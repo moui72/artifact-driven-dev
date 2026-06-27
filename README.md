@@ -1,8 +1,17 @@
 # artifact-driven-dev (ADD)
 
 A lightweight, artifact-driven workflow system for Claude Code. Inspired by
-spec-driven development but designed for builders who already know what they're
-building — the artifacts capture decisions, not discover them.
+[Spec Kit](https://github.com/github/spec-kit) — a spec-driven development
+framework for AI coding agents — but designed for builders who already know
+what they're building. The artifacts capture decisions, not discover them.
+
+## Credits
+
+ADD was inspired by [Spec Kit](https://github.com/github/spec-kit). If you
+need structured requirement discovery, user story generation, or a full
+spec-to-implementation pipeline, Spec Kit is the right tool. ADD is the
+lighter alternative for when you arrive with architectural clarity and just
+need a system to capture, cross-check, and execute against it.
 
 ## Philosophy
 
