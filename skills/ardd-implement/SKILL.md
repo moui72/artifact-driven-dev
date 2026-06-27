@@ -1,4 +1,4 @@
-# /implement
+# /ardd-implement
 
 Execute uncompleted tasks from `.project/tasks/tasks.md` sequentially.
 Each task is self-contained; the agent loads only the artifacts it declares.
@@ -6,7 +6,7 @@ Each task is self-contained; the agent loads only the artifacts it declares.
 ## Steps
 
 1. **Load `.project/tasks/tasks.md`.** If it does not exist, tell the user to
-   run `/tasks` first.
+   run `/ardd-tasks` first.
 
 2. **Find the next uncompleted task** (first `- [ ]` in document order).
    If all tasks are complete, report success and stop.
@@ -41,4 +41,4 @@ Each task is self-contained; the agent loads only the artifacts it declares.
 - **Add Principle VI annotations** at the point of any production shortcut
   identified in the task or encountered during implementation.
 - **Do not modify artifacts** during implementation. If a decision in an artifact
-  turns out to be wrong, stop, surface it, and let the user run `/refine` first.
+  turns out to be wrong, stop, surface it, and let the user run `/ardd-refine` first.

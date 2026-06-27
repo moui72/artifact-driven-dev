@@ -5,6 +5,14 @@ A lightweight, artifact-driven workflow system for Claude Code. Inspired by
 framework for AI coding agents — but designed for builders who already know
 what they're building. The artifacts capture decisions, not discover them.
 
+## Future directions
+
+A hooks system (pre/post skill execution, similar to spec-kit's extension model)
+is the most obvious next step — it would enable things like auto-running
+`/ardd-analyze` after every `/ardd-refine`, or triggering custom validation
+before `/ardd-plan`. The right hook points will become clearer after a few more
+projects use ADD. Designing them now would be speculative.
+
 ## Credits
 
 ADD was inspired by [Spec Kit](https://github.com/github/spec-kit). If you
@@ -36,20 +44,20 @@ Four living documents that evolve throughout the project:
 | `datamodel.md` | Canonical schema, field mappings, normalization rules |
 | `ui.md` | Views, interactions, display specs, states |
 
-All artifacts live in `.project/artifacts/`. All are refined with `/refine`.
+All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`.
 
 ## Skills
 
 | Command | When |
 |---|---|
-| `/bootstrap` | Once — seed artifacts from conversation context |
-| `/refine <artifact>` | Anytime — update a named artifact |
-| `/analyze` | Before planning — cross-artifact consistency check |
-| `/research <topic>` | As needed — targeted investigation |
-| `/plan` | When artifacts are stable |
-| `/tasks` | After plan approval |
-| `/implement` | Execute tasks sequentially |
-| `/converge` | Reconcile codebase with tasks after interruption |
+| `/ardd-bootstrap` | Once — seed artifacts from conversation context |
+| `/ardd-refine <artifact>` | Anytime — update a named artifact |
+| `/ardd-analyze` | Before planning — cross-artifact consistency check |
+| `/ardd-research <topic>` | As needed — targeted investigation |
+| `/ardd-plan` | When artifacts are stable |
+| `/ardd-tasks` | After plan approval |
+| `/ardd-implement` | Execute tasks sequentially |
+| `/ardd-converge` | Reconcile codebase with tasks after interruption |
 
 ## Install
 
@@ -57,7 +65,7 @@ All artifacts live in `.project/artifacts/`. All are refined with `/refine`.
 ./install.sh /path/to/your/project
 ```
 
-Then open Claude Code in your project and run `/bootstrap`.
+Then open Claude Code in your project and run `/ardd-bootstrap`.
 
 ## Project structure created
 
@@ -79,5 +87,5 @@ Tasks in `tasks.md` declare which artifacts they require:
 - [ ] T002 [artifacts: datamodel] [parallel] Create Appointment table in SQLite
 ```
 
-The `/implement` skill loads only the declared artifacts before executing each
+The `/ardd-implement` skill loads only the declared artifacts before executing each
 task, keeping context focused.

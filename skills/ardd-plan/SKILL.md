@@ -1,7 +1,7 @@
-# /plan
+# /ardd-plan
 
 Generate an implementation plan from the current artifacts and any research
-docs. Run `/analyze` first — do not plan over unresolved conflicts.
+docs. Run `/ardd-analyze` first — do not plan over unresolved conflicts.
 
 ## Steps
 
@@ -34,4 +34,5 @@ docs. Run `/analyze` first — do not plan over unresolved conflicts.
 
 6. **Present a summary** to the user: phases, key decisions, open questions.
    Ask for approval before the plan is considered final. Do not generate tasks
-   until the user approves.
+   until the user approves. Once approved, remind the user to run
+   `/ardd-analyze` to update the recommended next step in `STATUS.md`.

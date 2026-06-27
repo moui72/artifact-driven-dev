@@ -1,8 +1,8 @@
-# /refine
+# /ardd-refine
 
 Refine a project artifact. Usage: `/refine <name>` where name matches a file
 in `.project/artifacts/` (e.g., `constitution`, `infrastructure`, `datamodel`,
-`ui`, or any custom artifact added with `/add-artifact`).
+`ui`, or any custom artifact added with `/ardd-add-artifact`).
 
 ## Steps
 
@@ -33,7 +33,8 @@ in `.project/artifacts/` (e.g., `constitution`, `infrastructure`, `datamodel`,
 6. **Write** the updated artifact back to `.project/artifacts/<name>.md`.
 
 7. **Report** what changed in 2–3 sentences. Note any open questions deferred
-   for a future `/refine` pass.
+   for a future `/ardd-refine` pass. Remind the user to run `/ardd-analyze`
+   to refresh `STATUS.md` with the updated artifact status and open questions.
 
 ## Built-in artifact guidance
 

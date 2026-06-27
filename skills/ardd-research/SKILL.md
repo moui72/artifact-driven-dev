@@ -1,4 +1,4 @@
-# /research
+# /ardd-research
 
 Investigate a specific topic and produce a research document. Usage:
 `/research <topic>` (e.g., `/research sqlite orm options`,

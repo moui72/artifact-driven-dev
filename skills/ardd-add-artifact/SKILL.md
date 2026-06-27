@@ -1,4 +1,4 @@
-# /add-artifact
+# /ardd-add-artifact
 
 Create a new artifact in `.project/artifacts/`. Usage:
 `/add-artifact <name> [brief description of purpose]`
@@ -23,5 +23,5 @@ Create a new artifact in `.project/artifacts/`. Usage:
 
 6. **Update `CLAUDE.md`** — add the new artifact to the artifacts list.
 
-7. **Report** what was created and suggest running `/analyze` if other artifacts
+7. **Report** what was created and suggest running `/ardd-analyze` if other artifacts
    may reference this one.

@@ -15,7 +15,7 @@ decided about your system:
 - **ui** — what users see and how the app behaves
 
 You refine these iteratively. When they're stable, you generate a plan, then
-tasks, then execute. If work gets interrupted, `/converge` picks up where you
+tasks, then execute. If work gets interrupted, `/ardd-converge` picks up where you
 left off.
 
 ## Setup
@@ -46,7 +46,7 @@ draft` frontmatter field if there are open questions.
 If you want a constitution, run:
 
 ```
-/refine constitution
+/ardd-refine constitution
 ```
 
 This creates it from scratch and asks you targeted questions to fill it in.
@@ -58,12 +58,12 @@ This creates it from scratch and asks you targeted questions to fill it in.
 As you make decisions, update the relevant artifact:
 
 ```
-/refine datamodel
-/refine infrastructure add a note about the CarePoint sync strategy
-/refine ui
+/ardd-refine datamodel
+/ardd-refine infrastructure add a note about the CarePoint sync strategy
+/ardd-refine ui
 ```
 
-`/refine` reads the current artifact, applies your guidance, asks clarifying
+`/ardd-refine` reads the current artifact, applies your guidance, asks clarifying
 questions for anything unresolved, and writes it back. For the constitution,
 it also handles version bumping and the sync impact report.
 
@@ -83,7 +83,7 @@ This reads all four artifacts and reports:
 - **Missing artifacts** — anything still at `status: draft`
 - **Constitution violations** — decisions that break your principles
 
-Fix issues with `/refine` until `/analyze` reports clean.
+Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean.
 
 ---
 
@@ -93,12 +93,12 @@ For open questions — library choices, API behaviour, algorithmic approaches �
 run:
 
 ```
-/research sqlite full-text search options
-/research carepoint appointment pagination edge cases
+/ardd-research sqlite full-text search options
+/ardd-research carepoint appointment pagination edge cases
 ```
 
 Research outputs go to `.project/plans/research-<topic>-<date>.md`. The
-findings are available to `/plan` automatically.
+findings are available to `/ardd-plan` automatically.
 
 ---
 
@@ -132,7 +132,7 @@ task declares which artifacts it needs:
 - [ ] T002 [artifacts: datamodel, infrastructure] [parallel] Implement MedChart adapter
 ```
 
-Review the task list and adjust before running `/implement`.
+Review the task list and adjust before running `/ardd-implement`.
 
 ---
 
@@ -151,7 +151,7 @@ around them.
 
 ### 8. Resume after interruption
 
-If `/implement` is interrupted — or you pick the project up in a new session:
+If `/ardd-implement` is interrupted — or you pick the project up in a new session:
 
 ```
 /converge
@@ -159,7 +159,7 @@ If `/implement` is interrupted — or you pick the project up in a new session:
 
 This compares the codebase to `tasks.md`, marks tasks that are already done,
 notes partial work, and appends any gaps as new tasks. Then you can run
-`/implement` again to continue.
+`/ardd-implement` again to continue.
 
 ---
 
@@ -170,10 +170,27 @@ Each artifact has a `status` field in its frontmatter:
 - `draft` — has open questions; not safe to plan against
 - `stable` — decisions are made; ready for planning
 
-`/refine` sets this for you. `/analyze` will warn if you try to plan over a
+`/ardd-refine` sets this for you. `/ardd-analyze` will warn if you try to plan over a
 `draft` artifact.
 
-## When to use ADD vs Spec Kit
+---
+
+### Visualize your artifacts
+
+To generate a Mermaid diagram and upsert it into `README.md`:
+
+```
+/ardd-render datamodel
+/ardd-render infrastructure
+```
+
+`/ardd-render datamodel` produces an ERD from `datamodel.md` and writes it under
+a `## Datamodel` section. `/ardd-render infrastructure` produces a container
+diagram from `infrastructure.md` (and `adapters.md` if present) under
+`## Infrastructure`. GitHub renders Mermaid code fences natively — no extra
+tooling needed.
+
+---
 
 ## When to use ADD vs Spec Kit
 

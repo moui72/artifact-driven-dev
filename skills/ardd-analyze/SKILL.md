@@ -1,4 +1,4 @@
-# /analyze
+# /ardd-analyze
 
 Non-destructive cross-artifact consistency and quality check. Discovers and
 reads all artifacts present in `.project/artifacts/`, then reports gaps,
@@ -53,4 +53,13 @@ contradictions, and implied-but-undefined decisions.
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
 
-6. **Do not modify any files.** This skill is read-only.
+6. **Write `.project/STATUS.md`** from the analysis results. Use the same
+   structure defined in `/ardd-bootstrap`:
+   - Artifact status table (name, stable ✅ / draft ⚠️, open question count or —)
+   - Open questions grouped by artifact (omit artifacts with none)
+   - Recommended next step drawn from the Summary
+   - Update the `_Updated:` date to today
+
+   STATUS.md is the single re-entry point after any interruption. `/ardd-analyze`
+   is its only writer — other skills prompt the user to run it rather than
+   writing STATUS.md themselves.

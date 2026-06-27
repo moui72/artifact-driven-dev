@@ -26,6 +26,6 @@ done
 
 echo ""
 echo "Done. Next steps:"
-echo "  1. Run /bootstrap in Claude Code to seed your project artifacts."
-echo "  2. Run /analyze to check for cross-artifact issues."
-echo "  3. Run /plan when artifacts are stable."
+echo "  1. Run /ardd-bootstrap in Claude Code to seed your project artifacts."
+echo "  2. Run /ardd-analyze to check for cross-artifact issues."
+echo "  3. Run /ardd-plan when artifacts are stable."

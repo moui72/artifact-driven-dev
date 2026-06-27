@@ -1,4 +1,4 @@
-# /tasks
+# /ardd-tasks
 
 Generate an ordered task list from the current plan. Requires an approved plan
 in `.project/plans/`.
@@ -6,7 +6,7 @@ in `.project/plans/`.
 ## Steps
 
 1. **Load the most recent plan** from `.project/plans/plan-*.md` (latest by date).
-   If none exists, tell the user to run `/plan` first.
+   If none exists, tell the user to run `/ardd-plan` first.
 
 2. **Generate tasks** ordered by dependency. Each task MUST:
    - Have a unique ID: `T001`, `T002`, etc.

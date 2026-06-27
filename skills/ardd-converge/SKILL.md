@@ -1,7 +1,7 @@
-# /converge
+# /ardd-converge
 
 Compare the current codebase to `.project/tasks/tasks.md` and append any
-remaining unbuilt work as new tasks. Use after an interrupted `/implement` run
+remaining unbuilt work as new tasks. Use after an interrupted `/ardd-implement` run
 or when resuming work in a new session.
 
 ## Steps
@@ -11,7 +11,7 @@ or when resuming work in a new session.
 
 2. **Inspect the codebase** against each incomplete task. For each `- [ ]` task:
    - Determine whether the work is actually done despite the checkbox being open
-     (e.g., a previous `/implement` run completed it but didn't mark it)
+     (e.g., a previous `/ardd-implement` run completed it but didn't mark it)
    - Determine whether it is partially done
    - Determine whether it is truly not started
 
@@ -31,4 +31,4 @@ or when resuming work in a new session.
    - Tasks newly marked complete
    - Tasks found partial (with what remains)
    - New tasks appended
-   - Recommended next step (usually: run `/implement` to continue)
+   - Recommended next step (usually: run `/ardd-implement` to continue)
