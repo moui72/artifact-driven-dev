@@ -1,57 +1,56 @@
 # /analyze
 
-Non-destructive cross-artifact consistency and quality check. Reads all artifacts
-and reports gaps, contradictions, and implied-but-undefined decisions.
+Non-destructive cross-artifact consistency and quality check. Discovers and
+reads all artifacts present in `.project/artifacts/`, then reports gaps,
+contradictions, and implied-but-undefined decisions.
 
 ## Steps
 
-1. **Load all artifacts** from `.project/artifacts/`: `constitution.md`,
-   `infrastructure.md`, `datamodel.md`, `ui.md`. Note which are missing or
-   still `status: draft`.
+1. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
+   file present. Note which are `status: draft` and which are referenced by
+   other artifacts but missing.
 
-2. **Check cross-artifact consistency** across these dimensions:
+2. **Check cross-artifact consistency** for every pair of artifacts:
+   - Any entity, field, endpoint, or concept mentioned in one artifact must be
+     defined in the artifact that owns it. Flag anything referenced but
+     undefined.
+   - Decisions that span artifacts must be consistent — e.g., a storage choice
+     in `infrastructure.md` must match assumptions in `datamodel.md`.
+   - If a view/UI artifact exists, every field it displays or uses for logic
+     must exist in the data model artifact.
 
-   - **Infrastructure ↔ Datamodel**: Every entity the infrastructure layer
-     fetches and stores must exist in the data model. Every field the sync
-     jobs write must be defined. Storage choice must be consistent.
+3. **Check against `constitution.md`** if present:
+   - Flag decisions in any artifact that violate a stated principle.
+   - Flag shortcuts that lack a production annotation entry (if the constitution
+     includes a production annotation principle).
 
-   - **Datamodel ↔ UI**: Every field the UI displays or uses for business logic
-     (recommended action detection, sorting, filtering) must exist in the data
-     model. No UI field should be undefined or ambiguous in its source.
-
-   - **Infrastructure ↔ UI**: Sync frequency and data freshness assumptions must
-     be compatible with what the UI promises to users.
-
-   - **Constitution ↔ All**: Check that no artifact decision violates a
-     constitution principle (e.g., a pattern that introduces unjustified
-     complexity per Principle III, or a shortcut missing a Principle VI
-     annotation).
-
-3. **Check within each artifact** for:
-   - Unresolved placeholders or TODOs
+4. **Check within each artifact:**
+   - Unresolved `[OPEN: ...]` placeholders or TODOs
    - Vague language where a concrete decision is needed
-   - Missing rationale for non-obvious choices
-   - `status: draft` artifacts that block planning
+   - `status: draft` artifacts that would block planning
 
-4. **Produce a report** structured as:
+5. **Produce a report:**
 
    ```
+   ## Artifacts Found
+   - <name>.md — stable ✅ / draft ⚠️
+   - <name>.md — missing ❌ (referenced by <other artifact>)
+
    ## Cross-Artifact Issues
    - [CONFLICT] <description> — <artifact A> says X, <artifact B> says Y
    - [GAP] <description> — <artifact A> implies X but <artifact B> doesn't define it
-   - [MISSING] <artifact> does not exist yet
 
    ## Within-Artifact Issues
    ### <artifact>
-   - [TODO] <unresolved item>
+   - [OPEN] <unresolved item>
    - [VAGUE] <item needing a concrete decision>
 
    ## Constitution Compliance
    - [VIOLATION] <description>
-   - [ANNOTATION MISSING] <shortcut without a Principle VI note>
+   - [ANNOTATION MISSING] <shortcut without a production annotation>
 
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
 
-5. **Do not modify any files.** This skill is read-only.
+6. **Do not modify any files.** This skill is read-only.

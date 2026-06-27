@@ -1,33 +1,37 @@
 # /plan
 
-Generate an implementation plan from the current artifacts and any research docs.
-Run `/analyze` first — do not plan over unresolved conflicts.
+Generate an implementation plan from the current artifacts and any research
+docs. Run `/analyze` first — do not plan over unresolved conflicts.
 
 ## Steps
 
-1. **Load all artifacts** from `.project/artifacts/`. If any are `status: draft`
-   or missing, warn the user and ask whether to proceed.
+1. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
+   file present. If any are `status: draft`, warn the user and ask whether
+   to proceed.
 
-2. **Load any research documents** from `.project/plans/research-*.md` that are
-   relevant to the current work.
+2. **Load any research documents** from `.project/plans/research-*.md` relevant
+   to the current work.
 
-3. **Check constitution compliance.** Review Principle III (Simplicity) and flag
-   any planned patterns that require a Complexity Tracking entry.
+3. **Check constitution compliance** if `constitution.md` is present. Flag any
+   planned patterns that require a Complexity Tracking entry per the simplicity
+   principle.
 
 4. **Draft the plan** covering:
-
    - **Goal** — what this plan delivers (one sentence)
    - **Scope** — what is and is not included
    - **Technical Approach** — how the system will be built; reference artifact
      decisions rather than repeating them
    - **Phase Breakdown** — ordered phases with dependencies called out; each
-     phase produces a testable, demonstrable increment per Principle I and V
-   - **Complexity Tracking** — table of any justified deviations from Principle III
-   - **Open Questions** — anything that must be resolved before or during implementation
-   - **Production Annotation Summary** — list of known Principle VI items to add
+     phase produces a testable, demonstrable increment
+   - **Complexity Tracking** — table of justified deviations from the simplicity
+     principle (if a constitution is present)
+   - **Open Questions** — anything that must be resolved before or during
+     implementation
+   - **Production Annotation Summary** — list of known production shortcuts to
+     annotate during implementation
 
 5. **Write the plan** to `.project/plans/plan-<YYYY-MM-DD>.md`.
 
-6. **Present a summary** to the user: phases, key decisions, any open questions.
+6. **Present a summary** to the user: phases, key decisions, open questions.
    Ask for approval before the plan is considered final. Do not generate tasks
    until the user approves.

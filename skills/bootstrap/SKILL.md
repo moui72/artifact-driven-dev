@@ -1,46 +1,80 @@
 # /bootstrap
 
 One-time initialization. Seeds `.project/artifacts/` from the current
-conversation context. Run once at the start of a project; use `/refine`
-for all subsequent updates.
+conversation context, then generates project workflow documentation.
+Run once at project start; use `/refine` and `/add-artifact` for all
+subsequent changes.
 
 ## Steps
 
-1. **Check for existing artifacts.** If `infrastructure.md`, `datamodel.md`,
-   or `ui.md` already exist in `.project/artifacts/`, warn the user and ask
-   for confirmation before overwriting.
+1. **Check for existing artifacts.** List `.project/artifacts/`. If any `.md`
+   files already exist, warn the user and ask for confirmation before
+   overwriting.
 
-2. **Synthesize each artifact** from everything established in the current
-   conversation: API explorations, architectural decisions, data shapes, UI
-   intentions, constraints discussed. Do not invent decisions that were not
-   made — use `[OPEN: <question>]` for anything unresolved.
+2. **Determine which artifacts to create** based on conversation context.
+   Always consider the standard set:
+   - `constitution.md` — if the project has stated principles or non-negotiables
+   - `infrastructure.md` — if the project has external integrations, sync, or
+     non-trivial storage
+   - `datamodel.md` — if the project has a canonical schema or normalization
+     requirements
+   - `ui.md` — if the project has a user-facing interface
 
-3. **Write three artifacts:**
+   Add additional artifacts if the conversation establishes distinct concerns
+   that don't fit the standard set (e.g., `api.md` for a public API surface).
+   Use judgment — don't create artifacts for concerns that fit naturally into
+   an existing one.
 
-   ### `.project/artifacts/infrastructure.md`
-   Cover: sync strategy per EHR, storage choice and rationale, adapter pattern,
-   bootstrap vs incremental sync, job parameters, production annotation summary.
+3. **Synthesize each artifact** from everything established in the conversation:
+   decisions made, constraints discussed, data shapes explored, architectural
+   preferences stated. Do not invent decisions that were not made — use
+   `[OPEN: <question>]` for anything unresolved.
 
-   ### `.project/artifacts/datamodel.md`
-   Cover: canonical entities (Patient, Appointment, Encounter, CareProtocol),
-   field-level mapping tables (MedChart → canonical, CarePoint → canonical),
-   normalization rules (dates, IDs, enums, diagnosis string parsing), indexes.
+   For each artifact, look for a template at `templates/artifacts/<name>.md`
+   in the ADD installation. Use it as structure; fill in content from context.
+   Fall back to `templates/artifacts/generic.md` for custom artifacts.
 
-   ### `.project/artifacts/ui.md`
-   Cover: daily view layout, date navigation scope, per-practice presentation,
-   appointment row fields, recommended action types and detection logic summary,
-   loading/empty/error states.
+   Set `status: draft` for any artifact with open questions; `stable` otherwise.
 
-   Use the artifact template from `/refine`:
-   ```markdown
-   ---
-   name: <artifact>
-   status: draft
-   last_updated: YYYY-MM-DD
-   ---
-   ```
-   Set `status: draft` for any artifact with open questions.
+4. **Write all artifact files** to `.project/artifacts/`.
 
-4. **Report** what was written, how many open questions were left in each
-   artifact, and suggest running `/analyze` next to catch cross-artifact issues
-   before refining further.
+5. **Generate `.project/WORKFLOW.md`** using the structure below. Tailor the
+   skill descriptions to this specific project — do not copy generic descriptions
+   from USAGE.md. Each "when to use" note should reference this project's actual
+   artifacts and concerns.
+
+6. **Report** what was created, how many open questions exist per artifact, and
+   the recommended next step (usually `/analyze` then `/refine` on draft
+   artifacts).
+
+## WORKFLOW.md structure
+
+```markdown
+# [Project Name] — Workflow Guide
+
+This project uses [artifact-driven-dev](https://github.com/[owner]/artifact-driven-dev).
+
+## Artifacts
+
+| Artifact | Status | Purpose |
+|---|---|---|
+| [name].md | draft/stable | [one-line description specific to this project] |
+
+## Skills
+
+| Command | When to use |
+|---|---|
+| `/refine <artifact>` | [project-specific guidance, e.g., "use when EHR API exploration reveals new fields"] |
+| `/add-artifact <name>` | [project-specific note on when a new artifact might be needed] |
+| `/analyze` | [project-specific note, e.g., "run before planning to ensure datamodel and ui agree on field names"] |
+| `/research <topic>` | [project-specific examples, e.g., "sqlite ORM options, sync scheduling libraries"] |
+| `/plan` | [when artifacts are stable — note which artifacts are currently draft] |
+| `/tasks` | After plan approval |
+| `/implement` | Executes tasks from .project/tasks/tasks.md |
+| `/converge` | [project-specific note on when interruptions are likely] |
+
+## Current state
+
+[Honest assessment: which artifacts are stable, which are draft, what the
+open questions are, and what to do next.]
+```
