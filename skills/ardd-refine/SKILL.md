@@ -29,6 +29,8 @@ in `.project/artifacts/` (e.g., `constitution`, `infrastructure`, `datamodel`,
    - Set `status: stable` if substantially complete with no open questions.
      Set `status: draft` if significant gaps remain.
    - Set `last_updated` to today's date (YYYY-MM-DD).
+   - If the artifact is renderable (`datamodel`, `infrastructure`, or `ui`),
+     set `diagram_stale: true`.
 
 6. **Write** the updated artifact back to `.project/artifacts/<name>.md`.
 

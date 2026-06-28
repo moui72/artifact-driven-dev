@@ -49,6 +49,10 @@ contradictions, and implied-but-undefined decisions.
    - [VIOLATION] <description>
    - [ANNOTATION MISSING] <shortcut without a production annotation>
 
+   ## Diagrams
+   - <name>.md — up to date ✅ / stale ⚠️ (run /ardd-render <name>)
+   (Only list renderable artifacts: datamodel, infrastructure, ui)
+
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
