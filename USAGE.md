@@ -124,7 +124,8 @@ After approving the plan:
 /tasks
 ```
 
-This produces `.project/tasks/tasks.md` — an ordered checklist where each
+This asks which approved plan to generate tasks for, then produces
+`.project/tasks/tasks-<slug>-<hex>.md` — an ordered checklist where each
 task declares which artifacts it needs:
 
 ```markdown
@@ -142,10 +143,10 @@ Review the task list and adjust before running `/ardd-implement`.
 /implement
 ```
 
-Claude executes tasks sequentially: loads the declared artifacts for each
-task, writes tests first (failing), implements to pass them, marks the task
-complete, and commits. It stops and surfaces blockers rather than working
-around them.
+Claude asks which tasks file to work on, then executes tasks sequentially:
+loads the declared artifacts for each task, writes tests first (failing),
+implements to pass them, marks the task complete, and commits. It stops and
+surfaces blockers rather than working around them.
 
 ---
 
@@ -157,9 +158,9 @@ If `/ardd-implement` is interrupted — or you pick the project up in a new sess
 /converge
 ```
 
-This compares the codebase to `tasks.md`, marks tasks that are already done,
-notes partial work, and appends any gaps as new tasks. Then you can run
-`/ardd-implement` again to continue.
+This asks which tasks file to reconcile, compares the codebase against it,
+marks tasks that are already done, notes partial work, and appends any gaps
+as new tasks. Then you can run `/ardd-implement` again to continue.
 
 ---
 

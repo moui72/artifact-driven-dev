@@ -51,8 +51,12 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | Command | When |
 |---|---|
 | `/ardd-bootstrap` | Once — seed artifacts from conversation context |
+| `/ardd-codify` | Once — reverse-engineer artifacts from an existing codebase |
+| `/ardd-featurize` | Once (after codify) — extract a feature register from the codebase |
+| `/ardd-feature <description>` | Add a feature — coordinated multi-artifact update in one pass |
 | `/ardd-refine <artifact>` | Anytime — update a named artifact |
 | `/ardd-analyze` | Before planning — cross-artifact consistency check |
+| `/ardd-critique` | Anytime — challenge decisions: simplicity, failure modes, robustness, semantics |
 | `/ardd-research <topic>` | As needed — targeted investigation |
 | `/ardd-plan` | When artifacts are stable |
 | `/ardd-tasks` | After plan approval |
@@ -65,7 +69,13 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 ./install.sh /path/to/your/project
 ```
 
-Then open Claude Code in your project and run `/ardd-bootstrap`.
+**New project** — open Claude Code and run `/ardd-bootstrap` to seed artifacts
+from your conversation context. See [guides/greenfield.md](guides/greenfield.md).
+
+**Existing project** — open Claude Code and run `/ardd-codify` to
+reverse-engineer artifacts from the codebase. Review the generated drafts with
+`/ardd-refine`, then run `/ardd-analyze` before planning new work. See
+[guides/existing-project.md](guides/existing-project.md).
 
 ## Project structure created
 
@@ -73,14 +83,14 @@ Then open Claude Code in your project and run `/ardd-bootstrap`.
 .project/
   artifacts/    # living decision documents
   plans/        # generated plans and research
-  tasks/        # tasks.md — the execution queue
+  tasks/        # tasks-<slug>-<hex>.md — the execution queue, one per plan run
 .claude/
   skills/       # ADD skill files
 ```
 
 ## Task format
 
-Tasks in `tasks.md` declare which artifacts they require:
+Tasks in a `tasks-*.md` file declare which artifacts they require:
 
 ```markdown
 - [ ] T001 [artifacts: datamodel, infrastructure] Create Patient table in SQLite
