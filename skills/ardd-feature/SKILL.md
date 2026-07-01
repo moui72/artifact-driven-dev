@@ -89,13 +89,18 @@ existing GitLab REST fallback").
      artifacts, use the same name, type, and shape everywhere.
    - Preserve all existing content not touched by this feature.
    - Add `[OPEN: ...]` items for decisions the feature introduces but doesn't
-     resolve.
+     resolve. `[OPEN: ...]` is reserved for genuine undecided-design-question
+     gaps only — if the feature surfaces a known code-vs-artifact violation
+     (e.g., visible in `.project/DEFECTS.md`), don't write violation narrative
+     into the artifact body. Point the user at `DEFECTS.md` / `/ardd-verify`
+     instead.
    - Update frontmatter on each changed artifact:
      - `last_updated: <today YYYY-MM-DD>`
      - `status: draft` if new open questions were introduced;
        `status: stable` if the artifact remains fully resolved.
-     - Set `diagram_stale: true` for renderable artifacts (`datamodel`,
-       `infrastructure`, `ui`) if their content changed.
+     - For renderable artifacts (`datamodel`, `infrastructure`, `ui`) whose
+       content changed, set `diagram_status: stale` — unless it is currently
+       `unrendered`, in which case leave it `unrendered`.
 
 6. **Run cross-artifact analysis.** After writing all artifacts, perform the
    checks from `/ardd-analyze` steps 2–4 scoped to the changed artifacts:

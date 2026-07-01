@@ -69,3 +69,9 @@ self-contained; the agent loads only the artifacts it declares.
   identified in the task or encountered during implementation.
 - **Do not modify artifacts** during implementation. If a decision in an artifact
   turns out to be wrong, stop, surface it, and let the user run `/ardd-refine` first.
+- **Do not touch `DEFECTS.md`.** If a task incidentally reveals a pre-existing
+  code-vs-artifact violation unrelated to the task itself, don't write to
+  `.project/DEFECTS.md` directly — that would break its single-writer
+  ownership by `/ardd-verify`. Report the finding in the task's output instead
+  and tell the user to run `/ardd-verify` to capture it properly on its next
+  full pass.

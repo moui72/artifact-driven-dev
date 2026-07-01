@@ -56,6 +56,7 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-feature <description>` | Add a feature — coordinated multi-artifact update in one pass |
 | `/ardd-refine <artifact>` | Anytime — update a named artifact |
 | `/ardd-analyze` | Before planning — cross-artifact consistency check |
+| `/ardd-verify` | Before major planning, or periodically — check artifacts against the actual codebase and record drift in `DEFECTS.md` |
 | `/ardd-critique` | Anytime — challenge decisions: simplicity, failure modes, robustness, semantics |
 | `/ardd-research <topic>` | As needed — targeted investigation |
 | `/ardd-plan` | When artifacts are stable |

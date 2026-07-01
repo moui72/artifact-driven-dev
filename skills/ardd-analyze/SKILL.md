@@ -10,6 +10,11 @@ contradictions, and implied-but-undefined decisions.
    file present. Note which are `status: draft` and which are referenced by
    other artifacts but missing.
 
+   Also check for `.project/DEFECTS.md`. If present, read its last-verified
+   date and defect count — this is read-only: `/ardd-analyze` never
+   regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
+   `/ardd-verify`). If absent, note that verify has never run.
+
 2. **Check cross-artifact consistency** for every pair of artifacts:
    - Any entity, field, endpoint, or concept mentioned in one artifact must be
      defined in the artifact that owns it. Flag anything referenced but
@@ -50,8 +55,18 @@ contradictions, and implied-but-undefined decisions.
    - [ANNOTATION MISSING] <shortcut without a production annotation>
 
    ## Diagrams
-   - <name>.md — up to date ✅ / stale ⚠️ (run /ardd-render <name>)
-   (Only list renderable artifacts: datamodel, infrastructure, ui)
+   - <name>.md — current ✅ / stale ⚠️ (run /ardd-render <name>) / unrendered ⚠️ (never generated — run /ardd-render <name>)
+   (Only list renderable artifacts: datamodel, infrastructure, ui. Read each
+   one's `diagram_status` frontmatter field directly — do not infer from
+   whether a README section merely exists.)
+
+   ## Code-vs-Artifact Defects
+   - <N> known defects — see DEFECTS.md, last checked YYYY-MM-DD. Run
+     /ardd-verify to refresh.
+   (Or, if DEFECTS.md is absent: "Never checked — run /ardd-verify to compare
+   artifacts against the codebase." This section is visibility only —
+   `/ardd-analyze` does not read code itself and does not regenerate
+   DEFECTS.md.)
 
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
@@ -61,6 +76,8 @@ contradictions, and implied-but-undefined decisions.
    structure defined in `/ardd-bootstrap`:
    - Artifact status table (name, stable ✅ / draft ⚠️, open question count or —)
    - Open questions grouped by artifact (omit artifacts with none)
+   - A line surfacing `DEFECTS.md`'s summary (count + last-checked date, or
+     "never checked") drawn from step 1 — read-only, not regenerated here
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 
