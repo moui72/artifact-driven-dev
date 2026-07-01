@@ -2,6 +2,7 @@
 name: infrastructure
 status: draft
 last_updated: YYYY-MM-DD
+diagram_status: unrendered
 ---
 
 # Infrastructure

@@ -75,8 +75,9 @@ listed below.
 
 7. **Write `README.md`** back to the project root.
 
-8. **Clear the stale flag.** In the artifact's frontmatter, set `diagram_stale: false`.
-   Write the updated artifact back to `.project/artifacts/<name>.md`.
-   If the bare form ran (all artifacts), do this for each rendered artifact.
+8. **Mark it current.** In the artifact's frontmatter, set
+   `diagram_status: current`. Write the updated artifact back to
+   `.project/artifacts/<name>.md`. If the bare form ran (all artifacts), do
+   this for each rendered artifact.
 
 9. **Report** in one sentence what was generated and where it was written.

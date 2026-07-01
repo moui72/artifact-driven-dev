@@ -66,8 +66,9 @@ code does, not necessarily what was intended. Review each one with
    status: draft
    last_updated: <today YYYY-MM-DD>
    ```
-   Add `diagram_stale: false` for renderable artifacts (`datamodel`,
-   `infrastructure`, `ui`).
+   Add `diagram_status: unrendered` for renderable artifacts (`datamodel`,
+   `infrastructure`, `ui`) — codify never generates a diagram itself, so
+   these always start unrendered, never `current`.
 
 5. **Write all artifact files** to `.project/artifacts/`.
 
