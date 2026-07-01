@@ -35,8 +35,16 @@ when resuming work in a new session.
    frontmatter `status` to reflect the reconciled state: `completed` if every
    task is now `- [x]` with no gaps appended, `in-progress` otherwise.
 
+   If the status is now `completed`, glob `.project/tasks/tasks-*.md` for any
+   other file whose `plan:` frontmatter matches the same plan — a plan can
+   have more than one tasks file. Only if every one of them is `completed`,
+   load the plan and for each slug in its `features:` list flip that entry's
+   `Status` in `.project/artifacts/features.md` from `tasked` to
+   `implemented`.
+
 7. **Report:**
    - Tasks newly marked complete
    - Tasks found partial (with what remains)
    - New tasks appended
+   - Any features flipped to `implemented`
    - Recommended next step (usually: run `/ardd-implement` to continue)

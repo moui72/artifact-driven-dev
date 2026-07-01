@@ -70,7 +70,7 @@ This project uses [artifact-driven-dev](https://github.com/[owner]/artifact-driv
 | `/ardd-add-artifact <name>` | Create a new artifact for a concern that doesn't fit an existing one |
 | `/ardd-analyze` | Cross-artifact consistency check — find conflicts, gaps, and unresolved decisions |
 | `/ardd-research <topic>` | Investigate a specific topic and write a research doc to `.project/plans/` |
-| `/ardd-plan` | Generate an implementation plan from all stable artifacts, into `.project/plans/` |
+| `/ardd-plan [slug ...]` | Generate an implementation plan from all stable artifacts, into `.project/plans/`. Optionally target one or more backlogged feature slugs to design and apply their artifact changes as part of the same pass |
 | `/ardd-tasks` | Generate an ordered task list from a plan you select |
 | `/ardd-render [artifact]` | Generate Mermaid diagrams into `README.md`. Bare form runs all supported artifacts. |
 | `/ardd-implement` | Execute tasks from a tasks file you select in `.project/tasks/` |
@@ -78,7 +78,7 @@ This project uses [artifact-driven-dev](https://github.com/[owner]/artifact-driv
 | `/ardd-codify` | Reverse-engineer artifacts from an existing codebase |
 | `/ardd-featurize` | Extract a feature register from the codebase (run after codify) |
 | `/ardd-critique [artifact]` | Challenge decisions — simplicity, failure modes, robustness, semantics |
-| `/ardd-feature <description>` | Add a feature — coordinated multi-artifact update in one pass |
+| `/ardd-feature <description>` | Log a feature idea to the backlog (`features.md`) with a slug and `Status: backlogged` — no artifact edits yet |
 | `/ardd-feedback <notes>` | Capture bugs/UX/reconsidered-decision notes from manually inspecting the implementation, for the next `/ardd-plan` to consume |
 
 See `STATUS.md` for current artifact statuses, open questions, and recommended next step.

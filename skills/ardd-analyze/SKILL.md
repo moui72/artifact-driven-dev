@@ -20,6 +20,12 @@ contradictions, and implied-but-undefined decisions.
    never writes to feedback files (that belongs solely to `/ardd-feedback`
    and `/ardd-plan`).
 
+   Also read `.project/artifacts/features.md` if present. Count entries by
+   `Status` (`backlogged`/`planned`/`tasked`/`implemented`) — read-only
+   visibility; `/ardd-analyze` never writes to `features.md` (that belongs to
+   `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`, and
+   `/ardd-converge`).
+
 2. **Check cross-artifact consistency** for every pair of artifacts:
    - Any entity, field, endpoint, or concept mentioned in one artifact must be
      defined in the artifact that owns it. Flag anything referenced but
@@ -77,6 +83,11 @@ contradictions, and implied-but-undefined decisions.
    - <N> open feedback file(s) — see `.project/feedback/`, will be picked up
      by the next `/ardd-plan`. (Omit this section if none are open.)
 
+   ## Feature Backlog
+   - <N> backlogged · <N> planned · <N> tasked · <N> implemented — see
+     `.project/artifacts/features.md`. Target a backlogged slug with
+     `/ardd-plan <slug>`. (Omit this section if `features.md` doesn't exist.)
+
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
@@ -88,6 +99,8 @@ contradictions, and implied-but-undefined decisions.
    - A line surfacing `DEFECTS.md`'s summary (count + last-checked date, or
      "never checked") drawn from step 1 — read-only, not regenerated here
    - A line surfacing the open feedback count from step 1 (omit if zero)
+   - A line surfacing the feature backlog counts from step 1 (omit if
+     `features.md` doesn't exist)
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 

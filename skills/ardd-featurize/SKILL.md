@@ -84,13 +84,20 @@ backfill the capability history of an existing project. After that,
    # Features
 
    ## <Feature Name>
-   _Added <YYYY-MM-DD> · <artifact>, <artifact>_
+   _Slug: `<slug>` · Status: implemented · Added <YYYY-MM-DD> · <artifact>, <artifact>_
    <One sentence: what this capability does from the user or caller's perspective.>
    Why: <Optional — context that won't be obvious from code or artifacts later.>
 
    ## <Feature Name>
    ...
    ```
+
+   These are already-shipped capabilities, so every entry gets
+   `Status: implemented` — extracted history isn't a backlog. Derive each
+   `<slug>` the same way `/ardd-feature` does (kebab-case from the feature
+   name, ~30 chars, deduplicated with a 4-char hex suffix on collision) so
+   entries are consistently addressable even though there's nothing left to
+   plan for them.
 
    Order entries from oldest to newest (by inferred add-date, or by logical
    dependency if dates are unavailable). Omit the `Why:` line when there's no

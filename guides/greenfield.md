@@ -149,18 +149,28 @@ than working around them.
 
 ## Adding features after initial implementation
 
-When you want to add a feature that touches multiple artifacts:
+When you think of a feature that touches multiple artifacts, log it to the
+backlog first — this just records the idea with a slug, it doesn't touch
+artifacts:
 
 ```
 /ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
 ```
 
+Backlog items don't have to be worked in the order you logged them. When
+you're ready to actually design and build one, target it by slug:
+
+```
+/ardd-plan octokit-github-fallback
+```
+
 This reads all artifacts first, proposes coordinated changes across every
-affected one, waits for your confirmation, then applies them as a consistent
-unit. Use this instead of running `/ardd-refine` on each artifact separately —
-sequential refines leave artifacts inconsistent between passes. After the
-feature pass, run `/ardd-analyze` to refresh STATUS.md, then `/ardd-plan` for
-the new work.
+affected one, waits for your confirmation, applies them as a consistent unit,
+then drafts the plan against the updated artifacts — all in one pass. Use
+this instead of running `/ardd-refine` on each artifact separately —
+sequential refines leave artifacts inconsistent between passes. After
+approving the plan, run `/ardd-analyze` to refresh STATUS.md, then
+`/ardd-tasks`.
 
 ---
 

@@ -53,14 +53,14 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-bootstrap` | Once — seed artifacts from conversation context |
 | `/ardd-codify` | Once — reverse-engineer artifacts from an existing codebase |
 | `/ardd-featurize` | Once (after codify) — extract a feature register from the codebase |
-| `/ardd-feature <description>` | Add a feature — coordinated multi-artifact update in one pass |
+| `/ardd-feature <description>` | Log a feature idea to the backlog (`features.md`) — no artifact edits yet |
 | `/ardd-refine <artifact>` | Anytime — update a named artifact |
 | `/ardd-analyze` | Before planning — cross-artifact consistency check |
 | `/ardd-verify` | Before major planning, or periodically — check artifacts against the actual codebase and record drift in `DEFECTS.md` |
 | `/ardd-critique` | Anytime — challenge decisions: simplicity, failure modes, robustness, semantics |
 | `/ardd-feedback <notes>` | After manually inspecting the implementation — capture bugs/UX/reconsidered decisions for the next plan |
 | `/ardd-research <topic>` | As needed — targeted investigation |
-| `/ardd-plan` | When artifacts are stable |
+| `/ardd-plan [slug ...]` | When artifacts are stable. Pass backlogged feature slug(s) to design, apply their artifact changes, and plan them — any order, whenever you pick them up |
 | `/ardd-tasks` | After plan approval |
 | `/ardd-implement` | Execute tasks sequentially |
 | `/ardd-converge` | Reconcile codebase with tasks after interruption |

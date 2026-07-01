@@ -52,7 +52,13 @@ self-contained; the agent loads only the artifacts it declares.
 
 7. **Mark the task complete** in the tasks file: change `- [ ]` to `- [x]`. If
    this was the last incomplete task, flip the file's frontmatter `status` to
-   `completed`.
+   `completed`. Then read this tasks file's `plan:` frontmatter and glob
+   `.project/tasks/tasks-*.md` for any other file whose `plan:` frontmatter
+   matches the same plan — a plan can have more than one tasks file. Only if
+   every one of them is now `completed` (i.e. this wasn't the last of several
+   in-flight tasks files for the plan), load the plan and for each slug in
+   its `features:` list flip that entry's `Status` in
+   `.project/artifacts/features.md` from `tasked` to `implemented`.
 
 8. **Commit** the work with a concise message referencing the task ID.
 
@@ -69,6 +75,9 @@ self-contained; the agent loads only the artifacts it declares.
   identified in the task or encountered during implementation.
 - **Do not modify artifacts** during implementation. If a decision in an artifact
   turns out to be wrong, stop, surface it, and let the user run `/ardd-refine` first.
+  The one exception is flipping a bound feature's `Status` line in
+  `features.md` on task-file completion (step 7) — that's status bookkeeping,
+  not a design decision.
 - **Do not touch `DEFECTS.md`.** If a task incidentally reveals a pre-existing
   code-vs-artifact violation unrelated to the task itself, don't write to
   `.project/DEFECTS.md` directly — that would break its single-writer

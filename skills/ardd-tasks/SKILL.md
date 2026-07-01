@@ -80,5 +80,12 @@ Generate an ordered task list from an approved plan.
 
    Once all tasks are written, flip `status` to `ready`.
 
-6. **Report** the total task count and phase breakdown. Note any tasks that
-   embed a test requirement.
+6. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
+   `features:` list (if any). For each slug, flip its entry in
+   `.project/artifacts/features.md` from `Status: planned` to `Status: tasked`
+   and add `· Tasks: tasks-<slug>-<hex>.md` (this file's own filename) to its
+   metadata line.
+
+7. **Report** the total task count and phase breakdown. Note any tasks that
+   embed a test requirement, and which features (if any) were flipped to
+   `tasked`.

@@ -161,16 +161,26 @@ articulated. Either way, it's a useful mirror.
 
 ## Adding features after codify
 
-Once artifacts are stable, use `/ardd-feature` to add new functionality:
+Once artifacts are stable, use `/ardd-feature` to log a new idea to the
+backlog — this just records it, it doesn't touch artifacts yet:
 
 ```
 /ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
 ```
 
+That gives you a slug and a `backlogged` entry in `features.md`. When you're
+ready to actually work it (in whatever order you like — backlog items don't
+need to be worked in the order they were logged), target it by slug:
+
+```
+/ardd-plan octokit-github-fallback
+```
+
 This reads all artifacts first, identifies which ones the feature touches,
-proposes all changes together for your review, then applies them as a coherent
-unit. Use this instead of running `/ardd-refine` on each artifact separately —
-it sees the full cross-artifact picture before writing anything.
+proposes all changes together for your review, applies them as a coherent
+unit, then drafts the plan against the now-updated artifacts. Use this
+instead of running `/ardd-refine` on each artifact separately — it sees the
+full cross-artifact picture before writing anything.
 
 ---
 
@@ -180,5 +190,6 @@ it sees the full cross-artifact picture before writing anything.
 Session 1: /ardd-codify → /ardd-featurize → read artifacts → /ardd-refine × N
 Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
 Session 3 (optional): /ardd-plan → /ardd-tasks → /ardd-implement
-Session N: /ardd-feature <description> → /ardd-analyze → /ardd-plan (new work)
+Session N: /ardd-feature <description> (log to backlog, anytime)
+Session N+k: /ardd-plan <slug> (design + apply + plan, whenever you pick it up) → /ardd-analyze → /ardd-tasks → /ardd-implement
 ```
