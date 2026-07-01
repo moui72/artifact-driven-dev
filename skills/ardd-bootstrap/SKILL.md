@@ -79,6 +79,7 @@ This project uses [artifact-driven-dev](https://github.com/[owner]/artifact-driv
 | `/ardd-featurize` | Extract a feature register from the codebase (run after codify) |
 | `/ardd-critique [artifact]` | Challenge decisions — simplicity, failure modes, robustness, semantics |
 | `/ardd-feature <description>` | Add a feature — coordinated multi-artifact update in one pass |
+| `/ardd-feedback <notes>` | Capture bugs/UX/reconsidered-decision notes from manually inspecting the implementation, for the next `/ardd-plan` to consume |
 
 See `STATUS.md` for current artifact statuses, open questions, and recommended next step.
 ```

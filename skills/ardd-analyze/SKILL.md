@@ -15,6 +15,11 @@ contradictions, and implied-but-undefined decisions.
    regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
    `/ardd-verify`). If absent, note that verify has never run.
 
+   Also glob `.project/feedback/feedback-*.md` and read frontmatter. Count
+   files with `status: open` — this is read-only visibility; `/ardd-analyze`
+   never writes to feedback files (that belongs solely to `/ardd-feedback`
+   and `/ardd-plan`).
+
 2. **Check cross-artifact consistency** for every pair of artifacts:
    - Any entity, field, endpoint, or concept mentioned in one artifact must be
      defined in the artifact that owns it. Flag anything referenced but
@@ -68,6 +73,10 @@ contradictions, and implied-but-undefined decisions.
    `/ardd-analyze` does not read code itself and does not regenerate
    DEFECTS.md.)
 
+   ## Feedback
+   - <N> open feedback file(s) — see `.project/feedback/`, will be picked up
+     by the next `/ardd-plan`. (Omit this section if none are open.)
+
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
@@ -78,6 +87,7 @@ contradictions, and implied-but-undefined decisions.
    - Open questions grouped by artifact (omit artifacts with none)
    - A line surfacing `DEFECTS.md`'s summary (count + last-checked date, or
      "never checked") drawn from step 1 — read-only, not regenerated here
+   - A line surfacing the open feedback count from step 1 (omit if zero)
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 

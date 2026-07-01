@@ -58,6 +58,7 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-analyze` | Before planning — cross-artifact consistency check |
 | `/ardd-verify` | Before major planning, or periodically — check artifacts against the actual codebase and record drift in `DEFECTS.md` |
 | `/ardd-critique` | Anytime — challenge decisions: simplicity, failure modes, robustness, semantics |
+| `/ardd-feedback <notes>` | After manually inspecting the implementation — capture bugs/UX/reconsidered decisions for the next plan |
 | `/ardd-research <topic>` | As needed — targeted investigation |
 | `/ardd-plan` | When artifacts are stable |
 | `/ardd-tasks` | After plan approval |
