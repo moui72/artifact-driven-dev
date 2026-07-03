@@ -30,9 +30,12 @@ subsequent changes.
    preferences stated. Do not invent decisions that were not made — use
    `[OPEN: <question>]` for anything unresolved.
 
-   For each artifact, look for a template at `templates/artifacts/<name>.md`
-   in the ADD installation. Use it as structure; fill in content from context.
-   Fall back to `templates/artifacts/generic.md` for custom artifacts.
+   For each artifact, look for a template at `.claude/skills/ardd-artifact-
+   templates/<name>.md` (installed by `install.sh`). Use it as structure;
+   fill in content from context. Fall back to `.claude/skills/ardd-artifact-
+   templates/generic.md` for custom artifacts, or to no fixed structure if
+   the templates directory isn't present (e.g. `install.sh` hasn't been
+   re-run since this feature landed).
 
    Set `status: draft` for any artifact with open questions; `stable` otherwise.
 
