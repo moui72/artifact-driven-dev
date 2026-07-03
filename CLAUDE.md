@@ -24,6 +24,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
 ./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/tasks)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
+./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
+./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
 ```
 
 All lint/test scripts run in CI (`.github/workflows/lint.yml`) on
@@ -38,13 +40,19 @@ correctness is unverified.
 ## Architecture
 
 **Two install targets, don't conflate them.** Some scripts/docs govern *this*
-repo only (`scripts/lint-docs.sh`, its CI job, `tests/fixtures/`). Others are
-installed by `install.sh` into a *target* project and run there (every
-`skills/*/SKILL.md`, the constitution suggestion catalog, artifact templates,
-migrations, `scripts/lint-project.sh`). When adding a new deterministic
-check, decide which side it belongs to before writing it — a check against
-*this* repo's own files (docs, skill names) is source-side; a check against a
-*target* project's generated `.project/` state ships via `install.sh`.
+repo only (`scripts/lint-docs.sh`, its CI job, `tests/fixtures/`,
+`scripts/hook-lint-on-write.sh` + `.claude/settings.json` — dogfooding this
+repo's own `.project/`). Others are installed by `install.sh` into a
+*target* project and run there (every `skills/*/SKILL.md`, the constitution
+suggestion catalog, artifact templates, migrations, `scripts/lint-project.sh`,
+`scripts/branch-info.sh`). When adding a new deterministic check, decide
+which side it belongs to before writing it — a check against *this* repo's
+own files (docs, skill names) is source-side; a check against a *target*
+project's generated `.project/` state ships via `install.sh`.
+`hook-lint-on-write.sh` currently hardcodes `$PROJECT_ROOT/scripts/lint-project.sh`
+(the source-repo path), so it isn't installable as-is — wiring an
+equivalent hook into target projects via `install.sh` is a separate,
+not-yet-made decision, not an oversight.
 
 **`install.sh` is the only entry point into a target project.** It copies
 `skills/*/SKILL.md` into `.claude/skills/<name>/`, copies
@@ -71,7 +79,8 @@ Every skill either reads them, refines one of them, or turns them into
 plans/tasks/code. `status: draft` / `status: stable` frontmatter gates
 whether an artifact is safe to plan against.
 
-**Single-writer ownership of generated files, enforced only by convention.**
+**Single-writer ownership of generated files is, deliberately, prose-only —
+this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/STATUS.md` — written only by `/ardd-analyze`
 - `.project/DEFECTS.md` — written only by `/ardd-verify`
 - `.project/SYNC.md` — written only by `/ardd-sync`
@@ -80,9 +89,23 @@ whether an artifact is safe to plan against.
   `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`,
   `/ardd-converge`
 
-Every other skill treats these as read-only. Nothing enforces this except the
-skill's own instructions — when adding or editing a skill, preserve this
-boundary explicitly rather than assuming it's obvious.
+Every other skill treats these as read-only. A PreToolUse/PostToolUse hook
+cannot enforce this: its payload (`tool_name`, `tool_input`, `transcript_path`,
+etc.) carries no field identifying which skill/slash-command is currently
+active, and the transcript format is explicitly undocumented and
+version-fragile, so it can't be parsed for one either (confirmed against
+Claude Code's hook docs, not assumed). The only way around that would be
+each skill setting a sentinel before writing its owned file — which
+reintroduces the exact LLM-compliance dependency this convention exists to
+eliminate, i.e. it isn't real enforcement, just soft convention with extra
+steps. So: preserve the boundary explicitly in prose when adding or editing
+a skill, same as before, and don't try to "harden" it with a hook — that's
+a dead end, not an unfinished task. What a hook *can* do, and does
+(`.claude/settings.json`'s `PostToolUse` on `Write|Edit` →
+`scripts/hook-lint-on-write.sh`), is catch schema violations in whatever
+gets written to `.project/`, regardless of which skill wrote it — that's
+real hardening, just a different, narrower guarantee than ownership
+enforcement. Don't conflate the two.
 
 **Skill-to-skill handoffs run entirely through files on disk**, not shared
 state: frontmatter `status` fields, `[artifacts: ...]` tags on task/feedback
