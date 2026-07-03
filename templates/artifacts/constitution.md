@@ -34,7 +34,10 @@ specific leniencies (e.g., demo/portfolio, internal tool, production system).]
 
 ## Quality Standards
 
-- [Standard 1]
+- [Standard 1 — e.g., a testing paradigm if you have one: TDD (red-green),
+  test-after, coverage threshold, or no automated-testing requirement.
+  `/ardd-tasks` and `/ardd-implement` follow whatever is declared here rather
+  than assuming a default — state it explicitly if it matters to you.]
 - [Standard 2]
 
 ## Development Workflow
