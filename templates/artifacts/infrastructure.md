@@ -22,7 +22,9 @@ sync strategy, rationale for key decisions.]
 
 ## Production Annotations
 
-[List known shortcuts with notes on what the production approach would be,
-per the constitution's Production Annotations principle.]
+[List known shortcuts or gaps with notes on what the production approach
+would be — per the constitution's Development Workflow convention, this is
+the only place in this artifact such notes belong; don't scatter them inline
+in other sections.]
 
 - **[Shortcut]**: [What it does] — in production, [correct approach].

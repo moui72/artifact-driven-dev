@@ -36,3 +36,12 @@ model: date formats, ID schemes, enum values, string parsing, etc.]
 ## Indexes
 
 [List query patterns that require indexes and the indexes that support them.]
+
+## Production Annotations
+
+[List known shortcuts or gaps with notes on what the production approach
+would be — per the constitution's Development Workflow convention, this is
+the only place in this artifact such notes belong; don't scatter them inline
+in other sections.]
+
+- **[Shortcut]**: [What it does] — in production, [correct approach].

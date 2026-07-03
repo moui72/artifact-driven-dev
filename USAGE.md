@@ -193,6 +193,46 @@ tooling needed.
 
 ---
 
+### Sync features with GitHub Issues
+
+To mirror `.project/artifacts/features.md` to GitHub Issues and back:
+
+```
+/ardd-sync
+```
+
+Or run one direction only: `/ardd-sync push` (create/update issues from
+backlog entries) or `/ardd-sync pull` (import issues labeled `ardd-import` as
+new backlog entries, and report — but not apply — any tracker-side state
+that's diverged from `features.md`, e.g. an issue closed manually).
+
+`features.md` stays the source of truth for what a feature *is* (name, slug,
+description); the tracker becomes the source of truth for its status and
+discussion. Each synced entry gets a `· GH: #<n>` field appended to its
+metadata line.
+
+To run it unattended, invoke it headlessly from a GitHub Actions workflow —
+on a schedule, or on `issues` events so new `ardd-import`-labeled issues get
+picked up promptly:
+
+```yaml
+on:
+  schedule:
+    - cron: "0 * * * *"
+  issues:
+    types: [labeled]
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: claude -p "/ardd-sync"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+---
+
 ## When to use ADD vs Spec Kit
 
 [Spec Kit](https://github.com/github/spec-kit) is an agent-agnostic

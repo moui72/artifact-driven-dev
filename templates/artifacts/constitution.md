@@ -41,6 +41,11 @@ specific leniencies (e.g., demo/portfolio, internal tool, production system).]
 
 1. [Step 1]
 2. [Step 2]
+3. Any artifact documenting a known production shortcut or gap (a deliberate
+   simplification, an unintentional gap awaiting future work, etc.) does so
+   under a `## Production Annotations` heading — not inline prose elsewhere
+   in the artifact — so `/ardd-plan`'s Production Annotation Summary step and
+   `/ardd-critique` can rely on a single, consistent place to find them.
 
 ## Governance
 
