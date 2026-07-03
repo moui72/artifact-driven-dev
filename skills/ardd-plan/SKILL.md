@@ -119,9 +119,24 @@ idea; it doesn't touch artifacts).
    this is a decision reversal, not a routine update, so don't assume intent
    silently. On confirmation, the feedback wins and the plan includes a task
    to bring the artifact back in line; if the user declines, drop that item
-   from the plan and leave the artifact and feedback item as-is (still
-   `status: open` — it wasn't resolved). Remember which files/items were
-   loaded and confirmed; you'll mark the consumed files in step 10.
+   from the plan — it gets marked declined per the bookkeeping below, not
+   incorporated, and the artifact is left untouched.
+
+   **Finalize feedback bookkeeping now, not at plan approval** — the
+   negotiation above is the only place the accept/decline decision for each
+   item exists; a plan document only ever records *accepted* items (as
+   tasks), so deferring this to approval would lose declined items with no
+   way to recover their `[-]` marking later. For each loaded file: mark each
+   item `[x]` if it was incorporated into the plan, or `[-]` if the user
+   declined an override — mirroring `critique.md`'s resolution convention.
+   Once every item in a file is `[x]` or `[-]`, flip that file's `status` to
+   `planned` and set its `plan:` field to the plan filename you'll write in
+   step 9 (`plan-<slug>-<today's date>.md` — both already known at this
+   point). Planned feedback files are not edited further and become a
+   historical record of what prompted the plan. If any item is still
+   unresolved (e.g. the user wants to think about a declined override more),
+   leave the file's `status` as `open` so the next `/ardd-plan` run picks up
+   the remainder.
 
 6. **Check constitution compliance** if `constitution.md` is present. Flag any
    planned patterns that require a Complexity Tracking entry per the simplicity
@@ -170,15 +185,6 @@ idea; it doesn't touch artifacts).
     - Flip this plan's frontmatter `status` to `approved` in place.
     - If step 7 identified a plan this one supersedes, flip that plan's
       `status` to `superseded` in place.
-    - For each feedback file loaded in step 5, mark each item `[x]` if it was
-      incorporated into the plan, or `[-]` if the user declined an override
-      (per step 5) — mirroring `critique.md`'s resolution convention. Once
-      every item in a file is `[x]` or `[-]`, flip that file's `status` to
-      `planned` and set its `plan:` field to this plan's filename; planned
-      feedback files are not edited further and become a historical record of
-      what prompted the plan. If any item is still unresolved (e.g. the user
-      wants to think about a declined override more), leave the file's
-      `status` as `open` so the next `/ardd-plan` run picks up the remainder.
     - For each feature slug targeted in step 3, flip its entry in
       `.project/artifacts/features.md` from `Status: backlogged` to
       `Status: planned` and add `· Plan: plan-<slug>-<YYYY-MM-DD>.md` to its
