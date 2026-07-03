@@ -56,11 +56,14 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-feature <description>` | Log a feature idea to the backlog (`features.md`) — no artifact edits yet |
 | `/ardd-sync [push\|pull]` | Anytime — mirror `features.md` to/from an external issue tracker (GitHub Issues now) |
 | `/ardd-refine <artifact>` | Anytime — update a named artifact |
+| `/ardd-add-artifact <name>` | Anytime — create a new, non-standard artifact from a template |
 | `/ardd-analyze` | Before planning — cross-artifact consistency check |
+| `/ardd-lint` | Anytime — fast, deterministic check of frontmatter status/fields and `[artifacts: ...]` references (no LLM judgment involved) |
 | `/ardd-verify` | Before major planning, or periodically — check artifacts against the actual codebase and record drift in `DEFECTS.md` |
 | `/ardd-critique` | Anytime — challenge decisions: simplicity, failure modes, robustness, semantics |
 | `/ardd-feedback <notes>` | After manually inspecting the implementation — capture bugs/UX/reconsidered decisions for the next plan |
 | `/ardd-research <topic>` | As needed — targeted investigation |
+| `/ardd-render <artifact>` | Anytime — generate a Mermaid diagram from an artifact into `README.md` |
 | `/ardd-plan [slug ...]` | When artifacts are stable. Pass backlogged feature slug(s) to design, apply their artifact changes, and plan them — any order, whenever you pick them up |
 | `/ardd-tasks` | After plan approval |
 | `/ardd-implement` | Execute tasks sequentially |
