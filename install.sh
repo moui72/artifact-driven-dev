@@ -15,6 +15,7 @@ APPLIED_FILE="$TARGET/.ardd-applied"
 VERSION_FILE="$TARGET/.project/ardd-version.md"
 CONSTITUTION_DATA_DIR="$CLAUDE_SKILLS/ardd-constitution-data"
 ARTIFACT_TEMPLATES_DIR="$CLAUDE_SKILLS/ardd-artifact-templates"
+ARDD_SCRIPTS_DIR="$CLAUDE_SKILLS/ardd-scripts"
 
 if [ ! -d "$TARGET" ]; then
   echo "Error: target directory '$TARGET' does not exist." >&2
@@ -55,6 +56,16 @@ echo "  ✓ ardd-constitution-data/constitution-suggestions.md"
 mkdir -p "$ARTIFACT_TEMPLATES_DIR"
 cp "$SCRIPT_DIR"/templates/artifacts/*.md "$ARTIFACT_TEMPLATES_DIR/"
 echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.md | wc -l | tr -d ' ') templates)"
+
+# --- Deterministic check scripts ---
+# Not a skill — invoked by /ardd-lint (and by hand, or CI) against this
+# project's own .project/ state. Schema-of-record for status enums and
+# required frontmatter fields lives in this script, not in prose; see
+# scripts/lint-project.sh's header comment.
+mkdir -p "$ARDD_SCRIPTS_DIR"
+cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
+chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh"
+echo "  ✓ ardd-scripts/lint-project.sh"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
@@ -122,7 +133,7 @@ if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
         .claude/skills/*/*)
           rest="${f#.claude/skills/}"
           skill_name="${rest%%/*}"
-          case " $installed_skill_names ardd-constitution-data ardd-artifact-templates " in
+          case " $installed_skill_names ardd-constitution-data ardd-artifact-templates ardd-scripts " in
             *" $skill_name "*) tracked_ardd=1 ;;
             *) tracked_other_skills=1 ;;
           esac
