@@ -1,7 +1,7 @@
 ---
 plan: plan-implicit-plan-approval-2026-07-03.md
 generated: 2026-07-03
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -55,7 +55,7 @@ status: in-progress
 
 ## Phase 3: Fix stale doc references
 
-- [ ] T004 [parallel] Edit `USAGE.md`. Step 5 ("Generate a plan") currently
+- [x] T004 [parallel] Edit `USAGE.md`. Step 5 ("Generate a plan") currently
   says "The plan isn't written to disk until you approve it" — this is
   already inaccurate today (the plan is written as `draft` before any
   approval step) and more clearly wrong after T001–T003. Replace with an
@@ -64,7 +64,7 @@ status: in-progress
   tasks") — currently titled around "After approving the plan" — to
   describe selecting the draft in `/ardd-tasks` as the approval action
   itself, not a separate prior step.
-- [ ] T005 [parallel] Edit `README.md`'s Skills table: the `/ardd-tasks` row
+- [x] T005 [parallel] Edit `README.md`'s Skills table: the `/ardd-tasks` row
   currently reads "After plan approval" — update to reflect that
   `/ardd-tasks` performs the approval when a draft plan is selected, not
   just something that runs after approval happened elsewhere.

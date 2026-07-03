@@ -95,7 +95,7 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-research <topic>` | As needed — targeted investigation |
 | `/ardd-render <artifact>` | Anytime — generate a Mermaid diagram from an artifact into `README.md` |
 | `/ardd-plan [slug ...]` | When artifacts are stable. Pass backlogged feature slug(s) to design, apply their artifact changes, and plan them — any order, whenever you pick them up |
-| `/ardd-tasks` | After plan approval |
+| `/ardd-tasks` | Pick a plan (draft or approved) — selecting a draft one approves it as part of this step |
 | `/ardd-implement` | Execute tasks sequentially |
 | `/ardd-converge` | Reconcile codebase with tasks after interruption |
 

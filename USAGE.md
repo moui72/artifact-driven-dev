@@ -111,22 +111,23 @@ When artifacts are stable:
 ```
 
 Claude reads all artifacts and any research docs, drafts a phased
-implementation plan, and presents it for your review. The plan isn't written
-to disk until you approve it.
+implementation plan, and presents it for your review. The plan is saved to
+disk immediately as `status: draft` — there's no separate approval step
+here. Running `/ardd-tasks` and selecting it is what approves it.
 
 ---
 
 ### 6. Generate tasks
 
-After approving the plan:
-
 ```
 /ardd-tasks
 ```
 
-This asks which approved plan to generate tasks for, then produces
-`.project/tasks/tasks-<slug>-<hex>.md` — an ordered checklist where each
-task declares which artifacts it needs:
+This asks which plan to generate tasks for (draft or already-approved), and
+selecting a draft one approves it as part of this step — flips it to
+`approved` and flips its targeted backlog features from `backlogged` to
+`planned`. It then produces `.project/tasks/tasks-<slug>-<hex>.md` — an
+ordered checklist where each task declares which artifacts it needs:
 
 ```markdown
 - [ ] T001 [artifacts: datamodel] Create Patient table migration

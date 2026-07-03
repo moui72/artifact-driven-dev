@@ -16,7 +16,7 @@ hook (`.project/` writes only) exist today.
 
 ## Implicit plan approval via /ardd-tasks
 
-_Slug: `implicit-plan-approval` · Status: planned · Logged 2026-07-03 · Plan: plan-implicit-plan-approval-2026-07-03.md_
+_Slug: `implicit-plan-approval` · Status: implemented · Logged 2026-07-03 · Plan: plan-implicit-plan-approval-2026-07-03.md · Tasks: tasks-implicit-plan-approval-455c.md_
 Selecting a `status: draft` plan in `/ardd-tasks` implicitly flips it to
 `approved` instead of `/ardd-tasks` filtering drafts out and requiring a
 separate explicit approval step back in `/ardd-plan`.
