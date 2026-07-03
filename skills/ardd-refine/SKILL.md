@@ -23,9 +23,10 @@ that has open questions instead of a single one:
 ## Steps
 
 1. **Load the artifact** from `.project/artifacts/<name>.md`. If it does not
-   exist, offer to create it — look for a template at
-   `templates/artifacts/<name>.md` in the ADD installation, falling back to
-   `templates/artifacts/generic.md`.
+   exist, offer to create it — look for a template at `.claude/skills/ardd-
+   artifact-templates/<name>.md` (installed by `install.sh`), falling back
+   to `.claude/skills/ardd-artifact-templates/generic.md`, or to no fixed
+   structure if the templates directory isn't present.
 
 2. **Understand the user's intent.** The user may have provided guidance in
    their invocation (e.g., `/refine datamodel add a source_ehr field`).

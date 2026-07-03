@@ -14,6 +14,7 @@ CLAUDE_SKILLS="$TARGET/.claude/skills"
 APPLIED_FILE="$TARGET/.ardd-applied"
 VERSION_FILE="$TARGET/.project/ardd-version.md"
 CONSTITUTION_DATA_DIR="$CLAUDE_SKILLS/ardd-constitution-data"
+ARTIFACT_TEMPLATES_DIR="$CLAUDE_SKILLS/ardd-artifact-templates"
 
 if [ ! -d "$TARGET" ]; then
   echo "Error: target directory '$TARGET' does not exist." >&2
@@ -41,6 +42,19 @@ done
 mkdir -p "$CONSTITUTION_DATA_DIR"
 cp "$SCRIPT_DIR/templates/constitution-suggestions.md" "$CONSTITUTION_DATA_DIR/constitution-suggestions.md"
 echo "  ✓ ardd-constitution-data/constitution-suggestions.md"
+
+# --- Artifact templates ---
+# Not skills either — structure skeletons /ardd-bootstrap, /ardd-refine, and
+# /ardd-add-artifact fill in from context when creating/refining an artifact.
+# These previously only existed in the ADD source repo, never in a target
+# project, so the "look for templates/artifacts/<name>.md in the ADD
+# installation" instruction those skills carried was a no-op outside this
+# repo; falling back to generic.md silently absorbed the gap. Same fix as
+# the constitution catalog above: copy them so the fixed path actually
+# resolves in a target project.
+mkdir -p "$ARTIFACT_TEMPLATES_DIR"
+cp "$SCRIPT_DIR"/templates/artifacts/*.md "$ARTIFACT_TEMPLATES_DIR/"
+echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.md | wc -l | tr -d ' ') templates)"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
@@ -108,7 +122,7 @@ if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
         .claude/skills/*/*)
           rest="${f#.claude/skills/}"
           skill_name="${rest%%/*}"
-          case " $installed_skill_names ardd-constitution-data " in
+          case " $installed_skill_names ardd-constitution-data ardd-artifact-templates " in
             *" $skill_name "*) tracked_ardd=1 ;;
             *) tracked_other_skills=1 ;;
           esac

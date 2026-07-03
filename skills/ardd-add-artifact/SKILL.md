@@ -8,9 +8,11 @@ Create a new artifact in `.project/artifacts/`. Usage:
 1. **Check for conflicts.** If `.project/artifacts/<name>.md` already exists,
    tell the user and stop.
 
-2. **Find a template.** Look for `templates/artifacts/<name>.md` in the ADD
-   installation (the directory containing the installed skills). If found, use
-   it as the starting structure. Otherwise use `templates/artifacts/generic.md`.
+2. **Find a template.** Look for `.claude/skills/ardd-artifact-templates/
+   <name>.md` (installed by `install.sh`). If found, use it as the starting
+   structure. Otherwise use `.claude/skills/ardd-artifact-templates/
+   generic.md`, or no fixed structure if the templates directory isn't
+   present.
 
 3. **Seed the artifact** from conversation context and the user's description.
    Replace all placeholder tokens. Use `[OPEN: <question>]` for anything
