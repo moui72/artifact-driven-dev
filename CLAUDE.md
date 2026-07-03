@@ -22,9 +22,11 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
+./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/tasks)
+./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
 ```
 
-All three lint/test scripts run in CI (`.github/workflows/lint.yml`) on
+All lint/test scripts run in CI (`.github/workflows/lint.yml`) on
 push/PR to `main`. That's the full extent of automation, deliberately — a
 skill's *behavior* (does `/ardd-plan` actually draft a good plan?) is not
 something these scripts check and isn't a near-term goal; only the
@@ -100,12 +102,19 @@ valid files is worse than no validator, since it trains people to ignore its
 output. `/ardd-lint` is the user-facing skill that runs it against the
 current project; it never writes, only reports.
 
-**Duplicated procedure across skills is currently intentional, not
-accidental.** The "check branch" step in `ardd-plan`, `ardd-implement`, and
-`ardd-tasks` is copy-pasted near-verbatim rather than factored into a shared
-script — skills can't currently invoke other skills structurally. If you
-change that logic in one, change it in all three, or extract it to a
-`scripts/` helper all three shell out to.
+**The "check branch" step's deterministic half is a shared script, not
+duplicated prose.** `scripts/branch-info.sh` (installed to
+`.claude/skills/ardd-scripts/`) computes `current`/`default`/`on_default`;
+`ardd-plan`, `ardd-implement`, and `ardd-tasks` all shell out to it instead
+of re-deriving the current/default-branch fallback chain. What's still
+duplicated across those three, deliberately, is the *interactive* half —
+suggesting a semantic branch name, asking the user, deciding what to do with
+the answer — because that requires judgment a script doesn't have; skills
+can't invoke other skills structurally, so this residual duplication stays
+prose. If you touch the deterministic detection logic, edit
+`branch-info.sh` (and its regression test, `test-branch-info.sh`) once; if
+you touch the interactive framing, all three skills still need the same
+edit.
 
 ## Conventions
 
