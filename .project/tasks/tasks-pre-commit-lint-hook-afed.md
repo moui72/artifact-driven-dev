@@ -27,7 +27,7 @@ status: in-progress
   non-zero exit, print which script failed and abort (non-zero exit);
   otherwise exit 0 with no output (matches the other scripts' quiet-on-
   success convention). Confirm T001's test now passes (green).
-- [ ] T003 Wire `scripts/test-hooks-pre-commit.sh` into
+- [x] T003 Wire `scripts/test-hooks-pre-commit.sh` into
   `.github/workflows/lint.yml` as its own job, mirroring the existing job
   pattern (checkout + run script).
 
