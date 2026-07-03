@@ -36,7 +36,7 @@ Then open Claude Code in your project.
 After discussing your project with Claude, run:
 
 ```
-/bootstrap
+/ardd-bootstrap
 ```
 
 This reads the conversation and writes initial versions of `infrastructure.md`,
@@ -74,7 +74,7 @@ it also handles version bumping and the sync impact report.
 Before planning, run:
 
 ```
-/analyze
+/ardd-analyze
 ```
 
 This reads all four artifacts and reports:
@@ -107,7 +107,7 @@ findings are available to `/ardd-plan` automatically.
 When artifacts are stable:
 
 ```
-/plan
+/ardd-plan
 ```
 
 Claude reads all artifacts and any research docs, drafts a phased
@@ -121,7 +121,7 @@ to disk until you approve it.
 After approving the plan:
 
 ```
-/tasks
+/ardd-tasks
 ```
 
 This asks which approved plan to generate tasks for, then produces
@@ -140,7 +140,7 @@ Review the task list and adjust before running `/ardd-implement`.
 ### 7. Implement
 
 ```
-/implement
+/ardd-implement
 ```
 
 Claude asks which tasks file to work on, then executes tasks sequentially:
@@ -156,7 +156,7 @@ surfaces blockers rather than working around them.
 If `/ardd-implement` is interrupted — or you pick the project up in a new session:
 
 ```
-/converge
+/ardd-converge
 ```
 
 This asks which tasks file to reconcile, compares the codebase against it,
