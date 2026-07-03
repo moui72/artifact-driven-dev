@@ -20,7 +20,7 @@ status: in-progress
   stub exits non-zero, stopping before running any scripts after it in the
   sequence. Confirm this test fails right now — `hooks/pre-commit` doesn't
   exist yet (Principle V: test-first, red before green).
-- [ ] T002 Add `hooks/pre-commit`: POSIX sh script, run from repo root
+- [x] T002 Add `hooks/pre-commit`: POSIX sh script, run from repo root
   (`cwd`, matching how git invokes hooks). Runs `./scripts/lint-docs.sh`,
   `./scripts/test-lint-project.sh`, `./scripts/test-branch-info.sh`,
   `./scripts/test-hook-lint-on-write.sh` in that order. On the first

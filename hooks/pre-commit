@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+# Pre-commit hook — wired via `git config core.hooksPath hooks` (a one-time,
+# per-clone opt-in; git won't auto-enable a tracked hooks directory). Runs
+# this repository's lint/test scripts before a commit is accepted, per the
+# constitution's Pre-commit Enforcement standard. Runs with cwd at the repo
+# root, same as git invokes any hook. Aborts on the first failure and names
+# it — never runs the rest.
+
+set -e
+
+checks="scripts/lint-docs.sh scripts/test-lint-project.sh scripts/test-branch-info.sh scripts/test-hook-lint-on-write.sh"
+
+for check in $checks; do
+  if ! "./$check"; then
+    echo "pre-commit: $check failed — commit blocked" >&2
+    exit 1
+  fi
+done
+
+exit 0
