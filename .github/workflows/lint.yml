@@ -24,3 +24,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-branch-info.sh
+
+  hook-lint-on-write:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-hook-lint-on-write.sh
