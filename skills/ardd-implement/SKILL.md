@@ -39,9 +39,16 @@ self-contained; the agent loads only the artifacts it declares.
    and read each named file from `.project/artifacts/<name>.md`.
 
 5. **Execute the task:**
-   - For test tasks: write the test first, confirm it fails, then stop at the
-     red state. Mark the test task complete. The paired implementation task
-     follows.
+   - **Check `constitution.md`** (Quality Standards or Core Principles) for a
+     declared testing paradigm before touching a test task — TDD, test-after,
+     coverage threshold, or none. Tasks are paradigm-agnostic: follow
+     whichever the constitution declares, never default to one it doesn't
+     state.
+   - For test tasks under a TDD paradigm: write the test first, confirm it
+     fails, then stop at the red state. Mark the test task complete. The
+     paired implementation task follows.
+   - For test tasks under a test-after paradigm (or no paradigm stated):
+     implement first, then write the test and confirm it passes.
    - For implementation tasks: implement the minimum code to satisfy the task
      description and make the paired test(s) pass.
    - For research or decision tasks: produce the output described and write it
@@ -66,13 +73,17 @@ self-contained; the agent loads only the artifacts it declares.
 
 ## Rules
 
-- **Never skip a test task.** If a task has a test requirement, write and fail
-  the test before any implementation begins (Principle II).
+- **Never skip a test task.** Follow the constitution's declared testing
+  paradigm (step 5) — under TDD, write and fail the test before any
+  implementation begins; under test-after or no stated paradigm, write and
+  pass it as described in step 5. Don't assume TDD or reference a specific
+  principle number if the constitution doesn't name one.
 - **Stop and surface blockers** rather than working around them. If a task
   cannot be completed as written, update the tasks file with a note and ask
   the user.
-- **Add Principle VI annotations** at the point of any production shortcut
-  identified in the task or encountered during implementation.
+- **Add Production Annotations** at the point of any production shortcut
+  identified in the task or encountered during implementation, per the
+  convention in the constitution's Development Workflow section.
 - **Do not modify artifacts** during implementation. If a decision in an artifact
   turns out to be wrong, stop, surface it, and let the user run `/ardd-refine` first.
   The one exception is flipping a bound feature's `Status` line in

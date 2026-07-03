@@ -141,9 +141,10 @@ and adjust before execution. Then:
 ```
 
 Claude asks which tasks file to work on, then executes tasks sequentially:
-loads the relevant artifacts for each task, writes tests first, implements to
-pass them, marks the task complete, and commits. It surfaces blockers rather
-than working around them.
+loads the relevant artifacts for each task, writes and runs tests per
+whatever paradigm the constitution declares (TDD, test-after, or none),
+implements to pass them, marks the task complete, and commits. It surfaces
+blockers rather than working around them.
 
 ---
 

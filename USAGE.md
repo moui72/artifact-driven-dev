@@ -144,7 +144,8 @@ Review the task list and adjust before running `/ardd-implement`.
 ```
 
 Claude asks which tasks file to work on, then executes tasks sequentially:
-loads the declared artifacts for each task, writes tests first (failing),
+loads the declared artifacts for each task, writes and runs tests per
+whatever paradigm the constitution declares (TDD, test-after, or none),
 implements to pass them, marks the task complete, and commits. It stops and
 surfaces blockers rather than working around them.
 

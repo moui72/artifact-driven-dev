@@ -48,7 +48,11 @@ Generate an ordered task list from an approved plan.
    - Be atomic enough that an agent can complete it in one focused session
    - Be concrete enough to execute without reading the plan (embed necessary
      context in the task description)
-   - Include a test requirement where applicable (per Principle II — test first)
+   - Include a test requirement where applicable, following whatever testing
+     paradigm `constitution.md` declares (Quality Standards or Core
+     Principles) — TDD, test-after, coverage threshold, or none. Tasks are
+     paradigm-agnostic by default; don't assume TDD or any specific
+     principle number if the constitution doesn't state one
 
 4. **Mark parallelism** with `[parallel]` on tasks that touch different files
    and have no shared dependencies.
