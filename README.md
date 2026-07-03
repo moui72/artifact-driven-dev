@@ -160,3 +160,18 @@ Tasks in a `tasks-*.md` file declare which artifacts they require:
 
 The `/ardd-implement` skill loads only the declared artifacts before executing each
 task, keeping context focused.
+
+## Contributing to this repo
+
+This is separate from `## Install` above, which is about installing ADD
+*into a target project* — this is about working on ADD's own source. Run
+once per clone:
+
+```sh
+git config core.hooksPath hooks
+```
+
+This enables `hooks/pre-commit`, which runs this repository's own lint/test
+scripts before a commit is accepted. Git won't enable a tracked hooks
+directory automatically, so this is a one-time, per-clone opt-in, not
+something `install.sh` or any hook can do for you.

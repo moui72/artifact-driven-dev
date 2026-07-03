@@ -1,7 +1,7 @@
 ---
 plan: plan-pre-commit-lint-hook-2026-07-03.md
 generated: 2026-07-03
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -33,11 +33,11 @@ status: in-progress
 
 ## Phase 2: Document the opt-in step
 
-- [ ] T004 [parallel] Add the one-time `git config core.hooksPath hooks`
+- [x] T004 [parallel] Add the one-time `git config core.hooksPath hooks`
   step to `CLAUDE.md`'s Commands section, matching the existing command-list
   format, with a one-line note that this is a per-clone opt-in (git won't
   auto-enable a tracked hooks directory).
-- [ ] T005 [parallel] Add a short contributor-facing note to `README.md`
+- [x] T005 [parallel] Add a short contributor-facing note to `README.md`
   documenting the same opt-in step for working on this source repo itself —
   distinct from `install.sh`'s target-project instructions elsewhere in the
   same file (Principle IV: keep the two install targets separate).

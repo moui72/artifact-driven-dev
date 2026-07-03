@@ -26,6 +26,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
+./scripts/test-hooks-pre-commit.sh     # regression test for hooks/pre-commit's aggregation/short-circuit logic
+git config core.hooksPath hooks        # one-time, per-clone opt-in — enables hooks/pre-commit (see constitution.md)
 ```
 
 All lint/test scripts run in CI (`.github/workflows/lint.yml`) on
