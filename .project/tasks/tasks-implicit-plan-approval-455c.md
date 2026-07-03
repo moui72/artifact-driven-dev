@@ -37,7 +37,7 @@ status: in-progress
   presenting the summary, tell the user the plan is saved as `draft` at its
   file path, and that running `/ardd-tasks` and selecting it is what
   approves it and generates tasks.
-- [ ] T003 [parallel] Edit `skills/ardd-tasks/SKILL.md`. In step 2 (pick a
+- [x] T003 [parallel] Edit `skills/ardd-tasks/SKILL.md`. In step 2 (pick a
   plan): stop filtering out `status: draft` plans — list plans regardless
   of status, showing each plan's status in the presented list (alongside
   the existing tasks-file status/progress note). Add a new step immediately

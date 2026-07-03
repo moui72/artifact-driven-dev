@@ -1,6 +1,8 @@
 # /ardd-tasks
 
-Generate an ordered task list from an approved plan.
+Generate an ordered task list from a plan. Selecting a `status: draft` plan
+approves it as part of this — there's no separate approval step in
+`/ardd-plan` anymore.
 
 ## Steps
 
@@ -22,16 +24,18 @@ Generate an ordered task list from an approved plan.
    without asking again this run.
 
 2. **Pick a plan.** Glob `.project/plans/plan-*.md` and read frontmatter for
-   each. Filter out `status: draft` (if only drafts exist, warn the user the
-   same way the artifact draft-warning does, and stop). For each remaining
-   plan, also glob `.project/tasks/tasks-*.md` and check each file's `plan:`
-   frontmatter for an exact match against the plan's filename — note whether
-   one or more tasks files already exist for that plan and their statuses.
+   each — list plans regardless of `status` (`draft`, `approved`, or
+   `superseded`; skip `superseded` ones, they're historical). For each
+   remaining plan, also glob `.project/tasks/tasks-*.md` and check each
+   file's `plan:` frontmatter for an exact match against the plan's
+   filename — note whether one or more tasks files already exist for that
+   plan and their statuses.
 
    Present the list (plan filename, status, and any existing tasks files with
    their status/progress) and ask the user which plan to generate tasks for.
    If only one eligible plan exists, still confirm rather than auto-selecting
-   ("Found 1 approved plan: `plan-auth-flow-2026-06-30.md`. Use this one?").
+   ("Found 1 draft plan: `plan-auth-flow-2026-06-30.md`. Use this one?" —
+   selecting it approves it, see step 3).
 
    If the chosen plan already has a tasks file at `ready`, `in-progress`, or
    `completed`, surface that explicitly and ask for confirmation before
@@ -40,7 +44,18 @@ Generate an ordered task list from an approved plan.
    anyway?"). This is a deliberate fork, not silent data loss — proceeding
    creates a new file, never overwrites the existing one.
 
-3. **Generate tasks** ordered by dependency. Each task MUST:
+3. **Approve the plan, if it isn't already.** If the chosen plan's `status`
+   is `draft`: flip it to `approved` in place, then read its `features:`
+   frontmatter list (if any) and for each slug flip that entry in
+   `.project/artifacts/features.md` from `Status: backlogged` to
+   `Status: planned`, adding `· Plan: <plan filename>` to its metadata
+   line — the same mechanics `/ardd-plan` used to perform on explicit
+   approval, just triggered by selecting the plan here instead. If the
+   chosen plan is already `status: approved` (e.g. from before this
+   convention, or a second tasks-file run against the same plan), skip this
+   step — nothing to do.
+
+4. **Generate tasks** ordered by dependency. Each task MUST:
    - Have a unique ID: `T001`, `T002`, etc.
    - State which artifacts must be loaded before execution, e.g.
      `[artifacts: datamodel, infrastructure]`
@@ -53,10 +68,10 @@ Generate an ordered task list from an approved plan.
      paradigm-agnostic by default; don't assume TDD or any specific
      principle number if the constitution doesn't state one
 
-4. **Mark parallelism** with `[parallel]` on tasks that touch different files
+5. **Mark parallelism** with `[parallel]` on tasks that touch different files
    and have no shared dependencies.
 
-5. **Write to `.project/tasks/tasks-<slug>-<hex>.md`**, where `<slug>` is
+6. **Write to `.project/tasks/tasks-<slug>-<hex>.md`**, where `<slug>` is
    taken from the chosen plan's filename and `<hex>` is a freshly generated
    4-char token (same generation as the branch-gate step), minted at write
    time so the filename is always unique even when regenerating tasks for the
@@ -83,12 +98,12 @@ Generate an ordered task list from an approved plan.
 
    Once all tasks are written, flip `status` to `ready`.
 
-6. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
+7. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
    `features:` list (if any). For each slug, flip its entry in
    `.project/artifacts/features.md` from `Status: planned` to `Status: tasked`
    and add `· Tasks: tasks-<slug>-<hex>.md` (this file's own filename) to its
    metadata line.
 
-7. **Report** the total task count and phase breakdown. Note any tasks that
-   embed a test requirement, and which features (if any) were flipped to
-   `tasked`.
+8. **Report** the total task count and phase breakdown. Note any tasks that
+   embed a test requirement, which features (if any) were flipped to
+   `tasked`, and — if step 3 approved the plan — that it's now `approved`.
