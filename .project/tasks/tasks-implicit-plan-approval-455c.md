@@ -25,7 +25,7 @@ status: in-progress
 
 ## Phase 2: Move plan/feature approval to /ardd-tasks
 
-- [ ] T002 Edit `skills/ardd-plan/SKILL.md`. In step 7 (supersession check),
+- [x] T002 Edit `skills/ardd-plan/SKILL.md`. In step 7 (supersession check),
   once the user confirms a new plan supersedes an existing one, flip that
   existing plan's `status` to `superseded` immediately — don't wait for the
   new plan's own approval. In step 10: remove the "Ask for approval before

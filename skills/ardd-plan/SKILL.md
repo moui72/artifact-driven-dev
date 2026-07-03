@@ -103,8 +103,9 @@ idea; it doesn't touch artifacts).
       internally consistent before the plan itself is drafted against it.
 
    Remember which feature slugs were targeted here — you'll record them in
-   the plan's frontmatter (step 8) and flip their status on approval (step
-   10).
+   the plan's frontmatter (step 8). Their `Status` flips from `backlogged`
+   to `planned` later, in `/ardd-tasks`, when this plan is selected and
+   approved — not here.
 
 4. **Load any research documents** from `.project/plans/research-*.md` relevant
    to the current work.
@@ -144,8 +145,13 @@ idea; it doesn't touch artifacts).
 
 7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
-   plan you're about to draft supersedes one of them. Remember the answer for
-   step 10.
+   plan you're about to draft supersedes one of them. On confirmation, flip
+   that plan's `status` to `superseded` immediately — don't wait for this
+   new plan's own approval, which now happens later, when `/ardd-tasks`
+   selects it. A superseded-by-a-draft-that's-never-used plan is
+   an acceptable outcome, not a bug: `/ardd-analyze`/`STATUS.md` surface
+   open draft counts either way, so an abandoned replacement doesn't go
+   unnoticed.
 
 8. **Draft the plan** covering:
    - **Goal** — what this plan delivers (one sentence)
@@ -178,16 +184,11 @@ idea; it doesn't touch artifacts).
    ```
 
 10. **Present a summary** to the user: phases, key decisions, open questions.
-    Ask for approval before the plan is considered final. Do not generate tasks
-    until the user approves.
+    The plan is saved at `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` as
+    `status: draft` — there's no separate approval step here. Running
+    `/ardd-tasks` and selecting this plan is what approves it (flips it to
+    `approved`, and flips its targeted `features:` slugs from `backlogged`
+    to `planned`) and generates its tasks, in one step.
 
-    Once approved:
-    - Flip this plan's frontmatter `status` to `approved` in place.
-    - If step 7 identified a plan this one supersedes, flip that plan's
-      `status` to `superseded` in place.
-    - For each feature slug targeted in step 3, flip its entry in
-      `.project/artifacts/features.md` from `Status: backlogged` to
-      `Status: planned` and add `· Plan: plan-<slug>-<YYYY-MM-DD>.md` to its
-      metadata line.
-    - Remind the user to run `/ardd-analyze` to update the recommended next
-      step in `STATUS.md`.
+    Remind the user to run `/ardd-analyze` to update the recommended next
+    step in `STATUS.md`.
