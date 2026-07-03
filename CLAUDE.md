@@ -71,19 +71,27 @@ version produced it. Adding a new non-skill directory under
 gitignore-check section too, or it'll be misreported as a tracked
 non-ARDD skill.
 
-**Never suggest blanket `.claude/` in the gitignore check — this bit us in
-our own dogfooding.** Early in the session `install.sh` suggested exactly
-that (correctly, at the time — nothing else was tracked under `.claude/`
-yet), and it silently would have blocked `.claude/settings.json` — real,
-team-shared config for the `PostToolUse` lint hook added later — from ever
-being tracked without `git add -f`. The fix: the default suggestion is now
-always `.claude/skills/`, never blanket `.claude/`; and because the
-check's guard used to go silent forever once anything under `.claude/` was
-ignored, there's now a second check that fires even when `.claude/skills/`
-is already ignored, specifically testing whether `.claude/settings.json`
-would *also* be blocked, and warning if so. If you touch this logic again,
-preserve both: the narrow default, and the standing warning for
-already-ignored targets.
+**Never suggest anything broader than `.claude/skills/ardd-*/` in the
+gitignore check — this bit us twice, in our own dogfooding, at two nested
+levels of the same mistake.** First: `install.sh` suggested blanket
+`.claude/` (correctly, at the time — nothing else was tracked yet), which
+would have silently blocked `.claude/settings.json` — real, team-shared
+config for the `PostToolUse` lint hook added later — from ever being
+tracked without `git add -f`. Fixed by narrowing the default to
+`.claude/skills/`. Then, in this repo's own `.gitignore`, that narrower
+pattern turned out to have the *identical* problem one level down:
+`.claude/skills/` is not entirely ARDD-owned either — only the `ardd-*`
+subdirectories are; a hand-written custom skill could live alongside them.
+So the default narrowed again, to `.claude/skills/ardd-*/`, which is now
+the ceiling — nothing broader should ever be suggested again. Two standing
+warnings cover targets that already over-broadly ignore: one checks
+whether `.claude/settings.json` would be blocked, the other whether a
+synthetic custom-skill path under `.claude/skills/` would be — both fire
+independently since a blanket `.claude/` triggers both, while a blanket
+`.claude/skills/` alone triggers only the second. If you touch this logic
+again: `.claude/skills/ardd-*/` is the correctness floor, and don't drop
+either standing warning, since the check otherwise goes silent forever once
+anything under `.claude/` is already ignored.
 
 **Four artifacts, refined iteratively, not generated once.**
 `constitution.md`, `infrastructure.md`, `datamodel.md`, `ui.md` (plus

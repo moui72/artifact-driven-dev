@@ -92,22 +92,20 @@ the project's own history shows which ARDD version was active at any point
 without vendoring the skill files themselves.
 
 If `git` sees the skills as untracked or already committed, `install.sh`
-prints a suggested `.gitignore` pattern — never a blanket `.claude/`, since
-that directory can also hold real, team-shared config (`settings.json`,
-`agents/`, `commands/`, hooks) a project may want to track later, and a
-blanket ignore silently blocks that:
-
-| What's tracked under `.claude/skills/` | Suggested pattern |
-|---|---|
-| Nothing else, or only ARDD's own | `.claude/skills/` |
-| A custom (non-ARDD) skill too | `.claude/skills/ardd-*/` |
+suggests adding `.claude/skills/ardd-*/` to `.gitignore` — never anything
+broader (`.claude/`, or even `.claude/skills/`), since both can also hold
+real, team-shared content ARDD doesn't own: `.claude/settings.json`,
+`agents/`, `commands/`, hooks, or a hand-written custom skill living
+alongside ARDD's own under `.claude/skills/`. A broader pattern silently
+blocks tracking any of that later — git refuses to `add` an ignored path
+without `-f`.
 
 If the `ardd-*` skills were already committed, it also prints the
-`git rm -r --cached` command to untrack them. If `.claude/skills/` is
-*already* gitignored but broadly enough to also block `.claude/settings.json`
-(e.g. a blanket `.claude/` pattern), it warns about that separately, since
-that check would otherwise go silent forever once anything under `.claude/`
-is ignored.
+`git rm -r --cached` command to untrack them. If `.claude/skills/ardd-*/`
+is *already* gitignored but the actual pattern is broader than that (a
+blanket `.claude/` or `.claude/skills/`), it warns about the specific real
+content that pattern would also block, since that check would otherwise go
+silent forever once anything is already ignored.
 
 ## Project structure created
 
