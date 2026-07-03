@@ -36,17 +36,50 @@ subsequent changes.
 
    Set `status: draft` for any artifact with open questions; `stable` otherwise.
 
-4. **Write all artifact files** to `.project/artifacts/`.
+4. **If `constitution.md` is among the artifacts being created, offer
+   opinionated suggestions before writing it** — this runs once, at this
+   creation, not on later `/ardd-refine` passes. Read `.claude/skills/ardd-
+   constitution-data/constitution-suggestions.md` (installed by
+   `install.sh`). If it's missing, skip this step and note in the final
+   report that suggestions weren't offered because the catalog wasn't found
+   (recommend re-running `install.sh`).
 
-5. **Generate `.project/WORKFLOW.md`** — a stable skill reference that rarely
+   - **Filter**: keep every "Always" entry, plus any entry whose `Signal` is
+     met by which artifacts are being created (step 2) or facts already
+     established in conversation (language, framework, API shape, etc.).
+     When a signal is ambiguous, keep the entry — bias toward offering it
+     and having it rejected over not offering it at all.
+   - **Dedupe**: drop any entry whose concern is already substantively
+     covered by a principle you're about to synthesize from the
+     conversation itself — don't offer a generic duplicate of something the
+     user already stated in their own words.
+   - **Present** the remaining entries via `AskUserQuestion`, multiSelect
+     on, batched into as many calls as needed (max 4 questions per call, max
+     4 options per question — group related entries together, short header
+     per question, one-line description per option drawn from the entry's
+     `Rationale`).
+   - **Apply accepted entries**: insert each entry's `Suggested text`
+     verbatim into the section its `Section` field names. Core Principles
+     accepted here are numbered sequentially, immediately after any
+     principles already synthesized from conversation, in the catalog's own
+     order for ties. Quality Standard entries become bullets (or the named
+     subsection, for Pre-commit Enforcement). Project Scope notes are
+     appended to Project Scope & Intent. Leave wording refinement to a
+     later `/ardd-refine constitution` pass — don't rewrite the suggested
+     text here.
+
+5. **Write all artifact files** to `.project/artifacts/`.
+
+6. **Generate `.project/WORKFLOW.md`** — a stable skill reference that rarely
    needs to change. Use the structure below. Keep skill descriptions generic
    (what each skill does), not project-specific.
 
-6. **Generate `.project/STATUS.md`** — the living project state snapshot. Use
+7. **Generate `.project/STATUS.md`** — the living project state snapshot. Use
    the structure below. This file changes frequently; WORKFLOW.md does not.
 
-7. **Report** what was created, how many open questions exist per artifact, and
-   the recommended next step (usually `/ardd-analyze` then `/ardd-refine` on
+8. **Report** what was created, how many open questions exist per artifact,
+   which constitution suggestions (if any) were accepted, and the
+   recommended next step (usually `/ardd-analyze` then `/ardd-refine` on
    draft artifacts).
 
 ## WORKFLOW.md structure

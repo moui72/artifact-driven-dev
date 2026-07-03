@@ -13,6 +13,7 @@ MIGRATIONS_DIR="$SCRIPT_DIR/migrations"
 CLAUDE_SKILLS="$TARGET/.claude/skills"
 APPLIED_FILE="$TARGET/.ardd-applied"
 VERSION_FILE="$TARGET/.project/ardd-version.md"
+CONSTITUTION_DATA_DIR="$CLAUDE_SKILLS/ardd-constitution-data"
 
 if [ ! -d "$TARGET" ]; then
   echo "Error: target directory '$TARGET' does not exist." >&2
@@ -31,6 +32,15 @@ for skill_dir in "$SKILLS_DIR"/*/; do
   echo "  ✓ $skill_name"
   installed_skill_names="$installed_skill_names $skill_name"
 done
+
+# --- Constitution suggestion catalog ---
+# Not a skill (no SKILL.md, so it never registers as an invokable command) —
+# reference data /ardd-bootstrap and /ardd-codify read at constitution-
+# creation time. Lives under .claude/skills/ardd-* so it's covered by the
+# same gitignore guidance already given for ardd-* skill directories below.
+mkdir -p "$CONSTITUTION_DATA_DIR"
+cp "$SCRIPT_DIR/templates/constitution-suggestions.md" "$CONSTITUTION_DATA_DIR/constitution-suggestions.md"
+echo "  ✓ ardd-constitution-data/constitution-suggestions.md"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
@@ -98,7 +108,7 @@ if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
         .claude/skills/*/*)
           rest="${f#.claude/skills/}"
           skill_name="${rest%%/*}"
-          case " $installed_skill_names " in
+          case " $installed_skill_names ardd-constitution-data " in
             *" $skill_name "*) tracked_ardd=1 ;;
             *) tracked_other_skills=1 ;;
           esac

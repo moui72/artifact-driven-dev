@@ -57,6 +57,29 @@ code does, not necessarily what was intended. Review each one with
      what's imported). Mark inferred principles explicitly so the user can
      correct them.
 
+     After inference, **offer opinionated suggestions** the same way
+     `/ardd-bootstrap` does, before writing the artifact. Read `.claude/
+     skills/ardd-constitution-data/constitution-suggestions.md` (installed
+     by `install.sh`); if missing, skip this step and note it in the step 7
+     report (recommend re-running `install.sh`). Filter by signal (using the
+     step 2 codebase survey, which gives stronger signal than conversation
+     alone — e.g. `tsconfig.json`/`.ts` files for a typed language, route
+     files for API/REST shape, the component tree plus its framework for UI
+     signals, presence of any test files/runner for the Test-First signal),
+     dedupe against principles already inferred, then present via
+     `AskUserQuestion` and apply accepted entries — all exactly as described
+     in `/ardd-bootstrap` step 4.
+
+     **Codify-specific:** for each accepted entry, check whether the step 2
+     survey already shows it's currently violated (e.g. Test-First accepted
+     but zero test files found anywhere in the survey). If so, append
+     `[VIOLATED: <one-line evidence from the survey>]` to the inserted text,
+     the same way other inferred content is marked for the user to see and
+     correct. Never write to `DEFECTS.md` or `features.md` here — report the
+     violated count in step 7 instead, recommending `/ardd-verify` (to log
+     each gap in `DEFECTS.md`) followed by `/ardd-feature` to backlog closing
+     it. This preserves those files' existing single-writer ownership.
+
    Use the standard section structure for each known artifact type (see
    `/ardd-refine` built-in guidance). For custom artifacts, derive structure
    from the content.
@@ -82,5 +105,9 @@ code does, not necessarily what was intended. Review each one with
    - Total `[OPEN: ...]` items across all artifacts (count only)
    - One sentence on what the codebase survey found that was most surprising
      or ambiguous
+   - Which constitution suggestions (if any) were accepted, and how many of
+     those are marked `[VIOLATED: ...]` — if any are, recommend running
+     `/ardd-verify` next to log them in `DEFECTS.md`, then `/ardd-feature` to
+     backlog closing each gap
    - Recommended next step: `/ardd-refine <artifact>` for whichever artifact
      has the most open questions, then `/ardd-analyze` when all are resolved
