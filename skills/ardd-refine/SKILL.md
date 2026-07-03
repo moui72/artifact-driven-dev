@@ -67,6 +67,13 @@ that has open questions instead of a single one:
 When refining a known artifact type, use these section structures as guidance.
 For custom artifacts, follow the sections already present in the file.
 
+Any artifact documenting a known production shortcut or gap does so under a
+`## Production Annotations` heading, never as inline prose in another
+section — this is what lets `/ardd-plan`'s Production Annotation Summary
+step and `/ardd-critique` find them reliably. If you find one written inline
+elsewhere while refining, move it under `## Production Annotations` (adding
+the section if it doesn't exist yet) rather than leaving it in place.
+
 ### `infrastructure.md`
 - **Overview** — sync strategy, storage choice, rationale
 - **Integration Components** — one subsection per external source/service:
@@ -80,9 +87,11 @@ For custom artifacts, follow the sections already present in the file.
   mapping, and notes
 - **Normalization Rules** — date formats, ID schemes, enum values, string parsing
 - **Indexes** — query patterns that require indexes
+- **Production Annotations** — known shortcuts with production annotation notes
 
 ### `ui.md`
 - **Overview** — purpose, target user, key interactions
 - **Views** — one subsection per distinct view or screen
 - **Components** — shared components used across views
 - **States** — loading, empty, error handling per view
+- **Production Annotations** — known shortcuts with production annotation notes

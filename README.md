@@ -54,6 +54,7 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-codify` | Once — reverse-engineer artifacts from an existing codebase |
 | `/ardd-featurize` | Once (after codify) — extract a feature register from the codebase |
 | `/ardd-feature <description>` | Log a feature idea to the backlog (`features.md`) — no artifact edits yet |
+| `/ardd-sync [push\|pull]` | Anytime — mirror `features.md` to/from an external issue tracker (GitHub Issues now) |
 | `/ardd-refine <artifact>` | Anytime — update a named artifact |
 | `/ardd-analyze` | Before planning — cross-artifact consistency check |
 | `/ardd-verify` | Before major planning, or periodically — check artifacts against the actual codebase and record drift in `DEFECTS.md` |

@@ -9,9 +9,8 @@ last_updated: YYYY-MM-DD
 ## Overview
 
 [Describe the API layer: framework, transport (REST, tRPC, GraphQL), how the
-UI consumes it, and any auth approach or deliberate shortcut.]
-
-`// [PRODUCTION]: [auth/security shortcut annotation if applicable]`
+UI consumes it, and any auth approach. Note any auth/security shortcut under
+Production Annotations below, not inline here.]
 
 ## Dev Setup
 
@@ -52,4 +51,9 @@ AppRouter type for tRPC, generated OpenAPI client, shared types package.]
 
 ## Production Annotations
 
-[List known shortcuts with notes on what the production approach would be.]
+[List known shortcuts or gaps with notes on what the production approach
+would be — per the constitution's Development Workflow convention, this is
+the only place in this artifact such notes belong; don't scatter them inline
+in other sections.]
+
+- **[Shortcut]**: [What it does] — in production, [correct approach].
