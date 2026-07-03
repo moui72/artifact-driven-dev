@@ -71,6 +71,20 @@ version produced it. Adding a new non-skill directory under
 gitignore-check section too, or it'll be misreported as a tracked
 non-ARDD skill.
 
+**Never suggest blanket `.claude/` in the gitignore check — this bit us in
+our own dogfooding.** Early in the session `install.sh` suggested exactly
+that (correctly, at the time — nothing else was tracked under `.claude/`
+yet), and it silently would have blocked `.claude/settings.json` — real,
+team-shared config for the `PostToolUse` lint hook added later — from ever
+being tracked without `git add -f`. The fix: the default suggestion is now
+always `.claude/skills/`, never blanket `.claude/`; and because the
+check's guard used to go silent forever once anything under `.claude/` was
+ignored, there's now a second check that fires even when `.claude/skills/`
+is already ignored, specifically testing whether `.claude/settings.json`
+would *also* be blocked, and warning if so. If you touch this logic again,
+preserve both: the narrow default, and the standing warning for
+already-ignored targets.
+
 **Four artifacts, refined iteratively, not generated once.**
 `constitution.md`, `infrastructure.md`, `datamodel.md`, `ui.md` (plus
 `features.md` and optional artifacts like `adapters.md`/`api.md`) live in a
