@@ -5,12 +5,11 @@ self-contained; the agent loads only the artifacts it declares.
 
 ## Steps
 
-1. **Check branch.** Get the current branch (`git branch --show-current`) and
-   the repo's default branch (`git symbolic-ref refs/remotes/origin/HEAD`
-   stripped of `refs/remotes/origin/`, falling back to `main` then `master`
-   if no remote is configured). If they differ, skip to step 2.
+1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
+   `current`, `default`, and `on_default`. If `on_default` is `false`, skip to
+   step 2.
 
-   If they match, suggest a branch name — a semantic kebab-case slug derived
+   If `on_default` is `true`, suggest a branch name — a semantic kebab-case slug derived
    from the conversation/artifacts if the topic is clear, otherwise a short
    arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`). Ask the
    user:

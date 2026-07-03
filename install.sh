@@ -57,15 +57,20 @@ mkdir -p "$ARTIFACT_TEMPLATES_DIR"
 cp "$SCRIPT_DIR"/templates/artifacts/*.md "$ARTIFACT_TEMPLATES_DIR/"
 echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.md | wc -l | tr -d ' ') templates)"
 
-# --- Deterministic check scripts ---
-# Not a skill — invoked by /ardd-lint (and by hand, or CI) against this
-# project's own .project/ state. Schema-of-record for status enums and
-# required frontmatter fields lives in this script, not in prose; see
-# scripts/lint-project.sh's header comment.
+# --- Deterministic check/utility scripts ---
+# Not skills — shelled out to by skill prose or run by hand/CI.
+# lint-project.sh: invoked by /ardd-lint against this project's own
+#   .project/ state. Schema-of-record for status enums and required
+#   frontmatter fields lives in this script, not in prose; see its header.
+# branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-tasks' "check
+#   branch" step for the deterministic current/default-branch detection
+#   those three skills used to duplicate as prose.
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
-chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh"
+cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
+chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
+echo "  ✓ ardd-scripts/branch-info.sh"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
