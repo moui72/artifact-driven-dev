@@ -81,6 +81,7 @@ log.
 6. **Report a summary:**
    - Defect count, grouped by artifact
    - One line per defect (artifact, claim, actual behavior)
-   - Remind the user that `/ardd-analyze` will surface `DEFECTS.md`'s summary
-     in `STATUS.md` the next time it runs — `/ardd-verify` does not touch
-     `STATUS.md` itself.
+
+   Then run `/ardd-analyze` now to surface `DEFECTS.md`'s summary in
+   `STATUS.md` — `/ardd-verify` does not touch `STATUS.md` itself, so
+   without this the defect line there stays stale.

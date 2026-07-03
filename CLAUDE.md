@@ -157,11 +157,20 @@ of re-deriving the current/default-branch fallback chain. What's still
 duplicated across those three, deliberately, is the *interactive* half —
 suggesting a semantic branch name, asking the user, deciding what to do with
 the answer — because that requires judgment a script doesn't have; skills
-can't invoke other skills structurally, so this residual duplication stays
-prose. If you touch the deterministic detection logic, edit
-`branch-info.sh` (and its regression test, `test-branch-info.sh`) once; if
-you touch the interactive framing, all three skills still need the same
-edit.
+can't call into another skill as a subroutine to share that judgment or get
+a return value back, so this residual duplication stays prose. If you touch
+the deterministic detection logic, edit `branch-info.sh` (and its regression
+test, `test-branch-info.sh`) once; if you touch the interactive framing, all
+three skills still need the same edit.
+
+That's a different thing from a skill telling the agent, as its own last
+step, to run another skill and stop — a terminal handoff, not a subroutine
+call. Most skills that change state `/ardd-analyze` reports on end by
+instructing the agent to run `/ardd-analyze` directly, since Claude Code
+lets a skill's prose trigger another skill by name. No shared logic and no
+value passed back — analyze re-derives everything itself from disk, same as
+if the user had typed it. See `/ardd-analyze`'s own SKILL.md for the
+canonical list of which skills do this.
 
 ## Conventions
 

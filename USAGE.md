@@ -71,7 +71,10 @@ it also handles version bumping and the sync impact report.
 
 ### 3. Check consistency
 
-Before planning, run:
+`/ardd-refine` and most other skills that change project state now run this
+for you automatically as their final step, so you usually won't need to
+invoke it by hand — see `/ardd-analyze`'s own SKILL.md for the exact list. To run it standalone — e.g. before planning, or any time you
+want a fresh check outside those flows:
 
 ```
 /ardd-analyze
@@ -83,7 +86,8 @@ This reads all four artifacts and reports:
 - **Missing artifacts** — anything still at `status: draft`
 - **Constitution violations** — decisions that break your principles
 
-Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean.
+Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean — each
+`/ardd-refine` pass triggers the next check itself.
 
 ---
 

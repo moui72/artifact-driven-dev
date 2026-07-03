@@ -4,6 +4,21 @@ Non-destructive cross-artifact consistency and quality check. Discovers and
 reads all artifacts present in `.project/artifacts/`, then reports gaps,
 contradictions, and implied-but-undefined decisions.
 
+`/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-refine`,
+`/ardd-feedback`, `/ardd-implement` and `/ardd-converge` (both on
+tasks-file completion), `/ardd-add-artifact` (when relevant), and
+`/ardd-verify` invoke this skill automatically as their final step, since
+each of those changes state `STATUS.md` should reflect. This is the
+canonical list — other docs referencing which skills auto-trigger analyze
+point back here rather than re-enumerating, so it's the one place to update
+when that set changes.
+
+Manual invocation is still the right call after
+`/ardd-codify`/`/ardd-featurize` (deliberately deferred until after a
+`/ardd-refine` pass — running it immediately would just report a wall of
+expected draft-state noise) or anytime you want a fresh check outside those
+flows.
+
 ## Steps
 
 1. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`

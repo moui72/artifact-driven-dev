@@ -56,9 +56,9 @@ notes in the next message.
    - [ ] <item> [artifacts: <name>]
    ```
 
-5. **Report** the item count by category and the file path. Remind the user
-   that `/ardd-plan` will pick this up automatically, and to run
-   `/ardd-analyze` to reflect the open feedback count in `STATUS.md`.
+5. **Report** the item count by category and the file path, noting that
+   `/ardd-plan` will pick this up automatically. Then run `/ardd-analyze` now
+   to reflect the open feedback count in `STATUS.md`.
 
 ## Consumption by /ardd-plan
 

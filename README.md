@@ -10,11 +10,20 @@ knowing where that overhead pays for itself; see
 
 ## Future directions
 
-A hooks system (pre/post skill execution, similar to spec-kit's extension model)
-is the most obvious next step — it would enable things like auto-running
-`/ardd-analyze` after every `/ardd-refine`, or triggering custom validation
-before `/ardd-plan`. The right hook points will become clearer after a few more
-projects use ADD. Designing them now would be speculative.
+`/ardd-analyze` now runs automatically as the final step of most skills that
+change state it reports on — see the list in `/ardd-analyze`'s own SKILL.md,
+which is canonical. Each skill's own prose tells the agent to invoke it,
+since Claude Code lets a skill's instructions trigger another skill
+directly. That doesn't need a hooks
+system; it only reaches the skills that already end with "now run
+`/ardd-analyze`" written into them.
+
+A real hooks system (pre/post skill execution, similar to spec-kit's
+extension model) is still the more general next step — it would enable
+triggering *arbitrary* validation around *any* skill, including ones this
+repo hasn't anticipated, without editing that skill's prose. The right hook
+points will become clearer after a few more projects use ADD. Designing them
+now would be speculative.
 
 ## Credits
 

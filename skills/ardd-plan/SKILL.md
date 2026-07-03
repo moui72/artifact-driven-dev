@@ -190,5 +190,6 @@ idea; it doesn't touch artifacts).
     `approved`, and flips its targeted `features:` slugs from `backlogged`
     to `planned`) and generates its tasks, in one step.
 
-    Remind the user to run `/ardd-analyze` to update the recommended next
-    step in `STATUS.md`.
+    Run `/ardd-analyze` now to refresh `STATUS.md`'s recommended next step —
+    artifacts and/or `features.md` changed in this run, so don't wait for the
+    user to ask for it.

@@ -48,3 +48,8 @@ when resuming work in a new session.
    - New tasks appended
    - Any features flipped to `implemented`
    - Recommended next step (usually: run `/ardd-implement` to continue)
+
+   If step 6 flipped the file to `completed`, run `/ardd-analyze` now to
+   refresh `STATUS.md` — same trigger condition as `/ardd-implement`'s
+   tasks-file completion. Otherwise (still `in-progress`), skip it; nothing
+   changed that `STATUS.md` needs to reflect yet.

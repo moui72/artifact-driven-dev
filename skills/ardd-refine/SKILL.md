@@ -17,8 +17,9 @@ that has open questions instead of a single one:
 3. Run the normal refine steps below (steps 1–7) on each artifact in that
    order, using its open questions as the guidance/clarifying-question input
    for step 2 instead of asking from scratch.
-4. After the pass, remind the user to run `/ardd-analyze` once to refresh
-   `STATUS.md` for all refined artifacts, rather than after each one.
+4. After the pass, run `/ardd-analyze` once automatically to refresh
+   `STATUS.md` for all refined artifacts, rather than after each one — skip
+   the per-artifact trigger in step 7 below while running in this mode.
 
 ## Steps
 
@@ -60,8 +61,10 @@ that has open questions instead of a single one:
 6. **Write** the updated artifact back to `.project/artifacts/<name>.md`.
 
 7. **Report** what changed in 2–3 sentences. Note any open questions deferred
-   for a future `/ardd-refine` pass. Remind the user to run `/ardd-analyze`
-   to refresh `STATUS.md` with the updated artifact status and open questions.
+   for a future `/ardd-refine` pass. If invoked for a single artifact (not
+   via no-argument mode), run `/ardd-analyze` now to refresh `STATUS.md` with
+   the updated artifact status and open questions — in no-argument mode this
+   is skipped here since it already runs once after the full pass (above).
 
 ## Built-in artifact guidance
 

@@ -29,7 +29,10 @@ self-contained; the agent loads only the artifacts it declares.
    one exists, still confirm rather than auto-selecting.
 
 3. **Find the next uncompleted task** (first `- [ ]` in document order) in
-   the chosen file. If all tasks are complete, report success and stop.
+   the chosen file. If all tasks are complete, run `/ardd-analyze` now to
+   refresh `STATUS.md` — completing a tasks file changes `features.md`
+   Status (step 7) and is the natural wrap-up point for this run — then
+   report success and stop.
 
    If this is the first task being started in this file (status is `ready`),
    flip the file's frontmatter `status` to `in-progress` before proceeding.

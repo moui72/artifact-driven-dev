@@ -107,3 +107,5 @@ approves it as part of this — there's no separate approval step in
 8. **Report** the total task count and phase breakdown. Note any tasks that
    embed a test requirement, which features (if any) were flipped to
    `tasked`, and — if step 3 approved the plan — that it's now `approved`.
+   Then run `/ardd-analyze` now to refresh `STATUS.md` — plan approval and
+   the feature-backlog flips in steps 3 and 7 leave it stale otherwise.
