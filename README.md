@@ -1,9 +1,12 @@
 # artifact-driven-dev (ADD)
 
-A lightweight, artifact-driven workflow system for Claude Code. Inspired by
-[Spec Kit](https://github.com/github/spec-kit) — a spec-driven development
-framework for AI coding agents — but designed for builders who already know
-what they're building. The artifacts capture decisions, not discover them.
+A spec-driven workflow system for Claude Code, in the same lineage as
+[Spec Kit](https://github.com/github/spec-kit) — but built around capturing
+decisions you've already made, rather than discovering them through
+structured elicitation. It's disciplined, not lightweight — four-plus
+living documents, ~18 skills, several status state machines — so it's worth
+knowing where that overhead pays for itself; see
+[When artifacts earn their keep](#when-artifacts-earn-their-keep) below.
 
 ## Future directions
 
@@ -17,21 +20,48 @@ projects use ADD. Designing them now would be speculative.
 
 ADD was inspired by [Spec Kit](https://github.com/github/spec-kit). If you
 need structured requirement discovery, user story generation, or a full
-spec-to-implementation pipeline, Spec Kit is the right tool. ADD is the
-lighter alternative for when you arrive with architectural clarity and just
+spec-to-implementation pipeline, Spec Kit is the right tool. ADD is
+narrower in scope — for when you arrive with architectural clarity and just
 need a system to capture, cross-check, and execute against it.
 
 ## Philosophy
 
-Traditional spec frameworks generate clarity through ceremony. ADD assumes you
-arrive with clarity and need a system to capture, cross-check, and execute
-against it. The workflow is:
+ADD assumes you arrive with clarity about what you're building and need a
+system to capture, cross-check, and execute against those decisions — not
+one that generates the decisions for you through structured discovery. The
+workflow is:
 
 1. **Capture** decisions in living artifacts
 2. **Analyze** artifacts for consistency before planning
 3. **Plan** once artifacts are stable
 4. **Execute** against an ordered task list
 5. **Converge** when work is interrupted
+
+## When artifacts earn their keep
+
+An agent working in an existing codebase normally infers conventions by
+pattern-matching nearby code — that's usually enough, and a good `CLAUDE.md`
+plus direct conversation covers the rest. Artifacts pay for their overhead
+specifically when the codebase *can't* serve as that implicit spec:
+
+- **Greenfield** — there's no code yet to pattern-match against. Artifacts
+  are the only explicit source of truth until enough code exists to become
+  one itself.
+- **A major pivot** — the codebase exists, but reflects patterns you're
+  actively moving away from. An agent copying it faithfully reproduces
+  exactly what you're trying to escape. Artifacts let you declare the target
+  state independent of what the code currently does — though ADD doesn't
+  detect the pivot for you: `/ardd-codify` captures the codebase's *current*
+  patterns as a starting draft, and you still have to refine artifacts
+  toward where you actually want to end up.
+
+Where the codebase already *is* a trustworthy source of truth — mature,
+consistent, already following the conventions you want — an agent
+pattern-matches off it directly, and ADD's overhead buys you less than a
+solid `CLAUDE.md`. Artifacts still have a minor secondary benefit there (the
+code shows *how* something works, not *why* it was decided that way), but
+that's not enough on its own to justify the process for a codebase that's
+already a good implicit spec.
 
 ## Artifacts
 

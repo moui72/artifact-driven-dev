@@ -234,17 +234,27 @@ jobs:
 
 ---
 
-## When to use ADD vs Spec Kit
+## When to use ADD
+
+### vs. Spec Kit
 
 [Spec Kit](https://github.com/github/spec-kit) is an agent-agnostic
-spec-driven development framework. Use it when:
-- You need structured requirement discovery
-- You're working from a vague brief that needs user story generation
-- You want a full spec-to-task pipeline with templates and validation
+spec-driven development framework aimed at *discovering* requirements —
+structured elicitation, user story generation, a full spec-to-task pipeline.
+Use it when you're working from a vague brief and need the framework to help
+you arrive at decisions.
 
-Use ADD when:
-- You already have a clear picture of what you're building
-- You want to capture and cross-check decisions, not generate them
-- You prefer lean artifacts over templated ceremony
+ADD assumes you've already arrived at the decisions and need a system to
+capture, cross-check, and execute against them instead — narrower in scope
+than Spec Kit, not lighter in absolute terms; it still carries real process
+overhead. ADD is also currently Claude Code-specific; Spec Kit works across
+agents.
 
-ADD is currently Claude Code-specific. Spec Kit works across agents.
+### vs. a good CLAUDE.md and direct conversation
+
+The sharper question for most projects. Short version — see
+[README.md](README.md#when-artifacts-earn-their-keep) for the full
+reasoning: ADD earns its overhead when the codebase can't serve as an
+implicit spec an agent can pattern-match against (greenfield, or a pivot
+away from existing patterns), and buys you less when it already can (a
+mature, consistent codebase a good `CLAUDE.md` already covers).
