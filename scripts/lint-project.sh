@@ -41,7 +41,7 @@ ARTIFACT_STATUS_ENUM="draft stable"
 DIAGRAM_STATUS_ENUM="unrendered stale current"
 RENDERABLE_ARTIFACTS="datamodel infrastructure ui"
 PLAN_STATUS_ENUM="draft approved superseded"
-TASKS_STATUS_ENUM="generating ready in-progress completed"
+TASKS_STATUS_ENUM="generating ready in-progress completed abandoned"
 FEEDBACK_STATUS_ENUM="open planned"
 FEATURE_STATUS_ENUM="backlogged planned tasked implemented"
 # -----------------------------------------------------------------------

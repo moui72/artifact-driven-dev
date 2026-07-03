@@ -44,6 +44,16 @@ approves it as part of this — there's no separate approval step in
    anyway?"). This is a deliberate fork, not silent data loss — proceeding
    creates a new file, never overwrites the existing one.
 
+   On confirmation, also ask whether to mark each existing non-`completed`
+   tasks file for this plan as `abandoned` (skip any already `completed` —
+   that's a more informative terminal state than abandonment, and
+   `/ardd-implement`/`/ardd-converge`'s sibling-completion check already
+   treats a `completed` sibling as done). Flip `status` to `abandoned` for
+   each one the user confirms; leave the rest untouched (e.g. still
+   legitimately being worked in parallel). This keeps stale forks from
+   lingering at `ready`/`in-progress` forever with no way to tell "abandoned"
+   from "just not picked up yet."
+
 3. **Approve the plan, if it isn't already.** If the chosen plan's `status`
    is `draft`: flip it to `approved` in place, then read its `features:`
    frontmatter list (if any) and for each slug flip that entry in
@@ -84,6 +94,8 @@ approves it as part of this — there's no separate approval step in
    plan: plan-<slug>-YYYY-MM-DD.md   # exact filename of the source plan — authoritative binding
    generated: YYYY-MM-DD
    status: generating   # generating -> ready -> in-progress -> completed
+                        # (or -> abandoned, if superseded by a new tasks
+                        # file generated for the same plan)
    ---
 
    # Tasks

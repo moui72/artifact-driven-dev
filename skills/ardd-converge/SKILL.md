@@ -6,11 +6,13 @@ when resuming work in a new session.
 
 ## Steps
 
-1. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`. If none exist,
-   tell the user to run `/ardd-tasks` first. For each file, read its
-   frontmatter `status` and compute live progress from checkboxes (`x/y
-   complete`). Present the list and ask the user which to reconcile. If only
-   one exists, still confirm rather than auto-selecting.
+1. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`, excluding any at
+   `status: abandoned` — a superseded fork with nothing left to reconcile.
+   If none remain, tell the user to run `/ardd-tasks` first. For each
+   remaining file, read its frontmatter `status` and compute live progress
+   from checkboxes (`x/y complete`). Present the list and ask the user which
+   to reconcile. If only one exists, still confirm rather than
+   auto-selecting.
 
 2. **Load the chosen file.** Identify all tasks marked `- [x]` (complete) and
    `- [ ]` (incomplete).
@@ -35,12 +37,13 @@ when resuming work in a new session.
    frontmatter `status` to reflect the reconciled state: `completed` if every
    task is now `- [x]` with no gaps appended, `in-progress` otherwise.
 
-   If the status is now `completed`, glob `.project/tasks/tasks-*.md` for any
-   other file whose `plan:` frontmatter matches the same plan — a plan can
-   have more than one tasks file. Only if every one of them is `completed`,
-   load the plan and for each slug in its `features:` list flip that entry's
-   `Status` in `.project/artifacts/features.md` from `tasked` to
-   `implemented`.
+   If the status is now `completed`, run
+   `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's path>`
+   — the same shared check `/ardd-implement` runs on a tasks file's own
+   completion, since a plan can have more than one tasks file. Only if its
+   `all_complete=true`, load the plan and for each slug in its `features:`
+   list flip that entry's `Status` in `.project/artifacts/features.md` from
+   `tasked` to `implemented`.
 
 7. **Report:**
    - Tasks newly marked complete

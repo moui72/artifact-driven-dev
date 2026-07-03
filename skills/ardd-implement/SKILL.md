@@ -22,11 +22,13 @@ self-contained; the agent loads only the artifacts it declares.
    On yes, run `git checkout -b <name>`. On no, proceed on the default branch
    without asking again this run.
 
-2. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`. If none exist,
-   tell the user to run `/ardd-tasks` first. For each file, read its
-   frontmatter `status` and compute live progress from checkboxes (`x/y
-   complete`). Present the list and ask the user which to work on. If only
-   one exists, still confirm rather than auto-selecting.
+2. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`, excluding any at
+   `status: abandoned` — a superseded fork with nothing left to execute
+   against. If none remain, tell the user to run `/ardd-tasks` first. For
+   each remaining file, read its frontmatter `status` and compute live
+   progress from checkboxes (`x/y complete`). Present the list and ask the
+   user which to work on. If only one exists, still confirm rather than
+   auto-selecting.
 
 3. **Find the next uncompleted task** (first `- [ ]` in document order) in
    the chosen file. If all tasks are complete, run `/ardd-analyze` now to
@@ -61,13 +63,13 @@ self-contained; the agent loads only the artifacts it declares.
 
 7. **Mark the task complete** in the tasks file: change `- [ ]` to `- [x]`. If
    this was the last incomplete task, flip the file's frontmatter `status` to
-   `completed`. Then read this tasks file's `plan:` frontmatter and glob
-   `.project/tasks/tasks-*.md` for any other file whose `plan:` frontmatter
-   matches the same plan — a plan can have more than one tasks file. Only if
-   every one of them is now `completed` (i.e. this wasn't the last of several
-   in-flight tasks files for the plan), load the plan and for each slug in
-   its `features:` list flip that entry's `Status` in
-   `.project/artifacts/features.md` from `tasked` to `implemented`.
+   `completed`, then run
+   `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's path>`
+   — it reports every tasks file bound to the same plan (a plan can have
+   more than one) and whether they're collectively done. Only if its
+   `all_complete=true`, load the plan and for each slug in its `features:`
+   list flip that entry's `Status` in `.project/artifacts/features.md` from
+   `tasked` to `implemented`.
 
 8. **Commit** the work with a concise message referencing the task ID.
 

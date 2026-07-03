@@ -65,12 +65,18 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 # branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-tasks' "check
 #   branch" step for the deterministic current/default-branch detection
 #   those three skills used to duplicate as prose.
+# sibling-tasks-complete.sh: invoked by ardd-implement/ardd-converge on a
+#   tasks file's own completion, to check whether every tasks file bound to
+#   the same plan is done before flipping that plan's features to
+#   implemented — those two skills used to duplicate this check as prose.
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
 cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
-chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
+cp "$SCRIPT_DIR/scripts/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh"
+chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
+echo "  ✓ ardd-scripts/sibling-tasks-complete.sh"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
