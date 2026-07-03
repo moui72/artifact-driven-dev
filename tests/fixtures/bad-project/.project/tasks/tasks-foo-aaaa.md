@@ -1,5 +1,5 @@
 ---
-plan: plan-foo-2026-01-01.md
+plan: plan-missing-2026-01-01.md
 generated: 2026-01-01
 status: done
 ---

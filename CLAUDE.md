@@ -111,7 +111,8 @@ this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/critique.md` — written only by `/ardd-critique`
 - `.project/artifacts/features.md` `Status` field — written only by
   `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`,
-  `/ardd-converge`
+  `/ardd-converge`, `/ardd-sync` (pull step 1 appends new
+  `Status: backlogged` entries imported from the tracker)
 
 Every other skill treats these as read-only. A PreToolUse/PostToolUse hook
 cannot enforce this: its payload (`tool_name`, `tool_input`, `transcript_path`,

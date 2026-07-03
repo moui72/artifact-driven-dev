@@ -5,6 +5,11 @@
 #   - required frontmatter fields are present
 #   - [artifacts: ...] tags on tasks/feedback lines reference artifact files
 #     that actually exist
+#   - cross-file pointers resolve: a tasks file's `plan:` names an existing
+#     plan file; a plan's `features:` slugs exist in features.md; a
+#     features.md entry's `Plan:`/`Tasks:` metadata fields name existing files
+#   - a tasks file stuck at `status: generating` (a crashed /ardd-tasks run)
+#     is flagged rather than silently accepted as a valid enum value
 #
 # THIS SCRIPT IS THE SCHEMA-OF-RECORD for status enums and required fields.
 # The enums below are hardcoded because they can't be derived from the
@@ -23,6 +28,7 @@ set -e
 
 TARGET="${1:-.}"
 PROJECT_DIR="$TARGET/.project"
+FEATURES_FILE="$PROJECT_DIR/artifacts/features.md"
 
 fail=0
 report() {
@@ -99,7 +105,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
   done
 
   # --- features.md: last_updated in frontmatter, Status: per entry ---
-  features_file="$PROJECT_DIR/artifacts/features.md"
+  features_file="$FEATURES_FILE"
   if [ -f "$features_file" ]; then
     if ! frontmatter_has "$features_file" last_updated; then
       report "$features_file: missing required frontmatter field 'last_updated'"
@@ -109,6 +115,21 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       val="$(printf '%s' "$line" | sed -E 's/.*Status: ([a-z]+)$/\1/')"
       if ! in_enum "$val" $FEATURE_STATUS_ENUM; then
         echo "$features_file: feature '$slug' status '$val' not in {$FEATURE_STATUS_ENUM}"
+        echo 1 > "$TARGET/.lint-project-failed"
+      fi
+    done
+
+    # --- Plan:/Tasks: metadata fields must reference existing files ---
+    grep -E '_Slug: `' "$features_file" | while IFS= read -r line; do
+      slug="$(printf '%s' "$line" | sed -E 's/.*_Slug: `([^`]+)`.*/\1/')"
+      planref="$(printf '%s' "$line" | grep -oE 'Plan: [^·_]+' | sed -E 's/^Plan:[[:space:]]*//; s/[[:space:]]+$//')"
+      tasksref="$(printf '%s' "$line" | grep -oE 'Tasks: [^·_]+' | sed -E 's/^Tasks:[[:space:]]*//; s/[[:space:]]+$//')"
+      if [ -n "$planref" ] && [ ! -f "$PROJECT_DIR/plans/$planref" ]; then
+        echo "$features_file: feature '$slug' Plan reference '$planref' — no $PROJECT_DIR/plans/$planref"
+        echo 1 > "$TARGET/.lint-project-failed"
+      fi
+      if [ -n "$tasksref" ] && [ ! -f "$PROJECT_DIR/tasks/$tasksref" ]; then
+        echo "$features_file: feature '$slug' Tasks reference '$tasksref' — no $PROJECT_DIR/tasks/$tasksref"
         echo 1 > "$TARGET/.lint-project-failed"
       fi
     done
@@ -130,6 +151,28 @@ if [ -d "$PROJECT_DIR/plans" ]; then
         report "$f: status '$val' not in {$PLAN_STATUS_ENUM}"
       fi
     fi
+
+    # --- features: [...] slugs must exist in features.md ---
+    if frontmatter_has "$f" features; then
+      featval="$(frontmatter_field "$f" features)"
+      inner="$(printf '%s' "$featval" | sed -E 's/^\[//; s/\]$//')"
+      if [ -n "$inner" ]; then
+        old_ifs="$IFS"
+        IFS=','
+        for raw in $inner; do
+          IFS="$old_ifs"
+          slug="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+          if [ -n "$slug" ]; then
+            if [ ! -f "$FEATURES_FILE" ] || ! grep -qE "_Slug: \`${slug}\`" "$FEATURES_FILE"; then
+              echo "$f: features slug '$slug' not found in $FEATURES_FILE"
+              echo 1 > "$TARGET/.lint-project-failed"
+            fi
+          fi
+          IFS=','
+        done
+        IFS="$old_ifs"
+      fi
+    fi
   done
 fi
 
@@ -146,6 +189,16 @@ if [ -d "$PROJECT_DIR/tasks" ]; then
       val="$(frontmatter_field "$f" status)"
       if ! in_enum "$val" $TASKS_STATUS_ENUM; then
         report "$f: status '$val' not in {$TASKS_STATUS_ENUM}"
+      elif [ "$val" = "generating" ]; then
+        report "$f: status is 'generating' — a previous /ardd-tasks run likely crashed mid-generation; regenerate or fix manually"
+      fi
+    fi
+
+    # --- plan: must reference an existing plan file ---
+    if frontmatter_has "$f" plan; then
+      planref="$(frontmatter_field "$f" plan)"
+      if [ -n "$planref" ] && [ ! -f "$PROJECT_DIR/plans/$planref" ]; then
+        report "$f: plan '$planref' — no $PROJECT_DIR/plans/$planref"
       fi
     fi
   done

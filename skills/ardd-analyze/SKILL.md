@@ -38,8 +38,9 @@ flows.
    Also read `.project/artifacts/features.md` if present. Count entries by
    `Status` (`backlogged`/`planned`/`tasked`/`implemented`) — read-only
    visibility; `/ardd-analyze` never writes to `features.md` (that belongs to
-   `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`, and
-   `/ardd-converge`).
+   `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`,
+   `/ardd-converge`, and `/ardd-sync` — pull step 1 appends new backlog
+   entries imported from the tracker).
 
 2. **Check cross-artifact consistency** for every pair of artifacts:
    - Any entity, field, endpoint, or concept mentioned in one artifact must be
