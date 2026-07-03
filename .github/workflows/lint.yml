@@ -11,3 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: ./scripts/lint-docs.sh
+
+  lint-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-lint-project.sh
