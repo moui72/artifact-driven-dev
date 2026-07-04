@@ -85,7 +85,7 @@ status: in-progress
   different label → warns; a lock older than 5 minutes from a different
   label → silent (stale, not a real race). Confirm this test fails right
   now — the script doesn't exist yet.
-- [ ] T013 Implement `scripts/project-lock.sh` (`touch`/`check`
+- [x] T013 Implement `scripts/project-lock.sh` (`touch`/`check`
   subcommands) to make T012's tests pass. Confirm they pass.
 - [ ] T014 Update `install.sh` to copy `scripts/project-lock.sh` into
   `$ARDD_SCRIPTS_DIR` and `chmod +x` it (mirroring the other installed
