@@ -95,7 +95,7 @@ status: in-progress
   that a target project should also gitignore `.project/.lock` (transient
   local state, not project history — same reasoning already given there for
   `.claude/skills/ardd-*/`). Depends on T013.
-- [ ] T015 [parallel] Update `skills/ardd-plan/SKILL.md`: call
+- [x] T015 [parallel] Update `skills/ardd-plan/SKILL.md`: call
   `.claude/skills/ardd-scripts/project-lock.sh check ardd-plan` before step
   3d's artifact writes and before step 9's plan write, and `... touch
   ardd-plan` immediately after each; note in prose that a warning from

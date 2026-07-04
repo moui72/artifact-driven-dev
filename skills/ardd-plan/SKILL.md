@@ -83,7 +83,11 @@ idea; it doesn't touch artifacts).
       here rather than silently working around it. Wait for confirmation
       across all targeted features before proceeding to (d).
 
-   d. **Apply the confirmed changes** to every affected artifact:
+   d. **Apply the confirmed changes** to every affected artifact. Before
+      writing, run `.claude/skills/ardd-scripts/project-lock.sh check
+      ardd-plan` — if it warns, surface the warning to the user (another
+      invocation touched `.project/` recently) but proceed regardless; this
+      is advisory, never a block. After writing, run `... touch ardd-plan`.
       - Apply changes consistently — if the same concept appears in multiple
         artifacts, use the same name, type, and shape everywhere.
       - Preserve all existing content not touched by this feature.
@@ -172,7 +176,9 @@ idea; it doesn't touch artifacts).
      annotate during implementation
 
 9. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
-   frontmatter:
+   frontmatter. As in step 3d, run `.claude/skills/ardd-scripts/project-
+   lock.sh check ardd-plan` first (surface any warning, don't block on it),
+   and `... touch ardd-plan` after writing:
 
    ```yaml
    ---
