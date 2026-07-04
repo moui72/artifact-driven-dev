@@ -1,6 +1,6 @@
 # /ardd-refine
 
-Refine a project artifact. Usage: `/refine <name>` where name matches a file
+Refine a project artifact. Usage: `/ardd-refine <name>` where name matches a file
 in `.project/artifacts/` (e.g., `constitution`, `infrastructure`, `datamodel`,
 `ui`, or any custom artifact added with `/ardd-add-artifact`).
 
@@ -30,7 +30,7 @@ that has open questions instead of a single one:
    structure if the templates directory isn't present.
 
 2. **Understand the user's intent.** The user may have provided guidance in
-   their invocation (e.g., `/refine datamodel add a source_ehr field`).
+   their invocation (e.g., `/ardd-refine datamodel add a source_ehr field`).
    If no guidance was provided, read the artifact and ask up to 3 targeted
    clarifying questions about gaps, ambiguities, or unresolved decisions.
    Do not ask questions answerable by reading other artifacts.
