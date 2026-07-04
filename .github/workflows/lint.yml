@@ -25,6 +25,12 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-branch-info.sh
 
+  sibling-tasks-complete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-sibling-tasks-complete.sh
+
   hook-lint-on-write:
     runs-on: ubuntu-latest
     steps:

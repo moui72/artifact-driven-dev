@@ -14,7 +14,7 @@ status: in-progress
   `hooks/pre-commit` runs — that script was added in an earlier session and
   `hooks/pre-commit` already runs it, but the constitution's list still only
   names the original four. Bump `last_updated`.
-- [ ] T002 [parallel] Add a `sibling-tasks-complete` job to
+- [x] T002 [parallel] Add a `sibling-tasks-complete` job to
   `.github/workflows/lint.yml` running `./scripts/test-sibling-tasks-
   complete.sh`, mirroring the existing job pattern (e.g. the `lint-project`
   job: checkout + one run step) — this test script was added without CI
