@@ -22,7 +22,6 @@ Never checked — run `/ardd-verify` to compare artifacts against the codebase.
 
 ## Recommended Next Step
 
-No open work queued — both logged features (`pre-commit-lint-hook`,
-`implicit-plan-approval`) are implemented. Either log a new feature with
-`/ardd-feature`, or run `/ardd-verify` to get a first code-vs-artifact
-defect baseline (never run yet).
+`plan-design-review-robustness-2026-07-03.md` is now `approved`, with
+`tasks-design-review-robustness-2187.md` (21 tasks, 4 phases) ready on
+branch `design-review-robustness`. Run `/ardd-implement` to execute it.
