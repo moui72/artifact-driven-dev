@@ -61,7 +61,7 @@ status: in-progress
   decisions are currently made inline — the surrounding `gh` calls
   themselves stay in prose (only the pure decisions move into scripts).
   Depends on T004, T006, T008 existing.
-- [ ] T010 Update `install.sh`'s "Deterministic check/utility scripts"
+- [x] T010 Update `install.sh`'s "Deterministic check/utility scripts"
   section to copy `scripts/sync-slug-match.sh`, `scripts/sync-label-
   decision.sh`, and `scripts/sync-divergence.sh` into `$ARDD_SCRIPTS_DIR`
   and `chmod +x` them, mirroring how `lint-project.sh`/`branch-info.sh`/
