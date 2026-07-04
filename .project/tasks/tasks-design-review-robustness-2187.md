@@ -87,7 +87,7 @@ status: in-progress
   now — the script doesn't exist yet.
 - [x] T013 Implement `scripts/project-lock.sh` (`touch`/`check`
   subcommands) to make T012's tests pass. Confirm they pass.
-- [ ] T014 Update `install.sh` to copy `scripts/project-lock.sh` into
+- [x] T014 Update `install.sh` to copy `scripts/project-lock.sh` into
   `$ARDD_SCRIPTS_DIR` and `chmod +x` it (mirroring the other installed
   scripts); add `scripts/test-project-lock.sh` to `hooks/pre-commit`'s
   `checks` list and a matching job to `.github/workflows/lint.yml`; and

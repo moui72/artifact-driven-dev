@@ -73,6 +73,10 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   by ardd-sync's Push/Pull steps for the three pure decisions it makes
 #   from gh-provided state (dedup match, label-swap action, divergence
 #   detection) — extracted so they're testable without mocking gh itself.
+# project-lock.sh: invoked by ardd-plan/ardd-tasks/ardd-implement/
+#   ardd-converge around their multi-file bookkeeping writes — a warn-only
+#   marker for two sessions/agents racing on the same .project/, not real
+#   locking; a `check` never blocks a run, only surfaces a warning.
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
 cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
@@ -80,15 +84,18 @@ cp "$SCRIPT_DIR/scripts/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sibling-ta
 cp "$SCRIPT_DIR/scripts/sync-slug-match.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh"
 cp "$SCRIPT_DIR/scripts/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-label-decision.sh"
 cp "$SCRIPT_DIR/scripts/sync-divergence.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh"
+cp "$SCRIPT_DIR/scripts/project-lock.sh" "$ARDD_SCRIPTS_DIR/project-lock.sh"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
   "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh" \
-  "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh"
+  "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh" \
+  "$ARDD_SCRIPTS_DIR/project-lock.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
 echo "  ✓ ardd-scripts/sibling-tasks-complete.sh"
 echo "  ✓ ardd-scripts/sync-slug-match.sh"
 echo "  ✓ ardd-scripts/sync-label-decision.sh"
 echo "  ✓ ardd-scripts/sync-divergence.sh"
+echo "  ✓ ardd-scripts/project-lock.sh"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
@@ -193,6 +200,9 @@ if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     echo ""
     echo "  Commit .project/ardd-version.md instead — it's the lightweight,"
     echo "  human-readable record of which ARDD version produced them."
+    echo ""
+    echo "  Also gitignore .project/.lock if it appears — it's project-"
+    echo "  lock.sh's transient concurrency marker, not project history."
   else
     if git -C "$TARGET" check-ignore -q ".claude/settings.json" 2>/dev/null; then
       echo ""

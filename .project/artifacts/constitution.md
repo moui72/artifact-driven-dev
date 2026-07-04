@@ -133,8 +133,9 @@ before being built, not discovered as duplicated work later.
   lint/test scripts (`scripts/lint-docs.sh`, `scripts/test-lint-project.sh`,
   `scripts/test-branch-info.sh`, `scripts/test-sibling-tasks-complete.sh`,
   `scripts/test-sync-slug-match.sh`, `scripts/test-sync-label-decision.sh`,
-  `scripts/test-sync-divergence.sh`, `scripts/test-hook-lint-on-write.sh`)
-  before a commit is accepted. Bypassing the hook is prohibited except in a
+  `scripts/test-sync-divergence.sh`, `scripts/test-project-lock.sh`,
+  `scripts/test-hook-lint-on-write.sh`) before a commit is accepted.
+  Bypassing the hook is prohibited except in a
   documented emergency, and any bypass is followed immediately by a commit
   that re-establishes the passing state.
 - **No vendored dependency carries a nested `.git`**. If a dependency must

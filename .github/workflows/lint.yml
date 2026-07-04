@@ -49,6 +49,12 @@ jobs:
       - uses: actions/checkout@v4
       - run: ./scripts/test-sync-divergence.sh
 
+  project-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-project-lock.sh
+
   hook-lint-on-write:
     runs-on: ubuntu-latest
     steps:
