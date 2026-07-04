@@ -3,7 +3,7 @@
 Generate a Mermaid diagram from a project artifact and upsert it into
 `README.md`. GitHub renders Mermaid code fences natively.
 
-Usage: `/render <artifact>` where `<artifact>` is one of the supported types
+Usage: `/ardd-render <artifact>` where `<artifact>` is one of the supported types
 listed below.
 
 ## Render config

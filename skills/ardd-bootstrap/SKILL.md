@@ -116,6 +116,9 @@ This project uses [artifact-driven-dev](https://github.com/[owner]/artifact-driv
 | `/ardd-critique [artifact]` | Challenge decisions — simplicity, failure modes, robustness, semantics |
 | `/ardd-feature <description>` | Log a feature idea to the backlog (`features.md`) with a slug and `Status: backlogged` — no artifact edits yet |
 | `/ardd-feedback <notes>` | Capture bugs/UX/reconsidered-decision notes from manually inspecting the implementation, for the next `/ardd-plan` to consume |
+| `/ardd-lint` | Fast, deterministic check of frontmatter status/fields and `[artifacts: ...]` references — no LLM judgment involved |
+| `/ardd-verify` | Check artifacts against the actual codebase and record drift in `DEFECTS.md` |
+| `/ardd-sync [push\|pull]` | Mirror `features.md` to/from an external issue tracker |
 
 See `STATUS.md` for current artifact statuses, open questions, and recommended next step.
 ```

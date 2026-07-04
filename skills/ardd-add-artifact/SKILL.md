@@ -1,7 +1,7 @@
 # /ardd-add-artifact
 
 Create a new artifact in `.project/artifacts/`. Usage:
-`/add-artifact <name> [brief description of purpose]`
+`/ardd-add-artifact <name> [brief description of purpose]`
 
 ## Steps
 

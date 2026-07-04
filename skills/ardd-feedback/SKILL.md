@@ -63,8 +63,8 @@ notes in the next message.
 ## Consumption by /ardd-plan
 
 `/ardd-plan` globs `.project/feedback/feedback-*.md` for `status: open` and
-loads them as planning input alongside artifacts and research docs. Items
-tagged with an artifact produce artifact-revision tasks (tagged
+loads them as planning input alongside artifacts. Items tagged with an
+artifact produce artifact-revision tasks (tagged
 `[artifacts: name]`, same convention as any other plan task — no separate
 mechanism in `/ardd-tasks` or `/ardd-implement`); untagged items produce
 ordinary code-change tasks. Once the plan is approved, `/ardd-plan` flips

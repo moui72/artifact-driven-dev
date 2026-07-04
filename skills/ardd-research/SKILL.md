@@ -1,8 +1,8 @@
 # /ardd-research
 
 Investigate a specific topic and produce a research document. Usage:
-`/research <topic>` (e.g., `/research sqlite orm options`,
-`/research carepoint appointment sync strategy`).
+`/ardd-research <topic>` (e.g., `/ardd-research sqlite orm options`,
+`/ardd-research carepoint appointment sync strategy`).
 
 ## Steps
 
@@ -44,4 +44,10 @@ Investigate a specific topic and produce a research document. Usage:
    ```
 
 5. **Report** the recommendation to the user in 2–3 sentences and note the
-   file path where the full research was saved.
+   file path where the full research was saved. If the recommendation is a
+   standing decision (a library choice, a sync strategy, anything that
+   belongs in an artifact), recommend `/ardd-refine <artifact>` as the next
+   step to actually record it — a research doc is a one-off write with no
+   lifecycle, so nothing else in the system will pick it up automatically.
+   If it instead surfaces new backlog-worthy scope rather than a decision,
+   recommend `/ardd-feature` instead.
