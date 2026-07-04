@@ -33,9 +33,13 @@ when resuming work in a new session.
    was never tasked. Append these as new tasks at the end of the relevant phase,
    using the next available task ID.
 
-6. **Write the updated file back** to its original path. Update the
-   frontmatter `status` to reflect the reconciled state: `completed` if every
-   task is now `- [x]` with no gaps appended, `in-progress` otherwise.
+6. **Write the updated file back** to its original path. Run
+   `.claude/skills/ardd-scripts/project-lock.sh check ardd-converge` first —
+   surface any warning to the user (another invocation touched `.project/`
+   recently) but proceed regardless; this is advisory, never a block.
+   Update the frontmatter `status` to reflect the reconciled state:
+   `completed` if every task is now `- [x]` with no gaps appended,
+   `in-progress` otherwise.
 
    If the status is now `completed`, run
    `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's path>`
@@ -43,7 +47,8 @@ when resuming work in a new session.
    completion, since a plan can have more than one tasks file. Only if its
    `all_complete=true`, load the plan and for each slug in its `features:`
    list flip that entry's `Status` in `.project/artifacts/features.md` from
-   `tasked` to `implemented`.
+   `tasked` to `implemented`. Either way, run `... touch ardd-converge` once
+   this step's writes are done.
 
 7. **Report:**
    - Tasks newly marked complete

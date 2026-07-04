@@ -108,7 +108,7 @@ status: in-progress
 - [x] T017 [parallel] Update `skills/ardd-implement/SKILL.md`: call
   `project-lock.sh check ardd-implement` / `... touch ardd-implement`
   around step 7's feature-flip-on-completion write. Depends on T013.
-- [ ] T018 [parallel] Update `skills/ardd-converge/SKILL.md`: call
+- [x] T018 [parallel] Update `skills/ardd-converge/SKILL.md`: call
   `project-lock.sh check ardd-converge` / `... touch ardd-converge` around
   step 6's feature-flip-on-completion write. Depends on T013.
 
