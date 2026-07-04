@@ -66,7 +66,7 @@ status: in-progress
   decision.sh`, and `scripts/sync-divergence.sh` into `$ARDD_SCRIPTS_DIR`
   and `chmod +x` them, mirroring how `lint-project.sh`/`branch-info.sh`/
   `sibling-tasks-complete.sh` are installed. Depends on T004, T006, T008.
-- [ ] T011 Add `scripts/test-sync-slug-match.sh`, `scripts/test-sync-label-
+- [x] T011 Add `scripts/test-sync-slug-match.sh`, `scripts/test-sync-label-
   decision.sh`, and `scripts/test-sync-divergence.sh` to `hooks/pre-commit`'s
   `checks` list, and add three matching jobs to
   `.github/workflows/lint.yml` (one per script, mirroring the existing

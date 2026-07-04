@@ -34,6 +34,9 @@ stub lint-docs.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 0
 stub test-sibling-tasks-complete.sh 0
+stub test-sync-slug-match.sh 0
+stub test-sync-label-decision.sh 0
+stub test-sync-divergence.sh 0
 stub test-hook-lint-on-write.sh 0
 if (cd "$WORK" && sh ./pre-commit-under-test > /tmp/hook-case1.out 2>&1); then
   echo "ok: all-pass case exits 0"
@@ -49,6 +52,9 @@ stub lint-docs.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 1
 stub test-sibling-tasks-complete.sh 0
+stub test-sync-slug-match.sh 0
+stub test-sync-label-decision.sh 0
+stub test-sync-divergence.sh 0
 stub test-hook-lint-on-write.sh 0
 out="$(cd "$WORK" && sh ./pre-commit-under-test 2>&1)" && rc=0 || rc=$?
 if [ "$rc" -eq 0 ]; then
@@ -72,6 +78,9 @@ EOF
 chmod +x "$WORK/scripts/test-lint-project.sh"
 stub test-branch-info.sh 0
 stub test-sibling-tasks-complete.sh 0
+stub test-sync-slug-match.sh 0
+stub test-sync-label-decision.sh 0
+stub test-sync-divergence.sh 0
 stub test-hook-lint-on-write.sh 0
 (cd "$WORK" && sh ./pre-commit-under-test > /dev/null 2>&1) || true
 if [ -f "$WORK/ran-marker" ]; then
