@@ -43,7 +43,7 @@ status: in-progress
   → prints old/new label pair; `Status: implemented` with issue still open
   → prints "close". Confirm this test fails right now — the script doesn't
   exist yet.
-- [ ] T006 [parallel] Implement `scripts/sync-label-decision.sh` to make
+- [x] T006 [parallel] Implement `scripts/sync-label-decision.sh` to make
   T005's tests pass. Confirm they pass.
 - [ ] T007 [parallel] Write `scripts/test-sync-divergence.sh`: fixture-based
   regression test for a not-yet-written `scripts/sync-divergence.sh
