@@ -74,7 +74,7 @@ status: in-progress
 
 ## Phase 3: Concurrency marker
 
-- [ ] T012 Write `scripts/test-project-lock.sh`: fixture-based regression
+- [x] T012 Write `scripts/test-project-lock.sh`: fixture-based regression
   test (throwaway temp dir, mirroring `scripts/test-sibling-tasks-
   complete.sh`'s style) for a not-yet-written `scripts/project-lock.sh`
   with two subcommands: `touch <label>` (writes `.project/.lock` containing
