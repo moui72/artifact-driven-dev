@@ -32,7 +32,7 @@ status: in-progress
   *different* slug → no match. Mirror the throwaway-fixture style of
   `scripts/test-branch-info.sh`. Confirm this test fails right now — the
   script doesn't exist yet (Principle V: red before green).
-- [ ] T004 [parallel] Implement `scripts/sync-slug-match.sh` to make T003's
+- [x] T004 [parallel] Implement `scripts/sync-slug-match.sh` to make T003's
   tests pass. Confirm they pass (green).
 - [ ] T005 [parallel] Write `scripts/test-sync-label-decision.sh`: fixture-
   based regression test for a not-yet-written `scripts/sync-label-
