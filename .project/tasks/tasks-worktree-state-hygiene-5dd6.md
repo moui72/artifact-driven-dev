@@ -18,7 +18,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   to be checked out when the script ran. Run it and confirm it fails (no
   `worktree-info.sh` implementation exists yet) — per Constitution Principle
   V, this precedes T002.
-- [ ] T002 [artifacts: constitution] Implement `scripts/worktree-info.sh
+- [x] T002 [artifacts: constitution] Implement `scripts/worktree-info.sh
   create <slug> [project-dir]` (default `project-dir` is `.`, same
   convention as `lint-project.sh`/`project-lock.sh`): resolves the default
   branch via the same detection `branch-info.sh` uses, creates (or, if one

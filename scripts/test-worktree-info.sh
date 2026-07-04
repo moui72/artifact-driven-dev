@@ -9,10 +9,16 @@
 
 set -e
 
+# Drop any GIT_DIR/GIT_INDEX_FILE/etc. inherited from an outer git invocation
+# (e.g. this test running inside git's own pre-commit hook) — otherwise the
+# throwaway repos below inherit them and `git worktree add` resolves against
+# the wrong repository entirely.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_OBJECT_DIRECTORY
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 WORKTREE_INFO="$SCRIPT_DIR/worktree-info.sh"
 
-WORK="$(mktemp -d)"
+WORK="$(cd "$(mktemp -d)" && pwd -P)"
 trap 'rm -rf "$WORK"' EXIT
 
 git() { command git -c commit.gpgsign=false -c core.hooksPath=/dev/null "$@"; }
