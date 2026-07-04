@@ -114,7 +114,7 @@ status: in-progress
 
 ## Phase 4: Bookkeeping-consistency lint check
 
-- [ ] T019 Extend `tests/fixtures/bad-project`: add a `features:
+- [x] T019 Extend `tests/fixtures/bad-project`: add a `features:
   [some-slug]` entry to its plan frontmatter where the plan's own `status`
   is `approved` (reuse `plan-foo-2026-01-01.md`, already `status: draft` in
   that fixture per T-earlier work — change it to `approved` for this case,
