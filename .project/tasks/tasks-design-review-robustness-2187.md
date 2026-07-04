@@ -55,7 +55,7 @@ status: in-progress
   script doesn't exist yet.
 - [x] T008 [parallel] Implement `scripts/sync-divergence.sh` to make T007's
   tests pass. Confirm they pass.
-- [ ] T009 Update `skills/ardd-sync/SKILL.md` prose so Push step 2 calls
+- [x] T009 Update `skills/ardd-sync/SKILL.md` prose so Push step 2 calls
   `sync-slug-match.sh`, Push step 3 calls `sync-label-decision.sh`, and Pull
   step 2 calls `sync-divergence.sh` at the exact points where those
   decisions are currently made inline — the surrounding `gh` calls

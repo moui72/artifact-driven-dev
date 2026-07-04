@@ -59,20 +59,25 @@ later) so one entry could eventually carry links into more than one tracker.
 2. **For each entry with no `GH:` field:**
    - Before creating anything, search for an issue already carrying this
      slug's marker: `gh issue list --search "ardd-sync-slug-<slug> in:body"
-     --state all --json number`. Use a colon/equals-free marker token
-     (`ardd-sync-slug-<slug>`, not `ardd-sync:slug=<slug>`) — GitHub search
-     parses `word:word` as a `qualifier:value` pair, so a colon inside the
-     term gets silently dropped instead of matched literally, which would
-     defeat the dedup this search exists for. Confirmed empirically: a
-     colon-bearing search term returned unfiltered generic results instead
-     of zero hits, while the hyphenated form returned a clean, correct empty
-     result. If a match is found, adopt its number instead of creating a
-     duplicate. This is what makes push idempotent against a run that dies
-     between `gh issue create` and the `features.md` write — the expected
-     failure mode for something meant to run headlessly on a schedule, not
-     an edge case to ignore. Note GitHub's search index has a short indexing
-     lag after creation, so a re-run within seconds of a create can still
-     race; this is acceptable for anything run hourly or less often.
+     --state all --json number,body --jq '.[] | "\(.number)\t\(.body)"'`.
+     Use a colon/equals-free marker token (`ardd-sync-slug-<slug>`, not
+     `ardd-sync:slug=<slug>`) — GitHub search parses `word:word` as a
+     `qualifier:value` pair, so a colon inside the term gets silently
+     dropped instead of matched literally, which would defeat the dedup
+     this search exists for. Confirmed empirically: a colon-bearing search
+     term returned unfiltered generic results instead of zero hits, while
+     the hyphenated form returned a clean, correct empty result. GitHub's
+     search is lexical, not exact, so a result can be a false positive (a
+     similar-but-different slug); pipe the tab-separated output into
+     `.claude/skills/ardd-scripts/sync-slug-match.sh <slug>` to get back
+     the exact-match issue number, if any. If a match is found, adopt its
+     number instead of creating a duplicate. This is what makes push
+     idempotent against a run that dies between `gh issue create` and the
+     `features.md` write — the expected failure mode for something meant
+     to run headlessly on a schedule, not an edge case to ignore. Note
+     GitHub's search index has a short indexing lag after creation, so a
+     re-run within seconds of a create can still race; this is acceptable
+     for anything run hourly or less often.
    - Otherwise create it. If `Status` is `implemented` (e.g. a legacy or
      `/ardd-featurize`-written entry never synced before), create it with no
      status label and close it immediately after (`gh issue close <n>`) —
@@ -86,11 +91,13 @@ later) so one entry could eventually carry links into more than one tracker.
 
 3. **For each entry with an existing `GH:` field:**
    - Read current state: `gh issue view <n> --json state,labels`.
-   - If `Status` has advanced past what the current `ardd:*` label reflects,
-     swap the label (`gh issue edit <n> --remove-label ardd:<old> --add-label
-     ardd:<new>`).
-   - If `Status: implemented` and the issue is still open, close it (`gh
-     issue close <n>`).
+   - Run `.claude/skills/ardd-scripts/sync-label-decision.sh <status>
+     <current-ardd-label-or-none> <open-or-closed>` to decide the action —
+     `add ardd:<status>` (no label yet), `swap <old> ardd:<status>` (label
+     is behind status), `close` (`Status: implemented` and still open), or
+     nothing (already correct). Apply whatever it prints: `gh issue edit <n>
+     --add-label <new>` for `add`, `gh issue edit <n> --remove-label <old>
+     --add-label <new>` for `swap`, `gh issue close <n>` for `close`.
    - Never edit title or body after creation — a description edited later in
      `features.md` does not propagate. This is a stated limitation, not a
      gap: re-syncing content would blur the field-ownership rule this skill
@@ -114,10 +121,13 @@ later) so one entry could eventually carry links into more than one tracker.
      isn't re-imported next run.
 
 2. **Report divergence — do not apply it.** For every already-linked entry,
-   compare current issue state against what `Status` implies (closed but not
-   `implemented`; reopened but `implemented`). Collect mismatches into
-   `.project/SYNC.md` — full overwrite every run, mirroring `/ardd-verify`'s
-   `DEFECTS.md` pattern, including an explicit all-clear state:
+   run `.claude/skills/ardd-scripts/sync-divergence.sh <slug> <issue-number>
+   <status> <open-or-closed>` — it decides whether current issue state
+   diverges from what `Status` implies (closed but not `implemented`;
+   reopened but `implemented`) and prints the ready-to-use `## Diverged`
+   line if so, nothing otherwise. Collect its output into `.project/SYNC.md`
+   — full overwrite every run, mirroring `/ardd-verify`'s `DEFECTS.md`
+   pattern, including an explicit all-clear state:
 
    ```markdown
    # Sync
