@@ -34,7 +34,7 @@ status: in-progress
   script doesn't exist yet (Principle V: red before green).
 - [x] T004 [parallel] Implement `scripts/sync-slug-match.sh` to make T003's
   tests pass. Confirm they pass (green).
-- [ ] T005 [parallel] Write `scripts/test-sync-label-decision.sh`: fixture-
+- [x] T005 [parallel] Write `scripts/test-sync-label-decision.sh`: fixture-
   based regression test for a not-yet-written `scripts/sync-label-
   decision.sh <status> <current-labels>` that decides what `ardd:*` label
   change (if any) is needed given a `features.md` `Status` value and the
