@@ -105,7 +105,7 @@ status: in-progress
   lock.sh check ardd-tasks` before step 3's plan-approval flip and before
   step 6's tasks-file write, and `... touch ardd-tasks` immediately after
   each. Depends on T013.
-- [ ] T017 [parallel] Update `skills/ardd-implement/SKILL.md`: call
+- [x] T017 [parallel] Update `skills/ardd-implement/SKILL.md`: call
   `project-lock.sh check ardd-implement` / `... touch ardd-implement`
   around step 7's feature-flip-on-completion write. Depends on T013.
 - [ ] T018 [parallel] Update `skills/ardd-converge/SKILL.md`: call

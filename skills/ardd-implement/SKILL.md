@@ -62,14 +62,18 @@ self-contained; the agent loads only the artifacts it declares.
    no regressions in previously completed tasks.
 
 7. **Mark the task complete** in the tasks file: change `- [ ]` to `- [x]`. If
-   this was the last incomplete task, flip the file's frontmatter `status` to
-   `completed`, then run
+   this was the last incomplete task, run `.claude/skills/ardd-scripts/
+   project-lock.sh check ardd-implement` first — surface any warning to the
+   user (another invocation touched `.project/` recently) but proceed
+   regardless; this is advisory, never a block. Then flip the file's
+   frontmatter `status` to `completed`, and run
    `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's path>`
    — it reports every tasks file bound to the same plan (a plan can have
    more than one) and whether they're collectively done. Only if its
    `all_complete=true`, load the plan and for each slug in its `features:`
    list flip that entry's `Status` in `.project/artifacts/features.md` from
-   `tasked` to `implemented`.
+   `tasked` to `implemented`. Either way, run `... touch ardd-implement`
+   once this step's writes are done.
 
 8. **Commit** the work with a concise message referencing the task ID.
 
