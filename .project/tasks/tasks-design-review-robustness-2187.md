@@ -1,7 +1,7 @@
 ---
 plan: plan-design-review-robustness-2026-07-03.md
 generated: 2026-07-03
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -131,7 +131,7 @@ status: in-progress
   and the feature-status flip would leave — see `/ardd-tasks` step 3).
   Confirm T019's fixture now fails lint for this new reason, and
   `tests/fixtures/good-project` still passes.
-- [ ] T021 Run the full script suite — `scripts/lint-docs.sh`,
+- [x] T021 Run the full script suite — `scripts/lint-docs.sh`,
   `scripts/test-lint-project.sh`, `scripts/test-branch-info.sh`,
   `scripts/test-sibling-tasks-complete.sh`, `scripts/test-sync-slug-
   match.sh`, `scripts/test-sync-label-decision.sh`, `scripts/test-sync-
