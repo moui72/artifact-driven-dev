@@ -22,6 +22,7 @@ Never checked — run `/ardd-verify` to compare artifacts against the codebase.
 
 ## Recommended Next Step
 
-`plan-design-review-robustness-2026-07-03.md` is now `approved`, with
-`tasks-design-review-robustness-2187.md` (21 tasks, 4 phases) ready on
-branch `design-review-robustness`. Run `/ardd-implement` to execute it.
+`tasks-design-review-robustness-2187.md` is `completed` (all 21 tasks, 4
+phases) on branch `design-review-robustness`. No open work queued —
+either merge/PR this branch, or run `/ardd-verify` to get a first
+code-vs-artifact defect baseline (never run yet).
