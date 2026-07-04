@@ -1,11 +1,11 @@
 # /ardd-plan
 
-Generate an implementation plan from the current artifacts, any research
-docs, any open feedback (`/ardd-feedback`), and optionally one or more
-backlogged features (`/ardd-feature`). Run `/ardd-analyze` first — do not
-plan over unresolved conflicts.
+Generate an implementation plan from the current artifacts, any open
+feedback (`/ardd-feedback`), and optionally one or more backlogged features
+(`/ardd-feature`). Run `/ardd-analyze` first — do not plan over unresolved
+conflicts.
 
-Usage: `/ardd-plan` plans from artifacts/research/feedback only. `/ardd-plan
+Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
 <slug> [<slug> ...]` additionally targets one or more backlogged feature
 entries from `.project/artifacts/features.md` — this is where a feature
 idea's artifact design work actually happens (`/ardd-feature` only logs the
@@ -111,10 +111,7 @@ idea; it doesn't touch artifacts).
    to `planned` later, in `/ardd-tasks`, when this plan is selected and
    approved — not here.
 
-4. **Load any research documents** from `.project/plans/research-*.md` relevant
-   to the current work.
-
-5. **Load open feedback.** Glob `.project/feedback/feedback-*.md` and read
+4. **Load open feedback.** Glob `.project/feedback/feedback-*.md` and read
    frontmatter. Load every file with `status: open` as planning input —
    these came from the user manually inspecting the implementation (bugs,
    UX issues, reconsidered decisions). For each `## Reconsidered` item tagged
@@ -136,18 +133,18 @@ idea; it doesn't touch artifacts).
    declined an override — mirroring `critique.md`'s resolution convention.
    Once every item in a file is `[x]` or `[-]`, flip that file's `status` to
    `planned` and set its `plan:` field to the plan filename you'll write in
-   step 9 (`plan-<slug>-<today's date>.md` — both already known at this
+   step 8 (`plan-<slug>-<today's date>.md` — both already known at this
    point). Planned feedback files are not edited further and become a
    historical record of what prompted the plan. If any item is still
    unresolved (e.g. the user wants to think about a declined override more),
    leave the file's `status` as `open` so the next `/ardd-plan` run picks up
    the remainder.
 
-6. **Check constitution compliance** if `constitution.md` is present. Flag any
+5. **Check constitution compliance** if `constitution.md` is present. Flag any
    planned patterns that require a Complexity Tracking entry per the simplicity
    principle.
 
-7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
+6. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
    plan you're about to draft supersedes one of them. On confirmation, flip
    that plan's `status` to `superseded` immediately — don't wait for this
@@ -157,7 +154,7 @@ idea; it doesn't touch artifacts).
    open draft counts either way, so an abandoned replacement doesn't go
    unnoticed.
 
-8. **Draft the plan** covering:
+7. **Draft the plan** covering:
    - **Goal** — what this plan delivers (one sentence)
    - **Scope** — what is and is not included
    - **Technical Approach** — how the system will be built; reference artifact
@@ -175,7 +172,7 @@ idea; it doesn't touch artifacts).
    - **Production Annotation Summary** — list of known production shortcuts to
      annotate during implementation
 
-9. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
+8. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
    frontmatter. As in step 3d, run `.claude/skills/ardd-scripts/project-
    lock.sh check ardd-plan` first (surface any warning, don't block on it),
    and `... touch ardd-plan` after writing:
@@ -189,7 +186,7 @@ idea; it doesn't touch artifacts).
    ---
    ```
 
-10. **Present a summary** to the user: phases, key decisions, open questions.
+9. **Present a summary** to the user: phases, key decisions, open questions.
     The plan is saved at `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` as
     `status: draft` — there's no separate approval step here. Running
     `/ardd-tasks` and selecting this plan is what approves it (flips it to

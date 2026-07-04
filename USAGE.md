@@ -101,8 +101,11 @@ run:
 /ardd-research carepoint appointment pagination edge cases
 ```
 
-Research outputs go to `.project/plans/research-<topic>-<date>.md`. The
-findings are available to `/ardd-plan` automatically.
+Research outputs go to `.project/plans/research-<topic>-<date>.md`. This is a
+one-off write with no lifecycle — nothing reads it back automatically. If the
+recommendation is a standing decision, fold it into the relevant artifact
+with `/ardd-refine` so `/ardd-plan` picks it up the normal way; if it
+surfaces new backlog-worthy scope instead, use `/ardd-feature`.
 
 ---
 
@@ -114,7 +117,7 @@ When artifacts are stable:
 /ardd-plan
 ```
 
-Claude reads all artifacts and any research docs, drafts a phased
+Claude reads all stable artifacts and open feedback, drafts a phased
 implementation plan, and presents it for your review. The plan is saved to
 disk immediately as `status: draft` — there's no separate approval step
 here. Running `/ardd-tasks` and selecting it is what approves it.
