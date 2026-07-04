@@ -10,6 +10,10 @@
 #     features.md entry's `Plan:`/`Tasks:` metadata fields name existing files
 #   - a tasks file stuck at `status: generating` (a crashed /ardd-tasks run)
 #     is flagged rather than silently accepted as a valid enum value
+#   - an approved/superseded plan whose `features:` slugs are still
+#     `backlogged` in features.md — the fingerprint an approval sequence
+#     interrupted between the plan-status flip and the feature-status flip
+#     would leave (see /ardd-tasks step 3)
 #
 # THIS SCRIPT IS THE SCHEMA-OF-RECORD for status enums and required fields.
 # The enums below are hardcoded because they can't be derived from the
@@ -145,8 +149,10 @@ if [ -d "$PROJECT_DIR/plans" ]; then
         report "$f: missing required frontmatter field '$field'"
       fi
     done
+    plan_status=""
     if frontmatter_has "$f" status; then
       val="$(frontmatter_field "$f" status)"
+      plan_status="$val"
       if ! in_enum "$val" $PLAN_STATUS_ENUM; then
         report "$f: status '$val' not in {$PLAN_STATUS_ENUM}"
       fi
@@ -166,6 +172,13 @@ if [ -d "$PROJECT_DIR/plans" ]; then
             if [ ! -f "$FEATURES_FILE" ] || ! grep -qE "_Slug: \`${slug}\`" "$FEATURES_FILE"; then
               echo "$f: features slug '$slug' not found in $FEATURES_FILE"
               echo 1 > "$TARGET/.lint-project-failed"
+            elif [ "$plan_status" = "approved" ] || [ "$plan_status" = "superseded" ]; then
+              # --- an approved/superseded plan's feature must have moved past backlogged ---
+              feature_status="$(grep -oE "_Slug: \`${slug}\` · Status: [a-z]+" "$FEATURES_FILE" | sed -E 's/.*Status: ([a-z]+)$/\1/')"
+              if [ "$feature_status" = "backlogged" ]; then
+                echo "$f: plan is '$plan_status' but features slug '$slug' is still 'backlogged' in $FEATURES_FILE — a bookkeeping sequence was likely interrupted (see /ardd-tasks step 3)"
+                echo 1 > "$TARGET/.lint-project-failed"
+              fi
             fi
           fi
           IFS=','

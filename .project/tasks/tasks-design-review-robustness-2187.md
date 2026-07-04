@@ -123,7 +123,7 @@ status: in-progress
   `Status: backlogged`. Run `scripts/lint-project.sh` against
   `bad-project` and confirm it does *not* yet flag this specific
   combination — demonstrating the gap before T020 closes it (red state).
-- [ ] T020 Add a new check to `scripts/lint-project.sh`'s plan-validation
+- [x] T020 Add a new check to `scripts/lint-project.sh`'s plan-validation
   loop: for a plan at `status: approved` or `status: superseded` with a
   non-empty `features:` list, for each listed slug look up its `Status` in
   `features.md` and report a violation if it's still `backlogged` (the
