@@ -1,0 +1,43 @@
+---
+plan: plan-process-review-fixes-2026-07-03.md
+generated: 2026-07-03
+status: ready         # generating -> ready -> in-progress -> completed
+                     # (or -> abandoned, if superseded by a new tasks
+                     # file generated for the same plan)
+---
+
+# Tasks
+
+## Phase 1: Documentation & prose clarity
+
+- [ ] T001 [parallel] In `skills/ardd-codify/SKILL.md`, add a step that generates `.project/WORKFLOW.md`, reusing the same skills-table content as `/ardd-bootstrap`'s template, so the existing-project onboarding path produces the same skill-reference doc the greenfield path does. No test required (skill-prose change, no deterministic invariant to check).
+- [ ] T002 [parallel] In `skills/ardd-implement/SKILL.md`, make the `/ardd-analyze` auto-trigger explicit at its own tasks-file-completion step (mirroring `/ardd-converge`'s "run /ardd-analyze now" phrasing), instead of relying on the next-loop-iteration side effect to discover completion. No test required (skill-prose change).
+- [ ] T003 [parallel] In `USAGE.md`, add a comparison table distinguishing `/ardd-analyze`, `/ardd-lint`, `/ardd-verify`, and `/ardd-critique` (what each checks, when to run it). No test required (doc-only change); run `./scripts/lint-docs.sh` after to confirm no broken skill references.
+- [ ] T004 In `skills/ardd-feature/SKILL.md`, add a louder one-line callout near the top stating it only logs a backlog entry with no artifact/design work, and add a one-line cross-reference to `/ardd-featurize` for disambiguation. No test required (skill-prose change).
+- [ ] T005 [parallel] In `skills/ardd-featurize/SKILL.md`, add a one-line cross-reference back to `/ardd-feature` for disambiguation (companion to T004; touches a different file so safe to run in parallel with T004). No test required (skill-prose change).
+- [ ] T006 [parallel] In `scripts/lint-project.sh`, add a header comment noting that `critique.md`, `DEFECTS.md`, `SYNC.md`, and `STATUS.md` are deliberately unvalidated (looser, informal schemas by design), so a reader doesn't mistake the omission for an oversight. Comment-only change; run `./scripts/test-lint-project.sh` after to confirm no behavior change.
+- [ ] T007 [parallel] In `skills/ardd-add-artifact/SKILL.md`, add an explicit step naming which frontmatter fields must be set on the new artifact, matching the level of explicitness in `/ardd-codify` step 4. No test required (skill-prose change).
+- [ ] T008 [parallel] In `skills/ardd-feedback/SKILL.md`, document that item resolution uses the same 3-state convention as `critique.md` (`[ ]` open, `[x]` incorporated, `[-]` declined) — aligning the docs with what `/ardd-plan` step 5 already writes today. No test required (skill-prose change).
+- [ ] T009 In `scripts/project-lock.sh`, add two header sentences: (a) this provides no protection across `git worktree` checkouts, since the lock file lives inside each worktree's own `.project/`; (b) callers pass their own skill name as the label (e.g. `ardd-plan`, `ardd-tasks`, `ardd-implement`, `ardd-converge`), so a future caller doesn't have to reverse-engineer the convention. Comment-only change; run `./scripts/test-project-lock.sh` after to confirm no behavior change.
+- [ ] T010 [parallel] In `README.md`, add (a) a one-sentence caveat that `project-lock.sh` has no visibility across `git worktree` checkouts, and (b) a short "resolving `.project/` merge conflicts" note: for single-writer report files (`STATUS.md`, `DEFECTS.md`, `SYNC.md`, `critique.md`) take either side and re-run the owning skill; for `features.md`, resolve textually (it's append-oriented) then run `/ardd-lint`. No test required (doc-only change); run `./scripts/lint-docs.sh` after.
+- [ ] T011 In `skills/ardd-plan/SKILL.md` and `skills/ardd-tasks/SKILL.md`, append "(schema-of-record: scripts/lint-project.sh)" to each inline frontmatter status-enum transition comment (e.g. `status: draft # draft -> approved -> superseded`), so readers know where the authoritative enum list lives rather than trusting the inline copy. No test required (skill-prose change).
+
+## Phase 2: Extend `project-lock.sh` coverage to its two uncovered callers
+
+- [ ] T012 In `skills/ardd-feature/SKILL.md`, add `.claude/skills/ardd-scripts/project-lock.sh check ardd-feature` before its `features.md` read-modify-write step, and `... touch ardd-feature` after — matching the existing pattern in `/ardd-plan`/`/ardd-tasks`/`/ardd-implement`/`/ardd-converge`. This edits the same file as T004; run after T004 completes, not in parallel with it. No test required — invokes an already-tested script (`test-project-lock.sh` covers `check`/`touch` behavior); the caller is new, not the mechanism.
+- [ ] T013 In `skills/ardd-sync/SKILL.md`, add the same `project-lock.sh check ardd-sync` / `touch ardd-sync` pair around its `features.md` writes in both push and pull phases, and add a short note near the push-dedup step that `sync-slug-match.sh`'s dedup handles crash-retry idempotency, not true concurrent-run safety — the lock addition narrows but doesn't eliminate the residual external-system race (two genuinely simultaneous `push` runs can still both create a GitHub issue for the same slug), and that's a documented, known limitation. No test required (same reasoning as T012).
+
+## Phase 3: Deterministic check — duplicate feature slug across two live plans
+
+- [ ] T014 Add a fixture case to `tests/fixtures/bad-project/.project/plans/`: two plan files that both list the same slug in their `features:` frontmatter array, with `status: draft` and `status: approved` respectively (neither `superseded`). Add a fixture case to `tests/fixtures/good-project/.project/plans/`: same slug shared across two plans, but one of them is `status: superseded`. Update `scripts/test-lint-project.sh`'s expected-finding-count assertion for `bad-project` to include this new case. Run `./scripts/test-lint-project.sh` and confirm it now fails (the new bad-fixture case isn't yet flagged, since the rule doesn't exist) — this is the test-first checkpoint required by constitution Principle V before T015 implements the rule.
+- [ ] T015 In `scripts/lint-project.sh`, add a rule that flags when two non-`superseded` plans (`draft` or `approved`) both list the same slug in their `features:` frontmatter — following the same style as the script's existing "approved plan but feature still backlogged" check. Run `./scripts/test-lint-project.sh` and confirm it now passes, including the new case added in T014.
+
+## Phase 4: Cross-worktree slug-in-flight visibility
+
+- [ ] T016 Extend `scripts/test-branch-info.sh` with a case that sets up a second worktree (or a fixture directory standing in for one) containing a `.project/artifacts/features.md` with a `Status: planned` slug, and asserts that `branch-info.sh`'s output surfaces it. Run `./scripts/test-branch-info.sh` and confirm this new case fails (branch-info.sh doesn't yet enumerate worktrees) — the test-first checkpoint before T017.
+- [ ] T017 In `scripts/branch-info.sh`, add enumeration of other worktrees via `git worktree list --porcelain`; for each one found, read its `.project/artifacts/features.md` directly and report any slug whose `Status` is already past `backlogged` (e.g. a `worktrees=<path>:<branch>:<slugs-in-flight>` output line). Keep this purely advisory data — `branch-info.sh` makes no decisions itself. Run `./scripts/test-branch-info.sh` and confirm it now passes, including the case added in T016.
+- [ ] T018 In `skills/ardd-plan/SKILL.md` step 3a, when looking up a targeted feature slug in `features.md`, also check the new worktree data from `branch-info.sh` and print an advisory (never blocking) if another worktree already has that slug past `backlogged`. No test required (skill-prose consumption of an already-tested script's new output).
+
+## Phase 5: Drift-prevention comments on the triplicated branch-check prose
+
+- [ ] T019 In `skills/ardd-plan/SKILL.md`, `skills/ardd-tasks/SKILL.md`, and `skills/ardd-implement/SKILL.md`, add an explicit cross-reference comment to each "Check branch" step noting the block must stay behaviorally identical across all three except for `/ardd-plan`'s documented extra slug-derivation logic — so an editor touching one is prompted to check the others. No test possible (prose-only guidance for future editors, not a file-state invariant a script can check).
