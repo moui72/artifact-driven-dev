@@ -22,7 +22,7 @@ status: in-progress
 
 ## Phase 2: `/ardd-sync` testable decision scripts
 
-- [ ] T003 [parallel] Write `scripts/test-sync-slug-match.sh`: fixture-based
+- [x] T003 [parallel] Write `scripts/test-sync-slug-match.sh`: fixture-based
   regression test for a not-yet-written `scripts/sync-slug-match.sh
   <slug> <search-result-body>...` that decides whether a `gh issue list
   --search` result's body contains this slug's `ardd-sync-slug-<slug>`
