@@ -45,7 +45,7 @@ status: in-progress
   exist yet.
 - [x] T006 [parallel] Implement `scripts/sync-label-decision.sh` to make
   T005's tests pass. Confirm they pass.
-- [ ] T007 [parallel] Write `scripts/test-sync-divergence.sh`: fixture-based
+- [x] T007 [parallel] Write `scripts/test-sync-divergence.sh`: fixture-based
   regression test for a not-yet-written `scripts/sync-divergence.sh
   <status> <issue-state>` that decides whether tracker state has diverged
   from `features.md` (see `skills/ardd-sync/SKILL.md`'s Pull step 2: closed-
