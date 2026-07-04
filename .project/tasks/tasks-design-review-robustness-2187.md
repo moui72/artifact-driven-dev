@@ -101,7 +101,7 @@ status: in-progress
   ardd-plan` immediately after each; note in prose that a warning from
   `check` is advisory — surface it to the user but don't block on it.
   Depends on T013.
-- [ ] T016 [parallel] Update `skills/ardd-tasks/SKILL.md`: call `project-
+- [x] T016 [parallel] Update `skills/ardd-tasks/SKILL.md`: call `project-
   lock.sh check ardd-tasks` before step 3's plan-approval flip and before
   step 6's tasks-file write, and `... touch ardd-tasks` immediately after
   each. Depends on T013.

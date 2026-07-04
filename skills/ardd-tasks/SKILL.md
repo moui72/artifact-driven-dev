@@ -54,16 +54,20 @@ approves it as part of this — there's no separate approval step in
    lingering at `ready`/`in-progress` forever with no way to tell "abandoned"
    from "just not picked up yet."
 
-3. **Approve the plan, if it isn't already.** If the chosen plan's `status`
-   is `draft`: flip it to `approved` in place, then read its `features:`
-   frontmatter list (if any) and for each slug flip that entry in
+3. **Approve the plan, if it isn't already.** Run `.claude/skills/ardd-
+   scripts/project-lock.sh check ardd-tasks` first — surface any warning to
+   the user (another invocation touched `.project/` recently) but proceed
+   regardless; this is advisory, never a block. If the chosen plan's
+   `status` is `draft`: flip it to `approved` in place, then read its
+   `features:` frontmatter list (if any) and for each slug flip that entry in
    `.project/artifacts/features.md` from `Status: backlogged` to
    `Status: planned`, adding `· Plan: <plan filename>` to its metadata
    line — the same mechanics `/ardd-plan` used to perform on explicit
    approval, just triggered by selecting the plan here instead. If the
    chosen plan is already `status: approved` (e.g. from before this
    convention, or a second tasks-file run against the same plan), skip this
-   step — nothing to do.
+   step — nothing to do. Either way, run `... touch ardd-tasks` once this
+   step's writes (if any) are done.
 
 4. **Generate tasks** ordered by dependency. Each task MUST:
    - Have a unique ID: `T001`, `T002`, etc.
@@ -85,7 +89,9 @@ approves it as part of this — there's no separate approval step in
    taken from the chosen plan's filename and `<hex>` is a freshly generated
    4-char token (same generation as the branch-gate step), minted at write
    time so the filename is always unique even when regenerating tasks for the
-   same plan. Write the frontmatter immediately, before generating task
+   same plan. Run `.claude/skills/ardd-scripts/project-lock.sh check
+   ardd-tasks` before this first write (surface any warning, don't block on
+   it). Write the frontmatter immediately, before generating task
    content, with `status: generating` — this is what makes an interrupted
    generation visibly incomplete rather than silently mistaken for `ready`:
 
@@ -108,7 +114,8 @@ approves it as part of this — there's no separate approval step in
    - [ ] T003 [artifacts: datamodel] <description>
    ```
 
-   Once all tasks are written, flip `status` to `ready`.
+   Once all tasks are written, flip `status` to `ready`, then run
+   `... touch ardd-tasks`.
 
 7. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
    `features:` list (if any). For each slug, flip its entry in
