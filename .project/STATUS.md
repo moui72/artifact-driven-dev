@@ -1,6 +1,7 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-03. Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-04. Keep this current as artifacts are refined and open questions are resolved._
+
 
 ## Artifact Status
 
@@ -18,9 +19,9 @@ Never checked — run `/ardd-verify` to compare artifacts against the codebase.
 
 ## Feedback
 
-1 open feedback file — `feedback-plan-defects-check-4cdb.md` (`/ardd-plan`
-should check `DEFECTS.md` for unplanned work) — see `.project/feedback/`,
-will be picked up by the next `/ardd-plan`.
+None open — `feedback-plan-defects-check-4cdb.md` was incorporated into
+`plan-worktree-state-hygiene-2026-07-04.md` this run and is now
+`status: planned`.
 
 ## Feature Backlog
 
@@ -28,14 +29,19 @@ will be picked up by the next `/ardd-plan`.
 
 ## Recommended Next Step
 
-`design-review-robustness` is already merged into `main` — no action
-needed there. The live branch is `process-review-fixes`: its plan
-(`plan-process-review-fixes-2026-07-03.md`) is `approved`, but
-`tasks-process-review-fixes-cfd8.md` is stuck at `status: generating` — a
-previous `/ardd-tasks` run wrote full task content (19 tasks, 5 phases,
-covering the 16 items from `feedback-process-review-findings-bd4c.md`) but
-never flipped the status to `ready`. Fix the frontmatter to `ready` (the
-content looks complete and unstarted — verify it matches the plan first)
-or regenerate via `/ardd-tasks`, then run `/ardd-implement`. Separately, no
-code-vs-artifact baseline has ever been taken — run `/ardd-verify` when
-convenient.
+`plan-worktree-state-hygiene-2026-07-04.md` is now `status: approved`, with
+`tasks-worktree-state-hygiene-5dd6.md` (`status: ready`, 14 tasks across 6
+phases) generated on the `worktree-state-hygiene` branch. It reworks the
+branch/worktree gate across `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`,
+`/ardd-converge` so coarse state flips (`features.md` `Status`, plan/tasks
+frontmatter) commit to `main` immediately while long-running work is
+delegated to a worktree subagent. Run `/ardd-implement` to start executing
+it (Phase 1's `worktree-info.sh` + its test come first, since later phases
+depend on it).
+
+Separately, unrelated to this plan: `tasks-process-review-fixes-cfd8.md`
+(bound to the already-merged `process-review-fixes` branch, PR #1) is at
+`status: ready` with none of its tasks checked off, even though its branch
+is merged into `main` — worth confirming whether that work actually landed
+before treating it as done. No code-vs-artifact baseline has ever been
+taken — run `/ardd-verify` when convenient.
