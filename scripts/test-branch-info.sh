@@ -11,8 +11,10 @@ BRANCH_INFO="$SCRIPT_DIR/branch-info.sh"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
-# Throwaway fixture repos under $WORK — no signing needed or wanted.
-git() { command git -c commit.gpgsign=false "$@"; }
+# Throwaway fixture repos under $WORK — no signing needed or wanted, and no
+# hooks from the invoking user's global core.hooksPath (e.g. a signing-
+# verification pre-push hook) should run against these disposable repos.
+git() { command git -c commit.gpgsign=false -c core.hooksPath=/dev/null "$@"; }
 
 fail=0
 assert_contains() {
