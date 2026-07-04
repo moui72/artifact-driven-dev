@@ -53,7 +53,7 @@ status: in-progress
   states → not diverged; each of the two divergent combinations → diverged
   with the right message text. Confirm this test fails right now — the
   script doesn't exist yet.
-- [ ] T008 [parallel] Implement `scripts/sync-divergence.sh` to make T007's
+- [x] T008 [parallel] Implement `scripts/sync-divergence.sh` to make T007's
   tests pass. Confirm they pass.
 - [ ] T009 Update `skills/ardd-sync/SKILL.md` prose so Push step 2 calls
   `sync-slug-match.sh`, Push step 3 calls `sync-label-decision.sh`, and Pull
