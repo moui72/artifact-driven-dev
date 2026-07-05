@@ -90,7 +90,7 @@ approves it as part of this — there's no separate approval step in
    ---
    plan: plan-<slug>-YYYY-MM-DD.md   # exact filename of the source plan — authoritative binding
    generated: YYYY-MM-DD
-   status: generating   # generating -> ready -> in-progress -> completed
+   status: generating   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                         # (or -> abandoned, if superseded by a new tasks
                         # file generated for the same plan)
    # worktree_branch: <branch>  — added later by /ardd-implement or

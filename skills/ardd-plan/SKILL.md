@@ -214,7 +214,7 @@ idea; it doesn't touch artifacts).
 
    ```yaml
    ---
-   status: draft        # draft -> approved -> superseded
+   status: draft        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
    branch: <slug>
    created: YYYY-MM-DD
    features: [<slug>, ...]   # feature slugs targeted in step 3; omit or [] if none
