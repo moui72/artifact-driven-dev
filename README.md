@@ -103,10 +103,10 @@ All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`
 | `/ardd-feedback <notes>` | After manually inspecting the implementation — capture bugs/UX/reconsidered decisions for the next plan |
 | `/ardd-research <topic>` | As needed — targeted investigation |
 | `/ardd-render <artifact>` | Anytime — generate a Mermaid diagram from an artifact into `README.md` |
-| `/ardd-plan [slug ...]` | When artifacts are stable. Pass backlogged feature slug(s) to design, apply their artifact changes, and plan them — any order, whenever you pick them up |
-| `/ardd-tasks` | Pick a plan (draft or approved) — selecting a draft one approves it as part of this step |
-| `/ardd-implement` | Execute tasks sequentially |
-| `/ardd-converge` | Reconcile codebase with tasks after interruption |
+| `/ardd-plan [slug ...]` | When artifacts are stable. Pass backlogged feature slug(s) to design, apply their artifact changes, and plan them — any order, whenever you pick them up. Targeting a feature slug defaults to a worktree + delegated subagent, since that's real design work that can run long |
+| `/ardd-tasks` | Pick a plan (draft or approved) — selecting a draft one approves it as part of this step. Always runs on the current branch, no worktree gate — its own actions are the state update |
+| `/ardd-implement` | Execute tasks sequentially. Defaults to a worktree + delegated subagent |
+| `/ardd-converge` | Reconcile codebase with tasks after interruption. Defaults to a worktree + delegated subagent |
 
 ## Install
 

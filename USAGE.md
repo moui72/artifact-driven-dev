@@ -122,6 +122,15 @@ implementation plan, and presents it for your review. The plan is saved to
 disk immediately as `status: draft` — there's no separate approval step
 here. Running `/ardd-tasks` and selecting it is what approves it.
 
+Passing one or more backlogged feature slugs (`/ardd-plan <slug> ...`) does
+real artifact-design work first, which can run long — this defaults to
+creating a worktree and delegating the rest of the run to a subagent, so
+your conversation stays free while it works. A no-slug run (feedback/
+artifact touch-ups only) stays lightweight: a plain branch, no delegation.
+Either way, if another `/ardd-*` subagent is already running against this
+project, Claude checks and asks whether to wait before starting a second
+one.
+
 ---
 
 ### 6. Generate tasks
@@ -130,7 +139,11 @@ here. Running `/ardd-tasks` and selecting it is what approves it.
 /ardd-tasks
 ```
 
-This asks which plan to generate tasks for (draft or already-approved), and
+Always runs on whatever branch or worktree you invoke it from — no
+worktree gate of its own, since approving the plan and flipping the
+feature-backlog Status are themselves the state update the other commands'
+worktree delegation exists to get onto your default branch promptly. This
+asks which plan to generate tasks for (draft or already-approved), and
 selecting a draft one approves it as part of this step — flips it to
 `approved` and flips its targeted backlog features from `backlogged` to
 `planned`. It then produces `.project/tasks/tasks-<slug>-<hex>.md` — an
@@ -151,11 +164,20 @@ Review the task list and adjust before running `/ardd-implement`.
 /ardd-implement
 ```
 
-Claude asks which tasks file to work on, then executes tasks sequentially:
-loads the declared artifacts for each task, writes and runs tests per
-whatever paradigm the constitution declares (TDD, test-after, or none),
-implements to pass them, marks the task complete, and commits. It stops and
-surfaces blockers rather than working around them.
+Defaults to creating a worktree and delegating execution to a subagent —
+executing tasks is exactly the long-running, code-producing work this is
+for. Claude asks which tasks file to work on, then executes tasks
+sequentially: loads the declared artifacts for each task, writes and runs
+tests per whatever paradigm the constitution declares (TDD, test-after, or
+none), implements to pass them, marks the task complete, and commits. It
+stops and surfaces blockers rather than working around them.
+
+The feature-backlog Status flip (`tasked` → `implemented`) doesn't happen
+inside the worktree — it's held back until the coordinating conversation
+confirms the worktree's branch is actually merged into your default branch,
+so `features.md` never claims work is done before the code has landed.
+Individual task checkboxes and the tasks file's own status still update
+immediately, in the worktree, same as before.
 
 ---
 
@@ -167,6 +189,7 @@ If `/ardd-implement` is interrupted — or you pick the project up in a new sess
 /ardd-converge
 ```
 
+Also defaults to a worktree + delegated subagent, same as `/ardd-implement`.
 This asks which tasks file to reconcile, compares the codebase against it,
 marks tasks that are already done, notes partial work, and appends any gaps
 as new tasks. Then you can run `/ardd-implement` again to continue.

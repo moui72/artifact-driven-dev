@@ -62,9 +62,13 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 # lint-project.sh: invoked by /ardd-lint against this project's own
 #   .project/ state. Schema-of-record for status enums and required
 #   frontmatter fields lives in this script, not in prose; see its header.
-# branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-tasks' "check
+# branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-converge's "check
 #   branch" step for the deterministic current/default-branch detection
-#   those three skills used to duplicate as prose.
+#   those skills used to duplicate as prose.
+# worktree-info.sh: invoked by the same "check branch" step in ardd-plan/
+#   ardd-implement/ardd-converge to create or locate a worktree branched
+#   from the default branch's current tip, when that step's default-to-yes
+#   delegation is accepted.
 # sibling-tasks-complete.sh: invoked by ardd-implement/ardd-converge on a
 #   tasks file's own completion, to check whether every tasks file bound to
 #   the same plan is done before flipping that plan's features to
@@ -80,17 +84,20 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
 cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
+cp "$SCRIPT_DIR/scripts/worktree-info.sh" "$ARDD_SCRIPTS_DIR/worktree-info.sh"
 cp "$SCRIPT_DIR/scripts/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh"
 cp "$SCRIPT_DIR/scripts/sync-slug-match.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh"
 cp "$SCRIPT_DIR/scripts/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-label-decision.sh"
 cp "$SCRIPT_DIR/scripts/sync-divergence.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh"
 cp "$SCRIPT_DIR/scripts/project-lock.sh" "$ARDD_SCRIPTS_DIR/project-lock.sh"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
+  "$ARDD_SCRIPTS_DIR/worktree-info.sh" \
   "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh" \
   "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh" \
   "$ARDD_SCRIPTS_DIR/project-lock.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
+echo "  ✓ ardd-scripts/worktree-info.sh"
 echo "  ✓ ardd-scripts/sibling-tasks-complete.sh"
 echo "  ✓ ardd-scripts/sync-slug-match.sh"
 echo "  ✓ ardd-scripts/sync-label-decision.sh"

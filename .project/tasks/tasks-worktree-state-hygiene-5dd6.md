@@ -104,11 +104,15 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   not the tasks-file's own `→completed` flip.
 
 ## Phase 6: Docs
-- [ ] T013 [artifacts: constitution] Update `README.md` and `USAGE.md`
+- [x] T013 [artifacts: constitution] Update `README.md` and `USAGE.md`
   wherever they describe the branch/worktree gate or the
   implement/converge completion flow, to match the behavior from T003–T012.
-  Depends on T003, T004, T007, T010.
-- [ ] T014 [artifacts: constitution] [parallel] Update `CLAUDE.md`'s
+  Depends on T003, T004, T007, T010. Also fixed a real gap found while
+  writing this: `install.sh` never copied `worktree-info.sh` into a target
+  project's `.claude/skills/ardd-scripts/`, which would have made the new
+  skill behavior non-functional outside this repo — added the copy,
+  `chmod +x`, and inline comment alongside `branch-info.sh`'s.
+- [x] T014 [artifacts: constitution] [parallel] Update `CLAUDE.md`'s
   Architecture section: document the state-commit-before-branch spine, the
   coarse-vs-fine-grained state scoping rationale, and the worktree
   delegation pattern (new `worktree-info.sh`, sibling to `branch-info.sh`,

@@ -22,8 +22,10 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
-./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/tasks)
+./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
+./scripts/worktree-info.sh create <slug> [dir] # create/locate a worktree branched from the default branch's tip (used by ardd-plan/implement/converge)
+./scripts/test-worktree-info.sh        # regression test for worktree-info.sh (idempotency, branches-from-default-tip)
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
 ./scripts/test-hooks-pre-commit.sh     # regression test for hooks/pre-commit's aggregation/short-circuit logic
@@ -47,7 +49,7 @@ repo only (`scripts/lint-docs.sh`, its CI job, `tests/fixtures/`,
 repo's own `.project/`). Others are installed by `install.sh` into a
 *target* project and run there (every `skills/*/SKILL.md`, the constitution
 suggestion catalog, artifact templates, migrations, `scripts/lint-project.sh`,
-`scripts/branch-info.sh`). When adding a new deterministic check, decide
+`scripts/branch-info.sh`, `scripts/worktree-info.sh`). When adding a new deterministic check, decide
 which side it belongs to before writing it — a check against *this* repo's
 own files (docs, skill names) is source-side; a check against a *target*
 project's generated `.project/` state ships via `install.sh`.
@@ -153,16 +155,57 @@ current project; it never writes, only reports.
 **The "check branch" step's deterministic half is a shared script, not
 duplicated prose.** `scripts/branch-info.sh` (installed to
 `.claude/skills/ardd-scripts/`) computes `current`/`default`/`on_default`;
-`ardd-plan`, `ardd-implement`, and `ardd-tasks` all shell out to it instead
-of re-deriving the current/default-branch fallback chain. What's still
-duplicated across those three, deliberately, is the *interactive* half —
-suggesting a semantic branch name, asking the user, deciding what to do with
-the answer — because that requires judgment a script doesn't have; skills
-can't call into another skill as a subroutine to share that judgment or get
-a return value back, so this residual duplication stays prose. If you touch
-the deterministic detection logic, edit `branch-info.sh` (and its regression
+`ardd-plan`, `ardd-implement`, and `ardd-converge` all shell out to it
+instead of re-deriving the current/default-branch fallback chain
+(`ardd-tasks` deliberately doesn't — see below). What's still duplicated
+across those three, deliberately, is the *interactive* half — suggesting a
+semantic name, asking the user, deciding what to do with the answer —
+because that requires judgment a script doesn't have; skills can't call
+into another skill as a subroutine to share that judgment or get a return
+value back, so this residual duplication stays prose. If you touch the
+deterministic detection logic, edit `branch-info.sh` (and its regression
 test, `test-branch-info.sh`) once; if you touch the interactive framing, all
 three skills still need the same edit.
+
+**State-commit-before-branch: coarse state lands on the default branch
+immediately, fine-grained work is delegated to a worktree.** `ardd-plan`
+(when targeting a feature slug), `ardd-implement`, and `ardd-converge` are
+the long-running, code/artifact-producing skills — their branch-gate step
+defaults to creating a worktree via `scripts/worktree-info.sh` (sibling to
+`branch-info.sh`, same shared-deterministic-half/judgment-stays-in-prose
+split: it creates or locates a worktree branched from the default branch's
+*current tip*, nothing more) and delegating the rest of the skill to a
+subagent (`Agent` tool, `isolation: "worktree"`). `ardd-tasks` is the
+exception: it has no branch-gate step at all and always runs wherever it's
+invoked, because its own actions — plan approval, `features.md` Status
+flips — *are* the coarse state update the other three are trying to get
+onto the default branch promptly; there's nothing to defer behind a
+worktree.
+
+This creates a deliberate split in what happens where:
+- **Coarse, cross-cutting state** (`features.md` `Status`, plan/tasks
+  frontmatter `status`) is what other sessions, people, or `STATUS.md`
+  actually need to see promptly, and is what can conflict across
+  concurrently-running worktrees if left to merge timing. It lands on the
+  default branch as soon as it changes — before a worktree is even created
+  for the substantive work — and, for flips a delegated subagent would
+  otherwise perform on completion (`tasked→implemented`), is deliberately
+  held until the coordinating conversation confirms (`git merge-base
+  --is-ancestor <branch> main`) the worktree's branch has actually merged.
+  `features.md` never claims "implemented" before the code has landed.
+- **Fine-grained, single-owner state** (a tasks file's own
+  `ready→in-progress→completed` transitions, individual task checkboxes) has
+  no cross-branch conflict risk — nothing else concurrently edits the same
+  tasks file — so it stays immediate, inside the worktree, and reaches the
+  default branch the same way the code does: on merge. Syncing every
+  checkbox to the default branch in real time would eliminate the isolation
+  the worktree exists to provide, for no corresponding benefit.
+
+A coordination check (list in-flight background subagents via the harness's
+`TaskList` — not something a POSIX script can wrap, so this stays prose,
+per Principle II) runs before `ardd-plan`/`ardd-implement`/`ardd-converge`
+delegate new work, warning the user if a prior delegated run against this
+repo is still active before starting a second one.
 
 That's a different thing from a skill telling the agent, as its own last
 step, to run another skill and stop — a terminal handoff, not a subroutine
