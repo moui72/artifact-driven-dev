@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-04. Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-05. Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -18,9 +18,9 @@ Never checked — run `/ardd-verify` to compare artifacts against the codebase.
 
 ## Feedback
 
-None open — `feedback-plan-defects-check-4cdb.md` was incorporated into
-`plan-worktree-state-hygiene-2026-07-04.md` this run and is now
-`status: planned`.
+None open — all 3 feedback files (`feedback-design-review-robustness-13bc.md`,
+`feedback-plan-defects-check-4cdb.md`, `feedback-process-review-findings-bd4c.md`)
+are `status: planned`, incorporated into their respective plans.
 
 ## Feature Backlog
 
@@ -28,49 +28,24 @@ None open — `feedback-plan-defects-check-4cdb.md` was incorporated into
 
 ## Recommended Next Step
 
-`tasks-worktree-state-hygiene-5dd6.md` is now `status: completed` — all 21
-tasks done (14 original + 7 gap tasks across three `/ardd-converge`
-reconciliation passes mid-session, T015–T021), plus two further commits
-after a live smoke test (see below), all on the `worktree-state-hygiene`
-branch. **Every commit on this branch is unsigned** — 1Password was locked
-this session — **the whole range needs re-signing before this branch is
-pushed**.
+All five tasks files on this branch are now `status: completed`:
+`tasks-design-review-robustness-2187.md` (21/21), `tasks-implicit-plan-approval-455c.md`,
+`tasks-pre-commit-lint-hook-afed.md`, `tasks-worktree-state-hygiene-5dd6.md`, and, as of
+this run, `tasks-process-review-fixes-cfd8.md` (16 `[x]` + 3 `[-]` superseded/declined —
+T016, T017, T019 were superseded by the worktree-native-state redesign shipping
+equivalent or better coverage under different names; see that file for the
+user-confirmed rationale on each). `completion-flip-check.sh` ran clean against all
+five — no orphaned `tasked→implemented` flips. `inflight-worktrees.sh` found no other
+worktrees of this repo in flight.
 
-A live smoke test — actually delegating via `Agent`'s `isolation:
-"worktree"` against a throwaway plan+tasks file and inspecting the result,
-rather than reasoning about it — found the delegated worktree's branch
-had a merge-base with `origin/main`, not with the coordinator's current
-commit: it never saw either pre-delegation commit. This traces to the
-harness's `worktree.baseRef` setting (default `fresh`, branches from
-`origin/<default-branch>`) — not something a `SKILL.md` can override —
-and it invalidates the core premise the whole state-commit-before-branch
-design rested on, especially given this project's local-commit-only
-convention. As a result, `/ardd-implement`/`/ardd-converge` now default
-the delegation question's suggested answer to **"no"** and label it
-experimental, rather than defaulting to "yes." The same live test also
-found and fixed a real, reproducible bug: `test-branch-info.sh` leaked
-`GIT_DIR` into its fixture repos when run as this repo's own pre-commit
-hook, causing deterministic commit failures (fixed, confirmed red/green).
-It also surfaced a side effect — creating the `Agent`-tool worktree
-flipped this repo's `.git/config` to `core.bare = true`, breaking ordinary
-git commands in the primary checkout until manually reverted — noted in
-CLAUDE.md as something to watch for.
+All of this work — the worktree-native-state redesign, the process-review-fixes plan,
+and the design-review-robustness/implicit-plan-approval/pre-commit-lint-hook plans —
+lives unmerged on `worktree-state-hygiene`, 52 commits ahead of `main`. **Every commit
+on this range is unsigned** (1Password was locked this session) — the whole range
+needs re-signing (`git rebase -i main`, sign each) before this branch is pushed or
+merged.
 
-`/ardd-plan` still deliberately never delegates — its draft plan file is
-itself the state `/ardd-tasks` needs to see, so a worktree would trap it
-there until manual merge. Plan's `features: []`, so nothing in
-`features.md` changed from any of this.
-
-Next: review the diff, re-sign the commit range, then merge
-`worktree-state-hygiene` into `main` (this repo's dogfooded `.project/`
-files were not exempted from that — they're on this branch too). If
-delegation is worth relying on later, either confirm a
-`worktree.baseRef: head`-equivalent setting fixes the base-ref mismatch,
-or accept it as an opt-in, verify-before-use feature.
-
-Separately, unrelated to this plan: `tasks-process-review-fixes-cfd8.md`
-(bound to the already-merged `process-review-fixes` branch, PR #1) is at
-`status: ready` with none of its tasks checked off, even though its branch
-is merged into `main` — worth confirming whether that work actually landed
-before treating it as done. No code-vs-artifact baseline has ever been
-taken — run `/ardd-verify` when convenient.
+Next: review the full diff against `main`, re-sign the commit range, then merge
+`worktree-state-hygiene` (this repo's dogfooded `.project/` files are on this branch
+too, not exempted). No code-vs-artifact baseline has ever been taken — run
+`/ardd-verify` when convenient, ideally before merging a 52-commit range.
