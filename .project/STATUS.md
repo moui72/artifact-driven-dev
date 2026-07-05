@@ -14,14 +14,14 @@ None.
 
 ## Code-vs-Artifact Defects
 
-2 known defects — see `DEFECTS.md`, last checked 2026-07-05. Both severity
-**drift**, both in `constitution.md`: (1) the Governance footer's
-`Last Amended: 2026-07-03` contradicts the frontmatter's
-`last_updated: 2026-07-05` and the commit history; (2) the version is still
-1.0.0 with an "initial" Sync Impact Report despite material post-ratification
-amendments (expanded Pre-commit Enforcement script list), violating the
-constitution's own Governance §2–3 amendment procedure. `features.md`
-verified clean. Run `/ardd-verify` to refresh.
+No defects found — see `DEFECTS.md`, last checked 2026-07-05. An earlier
+check the same day found 2 drift defects in `constitution.md` (stale
+`Last Amended` footer; version/Sync Impact Report never bumped past
+1.0.0/"initial"); both were fixed by the v1.1.0 amendment (Pre-commit
+Enforcement is now a glob rule — `hooks/pre-commit` runs `lint-docs.sh`,
+`lint-project.sh`, and every `scripts/test-*.sh` — with governance
+bookkeeping brought current) and the re-run came back all-clear. Run
+`/ardd-verify` to refresh.
 
 ## Feedback
 
@@ -46,19 +46,17 @@ five — no orphaned `tasked→implemented` flips. `inflight-worktrees.sh` found
 worktrees of this repo in flight.
 
 All of this work — the worktree-native-state redesign, the process-review-fixes plan,
-and the design-review-robustness/implicit-plan-approval/pre-commit-lint-hook plans —
-lives unmerged on `worktree-state-hygiene`, 52 commits ahead of `main`. **Every commit
-on this range is unsigned** (1Password was locked this session) — the whole range
-needs re-signing (`git rebase -i main`, sign each) before this branch is pushed or
-merged.
+the design-review-robustness/implicit-plan-approval/pre-commit-lint-hook plans, and
+the constitution v1.1.0 amendment + all-clear verify run — lives unmerged on
+`worktree-state-hygiene`, 57 commits ahead of `main`. **The unsigned commit range
+(`4d1302e` onward — 1Password was locked) needs re-signing** before this branch is
+pushed or merged.
 
-`/ardd-verify` has now run (2026-07-05) and found 2 drift defects, both
-governance bookkeeping in `constitution.md` (stale `Last Amended` footer;
-version/Sync Impact Report never bumped past 1.0.0/"initial" despite material
-amendments — see Code-vs-Artifact Defects above).
+`/ardd-verify` has run twice (2026-07-05): the first pass found 2 governance-
+bookkeeping drift defects in `constitution.md`; the v1.1.0 amendment fixed
+them and the second pass came back all-clear (see Code-vs-Artifact Defects
+above).
 
-Next: run `/ardd-refine constitution` to fix the governance bookkeeping
-(footer date, version bump per Governance §2–3, refreshed Sync Impact
-Report), then review the full diff against `main`, re-sign the commit range,
-and merge `worktree-state-hygiene` (this repo's dogfooded `.project/` files
-are on this branch too, not exempted).
+Next: review the full branch diff against `main`, re-sign the unsigned commit
+range (`4d1302e` onward), and merge `worktree-state-hygiene` (this repo's
+dogfooded `.project/` files are on this branch too, not exempted).
