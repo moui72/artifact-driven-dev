@@ -16,7 +16,17 @@ Create a new artifact in `.project/artifacts/`. Usage:
 
 3. **Seed the artifact** from conversation context and the user's description.
    Replace all placeholder tokens. Use `[OPEN: <question>]` for anything
-   unresolved. Set `status: draft` if open questions remain, `stable` otherwise.
+   unresolved.
+
+   Set frontmatter explicitly, matching `/ardd-codify` step 4's field list:
+   ```
+   status: <draft if open questions remain, else stable>
+   last_updated: <today YYYY-MM-DD>
+   ```
+   Add `diagram_status: unrendered` if the new artifact is a renderable one
+   (`datamodel`, `infrastructure`, `ui`) — this skill never generates a
+   diagram itself, so a renderable artifact always starts `unrendered`, never
+   `current`.
 
 4. **Write** the artifact to `.project/artifacts/<name>.md`.
 
