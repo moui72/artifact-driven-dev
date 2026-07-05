@@ -38,7 +38,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   cross-references to step numbers within the file.
 
 ## Phase 3: `/ardd-plan` — worktree/subagent bias + DEFECTS.md ingestion
-- [ ] T004 [artifacts: constitution] In `skills/ardd-plan/SKILL.md` step 1
+- [x] T004 [artifacts: constitution] In `skills/ardd-plan/SKILL.md` step 1
   (branch check), change the suggestion logic: if one or more feature slugs
   were passed as arguments (step 3 will do real artifact-design work),
   default the suggested answer to creating a worktree via
@@ -48,12 +48,12 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   invoked with no feature slugs, keep today's plain-branch behavior
   unchanged — no delegation bias for lightweight feedback/artifact-only
   runs. Depends on T002 (references `worktree-info.sh`).
-- [ ] T005 [artifacts: constitution] In `skills/ardd-plan/SKILL.md`,
+- [x] T005 [artifacts: constitution] In `skills/ardd-plan/SKILL.md`,
   add a coordination-check step immediately before the delegation introduced
   in T004: list in-flight background subagents (harness `TaskList`) and, if
   any is touching this repo/`.project/`, surface it to the user and ask
   whether to wait before proceeding. Depends on T004 (shares the same step).
-- [ ] T006 [artifacts: constitution] In `skills/ardd-plan/SKILL.md`, add a
+- [x] T006 [artifacts: constitution] In `skills/ardd-plan/SKILL.md`, add a
   new step after the existing feedback-loading step that reads
   `.project/DEFECTS.md` (if present), presents each listed defect to the
   user, and on confirmation adds a corresponding fix task to the drafted

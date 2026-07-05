@@ -19,22 +19,47 @@ idea; it doesn't touch artifacts).
    If `on_default` is `false`, skip to step 2 and derive `<slug>` from
    `current` (lowercase, non-alphanumeric runs → `-`, truncate to ~30 chars).
 
-   If `on_default` is `true`, suggest a branch name — a semantic kebab-case slug derived
-   from the conversation/artifacts if the topic is clear, otherwise a short
-   arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`). If one
-   or more feature slugs were passed as arguments, prefer the first feature
-   slug as the suggested branch name instead of generating one. Ask the
-   user:
+   If `on_default` is `true` and one or more feature slugs were passed as
+   arguments (step 3 will do real artifact-design work, which can run
+   long): **check for in-flight work first** — list active background
+   subagents (harness `TaskList`). If one is already touching this repo or
+   its `.project/` directory, surface it to the user (what it's doing,
+   since when) and ask whether to wait for it to finish before starting
+   another delegated run — two worktrees racing on overlapping state flips
+   to the default branch is exactly what this coordination check exists to
+   catch. Then suggest a worktree: prefer the first feature slug as the
+   suggested name. Ask the user:
+   - "Yes, create a worktree for `<suggested-name>`"
+   - "Yes, create a worktree, but name it: ___"
+   - "No, continue on the current branch without a worktree"
+
+   On yes, run `.claude/skills/ardd-scripts/worktree-info.sh create <name>`
+   to create (or locate) the worktree, set `<slug>` to `<name>`, then
+   delegate steps 2 onward to a subagent (`Agent` tool, `isolation:
+   "worktree"`, pointed at the printed path) — give it this skill's
+   remaining steps verbatim as its instructions, along with `<slug>` and
+   the feature slug(s). The subagent runs independently and reports back
+   (plan drafted, summary, open questions) when done; the coordinating
+   conversation is free to do other things while it runs. On no, set
+   `<slug>` to a freshly generated short arbitrary hex token (4 hex chars,
+   e.g. `openssl rand -hex 2` → `f2ed`) and continue steps 2 onward inline,
+   without delegating.
+
+   If `on_default` is `true` and no feature slugs were passed (this run is
+   just touching feedback/artifacts, not doing feature design work), keep
+   the lighter-weight behavior: suggest a plain branch name — a semantic
+   kebab-case slug derived from the conversation/artifacts if the topic is
+   clear, otherwise a short arbitrary slug (4 hex chars, e.g. `openssl rand
+   -hex 2` → `f2ed`). Ask the user:
    - "Yes, create `<suggested-name>`"
    - "Yes, create a branch, but name it: ___"
-   - "No, continue on default" (a worktree works too — set one up yourself
-     and re-run from there; this gate doesn't automate worktree creation
-     since it's environment-specific)
+   - "No, continue on default"
 
    On yes, run `git checkout -b <name>` and set `<slug>` to `<name>`. On no,
    set `<slug>` to a freshly generated short arbitrary hex token (same
    generation as above) and proceed on the default branch without asking
-   again this run.
+   again this run. No delegation in this lighter-weight path — continue
+   inline.
 
 2. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present. If any are `status: draft`, warn the user and ask whether
@@ -140,11 +165,27 @@ idea; it doesn't touch artifacts).
    leave the file's `status` as `open` so the next `/ardd-plan` run picks up
    the remainder.
 
-5. **Check constitution compliance** if `constitution.md` is present. Flag any
+5. **Check `.project/DEFECTS.md` for unaddressed defects**, if present. Each
+   listed defect gets a stable identifier — a short hash of its description
+   text (e.g. `printf '%s' "<description>" | shasum | cut -c1-8`) — used to
+   track whether it's already been surfaced to the user by a prior
+   `/ardd-plan` run, so the same defect isn't re-prompted every time. Glob
+   `.project/plans/plan-*.md` and collect the union of every plan's
+   `surfaced-defects:` frontmatter list (if present) into an
+   "already-surfaced" set. For each `DEFECTS.md` entry whose identifier
+   isn't in that set: present it to the user and ask whether to include a
+   fix task for it in this plan. Whether accepted or declined, record its
+   identifier in the `surfaced-defects:` list of the plan you're drafting
+   (written in step 9) — declining still counts as "surfaced," which is what
+   stops it from being re-prompted on every future run. If accepted, the fix
+   task is added to the Phase Breakdown in step 8, tagged `[defect:
+   <identifier>]`.
+
+6. **Check constitution compliance** if `constitution.md` is present. Flag any
    planned patterns that require a Complexity Tracking entry per the simplicity
    principle.
 
-6. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
+7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
    plan you're about to draft supersedes one of them. On confirmation, flip
    that plan's `status` to `superseded` immediately — don't wait for this
@@ -154,7 +195,7 @@ idea; it doesn't touch artifacts).
    open draft counts either way, so an abandoned replacement doesn't go
    unnoticed.
 
-7. **Draft the plan** covering:
+8. **Draft the plan** covering:
    - **Goal** — what this plan delivers (one sentence)
    - **Scope** — what is and is not included
    - **Technical Approach** — how the system will be built; reference artifact
@@ -164,7 +205,8 @@ idea; it doesn't touch artifacts).
      with an artifact become artifact-revision tasks (`[artifacts: name]`);
      untagged feedback items become ordinary code-change tasks. Reference
      which feedback item each such task addresses. Tasks implementing a
-     feature targeted in step 3 reference that feature's slug.
+     feature targeted in step 3 reference that feature's slug. Tasks fixing a
+     defect accepted in step 5 reference that defect's identifier.
    - **Complexity Tracking** — table of justified deviations from the simplicity
      principle (if a constitution is present)
    - **Open Questions** — anything that must be resolved before or during
@@ -172,7 +214,7 @@ idea; it doesn't touch artifacts).
    - **Production Annotation Summary** — list of known production shortcuts to
      annotate during implementation
 
-8. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
+9. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
    frontmatter. As in step 3d, run `.claude/skills/ardd-scripts/project-
    lock.sh check ardd-plan` first (surface any warning, don't block on it),
    and `... touch ardd-plan` after writing:
@@ -183,10 +225,11 @@ idea; it doesn't touch artifacts).
    branch: <slug>
    created: YYYY-MM-DD
    features: [<slug>, ...]   # feature slugs targeted in step 3; omit or [] if none
+   surfaced-defects: [<id>, ...]   # DEFECTS.md identifiers surfaced in step 5; omit or [] if none
    ---
    ```
 
-9. **Present a summary** to the user: phases, key decisions, open questions.
+10. **Present a summary** to the user: phases, key decisions, open questions.
     The plan is saved at `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` as
     `status: draft` — there's no separate approval step here. Running
     `/ardd-tasks` and selecting this plan is what approves it (flips it to

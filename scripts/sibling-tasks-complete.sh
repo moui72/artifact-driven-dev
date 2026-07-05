@@ -3,7 +3,7 @@
 # /ardd-implement (on a tasks file's own completion) and /ardd-converge (on
 # reconciling a tasks file to completed) to decide whether to flip that
 # plan's bound features from tasked -> implemented. A plan can have more
-# than one tasks file (see /ardd-tasks step 2's "deliberate fork" case for a
+# than one tasks file (see /ardd-tasks step 1's "deliberate fork" case for a
 # plan that already has one in flight), so completing one doesn't mean the
 # plan's feature work is actually done. This logic used to be duplicated
 # near-verbatim as prose in both skills.
