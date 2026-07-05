@@ -28,7 +28,11 @@ existing GitLab REST fallback").
    slugs in `features.md` (see step 3) — if it collides, append a freshly
    generated 4-char hex token (`openssl rand -hex 2`).
 
-3. **Check for `features.md`.** If `.project/artifacts/features.md` doesn't
+3. **Check for `features.md`.** Before touching it, run
+   `.claude/skills/ardd-scripts/project-lock.sh check ardd-feature` — if it
+   warns, surface the warning to the user (another invocation touched
+   `.project/` recently) but proceed regardless; this is advisory, never a
+   block. If `.project/artifacts/features.md` doesn't
    exist, create it with the standard header:
 
    ```markdown
@@ -55,7 +59,8 @@ existing GitLab REST fallback").
    noun phrase at the capability level ("Octokit GitHub fallback") over an
    implementation label. Omit the `Why:` line when the motivation is already
    obvious from the description. Update `last_updated` in the frontmatter to
-   today's date.
+   today's date. After writing `features.md`, run
+   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-feature`.
 
    Entries with no `Slug`/`Status` line predate this convention (written by
    an older `/ardd-feature` or by `/ardd-featurize`) — treat them as
