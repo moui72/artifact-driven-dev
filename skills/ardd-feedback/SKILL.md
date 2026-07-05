@@ -67,7 +67,15 @@ loads them as planning input alongside artifacts. Items tagged with an
 artifact produce artifact-revision tasks (tagged
 `[artifacts: name]`, same convention as any other plan task — no separate
 mechanism in `/ardd-tasks` or `/ardd-implement`); untagged items produce
-ordinary code-change tasks. Once the plan is approved, `/ardd-plan` flips
+ordinary code-change tasks.
+
+Each item's checkbox uses the same 3-state resolution convention as
+`critique.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
+plan, `[-]` declined (an override the user chose not to take). `/ardd-plan`
+step 5 already writes these marks as it processes each item — feedback shares
+the convention rather than inventing its own.
+
+Once the plan is approved, `/ardd-plan` flips
 each consumed feedback file to `status: planned` and stamps `plan:` with its
 own filename. Planned feedback files are not edited further — they're the
 historical record of what prompted the plan.
