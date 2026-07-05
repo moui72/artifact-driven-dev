@@ -1,7 +1,7 @@
 ---
 plan: plan-worktree-state-hygiene-2026-07-04.md
 generated: 2026-07-04
-status: completed     # generating -> ready -> in-progress -> completed
+status: in-progress   # generating -> ready -> in-progress -> completed
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
 ---
@@ -119,3 +119,70 @@ status: completed     # generating -> ready -> in-progress -> completed
   same "shared deterministic half, judgment stays in prose" convention this
   file already documents for branch detection). Depends on T003, T004, T007,
   T010.
+
+## Phase 7: Gaps found by /ardd-converge reconciliation (2026-07-05)
+
+`worktree-info.sh`'s own header documents a precondition — "callers are
+expected to have already committed any state flip to the default branch
+before calling this" — that none of T004/T007/T010 actually implemented:
+all three create the worktree and delegate *before* any coarse state flip,
+not after committing one. This phase fixes that, reconsiders `/ardd-plan`'s
+delegation per user decision, and adds detection for the resulting
+orphaned-completion-flip failure mode. `[artifacts: constitution]` on all
+three — prose-only skill edits and one new deterministic script, no design
+decision requiring an artifact change.
+
+- [ ] T015 [artifacts: constitution] Fix the missing commit-then-branch
+  spine in `skills/ardd-implement/SKILL.md` and
+  `skills/ardd-converge/SKILL.md`. Currently step 1 creates the worktree and
+  delegates immediately; the tasks-file `ready→in-progress` flip (the actual
+  "work has started" signal) happens *inside* the delegated subagent, in the
+  worktree, reaching the default branch only on merge — the opposite of the
+  stated goal. Reorder each skill so: (a) picking the tasks file and, for
+  the first task in a file, flipping `ready→in-progress`, happen on the
+  *current* branch/worktree the skill was invoked from, before any
+  delegation decision; (b) that flip is committed there; (c) only then does
+  the worktree-creation/delegation step run (using `worktree-info.sh`,
+  branching from the commit that now includes the flip); (d) the subagent
+  receives the remaining task-execution loop, not the tasks-file-selection
+  step. If `on_default` is already `false` (invoked from an existing
+  worktree/branch), skip delegation entirely as today — this only affects
+  the `on_default: true` path.
+
+- [ ] T016 [artifacts: constitution] Revert `/ardd-plan`'s worktree +
+  subagent delegation (T004/T005), per explicit user decision: the draft
+  plan file is itself the state `/ardd-tasks` needs to see, and there's no
+  separate coarse marker to pre-commit the way tasks files have — isolating
+  it in a worktree traps it there until manual merge, severing the
+  plan→tasks handoff (`/ardd-tasks` globs `.project/plans/` on the default
+  branch and can't see a plan stuck in an unmerged worktree). Same reasoning
+  that already justified dropping `/ardd-tasks`'s own gate (T003). Restore
+  `skills/ardd-plan/SKILL.md` step 1 to a plain branch-gate — semantic
+  branch suggestion, `git checkout -b`, no worktree, no delegation, no
+  `TaskList` coordination check (nothing being delegated to race against).
+  Leave T006's `DEFECTS.md`-ingestion step untouched — unrelated to
+  delegation. Update `README.md`/`USAGE.md`/`CLAUDE.md` wherever T013/T014
+  described `/ardd-plan`'s delegation to match.
+
+- [ ] T017 [artifacts: constitution] Add orphaned-completion-flip detection
+  to `/ardd-analyze`, since the post-merge flip (`/ardd-implement` step 10,
+  `/ardd-converge` step 9) assumes a live coordinating conversation checks
+  back after merge — but merge is manual/async, so in the common case that
+  conversation is gone before it happens, recreating the exact
+  merged-but-status-never-flipped anomaly already flagged for
+  `tasks-process-review-fixes-cfd8.md`. Write
+  `scripts/test-completion-flip-check.sh` first (fixture-based, same
+  throwaway-repo style as `test-worktree-info.sh`), then implement
+  `scripts/completion-flip-check.sh <tasks-file> [project-dir]`: reads the
+  tasks file's `plan:` field and that plan's `branch:` field, runs
+  `git merge-base --is-ancestor <branch> <default>` (default via
+  `branch-info.sh`), and if true *and* any of the plan's `features:` slugs
+  are still `Status: tasked` in `features.md`, prints the orphaned slugs.
+  Wire it into `/ardd-analyze` step 1 (for every `status: completed` tasks
+  file) and the report/`STATUS.md` write (step 5/6): flag any orphaned
+  slugs found, and ask the user whether to perform the `tasked→implemented`
+  flip now. Document this as a new explicit, narrow exception to
+  `features.md`'s single-writer convention in `CLAUDE.md` (alongside the
+  existing tasks-file-completion exception) — `/ardd-analyze` writing this
+  one field, only on user confirmation, only when merge-ancestry and
+  tasked-status both hold.
