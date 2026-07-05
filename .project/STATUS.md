@@ -14,7 +14,14 @@ None.
 
 ## Code-vs-Artifact Defects
 
-Never checked — run `/ardd-verify` to compare artifacts against the codebase.
+2 known defects — see `DEFECTS.md`, last checked 2026-07-05. Both severity
+**drift**, both in `constitution.md`: (1) the Governance footer's
+`Last Amended: 2026-07-03` contradicts the frontmatter's
+`last_updated: 2026-07-05` and the commit history; (2) the version is still
+1.0.0 with an "initial" Sync Impact Report despite material post-ratification
+amendments (expanded Pre-commit Enforcement script list), violating the
+constitution's own Governance §2–3 amendment procedure. `features.md`
+verified clean. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
@@ -45,7 +52,13 @@ on this range is unsigned** (1Password was locked this session) — the whole ra
 needs re-signing (`git rebase -i main`, sign each) before this branch is pushed or
 merged.
 
-Next: review the full diff against `main`, re-sign the commit range, then merge
-`worktree-state-hygiene` (this repo's dogfooded `.project/` files are on this branch
-too, not exempted). No code-vs-artifact baseline has ever been taken — run
-`/ardd-verify` when convenient, ideally before merging a 52-commit range.
+`/ardd-verify` has now run (2026-07-05) and found 2 drift defects, both
+governance bookkeeping in `constitution.md` (stale `Last Amended` footer;
+version/Sync Impact Report never bumped past 1.0.0/"initial" despite material
+amendments — see Code-vs-Artifact Defects above).
+
+Next: run `/ardd-refine constitution` to fix the governance bookkeeping
+(footer date, version bump per Governance §2–3, refreshed Sync Impact
+Report), then review the full diff against `main`, re-sign the commit range,
+and merge `worktree-state-hygiene` (this repo's dogfooded `.project/` files
+are on this branch too, not exempted).
