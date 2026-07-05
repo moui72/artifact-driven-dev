@@ -125,6 +125,34 @@ echo "  ✓ ardd-scripts/project-lock.sh"
 echo "  ✓ ardd-scripts/worktree-align.sh"
 echo "  ✓ ardd-scripts/inflight-worktrees.sh"
 
+# --- Worktree include ---
+# Claude Code copies gitignored files into a freshly created worktree
+# (including an Agent-tool subagent's own `isolation: "worktree"`) when they
+# match a pattern in a `.worktreeinclude` file at the project root (gitignore
+# syntax; only files that both match AND are gitignored are copied). Since
+# .claude/skills/ardd-*/ is the gitignore pattern this script itself
+# recommends below, a fresh delegated worktree would otherwise start with
+# none of the installed ardd scripts. Never write anything broader than
+# .claude/skills/ardd-*/ here — same ceiling as the gitignore suggestion.
+WORKTREEINCLUDE="$TARGET/.worktreeinclude"
+WORKTREEINCLUDE_COMMENT="# ARDD: copy installed skills/scripts into new worktrees (added by install.sh)"
+WORKTREEINCLUDE_PATTERN=".claude/skills/ardd-*/"
+
+if [ ! -f "$WORKTREEINCLUDE" ]; then
+  printf '%s\n%s\n' "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE_PATTERN" > "$WORKTREEINCLUDE"
+  echo "  ✓ .worktreeinclude created ($WORKTREEINCLUDE_PATTERN)"
+elif grep -qxF "$WORKTREEINCLUDE_PATTERN" "$WORKTREEINCLUDE"; then
+  echo "  – .worktreeinclude already contains $WORKTREEINCLUDE_PATTERN"
+else
+  # Guard against a missing trailing newline in the existing file gluing our
+  # appended line onto its last line.
+  if [ -s "$WORKTREEINCLUDE" ] && [ -n "$(tail -c1 "$WORKTREEINCLUDE")" ]; then
+    printf '\n' >> "$WORKTREEINCLUDE"
+  fi
+  printf '%s\n%s\n' "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE_PATTERN" >> "$WORKTREEINCLUDE"
+  echo "  ✓ .worktreeinclude appended ($WORKTREEINCLUDE_PATTERN)"
+fi
+
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
   echo ""

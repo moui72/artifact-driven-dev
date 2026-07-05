@@ -86,23 +86,31 @@ self-contained; the agent loads only the artifacts it declares.
    a worktree with any other script, and do not name it; the branch name is
    whatever the subagent reports back. **The delegated subagent's
    instructions must begin with these two steps, before any task work:**
-   1. Run the align script **via the absolute path of the coordinator's own
-      copy** — the coordinator must expand
-      `<primary-checkout>/.claude/skills/ardd-scripts/worktree-align.sh` to
-      a real absolute path when writing the subagent's instructions. A
-      relative path won't work: the fresh worktree usually does not contain
-      the script yet (`.claude/skills/` is gitignored in target projects,
-      and the worktree's base commit may predate the script — the smoke
-      test confirmed it was absent before alignment, present after). Git
-      worktrees share the repo's object store and local refs, so even
-      though the worktree branched from `origin/<default>` (the harness
-      `worktree.baseRef: fresh` default — not steerable from prose, and it
-      has regressed in both directions across harness versions, so never
-      trust it), the local default branch's unpushed commits are still
-      reachable, and the script fast-forwards them into the fresh branch.
-      If it does not print `aligned=true`, **stop and report the failure
-      output verbatim — do not attempt any task, and never try a manual
-      conflicted merge.**
+   1. Run `worktree-align.sh` — the worktree's own copy at
+      `.claude/skills/ardd-scripts/worktree-align.sh` if it exists, else
+      the coordinator's copy by absolute path. It normally exists:
+      `install.sh` adds `.claude/skills/ardd-*/` to the target's
+      `.worktreeinclude`, so Claude Code copies the installed (gitignored)
+      ardd files into every new worktree. But the coordinator must still
+      expand `<primary-checkout>/.claude/skills/ardd-scripts/
+      worktree-align.sh` to a real absolute path in the subagent's
+      instructions as the fallback — `.worktreeinclude` is skipped when a
+      `WorktreeCreate` hook is configured, older installs predate it, and
+      a worktree's base commit may predate the scripts entirely (the live
+      smoke test hit exactly that: script absent before alignment, present
+      after). Git worktrees share the repo's object store and local refs,
+      so even though the worktree branched from `origin/<default>` (the
+      harness `worktree.baseRef: fresh` default — not steerable from
+      prose, and it has regressed in both directions across harness
+      versions, so never trust it), the local default branch's unpushed
+      commits are still reachable, and the script fast-forwards them into
+      the fresh branch. If it does not print `aligned=true`, **stop and
+      report the failure output verbatim — do not attempt any task, and
+      never try a manual conflicted merge.** The same present-or-fallback
+      rule applies to every other `.claude/skills/ardd-scripts/*.sh` call
+      in the remaining steps (`project-lock.sh`,
+      `sibling-tasks-complete.sh`): if the worktree copy is missing, use
+      the coordinator's absolute path.
    2. Verify the chosen tasks file exists at its expected path — a cheap
       end-to-end proof the alignment actually delivered the expected state.
 

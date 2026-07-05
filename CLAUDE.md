@@ -70,7 +70,12 @@ not-yet-made decision, not an oversight.
 `ardd-scripts` — so the fixed paths those skills expect actually resolve
 outside this repo), applies any `migrations/*.sh` not yet recorded in the
 target's `.ardd-applied`, and writes `.project/ardd-version.md` recording the
-source commit. It also inspects the target's git-tracked files under
+source commit. It also ensures the target's `.worktreeinclude` contains
+`.claude/skills/ardd-*/` (creating the file or idempotently appending) so
+Claude Code copies the installed, gitignored ardd files into every new
+worktree — without this, a delegated subagent's worktree contains none of
+the ardd scripts its steps call. The gitignore check's ceiling rule applies
+here too: never a pattern broader than `.claude/skills/ardd-*/`. It also inspects the target's git-tracked files under
 `.claude/` to print the right `.gitignore` suggestion — `.claude/skills/` is
 regenerated output and should never be committed in a target project;
 `.project/ardd-version.md` is the intentional, committed record of which ADD
@@ -194,14 +199,18 @@ truth*; and two installed scripts bridge them:
   fast-forward-merges the local default branch into the fresh worktree
   branch, refusing (`aligned=false`, `reason=diverged|dirty|...`) rather
   than resolving anything non-trivial. A subagent that doesn't see
-  `aligned=true` must stop and report, never work unaligned. It must be
-  invoked via the *absolute path of the coordinator's copy*: a fresh
-  worktree usually doesn't contain the script itself (`.claude/skills/` is
-  gitignored in target projects, and the worktree's base commit may predate
-  it). Live-validated 2026-07-05: a real `Agent` worktree based well behind
-  local state (`origin/main`) fast-forwarded cleanly onto an unpushed local
-  commit; the `core.bare` corruption (bug #3) did not reproduce on that
-  run, but the coordinator's post-delegation check stays.
+  `aligned=true` must stop and report, never work unaligned. The worktree
+  normally has its own copy — `install.sh` ensures the target's
+  `.worktreeinclude` contains `.claude/skills/ardd-*/`, so Claude Code
+  copies the installed (gitignored) ardd files into every new worktree —
+  but the coordinator always passes its copy's absolute path as fallback:
+  `.worktreeinclude` is skipped under a `WorktreeCreate` hook, older
+  installs predate it, and a worktree's base commit may predate the
+  scripts. Live-validated 2026-07-05: a real `Agent` worktree based well
+  behind local state (`origin/main`) fast-forwarded cleanly onto an
+  unpushed local commit; the `core.bare` corruption (bug #3) did not
+  reproduce on that run, but the coordinator's post-delegation check
+  stays.
 - `scripts/inflight-worktrees.sh` — enumerates every *other* worktree of
   the repo and its tasks-file state (branch, status, checkbox progress).
   This is solo mode's coarse-state visibility channel: `ardd-implement`/

@@ -63,13 +63,15 @@ when resuming work in a new session.
    pre-create one or name it; the branch name is whatever the subagent
    reports back. **The delegated subagent's instructions must begin with
    these two steps, before any reconciliation:**
-   1. Run the align script **via the absolute path of the coordinator's own
-      copy** — the coordinator expands
-      `<primary-checkout>/.claude/skills/ardd-scripts/worktree-align.sh` to
-      a real absolute path in the subagent's instructions; a relative path
-      won't work because the fresh worktree usually doesn't contain the
-      script yet (`.claude/skills/` is gitignored in targets, and the base
-      commit may predate it). Worktrees share the repo's object store and
+   1. Run `worktree-align.sh` — the worktree's own copy at
+      `.claude/skills/ardd-scripts/worktree-align.sh` if it exists (it
+      normally does: `install.sh` adds `.claude/skills/ardd-*/` to the
+      target's `.worktreeinclude`, so the installed gitignored ardd files
+      are copied into every new worktree), else the coordinator's copy by
+      an absolute path the coordinator must always include in these
+      instructions as the fallback (`.worktreeinclude` is skipped under a
+      `WorktreeCreate` hook, older installs predate it, and the base commit
+      may predate the scripts). Worktrees share the repo's object store and
       local refs, so even though the worktree branched from
       `origin/<default>` (the harness `worktree.baseRef: fresh` default —
       not steerable from prose, and it has regressed in both directions
@@ -77,7 +79,9 @@ when resuming work in a new session.
       branch's unpushed commits are reachable, and the script fast-forwards
       them in. If it does not print `aligned=true`, **stop and report the
       failure verbatim — do not attempt reconciliation, and never try a
-      manual conflicted merge.**
+      manual conflicted merge.** The same present-or-fallback rule applies
+      to the other `.claude/skills/ardd-scripts/*.sh` calls in the
+      remaining steps (`project-lock.sh`, `sibling-tasks-complete.sh`).
    2. Verify the chosen tasks file exists at its expected path — a cheap
       proof the alignment delivered the state.
 
