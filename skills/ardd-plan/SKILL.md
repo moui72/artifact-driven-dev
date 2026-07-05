@@ -70,6 +70,16 @@ idea; it doesn't touch artifacts).
       in flight, use `/ardd-feedback` (a reconsidered decision) or edit the
       relevant plan/artifact directly.
 
+      Also run `.claude/skills/ardd-scripts/inflight-worktrees.sh`. For each
+      in-flight tasks file it reports in another worktree, read that file's
+      `plan:` frontmatter (from that worktree's copy) and the named plan's
+      `features:` list — if a targeted slug appears there, print an advisory
+      (never blocking): the slug already has work in flight on that
+      worktree/branch, and planning it again here may produce conflicting
+      designs. The `features.md` visible on this branch can't show that —
+      under worktree-native state, in-flight status rides the other
+      worktree's branch until merge.
+
    b. **For each targeted feature, identify affected artifacts.** Use the
       feature's one-sentence description (and `Why:` line, if present) plus
       this table:
