@@ -1,7 +1,7 @@
 ---
 plan: plan-delegation-smoketest-2026-07-05.md
 generated: 2026-07-05
-status: ready
+status: in-progress
 ---
 
 # Tasks
