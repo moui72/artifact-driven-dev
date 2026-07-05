@@ -206,6 +206,13 @@ self-contained; the agent loads only the artifacts it declares.
    lands the code and this flip together. Run `... touch ardd-implement`
    once this step's writes are done.
 
+   **On the inline (non-delegated) path, this is the run's terminal step:**
+   once step 9 commits this final work, **run `/ardd-analyze` now** to refresh
+   `STATUS.md` — don't rely on the next loop iteration's early-exit (step 2)
+   to discover completion after the fact. A delegated subagent must **not**
+   run it here (see the note in step 3); its `/ardd-analyze` runs on the
+   coordinator after the worktree branch merges.
+
 9. **Commit** the work with a concise message referencing the task ID.
 
 10. **Proceed to the next task** and repeat from step 4.
