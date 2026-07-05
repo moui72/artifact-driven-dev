@@ -60,7 +60,7 @@ code does, not necessarily what was intended. Review each one with
      After inference, **offer opinionated suggestions** the same way
      `/ardd-bootstrap` does, before writing the artifact. Read `.claude/
      skills/ardd-constitution-data/constitution-suggestions.md` (installed
-     by `install.sh`); if missing, skip this step and note it in the step 7
+     by `install.sh`); if missing, skip this step and note it in the step 8
      report (recommend re-running `install.sh`). Filter by signal (using the
      step 2 codebase survey, which gives stronger signal than conversation
      alone — e.g. `tsconfig.json`/`.ts` files for a typed language, route
@@ -76,7 +76,7 @@ code does, not necessarily what was intended. Review each one with
      `[VIOLATED: <one-line evidence from the survey>]` to the inserted text,
      the same way other inferred content is marked for the user to see and
      correct. Never write to `DEFECTS.md` or `features.md` here — report the
-     violated count in step 7 instead, recommending `/ardd-verify` (to log
+     violated count in step 8 instead, recommending `/ardd-verify` (to log
      each gap in `DEFECTS.md`) followed by `/ardd-feature` to backlog closing
      it. This preserves those files' existing single-writer ownership.
 
@@ -95,12 +95,19 @@ code does, not necessarily what was intended. Review each one with
 
 5. **Write all artifact files** to `.project/artifacts/`.
 
-6. **Generate `.project/STATUS.md`** summarizing what was written. Use the
+6. **Generate `.project/WORKFLOW.md`** — the stable skill-reference doc, so the
+   existing-project onboarding path produces the same reference the greenfield
+   `/ardd-bootstrap` path does. Reuse the same structure and skills-table
+   content as `/ardd-bootstrap` (see its "WORKFLOW.md structure" section);
+   keep skill descriptions generic (what each skill does), not
+   project-specific.
+
+7. **Generate `.project/STATUS.md`** summarizing what was written. Use the
    standard STATUS.md structure (same as `/ardd-bootstrap`). In the
    "Recommended next step" line, direct the user to review draft artifacts with
    `/ardd-refine` and resolve open questions before running `/ardd-analyze`.
 
-7. **Report:**
+8. **Report:**
    - How many artifacts were written and which ones
    - Total `[OPEN: ...]` items across all artifacts (count only)
    - One sentence on what the codebase survey found that was most surprising
