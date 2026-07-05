@@ -15,6 +15,11 @@
 #     interrupted between the plan-status flip and the feature-status flip
 #     would leave (see /ardd-tasks step 2)
 #
+# Deliberately NOT validated: critique.md, DEFECTS.md, SYNC.md, and STATUS.md.
+# These are single-writer report files with looser, informal schemas by
+# design — their content is prose a human reads, not machine-checkable state —
+# so their absence from the checks above is intentional, not an oversight.
+#
 # THIS SCRIPT IS THE SCHEMA-OF-RECORD for status enums and required fields.
 # The enums below are hardcoded because they can't be derived from the
 # filesystem the way skill names can (see scripts/lint-docs.sh) — they only
