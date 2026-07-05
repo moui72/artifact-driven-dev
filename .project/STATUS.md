@@ -2,7 +2,6 @@
 
 _Updated: 2026-07-04. Keep this current as artifacts are refined and open questions are resolved._
 
-
 ## Artifact Status
 
 | Artifact | Status | Open questions |
@@ -29,15 +28,21 @@ None open — `feedback-plan-defects-check-4cdb.md` was incorporated into
 
 ## Recommended Next Step
 
-`plan-worktree-state-hygiene-2026-07-04.md` is now `status: approved`, with
-`tasks-worktree-state-hygiene-5dd6.md` (`status: ready`, 14 tasks across 6
-phases) generated on the `worktree-state-hygiene` branch. It reworks the
-branch/worktree gate across `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`,
-`/ardd-converge` so coarse state flips (`features.md` `Status`, plan/tasks
-frontmatter) commit to `main` immediately while long-running work is
-delegated to a worktree subagent. Run `/ardd-implement` to start executing
-it (Phase 1's `worktree-info.sh` + its test come first, since later phases
-depend on it).
+`tasks-worktree-state-hygiene-5dd6.md` is now `status: completed` — all 14
+tasks done on the `worktree-state-hygiene` branch (commits `168a6e6`
+through `25d3ba8`, all unsigned — 1Password was locked this session; **the
+whole range needs re-signing before this branch is pushed**). It reworked
+the branch/worktree gate across `/ardd-plan`, `/ardd-tasks`,
+`/ardd-implement`, `/ardd-converge` so coarse state (`features.md`
+`Status`, plan/tasks frontmatter) lands on the default branch promptly
+while long-running work delegates to a worktree subagent; added
+`scripts/worktree-info.sh` + its test and wired it into `install.sh`,
+`hooks/pre-commit`, and CI. Plan's `features: []`, so nothing in
+`features.md` changed.
+
+Next: review the diff, re-sign the commit range, then merge
+`worktree-state-hygiene` into `main` (this repo's dogfooded `.project/`
+files were not exempted from that — they're on this branch too).
 
 Separately, unrelated to this plan: `tasks-process-review-fixes-cfd8.md`
 (bound to the already-merged `process-review-fixes` branch, PR #1) is at
