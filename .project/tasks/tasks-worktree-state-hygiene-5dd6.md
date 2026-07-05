@@ -65,23 +65,27 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   feedback-file bookkeeping needed here).
 
 ## Phase 4: `/ardd-implement` — delegation + completion-flip relocation
-- [ ] T007 [artifacts: constitution] In `skills/ardd-implement/SKILL.md` step
+- [x] T007 [artifacts: constitution] In `skills/ardd-implement/SKILL.md` step
   1, change the branch-gate default to "yes" and, on acceptance, create a
   worktree via `worktree-info.sh` and delegate step 2 onward to a subagent
   (`Agent` tool, `isolation: "worktree"`) instead of running inline. Depends
   on T002.
-- [ ] T008 [artifacts: constitution] In
+- [x] T008 [artifacts: constitution] In
   `skills/ardd-implement/SKILL.md`, add the same coordination-check pattern
   as T005 before delegating. Depends on T007.
-- [ ] T009 [artifacts: constitution] In `skills/ardd-implement/SKILL.md`,
-  relocate the `tasked→implemented` feature flip and the tasks-file
-  `→completed` flip out of step 7 (which currently performs them
-  unconditionally) into a new step the *coordinating* conversation performs
-  only after receiving the delegated subagent's completion report: check
-  `git merge-base --is-ancestor <branch> main`; if true, perform the flip on
-  `main` immediately; if false, tell the user the flip is pending merge and
-  do not write it. When the user declined delegation (ran inline, no
-  subagent), behavior is unchanged from today. Depends on T007.
+- [x] T009 [artifacts: constitution] In `skills/ardd-implement/SKILL.md`,
+  relocate the `tasked→implemented` feature flip out of step 7 (which
+  currently performs it unconditionally) into a new step 10 the
+  *coordinating* conversation performs only after receiving the delegated
+  subagent's completion report: check `git merge-base --is-ancestor
+  <branch> main`; if true, perform the flip on `main` immediately; if
+  false, tell the user the flip is pending merge and do not write it. When
+  the user declined delegation (ran inline, no subagent), behavior is
+  unchanged from today. Depends on T007. **Refined during implementation**
+  (user-confirmed): the tasks-file's own `→completed` flip is *not*
+  relocated — it stays immediate/in-worktree, since it's plan-specific with
+  no cross-branch conflict risk, unlike `features.md`; see the plan's
+  Technical Approach note.
 
 ## Phase 5: `/ardd-converge` — same relocation
 - [ ] T010 [artifacts: constitution] [parallel] Apply the same change as

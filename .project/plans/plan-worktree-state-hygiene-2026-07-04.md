@@ -117,6 +117,15 @@ worktree. Instead:
   unchanged from today — the flip happens wherever the work happened, same
   as before this plan.
 
+**Implementation-time refinement (confirmed with the user during T009):**
+only the `features.md` flip is actually relocated to post-merge. The
+tasks-file's own `→completed` frontmatter flip stays immediate, in-worktree,
+same as its per-task checkboxes — it's plan-specific (no other branch edits
+the same tasks file concurrently), so it carries none of the cross-branch
+conflict risk `features.md` has, and it travels to `main` with the rest of
+the code on merge regardless. Relocating it too would only add latency with
+no corresponding benefit.
+
 **Coordination check.** `TaskList` is a harness tool, not something a POSIX
 script can wrap (per Constitution Principle II, this stays prose/judgment,
 not a deterministic check) — added as a preamble in `/ardd-plan` (when
