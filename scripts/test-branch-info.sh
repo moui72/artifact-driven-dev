@@ -5,6 +5,8 @@
 
 set -e
 
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_OBJECT_DIRECTORY
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BRANCH_INFO="$SCRIPT_DIR/branch-info.sh"
 
