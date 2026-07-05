@@ -1,7 +1,7 @@
 ---
 plan: plan-worktree-state-hygiene-2026-07-04.md
 generated: 2026-07-04
-status: completed     # generating -> ready -> in-progress -> completed
+status: in-progress   # generating -> ready -> in-progress -> completed
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
 ---
@@ -186,3 +186,44 @@ decision requiring an artifact change.
   existing tasks-file-completion exception) — `/ardd-analyze` writing this
   one field, only on user confirmation, only when merge-ancestry and
   tasked-status both hold.
+
+## Phase 8: Gaps found by /ardd-converge reconciliation (2026-07-05, second pass)
+
+The advisor traced a delegated `/ardd-implement` run against the actual
+`Agent` tool schema: `isolation: "worktree"` creates its **own** worktree
+and returns its path/branch afterward — there is no parameter to point it
+at a pre-existing path. T007/T010's prose ("run `worktree-info.sh
+create <name>` … then delegate via `Agent`, `isolation: "worktree"`,
+pointed at the printed path") describes two mechanisms that can't compose:
+the real work lands on the Agent's own auto-created branch, while the
+manually-created `<name>` branch stays empty at the default branch's tip —
+so the later `git merge-base --is-ancestor <name> main` check trivially
+returns true and `/ardd-analyze`'s new orphaned-flip detector would never
+catch it, because `features.md` gets flipped to `implemented` immediately,
+incorrectly, by the default path itself.
+
+- [ ] T018 [artifacts: constitution] Fix `/ardd-implement` and
+  `/ardd-converge`'s delegation step: delegate via `Agent` with
+  `isolation: "worktree"` directly (no `worktree-info.sh` call in this
+  path) and capture the branch name it returns in its result. Use *that*
+  branch — not a manually-chosen `<name>` — in the later post-merge
+  completion-flip step's `git merge-base --is-ancestor` check. The
+  "suggest a semantic branch name" prompt only still applies to the
+  non-delegated ("No, continue on the current branch") path, where
+  `git checkout -b <name>` is still used.
+
+- [ ] T019 [artifacts: constitution] Remove `scripts/worktree-info.sh` and
+  `scripts/test-worktree-info.sh` — per Constitution Principle VIII (check
+  tool idioms before building custom mechanism), it duplicates what
+  `Agent`'s `isolation: "worktree"` already does, and after T018 no skill
+  calls it anymore (dead code, per Principle VII). Remove its entries from
+  `hooks/pre-commit`, `.github/workflows/lint.yml`,
+  `scripts/test-hooks-pre-commit.sh`'s stub lists, and `install.sh`'s copy
+  list/comment. Update `CLAUDE.md`'s Commands block, its "State-commit-
+  before-branch" Architecture section, and `README.md`/`USAGE.md` wherever
+  they mention `worktree-info.sh` or describe delegation "pointing at" a
+  worktree path, to describe the corrected `Agent`-native mechanism
+  instead. This reverses T001/T002's own deliverable — document the
+  reversal explicitly (mirroring how T016 documented reverting `/ardd-plan`'s
+  delegation) so it isn't reintroduced later under the same
+  Principle-VIII mistake.
