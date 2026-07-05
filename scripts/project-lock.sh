@@ -16,6 +16,16 @@
 # `touch` records the current time and label. `check` prints a one-line
 # warning if a lock exists, is less than 5 minutes old, and was written by a
 # *different* label than the one given — otherwise it's silent.
+#
+# No protection across `git worktree` checkouts: the lock file lives inside
+# each worktree's own `.project/`, so two worktrees of the same repo never see
+# each other's lock. This guards concurrent runs sharing one `.project/`, not
+# runs isolated in separate worktrees.
+#
+# Callers pass their own skill name as <label> (e.g. `ardd-plan`,
+# `ardd-tasks`, `ardd-implement`, `ardd-converge`), which is what lets `check`
+# name the other writer — a future caller adding lock support should follow
+# the same convention rather than reverse-engineer it from the existing ones.
 
 set -e
 
