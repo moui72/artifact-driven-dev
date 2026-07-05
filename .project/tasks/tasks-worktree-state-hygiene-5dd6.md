@@ -88,19 +88,20 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   Technical Approach note.
 
 ## Phase 5: `/ardd-converge` — same relocation
-- [ ] T010 [artifacts: constitution] [parallel] Apply the same change as
+- [x] T010 [artifacts: constitution] [parallel] Apply the same change as
   T007 to `skills/ardd-converge/SKILL.md`'s branch/delegation handling (it
   currently has no explicit branch-gate step of its own — add one
   equivalent to `/ardd-implement`'s, biased to worktree+subagent delegation
   by default). Depends on T002.
-- [ ] T011 [artifacts: constitution] Apply the same
+- [x] T011 [artifacts: constitution] Apply the same
   coordination-check pattern (T005/T008) to `skills/ardd-converge/SKILL.md`
   before delegating. Depends on T010.
-- [ ] T012 [artifacts: constitution] Apply the same completion-flip
-  relocation as T009 to `skills/ardd-converge/SKILL.md` step 6 (it performs
-  the identical `tasked→implemented`/`→completed` flip via the same
+- [x] T012 [artifacts: constitution] Apply the same completion-flip
+  relocation as T009 to `skills/ardd-converge/SKILL.md` step 7 (it performs
+  the identical `tasked→implemented` flip via the same
   `sibling-tasks-complete.sh` check `/ardd-implement` uses). Depends on
-  T010.
+  T010. Same refinement as T009: only the `features.md` flip is relocated,
+  not the tasks-file's own `→completed` flip.
 
 ## Phase 6: Docs
 - [ ] T013 [artifacts: constitution] Update `README.md` and `USAGE.md`
