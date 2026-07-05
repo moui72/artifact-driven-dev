@@ -11,3 +11,7 @@ _Slug: `widget-export` · Status: shipped · Logged 2026-01-01 · Plan: plan-gho
 ## Backlogged Widget
 
 _Slug: `backlogged-widget` · Status: backlogged · Logged 2026-01-01_
+
+## Duplicate plan slug
+
+_Slug: `dup-plan-slug` · Status: tasked · Logged 2026-01-01_
