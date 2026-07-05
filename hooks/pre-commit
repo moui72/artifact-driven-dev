@@ -8,7 +8,7 @@
 
 set -e
 
-checks="scripts/lint-docs.sh scripts/test-lint-project.sh scripts/test-branch-info.sh scripts/test-worktree-info.sh scripts/test-sibling-tasks-complete.sh scripts/test-sync-slug-match.sh scripts/test-sync-label-decision.sh scripts/test-sync-divergence.sh scripts/test-project-lock.sh scripts/test-hook-lint-on-write.sh"
+checks="scripts/lint-docs.sh scripts/test-lint-project.sh scripts/test-branch-info.sh scripts/test-worktree-info.sh scripts/test-completion-flip-check.sh scripts/test-sibling-tasks-complete.sh scripts/test-sync-slug-match.sh scripts/test-sync-label-decision.sh scripts/test-sync-divergence.sh scripts/test-project-lock.sh scripts/test-hook-lint-on-write.sh"
 
 for check in $checks; do
   if ! "./$check"; then

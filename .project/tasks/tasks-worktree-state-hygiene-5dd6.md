@@ -164,7 +164,7 @@ decision requiring an artifact change.
   delegation. Update `README.md`/`USAGE.md`/`CLAUDE.md` wherever T013/T014
   described `/ardd-plan`'s delegation to match.
 
-- [ ] T017 [artifacts: constitution] Add orphaned-completion-flip detection
+- [x] T017 [artifacts: constitution] Add orphaned-completion-flip detection
   to `/ardd-analyze`, since the post-merge flip (`/ardd-implement` step 10,
   `/ardd-converge` step 9) assumes a live coordinating conversation checks
   back after merge — but merge is manual/async, so in the common case that

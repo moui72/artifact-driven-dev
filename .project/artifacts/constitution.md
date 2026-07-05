@@ -8,7 +8,7 @@ Added sections: all (initial)
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-04
+last_updated: 2026-07-05
 ---
 
 # artifact-driven-dev Constitution
@@ -132,6 +132,7 @@ before being built, not discovered as duplicated work later.
 - **Pre-commit Enforcement**: a pre-commit hook runs this repository's
   lint/test scripts (`scripts/lint-docs.sh`, `scripts/test-lint-project.sh`,
   `scripts/test-branch-info.sh`, `scripts/test-worktree-info.sh`,
+  `scripts/test-completion-flip-check.sh`,
   `scripts/test-sibling-tasks-complete.sh`,
   `scripts/test-sync-slug-match.sh`, `scripts/test-sync-label-decision.sh`,
   `scripts/test-sync-divergence.sh`, `scripts/test-project-lock.sh`,

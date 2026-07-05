@@ -85,6 +85,12 @@ This reads all four artifacts and reports:
 - **Gaps** — artifact A implies something artifact B never defines
 - **Missing artifacts** — anything still at `status: draft`
 - **Constitution violations** — decisions that break your principles
+- **Orphaned completion flips** — a completed tasks file whose plan's
+  branch already merged, but whose bound feature is still `Status: tasked`
+  in `features.md` (this happens when a worktree-delegated
+  `/ardd-implement`/`/ardd-converge` run's post-merge flip never got
+  performed because no conversation checked back after the merge). If
+  found, Claude asks whether to flip it to `implemented` now.
 
 Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean — each
 `/ardd-refine` pass triggers the next check itself.

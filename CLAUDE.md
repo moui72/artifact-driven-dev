@@ -26,6 +26,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
 ./scripts/worktree-info.sh create <slug> [dir] # create/locate a worktree branched from the default branch's tip (used by ardd-implement/converge only — ardd-plan never delegates)
 ./scripts/test-worktree-info.sh        # regression test for worktree-info.sh (idempotency, branches-from-default-tip)
+./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, features.md not updated); used by ardd-analyze
+./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
 ./scripts/test-hooks-pre-commit.sh     # regression test for hooks/pre-commit's aggregation/short-circuit logic
@@ -49,7 +51,8 @@ repo only (`scripts/lint-docs.sh`, its CI job, `tests/fixtures/`,
 repo's own `.project/`). Others are installed by `install.sh` into a
 *target* project and run there (every `skills/*/SKILL.md`, the constitution
 suggestion catalog, artifact templates, migrations, `scripts/lint-project.sh`,
-`scripts/branch-info.sh`, `scripts/worktree-info.sh`). When adding a new deterministic check, decide
+`scripts/branch-info.sh`, `scripts/worktree-info.sh`,
+`scripts/completion-flip-check.sh`). When adding a new deterministic check, decide
 which side it belongs to before writing it — a check against *this* repo's
 own files (docs, skill names) is source-side; a check against a *target*
 project's generated `.project/` state ships via `install.sh`.
@@ -114,7 +117,10 @@ this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/artifacts/features.md` `Status` field — written only by
   `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`,
   `/ardd-converge`, `/ardd-sync` (pull step 1 appends new
-  `Status: backlogged` entries imported from the tracker)
+  `Status: backlogged` entries imported from the tracker), and `/ardd-analyze`
+  (one narrow exception: the `tasked→implemented` flip, on user confirmation,
+  for an orphaned completion flip its `completion-flip-check.sh` detects —
+  see the note below)
 
 Every other skill treats these as read-only. A PreToolUse/PostToolUse hook
 cannot enforce this: its payload (`tool_name`, `tool_input`, `transcript_path`,
@@ -227,6 +233,21 @@ This creates a deliberate split in what happens where:
   default branch the same way the code does: on merge. Syncing every
   checkbox to the default branch in real time would eliminate the isolation
   the worktree exists to provide, for no corresponding benefit.
+
+**Orphaned-completion-flip detection.** `scripts/completion-flip-check.sh`
+(sibling to `sibling-tasks-complete.sh`, same purpose-built deterministic
+check pattern) is what catches the case above: given a `status: completed`
+tasks file, it resolves its plan's `branch:` and `features:` frontmatter,
+checks `git merge-base --is-ancestor <branch> <default>`, and — if the
+branch has merged but a bound feature is still `Status: tasked` in
+`features.md` — reports the slug. `/ardd-analyze` runs it against every
+completed tasks file on each invocation (so a session-less gap between
+merge and detection is fine — the next `/ardd-analyze` run, from anyone,
+catches it) and, on user confirmation, performs the `tasked→implemented`
+flip itself. This is a deliberate, narrow exception to `/ardd-analyze`
+never writing `features.md` (see the single-writer ownership list above) —
+justified because the entire reason this check exists is that no other
+skill invocation is left to catch it otherwise.
 
 A coordination check (list in-flight background subagents via the harness's
 `TaskList` — not something a POSIX script can wrap, so this stays prose,
