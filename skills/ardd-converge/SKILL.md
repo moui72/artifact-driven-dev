@@ -6,9 +6,27 @@ when resuming work in a new session.
 
 ## Steps
 
-1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
-   `current`, `default`, and `on_default`. If `on_default` is `false`, skip to
-   step 2 (already on a branch/worktree — no delegation to set up here).
+1. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`, excluding any at
+   `status: abandoned` — a superseded fork with nothing left to reconcile.
+   If none remain, tell the user to run `/ardd-tasks` first. For each
+   remaining file, read its frontmatter `status` and compute live progress
+   from checkboxes (`x/y complete`). Present the list and ask the user which
+   to reconcile. If only one exists, still confirm rather than
+   auto-selecting.
+
+   Unlike `/ardd-implement`, there's no separate coarse "work has started"
+   marker to commit before delegating here — reconciliation's outcome
+   (whether the file ends up `completed` or `in-progress`) isn't knowable
+   until after the inspection work in steps 4–6 actually runs, so there's
+   nothing meaningful to pre-commit. Picking the file first (rather than
+   inside the delegated subagent, as before) just lets the coordinating
+   conversation name the worktree after it and hand the subagent an
+   already-resolved target.
+
+2. **Check branch and delegate, if applicable.** Run
+   `.claude/skills/ardd-scripts/branch-info.sh` for `current`, `default`,
+   and `on_default`. If `on_default` is `false`, skip to step 3 (already on
+   a branch/worktree — no delegation to set up here).
 
    If `on_default` is `true`: **check for in-flight work first** — list
    active background subagents (harness `TaskList`). If one is already
@@ -19,7 +37,7 @@ when resuming work in a new session.
    coordination check exists to catch.
 
    Then suggest a worktree — a semantic kebab-case slug derived from the
-   conversation/tasks file if the topic is clear, otherwise a short arbitrary
+   chosen tasks file if the topic is clear, otherwise a short arbitrary
    slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`). Default the
    suggested answer to "yes" (reconciling a tasks file against the codebase
    can run long, same as `/ardd-implement`). Ask the user:
@@ -28,22 +46,14 @@ when resuming work in a new session.
    - "No, continue on the current branch without a worktree"
 
    On yes, run `.claude/skills/ardd-scripts/worktree-info.sh create <name>`
-   to create (or locate) the worktree, then delegate steps 2 onward to a
+   to create (or locate) the worktree, then delegate step 3 onward to a
    subagent (`Agent` tool, `isolation: "worktree"`, pointed at the printed
    path) — give it this skill's remaining steps verbatim as its
    instructions, along with the chosen tasks file. The subagent runs
    independently and reports back when done; the coordinating conversation
-   is free to do other things while it runs, but see step 8 for what it
-   must still do once the subagent finishes. On no, continue steps 2 onward
+   is free to do other things while it runs, but see step 9 for what it
+   must still do once the subagent finishes. On no, continue step 3 onward
    inline, without delegating.
-
-2. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`, excluding any at
-   `status: abandoned` — a superseded fork with nothing left to reconcile.
-   If none remain, tell the user to run `/ardd-tasks` first. For each
-   remaining file, read its frontmatter `status` and compute live progress
-   from checkboxes (`x/y complete`). Present the list and ask the user which
-   to reconcile. If only one exists, still confirm rather than
-   auto-selecting.
 
 3. **Load the chosen file.** Identify all tasks marked `- [x]` (complete) and
    `- [ ]` (incomplete).
@@ -77,7 +87,7 @@ when resuming work in a new session.
    — the same shared check `/ardd-implement` runs on a tasks file's own
    completion, since a plan can have more than one tasks file.
 
-   If its `all_complete=true`: **when running inline (step 1 was declined or
+   If its `all_complete=true`: **when running inline (step 2 was declined or
    skipped)**, load the plan and for each slug in its `features:` list flip
    that entry's `Status` in `.project/artifacts/features.md` from `tasked`
    to `implemented` now, same as always. **When running as a delegated

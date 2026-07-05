@@ -132,7 +132,7 @@ orphaned-completion-flip failure mode. `[artifacts: constitution]` on all
 three — prose-only skill edits and one new deterministic script, no design
 decision requiring an artifact change.
 
-- [ ] T015 [artifacts: constitution] Fix the missing commit-then-branch
+- [x] T015 [artifacts: constitution] Fix the missing commit-then-branch
   spine in `skills/ardd-implement/SKILL.md` and
   `skills/ardd-converge/SKILL.md`. Currently step 1 creates the worktree and
   delegates immediately; the tasks-file `ready→in-progress` flip (the actual
