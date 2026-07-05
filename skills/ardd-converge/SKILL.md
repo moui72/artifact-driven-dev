@@ -46,14 +46,12 @@ when resuming work in a new session.
    remembers it). If another worktree is mid-run against this repo, surface
    it and ask whether to wait before starting a second delegated run.
 
-   **Delegation is offered but defaults to "no" for now** — not because the
-   base-ref problem is unsolved (the align script below fixes it), but
-   because align + enumeration hasn't yet been confirmed under a live smoke
-   test in this harness (the coordinator will run it; flip the default to
-   "yes" once it passes). Ask, defaulting to "no":
-   - "No, continue on the current branch without a worktree" (recommended
-     until the smoke test confirms delegation)
-   - "Yes, delegate to a subagent in an isolated worktree"
+   **Offer delegation, suggesting "yes"** — same live-smoke-test validation
+   as `/ardd-implement` (2026-07-05: a real delegated worktree branched
+   from `origin/<default>` and `worktree-align.sh` fast-forwarded it onto
+   the coordinator's unpushed local commit). Ask:
+   - "Yes, delegate to a subagent in an isolated worktree" (recommended)
+   - "No, continue on the current branch without a worktree"
 
    If the user declines but wants isolation, a plain `git checkout -b` here
    is fine — the inline path on a branch, state riding that branch.
@@ -65,15 +63,21 @@ when resuming work in a new session.
    pre-create one or name it; the branch name is whatever the subagent
    reports back. **The delegated subagent's instructions must begin with
    these two steps, before any reconciliation:**
-   1. Run `.claude/skills/ardd-scripts/worktree-align.sh`. Worktrees share
-      the repo's object store and local refs, so even though the worktree
-      branched from `origin/<default>` (the harness `worktree.baseRef:
-      fresh` default — not steerable from prose, and it has regressed in
-      both directions across harness versions, so never trust it), the local
-      default branch's unpushed commits are reachable, and this script
-      fast-forwards them in. If it does not print `aligned=true`, **stop and
-      report the failure verbatim — do not attempt reconciliation, and never
-      try a manual conflicted merge.**
+   1. Run the align script **via the absolute path of the coordinator's own
+      copy** — the coordinator expands
+      `<primary-checkout>/.claude/skills/ardd-scripts/worktree-align.sh` to
+      a real absolute path in the subagent's instructions; a relative path
+      won't work because the fresh worktree usually doesn't contain the
+      script yet (`.claude/skills/` is gitignored in targets, and the base
+      commit may predate it). Worktrees share the repo's object store and
+      local refs, so even though the worktree branched from
+      `origin/<default>` (the harness `worktree.baseRef: fresh` default —
+      not steerable from prose, and it has regressed in both directions
+      across harness versions, so never trust it), the local default
+      branch's unpushed commits are reachable, and the script fast-forwards
+      them in. If it does not print `aligned=true`, **stop and report the
+      failure verbatim — do not attempt reconciliation, and never try a
+      manual conflicted merge.**
    2. Verify the chosen tasks file exists at its expected path — a cheap
       proof the alignment delivered the state.
 

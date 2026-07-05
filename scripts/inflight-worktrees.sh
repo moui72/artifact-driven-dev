@@ -18,8 +18,18 @@
 #   worktree=<path>	branch=<name|detached>	tasks=<relative-path>	status=<status>	progress=<x/y>
 # x = count of `- [x]` lines, y = x + count of `- [ ]` lines.
 #
-# If a worktree has no such tasks files (no .project/, or none in a
-# reportable status), prints one line instead:
+# Already-merged state is filtered out: a candidate tasks file that exists
+# on the default branch (per branch-info.sh, resolved once at startup) with
+# IDENTICAL content is not in-flight — it's history every worktree carries —
+# and reporting it is pure noise (a fresh worktree would otherwise report
+# every completed tasks file ever merged). A candidate is reported only if
+# it differs from the default branch's version or doesn't exist there at
+# all. If the default branch can't be resolved, no filtering happens
+# (everything is reported).
+#
+# If a worktree has no such tasks files (no .project/, none in a reportable
+# status, or all candidates filtered as already-merged), prints one line
+# instead:
 #   worktree=<path>	branch=<name|detached>	tasks=none	status=-	progress=-
 #
 # Prints nothing if there are no other worktrees. Exits 1 only if not
@@ -42,6 +52,24 @@ frontmatter_field() {
 }
 
 current_toplevel="$(cd "$(git rev-parse --show-toplevel)" && pwd -P)"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+default="$(sh "$SCRIPT_DIR/branch-info.sh" 2>/dev/null | sed -n 's/^default=//p')" || default=""
+
+# True if the candidate file is identical to the default branch's version —
+# already-merged state, not in-flight. If the default branch is unknown or
+# doesn't resolve in that worktree, nothing is considered merged (report
+# everything). `git diff` can't see untracked files, so the existence check
+# (cat-file -e) must come first: a file absent from the default branch is
+# always in-flight, tracked or not.
+already_merged() {
+  wt="$1"
+  rel="$2"
+  [ -n "$default" ] || return 1
+  git -C "$wt" rev-parse --verify --quiet "$default" > /dev/null 2>&1 || return 1
+  git -C "$wt" cat-file -e "$default:$rel" 2>/dev/null || return 1
+  git -C "$wt" diff --quiet "$default" -- "$rel" 2>/dev/null
+}
 
 # Parse `git worktree list --porcelain` into one "path<TAB>branch" line per
 # worktree. Each record is: "worktree <path>", "HEAD <sha>", then either
@@ -77,6 +105,7 @@ for record in $worktree_records; do
       *) continue ;;
     esac
     rel="${tf#"$wt_path"/}"
+    already_merged "$wt_path" "$rel" && continue
     x="$(grep -cE '^- \[x\]' "$tf" 2>/dev/null || true)"
     unchecked="$(grep -cE '^- \[ \]' "$tf" 2>/dev/null || true)"
     y=$((x + unchecked))

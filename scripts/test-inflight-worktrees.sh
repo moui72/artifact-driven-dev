@@ -80,6 +80,10 @@ assert_eq "case1: no worktrees -> empty output" "" "$out"
 assert_eq "case1: exit 0" "0" "$rc"
 
 # --- Set up worktrees ---
+# The tasks files written below are untracked and do NOT exist on the
+# default branch (main), so the already-merged filter must leave them
+# alone — each is genuinely in-flight state. Cases 7-8 cover the filter
+# itself with files that DO exist on main.
 git branch feat-a
 git worktree add -q "$WORK/wt-a" feat-a
 git branch feat-b
@@ -103,8 +107,7 @@ assert_contains "case5: worktree with no .project -> tasks=none" \
   "worktree=$WORK/wt-c	branch=feat-c	tasks=none	status=-	progress=-" "$out"
 
 # --- Case 6: run from inside a worktree — sees primary checkout's tasks
-# files (primary has none here, so wt-a should see wt-b/wt-c and the
-# primary as tasks=none, but not itself) ---
+# files (untracked in the primary, so not filtered), but not itself ---
 mkdir -p "$repo/.project/tasks"
 write_tasks "$repo/.project/tasks/tasks-primary.md" "in-progress" 1 0
 cd "$WORK/wt-a"
@@ -114,5 +117,29 @@ assert_contains "case6: from wt-a, sees primary's in-progress tasks" \
 assert_not_contains "case6: from wt-a, does not report itself" "branch=feat-a" "$out_from_wt"
 assert_contains "case6: from wt-a, still sees wt-b's completed tasks" \
   "worktree=$WORK/wt-b	branch=feat-b	tasks=.project/tasks/tasks-beta.md	status=completed	progress=3/3" "$out_from_wt"
+
+# --- Cases 7-8: the already-merged filter. Commit a completed tasks file
+# on main, then branch two worktrees from it: one leaves the file identical
+# to main (already-merged noise -> filtered, worktree prints tasks=none),
+# the other modifies it (differs from main -> reported). ---
+cd "$repo"
+write_tasks "$repo/.project/tasks/tasks-merged.md" "completed" 2 0
+git add .project/tasks/tasks-merged.md
+git commit -q -m "merged tasks file on main"
+
+git branch feat-d
+git worktree add -q "$WORK/wt-d" feat-d
+git branch feat-e
+git worktree add -q "$WORK/wt-e" feat-e
+# wt-d: tasks-merged.md checked out identical to main — pure history.
+# wt-e: same file, but with one task flipped back to unchecked — in-flight.
+write_tasks "$WORK/wt-e/.project/tasks/tasks-merged.md" "completed" 1 1
+
+out="$(sh "$INFLIGHT")"
+assert_contains "case7: identical-to-default completed file filtered -> tasks=none" \
+  "worktree=$WORK/wt-d	branch=feat-d	tasks=none	status=-	progress=-" "$out"
+assert_not_contains "case7: identical file not reported" "worktree=$WORK/wt-d	branch=feat-d	tasks=.project/tasks/tasks-merged.md" "$out"
+assert_contains "case8: differs-from-default file reported" \
+  "worktree=$WORK/wt-e	branch=feat-e	tasks=.project/tasks/tasks-merged.md	status=completed	progress=1/2" "$out"
 
 exit "$fail"

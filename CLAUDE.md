@@ -194,7 +194,14 @@ truth*; and two installed scripts bridge them:
   fast-forward-merges the local default branch into the fresh worktree
   branch, refusing (`aligned=false`, `reason=diverged|dirty|...`) rather
   than resolving anything non-trivial. A subagent that doesn't see
-  `aligned=true` must stop and report, never work unaligned.
+  `aligned=true` must stop and report, never work unaligned. It must be
+  invoked via the *absolute path of the coordinator's copy*: a fresh
+  worktree usually doesn't contain the script itself (`.claude/skills/` is
+  gitignored in target projects, and the worktree's base commit may predate
+  it). Live-validated 2026-07-05: a real `Agent` worktree based well behind
+  local state (`origin/main`) fast-forwarded cleanly onto an unpushed local
+  commit; the `core.bare` corruption (bug #3) did not reproduce on that
+  run, but the coordinator's post-delegation check stays.
 - `scripts/inflight-worktrees.sh` — enumerates every *other* worktree of
   the repo and its tasks-file state (branch, status, checkbox progress).
   This is solo mode's coarse-state visibility channel: `ardd-implement`/

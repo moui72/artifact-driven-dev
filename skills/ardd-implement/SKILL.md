@@ -65,15 +65,14 @@ self-contained; the agent loads only the artifacts it declares.
    mid-run against this repo, surface it (branch, tasks file, progress) and
    ask whether to wait before starting a second delegated run.
 
-   **Delegation is offered but defaults to "no" for now** — not because the
-   base-ref problem is unsolved (the align script below fixes it), but
-   because the align + enumeration path hasn't yet been confirmed under a
-   live smoke test in this harness. The coordinator session will run that
-   test; once it passes, flip the suggested default to "yes." Ask the user,
-   defaulting to "no":
-   - "No, continue on the current branch without a worktree" (recommended
-     until the smoke test confirms delegation)
-   - "Yes, delegate to a subagent in an isolated worktree"
+   **Offer delegation, suggesting "yes."** The align + enumeration path was
+   validated by a live smoke test (2026-07-05), not just reasoning: a real
+   delegated worktree branched from `origin/<default>` (well behind local
+   state, confirming the base-ref bug persists), and `worktree-align.sh`
+   fast-forwarded it onto the coordinator's unpushed local commit
+   (`aligned=true`). Ask the user:
+   - "Yes, delegate to a subagent in an isolated worktree" (recommended)
+   - "No, continue on the current branch without a worktree"
 
    If the user declines but wants isolation anyway, a plain
    `git checkout -b <name>` here is fine — that's just the inline path on a
@@ -87,13 +86,20 @@ self-contained; the agent loads only the artifacts it declares.
    a worktree with any other script, and do not name it; the branch name is
    whatever the subagent reports back. **The delegated subagent's
    instructions must begin with these two steps, before any task work:**
-   1. Run `.claude/skills/ardd-scripts/worktree-align.sh`. Git worktrees
-      share the repo's object store and local refs, so even though the
-      worktree branched from `origin/<default>` (the harness
+   1. Run the align script **via the absolute path of the coordinator's own
+      copy** — the coordinator must expand
+      `<primary-checkout>/.claude/skills/ardd-scripts/worktree-align.sh` to
+      a real absolute path when writing the subagent's instructions. A
+      relative path won't work: the fresh worktree usually does not contain
+      the script yet (`.claude/skills/` is gitignored in target projects,
+      and the worktree's base commit may predate the script — the smoke
+      test confirmed it was absent before alignment, present after). Git
+      worktrees share the repo's object store and local refs, so even
+      though the worktree branched from `origin/<default>` (the harness
       `worktree.baseRef: fresh` default — not steerable from prose, and it
       has regressed in both directions across harness versions, so never
       trust it), the local default branch's unpushed commits are still
-      reachable, and this script fast-forwards them into the fresh branch.
+      reachable, and the script fast-forwards them into the fresh branch.
       If it does not print `aligned=true`, **stop and report the failure
       output verbatim — do not attempt any task, and never try a manual
       conflicted merge.**
