@@ -6,24 +6,15 @@ approves it as part of this — there's no separate approval step in
 
 ## Steps
 
-1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
-   `current`, `default`, and `on_default`. If `on_default` is `false`, skip to
-   step 2.
+1. **Pick a plan.** No branch/worktree gate here, deliberately — unlike
+   `/ardd-plan`/`/ardd-implement`/`/ardd-converge`, `/ardd-tasks` always
+   operates on whatever branch or worktree it's invoked from. Its own
+   actions (plan approval, feature `backlogged→planned`/`planned→tasked`
+   flips) are themselves the coarse state update the rest of this workflow
+   is trying to get onto the default branch promptly, so there's nothing to
+   defer behind a worktree the way there is for the longer-running skills.
 
-   If `on_default` is `true`, suggest a branch name — a semantic kebab-case slug derived
-   from the conversation/artifacts if the topic is clear, otherwise a short
-   arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`). Ask the
-   user:
-   - "Yes, create `<suggested-name>`"
-   - "Yes, create a branch, but name it: ___"
-   - "No, continue on default" (a worktree works too — set one up yourself
-     and re-run from there; this gate doesn't automate worktree creation
-     since it's environment-specific)
-
-   On yes, run `git checkout -b <name>`. On no, proceed on the default branch
-   without asking again this run.
-
-2. **Pick a plan.** Glob `.project/plans/plan-*.md` and read frontmatter for
+   Glob `.project/plans/plan-*.md` and read frontmatter for
    each — list plans regardless of `status` (`draft`, `approved`, or
    `superseded`; skip `superseded` ones, they're historical). For each
    remaining plan, also glob `.project/tasks/tasks-*.md` and check each
@@ -35,7 +26,7 @@ approves it as part of this — there's no separate approval step in
    their status/progress) and ask the user which plan to generate tasks for.
    If only one eligible plan exists, still confirm rather than auto-selecting
    ("Found 1 draft plan: `plan-auth-flow-2026-06-30.md`. Use this one?" —
-   selecting it approves it, see step 3).
+   selecting it approves it, see step 2).
 
    If the chosen plan already has a tasks file at `ready`, `in-progress`, or
    `completed`, surface that explicitly and ask for confirmation before
@@ -54,7 +45,7 @@ approves it as part of this — there's no separate approval step in
    lingering at `ready`/`in-progress` forever with no way to tell "abandoned"
    from "just not picked up yet."
 
-3. **Approve the plan, if it isn't already.** Run `.claude/skills/ardd-
+2. **Approve the plan, if it isn't already.** Run `.claude/skills/ardd-
    scripts/project-lock.sh check ardd-tasks` first — surface any warning to
    the user (another invocation touched `.project/` recently) but proceed
    regardless; this is advisory, never a block. If the chosen plan's
@@ -69,7 +60,7 @@ approves it as part of this — there's no separate approval step in
    step — nothing to do. Either way, run `... touch ardd-tasks` once this
    step's writes (if any) are done.
 
-4. **Generate tasks** ordered by dependency. Each task MUST:
+3. **Generate tasks** ordered by dependency. Each task MUST:
    - Have a unique ID: `T001`, `T002`, etc.
    - State which artifacts must be loaded before execution, e.g.
      `[artifacts: datamodel, infrastructure]`
@@ -82,12 +73,12 @@ approves it as part of this — there's no separate approval step in
      paradigm-agnostic by default; don't assume TDD or any specific
      principle number if the constitution doesn't state one
 
-5. **Mark parallelism** with `[parallel]` on tasks that touch different files
+4. **Mark parallelism** with `[parallel]` on tasks that touch different files
    and have no shared dependencies.
 
-6. **Write to `.project/tasks/tasks-<slug>-<hex>.md`**, where `<slug>` is
+5. **Write to `.project/tasks/tasks-<slug>-<hex>.md`**, where `<slug>` is
    taken from the chosen plan's filename and `<hex>` is a freshly generated
-   4-char token (same generation as the branch-gate step), minted at write
+   4-char token (e.g. `openssl rand -hex 2` → `f2ed`), minted at write
    time so the filename is always unique even when regenerating tasks for the
    same plan. Run `.claude/skills/ardd-scripts/project-lock.sh check
    ardd-tasks` before this first write (surface any warning, don't block on
@@ -117,14 +108,14 @@ approves it as part of this — there's no separate approval step in
    Once all tasks are written, flip `status` to `ready`, then run
    `... touch ardd-tasks`.
 
-7. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
+6. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
    `features:` list (if any). For each slug, flip its entry in
    `.project/artifacts/features.md` from `Status: planned` to `Status: tasked`
    and add `· Tasks: tasks-<slug>-<hex>.md` (this file's own filename) to its
    metadata line.
 
-8. **Report** the total task count and phase breakdown. Note any tasks that
+7. **Report** the total task count and phase breakdown. Note any tasks that
    embed a test requirement, which features (if any) were flipped to
-   `tasked`, and — if step 3 approved the plan — that it's now `approved`.
+   `tasked`, and — if step 2 approved the plan — that it's now `approved`.
    Then run `/ardd-analyze` now to refresh `STATUS.md` — plan approval and
-   the feature-backlog flips in steps 3 and 7 leave it stale otherwise.
+   the feature-backlog flips in steps 2 and 6 leave it stale otherwise.

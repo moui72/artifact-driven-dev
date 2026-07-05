@@ -28,7 +28,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   success. Iterate until T001 passes.
 
 ## Phase 2: `/ardd-tasks` — drop the worktree gate
-- [ ] T003 [artifacts: constitution] [parallel] In
+- [x] T003 [artifacts: constitution] [parallel] In
   `skills/ardd-tasks/SKILL.md`, remove step 1 (the branch/worktree check)
   entirely — `/ardd-tasks` now always operates on whatever branch/worktree
   it's invoked from, with no gate, since its own actions (plan approval,
