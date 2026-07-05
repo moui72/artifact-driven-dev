@@ -14,6 +14,9 @@
 #     `backlogged` in features.md — the fingerprint an approval sequence
 #     interrupted between the plan-status flip and the feature-status flip
 #     would leave (see /ardd-tasks step 2)
+#   - the same feature slug listed in the `features:` of two non-superseded
+#     (draft/approved) plans — the file-based fingerprint of two live plans
+#     independently targeting the same feature (see /ardd-plan step 7)
 #
 # Deliberately NOT validated: critique.md, DEFECTS.md, SYNC.md, and STATUS.md.
 # These are single-writer report files with looser, informal schemas by
@@ -155,6 +158,9 @@ fi
 
 # --- plans/plan-*.md ----------------------------------------------------
 if [ -d "$PROJECT_DIR/plans" ]; then
+  # Accumulates every slug listed in a non-superseded plan's `features:`, to
+  # catch the same slug claimed by two live plans (checked after the loop).
+  live_plan_slugs=""
   for f in "$PROJECT_DIR"/plans/plan-*.md; do
     [ -f "$f" ] || continue
     for field in status branch created; do
@@ -182,6 +188,9 @@ if [ -d "$PROJECT_DIR/plans" ]; then
           IFS="$old_ifs"
           slug="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
           if [ -n "$slug" ]; then
+            if [ "$plan_status" != "superseded" ]; then
+              live_plan_slugs="$live_plan_slugs $slug"
+            fi
             if [ ! -f "$FEATURES_FILE" ] || ! grep -qE "_Slug: \`${slug}\`" "$FEATURES_FILE"; then
               echo "$f: features slug '$slug' not found in $FEATURES_FILE"
               echo 1 > "$TARGET/.lint-project-failed"
@@ -199,6 +208,14 @@ if [ -d "$PROJECT_DIR/plans" ]; then
         IFS="$old_ifs"
       fi
     fi
+  done
+
+  # --- same slug listed in two non-superseded (draft/approved) plans ---
+  # Two live plans independently targeting the same feature — the pure
+  # file-based fingerprint of two branches that each planned it. A superseded
+  # plan is excluded above, so sharing a slug with one is fine.
+  for slug in $(printf '%s\n' $live_plan_slugs | sort | uniq -d); do
+    report "duplicate feature slug '$slug' — listed in the features: of more than one non-superseded plan; two live plans target the same feature (supersede one, see /ardd-plan step 7)"
   done
 fi
 
