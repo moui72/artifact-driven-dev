@@ -1,8 +1,24 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: (none) → 1.0.0
-Added sections: all (initial)
+Version change: 1.0.0 → 1.1.0 (MINOR — material expansion of the
+Pre-commit Enforcement quality standard)
+
+Rationale: the standard enumerated ten specific scripts. /ardd-verify
+(2026-07-05) found the list had silently fallen four scripts behind CI
+(test-worktree-align, test-inflight-worktrees, test-install-worktreeinclude,
+test-hooks-pre-commit) — CI additions are covered by the Development
+Workflow's same-commit convention, but nothing obligated extending the hook
+or this list. An enumerated list is the drift-prone pattern Principle II
+exists to eliminate; replaced with a rule that cannot go stale: the hook
+runs the two lints plus every scripts/test-*.sh by glob. This also resolves
+the two governance-bookkeeping drift defects recorded in DEFECTS.md
+(stale Last Amended footer; version never bumped after the 2026-07-05
+amendments to this same standard's script list).
+
+Modified sections: Quality Standards → Pre-commit Enforcement (enumerated
+script list → glob rule; hooks/pre-commit and test-hooks-pre-commit.sh
+changed in the same commit). Footer version/date updated.
 -->
 
 ---
@@ -129,16 +145,22 @@ before being built, not discovered as duplicated work later.
 - **Shell scripts target POSIX `sh`**, not bash-specific syntax — they may
   be installed into arbitrary target projects, and `install.sh` itself is
   `#!/usr/bin/env sh`.
-- **Pre-commit Enforcement**: a pre-commit hook runs this repository's
-  lint/test scripts (`scripts/lint-docs.sh`, `scripts/test-lint-project.sh`,
-  `scripts/test-branch-info.sh`, `scripts/test-completion-flip-check.sh`,
-  `scripts/test-sibling-tasks-complete.sh`,
-  `scripts/test-sync-slug-match.sh`, `scripts/test-sync-label-decision.sh`,
-  `scripts/test-sync-divergence.sh`, `scripts/test-project-lock.sh`,
-  `scripts/test-hook-lint-on-write.sh`) before a commit is accepted.
-  Bypassing the hook is prohibited except in a
-  documented emergency, and any bypass is followed immediately by a commit
-  that re-establishes the passing state.
+- **Pre-commit Enforcement**: a pre-commit hook (`hooks/pre-commit`,
+  enabled per clone via `git config core.hooksPath hooks`) runs
+  `scripts/lint-docs.sh`, `scripts/lint-project.sh`, and **every**
+  `scripts/test-*.sh`, discovered by glob — never an enumerated list —
+  before a commit is accepted. A new test script is therefore enforced
+  the moment it exists, in the same commit that adds its CI job, with no
+  list to remember to extend (v1.0.0 enumerated ten scripts and silently
+  fell four behind CI; that pattern is prohibited here for the same reason
+  Principle II prohibits it generally). A test too slow for the hook is a
+  signal to make it faster, not grounds for an exclusion list; if a
+  deliberate exclusion is ever truly needed, it must be an explicit,
+  visible opt-out marker, not an omission. Bypassing the hook is
+  prohibited except in a documented emergency (e.g. committing a
+  deliberate test-first red state, stated in the commit body), and any
+  bypass is followed immediately by a commit that re-establishes the
+  passing state.
 - **No vendored dependency carries a nested `.git`**. If a dependency must
   ever be vendored, its provenance is recorded in a README note and it is
   committed as plain files, or added as a real git submodule. (Currently
@@ -170,4 +192,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.0.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-03
+**Version**: 1.1.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-05

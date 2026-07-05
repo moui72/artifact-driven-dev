@@ -31,6 +31,7 @@ fail=0
 
 # --- Case 1: all pass -> hook exits 0 ---
 stub lint-docs.sh 0
+stub lint-project.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 0
 stub test-completion-flip-check.sh 0
@@ -49,8 +50,9 @@ else
 fi
 rm -f /tmp/hook-case1.out
 
-# --- Case 2: third script fails -> hook stops there and names it ---
+# --- Case 2: a mid-list script fails -> hook stops there and names it ---
 stub lint-docs.sh 0
+stub lint-project.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 1
 stub test-completion-flip-check.sh 0
@@ -74,6 +76,7 @@ fi
 # --- Case 3: first script fails -> later scripts never run ---
 rm -f "$WORK/ran-marker"
 stub lint-docs.sh 1
+stub lint-project.sh 0
 cat > "$WORK/scripts/test-lint-project.sh" <<EOF
 #!/usr/bin/env sh
 touch "$WORK/ran-marker"
@@ -94,6 +97,34 @@ if [ -f "$WORK/ran-marker" ]; then
   fail=1
 else
   echo "ok: short-circuit case stops before later scripts run"
+fi
+
+# --- Case 4: a test script the hook never enumerated is still enforced ---
+# This is the glob's whole point (constitution v1.1.0): a brand-new
+# scripts/test-*.sh must be picked up with no hook edit. Make everything
+# pass except a never-before-seen test script, and expect the hook to fail
+# naming it.
+stub lint-docs.sh 0
+stub lint-project.sh 0
+stub test-lint-project.sh 0
+stub test-branch-info.sh 0
+stub test-completion-flip-check.sh 0
+stub test-sibling-tasks-complete.sh 0
+stub test-sync-slug-match.sh 0
+stub test-sync-label-decision.sh 0
+stub test-sync-divergence.sh 0
+stub test-project-lock.sh 0
+stub test-hook-lint-on-write.sh 0
+stub test-zzz-brand-new.sh 1
+out="$(cd "$WORK" && sh ./pre-commit-under-test 2>&1)" && rc=0 || rc=$?
+if [ "$rc" -eq 0 ]; then
+  echo "FAIL: unenumerated-test case should exit non-zero"
+  fail=1
+elif ! printf '%s' "$out" | grep -q "test-zzz-brand-new.sh"; then
+  echo "FAIL: failure output should name test-zzz-brand-new.sh, got: $out"
+  fail=1
+else
+  echo "ok: glob enforces a test script the hook never enumerated"
 fi
 
 exit "$fail"

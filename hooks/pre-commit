@@ -8,9 +8,16 @@
 
 set -e
 
-checks="scripts/lint-docs.sh scripts/test-lint-project.sh scripts/test-branch-info.sh scripts/test-completion-flip-check.sh scripts/test-sibling-tasks-complete.sh scripts/test-sync-slug-match.sh scripts/test-sync-label-decision.sh scripts/test-sync-divergence.sh scripts/test-project-lock.sh scripts/test-hook-lint-on-write.sh"
+# The two lints run first (fast), then every regression test — discovered by
+# glob, never an enumerated list: a new scripts/test-*.sh is enforced here the
+# moment it exists, in the same commit that adds its CI job, with no list to
+# remember to extend. (An enumerated list here silently fell four scripts
+# behind CI once — constitution v1.1.0's amendment replaced it with this
+# rule.) test-hooks-pre-commit.sh running *inside* the hook means the hook
+# tests its own control flow against fixtures on every commit — expected,
+# not recursion.
 
-for check in $checks; do
+for check in scripts/lint-docs.sh scripts/lint-project.sh scripts/test-*.sh; do
   if ! "./$check"; then
     echo "pre-commit: $check failed — commit blocked" >&2
     exit 1
