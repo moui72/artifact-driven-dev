@@ -97,6 +97,17 @@ This reads all four artifacts and reports:
 Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean — each
 `/ardd-refine` pass triggers the next check itself.
 
+#### Which checking skill do I want?
+
+Four skills check your project, at different layers. They don't overlap:
+
+| Skill | What it checks | When to run |
+|---|---|---|
+| `/ardd-analyze` | Cross-artifact **consistency** — conflicts, gaps, draft artifacts, constitution violations, orphaned completion flips, in-flight work. Uses LLM judgment. | Before planning. Auto-runs as the final step of most state-changing skills. |
+| `/ardd-lint` | **Structural** validity only — frontmatter `status`/required fields and `[artifacts: ...]` references. Fast, deterministic, no LLM judgment. | Anytime, cheaply — especially after hand-editing anything in `.project/`. |
+| `/ardd-verify` | Artifacts vs. the **actual codebase** — drift between what an artifact says and what the code does, recorded in `DEFECTS.md`. | Periodically, or before major planning. |
+| `/ardd-critique` | The **decisions themselves** — simplicity, failure modes, robustness, semantics. Challenges intent, doesn't just check consistency. | When you want a design pressure-tested, not just checked. |
+
 ---
 
 ### 4. Research anything uncertain
