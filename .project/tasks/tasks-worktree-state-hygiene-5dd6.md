@@ -48,7 +48,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   invoked with no feature slugs, keep today's plain-branch behavior
   unchanged — no delegation bias for lightweight feedback/artifact-only
   runs. Depends on T002 (references `worktree-info.sh`).
-- [ ] T005 [artifacts: constitution] [parallel] In `skills/ardd-plan/SKILL.md`,
+- [ ] T005 [artifacts: constitution] In `skills/ardd-plan/SKILL.md`,
   add a coordination-check step immediately before the delegation introduced
   in T004: list in-flight background subagents (harness `TaskList`) and, if
   any is touching this repo/`.project/`, surface it to the user and ask
@@ -70,7 +70,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   worktree via `worktree-info.sh` and delegate step 2 onward to a subagent
   (`Agent` tool, `isolation: "worktree"`) instead of running inline. Depends
   on T002.
-- [ ] T008 [artifacts: constitution] [parallel] In
+- [ ] T008 [artifacts: constitution] In
   `skills/ardd-implement/SKILL.md`, add the same coordination-check pattern
   as T005 before delegating. Depends on T007.
 - [ ] T009 [artifacts: constitution] In `skills/ardd-implement/SKILL.md`,
@@ -89,7 +89,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed
   currently has no explicit branch-gate step of its own — add one
   equivalent to `/ardd-implement`'s, biased to worktree+subagent delegation
   by default). Depends on T002.
-- [ ] T011 [artifacts: constitution] [parallel] Apply the same
+- [ ] T011 [artifacts: constitution] Apply the same
   coordination-check pattern (T005/T008) to `skills/ardd-converge/SKILL.md`
   before delegating. Depends on T010.
 - [ ] T012 [artifacts: constitution] Apply the same completion-flip
