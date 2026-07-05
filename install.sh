@@ -88,6 +88,15 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   ardd-converge around their multi-file bookkeeping writes — a warn-only
 #   marker for two sessions/agents racing on the same .project/, not real
 #   locking; a `check` never blocks a run, only surfaces a warning.
+# worktree-align.sh: run as the first step inside a freshly created
+#   delegated worktree, to fast-forward it onto whatever local commits
+#   already landed on the default branch before delegation started — a
+#   delegated worktree branches from origin/<default> by default and so can
+#   start behind the local default branch.
+# inflight-worktrees.sh: enumerates other worktrees of the repo and reports
+#   any in-progress/completed ARDD tasks-file state found in them — the
+#   worktree-native replacement for reading coarse state off the default
+#   branch to see what other delegated work is in flight.
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
 cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
@@ -97,11 +106,14 @@ cp "$SCRIPT_DIR/scripts/sync-slug-match.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.s
 cp "$SCRIPT_DIR/scripts/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-label-decision.sh"
 cp "$SCRIPT_DIR/scripts/sync-divergence.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh"
 cp "$SCRIPT_DIR/scripts/project-lock.sh" "$ARDD_SCRIPTS_DIR/project-lock.sh"
+cp "$SCRIPT_DIR/scripts/worktree-align.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh"
+cp "$SCRIPT_DIR/scripts/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
   "$ARDD_SCRIPTS_DIR/completion-flip-check.sh" \
   "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh" \
   "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh" \
-  "$ARDD_SCRIPTS_DIR/project-lock.sh"
+  "$ARDD_SCRIPTS_DIR/project-lock.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh" \
+  "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
 echo "  ✓ ardd-scripts/completion-flip-check.sh"
@@ -110,6 +122,8 @@ echo "  ✓ ardd-scripts/sync-slug-match.sh"
 echo "  ✓ ardd-scripts/sync-label-decision.sh"
 echo "  ✓ ardd-scripts/sync-divergence.sh"
 echo "  ✓ ardd-scripts/project-lock.sh"
+echo "  ✓ ardd-scripts/worktree-align.sh"
+echo "  ✓ ardd-scripts/inflight-worktrees.sh"
 
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then

@@ -32,6 +32,20 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-completion-flip-check.sh
 
+  worktree-align:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - run: ./scripts/test-worktree-align.sh
+
+  inflight-worktrees:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - run: ./scripts/test-inflight-worktrees.sh
+
   sibling-tasks-complete:
     runs-on: ubuntu-latest
     steps:

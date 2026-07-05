@@ -71,6 +71,22 @@ subsequent changes.
      later `/ardd-refine constitution` pass — don't rewrite the suggested
      text here.
 
+   **Set `workflow_mode` in the constitution's frontmatter.** Ask the user
+   once which mode this project runs in — `solo` (state rides local worktree
+   branches and merges locally) or `collaborative` (nothing lands on the
+   local default branch; work moves through pushed branches / draft PRs and
+   merges via PR). Suggest a default by detection: if `gh api
+   repos/{owner}/{repo}/branches/{default}/protection` (or equivalent) shows
+   branch protection on the default branch → suggest `collaborative`; if
+   there's no git remote at all → suggest `solo`; otherwise ask with no
+   default. Write the chosen value as `workflow_mode: <value>` in
+   `constitution.md`'s frontmatter. This field gates the branch/delegation
+   behavior of `/ardd-implement`, `/ardd-converge`, `/ardd-plan`, and
+   `/ardd-analyze`. Its absence means `solo`, so projects bootstrapped before
+   this field existed need no migration. (If `constitution.md` isn't among
+   the artifacts being created, skip this — those skills read an absent field
+   as `solo`.)
+
 5. **Write all artifact files** to `.project/artifacts/`.
 
 6. **Generate `.project/WORKFLOW.md`** — a stable skill reference that rarely
@@ -140,6 +156,13 @@ _Updated: [YYYY-MM-DD]. Keep this current as artifacts are refined and open ques
 
 **[artifact]**
 - [question]
+
+## In Flight
+
+- [worktree branch / tasks file / progress, or draft PR — work not yet
+  merged to the default branch. Omit this section when nothing is in flight.
+  Written by /ardd-analyze from `inflight-worktrees.sh` (and `gh pr list
+  --draft` in collaborative mode).]
 
 ## Recommended Next Step
 

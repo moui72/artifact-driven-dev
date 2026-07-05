@@ -43,6 +43,17 @@ idea; it doesn't touch artifacts).
    generation as above) and proceed on the default branch without asking
    again this run.
 
+   **Collaborative-mode note.** If `workflow_mode: collaborative` in
+   `.project/artifacts/constitution.md` frontmatter (grep it; absent =
+   `solo`), remember that a delegated `/ardd-implement` worktree branches
+   from `origin/<default>` and can only see files that have reached the
+   remote. So the plan this run writes (and, later, the tasks file
+   `/ardd-tasks` generates from it) must reach `origin/<default>` — via a
+   merged PR or a push — before delegated implementation can pick it up.
+   Solo mode needs nothing extra here: `worktree-align.sh` fast-forwards the
+   local default branch's unpushed commits into the delegated worktree, so
+   the plan is visible without pushing.
+
 2. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present. If any are `status: draft`, warn the user and ask whether
    to proceed.

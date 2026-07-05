@@ -19,11 +19,29 @@ Manual invocation is still the right call after
 expected draft-state noise) or anytime you want a fresh check outside those
 flows.
 
+**Run only from the primary checkout, never inside a delegated worktree.**
+`/ardd-analyze` is the sole writer of `STATUS.md`; running it inside a
+worktree would trap that write on the worktree's branch instead of the
+default branch. Delegated `/ardd-implement`/`/ardd-converge` subagents are
+told explicitly not to invoke it — the terminal analyze handoff belongs to
+the coordinator or the inline path.
+
 ## Steps
 
 1. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present. Note which are `status: draft` and which are referenced by
    other artifacts but missing.
+
+   Also run `.claude/skills/ardd-scripts/inflight-worktrees.sh` to enumerate
+   every *other* worktree of this repo — its branch and any `tasks-*.md` at
+   `in-progress`/`completed` with checkbox progress (`tasks=none` when
+   clean). This is the coarse in-flight-truth channel: work happening in a
+   sibling worktree hasn't merged yet, so the default branch (and everything
+   else this skill reads) doesn't reflect it. If `workflow_mode:
+   collaborative` in `.project/artifacts/constitution.md` frontmatter and
+   `gh` is available, also run `gh pr list --draft` — a pushed draft PR is
+   collaborative mode's in-flight channel. Collect both for the In-flight
+   report section and STATUS.md line below (omit when nothing is in flight).
 
    Also check for `.project/DEFECTS.md`. If present, read its last-verified
    date and defect count — this is read-only: `/ardd-analyze` never
@@ -118,6 +136,12 @@ flows.
      into the default branch, but `features.md` still says `Status: tasked`.
      (Omit this section entirely if step 1 found none.)
 
+   ## In Flight
+   - Worktree `<path>` (branch `<branch>`) — `<tasks-file>` <status>, <x/y>.
+   - Draft PR #<n> `<title>` (collaborative mode only).
+     (State that lives on a branch/worktree or an open draft PR, not yet
+     merged to the default branch. Omit this section if step 1 found none.)
+
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
@@ -133,6 +157,11 @@ flows.
      `features.md` doesn't exist)
    - A line surfacing any orphaned completion flips found in step 1 (omit
      if none)
+   - An "In flight" line/section surfacing the `inflight-worktrees.sh`
+     output from step 1 (and the draft-PR list, in collaborative mode) —
+     per-worktree branch + tasks file + progress; omit if nothing is in
+     flight. This is how a re-entering session sees work that lives on a
+     sibling worktree or open PR and hasn't merged yet.
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 

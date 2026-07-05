@@ -3,19 +3,18 @@
 # frontmatter is `status: completed`, whose work happened on a branch that
 # has already merged into the default branch, but whose bound features are
 # still `Status: tasked` in features.md rather than `implemented`.
-# /ardd-implement's and /ardd-converge's post-merge flip step assumes a
-# live coordinating conversation checks back after the worktree branch
-# merges — but merge is manual/async, so in the common case that
-# conversation is gone before it happens and the flip never lands.
-# /ardd-analyze wires this in as a read-only detector.
+# Under worktree-native state the flip rides the work branch and lands on
+# merge, so a merged branch normally carries its own flip — this check is
+# the legacy/crash safety net: it catches tasks files written under the
+# old held-flip design, and a delegated run that crashed between its
+# `->completed` flip and its features.md flip. /ardd-analyze wires this in
+# as a read-only detector.
 #
 # Which branch actually had the work: the tasks file's own
-# `worktree_branch:` frontmatter if present (written by /ardd-implement or
-# /ardd-converge the moment a delegated subagent reports back — see
-# CLAUDE.md's state-commit-before-branch note for why this must be read
-# from disk, not just recalled from the plan). Falls back to the *plan's*
-# `branch:` field only when `worktree_branch:` is absent — the
-# non-delegated/inline case, where work happened directly on whatever
+# `worktree_branch:` frontmatter if present (a field only old-design files
+# have — nothing writes it anymore; see CLAUDE.md's worktree-native state
+# note). Falls back to the *plan's* `branch:` field when `worktree_branch:`
+# is absent — the inline case, where work happened directly on whatever
 # branch the plan itself was drafted/approved on.
 #
 # Usage: ./scripts/completion-flip-check.sh <tasks-file>

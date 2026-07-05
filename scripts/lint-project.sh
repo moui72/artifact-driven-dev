@@ -48,6 +48,7 @@ PLAN_STATUS_ENUM="draft approved superseded"
 TASKS_STATUS_ENUM="generating ready in-progress completed abandoned"
 FEEDBACK_STATUS_ENUM="open planned"
 FEATURE_STATUS_ENUM="backlogged planned tasked implemented"
+WORKFLOW_MODE_ENUM="solo collaborative"
 # -----------------------------------------------------------------------
 
 in_enum() {
@@ -94,6 +95,13 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
 
     if ! frontmatter_has "$f" last_updated; then
       report "$f: missing required frontmatter field 'last_updated'"
+    fi
+
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" workflow_mode; then
+      val="$(frontmatter_field "$f" workflow_mode)"
+      if ! in_enum "$val" $WORKFLOW_MODE_ENUM; then
+        report "$f: workflow_mode '$val' not in {$WORKFLOW_MODE_ENUM}"
+      fi
     fi
 
     if in_enum "$name" $RENDERABLE_ARTIFACTS; then

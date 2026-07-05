@@ -14,60 +14,108 @@ when resuming work in a new session.
    to reconcile. If only one exists, still confirm rather than
    auto-selecting.
 
-   Unlike `/ardd-implement`, there's no separate coarse "work has started"
-   marker to commit before delegating here — reconciliation's outcome
-   (whether the file ends up `completed` or `in-progress`) isn't knowable
-   until after the inspection work in steps 4–6 actually runs, so there's
-   nothing meaningful to pre-commit. Picking the file first (rather than
-   inside the delegated subagent, as before) just lets the coordinating
-   conversation name the worktree after it and hand the subagent an
-   already-resolved target.
+   **Before presenting the list, run
+   `.claude/skills/ardd-scripts/inflight-worktrees.sh`** — it enumerates
+   every *other* worktree of this repo with its branch and any `tasks-*.md`
+   at `in-progress`/`completed` and checkbox progress. If a listed worktree
+   already claims one of these tasks files (same filename), its real state
+   lives there, not here — surface it (worktree path, branch, progress) and
+   exclude/warn before the user picks, so a second run doesn't reconcile
+   against state a sibling worktree is actively changing.
 
-2. **Check branch and delegate, if applicable.** Run
+   Nothing pre-commits here — under this design no run commits state to the
+   default branch before its work happens on a branch. (This was already
+   true for `/ardd-converge` for a different reason — reconciliation's
+   outcome isn't knowable until steps 4–6 run — but it now holds uniformly
+   across both skills: all state rides the branch and lands on merge.)
+
+2. **Resolve mode and delegation gate.** Read `workflow_mode` from
+   `.project/artifacts/constitution.md` frontmatter (grep it; `solo` |
+   `collaborative`, **absent = `solo`**). Run
    `.claude/skills/ardd-scripts/branch-info.sh` for `current`, `default`,
-   and `on_default`. If `on_default` is `false`, skip to step 3 (already on
-   a branch/worktree — no delegation to set up here).
+   and `on_default`. Nothing is committed in this step.
 
-   If `on_default` is `true`: **check for in-flight work first** — list
-   active background subagents (harness `TaskList`). If one is already
-   touching this repo or its `.project/` directory, surface it to the user
-   (what it's doing, since when) and ask whether to wait for it to finish
-   before starting another delegated run — two worktrees racing on
-   overlapping state flips to the default branch is exactly what this
-   coordination check exists to catch.
+   **Solo mode.** If `on_default` is `false`, continue inline at step 3 —
+   already isolated, state already rides this branch. If `on_default` is
+   `true`, offer delegation.
 
-   **Delegation is experimental — offer it, but default to "no."** Same
-   caveat as `/ardd-implement`: a live test found `Agent`'s `isolation:
-   "worktree"` branches from `origin/<default-branch>` (the harness's
-   `worktree.baseRef` default, `fresh`), not from the coordinator's current
-   commit — so any state this run needs from a not-yet-pushed local commit
-   won't be visible inside the delegated worktree. Until that's confirmed
-   fixed (e.g. via a `worktree.baseRef: head` setting), treat delegation as
-   opt-in, not the default.
+   First, **check for in-flight work** using step 1's
+   `inflight-worktrees.sh` output (this replaces the old harness-`TaskList`
+   check — deterministic, scriptable, and it survives conversation death, so
+   an abandoned subagent's worktree shows up even when no conversation
+   remembers it). If another worktree is mid-run against this repo, surface
+   it and ask whether to wait before starting a second delegated run.
 
-   Ask the user, defaulting the suggested answer to "no":
+   **Delegation is offered but defaults to "no" for now** — not because the
+   base-ref problem is unsolved (the align script below fixes it), but
+   because align + enumeration hasn't yet been confirmed under a live smoke
+   test in this harness (the coordinator will run it; flip the default to
+   "yes" once it passes). Ask, defaulting to "no":
    - "No, continue on the current branch without a worktree" (recommended
-     for now)
-   - "Yes, delegate to a subagent in an isolated worktree (experimental —
-     verify `worktree_branch:` actually lands the right commits before
-     trusting this)"
+     until the smoke test confirms delegation)
+   - "Yes, delegate to a subagent in an isolated worktree"
 
-   On yes, delegate step 3 onward to a subagent using the `Agent` tool with
-   `isolation: "worktree"` — give it this skill's remaining steps verbatim
-   as its instructions, along with the chosen tasks file. `isolation:
-   "worktree"` creates its own worktree and branch (there's no parameter to
-   point it at a pre-made one) — do not pre-create a worktree via any other
-   script first, and do not ask the user to name it; the branch name is
-   reported back in the subagent's result. The subagent runs independently;
-   the coordinating conversation is free to do other things while it runs.
+   If the user declines but wants isolation, a plain `git checkout -b` here
+   is fine — the inline path on a branch, state riding that branch.
 
-   **As soon as the subagent reports back**, write its reported branch name
-   into the tasks file's frontmatter as `worktree_branch: <branch>` and
-   commit that to the current (default) branch immediately — do not hold
-   this only in conversation memory. This is what lets step 9 (or a
-   completely separate later run) still find the right branch on disk. On
-   no, continue step 3 onward inline, without delegating, and no
-   `worktree_branch:` is written.
+   On yes, delegate step 3 onward to a subagent via the `Agent` tool with
+   `isolation: "worktree"`, handing it this skill's remaining steps verbatim
+   and the chosen tasks file. `isolation: "worktree"` creates and names its
+   own worktree/branch (no parameter points it at a pre-made one) — don't
+   pre-create one or name it; the branch name is whatever the subagent
+   reports back. **The delegated subagent's instructions must begin with
+   these two steps, before any reconciliation:**
+   1. Run `.claude/skills/ardd-scripts/worktree-align.sh`. Worktrees share
+      the repo's object store and local refs, so even though the worktree
+      branched from `origin/<default>` (the harness `worktree.baseRef:
+      fresh` default — not steerable from prose, and it has regressed in
+      both directions across harness versions, so never trust it), the local
+      default branch's unpushed commits are reachable, and this script
+      fast-forwards them in. If it does not print `aligned=true`, **stop and
+      report the failure verbatim — do not attempt reconciliation, and never
+      try a manual conflicted merge.**
+   2. Verify the chosen tasks file exists at its expected path — a cheap
+      proof the alignment delivered the state.
+
+   Then the subagent proceeds through the remaining steps normally,
+   committing in the worktree. It runs independently; the coordinating
+   conversation is free to do other things meanwhile.
+
+   **When the subagent reports back**, the coordinator:
+   - Runs `git config --get core.bare` in the primary checkout; if `true`,
+     runs `git config core.bare false` and tells the user (a known side
+     effect of `Agent` worktree creation flipping the primary checkout's
+     config).
+   - Offers to merge the worktree branch into the default branch now,
+     suggesting **yes** — eager merge keeps the in-flight window short in
+     solo mode, landing code and all its state (checkbox reconciliation, the
+     `→completed` flip, any `features.md` flip) together. On merge, run
+     `/ardd-analyze`. On decline, note the work stays visible via
+     `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section.
+
+   A delegated subagent must **never** run `/ardd-analyze` or write
+   `STATUS.md` — either traps `STATUS.md` in the worktree branch. The
+   terminal analyze handoff belongs to the coordinator (or inline path).
+
+   **Collaborative mode.** Nothing may be committed to the local default
+   branch, ever (branch protection makes it unlandable anyway). If
+   `on_default` is `true`, the work must move to a branch before step 3 —
+   delegated worktree (same align-first preamble, in-flight check, and
+   `core.bare` check) or plain `git checkout -b`. All state rides that
+   branch as in solo-delegated. After the first commit, offer to push the
+   branch and open a draft PR titled with the feature slug(s) — the pushed
+   draft PR is collaborative mode's in-flight channel (`gh pr list --draft`),
+   checked alongside `inflight-worktrees.sh`. **Never push without confirming
+   with the user** (commits may be unsigned when 1Password is locked and must
+   not be pushed silently). No eager local merge — merging goes through the
+   PR, and the `features.md` flip rides the branch and lands when the PR
+   merges.
+
+   (History note: earlier versions persisted a `worktree_branch:` field and
+   ran a post-merge held-flip step (old step 9) so `features.md` flipped only
+   after a live coordinating conversation confirmed the branch merged. That
+   whole machinery is gone — the flip now rides the branch and lands
+   atomically on merge, so there's nothing to defer or bookkeep.)
 
 3. **Load the chosen file.** Identify all tasks marked `- [x]` (complete) and
    `- [ ]` (incomplete).
@@ -101,39 +149,27 @@ when resuming work in a new session.
    — the same shared check `/ardd-implement` runs on a tasks file's own
    completion, since a plan can have more than one tasks file.
 
-   If its `all_complete=true`: **when running inline (step 2 was declined or
-   skipped)**, load the plan and for each slug in its `features:` list flip
-   that entry's `Status` in `.project/artifacts/features.md` from `tasked`
-   to `implemented` now, same as always. **When running as a delegated
-   subagent**, do not touch `features.md` — note in this run's final report
-   which feature slugs would flip, and leave the actual flip to the
-   coordinating conversation's step 9, once this worktree's branch is
-   merged. Either way, run `... touch ardd-converge` once this step's
-   writes are done.
+   If its `all_complete=true`, **flip the bound features now — uniformly,
+   whether inline or delegated.** Load the plan and for each slug in its
+   `features:` list flip that entry's `Status` in
+   `.project/artifacts/features.md` from `tasked` to `implemented`, right
+   here (in the worktree, if delegated). The flip rides the branch, so it
+   can't reach the default branch until the branch merges — `features.md`
+   never claims "implemented" before the code lands, and there's no
+   held-flip-until-merge step or inline/delegated split. Run
+   `... touch ardd-converge` once this step's writes are done.
 
 8. **Report:**
    - Tasks newly marked complete
    - Tasks found partial (with what remains)
    - New tasks appended
-   - Any features flipped to `implemented` (or pending merge, if delegated)
+   - Any features flipped to `implemented` (the flip rides this branch and
+     lands on merge)
    - Recommended next step (usually: run `/ardd-implement` to continue)
 
    If step 7 flipped the file to `completed`, run `/ardd-analyze` now to
    refresh `STATUS.md` — same trigger condition as `/ardd-implement`'s
    tasks-file completion. Otherwise (still `in-progress`), skip it; nothing
-   changed that `STATUS.md` needs to reflect yet.
-
-9. **(Coordinating conversation only, after a delegated subagent reports
-   done.)** If the subagent's tasks file is `completed` with pending feature
-   flips (step 7), read `worktree_branch:` from the tasks file's frontmatter
-   (written to disk in step 2 — not held only in memory) and check whether
-   it has already been merged: `git merge-base --is-ancestor
-   <worktree_branch> main`. If it has, load the plan and perform the
-   `tasked→implemented` flip in `.project/artifacts/features.md` on `main`
-   immediately — the same mechanics as step 7's inline case, just performed
-   here instead. If it hasn't been merged yet, tell the user the flip is
-   pending merge and do not write it; re-check next time this conversation
-   (or `/ardd-analyze`'s `completion-flip-check.sh`) revisits the branch. As
-   with `/ardd-implement`, the tasks file's own `→completed` flip (step 7)
-   is *not* relocated — it's plan-specific with
-   no cross-branch conflict risk, so it stays immediate/in-worktree.
+   changed that `STATUS.md` needs to reflect yet. (If this run is a delegated
+   subagent, it does *not* run `/ardd-analyze` — see step 2; the coordinator
+   does, after merge.)

@@ -85,12 +85,14 @@ This reads all four artifacts and reports:
 - **Gaps** — artifact A implies something artifact B never defines
 - **Missing artifacts** — anything still at `status: draft`
 - **Constitution violations** — decisions that break your principles
-- **Orphaned completion flips** — a completed tasks file whose plan's
-  branch already merged, but whose bound feature is still `Status: tasked`
-  in `features.md` (this happens when a worktree-delegated
-  `/ardd-implement`/`/ardd-converge` run's post-merge flip never got
-  performed because no conversation checked back after the merge). If
-  found, Claude asks whether to flip it to `implemented` now.
+- **Orphaned completion flips** — a completed tasks file whose work branch
+  already merged, but whose bound feature is still `Status: tasked` in
+  `features.md` (the fingerprint of a run that crashed between flips, or a
+  tasks file from before state rode the work branch). If found, Claude asks
+  whether to flip it to `implemented` now.
+- **In-flight work** — anything living in a sibling worktree (branch, tasks
+  file, checkbox progress) or, in collaborative mode, an open draft PR —
+  work that exists on disk but hasn't merged to your default branch yet.
 
 Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean — each
 `/ardd-refine` pass triggers the next check itself.
@@ -131,9 +133,9 @@ here. Running `/ardd-tasks` and selecting it is what approves it.
 Passing one or more backlogged feature slugs (`/ardd-plan <slug> ...`) does
 real artifact-design work first, which can run long, but `/ardd-plan` never
 delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the
-draft plan it produces is itself the state `/ardd-tasks` needs to see on
-your default branch, so isolating it in a worktree would just trap it there
-until a manual merge. It still offers a plain branch, same as before.
+draft plan it produces is itself the state `/ardd-tasks` needs to see, so
+isolating it in a worktree would just trap it there until a manual merge.
+It still offers a plain branch, same as before.
 
 ---
 
@@ -145,8 +147,8 @@ until a manual merge. It still offers a plain branch, same as before.
 
 Always runs on whatever branch or worktree you invoke it from — no
 worktree gate of its own, since approving the plan and flipping the
-feature-backlog Status are themselves the state update the other commands'
-worktree delegation exists to get onto your default branch promptly. This
+feature-backlog Status are quick state updates with no long-running work
+to isolate. This
 asks which plan to generate tasks for (draft or already-approved), and
 selecting a draft one approves it as part of this step — flips it to
 `approved` and flips its targeted backlog features from `backlogged` to
@@ -168,20 +170,27 @@ Review the task list and adjust before running `/ardd-implement`.
 /ardd-implement
 ```
 
-Defaults to creating a worktree and delegating execution to a subagent —
-executing tasks is exactly the long-running, code-producing work this is
-for. Claude asks which tasks file to work on, then executes tasks
-sequentially: loads the declared artifacts for each task, writes and runs
-tests per whatever paradigm the constitution declares (TDD, test-after, or
-none), implements to pass them, marks the task complete, and commits. It
-stops and surfaces blockers rather than working around them.
+Before anything else it checks for sibling worktrees already working a
+tasks file, so a second `/ardd-implement` can start safely while another is
+still in flight. If you're on your default branch it offers to delegate
+execution to a subagent in an isolated worktree — executing tasks is
+exactly the long-running, code-producing work isolation is for. Claude asks
+which tasks file to work on, then executes tasks sequentially: loads the
+declared artifacts for each task, writes and runs tests per whatever
+paradigm the constitution declares (TDD, test-after, or none), implements
+to pass them, marks the task complete, and commits. It stops and surfaces
+blockers rather than working around them.
 
-The feature-backlog Status flip (`tasked` → `implemented`) doesn't happen
-inside the worktree — it's held back until the coordinating conversation
-confirms the worktree's branch is actually merged into your default branch,
-so `features.md` never claims work is done before the code has landed.
-Individual task checkboxes and the tasks file's own status still update
-immediately, in the worktree, same as before.
+Every status change — the tasks file's own flips, checkboxes, and the
+feature-backlog flip (`tasked` → `implemented`) — rides the work branch and
+reaches your default branch when that branch merges, atomically with the
+code. So `features.md` never claims work is done before the code has
+landed, and until merge the in-flight truth is visible via the sibling-
+worktree check above and `/ardd-analyze`'s "In Flight" section. On a
+delegated run's completion, Claude offers to merge the worktree branch
+right away (in `workflow_mode: collaborative`, merging goes through a
+pushed draft PR instead — nothing is committed to your local default
+branch).
 
 ---
 
@@ -193,8 +202,7 @@ If `/ardd-implement` is interrupted — or you pick the project up in a new sess
 /ardd-converge
 ```
 
-Also defaults to a worktree + delegated subagent, same as `/ardd-implement`.
-This asks which tasks file to reconcile, compares the codebase against it,
+Same worktree-delegation offer and state model as `/ardd-implement`. This asks which tasks file to reconcile, compares the codebase against it,
 marks tasks that are already done, notes partial work, and appends any gaps
 as new tasks. Then you can run `/ardd-implement` again to continue.
 
