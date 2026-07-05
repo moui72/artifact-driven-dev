@@ -36,11 +36,21 @@ when resuming work in a new session.
    overlapping state flips to the default branch is exactly what this
    coordination check exists to catch.
 
-   Then ask the user, defaulting the suggested answer to "yes" (reconciling
-   a tasks file against the codebase can run long, same as
-   `/ardd-implement`):
-   - "Yes, delegate to a subagent in an isolated worktree"
-   - "No, continue on the current branch without a worktree"
+   **Delegation is experimental — offer it, but default to "no."** Same
+   caveat as `/ardd-implement`: a live test found `Agent`'s `isolation:
+   "worktree"` branches from `origin/<default-branch>` (the harness's
+   `worktree.baseRef` default, `fresh`), not from the coordinator's current
+   commit — so any state this run needs from a not-yet-pushed local commit
+   won't be visible inside the delegated worktree. Until that's confirmed
+   fixed (e.g. via a `worktree.baseRef: head` setting), treat delegation as
+   opt-in, not the default.
+
+   Ask the user, defaulting the suggested answer to "no":
+   - "No, continue on the current branch without a worktree" (recommended
+     for now)
+   - "Yes, delegate to a subagent in an isolated worktree (experimental —
+     verify `worktree_branch:` actually lands the right commits before
+     trusting this)"
 
    On yes, delegate step 3 onward to a subagent using the `Agent` tool with
    `isolation: "worktree"` — give it this skill's remaining steps verbatim

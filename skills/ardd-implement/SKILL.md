@@ -39,11 +39,24 @@ self-contained; the agent loads only the artifacts it declares.
    overlapping state flips to the default branch is exactly what this
    coordination check exists to catch.
 
-   Then ask the user, defaulting the suggested answer to "yes" (executing
-   tasks is exactly the kind of long-running, code-producing work this gate
-   exists to isolate):
-   - "Yes, delegate to a subagent in an isolated worktree"
-   - "No, continue on the current branch without a worktree"
+   **Delegation is experimental — offer it, but default to "no."** A live
+   test found that `Agent`'s `isolation: "worktree"` branches from
+   `origin/<default-branch>` (governed by the harness's own
+   `worktree.baseRef` setting, default `fresh`), not from the coordinator's
+   current commit. That means step 2's flip only reaches the delegated
+   worktree if it's already on `origin/<default-branch>` — never true for a
+   local-only commit, and this project's convention is local-commit-only
+   (never auto-push). So the guarantee this ordering exists to provide does
+   not currently hold. Until `worktree.baseRef: head` (or equivalent) is
+   confirmed to fix this, treat delegation as an opt-in experiment, not the
+   default path.
+
+   Ask the user, defaulting the suggested answer to "no":
+   - "No, continue on the current branch without a worktree" (recommended
+     for now)
+   - "Yes, delegate to a subagent in an isolated worktree (experimental —
+     verify `worktree_branch:` actually lands the right commits before
+     trusting this)"
 
    On yes, delegate step 4 onward to a subagent using the `Agent` tool with
    `isolation: "worktree"` — give it this skill's remaining steps verbatim

@@ -171,15 +171,20 @@ test, `test-branch-info.sh`) once; if you touch the interactive framing, all
 three skills still need the same edit.
 
 **State-commit-before-branch: coarse state lands on the default branch
-immediately, fine-grained work is delegated to a worktree.**
-`ardd-implement` and `ardd-converge` are the long-running,
-code-producing skills — their branch-gate step defaults to delegating the
-substantive work to a subagent via the `Agent` tool's own `isolation:
-"worktree"`. There is no custom script for this part: a hand-built
-`worktree-info.sh` was tried first and removed (see below) after turning
-out to duplicate what the tool already does, incompatibly — Constitution
-Principle VIII exists precisely to catch this before it's built, not just
-after.
+immediately; delegating fine-grained work to a worktree is experimental,
+opt-in, and defaults to off.** `ardd-implement` and `ardd-converge` are the
+long-running, code-producing skills — their branch-gate step *offers* to
+delegate the substantive work to a subagent via the `Agent` tool's own
+`isolation: "worktree"`, but defaults the suggested answer to "no." This
+was downgraded from "defaults to yes" after a live-executed smoke test
+(not just reasoning) found bug #3 below: the entire premise this section
+used to rest on — that a delegated worktree starts from a commit that
+already carries the pre-delegation flip — does not hold under this
+environment's default settings. There is no custom script for the
+worktree-creation part itself: a hand-built `worktree-info.sh` was tried
+first and removed (see below) after turning out to duplicate what the tool
+already does, incompatibly — Constitution Principle VIII exists precisely
+to catch this before it's built, not just after.
 
 `ardd-plan` and `ardd-tasks` are both exceptions, for related but distinct
 reasons. `ardd-tasks` has no branch-gate step at all — its own actions
@@ -199,18 +204,21 @@ worktrees). This was caught and reverted after initially being implemented
 the other way — worth remembering if the temptation to "make plan
 consistent with implement/converge" comes up again.
 
-For the two skills that *do* delegate, getting the coarse flip committed
-before the worktree is created is a real ordering requirement, not a
-suggestion: each reorders its steps so the tasks file is selected and, if
-this is the first task in it, flipped `ready→in-progress` and committed
-*before* the branch-gate/delegation step runs — since `isolation:
-"worktree"` branches from whatever commit is currently checked out, this
-ordering is what makes the delegated subagent's worktree start from a
-commit that already carries the flip, with no separate script needed to
-enforce it. `ardd-converge` has no equivalent flip to pre-commit (its own
-completed/in-progress outcome isn't knowable until after the reconciliation
-work runs), but still picks its tasks file before the delegation decision,
-for the same structural reason.
+For the two skills that offer delegation, the ordering below is still
+enforced — flip the tasks file's `ready→in-progress` status and commit it
+*before* the branch-gate/delegation step runs — but treat it as a
+best-effort convention, not a proven guarantee: it was written assuming
+`isolation: "worktree"` branches from whatever commit is currently checked
+out, which bug #3 below found is not actually true under this project's
+default settings (it branches from `origin/<default-branch>` instead). The
+ordering is kept because it's still correct and harmless for the inline
+(non-delegated) path, and because it's the right ordering *if* the base-ref
+mismatch gets fixed later — but don't describe it as something that
+currently makes the delegated subagent's worktree start from a commit that
+carries the flip, because empirically it doesn't. `ardd-converge` has no
+equivalent flip to pre-commit (its own completed/in-progress outcome isn't
+knowable until after the reconciliation work runs), but still picks its
+tasks file before the delegation decision, for the same structural reason.
 
 `isolation: "worktree"` creates and names its own worktree/branch — there
 is no parameter to point it at a pre-made one, and the branch name is only
@@ -246,6 +254,30 @@ already, both worth remembering if this area is touched again:
    `worktree_branch:` to the tasks file (this note) and having
    `completion-flip-check.sh` read that field first, falling back to the
    plan's `branch:` only for the non-delegated/inline case.
+3. **Not yet fixed — this is why delegation defaults to off.** A live
+   smoke test (committing a throwaway plan+tasks file, then delegating via
+   `Agent` with `isolation: "worktree"` and inspecting the result directly,
+   rather than reasoning about it) found that the resulting worktree's
+   branch had a merge-base with `origin/main`, not with the branch the
+   coordinating session was actually on — it never saw either
+   pre-delegation commit. This traces to the harness's own `worktree`
+   isolation defaulting to branching from `origin/<default-branch>`
+   (setting `worktree.baseRef`, default `fresh`; `head` branches from the
+   current local HEAD instead) — not something a `SKILL.md`'s prose can
+   override, since the `Agent` tool exposes no parameter for it. Given this
+   project's local-commit-only convention (never auto-push, per the global
+   CLAUDE.md signing-lockout instruction), a `worktree.baseRef: fresh`
+   environment means a delegated worktree will *never* see a pre-delegation
+   commit that hasn't been pushed — the entire reason the state-commit-
+   before-branch ordering exists. Separately, the same live test also
+   surfaced that creating the `Agent`-tool worktree flipped this repo's own
+   `.git/config` to `core.bare = true`, breaking ordinary work-tree git
+   commands in the primary checkout until manually reverted
+   (`git config core.bare false`) — worth checking for if a future delegated
+   run leaves the primary checkout unable to run `git status`. Until
+   `worktree.baseRef: head` (or equivalent) is confirmed to fix the
+   base-ref mismatch, `ardd-implement`/`ardd-converge` offer delegation but
+   default the suggested answer to "no."
 
 This creates a deliberate split in what happens where:
 - **Coarse, cross-cutting state** (`features.md` `Status`, plan/tasks
