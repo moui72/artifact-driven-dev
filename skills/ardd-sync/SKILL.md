@@ -49,7 +49,11 @@ later) so one entry could eventually carry links into more than one tracker.
 
 ### Push (`features.md` → GitHub) — run unless invoked as `pull`
 
-1. **Read `.project/artifacts/features.md`.** Parse each entry: name (H2),
+1. **Read `.project/artifacts/features.md`.** Before any `features.md` write
+   in this phase, run `.claude/skills/ardd-scripts/project-lock.sh check
+   ardd-sync` — if it warns, surface it to the user (another invocation
+   touched `.project/` recently) but proceed regardless; this is advisory,
+   never a block. Parse each entry: name (H2),
    slug, status, and metadata line fields, same parsing `/ardd-feature`
    already does. Entries with no `Slug`/`Status` line at all (legacy,
    pre-convention) are `Status: implemented` by convention — skip them
@@ -77,7 +81,15 @@ later) so one entry could eventually carry links into more than one tracker.
      to run headlessly on a schedule, not an edge case to ignore. Note
      GitHub's search index has a short indexing lag after creation, so a
      re-run within seconds of a create can still race; this is acceptable
-     for anything run hourly or less often.
+     for anything run hourly or less often. Note the scope of what
+     `sync-slug-match.sh`'s dedup buys: it handles **crash-retry
+     idempotency** (a single run that died between `gh issue create` and the
+     `features.md` write, re-run later), not **true concurrent-run safety**.
+     The `project-lock.sh check` above narrows but doesn't eliminate the
+     residual external-system race — two genuinely simultaneous `push` runs
+     can still both create a GitHub issue for the same slug before either
+     sees the other's. That's a documented, known limitation, not a gap to
+     silently paper over.
    - Otherwise create it. If `Status` is `implemented` (e.g. a legacy or
      `/ardd-featurize`-written entry never synced before), create it with no
      status label and close it immediately after (`gh issue close <n>`) —
@@ -88,6 +100,8 @@ later) so one entry could eventually carry links into more than one tracker.
      ardd:<status>, omitted when Status is implemented]`.
    - Either way, append `· GH: #<n>` to the entry's metadata line and write
      `features.md`.
+   - After this phase's `features.md` writes are done, run
+     `.claude/skills/ardd-scripts/project-lock.sh touch ardd-sync`.
 
 3. **For each entry with an existing `GH:` field:**
    - Read current state: `gh issue view <n> --json state,labels`.
@@ -105,7 +119,10 @@ later) so one entry could eventually carry links into more than one tracker.
 
 ### Pull (GitHub → `features.md`) — run unless invoked as `push`
 
-1. **Import new feature requests.** List open issues labeled `ardd-import`
+1. **Import new feature requests.** Before this phase's `features.md` writes,
+   run `.claude/skills/ardd-scripts/project-lock.sh check ardd-sync` — if it
+   warns, surface it to the user but proceed regardless; advisory, never a
+   block. List open issues labeled `ardd-import`
    (`gh issue list --label ardd-import --limit 200
    --json number,title,body`; pass an explicit `--limit` above the CLI's
    default of 30 since an import backlog can exceed it) — this label is
@@ -119,6 +136,9 @@ later) so one entry could eventually carry links into more than one tracker.
      cycle).
    - Swap the issue's label from `ardd-import` to `ardd:backlogged` so it
      isn't re-imported next run.
+
+   Once the imported entries are written, run
+   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-sync`.
 
 2. **Report divergence — do not apply it.** For every already-linked entry,
    run `.claude/skills/ardd-scripts/sync-divergence.sh <slug> <issue-number>
