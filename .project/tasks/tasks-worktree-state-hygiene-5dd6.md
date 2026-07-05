@@ -1,7 +1,7 @@
 ---
 plan: plan-worktree-state-hygiene-2026-07-04.md
 generated: 2026-07-04
-status: in-progress   # generating -> ready -> in-progress -> completed
+status: completed     # generating -> ready -> in-progress -> completed
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
 ---
