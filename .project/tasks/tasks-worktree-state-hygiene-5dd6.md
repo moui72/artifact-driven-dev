@@ -149,7 +149,7 @@ decision requiring an artifact change.
   worktree/branch), skip delegation entirely as today — this only affects
   the `on_default: true` path.
 
-- [ ] T016 [artifacts: constitution] Revert `/ardd-plan`'s worktree +
+- [x] T016 [artifacts: constitution] Revert `/ardd-plan`'s worktree +
   subagent delegation (T004/T005), per explicit user decision: the draft
   plan file is itself the state `/ardd-tasks` needs to see, and there's no
   separate coarse marker to pre-commit the way tasks files have — isolating

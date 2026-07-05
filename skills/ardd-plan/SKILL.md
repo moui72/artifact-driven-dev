@@ -19,47 +19,29 @@ idea; it doesn't touch artifacts).
    If `on_default` is `false`, skip to step 2 and derive `<slug>` from
    `current` (lowercase, non-alphanumeric runs → `-`, truncate to ~30 chars).
 
-   If `on_default` is `true` and one or more feature slugs were passed as
-   arguments (step 3 will do real artifact-design work, which can run
-   long): **check for in-flight work first** — list active background
-   subagents (harness `TaskList`). If one is already touching this repo or
-   its `.project/` directory, surface it to the user (what it's doing,
-   since when) and ask whether to wait for it to finish before starting
-   another delegated run — two worktrees racing on overlapping state flips
-   to the default branch is exactly what this coordination check exists to
-   catch. Then suggest a worktree: prefer the first feature slug as the
-   suggested name. Ask the user:
-   - "Yes, create a worktree for `<suggested-name>`"
-   - "Yes, create a worktree, but name it: ___"
-   - "No, continue on the current branch without a worktree"
-
-   On yes, run `.claude/skills/ardd-scripts/worktree-info.sh create <name>`
-   to create (or locate) the worktree, set `<slug>` to `<name>`, then
-   delegate steps 2 onward to a subagent (`Agent` tool, `isolation:
-   "worktree"`, pointed at the printed path) — give it this skill's
-   remaining steps verbatim as its instructions, along with `<slug>` and
-   the feature slug(s). The subagent runs independently and reports back
-   (plan drafted, summary, open questions) when done; the coordinating
-   conversation is free to do other things while it runs. On no, set
-   `<slug>` to a freshly generated short arbitrary hex token (4 hex chars,
-   e.g. `openssl rand -hex 2` → `f2ed`) and continue steps 2 onward inline,
-   without delegating.
-
-   If `on_default` is `true` and no feature slugs were passed (this run is
-   just touching feedback/artifacts, not doing feature design work), keep
-   the lighter-weight behavior: suggest a plain branch name — a semantic
-   kebab-case slug derived from the conversation/artifacts if the topic is
-   clear, otherwise a short arbitrary slug (4 hex chars, e.g. `openssl rand
-   -hex 2` → `f2ed`). Ask the user:
+   If `on_default` is `true`, suggest a branch name — a semantic kebab-case
+   slug derived from the conversation/artifacts if the topic is clear,
+   otherwise a short arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2`
+   → `f2ed`). If one or more feature slugs were passed as arguments, prefer
+   the first feature slug as the suggested branch name instead of generating
+   one. Ask the user:
    - "Yes, create `<suggested-name>`"
    - "Yes, create a branch, but name it: ___"
-   - "No, continue on default"
+   - "No, continue on default" (a worktree works too — set one up yourself
+     and re-run from there; this gate deliberately doesn't delegate to a
+     worktree subagent the way `/ardd-implement`/`/ardd-converge` do — the
+     draft plan this run produces (step 9) is itself the state
+     `/ardd-tasks` needs to see on the default branch, and there's no
+     separate coarse marker to pre-commit the way a tasks file's
+     `ready→in-progress` flip provides; isolating the plan in a worktree
+     would just trap it there until a manual merge, severing the
+     plan→tasks handoff. Same reasoning that already keeps `/ardd-tasks`
+     gate-free.)
 
    On yes, run `git checkout -b <name>` and set `<slug>` to `<name>`. On no,
    set `<slug>` to a freshly generated short arbitrary hex token (same
    generation as above) and proceed on the default branch without asking
-   again this run. No delegation in this lighter-weight path — continue
-   inline.
+   again this run.
 
 2. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present. If any are `status: draft`, warn the user and ask whether

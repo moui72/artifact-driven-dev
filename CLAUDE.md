@@ -24,7 +24,7 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
 ./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
-./scripts/worktree-info.sh create <slug> [dir] # create/locate a worktree branched from the default branch's tip (used by ardd-plan/implement/converge)
+./scripts/worktree-info.sh create <slug> [dir] # create/locate a worktree branched from the default branch's tip (used by ardd-implement/converge only — ardd-plan never delegates)
 ./scripts/test-worktree-info.sh        # regression test for worktree-info.sh (idempotency, branches-from-default-tip)
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
@@ -168,19 +168,43 @@ test, `test-branch-info.sh`) once; if you touch the interactive framing, all
 three skills still need the same edit.
 
 **State-commit-before-branch: coarse state lands on the default branch
-immediately, fine-grained work is delegated to a worktree.** `ardd-plan`
-(when targeting a feature slug), `ardd-implement`, and `ardd-converge` are
-the long-running, code/artifact-producing skills — their branch-gate step
-defaults to creating a worktree via `scripts/worktree-info.sh` (sibling to
-`branch-info.sh`, same shared-deterministic-half/judgment-stays-in-prose
-split: it creates or locates a worktree branched from the default branch's
-*current tip*, nothing more) and delegating the rest of the skill to a
-subagent (`Agent` tool, `isolation: "worktree"`). `ardd-tasks` is the
-exception: it has no branch-gate step at all and always runs wherever it's
-invoked, because its own actions — plan approval, `features.md` Status
-flips — *are* the coarse state update the other three are trying to get
-onto the default branch promptly; there's nothing to defer behind a
-worktree.
+immediately, fine-grained work is delegated to a worktree.**
+`ardd-implement` and `ardd-converge` are the long-running,
+code-producing skills — their branch-gate step defaults to creating a
+worktree via `scripts/worktree-info.sh` (sibling to `branch-info.sh`, same
+shared-deterministic-half/judgment-stays-in-prose split: it creates or
+locates a worktree branched from the default branch's *current tip*,
+nothing more) and delegating the substantive work to a subagent (`Agent`
+tool, `isolation: "worktree"`).
+
+`ardd-plan` and `ardd-tasks` are both exceptions, for related but distinct
+reasons. `ardd-tasks` has no branch-gate step at all — its own actions
+(plan approval, `features.md` Status flips) *are* the coarse state update
+the other two are trying to get onto the default branch promptly, so
+there's nothing to defer behind a worktree. `ardd-plan` *does* have a
+branch-gate step (a plain one, offering only a regular branch, never a
+worktree) — it deliberately never delegates, even though drafting a plan
+for a targeted feature can run just as long as implementing one: the draft
+plan file it produces (`.project/plans/plan-*.md`) is itself the artifact
+`ardd-tasks` needs to see on the default branch, with no separate coarse
+marker to pre-commit the way a tasks file's `ready→in-progress` flip
+provides. Delegating it to a worktree would trap that file there until a
+manual merge, severing the plan→tasks handoff (`ardd-tasks` globs
+`.project/plans/` on whatever branch it's invoked from, not across
+worktrees). This was caught and reverted after initially being implemented
+the other way — worth remembering if the temptation to "make plan
+consistent with implement/converge" comes up again.
+
+For the two skills that *do* delegate, satisfying `worktree-info.sh`'s own
+precondition — any state flip is committed to the default branch before
+the worktree is created — is a real ordering requirement, not a suggestion:
+each reorders its steps so the tasks file is selected and, if this is the
+first task in it, flipped `ready→in-progress` and committed *before* the
+branch-gate/delegation step runs, so the worktree it creates is branched
+from a commit that already carries the flip. `ardd-converge` has no
+equivalent flip to pre-commit (its own completed/in-progress outcome isn't
+knowable until after the reconciliation work runs), but still picks its
+tasks file before the delegation decision, for the same structural reason.
 
 This creates a deliberate split in what happens where:
 - **Coarse, cross-cutting state** (`features.md` `Status`, plan/tasks
@@ -192,7 +216,10 @@ This creates a deliberate split in what happens where:
   otherwise perform on completion (`tasked→implemented`), is deliberately
   held until the coordinating conversation confirms (`git merge-base
   --is-ancestor <branch> main`) the worktree's branch has actually merged.
-  `features.md` never claims "implemented" before the code has landed.
+  `features.md` never claims "implemented" before the code has landed. (In
+  practice that confirming conversation is often gone by the time a merge
+  actually happens, leaving the flip permanently pending — see the
+  orphaned-completion-flip note below for how this is caught.)
 - **Fine-grained, single-owner state** (a tasks file's own
   `ready→in-progress→completed` transitions, individual task checkboxes) has
   no cross-branch conflict risk — nothing else concurrently edits the same
@@ -203,9 +230,9 @@ This creates a deliberate split in what happens where:
 
 A coordination check (list in-flight background subagents via the harness's
 `TaskList` — not something a POSIX script can wrap, so this stays prose,
-per Principle II) runs before `ardd-plan`/`ardd-implement`/`ardd-converge`
-delegate new work, warning the user if a prior delegated run against this
-repo is still active before starting a second one.
+per Principle II) runs before `ardd-implement`/`ardd-converge` delegate new
+work, warning the user if a prior delegated run against this repo is still
+active before starting a second one.
 
 That's a different thing from a skill telling the agent, as its own last
 step, to run another skill and stop — a terminal handoff, not a subroutine

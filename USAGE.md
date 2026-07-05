@@ -123,13 +123,11 @@ disk immediately as `status: draft` — there's no separate approval step
 here. Running `/ardd-tasks` and selecting it is what approves it.
 
 Passing one or more backlogged feature slugs (`/ardd-plan <slug> ...`) does
-real artifact-design work first, which can run long — this defaults to
-creating a worktree and delegating the rest of the run to a subagent, so
-your conversation stays free while it works. A no-slug run (feedback/
-artifact touch-ups only) stays lightweight: a plain branch, no delegation.
-Either way, if another `/ardd-*` subagent is already running against this
-project, Claude checks and asks whether to wait before starting a second
-one.
+real artifact-design work first, which can run long, but `/ardd-plan` never
+delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the
+draft plan it produces is itself the state `/ardd-tasks` needs to see on
+your default branch, so isolating it in a worktree would just trap it there
+until a manual merge. It still offers a plain branch, same as before.
 
 ---
 

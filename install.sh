@@ -65,10 +65,12 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 # branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-converge's "check
 #   branch" step for the deterministic current/default-branch detection
 #   those skills used to duplicate as prose.
-# worktree-info.sh: invoked by the same "check branch" step in ardd-plan/
-#   ardd-implement/ardd-converge to create or locate a worktree branched
-#   from the default branch's current tip, when that step's default-to-yes
-#   delegation is accepted.
+# worktree-info.sh: invoked by ardd-implement/ardd-converge's "check
+#   branch" step to create or locate a worktree branched from the default
+#   branch's current tip, when that step's default-to-yes delegation is
+#   accepted. ardd-plan never delegates — its draft plan file is itself the
+#   state ardd-tasks needs to see promptly, so isolating it in a worktree
+#   would defeat the point.
 # sibling-tasks-complete.sh: invoked by ardd-implement/ardd-converge on a
 #   tasks file's own completion, to check whether every tasks file bound to
 #   the same plan is done before flipping that plan's features to
