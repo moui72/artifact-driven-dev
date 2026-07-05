@@ -1,7 +1,7 @@
 ---
 plan: plan-worktree-state-hygiene-2026-07-04.md
 generated: 2026-07-04
-status: completed     # generating -> ready -> in-progress -> completed
+status: in-progress   # generating -> ready -> in-progress -> completed
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
 ---
@@ -227,3 +227,46 @@ incorrectly, by the default path itself.
   reversal explicitly (mirroring how T016 documented reverting `/ardd-plan`'s
   delegation) so it isn't reintroduced later under the same
   Principle-VIII mistake.
+
+## Phase 9: Gaps found by /ardd-converge reconciliation (2026-07-05, third pass)
+
+T018 fixed the post-merge merge-check (step 11 / step 9) to use the
+subagent's actually-reported worktree branch instead of a manually-chosen
+name — but only in that one step, held in the coordinating conversation's
+memory. `completion-flip-check.sh` (T017) — the fallback detector for
+exactly the case where that conversation is gone — still reads the
+*plan's* `branch:` frontmatter field, which is unrelated to the ephemeral
+branch a delegated subagent's worktree actually used. So: if the
+conversation dies before step 11 runs (the common case this detector
+exists for), `completion-flip-check.sh` checks the wrong branch (or one
+that was never created at all, silently swallowed by its own
+`2>/dev/null`) and never reports the orphaned flip — the exact failure
+mode it was built to catch, now recreated one layer deeper.
+
+- [ ] T020 [artifacts: constitution] Persist the delegated subagent's
+  reported worktree branch to disk instead of only holding it in the
+  coordinating conversation's memory. Add an optional `worktree_branch:`
+  frontmatter field to tasks files. In `/ardd-implement` step 3 and
+  `/ardd-converge` step 2: immediately after the subagent reports back
+  (including its worktree branch), write `worktree_branch: <branch>` into
+  the tasks file's frontmatter and commit it to the current (default)
+  branch — before evaluating anything else. This is itself a coarse-state
+  write, consistent with the rest of this plan's spine, and is what makes
+  the branch identity survive past this conversation ending. Update
+  `/ardd-implement` step 11 and `/ardd-converge` step 9 to read
+  `worktree_branch:` from the tasks file (disk) rather than an in-memory
+  value for their `git merge-base --is-ancestor` check.
+
+- [ ] T021 [artifacts: constitution] Fix `scripts/completion-flip-check.sh`
+  to read `worktree_branch:` from the tasks file first (the branch
+  delegated work actually happened on); fall back to the plan's `branch:`
+  field only if `worktree_branch:` is absent (the non-delegated/inline
+  case, where work happens directly on whatever branch was current, which
+  — for a continuous inline session — is reasonably the same branch the
+  plan recorded). Update `scripts/test-completion-flip-check.sh` to add a
+  case modeling the delegated scenario explicitly: a tasks file with
+  `worktree_branch:` set to a branch *different* from the plan's own
+  `branch:` field, where the plan's branch is unmerged but
+  `worktree_branch:`'s is — confirming the detector follows the right one.
+  Run it and confirm it fails against the current (T017-era)
+  implementation before fixing it, per Constitution Principle V.
