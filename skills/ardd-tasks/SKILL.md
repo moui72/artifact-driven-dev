@@ -93,6 +93,9 @@ approves it as part of this — there's no separate approval step in
    status: generating   # generating -> ready -> in-progress -> completed
                         # (or -> abandoned, if superseded by a new tasks
                         # file generated for the same plan)
+   # worktree_branch: <branch>  — added later by /ardd-implement or
+   # /ardd-converge only if this file's work gets delegated to a worktree
+   # subagent; not written here at generation time.
    ---
 
    # Tasks

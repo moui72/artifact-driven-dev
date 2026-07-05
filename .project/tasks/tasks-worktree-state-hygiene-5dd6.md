@@ -243,7 +243,7 @@ that was never created at all, silently swallowed by its own
 `2>/dev/null`) and never reports the orphaned flip — the exact failure
 mode it was built to catch, now recreated one layer deeper.
 
-- [ ] T020 [artifacts: constitution] Persist the delegated subagent's
+- [x] T020 [artifacts: constitution] Persist the delegated subagent's
   reported worktree branch to disk instead of only holding it in the
   coordinating conversation's memory. Add an optional `worktree_branch:`
   frontmatter field to tasks files. In `/ardd-implement` step 3 and
@@ -257,7 +257,7 @@ mode it was built to catch, now recreated one layer deeper.
   `worktree_branch:` from the tasks file (disk) rather than an in-memory
   value for their `git merge-base --is-ancestor` check.
 
-- [ ] T021 [artifacts: constitution] Fix `scripts/completion-flip-check.sh`
+- [x] T021 [artifacts: constitution] Fix `scripts/completion-flip-check.sh`
   to read `worktree_branch:` from the tasks file first (the branch
   delegated work actually happened on); fall back to the plan's `branch:`
   field only if `worktree_branch:` is absent (the non-delegated/inline

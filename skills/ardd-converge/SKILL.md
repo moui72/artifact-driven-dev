@@ -48,12 +48,16 @@ when resuming work in a new session.
    "worktree"` creates its own worktree and branch (there's no parameter to
    point it at a pre-made one) — do not pre-create a worktree via any other
    script first, and do not ask the user to name it; the branch name is
-   reported back in the subagent's result. Record that returned branch
-   name — step 9 needs it for the merge check. The subagent runs
-   independently and reports back (including its worktree branch) when
-   done; the coordinating conversation is free to do other things while it
-   runs, but see step 9 for what it must still do once the subagent
-   finishes. On no, continue step 3 onward inline, without delegating.
+   reported back in the subagent's result. The subagent runs independently;
+   the coordinating conversation is free to do other things while it runs.
+
+   **As soon as the subagent reports back**, write its reported branch name
+   into the tasks file's frontmatter as `worktree_branch: <branch>` and
+   commit that to the current (default) branch immediately — do not hold
+   this only in conversation memory. This is what lets step 9 (or a
+   completely separate later run) still find the right branch on disk. On
+   no, continue step 3 onward inline, without delegating, and no
+   `worktree_branch:` is written.
 
 3. **Load the chosen file.** Identify all tasks marked `- [x]` (complete) and
    `- [ ]` (incomplete).
@@ -111,13 +115,15 @@ when resuming work in a new session.
 
 9. **(Coordinating conversation only, after a delegated subagent reports
    done.)** If the subagent's tasks file is `completed` with pending feature
-   flips (step 7), check whether the subagent's *actual reported worktree
-   branch* (from step 2 — not a name anyone chose, since `isolation:
-   "worktree"` picks its own) has already been merged: `git merge-base
-   --is-ancestor <that branch> main`. If it has, load the plan and perform
-   the `tasked→implemented` flip in `.project/artifacts/features.md` on
-   `main` immediately — the same mechanics as step 7's inline case, just
-   performed here instead. If it hasn't been merged yet, tell the user the
-   flip is pending merge and do not write it. As with `/ardd-implement`,
-   the tasks file's own `→completed` flip (step 7) is *not* relocated — it's plan-specific with
+   flips (step 7), read `worktree_branch:` from the tasks file's frontmatter
+   (written to disk in step 2 — not held only in memory) and check whether
+   it has already been merged: `git merge-base --is-ancestor
+   <worktree_branch> main`. If it has, load the plan and perform the
+   `tasked→implemented` flip in `.project/artifacts/features.md` on `main`
+   immediately — the same mechanics as step 7's inline case, just performed
+   here instead. If it hasn't been merged yet, tell the user the flip is
+   pending merge and do not write it; re-check next time this conversation
+   (or `/ardd-analyze`'s `completion-flip-check.sh`) revisits the branch. As
+   with `/ardd-implement`, the tasks file's own `→completed` flip (step 7)
+   is *not* relocated — it's plan-specific with
    no cross-branch conflict risk, so it stays immediate/in-worktree.

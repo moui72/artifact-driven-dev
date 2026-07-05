@@ -218,14 +218,34 @@ known from what the subagent's result reports back, never chosen up
 front. This is why the branch-gate step no longer offers to name the
 worktree the way it once did for a plain `git checkout -b`, and why the
 post-merge completion-flip step (below) checks the *actual reported
-branch*, not a name anyone picked. Getting this wrong once already
-produced a real bug: an earlier version called a separate script to make
-one branch, delegated via `Agent` (which silently made a *different* one),
-and then checked merge-ancestry against the first, empty branch — which
-trivially reported "merged" and flipped `features.md` to `implemented`
-while the real code sat unmerged elsewhere. Any future change to this
-delegation step must keep the reported-branch value as the one used in the
-merge check, or this exact failure mode comes back.
+branch*, not a name anyone picked. **That reported branch is written to
+disk, not just held in the coordinating conversation's memory**: as soon
+as the subagent reports back, `ardd-implement`/`ardd-converge` write it
+into the tasks file's own frontmatter as `worktree_branch:` and commit
+that to the default branch immediately. This exists because the
+"conversation checks back later" assumption already failed once at a
+different layer — see the orphaned-completion-flip note below — and an
+in-memory-only branch name would fail that same way here too, just
+silently, since nothing durable would remain to identify which branch
+actually had the work.
+
+Getting the branch-identity question wrong has produced two real bugs
+already, both worth remembering if this area is touched again:
+1. An earlier version called a separate script (`worktree-info.sh`) to
+   make one branch, delegated via `Agent` (which silently made a
+   *different* one), then checked merge-ancestry against the first, empty
+   branch — which trivially reported "merged" and flipped `features.md` to
+   `implemented` while the real code sat unmerged elsewhere. Fixed by
+   removing the separate script and using the `Agent`-reported branch
+   directly (see the worktree-info.sh removal note above).
+2. Even after that fix, the *fallback* detector
+   (`completion-flip-check.sh`, for when the coordinating conversation is
+   long gone by the time of merge) kept reading the *plan's* `branch:`
+   field — unrelated to the ephemeral worktree branch — so it silently
+   never caught the case it exists for. Fixed by persisting
+   `worktree_branch:` to the tasks file (this note) and having
+   `completion-flip-check.sh` read that field first, falling back to the
+   plan's `branch:` only for the non-delegated/inline case.
 
 This creates a deliberate split in what happens where:
 - **Coarse, cross-cutting state** (`features.md` `Status`, plan/tasks
@@ -236,8 +256,9 @@ This creates a deliberate split in what happens where:
   for the substantive work — and, for flips a delegated subagent would
   otherwise perform on completion (`tasked→implemented`), is deliberately
   held until the coordinating conversation confirms (`git merge-base
-  --is-ancestor <reported-branch> main`) the worktree's branch has actually
-  merged. `features.md` never claims "implemented" before the code has
+  --is-ancestor <worktree_branch> main`, reading `worktree_branch:` from
+  the tasks file) the worktree's branch has actually merged. `features.md`
+  never claims "implemented" before the code has
   landed. (In practice that confirming conversation is often gone by the
   time a merge actually happens, leaving the flip permanently pending — see
   the orphaned-completion-flip note below for how this is caught.)
@@ -252,7 +273,10 @@ This creates a deliberate split in what happens where:
 **Orphaned-completion-flip detection.** `scripts/completion-flip-check.sh`
 (sibling to `sibling-tasks-complete.sh`, same purpose-built deterministic
 check pattern) is what catches the case above: given a `status: completed`
-tasks file, it resolves its plan's `branch:` and `features:` frontmatter,
+tasks file, it reads its own `worktree_branch:` frontmatter if present (the
+branch delegated work actually happened on, per the note above) — falling
+back to its plan's `branch:` field only when `worktree_branch:` is absent
+(the non-delegated/inline case) — and its plan's `features:` frontmatter,
 checks `git merge-base --is-ancestor <branch> <default>`, and — if the
 branch has merged but a bound feature is still `Status: tasked` in
 `features.md` — reports the slug. `/ardd-analyze` runs it against every

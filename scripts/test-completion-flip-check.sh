@@ -60,18 +60,16 @@ EOF
 }
 
 write_tasks() {
-  # $1 = repo, $2 = status
+  # $1 = repo, $2 = status, $3 = optional worktree_branch value
   mkdir -p "$1/.project/tasks"
-  cat > "$1/.project/tasks/tasks-demo-0000.md" <<EOF
----
-plan: plan-demo-2026-07-05.md
-generated: 2026-07-05
-status: $2
----
-
-# Tasks
-- [x] T001 [artifacts: constitution] Demo task
-EOF
+  {
+    printf -- '---\n'
+    printf 'plan: plan-demo-2026-07-05.md\n'
+    printf 'generated: 2026-07-05\n'
+    printf 'status: %s\n' "$2"
+    [ -n "$3" ] && printf 'worktree_branch: %s\n' "$3"
+    printf -- '---\n\n# Tasks\n- [x] T001 [artifacts: constitution] Demo task\n'
+  } > "$1/.project/tasks/tasks-demo-0000.md"
 }
 
 # --- shared repo setup: main with one commit ---
@@ -119,5 +117,30 @@ write_features "$repo" "tasked"
 write_plan "$repo" "merged-branch" "[]"
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
 assert_eq "case6: no bound features -> silent" "" "$out"
+
+# --- Case 7 (delegated scenario): plan's own branch: field is a name that
+# was never created/merged (the ephemeral-name-mismatch bug), but the
+# tasks file's worktree_branch: (a DIFFERENT, real branch) IS merged and
+# the feature is still tasked -> must follow worktree_branch, print slug ---
+git checkout -q -b agent-actual-branch
+git commit -q --allow-empty -m "actual delegated work"
+git checkout -q main
+git merge -q agent-actual-branch -m "merge agent-actual-branch"
+write_features "$repo" "tasked"
+write_plan "$repo" "never-created-branch" "[demo-feature]"
+write_tasks "$repo" "completed" "agent-actual-branch"
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+assert_eq "case7: delegated — follows worktree_branch, not plan.branch" "demo-feature" "$out"
+
+# --- Case 8: same as case 7, but worktree_branch is unmerged -> silent,
+# even though plan.branch is unrelated/nonexistent (would be a false
+# negative either way, but confirms worktree_branch is actually consulted
+# rather than always falling back) ---
+git checkout -q -b agent-unmerged-branch
+git commit -q --allow-empty -m "unmerged delegated work"
+git checkout -q main
+write_tasks "$repo" "completed" "agent-unmerged-branch"
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+assert_eq "case8: delegated, worktree_branch unmerged -> silent" "" "$out"
 
 exit "$fail"

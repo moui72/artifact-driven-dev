@@ -53,13 +53,18 @@ self-contained; the agent loads only the artifacts it declares.
    one: it branches from the current commit, which already carries step 2's
    flip) — do not pre-create a worktree via any other script first, and do
    not ask the user to name it; the branch name isn't chosen, it's reported
-   back in the subagent's result. Record that returned branch name — step
-   11 needs it for the merge check. The subagent runs independently and
-   reports back (tasks completed, current state, its worktree branch) when
-   done; the coordinating conversation is free to do other things while it
-   runs, but see step 11 for what it must still do once the subagent
-   finishes. On no, continue step 4 onward inline, without delegating —
-   behavior is unchanged from before this gate existed.
+   back in the subagent's result. The subagent runs independently; the
+   coordinating conversation is free to do other things while it runs.
+
+   **As soon as the subagent reports back** (whether or not all tasks are
+   done yet), write its reported branch name into the tasks file's
+   frontmatter as `worktree_branch: <branch>` and commit that to the
+   current (default) branch immediately — do not hold this only in
+   conversation memory. This is what lets step 11 (or, if this conversation
+   ends first, a completely separate later run) still find the right
+   branch on disk. On no, continue step 4 onward inline, without
+   delegating — behavior is unchanged from before this gate existed, and no
+   `worktree_branch:` is written.
 
 4. **Find the next uncompleted task** (first `- [ ]` in document order) in
    the chosen file. (Its status is already `in-progress` by this point, per
@@ -113,19 +118,21 @@ self-contained; the agent loads only the artifacts it declares.
 
 11. **(Coordinating conversation only, after a delegated subagent reports
     done.)** If the subagent's tasks file is `completed` with pending
-    feature flips (step 8), check whether the subagent's *actual reported
-    worktree branch* (from step 3 — not a name anyone chose, since
-    `isolation: "worktree"` picks its own) has already been merged:
-    `git merge-base --is-ancestor <that branch> main`. If it has, load the
-    plan and perform the `tasked→implemented` flip in
-    `.project/artifacts/features.md` on `main` immediately — the same
-    mechanics as step 8's inline case, just performed here instead. If it
-    hasn't been merged yet, tell the user the flip is pending merge and do
-    not write it; re-check the next time this conversation revisits the
-    branch. This is what keeps `features.md` from claiming "implemented"
-    before the code has actually landed on the default branch — checking
-    against the wrong branch here (e.g. a name nobody actually committed
-    to) would silently defeat the entire point of this step.
+    feature flips (step 8), read `worktree_branch:` from the tasks file's
+    frontmatter (written to disk in step 3 — not held only in memory, so
+    this works even if a different conversation ends up running this step)
+    and check whether it has already been merged: `git merge-base
+    --is-ancestor <worktree_branch> main`. If it has, load the plan and
+    perform the `tasked→implemented` flip in `.project/artifacts/
+    features.md` on `main` immediately — the same mechanics as step 8's
+    inline case, just performed here instead. If it hasn't been merged yet,
+    tell the user the flip is pending merge and do not write it; re-check
+    the next time this conversation (or `/ardd-analyze`'s
+    `completion-flip-check.sh`) revisits the branch. This is what keeps
+    `features.md` from claiming "implemented" before the code has actually
+    landed on the default branch — checking against the wrong branch here
+    (e.g. the plan's own `branch:` field, which records something
+    unrelated) would silently defeat the entire point of this step.
 
 ## Rules
 
