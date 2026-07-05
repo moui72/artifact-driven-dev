@@ -212,7 +212,7 @@ incorrectly, by the default path itself.
   non-delegated ("No, continue on the current branch") path, where
   `git checkout -b <name>` is still used.
 
-- [ ] T019 [artifacts: constitution] Remove `scripts/worktree-info.sh` and
+- [x] T019 [artifacts: constitution] Remove `scripts/worktree-info.sh` and
   `scripts/test-worktree-info.sh` — per Constitution Principle VIII (check
   tool idioms before building custom mechanism), it duplicates what
   `Agent`'s `isolation: "worktree"` already does, and after T018 no skill

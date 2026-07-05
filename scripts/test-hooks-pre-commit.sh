@@ -33,7 +33,6 @@ fail=0
 stub lint-docs.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 0
-stub test-worktree-info.sh 0
 stub test-completion-flip-check.sh 0
 stub test-sibling-tasks-complete.sh 0
 stub test-sync-slug-match.sh 0
@@ -54,7 +53,6 @@ rm -f /tmp/hook-case1.out
 stub lint-docs.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 1
-stub test-worktree-info.sh 0
 stub test-completion-flip-check.sh 0
 stub test-sibling-tasks-complete.sh 0
 stub test-sync-slug-match.sh 0
@@ -83,7 +81,6 @@ exit 0
 EOF
 chmod +x "$WORK/scripts/test-lint-project.sh"
 stub test-branch-info.sh 0
-stub test-worktree-info.sh 0
 stub test-completion-flip-check.sh 0
 stub test-sibling-tasks-complete.sh 0
 stub test-sync-slug-match.sh 0

@@ -24,8 +24,6 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
 ./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
-./scripts/worktree-info.sh create <slug> [dir] # create/locate a worktree branched from the default branch's tip (used by ardd-implement/converge only — ardd-plan never delegates)
-./scripts/test-worktree-info.sh        # regression test for worktree-info.sh (idempotency, branches-from-default-tip)
 ./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, features.md not updated); used by ardd-analyze
 ./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
@@ -51,8 +49,7 @@ repo only (`scripts/lint-docs.sh`, its CI job, `tests/fixtures/`,
 repo's own `.project/`). Others are installed by `install.sh` into a
 *target* project and run there (every `skills/*/SKILL.md`, the constitution
 suggestion catalog, artifact templates, migrations, `scripts/lint-project.sh`,
-`scripts/branch-info.sh`, `scripts/worktree-info.sh`,
-`scripts/completion-flip-check.sh`). When adding a new deterministic check, decide
+`scripts/branch-info.sh`, `scripts/completion-flip-check.sh`). When adding a new deterministic check, decide
 which side it belongs to before writing it — a check against *this* repo's
 own files (docs, skill names) is source-side; a check against a *target*
 project's generated `.project/` state ships via `install.sh`.
@@ -176,12 +173,13 @@ three skills still need the same edit.
 **State-commit-before-branch: coarse state lands on the default branch
 immediately, fine-grained work is delegated to a worktree.**
 `ardd-implement` and `ardd-converge` are the long-running,
-code-producing skills — their branch-gate step defaults to creating a
-worktree via `scripts/worktree-info.sh` (sibling to `branch-info.sh`, same
-shared-deterministic-half/judgment-stays-in-prose split: it creates or
-locates a worktree branched from the default branch's *current tip*,
-nothing more) and delegating the substantive work to a subagent (`Agent`
-tool, `isolation: "worktree"`).
+code-producing skills — their branch-gate step defaults to delegating the
+substantive work to a subagent via the `Agent` tool's own `isolation:
+"worktree"`. There is no custom script for this part: a hand-built
+`worktree-info.sh` was tried first and removed (see below) after turning
+out to duplicate what the tool already does, incompatibly — Constitution
+Principle VIII exists precisely to catch this before it's built, not just
+after.
 
 `ardd-plan` and `ardd-tasks` are both exceptions, for related but distinct
 reasons. `ardd-tasks` has no branch-gate step at all — its own actions
@@ -201,16 +199,33 @@ worktrees). This was caught and reverted after initially being implemented
 the other way — worth remembering if the temptation to "make plan
 consistent with implement/converge" comes up again.
 
-For the two skills that *do* delegate, satisfying `worktree-info.sh`'s own
-precondition — any state flip is committed to the default branch before
-the worktree is created — is a real ordering requirement, not a suggestion:
-each reorders its steps so the tasks file is selected and, if this is the
-first task in it, flipped `ready→in-progress` and committed *before* the
-branch-gate/delegation step runs, so the worktree it creates is branched
-from a commit that already carries the flip. `ardd-converge` has no
-equivalent flip to pre-commit (its own completed/in-progress outcome isn't
-knowable until after the reconciliation work runs), but still picks its
-tasks file before the delegation decision, for the same structural reason.
+For the two skills that *do* delegate, getting the coarse flip committed
+before the worktree is created is a real ordering requirement, not a
+suggestion: each reorders its steps so the tasks file is selected and, if
+this is the first task in it, flipped `ready→in-progress` and committed
+*before* the branch-gate/delegation step runs — since `isolation:
+"worktree"` branches from whatever commit is currently checked out, this
+ordering is what makes the delegated subagent's worktree start from a
+commit that already carries the flip, with no separate script needed to
+enforce it. `ardd-converge` has no equivalent flip to pre-commit (its own
+completed/in-progress outcome isn't knowable until after the reconciliation
+work runs), but still picks its tasks file before the delegation decision,
+for the same structural reason.
+
+`isolation: "worktree"` creates and names its own worktree/branch — there
+is no parameter to point it at a pre-made one, and the branch name is only
+known from what the subagent's result reports back, never chosen up
+front. This is why the branch-gate step no longer offers to name the
+worktree the way it once did for a plain `git checkout -b`, and why the
+post-merge completion-flip step (below) checks the *actual reported
+branch*, not a name anyone picked. Getting this wrong once already
+produced a real bug: an earlier version called a separate script to make
+one branch, delegated via `Agent` (which silently made a *different* one),
+and then checked merge-ancestry against the first, empty branch — which
+trivially reported "merged" and flipped `features.md` to `implemented`
+while the real code sat unmerged elsewhere. Any future change to this
+delegation step must keep the reported-branch value as the one used in the
+merge check, or this exact failure mode comes back.
 
 This creates a deliberate split in what happens where:
 - **Coarse, cross-cutting state** (`features.md` `Status`, plan/tasks
@@ -221,11 +236,11 @@ This creates a deliberate split in what happens where:
   for the substantive work — and, for flips a delegated subagent would
   otherwise perform on completion (`tasked→implemented`), is deliberately
   held until the coordinating conversation confirms (`git merge-base
-  --is-ancestor <branch> main`) the worktree's branch has actually merged.
-  `features.md` never claims "implemented" before the code has landed. (In
-  practice that confirming conversation is often gone by the time a merge
-  actually happens, leaving the flip permanently pending — see the
-  orphaned-completion-flip note below for how this is caught.)
+  --is-ancestor <reported-branch> main`) the worktree's branch has actually
+  merged. `features.md` never claims "implemented" before the code has
+  landed. (In practice that confirming conversation is often gone by the
+  time a merge actually happens, leaving the flip permanently pending — see
+  the orphaned-completion-flip note below for how this is caught.)
 - **Fine-grained, single-owner state** (a tasks file's own
   `ready→in-progress→completed` transitions, individual task checkboxes) has
   no cross-branch conflict risk — nothing else concurrently edits the same
