@@ -202,7 +202,7 @@ returns true and `/ardd-analyze`'s new orphaned-flip detector would never
 catch it, because `features.md` gets flipped to `implemented` immediately,
 incorrectly, by the default path itself.
 
-- [ ] T018 [artifacts: constitution] Fix `/ardd-implement` and
+- [x] T018 [artifacts: constitution] Fix `/ardd-implement` and
   `/ardd-converge`'s delegation step: delegate via `Agent` with
   `isolation: "worktree"` directly (no `worktree-info.sh` call in this
   path) and capture the branch name it returns in its result. Use *that*

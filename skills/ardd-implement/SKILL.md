@@ -39,29 +39,27 @@ self-contained; the agent loads only the artifacts it declares.
    overlapping state flips to the default branch is exactly what this
    coordination check exists to catch.
 
-   Then suggest a worktree — a semantic kebab-case slug derived from the
-   conversation/tasks file if the topic is clear, otherwise a short arbitrary
-   slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`). Default the
-   suggested answer to "yes" (executing tasks is exactly the kind of
-   long-running, code-producing work this gate exists to isolate). Ask the
-   user:
-   - "Yes, create a worktree for `<suggested-name>`"
-   - "Yes, create a worktree, but name it: ___"
+   Then ask the user, defaulting the suggested answer to "yes" (executing
+   tasks is exactly the kind of long-running, code-producing work this gate
+   exists to isolate):
+   - "Yes, delegate to a subagent in an isolated worktree"
    - "No, continue on the current branch without a worktree"
 
-   On yes, run `.claude/skills/ardd-scripts/worktree-info.sh create <name>`
-   to create (or locate) the worktree — branching from the commit step 2
-   just made, satisfying `worktree-info.sh`'s own precondition that any
-   state flip is committed to the default branch before it's called — then
-   delegate step 4 onward to a subagent (`Agent` tool, `isolation:
-   "worktree"`, pointed at the printed path) — give it this skill's
-   remaining steps verbatim as its instructions, along with the chosen
-   tasks file and current task pointer. The subagent runs independently and
-   reports back (tasks completed, current state) when done; the
-   coordinating conversation is free to do other things while it runs, but
-   see step 11 for what it must still do once the subagent finishes. On no,
-   continue step 4 onward inline, without delegating — behavior is
-   unchanged from before this gate existed.
+   On yes, delegate step 4 onward to a subagent using the `Agent` tool with
+   `isolation: "worktree"` — give it this skill's remaining steps verbatim
+   as its instructions, along with the chosen tasks file and current task
+   pointer. `isolation: "worktree"` creates its own worktree and branch
+   (there's no parameter to point it at a pre-made one, and no need for
+   one: it branches from the current commit, which already carries step 2's
+   flip) — do not pre-create a worktree via any other script first, and do
+   not ask the user to name it; the branch name isn't chosen, it's reported
+   back in the subagent's result. Record that returned branch name — step
+   11 needs it for the merge check. The subagent runs independently and
+   reports back (tasks completed, current state, its worktree branch) when
+   done; the coordinating conversation is free to do other things while it
+   runs, but see step 11 for what it must still do once the subagent
+   finishes. On no, continue step 4 onward inline, without delegating —
+   behavior is unchanged from before this gate existed.
 
 4. **Find the next uncompleted task** (first `- [ ]` in document order) in
    the chosen file. (Its status is already `in-progress` by this point, per
@@ -115,15 +113,19 @@ self-contained; the agent loads only the artifacts it declares.
 
 11. **(Coordinating conversation only, after a delegated subagent reports
     done.)** If the subagent's tasks file is `completed` with pending
-    feature flips (step 8), check whether its worktree branch has already
-    been merged: `git merge-base --is-ancestor <branch> main`. If it has,
-    load the plan and perform the `tasked→implemented` flip in
+    feature flips (step 8), check whether the subagent's *actual reported
+    worktree branch* (from step 3 — not a name anyone chose, since
+    `isolation: "worktree"` picks its own) has already been merged:
+    `git merge-base --is-ancestor <that branch> main`. If it has, load the
+    plan and perform the `tasked→implemented` flip in
     `.project/artifacts/features.md` on `main` immediately — the same
     mechanics as step 8's inline case, just performed here instead. If it
     hasn't been merged yet, tell the user the flip is pending merge and do
     not write it; re-check the next time this conversation revisits the
     branch. This is what keeps `features.md` from claiming "implemented"
-    before the code has actually landed on the default branch.
+    before the code has actually landed on the default branch — checking
+    against the wrong branch here (e.g. a name nobody actually committed
+    to) would silently defeat the entire point of this step.
 
 ## Rules
 

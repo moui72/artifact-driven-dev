@@ -36,24 +36,24 @@ when resuming work in a new session.
    overlapping state flips to the default branch is exactly what this
    coordination check exists to catch.
 
-   Then suggest a worktree — a semantic kebab-case slug derived from the
-   chosen tasks file if the topic is clear, otherwise a short arbitrary
-   slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`). Default the
-   suggested answer to "yes" (reconciling a tasks file against the codebase
-   can run long, same as `/ardd-implement`). Ask the user:
-   - "Yes, create a worktree for `<suggested-name>`"
-   - "Yes, create a worktree, but name it: ___"
+   Then ask the user, defaulting the suggested answer to "yes" (reconciling
+   a tasks file against the codebase can run long, same as
+   `/ardd-implement`):
+   - "Yes, delegate to a subagent in an isolated worktree"
    - "No, continue on the current branch without a worktree"
 
-   On yes, run `.claude/skills/ardd-scripts/worktree-info.sh create <name>`
-   to create (or locate) the worktree, then delegate step 3 onward to a
-   subagent (`Agent` tool, `isolation: "worktree"`, pointed at the printed
-   path) — give it this skill's remaining steps verbatim as its
-   instructions, along with the chosen tasks file. The subagent runs
-   independently and reports back when done; the coordinating conversation
-   is free to do other things while it runs, but see step 9 for what it
-   must still do once the subagent finishes. On no, continue step 3 onward
-   inline, without delegating.
+   On yes, delegate step 3 onward to a subagent using the `Agent` tool with
+   `isolation: "worktree"` — give it this skill's remaining steps verbatim
+   as its instructions, along with the chosen tasks file. `isolation:
+   "worktree"` creates its own worktree and branch (there's no parameter to
+   point it at a pre-made one) — do not pre-create a worktree via any other
+   script first, and do not ask the user to name it; the branch name is
+   reported back in the subagent's result. Record that returned branch
+   name — step 9 needs it for the merge check. The subagent runs
+   independently and reports back (including its worktree branch) when
+   done; the coordinating conversation is free to do other things while it
+   runs, but see step 9 for what it must still do once the subagent
+   finishes. On no, continue step 3 onward inline, without delegating.
 
 3. **Load the chosen file.** Identify all tasks marked `- [x]` (complete) and
    `- [ ]` (incomplete).
@@ -111,12 +111,13 @@ when resuming work in a new session.
 
 9. **(Coordinating conversation only, after a delegated subagent reports
    done.)** If the subagent's tasks file is `completed` with pending feature
-   flips (step 7), check whether its worktree branch has already been
-   merged: `git merge-base --is-ancestor <branch> main`. If it has, load the
-   plan and perform the `tasked→implemented` flip in
-   `.project/artifacts/features.md` on `main` immediately — the same
-   mechanics as step 7's inline case, just performed here instead. If it
-   hasn't been merged yet, tell the user the flip is pending merge and do
-   not write it. As with `/ardd-implement`, the tasks file's own
-   `→completed` flip (step 7) is *not* relocated — it's plan-specific with
+   flips (step 7), check whether the subagent's *actual reported worktree
+   branch* (from step 2 — not a name anyone chose, since `isolation:
+   "worktree"` picks its own) has already been merged: `git merge-base
+   --is-ancestor <that branch> main`. If it has, load the plan and perform
+   the `tasked→implemented` flip in `.project/artifacts/features.md` on
+   `main` immediately — the same mechanics as step 7's inline case, just
+   performed here instead. If it hasn't been merged yet, tell the user the
+   flip is pending merge and do not write it. As with `/ardd-implement`,
+   the tasks file's own `→completed` flip (step 7) is *not* relocated — it's plan-specific with
    no cross-branch conflict risk, so it stays immediate/in-worktree.
