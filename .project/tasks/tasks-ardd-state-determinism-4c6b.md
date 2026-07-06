@@ -95,7 +95,7 @@ same commit.
 
 ## Phase 3: Rewire skills to ardd-state.sh (big-bang, after Phase 2; one commit per field-group)
 
-- [ ] T013 [artifacts: constitution] Rewire plan/feedback bookkeeping:
+- [x] T013 [artifacts: constitution] Rewire plan/feedback bookkeeping:
   `skills/ardd-plan/SKILL.md` (feedback `[x]`/`[-]` marks →
   `feedback-mark`, status flip → `feedback-planned`, plan supersession →
   `plan-flip`, slug/filename generation → `slug`/`mint`) and

@@ -33,9 +33,16 @@ notes in the next message.
    `/ardd-plan` the item needs an artifact-revision task, not just a code
    change.
 
-4. **Write** `.project/feedback/feedback-<slug>-<hex>.md`, where `<slug>` is
-   the current branch name (sanitized, ~30 chars) or a short topic slug, and
-   `<hex>` is a freshly generated 4-char token (`openssl rand -hex 2`):
+4. **Write** the feedback file. Choose `<slug>` (the current branch name
+   or a short topic slug — sanitize either via
+   `.claude/skills/ardd-scripts/ardd-state.sh slug "<text>"`), then mint
+   the filename deterministically:
+
+   ```
+   .claude/skills/ardd-scripts/ardd-state.sh mint feedback <slug>
+   ```
+
+   Write to `.project/feedback/<that filename>`:
 
    ```yaml
    ---

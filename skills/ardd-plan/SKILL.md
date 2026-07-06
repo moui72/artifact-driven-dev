@@ -7,7 +7,7 @@ conflicts.
 
 Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
 <slug> [<slug> ...]` additionally targets one or more backlogged feature
-entries from `.project/artifacts/features.md` — this is where a feature
+entries from the feature register (`.project/features/`) — this is where a feature
 idea's artifact design work actually happens (`/ardd-feature` only logs the
 idea; it doesn't touch artifacts).
 
@@ -17,7 +17,8 @@ idea; it doesn't touch artifacts).
    `current`, `default`, and `on_default`.
 
    If `on_default` is `false`, skip to step 2 and derive `<slug>` from
-   `current` (lowercase, non-alphanumeric runs → `-`, truncate to ~30 chars).
+   `current` via `.claude/skills/ardd-scripts/ardd-state.sh slug "<current>"`
+   (deterministic kebab sanitization — don't hand-derive it).
 
    If `on_default` is `true`, suggest a branch name — a semantic kebab-case
    slug derived from the conversation/artifacts if the topic is clear,
@@ -62,8 +63,9 @@ idea; it doesn't touch artifacts).
    artifact changes now — this absorbs what `/ardd-feature` used to do
    eagerly, deferred to the moment you actually choose to work an idea:
 
-   a. **Look up each slug** in `.project/artifacts/features.md`. If a slug
-      isn't found, tell the user and stop. If a slug's `Status` isn't
+   a. **Look up each slug** in the feature register — read
+      `.project/features/<slug>.md` and its frontmatter `status`. If the
+      file doesn't exist, tell the user and stop. If its status isn't
       `backlogged` (e.g. already `planned`/`tasked`/`implemented`), tell the
       user it's already past the backlog stage and stop — this skill only
       designs features forward from `backlogged`; to revise a feature already
@@ -76,7 +78,7 @@ idea; it doesn't touch artifacts).
       `features:` list — if a targeted slug appears there, print an advisory
       (never blocking): the slug already has work in flight on that
       worktree/branch, and planning it again here may produce conflicting
-      designs. The `features.md` visible on this branch can't show that —
+      designs. The register visible on this branch can't show that —
       under worktree-native state, in-flight status rides the other
       worktree's branch until merge.
 
@@ -123,10 +125,12 @@ idea; it doesn't touch artifacts).
         doesn't resolve (genuine undecided-design-question gaps only — point
         to `DEFECTS.md`/`/ardd-verify` for known code-vs-artifact violations
         instead of narrating them into the artifact body).
-      - Update frontmatter on each changed artifact: `last_updated`,
-        `status` (`draft` if new open questions were introduced, else
-        `stable`), and `diagram_status: stale` for renderable artifacts
-        (unless currently `unrendered`).
+      - Update frontmatter on each changed artifact via
+        `.claude/skills/ardd-scripts/ardd-state.sh stamp <file> ...`:
+        `last_updated <today>`, and `diagram_status stale` for renderable
+        artifacts (unless currently `unrendered`). The `status` field
+        (`draft` if new open questions were introduced, else `stable`) is
+        a judgment call — set it while editing the artifact body.
 
    e. **Run a scoped cross-artifact check** — the same checks as
       `/ardd-analyze` steps 2–4, scoped to the artifacts just changed: verify
@@ -156,17 +160,29 @@ idea; it doesn't touch artifacts).
    negotiation above is the only place the accept/decline decision for each
    item exists; a plan document only ever records *accepted* items (as
    tasks), so deferring this to approval would lose declined items with no
-   way to recover their `[-]` marking later. For each loaded file: mark each
-   item `[x]` if it was incorporated into the plan, or `[-]` if the user
-   declined an override — mirroring `critique.md`'s resolution convention.
-   Once every item in a file is `[x]` or `[-]`, flip that file's `status` to
-   `planned` and set its `plan:` field to the plan filename you'll write in
-   step 8 (`plan-<slug>-<today's date>.md` — both already known at this
-   point). Planned feedback files are not edited further and become a
-   historical record of what prompted the plan. If any item is still
-   unresolved (e.g. the user wants to think about a declined override more),
-   leave the file's `status` as `open` so the next `/ardd-plan` run picks up
-   the remainder.
+   way to recover their declined marking later. The decision of *what* to
+   accept or decline is judgment; the marking itself is script-performed
+   (constitution Principle II). For each item, by its `F###` ID:
+
+   ```
+   .claude/skills/ardd-scripts/ardd-state.sh feedback-mark <file> <F-id> x   # incorporated
+   .claude/skills/ardd-scripts/ardd-state.sh feedback-mark <file> <F-id> -   # declined
+   ```
+
+   Once every item in a file is resolved, flip it and stamp the consuming
+   plan in one validated step (it refuses if anything is still unresolved):
+
+   ```
+   .claude/skills/ardd-scripts/ardd-state.sh feedback-planned <file> <plan-filename>
+   ```
+
+   The plan filename is already known at this point — mint it now (step 9
+   reuses it): `.claude/skills/ardd-scripts/ardd-state.sh mint plan <slug>`.
+   Planned feedback files are not edited further and become a historical
+   record of what prompted the plan. If any item is still unresolved (e.g.
+   the user wants to think about a declined override more), skip
+   `feedback-planned` — the file stays `open` and the next `/ardd-plan` run
+   picks up the remainder.
 
 5. **Check `.project/DEFECTS.md` for unaddressed defects**, if present. Each
    listed defect gets a stable identifier — a short hash of its description
@@ -191,7 +207,7 @@ idea; it doesn't touch artifacts).
 7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
    plan you're about to draft supersedes one of them. On confirmation, flip
-   that plan's `status` to `superseded` immediately — don't wait for this
+   that plan's status to `superseded` immediately via `.claude/skills/ardd-scripts/ardd-state.sh plan-flip <file> superseded` — don't wait for this
    new plan's own approval, which now happens later, when `/ardd-tasks`
    selects it. A superseded-by-a-draft-that's-never-used plan is
    an acceptable outcome, not a bug: `/ardd-analyze`/`STATUS.md` surface
@@ -240,5 +256,5 @@ idea; it doesn't touch artifacts).
     to `planned`) and generates its tasks, in one step.
 
     Run `/ardd-analyze` now to refresh `STATUS.md`'s recommended next step —
-    artifacts and/or `features.md` changed in this run, so don't wait for the
+    artifacts and/or the feature register changed in this run, so don't wait for the
     user to ask for it.
