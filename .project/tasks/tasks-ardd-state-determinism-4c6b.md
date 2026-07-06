@@ -68,7 +68,7 @@ same commit.
   enforces backlogged→planned→tasked→implemented ordering;
   `feature-field` sets `plan`/`tasks`/`gh_issue`. Tests first (good;
   bad: duplicate create, illegal flip, unknown slug).
-- [ ] T009 `stamp <artifact-file> last_updated|diagram_status <value>`:
+- [x] T009 `stamp <artifact-file> last_updated|diagram_status <value>`:
   frontmatter stamping with enum validation (`diagram_status`:
   unrendered|stale|current). Tests first.
 - [ ] T010 Update `scripts/lint-project.sh` to validate the per-feature

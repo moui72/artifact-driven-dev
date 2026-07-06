@@ -260,4 +260,35 @@ set +e
 set -e
 assert_exit "feature-field: unknown key usage error" 2 "$rc"
 
+# --- stamp ---
+ART="$WORK/p2/.project/artifacts"; mkdir -p "$ART"
+AF="$ART/datamodel.md"
+cat > "$AF" <<'EOF'
+---
+name: datamodel
+status: stable
+last_updated: 2026-07-01
+---
+# Datamodel
+EOF
+sh "$STATE" stamp "$AF" last_updated 2026-07-06 >/dev/null
+assert_file_grep "stamp: last_updated replaced" "^last_updated: 2026-07-06" "$AF"
+set +e
+sh "$STATE" stamp "$AF" last_updated 'not-a-date' >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bad date refused" 1 "$rc"
+sh "$STATE" stamp "$AF" diagram_status stale >/dev/null
+assert_file_grep "stamp: diagram_status added into frontmatter" "^diagram_status: stale" "$AF"
+fmend="$(grep -n '^---$' "$AF" | sed -n 2p | cut -d: -f1)"
+dsline="$(grep -n '^diagram_status:' "$AF" | cut -d: -f1)"
+[ "$dsline" -lt "$fmend" ] && ok "stamp: added inside frontmatter" || bad "stamp: added inside frontmatter — line $dsline vs closing --- at $fmend"
+set +e
+sh "$STATE" stamp "$AF" diagram_status bogus >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bad diagram_status refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$AF" name other >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: unknown key usage error" 2 "$rc"
+
 exit "$fail"

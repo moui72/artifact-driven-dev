@@ -45,7 +45,22 @@ Deterministic state mutations for .project/ files. Subcommands:
                            backlogged->planned->tasked->implemented
   feature-field <slug> <plan|tasks|gh_issue> <value>
                            set an optional frontmatter field (add or replace)
+  stamp <file> last_updated <YYYY-MM-DD>
+  stamp <file> diagram_status <unrendered|stale|current>
+                           set an artifact frontmatter field (add or replace)
 EOF
+}
+
+# set_frontmatter <file> <key> <value> — replace, or insert before closing ---
+set_frontmatter() {
+  if grep -q "^$2:" "$1"; then
+    sed -i.arddbak "s|^$2:.*|$2: $3|" "$1" && rm -f "$1.arddbak"
+  else
+    awk -v k="$2" -v v="$3" '
+      /^---$/ { c++; if (c == 2) { print k ": " v } }
+      { print }
+    ' "$1" > "$1.arddtmp" && mv "$1.arddtmp" "$1"
+  fi
 }
 
 die()  { echo "ardd-state: $1" >&2; exit 1; }
@@ -248,16 +263,31 @@ cmd_feature_field() {
   esac
   f="$(feature_file "$slug")"
   [ -f "$f" ] || die "feature-field: no such feature: $f"
-  if grep -q "^$key:" "$f"; then
-    sed -i.arddbak "s|^$key:.*|$key: $val|" "$f" && rm -f "$f.arddbak"
-  else
-    # insert before the closing --- of the frontmatter (2nd --- line)
-    awk -v k="$key" -v v="$val" '
-      /^---$/ { c++; if (c == 2) { print k ": " v } }
-      { print }
-    ' "$f" > "$f.arddtmp" && mv "$f.arddtmp" "$f"
-  fi
+  set_frontmatter "$f" "$key" "$val"
   echo "feature-field: $slug $key = $val"
+}
+
+cmd_stamp() {
+  file="${1:-}"; key="${2:-}"; val="${3:-}"
+  [ -n "$file" ] && [ -n "$key" ] && [ -n "$val" ] || dieu "stamp: need <file> <key> <value>"
+  [ -f "$file" ] || die "stamp: no such file: $file"
+  case "$key" in
+    last_updated)
+      case "$val" in
+        [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+        *) die "stamp: last_updated must be YYYY-MM-DD, got '$val'" ;;
+      esac
+      ;;
+    diagram_status)
+      case "$val" in
+        unrendered|stale|current) ;;
+        *) dieu "stamp: diagram_status must be unrendered|stale|current, got '$val'" ;;
+      esac
+      ;;
+    *) dieu "stamp: key must be last_updated|diagram_status, got '$key'" ;;
+  esac
+  set_frontmatter "$file" "$key" "$val"
+  echo "stamp: $file $key = $val"
 }
 
 cmd="${1:-}"
@@ -269,6 +299,7 @@ case "$cmd" in
   feature-create) cmd_feature_create "$@" ;;
   feature-flip) cmd_feature_flip "$@" ;;
   feature-field) cmd_feature_field "$@" ;;
+  stamp) cmd_stamp "$@" ;;
   feedback-mark) cmd_feedback_mark "$@" ;;
   feedback-planned) cmd_feedback_planned "$@" ;;
   mint) cmd_mint "$@" ;;
