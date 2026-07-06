@@ -1,7 +1,7 @@
 ---
 plan: plan-ardd-state-determinism-2026-07-06.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-06
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -183,7 +183,7 @@ same commit.
 
 ## Phase 7: Bookkeeping
 
-- [ ] T023 [parallel] Record the mechanization non-goals in CLAUDE.md
+- [x] T023 [parallel] Record the mechanization non-goals in CLAUDE.md
   (short list: critique.md staleness compare, STATUS.md count assembly,
   ardd-sync `gh` glue, `core.bare` one-liner, judgment steps —
   deliberately not scripted per Principle VI) so they stop resurfacing.

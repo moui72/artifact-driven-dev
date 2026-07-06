@@ -354,6 +354,18 @@ value passed back — analyze re-derives everything itself from disk, same as
 if the user had typed it. See `/ardd-analyze`'s own SKILL.md for the
 canonical list of which skills do this.
 
+**Mechanization non-goals (audited 2026-07-06, deliberately NOT scripted
+per Principle VI).** A determinism audit that produced `ardd-state.sh`,
+`defects-unsurfaced.sh`, `tasks-list.sh`, and `upsert-section.sh` also
+explicitly rejected these — don't re-propose scripting them without new
+evidence: `critique.md`'s staleness date-compare (advisory, low blast
+radius); STATUS.md count assembly (its counts are byproducts of the
+scripts above); `ardd-sync`'s remaining `gh` glue (error handling needs
+judgment; the decisions are already in the three `sync-*.sh` scripts);
+the post-delegation `core.bare` check (a one-line `git config --get`);
+and all genuine-judgment steps (Mermaid diagram content, feature naming,
+converge's gap identification).
+
 ## Conventions
 
 - **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `refactor:`,
