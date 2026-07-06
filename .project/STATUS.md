@@ -14,11 +14,15 @@ None.
 
 ## Code-vs-Artifact Defects
 
-No defects found — see `DEFECTS.md`, last checked 2026-07-05. Since then
-the constitution was amended to v1.2.0 (Principle II extended to state
-mutations; behavioral smoke-test tier; per-feature register standing
-decision) and the implementing work landed on this branch — run
-`/ardd-verify` after merge to confirm code and constitution still agree.
+2 defects — see `DEFECTS.md`, last checked 2026-07-06 (post-v1.2.0
+verify): (1) **broken-contract** — migrations 0001/0002 use BSD-only
+`sed -i ''`, which breaks `install.sh` on Linux targets with pre-0002
+state (predates this plan; missed by the 2026-07-05 run; neither has a
+fixture test, which is why ubuntu CI never caught it); (2) **drift** —
+the v1.2.0 behavioral-smoke-test standard says "required for
+state-mutating skill paths" but only one scenario exists. The next
+`/ardd-plan` run surfaces both via `defects-unsurfaced.sh`. All other
+spot-checks passed. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
@@ -56,6 +60,8 @@ Merged. The plan's tasks file is `completed` (23/23); what landed:
   until the `ANTHROPIC_API_KEY` secret is provisioned (deliberate);
   promotion = provision the secret + drop `continue-on-error`
 
-Next: push `main` when ready (all commits signed), run `/ardd-verify`
-to confirm code vs. the v1.2.0 constitution, then plan the docs half via
-`/ardd-plan feedback-repo-critique-docs-ca1d.md`.
+Pushed and verified. Next:
+`/ardd-plan feedback-repo-critique-docs-ca1d.md` for the docs half of
+the critique — that run will also surface the two new DEFECTS.md entries
+(via `defects-unsurfaced.sh`) and offer fix tasks; the sed -i
+portability fix is small and worth accepting into that plan.
