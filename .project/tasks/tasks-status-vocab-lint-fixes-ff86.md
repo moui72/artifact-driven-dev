@@ -39,7 +39,7 @@ exception. Mutations via `.claude/skills/ardd-scripts/ardd-state.sh`.
   note; the file flips to planned when every item is resolved — the
   leftover open item is exactly why it can't flip yet). T003's default
   wording stands.]
-- [ ] T003 lint-project.sh pointed status messages, test-first (bad
+- [x] T003 lint-project.sh pointed status messages, test-first (bad
   fixtures + message assertions like the placeholder-name one; adjust
   EXPECTED_BAD_FINDINGS): (a) tasks status beginning `reopened` →
   "completed is terminal — capture post-completion failures with
