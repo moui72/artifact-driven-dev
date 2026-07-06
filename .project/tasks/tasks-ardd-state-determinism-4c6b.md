@@ -62,7 +62,7 @@ same commit.
   `[ ]`. Update `skills/ardd-feedback/SKILL.md`'s template so new
   feedback items are written with `F###` ID prefixes (existing feedback
   files are all `planned` — no migration). Tests first.
-- [ ] T008 `feature-create <slug>`, `feature-flip <slug> <status>`,
+- [x] T008 `feature-create <slug>`, `feature-flip <slug> <status>`,
   `feature-field <slug> <key> <value>`: per-feature files at
   `.project/features/<slug>.md` per T001's schema; `feature-flip`
   enforces backlogged→planned→tasked→implemented ordering;

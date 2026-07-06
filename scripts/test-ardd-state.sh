@@ -222,4 +222,42 @@ sh "$STATE" feedback-planned "$FF" plan-x-2026-07-06.md >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "feedback-planned: refused while items unresolved" 1 "$rc"
 
+# --- feature-create / feature-flip / feature-field (CWD-relative .project/) ---
+FPROJ="$WORK/p2"; mkdir -p "$FPROJ/.project"
+( cd "$FPROJ" && printf 'Adds dark mode.\nWhy: users asked.\n' | sh "$STATE" feature-create dark-mode >/dev/null )
+FEAT="$FPROJ/.project/features/dark-mode.md"
+[ -f "$FEAT" ] && ok "feature-create: file created" || bad "feature-create: file created — missing $FEAT"
+assert_file_grep "feature-create: slug field" "^slug: dark-mode" "$FEAT"
+assert_file_grep "feature-create: backlogged" "^status: backlogged" "$FEAT"
+assert_file_grep "feature-create: logged date" "^logged: $(date +%Y-%m-%d)" "$FEAT"
+assert_file_grep "feature-create: body from stdin" "Adds dark mode." "$FEAT"
+set +e
+( cd "$FPROJ" && printf '' | sh "$STATE" feature-create dark-mode ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-create: duplicate slug refused" 1 "$rc"
+
+( cd "$FPROJ" && sh "$STATE" feature-flip dark-mode planned >/dev/null )
+assert_file_grep "feature-flip: backlogged->planned" "^status: planned" "$FEAT"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip dark-mode implemented ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: skipping stages refused" 1 "$rc"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip no-such-slug tasked ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: unknown slug refused" 1 "$rc"
+
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode plan plan-dark-mode-2026-07-06.md >/dev/null )
+assert_file_grep "feature-field: plan added" "^plan: plan-dark-mode-2026-07-06.md" "$FEAT"
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode plan plan-other-2026-07-07.md >/dev/null )
+assert_file_grep "feature-field: plan replaced" "^plan: plan-other-2026-07-07.md" "$FEAT"
+n="$(grep -c '^plan:' "$FEAT")"
+[ "$n" -eq 1 ] && ok "feature-field: no duplicate keys" || bad "feature-field: no duplicate keys — found $n plan: lines"
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode gh_issue 42 >/dev/null )
+assert_file_grep "feature-field: gh_issue added" "^gh_issue: 42" "$FEAT"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode owner bob ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-field: unknown key usage error" 2 "$rc"
+
 exit "$fail"

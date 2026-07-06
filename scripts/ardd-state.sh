@@ -38,6 +38,13 @@ Deterministic state mutations for .project/ files. Subcommands:
   feedback-planned <file> <plan-filename>
                            flip a feedback file open->planned and stamp
                            plan:; refuses while any item is unresolved
+  feature-create <slug>    create .project/features/<slug>.md (CWD-relative)
+                           as status: backlogged; body read from stdin
+  feature-flip <slug> <status>
+                           advance a feature one stage along
+                           backlogged->planned->tasked->implemented
+  feature-field <slug> <plan|tasks|gh_issue> <value>
+                           set an optional frontmatter field (add or replace)
 EOF
 }
 
@@ -188,12 +195,80 @@ cmd_feedback_planned() {
   echo "feedback-planned: $file -> planned, plan: $plan"
 }
 
+FEATURES_DIR=".project/features"
+
+feature_file() {
+  require_kebab "$1"
+  printf '%s/%s.md' "$FEATURES_DIR" "$1"
+}
+
+cmd_feature_create() {
+  slug="${1:-}"
+  [ -n "$slug" ] || dieu "feature-create: need <slug>"
+  f="$(feature_file "$slug")"
+  [ ! -e "$f" ] || die "feature-create: $f already exists"
+  [ -d ".project" ] || die "feature-create: no .project/ under current directory"
+  mkdir -p "$FEATURES_DIR"
+  body="$(cat)"
+  {
+    printf -- '---\nslug: %s\nstatus: backlogged\nlogged: %s\n---\n\n' "$slug" "$(date +%Y-%m-%d)"
+    [ -n "$body" ] && printf '%s\n' "$body"
+  } > "$f"
+  echo "feature-create: $f (backlogged)"
+}
+
+cmd_feature_flip() {
+  slug="${1:-}"; to="${2:-}"
+  [ -n "$slug" ] && [ -n "$to" ] || dieu "feature-flip: need <slug> <status>"
+  case "$to" in
+    planned|tasked|implemented) ;;
+    *) dieu "feature-flip: target must be planned|tasked|implemented, got '$to'" ;;
+  esac
+  f="$(feature_file "$slug")"
+  [ -f "$f" ] || die "feature-flip: no such feature: $f"
+  from="$(read_status "$f")"
+  if [ "$from" = "$to" ]; then
+    echo "feature-flip: $slug already $to (no-op)"
+    return 0
+  fi
+  case "$from-$to" in
+    backlogged-planned|planned-tasked|tasked-implemented) ;;
+    *) die "feature-flip: illegal transition $from -> $to for $slug (one stage at a time)" ;;
+  esac
+  write_status "$f" "$from" "$to"
+  echo "feature-flip: $slug $from -> $to"
+}
+
+cmd_feature_field() {
+  slug="${1:-}"; key="${2:-}"; val="${3:-}"
+  [ -n "$slug" ] && [ -n "$key" ] && [ -n "$val" ] || dieu "feature-field: need <slug> <key> <value>"
+  case "$key" in
+    plan|tasks|gh_issue) ;;
+    *) dieu "feature-field: key must be plan|tasks|gh_issue, got '$key'" ;;
+  esac
+  f="$(feature_file "$slug")"
+  [ -f "$f" ] || die "feature-field: no such feature: $f"
+  if grep -q "^$key:" "$f"; then
+    sed -i.arddbak "s|^$key:.*|$key: $val|" "$f" && rm -f "$f.arddbak"
+  else
+    # insert before the closing --- of the frontmatter (2nd --- line)
+    awk -v k="$key" -v v="$val" '
+      /^---$/ { c++; if (c == 2) { print k ": " v } }
+      { print }
+    ' "$f" > "$f.arddtmp" && mv "$f.arddtmp" "$f"
+  fi
+  echo "feature-field: $slug $key = $val"
+}
+
 cmd="${1:-}"
 [ -n "$cmd" ] || { usage >&2; exit 2; }
 shift
 
 case "$cmd" in
   slug) cmd_slug "$@" ;;
+  feature-create) cmd_feature_create "$@" ;;
+  feature-flip) cmd_feature_flip "$@" ;;
+  feature-field) cmd_feature_field "$@" ;;
   feedback-mark) cmd_feedback_mark "$@" ;;
   feedback-planned) cmd_feedback_planned "$@" ;;
   mint) cmd_mint "$@" ;;
