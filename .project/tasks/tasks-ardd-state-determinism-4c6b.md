@@ -71,7 +71,7 @@ same commit.
 - [x] T009 `stamp <artifact-file> last_updated|diagram_status <value>`:
   frontmatter stamping with enum validation (`diagram_status`:
   unrendered|stale|current). Tests first.
-- [ ] T010 Update `scripts/lint-project.sh` to validate the per-feature
+- [x] T010 Update `scripts/lint-project.sh` to validate the per-feature
   schema (`.project/features/*.md` frontmatter enums/required fields,
   cross-file pointers `plan:`/`tasks:` resolve) and drop the
   single-file features.md checks; update `tests/fixtures/good-project`

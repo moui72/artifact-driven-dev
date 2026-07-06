@@ -143,4 +143,27 @@ write_tasks "$repo" "completed" "agent-unmerged-branch"
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
 assert_eq "case8: delegated, worktree_branch unmerged -> silent" "" "$out"
 
+# --- Case 9: per-feature register (post-migration-0003). Same merged +
+# tasked scenario as case 4, but the status lives in
+# .project/features/demo-feature.md and the legacy features.md is gone —
+# must still print the slug. Then implemented -> silent. ---
+rm -f "$repo/.project/artifacts/features.md"
+mkdir -p "$repo/.project/features"
+cat > "$repo/.project/features/demo-feature.md" <<'EOF'
+---
+slug: demo-feature
+status: tasked
+logged: 2026-07-05
+---
+
+Demo.
+EOF
+write_plan "$repo" "merged-branch" "[demo-feature]"
+write_tasks "$repo" "completed"
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+assert_eq "case9: per-feature register, merged + tasked -> prints slug" "demo-feature" "$out"
+sed -i.bak 's/^status: tasked/status: implemented/' "$repo/.project/features/demo-feature.md" && rm -f "$repo/.project/features/demo-feature.md.bak"
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+assert_eq "case10: per-feature register, already implemented -> silent" "" "$out"
+
 exit "$fail"

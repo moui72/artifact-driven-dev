@@ -67,8 +67,20 @@ if ! (cd "$repo_root" && git merge-base --is-ancestor "$branch" "$default" 2>/de
   exit 0
 fi
 
+# Register lookup: per-feature files (.project/features/<slug>.md) are the
+# register of record; the single-file features.md branch is retained only
+# for pre-migration-0003 projects.
+features_dir="$project_root/features"
 features_file="$project_root/artifacts/features.md"
-[ -f "$features_file" ] || exit 0
+[ -d "$features_dir" ] || [ -f "$features_file" ] || exit 0
+
+status_of() {
+  if [ -d "$features_dir" ] && [ -f "$features_dir/$1.md" ]; then
+    frontmatter_field "$features_dir/$1.md" status
+  elif [ -f "$features_file" ]; then
+    grep -oE "_Slug: \`$1\` · Status: [a-z]+" "$features_file" | sed -E 's/.*Status: ([a-z]+)$/\1/'
+  fi
+}
 
 old_ifs="$IFS"
 IFS=','
@@ -76,7 +88,7 @@ for raw in $inner; do
   IFS="$old_ifs"
   slug="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
   if [ -n "$slug" ]; then
-    feature_status="$(grep -oE "_Slug: \`${slug}\` · Status: [a-z]+" "$features_file" | sed -E 's/.*Status: ([a-z]+)$/\1/')"
+    feature_status="$(status_of "$slug")"
     [ "$feature_status" = "tasked" ] && echo "$slug"
   fi
   IFS=','

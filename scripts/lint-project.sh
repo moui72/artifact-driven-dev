@@ -40,7 +40,8 @@ set -e
 
 TARGET="${1:-.}"
 PROJECT_DIR="$TARGET/.project"
-FEATURES_FILE="$PROJECT_DIR/artifacts/features.md"
+FEATURES_FILE="$PROJECT_DIR/artifacts/features.md"   # legacy pre-0003 register
+FEATURES_DIR="$PROJECT_DIR/features"                 # register of record
 
 fail=0
 report() {
@@ -85,6 +86,24 @@ frontmatter_has() {
   awk '/^---$/{n++; next} n==1' "$file" | grep -qE "^${field}:"
 }
 
+# Register lookups, mode-agnostic: per-feature files if the register dir
+# exists, else the legacy single-file format.
+feature_exists() {
+  if [ -d "$FEATURES_DIR" ]; then
+    [ -f "$FEATURES_DIR/$1.md" ]
+  else
+    [ -f "$FEATURES_FILE" ] && grep -qE "_Slug: \`$1\`" "$FEATURES_FILE"
+  fi
+}
+
+feature_status_of() {
+  if [ -d "$FEATURES_DIR" ]; then
+    [ -f "$FEATURES_DIR/$1.md" ] && frontmatter_field "$FEATURES_DIR/$1.md" status
+  else
+    grep -oE "_Slug: \`$1\` · Status: [a-z]+" "$FEATURES_FILE" | sed -E 's/.*Status: ([a-z]+)$/\1/'
+  fi
+}
+
 # --- artifacts/*.md (excluding features.md — different schema) --------
 if [ -d "$PROJECT_DIR/artifacts" ]; then
   for f in "$PROJECT_DIR"/artifacts/*.md; do
@@ -124,9 +143,61 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     fi
   done
 
-  # --- features.md: last_updated in frontmatter, Status: per entry ---
-  features_file="$FEATURES_FILE"
-  if [ -f "$features_file" ]; then
+  # --- feature register ---------------------------------------------
+  # Per-feature files (.project/features/<slug>.md) are the register of
+  # record (constitution standing decision, 2026-07-06). The single-file
+  # artifacts/features.md branch below is retained ONLY for projects that
+  # predate migration 0003-per-feature-files — install.sh applies the
+  # migration on upgrade, so any project with a features/ dir is
+  # post-migration and a lingering features.md there is a violation.
+  if [ -d "$FEATURES_DIR" ]; then
+    if [ -f "$FEATURES_FILE" ]; then
+      report "$FEATURES_FILE: legacy single-file register coexists with $FEATURES_DIR/ — run migration 0003-per-feature-files (re-run install.sh) and remove features.md"
+    fi
+    for f in "$FEATURES_DIR"/*.md; do
+      [ -f "$f" ] || continue
+      fslug="$(basename "$f" .md)"
+      if ! frontmatter_has "$f" slug; then
+        report "$f: missing required frontmatter field 'slug'"
+      else
+        val="$(frontmatter_field "$f" slug)"
+        if [ "$val" != "$fslug" ]; then
+          report "$f: frontmatter slug '$val' does not match filename '$fslug'"
+        fi
+      fi
+      if ! frontmatter_has "$f" status; then
+        report "$f: missing required frontmatter field 'status'"
+      else
+        val="$(frontmatter_field "$f" status)"
+        if ! in_enum "$val" $FEATURE_STATUS_ENUM; then
+          report "$f: status '$val' not in {$FEATURE_STATUS_ENUM}"
+        fi
+      fi
+      if ! frontmatter_has "$f" logged; then
+        report "$f: missing required frontmatter field 'logged'"
+      fi
+      if frontmatter_has "$f" plan; then
+        ref="$(frontmatter_field "$f" plan)"
+        if [ -n "$ref" ] && [ ! -f "$PROJECT_DIR/plans/$ref" ]; then
+          report "$f: plan reference '$ref' — no $PROJECT_DIR/plans/$ref"
+        fi
+      fi
+      if frontmatter_has "$f" tasks; then
+        ref="$(frontmatter_field "$f" tasks)"
+        if [ -n "$ref" ] && [ ! -f "$PROJECT_DIR/tasks/$ref" ]; then
+          report "$f: tasks reference '$ref' — no $PROJECT_DIR/tasks/$ref"
+        fi
+      fi
+      if frontmatter_has "$f" gh_issue; then
+        val="$(frontmatter_field "$f" gh_issue)"
+        case "$val" in
+          ''|*[!0-9]*) report "$f: gh_issue '$val' is not a number" ;;
+        esac
+      fi
+    done
+  elif [ -f "$FEATURES_FILE" ]; then
+    # Legacy pre-0003 single-file register.
+    features_file="$FEATURES_FILE"
     if ! frontmatter_has "$features_file" last_updated; then
       report "$features_file: missing required frontmatter field 'last_updated'"
     fi
@@ -138,8 +209,6 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
         echo 1 > "$TARGET/.lint-project-failed"
       fi
     done
-
-    # --- Plan:/Tasks: metadata fields must reference existing files ---
     grep -E '_Slug: `' "$features_file" | while IFS= read -r line; do
       slug="$(printf '%s' "$line" | sed -E 's/.*_Slug: `([^`]+)`.*/\1/')"
       planref="$(printf '%s' "$line" | grep -oE 'Plan: [^·_]+' | sed -E 's/^Plan:[[:space:]]*//; s/[[:space:]]+$//')"
@@ -191,14 +260,14 @@ if [ -d "$PROJECT_DIR/plans" ]; then
             if [ "$plan_status" != "superseded" ]; then
               live_plan_slugs="$live_plan_slugs $slug"
             fi
-            if [ ! -f "$FEATURES_FILE" ] || ! grep -qE "_Slug: \`${slug}\`" "$FEATURES_FILE"; then
-              echo "$f: features slug '$slug' not found in $FEATURES_FILE"
+            if ! feature_exists "$slug"; then
+              echo "$f: features slug '$slug' not found in the feature register"
               echo 1 > "$TARGET/.lint-project-failed"
             elif [ "$plan_status" = "approved" ] || [ "$plan_status" = "superseded" ]; then
               # --- an approved/superseded plan's feature must have moved past backlogged ---
-              feature_status="$(grep -oE "_Slug: \`${slug}\` · Status: [a-z]+" "$FEATURES_FILE" | sed -E 's/.*Status: ([a-z]+)$/\1/')"
+              feature_status="$(feature_status_of "$slug")"
               if [ "$feature_status" = "backlogged" ]; then
-                echo "$f: plan is '$plan_status' but features slug '$slug' is still 'backlogged' in $FEATURES_FILE — a bookkeeping sequence was likely interrupted (see /ardd-tasks step 2)"
+                echo "$f: plan is '$plan_status' but features slug '$slug' is still 'backlogged' in the register — a bookkeeping sequence was likely interrupted (see /ardd-tasks step 2)"
                 echo 1 > "$TARGET/.lint-project-failed"
               fi
             fi
