@@ -121,4 +121,59 @@ sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" bogus >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "plan-flip: unknown target status usage error" 2 "$rc"
 
+# --- tasks-flip / task-check / next-task ---
+TASKS="$WORK/p1/.project/tasks"; mkdir -p "$TASKS"
+TF="$TASKS/tasks-x-ab12.md"
+cat > "$TF" <<'EOF'
+---
+plan: plan-x-2026-07-06.md
+generated: 2026-07-06
+status: generating   # generating -> ready -> in-progress -> completed
+---
+# Tasks
+## Phase 1
+- [ ] T001 [artifacts: constitution] First task
+- [ ] T002 [parallel] Second task
+EOF
+sh "$STATE" tasks-flip "$TF" ready >/dev/null
+assert_file_grep "tasks-flip: generating->ready" "^status: *ready" "$TF"
+set +e
+sh "$STATE" tasks-flip "$TF" completed >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "tasks-flip: ready->completed refused (skips in-progress)" 1 "$rc"
+sh "$STATE" tasks-flip "$TF" in-progress >/dev/null
+assert_file_grep "tasks-flip: ready->in-progress" "^status: *in-progress" "$TF"
+
+nt="$(sh "$STATE" next-task "$TF")"
+case "$nt" in
+  *T001*) ok "next-task: finds first unchecked" ;;
+  *) bad "next-task: finds first unchecked — got '$nt'" ;;
+esac
+sh "$STATE" task-check "$TF" T001 >/dev/null
+assert_file_grep "task-check: T001 checked" "^- \[x\] T001 " "$TF"
+set +e
+sh "$STATE" task-check "$TF" T001 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "task-check: already-checked is no-op success" 0 "$rc"
+set +e
+sh "$STATE" task-check "$TF" T099 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "task-check: unknown task ID refused" 1 "$rc"
+nt="$(sh "$STATE" next-task "$TF")"
+case "$nt" in
+  *T002*) ok "next-task: advances to T002" ;;
+  *) bad "next-task: advances to T002 — got '$nt'" ;;
+esac
+sh "$STATE" task-check "$TF" T002 >/dev/null
+set +e
+sh "$STATE" next-task "$TF" >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "next-task: exit 1 when all complete" 1 "$rc"
+sh "$STATE" tasks-flip "$TF" completed >/dev/null
+assert_file_grep "tasks-flip: in-progress->completed" "^status: *completed" "$TF"
+set +e
+sh "$STATE" tasks-flip "$TF" abandoned >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "tasks-flip: completed->abandoned refused" 1 "$rc"
+
 exit "$fail"

@@ -51,7 +51,7 @@ same commit.
   status is a legal predecessor, edits frontmatter in place, refuses
   illegal transitions with nonzero exit. Tests first (good draft file;
   bad: already-superseded, missing frontmatter).
-- [ ] T006 `tasks-flip <file> <status>`, `task-check <file> <task-id>`,
+- [x] T006 `tasks-flip <file> <status>`, `task-check <file> <task-id>`,
   `next-task <file>`: status transitions per the
   generating→ready→in-progress→completed/abandoned chain, checkbox flip
   by task ID, first-`- [ ]` locator. Tests first (good fixtures; bad:

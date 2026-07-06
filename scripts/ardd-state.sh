@@ -26,6 +26,12 @@ Deterministic state mutations for .project/ files. Subcommands:
                            flip a plan's frontmatter status; refuses
                            illegal transitions (legal: draft->approved,
                            draft->superseded, approved->superseded)
+  tasks-flip <file> <ready|in-progress|completed|abandoned>
+                           flip a tasks file's status along
+                           generating->ready->in-progress->completed;
+                           abandoned allowed from generating/ready/in-progress
+  task-check <file> <Tnnn> flip that task's checkbox [ ] -> [x]
+  next-task <file>         print the first unchecked task line; exit 1 if none
 EOF
 }
 
@@ -107,6 +113,49 @@ cmd_plan_flip() {
   echo "plan-flip: $file $from -> $to"
 }
 
+cmd_tasks_flip() {
+  file="${1:-}"; to="${2:-}"
+  [ -n "$file" ] && [ -n "$to" ] || dieu "tasks-flip: need <file> <status>"
+  case "$to" in
+    ready|in-progress|completed|abandoned) ;;
+    *) dieu "tasks-flip: target must be ready|in-progress|completed|abandoned, got '$to'" ;;
+  esac
+  from="$(read_status "$file")"
+  if [ "$from" = "$to" ]; then
+    echo "tasks-flip: $file already $to (no-op)"
+    return 0
+  fi
+  case "$from-$to" in
+    generating-ready|ready-in-progress|in-progress-completed) ;;
+    generating-abandoned|ready-abandoned|in-progress-abandoned) ;;
+    *) die "tasks-flip: illegal transition $from -> $to in $file" ;;
+  esac
+  write_status "$file" "$from" "$to"
+  echo "tasks-flip: $file $from -> $to"
+}
+
+cmd_task_check() {
+  file="${1:-}"; id="${2:-}"
+  [ -n "$file" ] && [ -n "$id" ] || dieu "task-check: need <file> <task-id>"
+  [ -f "$file" ] || die "no such file: $file"
+  if grep -q "^- \[x\] $id " "$file"; then
+    echo "task-check: $id already checked in $file (no-op)"
+    return 0
+  fi
+  grep -q "^- \[ \] $id " "$file" || die "task-check: no unchecked task '$id' in $file"
+  sed -i.arddbak "s/^- \[ \] $id /- [x] $id /" "$file" && rm -f "$file.arddbak"
+  echo "task-check: $id checked in $file"
+}
+
+cmd_next_task() {
+  file="${1:-}"
+  [ -n "$file" ] || dieu "next-task: need <file>"
+  [ -f "$file" ] || die "no such file: $file"
+  line="$(grep -m1 '^- \[ \] ' "$file" || true)"
+  [ -n "$line" ] || { echo "next-task: no unchecked tasks in $file" >&2; exit 1; }
+  printf '%s\n' "$line"
+}
+
 cmd="${1:-}"
 [ -n "$cmd" ] || { usage >&2; exit 2; }
 shift
@@ -115,6 +164,9 @@ case "$cmd" in
   slug) cmd_slug "$@" ;;
   mint) cmd_mint "$@" ;;
   plan-flip) cmd_plan_flip "$@" ;;
+  tasks-flip) cmd_tasks_flip "$@" ;;
+  task-check) cmd_task_check "$@" ;;
+  next-task) cmd_next_task "$@" ;;
   *)
     echo "ardd-state: unknown subcommand '$cmd'" >&2
     usage >&2
