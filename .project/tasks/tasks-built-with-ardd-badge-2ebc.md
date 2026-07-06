@@ -57,7 +57,7 @@ exception. State mutations go through
 
 ## Phase 4: Docs review batch [feedback 5ef3]
 
-- [ ] T006 (F005) gen-skill-docs.sh: explicit per-tier workflow
+- [x] T006 (F005) gen-skill-docs.sh: explicit per-tier workflow
   ordering via ordered name lists in the generator (resolves the plan's
   open question — the order is editorial, so it lives with the other
   editorial text in the generator; unknown/unlisted skills append

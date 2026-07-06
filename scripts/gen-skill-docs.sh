@@ -22,13 +22,37 @@ fm() { # fm <file> <field>
   awk '/^---$/{n++; next} n==1' "$1" | sed -n "s/^$2:[[:space:]]*//p" | head -1
 }
 
+# Editorial workflow order per tier — skills not listed here append after
+# the ordered ones, alphabetically, so a new skill can't silently vanish
+# from the generated tables.
+ORDER_core="ardd-bootstrap ardd-codify ardd-refine ardd-plan ardd-tasks ardd-implement"
+ORDER_extension="ardd-analyze ardd-lint ardd-verify ardd-critique ardd-converge ardd-feature ardd-feedback ardd-research ardd-render ardd-sync ardd-featurize ardd-add-artifact"
+
+row_for() { # row_for <skill-name>
+  f="skills/$1/SKILL.md"
+  [ -f "$f" ] || return 0
+  printf '| `/%s` | %s |\n' "$(fm "$f" name)" "$(fm "$f" description)"
+}
+
 table_rows() { # table_rows <tier>
+  case "$1" in
+    core)      ordered="$ORDER_core" ;;
+    extension) ordered="$ORDER_extension" ;;
+    *)         ordered="" ;;
+  esac
+  emitted=" "
+  for name in $ordered; do
+    f="skills/$name/SKILL.md"
+    [ -f "$f" ] || continue
+    [ "$(fm "$f" tier)" = "$1" ] || continue
+    row_for "$name"
+    emitted="$emitted$name "
+  done
   for f in skills/*/SKILL.md; do
     name="$(fm "$f" name)"
-    tier="$(fm "$f" tier)"
-    desc="$(fm "$f" description)"
-    [ "$tier" = "$1" ] || continue
-    printf '| `/%s` | %s |\n' "$name" "$desc"
+    case "$emitted" in *" $name "*) continue ;; esac
+    [ "$(fm "$f" tier)" = "$1" ] || continue
+    row_for "$name"
   done
 }
 

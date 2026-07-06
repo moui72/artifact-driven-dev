@@ -55,6 +55,19 @@ set +e
 set -e
 [ "$rc" -ne 0 ] && ok "--check fails on drift" || bad "--check fails on drift"
 
+# --- workflow ordering: in the real repo's generated WORKFLOW.md, the
+# core loop must read in execution order (plan before implement, tasks
+# between them) — not glob/alphabetical order ---
+WF="$REPO/templates/WORKFLOW.md"
+lp="$(grep -n '| `/ardd-plan`' "$WF" | cut -d: -f1 | head -1)"
+lt="$(grep -n '| `/ardd-tasks`' "$WF" | cut -d: -f1 | head -1)"
+li="$(grep -n '| `/ardd-implement`' "$WF" | cut -d: -f1 | head -1)"
+if [ -n "$lp" ] && [ -n "$lt" ] && [ -n "$li" ] && [ "$lp" -lt "$lt" ] && [ "$lt" -lt "$li" ]; then
+  ok "workflow order: plan < tasks < implement"
+else
+  bad "workflow order: plan < tasks < implement (lines: plan=$lp tasks=$lt implement=$li)"
+fi
+
 # --- real repo must currently be in sync (or the commit adding this is wrong) ---
 ( cd "$REPO" && sh "$GEN" --check ) >/dev/null 2>&1 && ok "real repo in sync" || bad "real repo in sync"
 
