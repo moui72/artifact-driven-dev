@@ -12,7 +12,9 @@ subsequent changes.
    overwriting.
 
 2. **Determine which artifacts to create** based on conversation context.
-   Always consider the standard set:
+   There is no required set — an artifact exists only if the project has
+   the concern it owns (a project may legitimately end up with just a
+   constitution). Consider the common defaults:
    - `constitution.md` — if the project has stated principles or non-negotiables
    - `infrastructure.md` — if the project has external integrations, sync, or
      non-trivial storage
@@ -21,7 +23,7 @@ subsequent changes.
    - `ui.md` — if the project has a user-facing interface
 
    Add additional artifacts if the conversation establishes distinct concerns
-   that don't fit the standard set (e.g., `api.md` for a public API surface).
+   that don't fit the defaults (e.g., `api.md` for a public API surface).
    Use judgment — don't create artifacts for concerns that fit naturally into
    an existing one.
 

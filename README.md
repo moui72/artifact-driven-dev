@@ -74,14 +74,20 @@ already a good implicit spec.
 
 ## Artifacts
 
-Four living documents that evolve throughout the project:
+A declared set of living documents that evolve throughout the project —
+typically a constitution plus whichever concerns your project actually
+has. There is no fixed set: `/ardd-bootstrap` proposes artifacts based on
+what your project needs (this repo's own dogfooded `.project/` carries
+only a constitution), and `/ardd-add-artifact` adds non-standard ones
+anytime. The common defaults:
 
-| Artifact | Purpose |
+| Artifact | Suggested when |
 |---|---|
-| `constitution.md` | Principles, quality standards, governance |
-| `infrastructure.md` | Architecture, integrations, storage, sync strategy |
-| `datamodel.md` | Canonical schema, field mappings, normalization rules |
-| `ui.md` | Views, interactions, display specs, states |
+| `constitution.md` | Nearly always — principles, quality standards, governance |
+| `infrastructure.md` | External integrations, sync, or non-trivial storage |
+| `datamodel.md` | A canonical schema or normalization rules |
+| `ui.md` | A user-facing interface |
+| `api.md`, `adapters.md`, ... | A public API surface, external data sources, or any distinct concern |
 
 All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`.
 

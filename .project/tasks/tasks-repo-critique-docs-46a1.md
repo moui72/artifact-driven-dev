@@ -30,7 +30,7 @@ before implementing. State mutations go through
   research/add-artifact moved under an "Extensions" section described
   as opt-in. Restructure only — every skill keeps its documented
   behavior; lint-docs.sh must stay green.
-- [ ] T003 Demote the four-artifact set in README.md and USAGE.md: the
+- [x] T003 Demote the four-artifact set in README.md and USAGE.md: the
   system is "a declared set of living artifacts — typically a
   constitution plus the concerns your project actually has," with
   constitution/infrastructure/datamodel/ui as suggested defaults per

@@ -6,13 +6,19 @@ consistency, and turns them into an executable task list.
 
 ## The core idea
 
-You have four living documents called **artifacts**. They capture what you've
-decided about your system:
+You keep a declared set of living documents called **artifacts**. They
+capture what you've decided about your system. Which artifacts exist is
+up to your project — a constitution plus the concerns you actually have.
+The common defaults:
 
-- **constitution** — your principles and non-negotiables
+- **constitution** — your principles and non-negotiables (nearly always)
 - **infrastructure** — how data moves, where it's stored, external integrations
 - **datamodel** — your canonical schema and any normalization rules
 - **ui** — what users see and how the app behaves
+
+A CLI tool might carry only a constitution and an `api.md`; this repo's
+own `.project/` carries only a constitution. `/ardd-bootstrap` suggests a
+set; `/ardd-add-artifact` extends it anytime.
 
 You refine these iteratively. When they're stable, you generate a plan, then
 tasks, then execute. If work gets interrupted, `/ardd-converge` picks up where you
