@@ -1,37 +1,33 @@
 # Defects
 
-_Last verified: 2026-07-06_
+_Last verified: 2026-07-06 (third pass)_
 
 ## constitution.md
 
-- **Claim:** Shell scripts target POSIX sh and may be installed into arbitrary target projects
-  **Actual:** `migrations/0001-diagram-stale.sh` and
-  `migrations/0002-diagram-status.sh` use BSD-only `sed -i ''`, which
-  fails under GNU sed — so on a Linux target project whose state predates
-  those migrations, `install.sh`'s migration step breaks. Missed by the
-  2026-07-05 verify run. Related gap: unlike 0003, neither migration has
-  a fixture test (the testing-paradigm standard postdates them), which is
-  why ubuntu CI never caught it.
-  **Location:** migrations/0001-diagram-stale.sh:17, migrations/0002-diagram-status.sh:49,51
-  **Severity:** broken-contract (Linux targets with pre-0002 state only; no-op for already-migrated projects)
-
 - **Claim:** Behavioral smoke tests are required for state-mutating skill paths
-  **Actual:** exactly one smoke scenario exists
-  (`.github/workflows/smoke.yml`: `/ardd-feature` → `/ardd-plan`); the
-  `/ardd-tasks`, `/ardd-implement`, `/ardd-converge`, `/ardd-feedback`,
-  and `/ardd-sync` state-mutating paths have none. The standard as worded
-  overclaims current coverage — either add scenarios as the smoke harness
-  matures (it can't execute until the API key is provisioned) or soften
-  the wording to "at least one scenario, expanding with the harness."
+  **Actual:** two scenarios now exist (`.github/workflows/smoke.yml`:
+  feature→plan, tasks→implement — scenario 2 added by
+  plan-repo-critique-docs T010 per the user's expand-don't-soften
+  decision), but the `/ardd-converge`, `/ardd-feedback`, `/ardd-refine`,
+  and `/ardd-sync` state-mutating paths still have none, and no scenario
+  has ever executed (the `ANTHROPIC_API_KEY` secret is deliberately
+  unprovisioned; jobs skip). Reduced-scope residue of an already-surfaced
+  defect (identifier 970d935b is in
+  plan-repo-critique-docs-2026-07-06.md's `surfaced-defects:`, so
+  /ardd-plan will not re-prompt) — expand scenarios as the harness
+  matures, starting when the key is provisioned and the existing two are
+  proven to run.
   **Location:** .github/workflows/smoke.yml:1
-  **Severity:** drift
+  **Severity:** drift (reduced scope; tracked, not re-promptable)
 
-All other spot-checks passed: pre-commit runs the two lints plus every
-`scripts/test-*.sh` by glob (v1.1.0 rule upheld); state mutations across
-all ten state-touching skills are script-performed via `ardd-state.sh`
-(Principle II as amended); the per-feature register standing decision
-matches reality (migration 0003 applied, `lint-project.sh` enforces the
-schema, no hand-maintained index exists); governance
-footer/frontmatter/SIR agree (now also lint-enforced); the new scripts
-are POSIX-clean (`[[:space:]]` classes, not bashisms); no vendored
-dependencies.
+Cleared since the previous run: the BSD-only `sed -i ''` in migrations
+0001/0002 (58bd7dd2) — replaced with the portable `sed -i.bak` pattern,
+with backfilled fixture tests running in ubuntu CI (only a historical
+comment in test-migrations-legacy.sh mentions the old form).
+
+All other spot-checks passed: POSIX-clean scripts throughout (21 test
+scripts, every deterministic check covered — including both legacy
+migrations now); pre-commit glob rule upheld; per-feature register
+matches the standing decision; governance footer/frontmatter/SIR
+consistent at v1.2.1 (lint-enforced); skill docs single-sourced and
+`gen-skill-docs.sh --check` in sync; no vendored dependencies.

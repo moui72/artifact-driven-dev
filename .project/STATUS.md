@@ -14,15 +14,12 @@ None.
 
 ## Code-vs-Artifact Defects
 
-2 defects — see `DEFECTS.md`, last checked 2026-07-06 (post-v1.2.0
-verify): (1) **broken-contract** — migrations 0001/0002 use BSD-only
-`sed -i ''`, which breaks `install.sh` on Linux targets with pre-0002
-state (predates this plan; missed by the 2026-07-05 run; neither has a
-fixture test, which is why ubuntu CI never caught it); (2) **drift** —
-the v1.2.0 behavioral-smoke-test standard says "required for
-state-mutating skill paths" but only one scenario exists. The next
-`/ardd-plan` run surfaces both via `defects-unsurfaced.sh`. All other
-spot-checks passed. Run `/ardd-verify` to refresh.
+1 defect — see `DEFECTS.md`, last checked 2026-07-06 (third pass):
+the behavioral-smoke-tier claim still exceeds coverage (2 scenarios
+exist, converge/feedback/refine/sync paths uncovered, none executable
+until the API key is provisioned). This is the reduced-scope residue of
+already-surfaced 970d935b — /ardd-plan won't re-prompt it. The BSD-sed
+defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
@@ -46,19 +43,11 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`tasks-repo-critique-docs-46a1.md` is **completed** (11/11) on branch
-`repo-critique-docs` — docs tiered (core loop vs extensions), ARDD is the
-single name (constitution v1.2.1), the artifact set is declared-not-fixed,
-inline-on-a-branch is the documented delegation fallback, development
-archaeology moved to `docs/decisions/`, skill descriptions are
-single-sourced from SKILL.md frontmatter (`gen-skill-docs.sh` +
-lint-docs drift check; WORKFLOW.md now static via install.sh), and both
-DEFECTS.md entries are fixed (portable sed in migrations 0001/0002 with
-backfilled ubuntu-red tests; smoke scenario 2 for tasks→implement).
-T006 note: archaeology strip achieved 8.5% token reduction, not the
-plan's 25% estimate — earlier rewires had already removed most of it.
-
-All commits on this branch are signed (the two made while 1Password was
-locked were re-signed 2026-07-06). Next: merge `repo-critique-docs` into `main`, re-run `./install.sh .`,
-push, and run `/ardd-verify` to confirm the two defects clear from
-DEFECTS.md.
+Both critique plans are fully landed on `main` and pushed. Nothing is
+in flight. The one open thread is smoke-harness promotion: provision
+the `ANTHROPIC_API_KEY` secret, prove the two scenarios actually run
+(expect a tuning pass — headless `claude -p` against interactive skill
+gates is unexercised), drop `continue-on-error`, then extend scenarios
+toward the uncovered paths (converge/feedback/refine/sync) so the last
+DEFECTS.md entry clears. Otherwise: normal feature work via
+`/ardd-feature` → `/ardd-plan <slug>`.
