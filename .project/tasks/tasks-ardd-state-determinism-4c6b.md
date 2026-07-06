@@ -47,7 +47,7 @@ same commit.
   generation, and filename minting for plan/tasks/feedback/research
   files. Tests first (fixture strings incl. unicode, punctuation, long
   input), red, then implement.
-- [ ] T005 `plan-flip <file> approved|superseded`: validates current
+- [x] T005 `plan-flip <file> approved|superseded`: validates current
   status is a legal predecessor, edits frontmatter in place, refuses
   illegal transitions with nonzero exit. Tests first (good draft file;
   bad: already-superseded, missing frontmatter).

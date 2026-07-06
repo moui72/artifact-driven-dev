@@ -22,6 +22,10 @@ Deterministic state mutations for .project/ files. Subcommands:
   mint tasks <slug>        print tasks-<slug>-<hex4>.md   (fresh token)
   mint feedback <slug>     print feedback-<slug>-<hex4>.md (fresh token)
   mint research <slug>     print research-<slug>-<YYYY-MM-DD>.md
+  plan-flip <file> <approved|superseded>
+                           flip a plan's frontmatter status; refuses
+                           illegal transitions (legal: draft->approved,
+                           draft->superseded, approved->superseded)
 EOF
 }
 
@@ -70,6 +74,39 @@ cmd_mint() {
   esac
 }
 
+# read_status <file> — print the frontmatter `status:` value (sans comment)
+read_status() {
+  [ -f "$1" ] || die "no such file: $1"
+  s="$(sed -n 's/^status:[[:space:]]*\([a-z-]*\).*/\1/p' "$1" | head -1)"
+  [ -n "$s" ] || die "no frontmatter status field in $1"
+  printf '%s\n' "$s"
+}
+
+# write_status <file> <old> <new> — in-place, preserves spacing + comment
+write_status() {
+  sed -i.arddbak "s/^status:\([[:space:]]*\)$2/status:\1$3/" "$1" && rm -f "$1.arddbak"
+}
+
+cmd_plan_flip() {
+  file="${1:-}"; to="${2:-}"
+  [ -n "$file" ] && [ -n "$to" ] || dieu "plan-flip: need <file> <status>"
+  case "$to" in
+    approved|superseded) ;;
+    *) dieu "plan-flip: target must be approved|superseded, got '$to'" ;;
+  esac
+  from="$(read_status "$file")"
+  if [ "$from" = "$to" ]; then
+    echo "plan-flip: $file already $to (no-op)"
+    return 0
+  fi
+  case "$from-$to" in
+    draft-approved|draft-superseded|approved-superseded) ;;
+    *) die "plan-flip: illegal transition $from -> $to in $file" ;;
+  esac
+  write_status "$file" "$from" "$to"
+  echo "plan-flip: $file $from -> $to"
+}
+
 cmd="${1:-}"
 [ -n "$cmd" ] || { usage >&2; exit 2; }
 shift
@@ -77,6 +114,7 @@ shift
 case "$cmd" in
   slug) cmd_slug "$@" ;;
   mint) cmd_mint "$@" ;;
+  plan-flip) cmd_plan_flip "$@" ;;
   *)
     echo "ardd-state: unknown subcommand '$cmd'" >&2
     usage >&2

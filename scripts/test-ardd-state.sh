@@ -84,4 +84,41 @@ sh "$STATE" mint plan 'Not A Slug!' >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "mint: rejects non-kebab slug" 1 "$rc"
 
+# --- plan-flip ---
+PLANS="$WORK/p1/.project/plans"; mkdir -p "$PLANS"
+cat > "$PLANS/plan-x-2026-07-06.md" <<'EOF'
+---
+status: draft        # draft -> approved -> superseded
+branch: x
+created: 2026-07-06
+---
+# Plan
+EOF
+sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" approved
+assert_file_grep "plan-flip: draft->approved" "^status: *approved" "$PLANS/plan-x-2026-07-06.md"
+assert_file_grep "plan-flip: trailing comment preserved" "# draft -> approved -> superseded" "$PLANS/plan-x-2026-07-06.md"
+set +e
+sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" approved >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "plan-flip: same-state is a no-op success" 0 "$rc"
+sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" superseded >/dev/null
+assert_file_grep "plan-flip: approved->superseded" "^status: *superseded" "$PLANS/plan-x-2026-07-06.md"
+set +e
+sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" approved >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "plan-flip: superseded->approved refused" 1 "$rc"
+set +e
+sh "$STATE" plan-flip "$PLANS/no-such-plan.md" approved >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "plan-flip: missing file refused" 1 "$rc"
+printf '# no frontmatter\n' > "$PLANS/plan-bad-2026-07-06.md"
+set +e
+sh "$STATE" plan-flip "$PLANS/plan-bad-2026-07-06.md" approved >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "plan-flip: missing status field refused" 1 "$rc"
+set +e
+sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" bogus >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "plan-flip: unknown target status usage error" 2 "$rc"
+
 exit "$fail"
