@@ -9,6 +9,8 @@
 #   --exists <relpath>            file must exist
 #   --absent <relpath>            file must not exist
 #   --feature <slug> <status>     register entry must have that status
+#   --plan-status <relpath> <status>    plan frontmatter status must match
+#   --tasks-status <relpath> <status>   tasks frontmatter status must match
 #
 # Usage: smoke-assert.sh <target-dir> [assertions...]
 # Exit 0 if every assertion holds, 1 otherwise.
@@ -43,6 +45,16 @@ while [ $# -gt 0 ]; do
       else
         actual="$(sed -n 's/^status:[[:space:]]*\([a-z-]*\).*/\1/p' "$f" | head -1)"
         [ "$actual" = "$3" ] || report "feature '$2' status '$actual', expected '$3'"
+      fi
+      shift 3 ;;
+    --plan-status|--tasks-status)
+      kind="${1#--}"; kind="${kind%-status}"
+      f="$TARGET/$2"
+      if [ ! -f "$f" ]; then
+        report "$kind file missing: $2"
+      else
+        actual="$(sed -n 's/^status:[[:space:]]*\([a-z-]*\).*/\1/p' "$f" | head -1)"
+        [ "$actual" = "$3" ] || report "$kind $2 status '$actual', expected '$3'"
       fi
       shift 3 ;;
     *)

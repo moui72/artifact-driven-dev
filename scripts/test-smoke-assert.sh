@@ -63,4 +63,40 @@ sh "$ASSERT" "$T" >/dev/null 2>&1; rc=$?
 set -e
 [ "$rc" -ne 0 ] && ok "lint violation fails the run" || bad "lint violation fails the run"
 
+# --- scenario-2 assertion set: plan/tasks status flags (simulated
+# post-/ardd-implement state; runs with no API key) ---
+mkdir -p "$T/.project/plans" "$T/.project/tasks"
+sed -i.bak 's/^status: shipped/status: implemented/' "$T/.project/features/dark-mode.md" && rm -f "$T/.project/features/dark-mode.md.bak"
+cat > "$T/.project/plans/plan-dm-2026-07-06.md" <<'EOF'
+---
+status: approved
+branch: dm
+created: 2026-07-06
+features: [dark-mode]
+---
+# P
+EOF
+cat > "$T/.project/tasks/tasks-dm-aaaa.md" <<'EOF'
+---
+plan: plan-dm-2026-07-06.md
+generated: 2026-07-06
+status: completed
+---
+# Tasks
+- [x] T001 done
+EOF
+sh "$ASSERT" "$T" \
+  --plan-status .project/plans/plan-dm-2026-07-06.md approved \
+  --tasks-status .project/tasks/tasks-dm-aaaa.md completed \
+  --feature dark-mode implemented \
+  && ok "scenario-2 set passes" || bad "scenario-2 set passes"
+set +e
+sh "$ASSERT" "$T" --plan-status .project/plans/plan-dm-2026-07-06.md draft >/dev/null 2>&1; rc=$?
+set -e
+[ "$rc" -ne 0 ] && ok "--plan-status wrong value fails" || bad "--plan-status wrong value fails"
+set +e
+sh "$ASSERT" "$T" --tasks-status .project/tasks/tasks-dm-aaaa.md in-progress >/dev/null 2>&1; rc=$?
+set -e
+[ "$rc" -ne 0 ] && ok "--tasks-status wrong value fails" || bad "--tasks-status wrong value fails"
+
 exit "$fail"

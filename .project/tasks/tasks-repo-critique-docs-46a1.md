@@ -1,7 +1,7 @@
 ---
 plan: plan-repo-critique-docs-2026-07-06.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-06
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -103,7 +103,7 @@ before implementing. State mutations go through
   single-writer files untouched. Same key-gate + `continue-on-error`
   and the same promotion annotation; remains unexecutable until the
   `ANTHROPIC_API_KEY` secret is provisioned.
-- [ ] T011 Dry-run the full smoke workflow logic locally as far as
+- [x] T011 Dry-run the full smoke workflow logic locally as far as
   possible without the key (fixture setup + smoke-assert calls against
   a hand-simulated post-run state) so both scenarios' assertion logic
   is itself exercised in CI — extend `scripts/test-smoke-assert.sh`

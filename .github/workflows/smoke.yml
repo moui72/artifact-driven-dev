@@ -110,10 +110,9 @@ jobs:
           plan="$(ls /tmp/smoke-target/.project/plans | grep '^plan-' | head -1)"
           tasks="$(ls /tmp/smoke-target/.project/tasks | grep '^tasks-' | head -1 || true)"
           test -n "$tasks" || { echo "no tasks file produced"; exit 1; }
-          grep -q '^status: *approved' "/tmp/smoke-target/.project/plans/$plan" || { echo "plan not approved"; exit 1; }
-          grep -q '^status: *completed' "/tmp/smoke-target/.project/tasks/$tasks" || { echo "tasks file not completed"; exit 1; }
           ./scripts/smoke-assert.sh /tmp/smoke-target \
-            --exists ".project/tasks/$tasks" \
+            --plan-status ".project/plans/$plan" approved \
+            --tasks-status ".project/tasks/$tasks" completed \
             --feature "$slug" implemented \
             --absent ".project/DEFECTS.md" \
             --absent ".project/SYNC.md"
