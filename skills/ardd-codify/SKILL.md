@@ -1,6 +1,6 @@
 ---
 name: ardd-codify
-tier: core
+tier: setup
 description: One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap).
 ---
 

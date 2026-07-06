@@ -36,12 +36,23 @@ description: Does the beta thing.
 ---
 # /ardd-beta
 EOF
+mkdir -p "$F/skills/ardd-gamma"
+cat > "$F/skills/ardd-gamma/SKILL.md" <<'EOF'
+---
+name: ardd-gamma
+tier: setup
+description: Does the gamma setup thing.
+---
+# /ardd-gamma
+EOF
 printf '# Fixture\n\nIntro.\n' > "$F/README.md"
 
 # --- generate ---
 ( cd "$F" && sh "$GEN" ) >/dev/null
 grep -q '`/ardd-alpha`' "$F/README.md" && ok "core skill in README" || bad "core skill in README"
 grep -q 'Does the beta thing.' "$F/README.md" && ok "extension description in README" || bad "extension description in README"
+grep -q 'Does the gamma setup thing.' "$F/README.md" && ok "setup tier in README" || bad "setup tier in README"
+grep -q '/ardd-gamma' "$F/templates/WORKFLOW.md" && ok "setup tier in WORKFLOW.md" || bad "setup tier in WORKFLOW.md"
 grep -q '/ardd-alpha' "$F/templates/WORKFLOW.md" && ok "WORKFLOW.md generated" || bad "WORKFLOW.md generated"
 grep -q 'Does the alpha thing.' "$F/templates/WORKFLOW.md" && ok "WORKFLOW.md carries description" || bad "WORKFLOW.md carries description"
 

@@ -65,7 +65,7 @@ exception. State mutations go through
   test-gen-skill-docs.sh first to assert core-loop order (red: current
   output is alphabetical), then implement; regenerate README +
   templates/WORKFLOW.md.
-- [ ] T007 (F009, user-confirmed reversal 2026-07-06) Three-tier
+- [x] T007 (F009, user-confirmed reversal 2026-07-06) Three-tier
   reframe: retag frontmatter `tier:` values — `setup`: bootstrap,
   codify, featurize; `core`: feature, feedback, refine, plan, tasks,
   implement; `extension`: the rest — teach gen-skill-docs.sh and its

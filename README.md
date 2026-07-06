@@ -91,17 +91,28 @@ anytime. The common defaults:
 
 All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`.
 
-## The core loop
+## Getting started
 
-The skills that carry a project from decisions to shipped code — this is
-the workflow; everything else is opt-in. (This table is generated from
-each skill's frontmatter by `scripts/gen-skill-docs.sh` — edit the
-`description:` there, then re-run it.)
+Run once (or rarely) to bring a project under ARDD. (This table is
+generated from each skill's frontmatter by `scripts/gen-skill-docs.sh` —
+edit the `description:` there, then re-run it.)
 
 | Command | What it does |
 |---|---|
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
+| `/ardd-featurize` | One-time (after codify): extract a feature register from an existing codebase. |
+
+## The core loop
+
+The recurring delivery cycle — ideas and observations come in, plans and
+shipped code come out. This is the loop a project lives in after setup;
+everything else is opt-in. (Generated — see note under Getting started.)
+
+| Command | What it does |
+|---|---|
+| `/ardd-feature` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet. |
+| `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume. |
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning. |
 | `/ardd-plan` | Draft a phased implementation plan from artifacts, feedback, and optionally backlogged features; feedback-file arguments scope which feedback is consumed. |
 | `/ardd-tasks` | Generate an ordered task list from a plan; selecting a draft plan approves it. |
@@ -114,7 +125,7 @@ remember — run it by hand anytime for a fresh check.
 ## Extensions
 
 Opt-in skills for concerns the core loop doesn't force on you.
-(Generated — see note under The core loop.)
+(Generated — see note under Getting started.)
 
 | Command | What it does |
 |---|---|
@@ -123,12 +134,9 @@ Opt-in skills for concerns the core loop doesn't force on you.
 | `/ardd-verify` | Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer). |
 | `/ardd-critique` | Challenge artifact decisions: simplicity, failure modes, robustness, semantics. |
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |
-| `/ardd-feature` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet. |
-| `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume. |
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
 | `/ardd-render` | Generate a Mermaid diagram from a renderable artifact and upsert it into README.md. |
 | `/ardd-sync` | Mirror the feature register to/from an external issue tracker (GitHub Issues today). |
-| `/ardd-featurize` | One-time (after codify): extract a feature register from an existing codebase. |
 | `/ardd-add-artifact` | Create a new, non-standard artifact from a template. |
 
 ## Install

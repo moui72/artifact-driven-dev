@@ -1,6 +1,6 @@
 ---
 name: ardd-feature
-tier: extension
+tier: core
 description: Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet.
 ---
 

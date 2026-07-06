@@ -35,17 +35,16 @@ cd /path/to/artifact-driven-dev
 
 Then open Claude Code in your project.
 
-## The core loop
+## Getting started (once per project)
 
-Steps 1–8 below are the whole workflow: seed artifacts, refine until
-stable, plan, generate tasks, implement (and converge after an
-interruption). Consistency checking (`/ardd-analyze`) runs automatically
-at the end of most of these steps. Everything under
-[Extensions](#extensions) further down — diagrams, tracker sync,
-critique, code-vs-artifact verification — is opt-in and can be ignored
-until you want it.
+Bring the project under ARDD: seed artifacts, refine until stable. After
+this you live in [the core loop](#the-core-loop) below. Consistency
+checking (`/ardd-analyze`) runs automatically at the end of most
+state-changing skills. Everything under [Extensions](#extensions) —
+diagrams, tracker sync, critique, code-vs-artifact verification,
+research — is opt-in and can be ignored until you want it.
 
-### 1. Seed your artifacts
+### Seed your artifacts
 
 After discussing your project with Claude, run:
 
@@ -67,7 +66,7 @@ This creates it from scratch and asks you targeted questions to fill it in.
 
 ---
 
-### 2. Refine artifacts
+### Refine artifacts
 
 As you make decisions, update the relevant artifact:
 
@@ -83,7 +82,7 @@ it also handles version bumping and the sync impact report.
 
 ---
 
-### 3. Check consistency
+### Check consistency
 
 `/ardd-refine` and most other skills that change project state now run this
 for you automatically as their final step, so you usually won't need to
@@ -124,27 +123,41 @@ Four skills check your project, at different layers. They don't overlap:
 
 ---
 
-### 4. Research anything uncertain
-
-For open questions — library choices, API behaviour, algorithmic approaches —
-run:
-
-```
-/ardd-research sqlite full-text search options
-/ardd-research carepoint appointment pagination edge cases
-```
-
-Research outputs go to `.project/plans/research-<topic>-<date>.md`. This is a
-one-off write with no lifecycle — nothing reads it back automatically. If the
-recommendation is a standing decision, fold it into the relevant artifact
-with `/ardd-refine` so `/ardd-plan` picks it up the normal way; if it
-surfaces new backlog-worthy scope instead, use `/ardd-feature`.
-
 ---
 
-### 5. Generate a plan
+## The core loop
 
-When artifacts are stable:
+The recurring delivery cycle. Ideas and observations flow in
+continuously; each plan run turns a batch of them into shipped code.
+
+### 1. Log ideas as they occur
+
+```
+/ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
+```
+
+This records the idea in the feature register (`.project/features/<slug>.md`,
+`status: backlogged`) — no design work happens yet, so logging is cheap;
+do it the moment an idea exists. Work backlog items in any order,
+whenever you choose, by targeting the slug in step 3.
+
+### 2. Capture what you notice
+
+After actually using what's been built:
+
+```
+/ardd-feedback the export button silently fails on empty datasets; also
+reconsidering the CSV-only decision
+```
+
+Bugs, UX friction, reconsidered decisions — each becomes a tracked item
+(`F001`, `F002`, …) in `.project/feedback/`, consumed by the next plan.
+Reconsidered items tagged with an artifact get an explicit
+confirm-the-reversal prompt at planning time.
+
+### 3. Generate a plan
+
+When you're ready to work a batch:
 
 ```
 /ardd-plan
@@ -169,7 +182,7 @@ It still offers a plain branch, same as before.
 
 ---
 
-### 6. Generate tasks
+### 4. Generate tasks
 
 ```
 /ardd-tasks
@@ -194,7 +207,7 @@ Review the task list and adjust before running `/ardd-implement`.
 
 ---
 
-### 7. Implement
+### 5. Implement
 
 ```
 /ardd-implement
@@ -229,7 +242,7 @@ branch).
 
 ---
 
-### 8. Resume after interruption
+### 6. Resume after interruption
 
 If `/ardd-implement` is interrupted — or you pick the project up in a new session:
 
@@ -258,6 +271,24 @@ Each artifact has a `status` field in its frontmatter:
 ## Extensions
 
 Everything below is opt-in — useful, but never required by the core loop.
+
+### Research anything uncertain
+
+For open questions — library choices, API behaviour, algorithmic approaches —
+run:
+
+```
+/ardd-research sqlite full-text search options
+/ardd-research carepoint appointment pagination edge cases
+```
+
+Research outputs go to `.project/plans/research-<topic>-<date>.md`. This is a
+one-off write with no lifecycle — nothing reads it back automatically. If the
+recommendation is a standing decision, fold it into the relevant artifact
+with `/ardd-refine` so `/ardd-plan` picks it up the normal way; if it
+surfaces new backlog-worthy scope instead, use `/ardd-feature`.
+
+---
 
 ### Visualize your artifacts
 

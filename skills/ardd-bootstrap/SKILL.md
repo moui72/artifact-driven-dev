@@ -1,6 +1,6 @@
 ---
 name: ardd-bootstrap
-tier: core
+tier: setup
 description: One-time initialization: seed .project/ artifacts from conversation context (greenfield projects).
 ---
 

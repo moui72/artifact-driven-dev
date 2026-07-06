@@ -1,6 +1,6 @@
 ---
 name: ardd-featurize
-tier: extension
+tier: setup
 description: One-time (after codify): extract a feature register from an existing codebase.
 ---
 
