@@ -35,14 +35,13 @@ removed).
 
 ## In Flight
 
-No sibling worktrees; `completion-flip-check.sh` clean against all six
-completed tasks files. This branch (`ardd-state-determinism`, 24 commits
-ahead of `main`) carries the completed work and is ready to merge.
+Nothing — `ardd-state-determinism` merged into `main` (fast-forward,
+2026-07-06) and the branch was deleted; the dogfooded skill copies were
+refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-**Merge `ardd-state-determinism` into `main`.** The plan's tasks file is
-`completed` (23/23):
+Merged. The plan's tasks file is `completed` (23/23); what landed:
 
 - constitution v1.2.0 (Principle II covers mutations; behavioral-test
   tier; per-feature register decision)
@@ -57,6 +56,6 @@ ahead of `main`) carries the completed work and is ready to merge.
   until the `ANTHROPIC_API_KEY` secret is provisioned (deliberate);
   promotion = provision the secret + drop `continue-on-error`
 
-After merge: re-run `./install.sh .` (refresh dogfooded skill copies),
-run `/ardd-verify`, then plan the docs half via
+Next: push `main` when ready (all commits signed), run `/ardd-verify`
+to confirm code vs. the v1.2.0 constitution, then plan the docs half via
 `/ardd-plan feedback-repo-critique-docs-ca1d.md`.
