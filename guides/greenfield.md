@@ -148,30 +148,10 @@ blockers rather than working around them.
 
 ---
 
-## Adding features after initial implementation
+## After initial implementation
 
-When you think of a feature that touches multiple artifacts, log it to the
-backlog first — this just records the idea with a slug, it doesn't touch
-artifacts:
-
-```
-/ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
-```
-
-Backlog items don't have to be worked in the order you logged them. When
-you're ready to actually design and build one, target it by slug:
-
-```
-/ardd-plan octokit-github-fallback
-```
-
-This reads all artifacts first, proposes coordinated changes across every
-affected one, waits for your confirmation, applies them as a consistent unit,
-then drafts the plan against the updated artifacts — all in one pass. Use
-this instead of running `/ardd-refine` on each artifact separately —
-sequential refines leave artifacts inconsistent between passes. After
-approving the plan, run `/ardd-analyze` to refresh STATUS.md, then
-`/ardd-tasks`.
+You're now in the recurring delivery loop — logging features, capturing
+feedback, planning batches. See [continuing.md](continuing.md).
 
 ---
 

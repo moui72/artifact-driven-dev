@@ -153,6 +153,10 @@ reverse-engineer artifacts from the codebase. Review the generated drafts with
 `/ardd-refine`, then run `/ardd-analyze` before planning new work. See
 [guides/existing-project.md](guides/existing-project.md).
 
+**Established project** — already set up and shipping? The steady-state
+loop (features, feedback, targeted plans) is
+[guides/continuing.md](guides/continuing.md).
+
 **Gitignore the skill files** in the target project. They're regenerated
 output — re-running `install.sh` overwrites them from whatever commit of
 this repo you point it at, so committing them just means merge conflicts

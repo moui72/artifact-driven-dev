@@ -129,6 +129,7 @@ Four skills check your project, at different layers. They don't overlap:
 
 The recurring delivery cycle. Ideas and observations flow in
 continuously; each plan run turns a batch of them into shipped code.
+(Guide-length treatment: [guides/continuing.md](guides/continuing.md).)
 
 ### 1. Log ideas as they occur
 

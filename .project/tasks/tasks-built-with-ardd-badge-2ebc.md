@@ -74,7 +74,7 @@ exception. State mutations go through
   become the delivery loop (feature/feedback intake → plan → tasks →
   implement → converge), setup gets its own short section, research
   moves under Extensions. Depends on T006.
-- [ ] T008 (F008) Write guides/continuing.md — "Working an established
+- [x] T008 (F008) Write guides/continuing.md — "Working an established
   project": log ideas the moment you have them (`/ardd-feature`),
   capture observations from using the built thing (`/ardd-feedback`),
   targeted plans by slug, feedback-scoped plans

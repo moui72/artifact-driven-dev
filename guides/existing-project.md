@@ -159,28 +159,10 @@ articulated. Either way, it's a useful mirror.
 
 ---
 
-## Adding features after codify
+## After codify
 
-Once artifacts are stable, use `/ardd-feature` to log a new idea to the
-backlog — this just records it, it doesn't touch artifacts yet:
-
-```
-/ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
-```
-
-That gives you a slug and a `backlogged` entry in `features.md`. When you're
-ready to actually work it (in whatever order you like — backlog items don't
-need to be worked in the order they were logged), target it by slug:
-
-```
-/ardd-plan octokit-github-fallback
-```
-
-This reads all artifacts first, identifies which ones the feature touches,
-proposes all changes together for your review, applies them as a coherent
-unit, then drafts the plan against the now-updated artifacts. Use this
-instead of running `/ardd-refine` on each artifact separately — it sees the
-full cross-artifact picture before writing anything.
+From here you're in the recurring delivery loop — logging features,
+capturing feedback, planning batches. See [continuing.md](continuing.md).
 
 ---
 
