@@ -366,7 +366,10 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       for raw in $names; do
         IFS="$old_ifs"
         n="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
-        if [ -n "$n" ] && [ ! -f "$PROJECT_DIR/artifacts/$n.md" ]; then
+        if [ "$n" = "none" ] || [ "$n" = "n/a" ]; then
+          echo "$f:$lineno: placeholder artifact name '$n' — omit the artifacts bracket-tag entirely when no artifact applies"
+          echo 1 > "$TARGET/.lint-project-failed"
+        elif [ -n "$n" ] && [ ! -f "$PROJECT_DIR/artifacts/$n.md" ]; then
           echo "$f:$lineno: [artifacts: ...] references '$n' — no $PROJECT_DIR/artifacts/$n.md"
           echo 1 > "$TARGET/.lint-project-failed"
         fi

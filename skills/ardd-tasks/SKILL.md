@@ -76,7 +76,9 @@ approves it as part of this — there's no separate approval step in
 3. **Generate tasks** ordered by dependency. Each task MUST:
    - Have a unique ID: `T001`, `T002`, etc.
    - State which artifacts must be loaded before execution, e.g.
-     `[artifacts: datamodel, infrastructure]`
+     `[artifacts: datamodel, infrastructure]` — omitting the bracket-tag
+     entirely when no artifact applies; never write a placeholder name
+     like `none`
    - Be atomic enough that an agent can complete it in one focused session
    - Be concrete enough to execute without reading the plan (embed necessary
      context in the task description)

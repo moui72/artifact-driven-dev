@@ -45,11 +45,11 @@ exception. State mutations go through
 
 ## Phase 3: Artifacts-none convention [feedback 9fc6 F001]
 
-- [ ] T004 [parallel] Soften `skills/ardd-tasks/SKILL.md` step 3's
+- [x] T004 [parallel] Soften `skills/ardd-tasks/SKILL.md` step 3's
   artifact requirement: "state which artifacts must be loaded, omitting
   the artifacts bracket-tag entirely when none apply — never write a
   placeholder name like `none`." Doc-only; lint-docs must stay green.
-- [ ] T005 [parallel] lint-project.sh: when a bracket-tag names the
+- [x] T005 [parallel] lint-project.sh: when a bracket-tag names the
   literal `none` or `n/a`, report the pointed message "placeholder
   artifact name — omit the artifacts bracket-tag instead" in place of
   the generic missing-file error. Bad fixture line added first (red),
