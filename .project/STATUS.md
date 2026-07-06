@@ -37,9 +37,11 @@ are `planned`.
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 0 tasked · 2 implemented — now as per-feature
-files in `.project/features/` (migration 0003 ran; legacy features.md
-removed).
+1 backlogged · 0 planned · 0 tasked · 2 implemented — per-feature files
+in `.project/features/`. Backlogged: `built-with-ardd-badge` (opt-in
+"built with ARDD" README badge injectable by install.sh into downstream
+consumers) — target with `/ardd-plan built-with-ardd-badge`, or bundle
+with the three open feedback files.
 
 ## In Flight
 
