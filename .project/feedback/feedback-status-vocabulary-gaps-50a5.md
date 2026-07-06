@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-06
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-status-vocab-lint-fixes-2026-07-06.md
 ---
 
 # Feedback
@@ -19,7 +19,7 @@ the vocabulary/affordances, not the validator.
 
 ## UX
 
-- [ ] F001 No sanctioned way to reopen a completed tasks file. Observed:
+- [x] F001 No sanctioned way to reopen a completed tasks file. Observed:
   sync-tab-scroll's tasks-lyrics-ticker-75dd.md at
   `status: reopened (T004 failed live-browser verification ...)` — an
   invented value plus an inline annotation, because a task that passed
@@ -34,13 +34,13 @@ the vocabulary/affordances, not the validator.
   (feedback → plan → new tasks file) and say so in ardd-implement/
   ardd-converge prose + the tasks-file status comment. Either way,
   lint's unknown-status message should point at the sanctioned path.
-- [ ] F002 Tasks-file vocabulary confusion: `superseded` (a plan status)
+- [x] F002 Tasks-file vocabulary confusion: `superseded` (a plan status)
   used on a tasks file where the enum wants `abandoned` — observed in
   sync-tab-scroll's tasks-settings-modal-followup-bbd2.md. Cheap fix:
   lint special-cases known cross-schema values (`superseded` on tasks →
   "did you mean abandoned? superseded is a plan status"), mirroring the
   placeholder-name special-case from 9fc6.
-- [ ] F003 No sanctioned way to split/partially-consume a feedback file:
+- [x] F003 No sanctioned way to split/partially-consume a feedback file:
   `status: split` invented on sync-tab-scroll's
   feedback-manual-verification-pass-4b3c.md. The current design already
   handles partial consumption (items marked per-item; file stays `open`

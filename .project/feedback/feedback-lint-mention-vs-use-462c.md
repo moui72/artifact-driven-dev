@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-06
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-status-vocab-lint-fixes-2026-07-06.md
 ---
 
 # Feedback
@@ -14,7 +14,7 @@ name — each tripped lint and had to be reworded to dodge it.
 
 ## Bugs
 
-- [ ] F001 lint-project.sh cannot distinguish a line that USES an
+- [x] F001 lint-project.sh cannot distinguish a line that USES an
   artifacts bracket-tag from prose that MENTIONS the syntax: it greps
   every line of tasks/feedback files, so meta-content about ARDD inside
   an ARDD-managed project fights the linter (this repo constantly, via

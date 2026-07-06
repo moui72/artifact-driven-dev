@@ -23,13 +23,9 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-2 open feedback files:
-`feedback-status-vocabulary-gaps-50a5.md` (3 UX — agents invent enum
-values: `reopened`/`superseded`/`split`; missing reopen affordance and
-pointed guidance) and `feedback-lint-mention-vs-use-462c.md` (1 bug —
-lint can't tell tag *use* from syntax *mention*; fix: parse tags on
-checklist item lines only; hit three times in one day). Both small;
-bundle into the next plan. The 8 older feedback files are `planned`.
+None open — all 10 feedback files are `status: planned`. The two from
+the vocabulary/lint batch were consumed this run by
+`plan-status-vocab-lint-fixes-2026-07-06.md`.
 
 ## Feature Backlog
 
@@ -45,11 +41,13 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-All planned work is merged and pushed (ffd3628); downstream consumers
-reinstalled (migration 0004 fixed sync-tab-scroll's dangling tags; both
-received the badge offer). Two small open feedback files
-(status-vocabulary-gaps; lint mention-vs-use) await the next
-`/ardd-plan`. Remaining threads otherwise: smoke-harness key
-provisioning (DEFECTS.md 970d935b), and downstream repos' own content
-fixes (invented statuses, the assisted-review placeholder tag,
-sync-tab-scroll's constitution governance drift — now caught by lint).
+`plan-status-vocab-lint-fixes-2026-07-06.md` is **approved** and tasked:
+`tasks-status-vocab-lint-fixes-ff86.md` (`status: ready`, 6 tasks in 2
+phases, branch `status-vocab-lint-fixes`). Phase 1: terminal-completion
+rule in implement/converge/tasks prose (T001), the sync-tab-scroll
+`split`-file reading (T002, resolves the plan's one open question),
+three pointed lint status messages test-first (T003). Phase 2:
+item-line-scoped tag parsing — absence-assertion red first (T004),
+implementation (T005), then unwinding this repo's dodge-vocabulary
+prose (T006). Next: `/ardd-implement` (inline — already on the work
+branch).
