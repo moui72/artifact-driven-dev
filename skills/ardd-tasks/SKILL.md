@@ -39,8 +39,9 @@ approves it as part of this — there's no separate approval step in
    tasks file for this plan as `abandoned` (skip any already `completed` —
    that's a more informative terminal state than abandonment, and
    `/ardd-implement`/`/ardd-converge`'s sibling-completion check already
-   treats a `completed` sibling as done). Flip `status` to `abandoned` for
-   each one the user confirms; leave the rest untouched (e.g. still
+   treats a `completed` sibling as done). For each one the user confirms,
+   run `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file>
+   abandoned`; leave the rest untouched (e.g. still
    legitimately being worked in parallel). This keeps stale forks from
    lingering at `ready`/`in-progress` forever with no way to tell "abandoned"
    from "just not picked up yet."
@@ -49,11 +50,18 @@ approves it as part of this — there's no separate approval step in
    scripts/project-lock.sh check ardd-tasks` first — surface any warning to
    the user (another invocation touched `.project/` recently) but proceed
    regardless; this is advisory, never a block. If the chosen plan's
-   `status` is `draft`: flip it to `approved` in place, then read its
-   `features:` frontmatter list (if any) and for each slug flip that entry in
-   `.project/artifacts/features.md` from `Status: backlogged` to
-   `Status: planned`, adding `· Plan: <plan filename>` to its metadata
-   line — the same mechanics `/ardd-plan` used to perform on explicit
+   `status` is `draft`: approve it and advance its features via
+   `ardd-state.sh` (all mutations script-performed — constitution
+   Principle II; use the copy at `.claude/skills/ardd-scripts/`):
+
+   ```
+   ardd-state.sh plan-flip <plan file> approved
+   # then, for each slug in the plan's features: frontmatter list:
+   ardd-state.sh feature-flip <slug> planned
+   ardd-state.sh feature-field <slug> plan <plan filename>
+   ```
+
+   — the same mechanics `/ardd-plan` used to perform on explicit
    approval, just triggered by selecting the plan here instead. If the
    chosen plan is already `status: approved` (e.g. from before this
    convention, or a second tasks-file run against the same plan), skip this
@@ -76,11 +84,11 @@ approves it as part of this — there's no separate approval step in
 4. **Mark parallelism** with `[parallel]` on tasks that touch different files
    and have no shared dependencies.
 
-5. **Write to `.project/tasks/tasks-<slug>-<hex>.md`**, where `<slug>` is
-   taken from the chosen plan's filename and `<hex>` is a freshly generated
-   4-char token (e.g. `openssl rand -hex 2` → `f2ed`), minted at write
-   time so the filename is always unique even when regenerating tasks for the
-   same plan. Run `.claude/skills/ardd-scripts/project-lock.sh check
+5. **Write the tasks file.** Mint its filename from the chosen plan's
+   slug — `.claude/skills/ardd-scripts/ardd-state.sh mint tasks <slug>` —
+   minted at write time so the name is always unique even when
+   regenerating tasks for the same plan; write to
+   `.project/tasks/<that filename>`. Run `.claude/skills/ardd-scripts/project-lock.sh check
    ardd-tasks` before this first write (surface any warning, don't block on
    it). Write the frontmatter immediately, before generating task
    content, with `status: generating` — this is what makes an interrupted
@@ -108,14 +116,17 @@ approves it as part of this — there's no separate approval step in
    - [ ] T003 [artifacts: datamodel] <description>
    ```
 
-   Once all tasks are written, flip `status` to `ready`, then run
-   `... touch ardd-tasks`.
+   Once all tasks are written, flip the file to ready —
+   `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file> ready` —
+   then run `... touch ardd-tasks`.
 
 6. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
-   `features:` list (if any). For each slug, flip its entry in
-   `.project/artifacts/features.md` from `Status: planned` to `Status: tasked`
-   and add `· Tasks: tasks-<slug>-<hex>.md` (this file's own filename) to its
-   metadata line.
+   `features:` list (if any). For each slug:
+
+   ```
+   ardd-state.sh feature-flip <slug> tasked
+   ardd-state.sh feature-field <slug> tasks <this tasks filename>
+   ```
 
 7. **Report** the total task count and phase breakdown. Note any tasks that
    embed a test requirement, which features (if any) were flipped to

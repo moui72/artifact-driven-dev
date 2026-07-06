@@ -103,7 +103,7 @@ same commit.
   keeps all judgment (what to accept, when to flip); mutations go
   through subcommands. Doc-only skill edits — no new test; run
   `lint-docs.sh` + full hook.
-- [ ] T014 [artifacts: constitution] Rewire tasks/implement/converge:
+- [x] T014 [artifacts: constitution] Rewire tasks/implement/converge:
   `skills/ardd-tasks/SKILL.md` (plan approval → `plan-flip`, tasks-file
   minting → `mint`, generating→ready → `tasks-flip`, feature flips →
   `feature-flip`/`feature-field`), `skills/ardd-implement/SKILL.md` and

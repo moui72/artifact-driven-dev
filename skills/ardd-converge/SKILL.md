@@ -81,7 +81,7 @@ when resuming work in a new session.
       failure verbatim — do not attempt reconciliation, and never try a
       manual conflicted merge.** The same present-or-fallback rule applies
       to the other `.claude/skills/ardd-scripts/*.sh` calls in the
-      remaining steps (`project-lock.sh`, `sibling-tasks-complete.sh`).
+      remaining steps (`project-lock.sh`, `sibling-tasks-complete.sh`, `ardd-state.sh`).
    2. Verify the chosen tasks file exists at its expected path — a cheap
       proof the alignment delivered the state.
 
@@ -148,9 +148,12 @@ when resuming work in a new session.
    `.claude/skills/ardd-scripts/project-lock.sh check ardd-converge` first —
    surface any warning to the user (another invocation touched `.project/`
    recently) but proceed regardless; this is advisory, never a block.
-   Update the frontmatter `status` to reflect the reconciled state:
+   Update the frontmatter `status` to reflect the reconciled state via
+   `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file> <status>`:
    `completed` if every task is now `- [x]` with no gaps appended,
-   `in-progress` otherwise.
+   `in-progress` otherwise. (Checkbox marks made in step 5 go through
+   `ardd-state.sh task-check <file> <task-id>` too — deciding *whether*
+   work is done is judgment; the mark itself is script-performed.)
 
    If the status is now `completed`, run
    `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's path>`
@@ -159,11 +162,11 @@ when resuming work in a new session.
 
    If its `all_complete=true`, **flip the bound features now — uniformly,
    whether inline or delegated.** Load the plan and for each slug in its
-   `features:` list flip that entry's `Status` in
-   `.project/artifacts/features.md` from `tasked` to `implemented`, right
-   here (in the worktree, if delegated). The flip rides the branch, so it
-   can't reach the default branch until the branch merges — `features.md`
-   never claims "implemented" before the code lands, and there's no
+   `features:` list run `.claude/skills/ardd-scripts/ardd-state.sh
+   feature-flip <slug> implemented`, right here (in the worktree, if
+   delegated). The flip rides the branch, so it can't reach the default
+   branch until the branch merges — the register never claims
+   "implemented" before the code lands, and there's no
    held-flip-until-merge step or inline/delegated split. Run
    `... touch ardd-converge` once this step's writes are done.
 

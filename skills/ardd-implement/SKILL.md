@@ -109,13 +109,14 @@ self-contained; the agent loads only the artifacts it declares.
       never try a manual conflicted merge.** The same present-or-fallback
       rule applies to every other `.claude/skills/ardd-scripts/*.sh` call
       in the remaining steps (`project-lock.sh`,
-      `sibling-tasks-complete.sh`): if the worktree copy is missing, use
-      the coordinator's absolute path.
+      `sibling-tasks-complete.sh`, `ardd-state.sh`): if the worktree copy
+      is missing, use the coordinator's absolute path.
    2. Verify the chosen tasks file exists at its expected path — a cheap
       end-to-end proof the alignment actually delivered the expected state.
 
-   Then the subagent flips the tasks file `ready→in-progress` and commits
-   that *in the worktree*, and proceeds through the remaining steps
+   Then the subagent flips the tasks file `ready→in-progress`
+   (`ardd-state.sh tasks-flip <file> in-progress`) and commits that *in
+   the worktree*, and proceeds through the remaining steps
    normally, committing per task as usual. The subagent runs independently;
    the coordinating conversation is free to do other things meanwhile.
 
@@ -156,11 +157,11 @@ self-contained; the agent loads only the artifacts it declares.
 4. **Flip to `in-progress` (if needed), then find the next uncompleted
    task.** If the file's status is still `ready` (a first-task run on the
    inline path — the delegated path already flipped it in step 3's
-   preamble), flip its frontmatter `status` to `in-progress` and commit that
-   now, on the current branch. This flip rides the branch like all other
-   state — there is no separate default-branch pre-commit. Then locate the
-   next uncompleted task (first `- [ ]` in document order); no further status
-   flip in this step.
+   preamble), run `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip
+   <file> in-progress` and commit that now, on the current branch. This
+   flip rides the branch like all other state — there is no separate
+   default-branch pre-commit. Then locate the next uncompleted task via
+   `ardd-state.sh next-task <file>`; no further status flip in this step.
 
 5. **Load declared artifacts.** Parse the `[artifacts: ...]` tag on the task
    and read each named file from `.project/artifacts/<name>.md`.
@@ -184,27 +185,27 @@ self-contained; the agent loads only the artifacts it declares.
 7. **Verify** the task is complete: tests pass, the feature works as described,
    no regressions in previously completed tasks.
 
-8. **Mark the task complete** in the tasks file: change `- [ ]` to `- [x]`. If
-   this was the last incomplete task, run `.claude/skills/ardd-scripts/
-   project-lock.sh check ardd-implement` first — surface any warning to the
-   user (another invocation touched `.project/` recently) but proceed
-   regardless; this is advisory, never a block. Then flip the file's
-   frontmatter `status` to `completed`, and run
+8. **Mark the task complete**: `.claude/skills/ardd-scripts/ardd-state.sh
+   task-check <file> <task-id>`. If this was the last incomplete task
+   (`ardd-state.sh next-task <file>` exits 1), run `.claude/skills/
+   ardd-scripts/project-lock.sh check ardd-implement` first — surface any
+   warning to the user (another invocation touched `.project/` recently)
+   but proceed regardless; this is advisory, never a block. Then run
+   `ardd-state.sh tasks-flip <file> completed`, and run
    `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's path>`
    — it reports every tasks file bound to the same plan (a plan can have
    more than one) and whether they're collectively done.
 
    If its `all_complete=true`, **flip the bound features now — uniformly,
    whether inline or delegated.** Load the plan and for each slug in its
-   `features:` list flip that entry's `Status` in
-   `.project/artifacts/features.md` from `tasked` to `implemented`, right
-   here (in the worktree, if this is a delegated run). This is safe because
-   the flip rides the branch: it can't reach the default branch until the
-   branch merges, so `features.md` never claims "implemented" before the code
-   has actually landed. There is no held-flip-until-merge step and no
-   inline/delegated split anymore — merge is the single atomic event that
-   lands the code and this flip together. Run `... touch ardd-implement`
-   once this step's writes are done.
+   `features:` list run `ardd-state.sh feature-flip <slug> implemented`,
+   right here (in the worktree, if this is a delegated run). This is safe
+   because the flip rides the branch: it can't reach the default branch
+   until the branch merges, so the register never claims "implemented"
+   before the code has actually landed. There is no held-flip-until-merge
+   step and no inline/delegated split anymore — merge is the single atomic
+   event that lands the code and this flip together. Run
+   `... touch ardd-implement` once this step's writes are done.
 
    **On the inline (non-delegated) path, this is the run's terminal step:**
    once step 9 commits this final work, **run `/ardd-analyze` now** to refresh
@@ -232,10 +233,11 @@ self-contained; the agent loads only the artifacts it declares.
   convention in the constitution's Development Workflow section.
 - **Do not modify artifacts** during implementation. If a decision in an artifact
   turns out to be wrong, stop, surface it, and let the user run `/ardd-refine` first.
-  The one exception is flipping a bound feature's `Status` line in
-  `features.md` on task-file completion (step 8, uniformly whether inline or
-  delegated — the flip rides the branch and lands only on merge) — that's
-  status bookkeeping, not a design decision.
+  The one exception is flipping a bound feature's register status
+  (`ardd-state.sh feature-flip <slug> implemented`) on task-file completion
+  (step 8, uniformly whether inline or delegated — the flip rides the
+  branch and lands only on merge) — that's status bookkeeping, not a
+  design decision.
 - **Do not touch `DEFECTS.md`.** If a task incidentally reveals a pre-existing
   code-vs-artifact violation unrelated to the task itself, don't write to
   `.project/DEFECTS.md` directly — that would break its single-writer
