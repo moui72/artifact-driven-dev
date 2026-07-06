@@ -46,14 +46,20 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-repo-critique-docs-2026-07-06.md` is **approved** and tasked:
-`tasks-repo-critique-docs-46a1.md` (`status: ready`, 11 tasks in 4
-phases, on branch `repo-critique-docs`). Phase 1 (README/USAGE
-restructure — name decision T001, tiering, artifact-set demotion,
-delegation-fallback note) is sequential; Phases 2/3 carry parallel-safe
-tasks; Phase 4 fixes both surfaced defects (sed portability with
-backfilled migration tests; second smoke scenario). Next:
-`/ardd-implement` and select that tasks file — T001 asks the ADD-vs-ARDD
-name question first (ARDD recommended). Note this branch also carries
-the still-uncommitted plan/feedback bookkeeping from the /ardd-plan run;
-implement's first commit will land it.
+`tasks-repo-critique-docs-46a1.md` is **completed** (11/11) on branch
+`repo-critique-docs` — docs tiered (core loop vs extensions), ARDD is the
+single name (constitution v1.2.1), the artifact set is declared-not-fixed,
+inline-on-a-branch is the documented delegation fallback, development
+archaeology moved to `docs/decisions/`, skill descriptions are
+single-sourced from SKILL.md frontmatter (`gen-skill-docs.sh` +
+lint-docs drift check; WORKFLOW.md now static via install.sh), and both
+DEFECTS.md entries are fixed (portable sed in migrations 0001/0002 with
+backfilled ubuntu-red tests; smoke scenario 2 for tasks→implement).
+T006 note: archaeology strip achieved 8.5% token reduction, not the
+plan's 25% estimate — earlier rewires had already removed most of it.
+
+**The final commit (9972413) is unsigned — 1Password was locked.**
+Re-sign before pushing (e.g. `git commit --amend -S` after unlocking).
+Next: merge `repo-critique-docs` into `main`, re-run `./install.sh .`,
+push, and run `/ardd-verify` to confirm the two defects clear from
+DEFECTS.md.
