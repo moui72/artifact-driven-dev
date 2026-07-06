@@ -87,7 +87,7 @@ same commit.
   in `.ardd-applied`. Fixture test with this repo's own current
   features.md copied as fixture, red first. Run it against this repo's
   live `.project/` as the verification step.
-- [ ] T012 Ship via `install.sh`: add `ardd-state.sh` (and nothing else
+- [x] T012 Ship via `install.sh`: add `ardd-state.sh` (and nothing else
   new) to the copied-scripts set; confirm `.worktreeinclude` coverage
   (`.claude/skills/ardd-*/` already covers it); extend
   `scripts/test-install-worktreeinclude.sh` or sibling install test to

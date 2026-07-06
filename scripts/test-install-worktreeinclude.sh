@@ -57,6 +57,14 @@ else
   bad "case1: pattern present exactly once (got count=$count)"
 fi
 
+# --- Case 1b: ardd-state.sh ships into ardd-scripts and is executable ---
+state="$target/.claude/skills/ardd-scripts/ardd-state.sh"
+if [ -x "$state" ]; then
+  ok "case1b: ardd-state.sh installed and executable"
+else
+  bad "case1b: ardd-state.sh installed and executable (missing or not +x)"
+fi
+
 # --- Case 2: existing .worktreeinclude, unrelated content, NO trailing newline ---
 target="$WORK/case2"
 mkdir -p "$target"
