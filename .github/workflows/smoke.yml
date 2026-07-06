@@ -1,0 +1,92 @@
+# Behavioral smoke test (constitution Quality Standards, behavioral-test
+# tier): install ADD into a throwaway target project, run one
+# state-mutating skill flow headlessly, and assert on the file outcomes.
+#
+# PRODUCTION ANNOTATION (decided 2026-07-06, plan-ardd-state-determinism):
+# the ANTHROPIC_API_KEY secret is deliberately NOT provisioned yet, so the
+# job skips fast when it's absent and carries continue-on-error. Promotion
+# to a required check = provision the secret and remove continue-on-error.
+name: smoke
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+
+jobs:
+  skill-smoke:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for API key
+        id: key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "ANTHROPIC_API_KEY not provisioned — skipping smoke run (expected until the secret is added)."
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up target fixture
+        if: steps.key.outputs.present == 'true'
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI"
+          mkdir -p /tmp/smoke-target/.project/artifacts
+          cd /tmp/smoke-target
+          git init -q -b main
+          cat > .project/artifacts/constitution.md <<'EOF'
+          ---
+          name: constitution
+          status: stable
+          last_updated: 2026-07-06
+          workflow_mode: solo
+          ---
+          # Smoke Constitution
+
+          ## Core Principles
+
+          ### I. Simplicity
+
+          Keep it minimal.
+          EOF
+          git add -A && git commit -q -m "fixture init"
+          cd "$GITHUB_WORKSPACE"
+          ./install.sh /tmp/smoke-target
+
+      - name: Install Claude Code CLI
+        if: steps.key.outputs.present == 'true'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: "Smoke flow: /ardd-feature then /ardd-plan"
+        if: steps.key.outputs.present == 'true'
+        working-directory: /tmp/smoke-target
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "/ardd-feature add a hello command that prints a greeting" --dangerously-skip-permissions
+          slug="$(ls .project/features | head -1 | sed 's/\.md$//')"
+          echo "logged feature slug: $slug"
+          claude -p "/ardd-plan $slug" --dangerously-skip-permissions
+
+      - name: Assert file outcomes
+        if: steps.key.outputs.present == 'true'
+        run: |
+          slug="$(ls /tmp/smoke-target/.project/features | head -1 | sed 's/\.md$//')"
+          plan="$(ls /tmp/smoke-target/.project/plans | grep '^plan-' | head -1 || true)"
+          test -n "$plan" || { echo "no plan file produced"; exit 1; }
+          ./scripts/smoke-assert.sh /tmp/smoke-target \
+            --exists ".project/features/$slug.md" \
+            --exists ".project/plans/$plan" \
+            --feature "$slug" backlogged \
+            --absent ".project/STATUS.md.orig"
+          # Single-writer discipline: the plan run must not have created
+          # DEFECTS.md or SYNC.md (owned by verify/sync respectively).
+          ./scripts/smoke-assert.sh /tmp/smoke-target \
+            --absent ".project/DEFECTS.md" \
+            --absent ".project/SYNC.md"

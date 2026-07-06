@@ -172,7 +172,7 @@ same commit.
   (`lint-project.sh` clean), and single-writer files are untouched.
   Test-first: assertion script gets its own good/bad fixture test and
   CI job (runs without any API key — pure file checks).
-- [ ] T022 CI smoke job in `.github/workflows/`: triggers only on
+- [x] T022 CI smoke job in `.github/workflows/`: triggers only on
   `pull_request` with `paths: [skills/**]`; guard step skips fast when
   `ANTHROPIC_API_KEY` secret is absent; `continue-on-error: true`
   (Production Annotation: key deliberately unprovisioned — promotion =
