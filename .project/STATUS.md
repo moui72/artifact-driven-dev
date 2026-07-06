@@ -23,10 +23,12 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-None open — all 8 feedback files are `status: planned`. The three from
-2026-07-06 (migration dangling-tags, artifacts-none convention, docs
-review/three-tier reframe) were consumed this run by
-`plan-built-with-ardd-badge-2026-07-06.md`.
+1 open feedback file: `feedback-status-vocabulary-gaps-50a5.md`
+(2026-07-06, 3 UX) — post-0004 downstream lint showed three independent
+agent-invented status values (`reopened` on a completed tasks file,
+`superseded` on a tasks file, `split` on a feedback file): the enums
+lack a reopen transition/affordance and pointed guidance at the moment
+of invention. The 8 older feedback files are `planned`.
 
 ## Feature Backlog
 
@@ -42,15 +44,11 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`tasks-built-with-ardd-badge-2ebc.md` is **completed** (11/11) on branch
-`built-with-ardd-badge`: badge template + opt-in install.sh suggestion,
-migration 0004 (dangling register tags — downstream repos fixed on next
-install), artifacts-none convention (softened wording + pointed lint
-message), generator workflow ordering, the three-tier docs reframe
-(Getting started / core loop with feature+feedback intake / Extensions),
-guides/continuing.md, USAGE bootstrap rewrite, staleness sweep, README
-restructure. **All commits on this branch are unsigned (1Password
-locked) — re-sign before pushing** (`git rebase HEAD~N --exec 'git
-commit --amend --no-edit -S -n'` after unlocking). Then: merge into
-main, `./install.sh .`, push, and re-install downstream (applies
-migration 0004 and offers the badge).
+All planned work is merged and pushed (ffd3628); downstream consumers
+reinstalled (migration 0004 fixed sync-tab-scroll's dangling tags; both
+received the badge offer). One open feedback file
+(status-vocabulary-gaps, above) awaits the next `/ardd-plan` — small,
+three UX items. Remaining threads otherwise: smoke-harness key
+provisioning (DEFECTS.md 970d935b), and downstream repos' own content
+fixes (invented statuses, the assisted-review placeholder tag,
+sync-tab-scroll's constitution governance drift — now caught by lint).
