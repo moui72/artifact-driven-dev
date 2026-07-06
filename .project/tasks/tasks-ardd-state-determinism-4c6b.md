@@ -133,7 +133,7 @@ same commit.
   all surfaced / some unsurfaced / no DEFECTS.md). CI job. Rewire
   `skills/ardd-plan/SKILL.md` step 5 to call it, keeping only the
   ask-the-user half. Add to `install.sh` copied set.
-- [ ] T017 [parallel] `scripts/tasks-list.sh [project-dir]`: enumerate
+- [x] T017 [parallel] `scripts/tasks-list.sh [project-dir]`: enumerate
   `.project/tasks/tasks-*.md` with status, x/y checkbox progress, and
   `plan:` binding; exclude `abandoned` behind a flag. Fixture tests
   first. CI job. Rewire the pick-list prose in

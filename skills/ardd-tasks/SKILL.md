@@ -16,11 +16,10 @@ approves it as part of this — there's no separate approval step in
 
    Glob `.project/plans/plan-*.md` and read frontmatter for
    each — list plans regardless of `status` (`draft`, `approved`, or
-   `superseded`; skip `superseded` ones, they're historical). For each
-   remaining plan, also glob `.project/tasks/tasks-*.md` and check each
-   file's `plan:` frontmatter for an exact match against the plan's
-   filename — note whether one or more tasks files already exist for that
-   plan and their statuses.
+   `superseded`; skip `superseded` ones, they're historical). Then run
+   `.claude/skills/ardd-scripts/tasks-list.sh --all` and match its
+   plan-binding column against each plan's filename — note whether one or
+   more tasks files already exist for that plan and their statuses.
 
    Present the list (plan filename, status, and any existing tasks files with
    their status/progress) and ask the user which plan to generate tasks for.

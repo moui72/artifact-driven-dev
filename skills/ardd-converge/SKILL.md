@@ -6,12 +6,12 @@ when resuming work in a new session.
 
 ## Steps
 
-1. **Pick a tasks file.** Glob `.project/tasks/tasks-*.md`, excluding any at
-   `status: abandoned` — a superseded fork with nothing left to reconcile.
-   If none remain, tell the user to run `/ardd-tasks` first. For each
-   remaining file, read its frontmatter `status` and compute live progress
-   from checkboxes (`x/y complete`). Present the list and ask the user which
-   to reconcile. If only one exists, still confirm rather than
+1. **Pick a tasks file.** Run
+   `.claude/skills/ardd-scripts/tasks-list.sh` — it lists every
+   non-abandoned `.project/tasks/tasks-*.md` with status, checkbox
+   progress (`x/y`), and plan binding. If it prints nothing, tell the
+   user to run `/ardd-tasks` first. Present the list and ask the user
+   which to reconcile. If only one exists, still confirm rather than
    auto-selecting.
 
    **Before presenting the list, run
