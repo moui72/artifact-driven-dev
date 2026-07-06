@@ -79,7 +79,7 @@ same commit.
   bad fixtures red first). Also update `scripts/completion-flip-check.sh`
   and `scripts/inflight-worktrees.sh` if they read features.md/the
   register (check; adjust tests likewise).
-- [ ] T011 Migration `migrations/0003-per-feature-files.sh`: split a
+- [x] T011 Migration `migrations/0003-per-feature-files.sh`: split a
   legacy `features.md` into per-feature files (parse the
   `· `-separated metadata line one final time: Slug, Status, Logged,
   Plan, Tasks, GH), idempotent, leaves a pointer stub or removes

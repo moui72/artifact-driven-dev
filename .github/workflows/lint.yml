@@ -95,6 +95,12 @@ jobs:
       - uses: actions/checkout@v4
       - run: ./scripts/test-ardd-state.sh
 
+  migration-per-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-migration-per-feature.sh
+
   hooks-pre-commit:
     runs-on: ubuntu-latest
     steps:
