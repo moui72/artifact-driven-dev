@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-06
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-built-with-ardd-badge-2026-07-06.md
 ---
 
 # Feedback
@@ -11,7 +11,7 @@ into assisted-review and sync-tab-scroll).
 
 ## Bugs
 
-- [ ] F001 Migration 0003-per-feature-files leaves dangling `artifacts: features` tags: it converts the register and removes
+- [x] F001 Migration 0003-per-feature-files leaves dangling `artifacts: features` tags: it converts the register and removes
   `.project/artifacts/features.md`, but task/feedback lines whose bracket-tag declared the `features` artifact (valid pre-migration, when the register was an
   artifact file) now fail lint-project's artifact-reference check with a
   generic "no artifacts/features.md" message. Observed live in

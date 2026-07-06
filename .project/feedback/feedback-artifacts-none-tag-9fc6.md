@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-06
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-built-with-ardd-badge-2026-07-06.md
 ---
 
 # Feedback
@@ -18,7 +18,7 @@ None — lint behaved correctly; the invented tag is the symptom.
 
 ## UX
 
-- [ ] F001 There is no sanctioned way to annotate a task that needs no
+- [x] F001 There is no sanctioned way to annotate a task that needs no
   artifact, and ardd-tasks step 3 says every task "MUST state which
   artifacts must be loaded" — which pressures an agent into inventing a
   placeholder like the literal name `none` when nothing applies. De

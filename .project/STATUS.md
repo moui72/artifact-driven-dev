@@ -23,25 +23,17 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-3 open feedback files:
-`feedback-migration-dangling-tags-b959.md` (1 bug — migration 0003
-leaves dangling `features` bracket-tags),
-`feedback-artifacts-none-tag-9fc6.md` (1 UX — no sanctioned
-no-artifacts annotation; agents invent `none`), and
-`feedback-docs-review-core-loop-5ef3.md` (5 bugs, 3 UX, 1 reconsidered —
-docs review: staleness sweep, table ordering, README section moves, a
-new guides/continuing.md, and the three-tier reframe putting
-feature/feedback in the core loop as the recurring delivery cycle's
-intake). All three fit one plan comfortably. The 5 older feedback files
-are `planned`.
+None open — all 8 feedback files are `status: planned`. The three from
+2026-07-06 (migration dangling-tags, artifacts-none convention, docs
+review/three-tier reframe) were consumed this run by
+`plan-built-with-ardd-badge-2026-07-06.md`.
 
 ## Feature Backlog
 
-1 backlogged · 0 planned · 0 tasked · 2 implemented — per-feature files
-in `.project/features/`. Backlogged: `built-with-ardd-badge` (opt-in
-"built with ARDD" README badge injectable by install.sh into downstream
-consumers) — target with `/ardd-plan built-with-ardd-badge`, or bundle
-with the three open feedback files.
+0 backlogged · 0 planned · 1 tasked · 2 implemented —
+`built-with-ardd-badge` is bound to
+`tasks-built-with-ardd-badge-2ebc.md` and flips to `implemented` when
+that file completes (riding the work branch).
 
 ## In Flight
 
@@ -51,16 +43,12 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-Both critique plans are fully landed on `main` and pushed. Nothing is
-in flight. The one open thread is smoke-harness promotion: provision
-the `ANTHROPIC_API_KEY` secret, prove the two scenarios actually run
-(expect a tuning pass — headless `claude -p` against interactive skill
-gates is unexercised), drop `continue-on-error`, then extend scenarios
-toward the uncovered paths (converge/feedback/refine/sync) so the last
-DEFECTS.md entry clears. Three open feedback files
-await the next `/ardd-plan`: the docs-review batch (three-tier core-loop
-reframe + continuing.md guide + staleness fixes) plus the two small
-downstream-upgrade items — all bundle into one plan comfortably. Note
-the reframe item (F009 in 5ef3) reverses a decision from the
-just-landed docs plan, so /ardd-plan will ask for explicit confirmation. Otherwise: normal
-feature work via `/ardd-feature` → `/ardd-plan <slug>`.
+`plan-built-with-ardd-badge-2026-07-06.md` is **approved** and tasked:
+`tasks-built-with-ardd-badge-2ebc.md` (`status: ready`, 11 tasks in 4
+phases, branch `built-with-ardd-badge`). Both of the plan's open
+questions were resolved during task generation: the badge decline-memory
+question dissolves (install.sh only prints a suggestion, never edits the
+target README — no state to remember), and generator ordering uses
+per-tier ordered lists with alphabetical append for unlisted skills.
+Next: `/ardd-implement` and select that tasks file (inline — already on
+the work branch).

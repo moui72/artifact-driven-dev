@@ -1,7 +1,9 @@
 ---
 slug: built-with-ardd-badge
-status: backlogged
+status: tasked
 logged: 2026-07-06
+plan: plan-built-with-ardd-badge-2026-07-06.md
+tasks: tasks-built-with-ardd-badge-2ebc.md
 ---
 
 An optional "built with ARDD" badge (shields.io-style markdown snippet linking back to the ARDD repo) that install.sh can offer to inject into a downstream consumer repo's README.

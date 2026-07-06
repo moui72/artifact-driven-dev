@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-06
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-built-with-ardd-badge-2026-07-06.md
 ---
 
 # Feedback
@@ -13,28 +13,28 @@ classified as "extensions."
 
 ## Bugs
 
-- [ ] F001 USAGE step 1 misdescribes `/ardd-bootstrap`: says it writes
+- [x] F001 USAGE step 1 misdescribes `/ardd-bootstrap`: says it writes
   infrastructure/datamodel/ui and to run `/ardd-refine constitution` "if
   you want a constitution" — bootstrap has created the constitution
   (suggestion catalog, `workflow_mode` question) for a while, and the
   artifact set is judgment-driven, not fixed. Rewrite the step to match
   ardd-bootstrap's actual behavior.
-- [ ] F002 guides/greenfield.md claims research outputs are "available
+- [x] F002 guides/greenfield.md claims research outputs are "available
   to `/ardd-plan` automatically" — false; nothing reads research docs
   back (USAGE states this correctly, and ardd-plan has no
   research-loading step). Also says "review and approve the phased
   plan" — the separate approval step no longer exists (selecting the
   plan in `/ardd-tasks` approves it). Fix both.
-- [ ] F003 The name "ArDD" survives in 7 places across guides/ (T001's
+- [x] F003 The name "ArDD" survives in 7 places across guides/ (T001's
   rename matched the token ADD but not ArDD) — apply ARDD there too.
-- [ ] F004 Stale single-file-register and fixed-set references:
+- [x] F004 Stale single-file-register and fixed-set references:
   guides/existing-project.md says features land in `features.md`
   (register is per-feature files now); README line ~6 still says
   "four-plus living documents"; USAGE line ~97 says "reads all four
   artifacts"; CLAUDE.md retains ~7 `features.md` mentions including the
   lint-enum description that no longer matches lint-project.sh's
   per-feature schema. Sweep and fix all.
-- [ ] F005 gen-skill-docs.sh emits the core-loop table in glob
+- [x] F005 gen-skill-docs.sh emits the core-loop table in glob
   (alphabetical) order — implement appears before plan, defeating the
   loop presentation. Add an explicit ordering (e.g. an `order:`
   frontmatter field or a per-tier ordered list in the generator), with
@@ -43,13 +43,13 @@ classified as "extensions."
 
 ## UX
 
-- [ ] F006 README's "Future directions" (and Credits) sit as sections
+- [x] F006 README's "Future directions" (and Credits) sit as sections
   2–3, before Philosophy — a reader hits speculative roadmap before
   learning what the system is. Move both to the bottom of README.
-- [ ] F007 The one-time "Recovering from a rewritten main" note
+- [x] F007 The one-time "Recovering from a rewritten main" note
   (2026-07-04 event) permanently occupies README space — move to
   docs/decisions/ with a one-line pointer, or drop entirely.
-- [ ] F008 Add guides/continuing.md — "Working an established project,"
+- [x] F008 Add guides/continuing.md — "Working an established project,"
   the missing third guide for steady-state use: log ideas the moment
   you have them (`/ardd-feature`), capture observations from using the
   built thing (`/ardd-feedback`), targeted plans by slug,
@@ -62,7 +62,7 @@ classified as "extensions."
 
 ## Reconsidered
 
-- [ ] F009 The two-tier core-loop framing (T002/F001 of the docs plan)
+- [x] F009 The two-tier core-loop framing (T002/F001 of the docs plan)
   misclassifies the system's steady state: bootstrap/codify/refine are
   really *setup* (run once, or rarely), while `/ardd-feature` and
   `/ardd-feedback` are the intake side of the *recurring* delivery loop
