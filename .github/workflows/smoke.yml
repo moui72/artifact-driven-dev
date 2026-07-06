@@ -74,7 +74,7 @@ jobs:
           echo "logged feature slug: $slug"
           claude -p "/ardd-plan $slug" --dangerously-skip-permissions
 
-      - name: Assert file outcomes
+      - name: "Scenario 1 assertions: feature logged, plan drafted"
         if: steps.key.outputs.present == 'true'
         run: |
           slug="$(ls /tmp/smoke-target/.project/features | head -1 | sed 's/\.md$//')"
@@ -83,10 +83,37 @@ jobs:
           ./scripts/smoke-assert.sh /tmp/smoke-target \
             --exists ".project/features/$slug.md" \
             --exists ".project/plans/$plan" \
-            --feature "$slug" backlogged \
-            --absent ".project/STATUS.md.orig"
+            --feature "$slug" backlogged
           # Single-writer discipline: the plan run must not have created
           # DEFECTS.md or SYNC.md (owned by verify/sync respectively).
           ./scripts/smoke-assert.sh /tmp/smoke-target \
+            --absent ".project/DEFECTS.md" \
+            --absent ".project/SYNC.md"
+
+      # Scenario 2 [defect: 970d935b]: the tasks->implement mutation path.
+      # /ardd-tasks approves the scenario-1 plan (plan-flip, feature-flip
+      # planned->tasked); /ardd-implement executes to completion
+      # (tasks-flip, task-check, feature-flip implemented).
+      - name: "Scenario 2: /ardd-tasks then /ardd-implement"
+        if: steps.key.outputs.present == 'true'
+        working-directory: /tmp/smoke-target
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "/ardd-tasks — select the only draft plan and approve it" --dangerously-skip-permissions
+          claude -p "/ardd-implement — work the only actionable tasks file inline to completion" --dangerously-skip-permissions
+
+      - name: "Scenario 2 assertions: approved plan, completed tasks, implemented feature"
+        if: steps.key.outputs.present == 'true'
+        run: |
+          slug="$(ls /tmp/smoke-target/.project/features | head -1 | sed 's/\.md$//')"
+          plan="$(ls /tmp/smoke-target/.project/plans | grep '^plan-' | head -1)"
+          tasks="$(ls /tmp/smoke-target/.project/tasks | grep '^tasks-' | head -1 || true)"
+          test -n "$tasks" || { echo "no tasks file produced"; exit 1; }
+          grep -q '^status: *approved' "/tmp/smoke-target/.project/plans/$plan" || { echo "plan not approved"; exit 1; }
+          grep -q '^status: *completed' "/tmp/smoke-target/.project/tasks/$tasks" || { echo "tasks file not completed"; exit 1; }
+          ./scripts/smoke-assert.sh /tmp/smoke-target \
+            --exists ".project/tasks/$tasks" \
+            --feature "$slug" implemented \
             --absent ".project/DEFECTS.md" \
             --absent ".project/SYNC.md"

@@ -94,7 +94,7 @@ before implementing. State mutations go through
   BSD-only `sed -i ''`. Then fix: replace with the portable
   `sed -i.bak` + `rm` pattern migration 0003 uses; tests go green on
   both platforms. Same commit per Principle V.
-- [ ] T010 [defect: 970d935b] Extend `.github/workflows/smoke.yml` with
+- [x] T010 [defect: 970d935b] Extend `.github/workflows/smoke.yml` with
   a second scenario covering the tasks→implement mutation path: fixture
   target gets a pre-written 1-task plan+tasks pair (or the scenario
   runs `/ardd-tasks` selecting the scenario-one plan), then a headless
