@@ -184,16 +184,13 @@ idea; it doesn't touch artifacts).
    `feedback-planned` — the file stays `open` and the next `/ardd-plan` run
    picks up the remainder.
 
-5. **Check `.project/DEFECTS.md` for unaddressed defects**, if present. Each
-   listed defect gets a stable identifier — a short hash of its description
-   text (e.g. `printf '%s' "<description>" | shasum | cut -c1-8`) — used to
-   track whether it's already been surfaced to the user by a prior
-   `/ardd-plan` run, so the same defect isn't re-prompted every time. Glob
-   `.project/plans/plan-*.md` and collect the union of every plan's
-   `surfaced-defects:` frontmatter list (if present) into an
-   "already-surfaced" set. For each `DEFECTS.md` entry whose identifier
-   isn't in that set: present it to the user and ask whether to include a
-   fix task for it in this plan. Whether accepted or declined, record its
+5. **Check for unsurfaced defects.** Run
+   `.claude/skills/ardd-scripts/defects-unsurfaced.sh` — it computes each
+   `DEFECTS.md` entry's stable identifier, unions every plan's
+   `surfaced-defects:` frontmatter list, and prints only the
+   `<id>\t<claim>` pairs never yet surfaced by a prior `/ardd-plan` run
+   (silent when there's nothing new). For each printed defect: present it
+   to the user and ask whether to include a fix task for it in this plan. Whether accepted or declined, record its
    identifier in the `surfaced-defects:` list of the plan you're drafting
    (written in step 9) — declining still counts as "surfaced," which is what
    stops it from being re-prompted on every future run. If accepted, the fix

@@ -126,7 +126,7 @@ same commit.
 
 ## Phase 4: Sibling deterministic helpers (each [parallel] — independent scripts, own tests + CI jobs; only their small SKILL.md rewires touch shared files)
 
-- [ ] T016 [parallel] `scripts/defects-unsurfaced.sh <project-dir>`:
+- [x] T016 [parallel] `scripts/defects-unsurfaced.sh <project-dir>`:
   hash each DEFECTS.md defect description (shasum, first 8 chars),
   union all plans' `surfaced-defects:` frontmatter lists, print
   unsurfaced `id<TAB>description` pairs. Fixture tests first (defects
