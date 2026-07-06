@@ -1,5 +1,6 @@
 ---
 name: ardd-research
+tier: extension
 description: Targeted investigation written to .project/plans/ — one-off output with no lifecycle.
 ---
 

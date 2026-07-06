@@ -64,5 +64,10 @@ if [ -f "$SCRIPT_DIR/.lint-docs-failed" ]; then
   exit 1
 fi
 
+# --- generated skill docs must match SKILL.md frontmatter ---------------
+if ! sh "$(dirname "$SCRIPT_DIR")/scripts/gen-skill-docs.sh" --check 2>&1; then
+  exit 1
+fi
+
 echo "lint-docs: clean — every /ardd-* reference in README.md, USAGE.md, guides/*.md matches a skill."
 exit 0

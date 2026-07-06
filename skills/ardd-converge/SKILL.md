@@ -1,5 +1,6 @@
 ---
 name: ardd-converge
+tier: extension
 description: Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement.
 ---
 

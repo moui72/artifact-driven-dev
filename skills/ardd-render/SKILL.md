@@ -1,5 +1,6 @@
 ---
 name: ardd-render
+tier: extension
 description: Generate a Mermaid diagram from a renderable artifact and upsert it into README.md.
 ---
 

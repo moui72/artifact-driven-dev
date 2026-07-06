@@ -1,5 +1,6 @@
 ---
 name: ardd-feedback
+tier: extension
 description: Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume.
 ---
 

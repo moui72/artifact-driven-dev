@@ -1,5 +1,6 @@
 ---
 name: ardd-sync
+tier: extension
 description: Mirror the feature register to/from an external issue tracker (GitHub Issues today).
 ---
 

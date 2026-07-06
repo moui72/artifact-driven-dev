@@ -1,5 +1,6 @@
 ---
 name: ardd-implement
+tier: core
 description: Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge.
 ---
 

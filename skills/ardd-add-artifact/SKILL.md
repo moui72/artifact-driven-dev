@@ -1,5 +1,6 @@
 ---
 name: ardd-add-artifact
+tier: extension
 description: Create a new, non-standard artifact from a template.
 ---
 

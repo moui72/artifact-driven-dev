@@ -1,5 +1,6 @@
 ---
 name: ardd-plan
+tier: core
 description: Draft a phased implementation plan from artifacts, feedback, and optionally backlogged features; feedback-file arguments scope which feedback is consumed.
 ---
 

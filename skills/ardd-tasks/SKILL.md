@@ -1,5 +1,6 @@
 ---
 name: ardd-tasks
+tier: core
 description: Generate an ordered task list from a plan; selecting a draft plan approves it.
 ---
 

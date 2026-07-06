@@ -1,5 +1,6 @@
 ---
 name: ardd-codify
+tier: core
 description: One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap).
 ---
 
@@ -100,13 +101,9 @@ code does, not necessarily what was intended. Review each one with
 
 5. **Write all artifact files** to `.project/artifacts/`.
 
-6. **Generate `.project/WORKFLOW.md`** — the stable skill-reference doc, so the
-   existing-project onboarding path produces the same reference the greenfield
-   `/ardd-bootstrap` path does. Reuse the same structure and skills-table
-   content as `/ardd-bootstrap` (see its "WORKFLOW.md structure" section);
-   keep skill descriptions generic (what each skill does), not
-   project-specific.
-
+6. **Install `.project/WORKFLOW.md`** — same as `/ardd-bootstrap` step 6:
+   `cp .claude/skills/ardd-artifact-templates/WORKFLOW.md .project/WORKFLOW.md`
+   (recommend re-running install.sh if the template is missing).
 7. **Generate `.project/STATUS.md`** summarizing what was written. Use the
    standard STATUS.md structure (same as `/ardd-bootstrap`). In the
    "Recommended next step" line, direct the user to review draft artifacts with

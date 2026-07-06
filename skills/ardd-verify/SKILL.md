@@ -1,5 +1,6 @@
 ---
 name: ardd-verify
+tier: extension
 description: Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer).
 ---
 

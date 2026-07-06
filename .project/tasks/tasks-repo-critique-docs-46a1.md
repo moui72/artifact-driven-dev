@@ -75,7 +75,7 @@ before implementing. State mutations go through
   load as slash commands after install (frontmatter is the standard
   Claude Code skill format). Doc/format task — no new test yet (T008
   adds the deterministic check).
-- [ ] T008 Build `scripts/gen-skill-docs.sh` (source-side): reads each
+- [x] T008 Build `scripts/gen-skill-docs.sh` (source-side): reads each
   SKILL.md's frontmatter and regenerates (a) the README.md skill table
   via `scripts/upsert-section.sh` and (b) a static
   `templates/WORKFLOW.md` that install.sh copies into targets —

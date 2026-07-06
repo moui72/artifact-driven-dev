@@ -1,5 +1,6 @@
 ---
 name: ardd-refine
+tier: core
 description: Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning.
 ---
 

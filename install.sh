@@ -112,6 +112,8 @@ cp "$SCRIPT_DIR/scripts/ardd-state.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh"
 cp "$SCRIPT_DIR/scripts/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh"
 cp "$SCRIPT_DIR/scripts/tasks-list.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh"
 cp "$SCRIPT_DIR/scripts/upsert-section.sh" "$ARDD_SCRIPTS_DIR/upsert-section.sh"
+cp "$SCRIPT_DIR/templates/WORKFLOW.md" "$ARTIFACT_TEMPLATES_DIR/WORKFLOW.md"
+echo "  ✓ ardd-artifact-templates/WORKFLOW.md"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
   "$ARDD_SCRIPTS_DIR/completion-flip-check.sh" \
   "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh" \

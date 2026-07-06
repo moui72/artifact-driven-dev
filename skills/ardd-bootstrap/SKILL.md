@@ -1,5 +1,6 @@
 ---
 name: ardd-bootstrap
+tier: core
 description: One-time initialization: seed .project/ artifacts from conversation context (greenfield projects).
 ---
 
@@ -96,9 +97,12 @@ subsequent changes.
 
 5. **Write all artifact files** to `.project/artifacts/`.
 
-6. **Generate `.project/WORKFLOW.md`** — a stable skill reference that rarely
-   needs to change. Use the structure below. Keep skill descriptions generic
-   (what each skill does), not project-specific.
+6. **Install `.project/WORKFLOW.md`** — a static skill reference shipped
+   with ARDD, not transcribed by hand:
+   `cp .claude/skills/ardd-artifact-templates/WORKFLOW.md .project/WORKFLOW.md`.
+   If the template is missing (older install), note it in the final
+   report and recommend re-running install.sh — don't reconstruct it
+   from memory.
 
 7. **Generate `.project/STATUS.md`** — the living project state snapshot. Use
    the structure below. This file changes frequently; WORKFLOW.md does not.
@@ -107,44 +111,6 @@ subsequent changes.
    which constitution suggestions (if any) were accepted, and the
    recommended next step (usually `/ardd-analyze` then `/ardd-refine` on
    draft artifacts).
-
-## WORKFLOW.md structure
-
-```markdown
-# [Project Name] — Workflow Guide
-
-This project uses [artifact-driven-dev](https://github.com/[owner]/artifact-driven-dev).
-
-## Artifacts
-
-| Artifact | Purpose |
-|---|---|
-| [name].md | [one-line description of what this artifact owns] |
-
-## Skills
-
-| Command | What it does |
-|---|---|
-| `/ardd-refine <artifact>` | Update a named artifact — apply new decisions, resolve open questions, add content |
-| `/ardd-add-artifact <name>` | Create a new artifact for a concern that doesn't fit an existing one |
-| `/ardd-analyze` | Cross-artifact consistency check — find conflicts, gaps, and unresolved decisions |
-| `/ardd-research <topic>` | Investigate a specific topic and write a research doc to `.project/plans/` |
-| `/ardd-plan [slug ...]` | Generate an implementation plan from all stable artifacts, into `.project/plans/`. Optionally target one or more backlogged feature slugs to design and apply their artifact changes as part of the same pass |
-| `/ardd-tasks` | Generate an ordered task list from a plan you select |
-| `/ardd-render [artifact]` | Generate Mermaid diagrams into `README.md`. Bare form runs all supported artifacts. |
-| `/ardd-implement` | Execute tasks from a tasks file you select in `.project/tasks/` |
-| `/ardd-converge` | Reconcile codebase with a tasks file you select, after an interrupted `/ardd-implement` run |
-| `/ardd-codify` | Reverse-engineer artifacts from an existing codebase |
-| `/ardd-featurize` | Extract a feature register from the codebase (run after codify) |
-| `/ardd-critique [artifact]` | Challenge decisions — simplicity, failure modes, robustness, semantics |
-| `/ardd-feature <description>` | Log a feature idea to the backlog (`.project/features/<slug>.md`, `status: backlogged`) — no artifact edits yet |
-| `/ardd-feedback <notes>` | Capture bugs/UX/reconsidered-decision notes from manually inspecting the implementation, for the next `/ardd-plan` to consume |
-| `/ardd-lint` | Fast, deterministic check of frontmatter status/fields and `[artifacts: ...]` references — no LLM judgment involved |
-| `/ardd-verify` | Check artifacts against the actual codebase and record drift in `DEFECTS.md` |
-| `/ardd-sync [push\|pull]` | Mirror the feature register to/from an external issue tracker |
-
-See `STATUS.md` for current artifact statuses, open questions, and recommended next step.
-```
 
 ## STATUS.md structure
 
