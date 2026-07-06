@@ -29,9 +29,11 @@ the vocabulary/lint batch were consumed this run by
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 0 tasked · 3 implemented —
-`built-with-ardd-badge` completed this run (flip rides branch
-`built-with-ardd-badge`, lands on merge).
+1 backlogged · 0 planned · 0 tasked · 3 implemented — backlogged:
+`self-update-from-consumer` (update ARDD from inside a consuming repo +
+pending-update notification; both downstream repos silently fell a full
+release behind before today's manual sweep). Target with
+`/ardd-plan self-update-from-consumer`.
 
 ## In Flight
 
