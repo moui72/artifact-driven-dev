@@ -85,28 +85,42 @@ Four living documents that evolve throughout the project:
 
 All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`.
 
-## Skills
+## The core loop
+
+Five skills carry a project from decisions to shipped code — this is the
+workflow; everything else is opt-in:
 
 | Command | When |
 |---|---|
-| `/ardd-bootstrap` | Once — seed artifacts from conversation context |
-| `/ardd-codify` | Once — reverse-engineer artifacts from an existing codebase |
-| `/ardd-featurize` | Once (after codify) — extract a feature register from the codebase |
+| `/ardd-bootstrap` | Once — seed artifacts from conversation context (greenfield) |
+| `/ardd-codify` | Once — reverse-engineer artifacts from an existing codebase (instead of bootstrap) |
+| `/ardd-refine <artifact>` | Anytime — update a named artifact as decisions evolve |
+| `/ardd-plan [slug \| feedback-file ...]` | When artifacts are stable — draft a phased plan (targets backlogged features or scopes to a feedback file). Never delegates to a worktree — the draft plan is itself the state `/ardd-tasks` needs to see |
+| `/ardd-tasks` | Pick a plan (selecting a draft approves it) — generates the ordered task list |
+| `/ardd-implement` | Execute tasks sequentially. Offers to delegate to a subagent in an isolated worktree; all state rides the work branch and lands on merge |
+
+`/ardd-analyze` (cross-artifact consistency) runs automatically as the
+final step of most state-changing skills, so it isn't a step you have to
+remember — run it by hand anytime for a fresh check.
+
+## Extensions
+
+Opt-in skills for concerns the core loop doesn't force on you:
+
+| Command | When |
+|---|---|
 | `/ardd-feature <description>` | Log a feature idea to the backlog (`.project/features/`) — no artifact edits yet |
-| `/ardd-sync [push\|pull]` | Anytime — mirror the feature register (`.project/features/`) to/from an external issue tracker (GitHub Issues now) |
-| `/ardd-refine <artifact>` | Anytime — update a named artifact |
-| `/ardd-add-artifact <name>` | Anytime — create a new, non-standard artifact from a template |
-| `/ardd-analyze` | Before planning — cross-artifact consistency check |
-| `/ardd-lint` | Anytime — fast, deterministic check of frontmatter status/fields and `[artifacts: ...]` references (no LLM judgment involved) |
+| `/ardd-feedback <notes>` | After manually inspecting the implementation — capture bugs/UX/reconsidered decisions for the next plan |
+| `/ardd-converge` | Reconcile codebase with tasks after an interruption. Same worktree-delegation offer and state model as `/ardd-implement` |
 | `/ardd-verify` | Before major planning, or periodically — check artifacts against the actual codebase and record drift in `DEFECTS.md` |
 | `/ardd-critique` | Anytime — challenge decisions: simplicity, failure modes, robustness, semantics |
-| `/ardd-feedback <notes>` | After manually inspecting the implementation — capture bugs/UX/reconsidered decisions for the next plan |
+| `/ardd-lint` | Anytime — fast, deterministic check of frontmatter status/fields and `[artifacts: ...]` references (no LLM judgment involved) |
+| `/ardd-analyze` | Standalone consistency check (see core loop — usually auto-run) |
 | `/ardd-research <topic>` | As needed — targeted investigation |
 | `/ardd-render <artifact>` | Anytime — generate a Mermaid diagram from an artifact into `README.md` |
-| `/ardd-plan [slug ...]` | When artifacts are stable. Pass backlogged feature slug(s) to design, apply their artifact changes, and plan them — any order, whenever you pick them up. Never delegates to a worktree — the draft plan is itself the state `/ardd-tasks` needs to see |
-| `/ardd-tasks` | Pick a plan (draft or approved) — selecting a draft one approves it as part of this step. Always runs on the current branch, no worktree gate — its own actions are quick state updates |
-| `/ardd-implement` | Execute tasks sequentially. Offers to delegate to a subagent in an isolated worktree; all state rides the work branch and lands on merge |
-| `/ardd-converge` | Reconcile codebase with tasks after interruption. Same worktree-delegation offer and state model as `/ardd-implement` |
+| `/ardd-sync [push\|pull]` | Anytime — mirror the feature register (`.project/features/`) to/from an external issue tracker (GitHub Issues now) |
+| `/ardd-featurize` | Once (after codify) — extract a feature register from the codebase |
+| `/ardd-add-artifact <name>` | Anytime — create a new, non-standard artifact from a template |
 
 ## Install
 

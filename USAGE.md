@@ -29,7 +29,15 @@ cd /path/to/artifact-driven-dev
 
 Then open Claude Code in your project.
 
-## Typical workflow
+## The core loop
+
+Steps 1–8 below are the whole workflow: seed artifacts, refine until
+stable, plan, generate tasks, implement (and converge after an
+interruption). Consistency checking (`/ardd-analyze`) runs automatically
+at the end of most of these steps. Everything under
+[Extensions](#extensions) further down — diagrams, tracker sync,
+critique, code-vs-artifact verification — is opt-in and can be ignored
+until you want it.
 
 ### 1. Seed your artifacts
 
@@ -235,6 +243,10 @@ Each artifact has a `status` field in its frontmatter:
 `draft` artifact.
 
 ---
+
+## Extensions
+
+Everything below is opt-in — useful, but never required by the core loop.
 
 ### Visualize your artifacts
 

@@ -23,7 +23,7 @@ before implementing. State mutations go through
   and `ardd-*` skill names unchanged). Constitution edit is a wording
   fix — PATCH bump (v1.2.0 → v1.2.1) with Sync Impact Report per
   Governance. Doc task — no test; run lint-docs.sh.
-- [ ] T002 Tier README.md and USAGE.md around the core loop:
+- [x] T002 Tier README.md and USAGE.md around the core loop:
   bootstrap/codify → refine → plan → tasks → implement (analyze
   auto-running) presented as *the* workflow, with
   sync/render/critique/verify/featurize/converge/feedback/lint/
