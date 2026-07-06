@@ -30,10 +30,9 @@ review/three-tier reframe) were consumed this run by
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 1 tasked · 2 implemented —
-`built-with-ardd-badge` is bound to
-`tasks-built-with-ardd-badge-2ebc.md` and flips to `implemented` when
-that file completes (riding the work branch).
+0 backlogged · 0 planned · 0 tasked · 3 implemented —
+`built-with-ardd-badge` completed this run (flip rides branch
+`built-with-ardd-badge`, lands on merge).
 
 ## In Flight
 
@@ -43,12 +42,15 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-built-with-ardd-badge-2026-07-06.md` is **approved** and tasked:
-`tasks-built-with-ardd-badge-2ebc.md` (`status: ready`, 11 tasks in 4
-phases, branch `built-with-ardd-badge`). Both of the plan's open
-questions were resolved during task generation: the badge decline-memory
-question dissolves (install.sh only prints a suggestion, never edits the
-target README — no state to remember), and generator ordering uses
-per-tier ordered lists with alphabetical append for unlisted skills.
-Next: `/ardd-implement` and select that tasks file (inline — already on
-the work branch).
+`tasks-built-with-ardd-badge-2ebc.md` is **completed** (11/11) on branch
+`built-with-ardd-badge`: badge template + opt-in install.sh suggestion,
+migration 0004 (dangling register tags — downstream repos fixed on next
+install), artifacts-none convention (softened wording + pointed lint
+message), generator workflow ordering, the three-tier docs reframe
+(Getting started / core loop with feature+feedback intake / Extensions),
+guides/continuing.md, USAGE bootstrap rewrite, staleness sweep, README
+restructure. **All commits on this branch are unsigned (1Password
+locked) — re-sign before pushing** (`git rebase HEAD~N --exec 'git
+commit --amend --no-edit -S -n'` after unlocking). Then: merge into
+main, `./install.sh .`, push, and re-install downstream (applies
+migration 0004 and offers the badge).
