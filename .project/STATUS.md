@@ -23,12 +23,13 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-1 open feedback file: `feedback-status-vocabulary-gaps-50a5.md`
-(2026-07-06, 3 UX) — post-0004 downstream lint showed three independent
-agent-invented status values (`reopened` on a completed tasks file,
-`superseded` on a tasks file, `split` on a feedback file): the enums
-lack a reopen transition/affordance and pointed guidance at the moment
-of invention. The 8 older feedback files are `planned`.
+2 open feedback files:
+`feedback-status-vocabulary-gaps-50a5.md` (3 UX — agents invent enum
+values: `reopened`/`superseded`/`split`; missing reopen affordance and
+pointed guidance) and `feedback-lint-mention-vs-use-462c.md` (1 bug —
+lint can't tell tag *use* from syntax *mention*; fix: parse tags on
+checklist item lines only; hit three times in one day). Both small;
+bundle into the next plan. The 8 older feedback files are `planned`.
 
 ## Feature Backlog
 
@@ -46,9 +47,9 @@ refreshed via `./install.sh .`.
 
 All planned work is merged and pushed (ffd3628); downstream consumers
 reinstalled (migration 0004 fixed sync-tab-scroll's dangling tags; both
-received the badge offer). One open feedback file
-(status-vocabulary-gaps, above) awaits the next `/ardd-plan` — small,
-three UX items. Remaining threads otherwise: smoke-harness key
+received the badge offer). Two small open feedback files
+(status-vocabulary-gaps; lint mention-vs-use) await the next
+`/ardd-plan`. Remaining threads otherwise: smoke-harness key
 provisioning (DEFECTS.md 970d935b), and downstream repos' own content
 fixes (invented statuses, the assisted-review placeholder tag,
 sync-tab-scroll's constitution governance drift — now caught by lint).
