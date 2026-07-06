@@ -168,7 +168,18 @@ fi
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
   echo ""
-  echo "Applying migrations ..."
+  # --- "built with ARDD" badge: suggestion only, never an edit -----------
+# Mirrors the gitignore-suggestion posture: install.sh never modifies a
+# target's README. Offered only when a README exists and lacks the marker.
+if [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
+  echo ""
+  echo "Optional: add a \"built with ARDD\" badge to your README — paste this snippet:"
+  echo ""
+  cat "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+  echo ""
+fi
+
+echo "Applying migrations ..."
 
   touch "$APPLIED_FILE"
   any_new=0

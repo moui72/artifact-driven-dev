@@ -20,7 +20,7 @@ exception. State mutations go through
   wrapped in `<!-- ardd-badge-start -->` / `<!-- ardd-badge-end -->`
   marker comments (detection + idempotent reinjection). Doc/template
   task — no test (T002 covers behavior).
-- [ ] T002 install.sh badge offer, strictly opt-in: after the existing
+- [x] T002 install.sh badge offer, strictly opt-in: after the existing
   gitignore-check section, if the target README.md exists and lacks the
   start marker, print the snippet and a one-line suggestion telling the
   user to paste it (or re-run interactively) — install.sh NEVER edits a

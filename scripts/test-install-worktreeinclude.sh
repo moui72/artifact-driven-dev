@@ -57,6 +57,43 @@ else
   bad "case1: pattern present exactly once (got count=$count)"
 fi
 
+# --- Case 1a2: badge suggestion — README without marker gets a printed
+# suggestion and is NEVER edited by install.sh itself ---
+printf '# Case1 Project\n' > "$target/README.md"
+before="$(cat "$target/README.md")"
+out="$(cd "$REPO_ROOT" && sh "$INSTALL_SH" "$target")"
+after="$(cat "$target/README.md")"
+if [ "$before" = "$after" ]; then
+  ok "badge: README untouched by install"
+else
+  bad "badge: README untouched by install"
+fi
+case "$out" in
+  *ardd-badge-start*) ok "badge: suggestion printed when marker absent" ;;
+  *) bad "badge: suggestion printed when marker absent" ;;
+esac
+
+# marker present -> silent
+cat "$REPO_ROOT/templates/badge.md" >> "$target/README.md"
+out="$(cd "$REPO_ROOT" && sh "$INSTALL_SH" "$target")"
+case "$out" in
+  *"built with-ARDD-blue"*|*"suggestion"*|*ardd-badge-start*)
+    # tolerate the word suggestion elsewhere; assert the badge block is not re-suggested
+    case "$out" in
+      *"img.shields.io/badge/built"*) bad "badge: silent when marker present" ;;
+      *) ok "badge: silent when marker present" ;;
+    esac ;;
+  *) ok "badge: silent when marker present" ;;
+esac
+
+# no README -> silent (case2 target below has no README; checked here on a fresh dir)
+nb="$WORK/nobadge"; mkdir -p "$nb"; git init -q "$nb"; git -C "$nb" commit -q --allow-empty -m init
+out="$(cd "$REPO_ROOT" && sh "$INSTALL_SH" "$nb")"
+case "$out" in
+  *"img.shields.io"*) bad "badge: silent when README missing" ;;
+  *) ok "badge: silent when README missing" ;;
+esac
+
 # --- Case 1b: ardd-state.sh ships into ardd-scripts and is executable ---
 state="$target/.claude/skills/ardd-scripts/ardd-state.sh"
 if [ -x "$state" ]; then
