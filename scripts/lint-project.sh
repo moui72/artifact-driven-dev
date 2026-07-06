@@ -376,6 +376,10 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
   for f in "$PROJECT_DIR"/tasks/tasks-*.md "$PROJECT_DIR"/feedback/feedback-*.md; do
     [ -f "$f" ] || continue
     grep -noE '\[artifacts: [^]]+\]' "$f" | while IFS=: read -r lineno rest; do
+      # Both bracket-tag checks (artifact-reference and placeholder-name)
+      # apply to checklist item lines only — `- [ ]` / `- [x]` / `- [-]`.
+      # A tag mentioned in body prose is prose, not a reference.
+      sed -n "${lineno}p" "$f" | grep -qE '^[[:space:]]*- \[[ x-]\]' || continue
       names="$(printf '%s' "$rest" | sed -E 's/^\[artifacts: //; s/\]$//')"
       old_ifs="$IFS"
       IFS=','

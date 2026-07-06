@@ -64,6 +64,21 @@ else
     echo "FAIL: 'split' feedback status gets pointed per-item message"
     fail=1
   fi
+  # bracket-tag checks are scoped to checklist item lines: a tag mentioned
+  # in body prose (tasks-foo-aaaa.md's trailing paragraph) must NOT be
+  # reported, while the item-line violations above still are.
+  if grep -q "prose-only-mention" /tmp/lint-bad.out; then
+    echo "FAIL: body-prose bracket-tag must not be reported"
+    fail=1
+  else
+    echo "ok: body-prose bracket-tag is not reported"
+  fi
+  if grep -q "references 'nonexistent'" /tmp/lint-bad.out; then
+    echo "ok: item-line bracket-tag violation still reported"
+  else
+    echo "FAIL: item-line bracket-tag violation still reported"
+    fail=1
+  fi
 fi
 
 rm -f /tmp/lint-good.out /tmp/lint-bad.out

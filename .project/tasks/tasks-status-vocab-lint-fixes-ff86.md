@@ -52,14 +52,14 @@ exception. Mutations via `.claude/skills/ardd-scripts/ardd-state.sh`.
 
 ## Phase 2: Item-line-scoped tag parsing [feedback 462c]
 
-- [ ] T004 [parallel] Test-first red for the scoping change: add a
+- [x] T004 [parallel] Test-first red for the scoping change: add a
   body-prose line to a bad-project tasks fixture carrying a literal
   artifacts bracket-tag that must NOT be reported — assert its absence
   specifically (grep -v style assertion in test-lint-project.sh, not
   just the findings count), alongside the existing item-line
   violations asserting presence. Confirm red (current lint reports the
   prose line).
-- [ ] T005 Implement: restrict both bracket-tag checks in
+- [x] T005 Implement: restrict both bracket-tag checks in
   lint-project.sh (artifact-reference and placeholder-name) to
   checklist item lines — lines matching the `- [ ]` / `- [x]` / `- [-]`
   prefix. T004's absence assertion goes green; all presence assertions
