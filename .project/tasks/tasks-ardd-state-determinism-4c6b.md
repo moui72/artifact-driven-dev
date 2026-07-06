@@ -16,7 +16,7 @@ same commit.
 
 ## Phase 1: Governance and format decision (sequential — both edit constitution.md)
 
-- [ ] T001 [artifacts: constitution] Record the per-feature-files
+- [x] T001 [artifacts: constitution] Record the per-feature-files
   decision in the constitution (standing decision under Quality
   Standards): `.project/features/<slug>.md` with frontmatter replaces
   the single-file `· `-separated features.md register. Specify the

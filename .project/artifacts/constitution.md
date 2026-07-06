@@ -161,6 +161,19 @@ before being built, not discovered as duplicated work later.
   deliberate test-first red state, stated in the commit body), and any
   bypass is followed immediately by a commit that re-establishes the
   passing state.
+- **Feature register format (standing decision, 2026-07-06)**: the
+  feature register is **per-feature files** at
+  `.project/features/<slug>.md`, not a single `features.md` — merge and
+  parse robustness win over single-file glanceability, especially for
+  collaborative mode and tracker sync. Schema per file — frontmatter,
+  required: `slug`, `status` (`backlogged|planned|tasked|implemented`),
+  `logged` (YYYY-MM-DD); optional: `plan` and `tasks` (filenames of the
+  binding plan/tasks files), `gh_issue` (issue number). Body: a
+  one-sentence description, optionally followed by a `Why:` line.
+  Register-wide views are produced by enumeration (glob), never by a
+  second hand-maintained index file. This decision was made explicitly
+  (repo critique, 2026-07-06) — do not re-litigate it when touching
+  register tooling; amend it here first if it ever needs to change.
 - **No vendored dependency carries a nested `.git`**. If a dependency must
   ever be vendored, its provenance is recorded in a README note and it is
   committed as plain files, or added as a real git submodule. (Currently
