@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-artifact-driven-dev (ADD/ARDD) is a Claude Code skill pack, not an application.
+artifact-driven-dev (ARDD) is a Claude Code skill pack, not an application.
 The deliverable is the content of `skills/*/SKILL.md` — markdown files that
 become slash commands in a *target* project once installed there. There is no
 application code, build step, or test suite in the conventional sense; the
@@ -78,7 +78,7 @@ the ardd scripts its steps call. The gitignore check's ceiling rule applies
 here too: never a pattern broader than `.claude/skills/ardd-*/`. It also inspects the target's git-tracked files under
 `.claude/` to print the right `.gitignore` suggestion — `.claude/skills/` is
 regenerated output and should never be committed in a target project;
-`.project/ardd-version.md` is the intentional, committed record of which ADD
+`.project/ardd-version.md` is the intentional, committed record of which ARDD
 version produced it. Adding a new non-skill directory under
 `.claude/skills/`? Add its name to the `case` allowlist in install.sh's
 gitignore-check section too, or it'll be misreported as a tracked

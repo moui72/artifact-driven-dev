@@ -1,35 +1,20 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.1.0 → 1.2.0 (MINOR — material expansion of Principle
-II, one new Quality Standard, one new standing decision)
+Version change: 1.2.0 → 1.2.1 (PATCH — wording/naming clarification only)
 
-Rationale: a full-repo critique (2026-07-06, captured in
-feedback-repo-critique-6ad1.md and consumed by
-plan-ardd-state-determinism-2026-07-06.md) found the system's weakest
-point is exactly the one Principle II exists to police, one level up:
-deterministic *checks* are scripted, but the state *mutations* those
-checks police (status flips, checkbox marks, frontmatter stamps,
-register edits) are still performed by the LLM hand-editing markdown per
-prose instructions — every one an unforced compliance risk. Separately,
-skill behavior itself had no test tier at all despite Principle I
-treating skill edits as public-API changes. Both amendments were
-user-confirmed before planning.
+Rationale: T001 of plan-repo-critique-docs-2026-07-06 (feedback item
+F002): the project used "ADD" and "ARDD" interchangeably across README,
+USAGE, guides, and this constitution. The user chose ARDD (2026-07-06)
+as the single name — it matches every ardd-* skill name. Pure rename;
+no principle, standard, or behavior changed.
 
-Modified sections:
-- Core Principles → Principle II retitled ("Deterministic Checks and
-  Mutations Over Prose...") and extended: transitions that are pure
-  functions of file state get scripts (ardd-state.sh et al.); prose
-  decides *when*, scripts do the *writing*.
-- Quality Standards → new "Behavioral smoke tests" tier: fixture-project
-  scenarios running skills headlessly, asserting on file outcomes,
-  required for state-mutating skill paths.
-- Quality Standards → new "Feature register format" standing decision
-  (per-feature files; added by T001 in the same plan, versioned here).
-Footer version/date updated.
+Modified sections: Project Scope & Intent wording ("artifact-driven-dev
+(ARDD)"); every prose "ADD" → "ARDD". Footer version updated.
 
-Previous SIR (1.0.0 → 1.1.0, Pre-commit Enforcement glob rule) is
-recorded in git history at this file's prior revision.
+Previous SIR (1.1.0 → 1.2.0, Principle II mutations + behavioral-test
+tier + register decision) is in git history at this file's prior
+revision.
 -->
 
 ---
@@ -42,24 +27,24 @@ last_updated: 2026-07-06
 
 ## Project Scope & Intent
 
-artifact-driven-dev (ADD/ARDD) is a Claude Code skill pack: markdown-defined
+artifact-driven-dev (ARDD) is a Claude Code skill pack: markdown-defined
 slash commands (`skills/*/SKILL.md`) installed into other projects via
 `install.sh`, plus a small number of POSIX shell scripts for the parts of
 the system that must be deterministic rather than left to LLM judgment.
 There is no runtime application, database, or user interface belonging to
-ADD itself — the product is prose instructions an LLM executes in a target
+ARDD itself — the product is prose instructions an LLM executes in a target
 project, plus the install/lint tooling that supports them. `datamodel.md`,
 `infrastructure.md`, and `ui.md` accordingly do not exist for this project
 and are not expected to: none of the concerns they own apply here.
 
-ADD is narrower in scope than Spec Kit, not lighter in absolute terms: it
+ARDD is narrower in scope than Spec Kit, not lighter in absolute terms: it
 assumes the user arrives with architectural clarity and needs a system to
 capture, cross-check, and execute against decisions already made, rather
 than a framework that discovers those decisions through structured
 elicitation. See `README.md`'s "When artifacts earn their keep" for when
 that overhead is actually worth it — for this repository specifically, it's
 worth it because there is no external target codebase to serve as an
-implicit spec for what ADD itself should do next; the skills, scripts, and
+implicit spec for what ARDD itself should do next; the skills, scripts, and
 docs *are* the product, and this constitution is the explicit source of
 truth for the principles they follow.
 
@@ -105,7 +90,7 @@ unexplained soft convention.
 
 Any `.gitignore` guidance this project gives — its own, or what
 `install.sh` suggests to a target project — names the narrowest directory
-that is guaranteed to be ADD-regenerated output, never a broader parent. A
+that is guaranteed to be ARDD-regenerated output, never a broader parent. A
 broader pattern silently blocks tracking real content (`settings.json`, a
 hand-written custom skill, hooks) without `-f`, and git gives no warning
 when that happens. This was learned the hard way twice in the same
@@ -204,7 +189,7 @@ before being built, not discovered as duplicated work later.
 - **No vendored dependency carries a nested `.git`**. If a dependency must
   ever be vendored, its provenance is recorded in a README note and it is
   committed as plain files, or added as a real git submodule. (Currently
-  N/A — ADD vendors nothing — kept as a standing floor.)
+  N/A — ARDD vendors nothing — kept as a standing floor.)
 
 ## Development Workflow
 
@@ -232,4 +217,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.2.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-06
+**Version**: 1.2.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-06

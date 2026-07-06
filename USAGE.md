@@ -1,6 +1,6 @@
 # Using artifact-driven-dev
 
-ADD is a workflow, not a generator. It doesn't write your spec for you — it
+ARDD is a workflow, not a generator. It doesn't write your spec for you — it
 gives you a place to put decisions you've already made, checks them for
 consistency, and turns them into an executable task list.
 
@@ -20,7 +20,7 @@ left off.
 
 ## Setup
 
-Install ADD into your project:
+Install ARDD into your project:
 
 ```sh
 cd /path/to/artifact-driven-dev
@@ -292,7 +292,7 @@ jobs:
 
 ---
 
-## When to use ADD
+## When to use ARDD
 
 ### vs. Spec Kit
 
@@ -302,17 +302,17 @@ structured elicitation, user story generation, a full spec-to-task pipeline.
 Use it when you're working from a vague brief and need the framework to help
 you arrive at decisions.
 
-ADD assumes you've already arrived at the decisions and need a system to
+ARDD assumes you've already arrived at the decisions and need a system to
 capture, cross-check, and execute against them instead — narrower in scope
 than Spec Kit, not lighter in absolute terms; it still carries real process
-overhead. ADD is also currently Claude Code-specific; Spec Kit works across
+overhead. ARDD is also currently Claude Code-specific; Spec Kit works across
 agents.
 
 ### vs. a good CLAUDE.md and direct conversation
 
 The sharper question for most projects. Short version — see
 [README.md](README.md#when-artifacts-earn-their-keep) for the full
-reasoning: ADD earns its overhead when the codebase can't serve as an
+reasoning: ARDD earns its overhead when the codebase can't serve as an
 implicit spec an agent can pattern-match against (greenfield, or a pivot
 away from existing patterns), and buys you less when it already can (a
 mature, consistent codebase a good `CLAUDE.md` already covers).

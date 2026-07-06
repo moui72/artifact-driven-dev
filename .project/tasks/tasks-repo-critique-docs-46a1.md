@@ -14,7 +14,7 @@ before implementing. State mutations go through
 
 ## Phase 1: README/USAGE restructure (sequential — all four edit the same files)
 
-- [ ] T001 [artifacts: constitution] Confirm the project name with the
+- [x] T001 [artifacts: constitution] Confirm the project name with the
   user — ADD vs ARDD (recommendation on record: ARDD; matches every
   skill name, avoids the collision) — then apply the chosen name
   consistently across README.md, USAGE.md, guides/*.md, CLAUDE.md
