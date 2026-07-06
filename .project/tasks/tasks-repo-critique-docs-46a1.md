@@ -37,7 +37,7 @@ before implementing. State mutations go through
   project shape, not the definition. Align `skills/ardd-bootstrap/
   SKILL.md` step 2's framing (it already uses judgment; make the prose
   say so). Doc task — no test; lint-docs.sh.
-- [ ] T004 Add a short README/USAGE note documenting inline-on-a-branch
+- [x] T004 Add a short README/USAGE note documenting inline-on-a-branch
   (`git checkout -b` + inline run) as the blessed degradation path when
   worktree delegation misbehaves — the harness `worktree.baseRef`
   behavior has regressed in both directions before; a regression

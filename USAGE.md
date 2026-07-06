@@ -211,6 +211,11 @@ paradigm the constitution declares (TDD, test-after, or none), implements
 to pass them, marks the task complete, and commits. It stops and surfaces
 blockers rather than working around them.
 
+If the worktree path ever misbehaves (it leans on harness behavior that
+has regressed before), decline the delegation offer and run inline on a
+plain branch (`git checkout -b`) — same state model, same merge, nothing
+lost. Delegation is an optimization, not a requirement.
+
 Every status change — the tasks file's own flips, checkboxes, and the
 feature-backlog flip (`tasked` → `implemented`) — rides the work branch and
 reaches your default branch when that branch merges, atomically with the
