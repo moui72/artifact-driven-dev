@@ -1,12 +1,12 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-06 (post-/ardd-plan). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-06 (post-/ardd-implement, ardd-state-determinism complete). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ | — |
+| constitution.md | stable ✅ (v1.2.0) | — |
 
 ## Open Questions
 
@@ -14,48 +14,49 @@ None.
 
 ## Code-vs-Artifact Defects
 
-No defects found — see `DEFECTS.md`, last checked 2026-07-05. Run
-`/ardd-verify` to refresh. Note: one open feedback item (below) proposes
-amending the constitution (Principle II extended to state mutations;
-Quality Standards naming a behavioral-test tier) — once that plan lands,
-a fresh `/ardd-verify` pass is warranted.
+No defects found — see `DEFECTS.md`, last checked 2026-07-05. Since then
+the constitution was amended to v1.2.0 (Principle II extended to state
+mutations; behavioral smoke-test tier; per-feature register standing
+decision) and the implementing work landed on this branch — run
+`/ardd-verify` after merge to confirm code and constitution still agree.
 
 ## Feedback
 
 1 open feedback file: `feedback-repo-critique-docs-ca1d.md`
-(docs/positioning — docs tiering, four-artifact demotion, naming,
-delegation-fallback docs on one shared branch, plus the parallel-safe
-archaeology strip and SKILL.md `description:` frontmatter + generated
-tables). Its sibling `feedback-repo-critique-6ad1.md`
-(structural/determinism) was consumed this run — all 9 items
-incorporated, file flipped to `planned`, bound to
-`plan-ardd-state-determinism-2026-07-06.md`. The 3 older feedback files
-remain `status: planned`.
+(docs/positioning half of the 2026-07-06 critique) — feed it to the next
+`/ardd-plan` (it now supports feedback-file scoping, though with only one
+open file scoping is moot). The other 3 feedback files are `planned`.
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 0 tasked · 2 implemented — see `.project/artifacts/features.md`.
+0 backlogged · 0 planned · 0 tasked · 2 implemented — now as per-feature
+files in `.project/features/` (migration 0003 ran; legacy features.md
+removed).
 
 ## In Flight
 
-Nothing — `inflight-worktrees.sh` found no other worktrees;
-`completion-flip-check.sh` ran clean against all five completed tasks
-files. The previously flagged `worktree-state-hygiene` branch has merged
-into `main`, `main` is pushed to `origin/main`, and the once-unsigned
-commit range is signed — the prior "re-sign and merge" next step is fully
-resolved.
+No sibling worktrees; `completion-flip-check.sh` clean against all six
+completed tasks files. This branch (`ardd-state-determinism`, 24 commits
+ahead of `main`) carries the completed work and is ready to merge.
 
 ## Recommended Next Step
 
-The structural plan is **approved** and tasked:
-`plan-ardd-state-determinism-2026-07-06.md` →
-`tasks-ardd-state-determinism-4c6b.md` (`status: ready`, 23 tasks in 7
-phases, on branch `ardd-state-determinism`). All open questions were
-resolved pre-approval (per-feature files; smoke CI on `skills/**` PRs
-with `continue-on-error` until the API key is provisioned; `F###`
-feedback-item IDs; big-bang skill rewire). Next: `/ardd-implement` and
-select that tasks file. Note it's invoked from the
-`ardd-state-determinism` branch, so the inline path applies — state
-rides this branch. The second `/ardd-plan` run for
-`feedback-repo-critique-docs-ca1d.md` (still `open`) can happen anytime.
-`lint-project.sh` ran clean after this run's writes.
+**Merge `ardd-state-determinism` into `main`.** The plan's tasks file is
+`completed` (23/23):
+
+- constitution v1.2.0 (Principle II covers mutations; behavioral-test
+  tier; per-feature register decision)
+- `ardd-state.sh` (13 subcommands, all state transitions script-performed)
+  + `defects-unsurfaced.sh`, `tasks-list.sh`, `upsert-section.sh`,
+  `smoke-assert.sh` — each with fixture tests + CI jobs
+- migration `0003-per-feature-files` (applied live to this repo),
+  `lint-project.sh` per-feature schema + governance-consistency check
+- all ten state-touching skills rewired: prose decides, scripts write
+- `/ardd-plan` feedback-file scoping
+- key-gated smoke workflow (`.github/workflows/smoke.yml`) — skips fast
+  until the `ANTHROPIC_API_KEY` secret is provisioned (deliberate);
+  promotion = provision the secret + drop `continue-on-error`
+
+After merge: re-run `./install.sh .` (refresh dogfooded skill copies),
+run `/ardd-verify`, then plan the docs half via
+`/ardd-plan feedback-repo-critique-docs-ca1d.md`.
