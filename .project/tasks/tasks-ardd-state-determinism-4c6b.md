@@ -164,7 +164,7 @@ same commit.
 
 ## Phase 6: Behavioral smoke test (after Phase 3 — assertions target script-driven state)
 
-- [ ] T021 Build the smoke fixture: `tests/fixtures/smoke-project/` — a
+- [x] T021 Build the smoke fixture: `tests/fixtures/smoke-project/` — a
   minimal installable target (git repo initialized in the test, ADD
   installed via `./install.sh`, one stable artifact, empty register).
   Plus `scripts/smoke-assert.sh`: given the fixture after a skill run,
