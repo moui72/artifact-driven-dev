@@ -147,7 +147,7 @@ same commit.
   header-substring false-match guard). CI job. Rewire
   `skills/ardd-render/SKILL.md` step 6 (Mermaid content stays prose).
   Add to `install.sh` copied set.
-- [ ] T019 [parallel] [artifacts: constitution] Governance-consistency
+- [x] T019 [parallel] [artifacts: constitution] Governance-consistency
   check in `scripts/lint-project.sh`: constitution footer `Version`/
   `Last Amended` vs frontmatter `last_updated` vs Sync Impact Report
   version agree. Bad fixture (mismatched footer) red first; good

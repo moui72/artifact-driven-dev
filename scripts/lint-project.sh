@@ -131,6 +131,27 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       fi
     fi
 
+    # --- constitution governance bookkeeping consistency ---
+    # The exact drift /ardd-verify caught once (v1.1.0 defects): footer
+    # Version/Last Amended vs frontmatter last_updated vs the Sync Impact
+    # Report's target version. Checked only when the markers exist — a
+    # minimal constitution without a footer/SIR is fine.
+    if [ "$name" = "constitution" ]; then
+      footer="$(grep -E '^\*\*Version\*\*:' "$f" | head -1 || true)"
+      if [ -n "$footer" ]; then
+        footer_ver="$(printf '%s' "$footer" | sed -E 's/^\*\*Version\*\*:[[:space:]]*([0-9.]+).*/\1/')"
+        footer_amended="$(printf '%s' "$footer" | sed -E 's/.*\*\*Last Amended\*\*:[[:space:]]*([0-9-]+).*/\1/')"
+        fm_updated="$(frontmatter_field "$f" last_updated)"
+        if [ -n "$footer_amended" ] && [ -n "$fm_updated" ] && [ "$footer_amended" != "$fm_updated" ]; then
+          report "$f: footer Last Amended '$footer_amended' != frontmatter last_updated '$fm_updated' — governance bookkeeping drift"
+        fi
+        sir_ver="$(grep -E '^Version change:' "$f" | head -1 | sed -E 's/.*→[[:space:]]*([0-9.]+).*/\1/' || true)"
+        if [ -n "$sir_ver" ] && [ "$sir_ver" != "$footer_ver" ]; then
+          report "$f: Sync Impact Report targets version '$sir_ver' but footer says '$footer_ver' — governance bookkeeping drift"
+        fi
+      fi
+    fi
+
     if in_enum "$name" $RENDERABLE_ARTIFACTS; then
       if ! frontmatter_has "$f" diagram_status; then
         report "$f: missing required frontmatter field 'diagram_status'"
