@@ -14,7 +14,7 @@ exception. State mutations go through
 
 ## Phase 1: Built-with-ARDD badge (feature: built-with-ardd-badge)
 
-- [ ] T001 Add the badge snippet as a source-of-truth template
+- [x] T001 Add the badge snippet as a source-of-truth template
   (`templates/badge.md`): shields.io markdown
   `[![built with ARDD](https://img.shields.io/badge/built%20with-ARDD-blue)](https://github.com/moui72/artifact-driven-dev)`
   wrapped in `<!-- ardd-badge-start -->` / `<!-- ardd-badge-end -->`
