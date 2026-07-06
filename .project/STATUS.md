@@ -58,8 +58,7 @@ backfilled ubuntu-red tests; smoke scenario 2 for tasks→implement).
 T006 note: archaeology strip achieved 8.5% token reduction, not the
 plan's 25% estimate — earlier rewires had already removed most of it.
 
-**The final commit (9972413) is unsigned — 1Password was locked.**
-Re-sign before pushing (e.g. `git commit --amend -S` after unlocking).
-Next: merge `repo-critique-docs` into `main`, re-run `./install.sh .`,
+All commits on this branch are signed (the two made while 1Password was
+locked were re-signed 2026-07-06). Next: merge `repo-critique-docs` into `main`, re-run `./install.sh .`,
 push, and run `/ardd-verify` to confirm the two defects clear from
 DEFECTS.md.
