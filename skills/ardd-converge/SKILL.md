@@ -97,7 +97,7 @@ when resuming work in a new session.
    - Offers to merge the worktree branch into the default branch now,
      suggesting **yes** — eager merge keeps the in-flight window short in
      solo mode, landing code and all its state (checkbox reconciliation, the
-     `→completed` flip, any `features.md` flip) together. On merge, run
+     `→completed` flip, any register flip) together. On merge, run
      `/ardd-analyze`. On decline, note the work stays visible via
      `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section.
 
@@ -116,7 +116,7 @@ when resuming work in a new session.
    checked alongside `inflight-worktrees.sh`. **Never push without confirming
    with the user** (commits may be unsigned when 1Password is locked and must
    not be pushed silently). No eager local merge — merging goes through the
-   PR, and the `features.md` flip rides the branch and lands when the PR
+   PR, and the register flip rides the branch and lands when the PR
    merges.
 
    (History note: earlier versions persisted a `worktree_branch:` field and

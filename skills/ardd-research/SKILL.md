@@ -15,7 +15,9 @@ Investigate a specific topic and produce a research document. Usage:
 3. **Investigate** using available tools: read code, fetch URLs, search, inspect
    APIs, check library documentation. Be thorough on the specific question.
 
-4. **Write a research document** to `.project/plans/research-<slug>-<YYYY-MM-DD>.md`
+4. **Write a research document** to `.project/plans/<filename>`, minting
+   the filename via `.claude/skills/ardd-scripts/ardd-state.sh mint
+   research <slug>` (sanitize the topic first with `ardd-state.sh slug`)
    using this structure:
 
    ```markdown

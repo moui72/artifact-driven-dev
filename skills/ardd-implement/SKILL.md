@@ -37,7 +37,7 @@ self-contained; the agent loads only the artifacts it declares.
 
    **Nothing is committed in this step.** Under this design all state a run
    produces — the tasks file's `ready→in-progress` flip, every checkbox, the
-   `→completed` flip, and the `tasked→implemented` flip in `features.md` —
+   `→completed` flip, and the `tasked→implemented` flip in the register —
    rides the branch the work happens on and reaches the default branch only
    on merge, atomically with the code. There is no pre-delegation flip
    commit to land on the default branch first. (History note: earlier
@@ -128,7 +128,7 @@ self-contained; the agent loads only the artifacts it declares.
    - Offers to merge the worktree branch into the default branch now,
      suggesting **yes** — eager merge is what keeps the in-flight window
      short in solo mode, landing code and all its state (checkboxes,
-     `→completed`, any `features.md` flip) together. On merge, run
+     `→completed`, any register flip) together. On merge, run
      `/ardd-analyze`. On decline, note the work stays visible via
      `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section until
      merged.
@@ -151,7 +151,7 @@ self-contained; the agent loads only the artifacts it declares.
    push without confirming with the user** (repo convention: commits may be
    unsigned when 1Password is locked and must not be pushed silently). There
    is no eager local merge in collaborative mode — merging happens through
-   the PR, and the `features.md` flip rides the branch and lands when the PR
+   the PR, and the register flip rides the branch and lands when the PR
    merges, atomically.
 
 4. **Flip to `in-progress` (if needed), then find the next uncompleted

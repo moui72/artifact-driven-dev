@@ -1,6 +1,6 @@
 # /ardd-sync
 
-Mirror `.project/artifacts/features.md` to and from an external issue
+Mirror the feature register (`.project/features/*.md`) to and from an external issue
 tracker. GitHub Issues (via the `gh` CLI) is the only backend today; the
 design keeps the entry format, field-ownership rule, and phase structure
 provider-agnostic so Jira and others can be added later as a branch inside
@@ -9,12 +9,12 @@ push/pull, not a redesign.
 Usage: `/ardd-sync` runs both phases (push then pull). `/ardd-sync push` or
 `/ardd-sync pull` runs one.
 
-`features.md` owns name, slug, and description — design intent, set by
+The register owns name, slug, and description — design intent, set by
 `/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`. The tracker
 owns issue state, labels, and discussion — execution visibility. Each field
 syncs in one fixed direction; `/ardd-sync` never overwrites a tracker's
-title/body after creation, and never overwrites `features.md`'s `Status`
-from tracker state. This is why conflicts can't occur — see Pull, step 2,
+title/body after creation, and never overwrites a register entry's
+`status` from tracker state. This is why conflicts can't occur — see Pull, step 2,
 for the one deliberate exception (report-only, never applied).
 
 ## Prerequisites
@@ -31,36 +31,29 @@ for the one deliberate exception (report-only, never applied).
    `Status: implemented` has no label — a closed issue *is* the implemented
    state.
 
-## The `GH:` field
+## The `gh_issue` field
 
-Each `features.md` entry's metadata line gets a new trailing field once
-synced, following the existing `·`-separated convention (`Slug`, `Status`,
-`Logged`, `Plan`, `Tasks`):
-
-```
-_Slug: `foo` · Status: planned · Logged 2026-06-01 · Plan: plan-foo-2026-06-05.md · GH: #123_
-```
-
-Absent `GH:` means "not yet synced" — no migration needed for existing
-`features.md` files. The field name is provider-specific (`GH:` now, `Jira:`
-later) so one entry could eventually carry links into more than one tracker.
+Each register file gains a `gh_issue: <n>` frontmatter field once synced
+(set via `ardd-state.sh feature-field <slug> gh_issue <n>`). Absent
+`gh_issue` means "not yet synced" — no migration needed. The field name is
+provider-specific (`gh_issue` now, `jira` later) so one entry could
+eventually carry links into more than one tracker.
 
 ## Steps
 
-### Push (`features.md` → GitHub) — run unless invoked as `pull`
+### Push (register → GitHub) — run unless invoked as `pull`
 
-1. **Read `.project/artifacts/features.md`.** Before any `features.md` write
-   in this phase, run `.claude/skills/ardd-scripts/project-lock.sh check
+1. **Read the register.** Glob `.project/features/*.md` and read each
+   file's frontmatter (`slug`, `status`, `gh_issue`) and body (first line
+   = description, optional `Why:` line). Before any register write in
+   this phase, run `.claude/skills/ardd-scripts/project-lock.sh check
    ardd-sync` — if it warns, surface it to the user (another invocation
-   touched `.project/` recently) but proceed regardless; this is advisory,
-   never a block. Parse each entry: name (H2),
-   slug, status, and metadata line fields, same parsing `/ardd-feature`
-   already does. Entries with no `Slug`/`Status` line at all (legacy,
-   pre-convention) are `Status: implemented` by convention — skip them
-   entirely; there's no design intent to publish for lines already fully
-   applied before this workflow existed.
+   touched `.project/` recently) but proceed regardless; this is
+   advisory, never a block. (A legacy single-file features.md means the
+   project predates migration 0003 — tell the user to re-run install.sh
+   and stop.)
 
-2. **For each entry with no `GH:` field:**
+2. **For each entry with no `gh_issue` field:**
    - Before creating anything, search for an issue already carrying this
      slug's marker: `gh issue list --search "ardd-sync-slug-<slug> in:body"
      --state all --json number,body --jq '.[] | "\(.number)\t\(.body)"'`.
@@ -77,14 +70,14 @@ later) so one entry could eventually carry links into more than one tracker.
      the exact-match issue number, if any. If a match is found, adopt its
      number instead of creating a duplicate. This is what makes push
      idempotent against a run that dies between `gh issue create` and the
-     `features.md` write — the expected failure mode for something meant
+     register write — the expected failure mode for something meant
      to run headlessly on a schedule, not an edge case to ignore. Note
      GitHub's search index has a short indexing lag after creation, so a
      re-run within seconds of a create can still race; this is acceptable
      for anything run hourly or less often. Note the scope of what
      `sync-slug-match.sh`'s dedup buys: it handles **crash-retry
      idempotency** (a single run that died between `gh issue create` and the
-     `features.md` write, re-run later), not **true concurrent-run safety**.
+     register write, re-run later), not **true concurrent-run safety**.
      The `project-lock.sh check` above narrows but doesn't eliminate the
      residual external-system race — two genuinely simultaneous `push` runs
      can still both create a GitHub issue for the same slug before either
@@ -98,12 +91,12 @@ later) so one entry could eventually carry links into more than one tracker.
      `tasked`: `gh issue create --title "<name>" --body "<description>\n\n<Why
      line, if present>\n\n<!-- ardd-sync-slug-<slug> -->" [--label
      ardd:<status>, omitted when Status is implemented]`.
-   - Either way, append `· GH: #<n>` to the entry's metadata line and write
-     `features.md`.
-   - After this phase's `features.md` writes are done, run
+   - Either way, record the link:
+     `ardd-state.sh feature-field <slug> gh_issue <n>`.
+   - After this phase's register writes are done, run
      `.claude/skills/ardd-scripts/project-lock.sh touch ardd-sync`.
 
-3. **For each entry with an existing `GH:` field:**
+3. **For each entry with an existing `gh_issue` field:**
    - Read current state: `gh issue view <n> --json state,labels`.
    - Run `.claude/skills/ardd-scripts/sync-label-decision.sh <status>
      <current-ardd-label-or-none> <open-or-closed>` to decide the action —
@@ -113,13 +106,13 @@ later) so one entry could eventually carry links into more than one tracker.
      --add-label <new>` for `add`, `gh issue edit <n> --remove-label <old>
      --add-label <new>` for `swap`, `gh issue close <n>` for `close`.
    - Never edit title or body after creation — a description edited later in
-     `features.md` does not propagate. This is a stated limitation, not a
+     the register does not propagate. This is a stated limitation, not a
      gap: re-syncing content would blur the field-ownership rule this skill
      depends on.
 
-### Pull (GitHub → `features.md`) — run unless invoked as `push`
+### Pull (GitHub → register) — run unless invoked as `push`
 
-1. **Import new feature requests.** Before this phase's `features.md` writes,
+1. **Import new feature requests.** Before this phase's register writes,
    run `.claude/skills/ardd-scripts/project-lock.sh check ardd-sync` — if it
    warns, surface it to the user but proceed regardless; advisory, never a
    block. List open issues labeled `ardd-import`
@@ -128,12 +121,12 @@ later) so one entry could eventually carry links into more than one tracker.
    default of 30 since an import backlog can exceed it) — this label is
    applied by stakeholders themselves, never inferred, so a stray bug report
    never gets treated as a feature idea. For each:
-   - Derive a slug from the title using the same kebab-case + collision
-     logic as `/ardd-feature` step 2.
-   - Append a new `features.md` entry: `Status: backlogged`, `Logged
-     <today>`, `GH: #<n>`, description taken from the issue body (strip the
-     `<!-- ardd-sync-slug-... -->` marker if present from a prior push
-     cycle).
+   - Derive a slug from the title: `ardd-state.sh slug "<title>"`, with
+     the same hex-suffix collision handling as `/ardd-feature` step 2.
+   - Create the entry (description from the issue body, stripping any
+     `<!-- ardd-sync-slug-... -->` marker from a prior push cycle):
+     `printf '%s\n' "<description>" | ardd-state.sh feature-create <slug>`,
+     then `ardd-state.sh feature-field <slug> gh_issue <n>`.
    - Swap the issue's label from `ardd-import` to `ardd:backlogged` so it
      isn't re-imported next run.
 
@@ -143,7 +136,7 @@ later) so one entry could eventually carry links into more than one tracker.
 2. **Report divergence — do not apply it.** For every already-linked entry,
    run `.claude/skills/ardd-scripts/sync-divergence.sh <slug> <issue-number>
    <status> <open-or-closed>` — it decides whether current issue state
-   diverges from what `Status` implies (closed but not `implemented`;
+   diverges from what `status` implies (closed but not `implemented`;
    reopened but `implemented`) and prints the ready-to-use `## Diverged`
    line if so, nothing otherwise. Collect its output into `.project/SYNC.md`
    — full overwrite every run, mirroring `/ardd-verify`'s `DEFECTS.md`
@@ -155,7 +148,7 @@ later) so one entry could eventually carry links into more than one tracker.
    _Last synced: YYYY-MM-DD_
 
    ## Diverged
-   - **Slug:** <slug> — issue #<n> is <closed/open>, features.md says `Status: <status>`
+   - **Slug:** <slug> — issue #<n> is <closed/open>, the register says `status: <status>`
 
    (repeat per divergence)
    ```
@@ -167,11 +160,11 @@ later) so one entry could eventually carry links into more than one tracker.
 
    _Last synced: YYYY-MM-DD_
 
-   No divergence — tracker state matches features.md as of this run.
+   No divergence — tracker state matches the register as of this run.
    ```
 
    This is the one deliberate asymmetry in "vice-versa": pull's only
-   write-back into `features.md` is importing new entries (step 1). A
+   write-back into the register is importing new entries (step 1). A
    tracker-side status change is always reported, never applied — `Status`
    transitions belong to the ARDD lifecycle skills
    (`/ardd-plan`/`/ardd-tasks`/`/ardd-implement`), not to this skill. The

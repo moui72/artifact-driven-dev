@@ -112,7 +112,7 @@ same commit.
   `feature-flip`). Same judgment/mutation split; delegated-subagent
   preamble gets the same present-or-fallback path rule as other
   ardd-scripts calls.
-- [ ] T015 [artifacts: constitution] Rewire the register writers/readers
+- [x] T015 [artifacts: constitution] Rewire the register writers/readers
   to per-feature files: `skills/ardd-feature/SKILL.md`
   (`feature-create`), `skills/ardd-featurize/SKILL.md` (bulk
   `feature-create`), `skills/ardd-sync/SKILL.md` (`feature-field` for

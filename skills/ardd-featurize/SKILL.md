@@ -1,13 +1,13 @@
 # /ardd-featurize
 
 Extract a feature register from an existing codebase and write it to
-`.project/artifacts/features.md`. Use this once after `/ardd-codify` to
+per-feature files under `.project/features/`. Use this once after `/ardd-codify` to
 backfill the capability history of an existing project. After that,
-`/ardd-feature` keeps `features.md` current as new features are added.
+`/ardd-feature` keeps the register current as new features are added.
 
 ## Steps
 
-1. **Check for existing `features.md`.** If it already exists and has entries,
+1. **Check for an existing register.** If `.project/features/` already has entries (or a legacy `.project/artifacts/features.md` exists),
    warn the user and ask for confirmation before overwriting. On confirmation,
    proceed; on denial, exit.
 
@@ -74,36 +74,26 @@ backfill the capability history of an existing project. After that,
    - Note which standard artifacts each feature primarily touches
      (infrastructure, adapters, api, ui, datamodel).
 
-4. **Write `.project/artifacts/features.md`** using this format:
+4. **Write one register file per feature.** For each feature, sanitize
+   the slug (`.claude/skills/ardd-scripts/ardd-state.sh slug "<name>"`,
+   4-char hex suffix on collision), then create the file with the body on
+   stdin:
 
-   ```markdown
-   ---
-   last_updated: YYYY-MM-DD
-   ---
-
-   # Features
-
-   ## <Feature Name>
-   _Slug: `<slug>` · Status: implemented · Added <YYYY-MM-DD> · <artifact>, <artifact>_
-   <One sentence: what this capability does from the user or caller's perspective.>
-   Why: <Optional — context that won't be obvious from code or artifacts later.>
-
-   ## <Feature Name>
-   ...
+   ```
+   printf '%s\n' "<one-sentence description>" "Why: <optional>" \
+     | .claude/skills/ardd-scripts/ardd-state.sh feature-create <slug>
    ```
 
-   These are already-shipped capabilities, so every entry gets
-   `Status: implemented` — extracted history isn't a backlog. Derive each
-   `<slug>` the same way `/ardd-feature` does (kebab-case from the feature
-   name, ~30 chars, deduplicated with a 4-char hex suffix on collision) so
-   entries are consistently addressable even though there's nothing left to
-   plan for them.
+   `feature-create` writes `status: backlogged`; these are already-shipped
+   capabilities, so immediately advance each one:
+   `ardd-state.sh feature-flip <slug> planned`, `... tasked`,
+   `... implemented` (the script enforces one stage at a time) — extracted
+   history isn't a backlog.
 
-   Order entries from oldest to newest (by inferred add-date, or by logical
-   dependency if dates are unavailable). Omit the `Why:` line when there's no
-   non-obvious context to add.
+   Note which artifacts each feature touches as a line in the body. Omit
+   the `Why:` line when there's no non-obvious context to add.
 
-   Place `[REVIEW: <reason>]` on the line immediately after the header of any
+   Place `[REVIEW: <reason>]` as the first body line of any
    entry that is uncertain — wrong date, ambiguous scope, inferred from a
    bundled commit, or not clearly user-visible. This makes uncertain entries
    findable without reading the report.
@@ -112,6 +102,6 @@ backfill the capability history of an existing project. After that,
    - How many features were extracted
    - Which sources were most useful (git log, releases, tests, README, etc.)
    - Count of `[REVIEW: ...]` entries and a brief note on each
-   - Recommended next step: review `features.md`, resolve or remove
+   - Recommended next step: review `.project/features/`, resolve or remove
      `[REVIEW: ...]` entries, then run `/ardd-analyze` to ensure all artifacts
      are current

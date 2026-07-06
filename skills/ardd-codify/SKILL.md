@@ -75,7 +75,7 @@ code does, not necessarily what was intended. Review each one with
      but zero test files found anywhere in the survey). If so, append
      `[VIOLATED: <one-line evidence from the survey>]` to the inserted text,
      the same way other inferred content is marked for the user to see and
-     correct. Never write to `DEFECTS.md` or `features.md` here — report the
+     correct. Never write to `DEFECTS.md` or the feature register here — report the
      violated count in step 8 instead, recommending `/ardd-verify` (to log
      each gap in `DEFECTS.md`) followed by `/ardd-feature` to backlog closing
      it. This preserves those files' existing single-writer ownership.

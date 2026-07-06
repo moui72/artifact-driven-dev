@@ -87,7 +87,7 @@ This reads all four artifacts and reports:
 - **Constitution violations** — decisions that break your principles
 - **Orphaned completion flips** — a completed tasks file whose work branch
   already merged, but whose bound feature is still `Status: tasked` in
-  `features.md` (the fingerprint of a run that crashed between flips, or a
+  the feature register (the fingerprint of a run that crashed between flips, or a
   tasks file from before state rode the work branch). If found, Claude asks
   whether to flip it to `implemented` now.
 - **In-flight work** — anything living in a sibling worktree (branch, tasks
@@ -195,7 +195,7 @@ blockers rather than working around them.
 Every status change — the tasks file's own flips, checkboxes, and the
 feature-backlog flip (`tasked` → `implemented`) — rides the work branch and
 reaches your default branch when that branch merges, atomically with the
-code. So `features.md` never claims work is done before the code has
+code. So the feature register never claims work is done before the code has
 landed, and until merge the in-flight truth is visible via the sibling-
 worktree check above and `/ardd-analyze`'s "In Flight" section. On a
 delegated run's completion, Claude offers to merge the worktree branch
@@ -250,7 +250,7 @@ tooling needed.
 
 ### Sync features with GitHub Issues
 
-To mirror `.project/artifacts/features.md` to GitHub Issues and back:
+To mirror the feature register (`.project/features/`) to GitHub Issues and back:
 
 ```
 /ardd-sync
@@ -259,12 +259,11 @@ To mirror `.project/artifacts/features.md` to GitHub Issues and back:
 Or run one direction only: `/ardd-sync push` (create/update issues from
 backlog entries) or `/ardd-sync pull` (import issues labeled `ardd-import` as
 new backlog entries, and report — but not apply — any tracker-side state
-that's diverged from `features.md`, e.g. an issue closed manually).
+that's diverged from the register, e.g. an issue closed manually).
 
-`features.md` stays the source of truth for what a feature *is* (name, slug,
+The register stays the source of truth for what a feature *is* (name, slug,
 description); the tracker becomes the source of truth for its status and
-discussion. Each synced entry gets a `· GH: #<n>` field appended to its
-metadata line.
+discussion. Each synced entry gets a `gh_issue: <n>` frontmatter field.
 
 To run it unattended, invoke it headlessly from a GitHub Actions workflow —
 on a schedule, or on `issues` events so new `ardd-import`-labeled issues get

@@ -53,16 +53,17 @@ the coordinator or the inline path.
    never writes to feedback files (that belongs solely to `/ardd-feedback`
    and `/ardd-plan`).
 
-   Also read `.project/artifacts/features.md` if present. Count entries by
-   `Status` (`backlogged`/`planned`/`tasked`/`implemented`) — read-only
-   visibility; `/ardd-analyze` never writes to `features.md` except the one
-   narrow, explicit exception in step 5a below.
+   Also glob `.project/features/*.md` (the per-feature register) if
+   present. Count entries by frontmatter `status`
+   (`backlogged`/`planned`/`tasked`/`implemented`) — read-only visibility;
+   `/ardd-analyze` never writes to the register except the one narrow,
+   explicit exception in step 5a below.
 
    Also glob `.project/tasks/tasks-*.md` for files at `status: completed`.
    For each, run `.claude/skills/ardd-scripts/completion-flip-check.sh
    <file>` — detects the orphaned-completion-flip failure mode: a plan
    whose branch has already merged into the default branch, but whose bound
-   features are still `Status: tasked` in `features.md` rather than
+   features are still `tasked` in the register rather than
    `implemented`. This happens because `/ardd-implement`'s and
    `/ardd-converge`'s post-merge flip step assumes a live coordinating
    conversation checks back after the worktree branch merges — but merge is
@@ -128,12 +129,12 @@ the coordinator or the inline path.
 
    ## Feature Backlog
    - <N> backlogged · <N> planned · <N> tasked · <N> implemented — see
-     `.project/artifacts/features.md`. Target a backlogged slug with
-     `/ardd-plan <slug>`. (Omit this section if `features.md` doesn't exist.)
+     `.project/features/`. Target a backlogged slug with
+     `/ardd-plan <slug>`. (Omit this section if the register doesn't exist.)
 
    ## Orphaned Completion Flips
    - Slug `<slug>` — tasks file `<file>`'s plan branch `<branch>` is merged
-     into the default branch, but `features.md` still says `Status: tasked`.
+     into the default branch, but the register still says `status: tasked`.
      (Omit this section entirely if step 1 found none.)
 
    ## In Flight
@@ -154,7 +155,7 @@ the coordinator or the inline path.
      "never checked") drawn from step 1 — read-only, not regenerated here
    - A line surfacing the open feedback count from step 1 (omit if zero)
    - A line surfacing the feature backlog counts from step 1 (omit if
-     `features.md` doesn't exist)
+     the register doesn't exist)
    - A line surfacing any orphaned completion flips found in step 1 (omit
      if none)
    - An "In flight" line/section surfacing the `inflight-worktrees.sh`
@@ -170,9 +171,10 @@ the coordinator or the inline path.
    writing STATUS.md themselves.
 
 7. **If step 1 found any orphaned completion flips**, ask the user whether
-   to perform the `tasked→implemented` flip in `.project/artifacts/
-   features.md` for each one now. This is `/ardd-analyze`'s one narrow,
-   explicit exception to never writing `features.md` — mirroring the
+   to perform the flip for each one now via
+   `.claude/skills/ardd-scripts/ardd-state.sh feature-flip <slug>
+   implemented`. This is `/ardd-analyze`'s one narrow,
+   explicit exception to never writing the register — mirroring the
    tasks-file-completion exception already documented for
    `/ardd-implement`/`/ardd-converge` — since the whole reason this check
    exists is that no other skill run is left to catch it. On confirmation,

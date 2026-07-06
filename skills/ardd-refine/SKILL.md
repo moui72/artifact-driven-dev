@@ -52,11 +52,12 @@ that has open questions instead of a single one:
 5. **Update frontmatter** on all other artifacts:
    - Set `status: stable` if substantially complete with no open questions.
      Set `status: draft` if significant gaps remain.
-   - Set `last_updated` to today's date (YYYY-MM-DD).
+   - Set `last_updated` via `.claude/skills/ardd-scripts/ardd-state.sh
+     stamp <file> last_updated <today>`.
    - If the artifact is renderable (`datamodel`, `infrastructure`, or `ui`),
-     set `diagram_status: stale` — unless it is currently `unrendered`, in
-     which case leave it `unrendered` (no diagram has ever been generated,
-     so there's nothing to go stale).
+     run `ardd-state.sh stamp <file> diagram_status stale` — unless it is
+     currently `unrendered`, in which case leave it `unrendered` (no
+     diagram has ever been generated, so there's nothing to go stale).
 
 6. **Write** the updated artifact back to `.project/artifacts/<name>.md`.
 

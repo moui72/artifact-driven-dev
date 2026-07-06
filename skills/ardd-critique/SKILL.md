@@ -31,7 +31,7 @@ to focus on a single artifact.
    - If it does not exist: proceed to step 2.
 
 2. **Load artifacts.** If scoped to a named artifact, load that file. Otherwise
-   load all `.md` files in `.project/artifacts/`. Also load `features.md` if
+   load all `.md` files in `.project/artifacts/`. Also load the feature register (`.project/features/*.md`) if
    present.
 
 3. **Apply critical lenses.** For each artifact, work through every lens below.

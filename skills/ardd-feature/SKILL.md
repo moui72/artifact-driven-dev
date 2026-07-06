@@ -1,6 +1,7 @@
 # /ardd-feature
 
-Log a feature idea to the backlog in `.project/artifacts/features.md`. This
+Log a feature idea to the backlog — a new file in `.project/features/`
+(the per-feature register; constitution standing decision 2026-07-06). This
 skill only records the idea — it does not touch artifacts. Design work
 (identifying affected artifacts, proposing and applying changes) happens
 later, when the idea is targeted by slug in `/ardd-plan <slug>`. This lets
@@ -23,49 +24,36 @@ existing GitLab REST fallback").
    full design detail), ask one clarifying question. Do not ask questions
    answerable by reading the artifacts.
 
-2. **Derive a slug.** Kebab-case, ~30 chars, from the description (e.g.
-   "octokit fallback for GitHub" → `octokit-github-fallback`). Check existing
-   slugs in `features.md` (see step 3) — if it collides, append a freshly
-   generated 4-char hex token (`openssl rand -hex 2`).
+2. **Derive a slug.** Choose the wording (judgment — prefer a short
+   capability-level noun phrase), then sanitize it deterministically:
+   `.claude/skills/ardd-scripts/ardd-state.sh slug "<text>"`. Check for a
+   collision against existing files in `.project/features/` — if taken,
+   append a freshly generated 4-char hex token.
 
-3. **Check for `features.md`.** Before touching it, run
+3. **Create the register entry.** Before writing, run
    `.claude/skills/ardd-scripts/project-lock.sh check ardd-feature` — if it
    warns, surface the warning to the user (another invocation touched
    `.project/` recently) but proceed regardless; this is advisory, never a
-   block. If `.project/artifacts/features.md` doesn't
-   exist, create it with the standard header:
+   block. Then create the file (script-performed; it refuses a duplicate
+   slug), with the body on stdin:
 
-   ```markdown
-   ---
-   last_updated: YYYY-MM-DD
-   ---
-
-   # Features
+   ```
+   printf '%s\n' "<one-sentence description>" "Why: <optional context>" \
+     | .claude/skills/ardd-scripts/ardd-state.sh feature-create <slug>
    ```
 
-   If it exists, read it to check for slug collisions (step 2) and to append
-   after the last entry.
-
-4. **Append the backlog entry:**
-
-   ```markdown
-   ## <Feature Name>
-   _Slug: `<slug>` · Status: backlogged · Logged <today YYYY-MM-DD>_
-   <One sentence: what this capability does from the user or caller's perspective.>
-   Why: <Optional — context that won't be obvious from code or artifacts later.>
-   ```
-
-   Derive the feature name from the user's description — prefer a short
-   noun phrase at the capability level ("Octokit GitHub fallback") over an
-   implementation label. Omit the `Why:` line when the motivation is already
-   obvious from the description. Update `last_updated` in the frontmatter to
-   today's date. After writing `features.md`, run
+   The body is one sentence on what the capability does from the user or
+   caller's perspective, plus an optional `Why:` line for context that
+   won't be obvious from code or artifacts later — omit it when the
+   motivation is already obvious. The script writes the frontmatter
+   (`slug`, `status: backlogged`, `logged: <today>`). After writing, run
    `.claude/skills/ardd-scripts/project-lock.sh touch ardd-feature`.
 
-   Entries with no `Slug`/`Status` line predate this convention (written by
-   an older `/ardd-feature` or by `/ardd-featurize`) — treat them as
-   `Status: implemented` and leave them as-is; don't retrofit them unless the
-   user asks.
+4. **Legacy note.** If the project still has a single-file
+   `.project/artifacts/features.md`, the register predates migration
+   0003-per-feature-files — tell the user to re-run `install.sh` (which
+   applies the migration) before logging new entries; don't append to the
+   legacy file.
 
 5. **Report** the slug and a one-line confirmation. Remind the user: run
    `/ardd-plan <slug>` (any time, in any order relative to other backlog
