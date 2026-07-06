@@ -141,6 +141,11 @@ implementation plan, and presents it for your review. The plan is saved to
 disk immediately as `status: draft` — there's no separate approval step
 here. Running `/ardd-tasks` and selecting it is what approves it.
 
+Passing a feedback filename (`/ardd-plan feedback-<slug>-<hex>.md`) scopes
+the run to that feedback file — other open feedback files are left
+untouched for a later plan, which is how two open feedback files feed two
+separate plans cleanly.
+
 Passing one or more backlogged feature slugs (`/ardd-plan <slug> ...`) does
 real artifact-design work first, which can run long, but `/ardd-plan` never
 delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the

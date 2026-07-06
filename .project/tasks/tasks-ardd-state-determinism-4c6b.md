@@ -155,7 +155,7 @@ same commit.
 
 ## Phase 5: ardd-plan feedback scoping
 
-- [ ] T020 [parallel] Add optional feedback-file argument(s) to
+- [x] T020 [parallel] Add optional feedback-file argument(s) to
   `skills/ardd-plan/SKILL.md`: `/ardd-plan [--feedback <file> ...]`
   (or bare filenames recognized by the `feedback-` prefix) scopes the
   step-5 glob to the named file(s); unnamed open files are neither

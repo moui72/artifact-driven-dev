@@ -11,6 +11,15 @@ entries from the feature register (`.project/features/`) — this is where a fea
 idea's artifact design work actually happens (`/ardd-feature` only logs the
 idea; it doesn't touch artifacts).
 
+Any argument that looks like a feedback filename (`feedback-*.md`, with or
+without its `.project/feedback/` path) is a **feedback scope** instead of a
+feature slug: step 4 then consumes only the named feedback file(s), and
+every other open feedback file is neither presented nor marked — it stays
+`status: open`, untouched, for a later run. Without a feedback-scope
+argument, step 4 loads all open feedback files as before. This is how two
+open feedback files feed two separate plans without one run accidentally
+binding (or `[-]`-declining) the other's items.
+
 ## Steps
 
 1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
@@ -144,7 +153,11 @@ idea; it doesn't touch artifacts).
    approved — not here.
 
 4. **Load open feedback.** Glob `.project/feedback/feedback-*.md` and read
-   frontmatter. Load every file with `status: open` as planning input —
+   frontmatter. If feedback-scope argument(s) were passed (see Usage),
+   restrict everything in this step — loading, presenting, marking,
+   `feedback-planned` — to the named file(s); other open files are
+   invisible to this run. Load every (in-scope) file with `status: open`
+   as planning input —
    these came from the user manually inspecting the implementation (bugs,
    UX issues, reconsidered decisions). For each `## Reconsidered` item tagged
    with an artifact, diff it against that artifact's current text and surface
