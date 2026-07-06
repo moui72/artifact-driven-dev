@@ -1,30 +1,41 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.0 → 1.1.0 (MINOR — material expansion of the
-Pre-commit Enforcement quality standard)
+Version change: 1.1.0 → 1.2.0 (MINOR — material expansion of Principle
+II, one new Quality Standard, one new standing decision)
 
-Rationale: the standard enumerated ten specific scripts. /ardd-verify
-(2026-07-05) found the list had silently fallen four scripts behind CI
-(test-worktree-align, test-inflight-worktrees, test-install-worktreeinclude,
-test-hooks-pre-commit) — CI additions are covered by the Development
-Workflow's same-commit convention, but nothing obligated extending the hook
-or this list. An enumerated list is the drift-prone pattern Principle II
-exists to eliminate; replaced with a rule that cannot go stale: the hook
-runs the two lints plus every scripts/test-*.sh by glob. This also resolves
-the two governance-bookkeeping drift defects recorded in DEFECTS.md
-(stale Last Amended footer; version never bumped after the 2026-07-05
-amendments to this same standard's script list).
+Rationale: a full-repo critique (2026-07-06, captured in
+feedback-repo-critique-6ad1.md and consumed by
+plan-ardd-state-determinism-2026-07-06.md) found the system's weakest
+point is exactly the one Principle II exists to police, one level up:
+deterministic *checks* are scripted, but the state *mutations* those
+checks police (status flips, checkbox marks, frontmatter stamps,
+register edits) are still performed by the LLM hand-editing markdown per
+prose instructions — every one an unforced compliance risk. Separately,
+skill behavior itself had no test tier at all despite Principle I
+treating skill edits as public-API changes. Both amendments were
+user-confirmed before planning.
 
-Modified sections: Quality Standards → Pre-commit Enforcement (enumerated
-script list → glob rule; hooks/pre-commit and test-hooks-pre-commit.sh
-changed in the same commit). Footer version/date updated.
+Modified sections:
+- Core Principles → Principle II retitled ("Deterministic Checks and
+  Mutations Over Prose...") and extended: transitions that are pure
+  functions of file state get scripts (ardd-state.sh et al.); prose
+  decides *when*, scripts do the *writing*.
+- Quality Standards → new "Behavioral smoke tests" tier: fixture-project
+  scenarios running skills headlessly, asserting on file outcomes,
+  required for state-mutating skill paths.
+- Quality Standards → new "Feature register format" standing decision
+  (per-feature files; added by T001 in the same plan, versioned here).
+Footer version/date updated.
+
+Previous SIR (1.0.0 → 1.1.0, Pre-commit Enforcement glob rule) is
+recorded in git history at this file's prior revision.
 -->
 
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-05
+last_updated: 2026-07-06
 ---
 
 # artifact-driven-dev Constitution
@@ -70,14 +81,20 @@ A `SKILL.md` edit is a behavior change to every project that has run
 a public API. Don't rewrite a skill's steps without considering every
 project already relying on its current behavior.
 
-### II. Deterministic Checks Over Prose, Wherever the Invariant Is Actually Checkable
+### II. Deterministic Checks and Mutations Over Prose, Wherever the Operation Is Actually Mechanizable
 
 Any invariant that is a pure function of file state on disk — a status
 enum, a required frontmatter field, a cross-reference that must resolve, a
 doc that must name a real skill — gets a real deterministic script, not
-reliance on an LLM reading instructions carefully every time. Skill prose
-is reserved for what genuinely requires judgment: deciding a branch name,
-weighing a design tradeoff, asking the user a clarifying question. Where an
+reliance on an LLM reading instructions carefully every time. The same
+rule applies to state *mutations*: any transition that is itself a pure
+function of file state — a status flip, a checkbox mark, a frontmatter
+stamp, a register append — is performed by a script (`ardd-state.sh` and
+its siblings) that validates before writing, never by the LLM hand-editing
+markdown per prose instructions. Skill prose decides *when* a mutation
+happens; scripts do the *writing*. Prose is reserved for what genuinely
+requires judgment: deciding a branch name, weighing a design tradeoff,
+asking the user a clarifying question. Where an
 invariant looks hardenable but a hook or script provably can't verify it
 (e.g. single-writer file ownership, which requires knowing *which skill* is
 currently active — information no Claude Code hook payload carries), that
@@ -140,6 +157,16 @@ before being built, not discovered as duplicated work later.
   git-state tests), verified against both a known-good and a known-bad
   case, required for every deterministic check, added in the same commit
   as the check itself.
+- **Behavioral smoke tests**: skill behavior is verified by
+  fixture-project smoke scenarios — a minimal installable target project,
+  a headless `claude -p "/ardd-<skill>"` run, and deterministic
+  assertions on file outcomes (expected files exist, statuses legal per
+  `lint-project.sh`, single-writer files untouched) — required for
+  state-mutating skill paths. This is a second tier alongside
+  fixture-based regression tests: regression tests verify the scripts;
+  smoke tests verify the skills invoke them to the right end state. CI
+  smoke jobs may run conditionally (path-filtered, secret-gated) but
+  must exist.
 - **Commit messages** follow Conventional Commits (`feat:`, `fix:`,
   `refactor:`, `chore:`, `docs:`, etc.).
 - **Shell scripts target POSIX `sh`**, not bash-specific syntax — they may
@@ -205,4 +232,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.1.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-05
+**Version**: 1.2.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-06

@@ -25,7 +25,7 @@ same commit.
   optional: `plan`, `tasks` (filenames), `gh_issue` (number); body:
   one-sentence description + optional `Why:` line. This schema is the
   input contract for T006, T008, and T009. Doc task — no test.
-- [ ] T002 [artifacts: constitution] Amend the constitution, v1.1.0 →
+- [x] T002 [artifacts: constitution] Amend the constitution, v1.1.0 →
   v1.2.0 (one MINOR bump), Sync Impact Report prepended, footer +
   frontmatter `last_updated` updated: (1) extend Principle II to state
   *mutations* — deterministic transitions that are pure functions of
