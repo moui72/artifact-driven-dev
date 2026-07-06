@@ -87,7 +87,7 @@ before implementing. State mutations go through
 
 ## Phase 4: Verify-run defects
 
-- [ ] T009 [defect: 58bd7dd2] Backfill fixture tests for migrations
+- [x] T009 [defect: 58bd7dd2] Backfill fixture tests for migrations
   0001-diagram-stale.sh and 0002-diagram-status.sh (temp-dir fixture
   with pre-migration artifacts; assert resulting frontmatter), added
   to CI — on ubuntu these tests are RED today because both scripts use

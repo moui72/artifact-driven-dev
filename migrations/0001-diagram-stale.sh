@@ -14,7 +14,7 @@ for name in datamodel infrastructure ui; do
     continue
   fi
   # Insert diagram_stale: false after the last_updated line
-  sed -i '' '/^last_updated:/a\
-diagram_stale: false' "$file"
+  sed -i.arddbak '/^last_updated:/a\
+diagram_stale: false' "$file" && rm -f "$file.arddbak"
   echo "  ✓ added diagram_stale to $name.md"
 done

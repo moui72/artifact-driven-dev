@@ -46,10 +46,10 @@ for name in datamodel infrastructure ui; do
   fi
 
   if grep -q "^diagram_stale:" "$file"; then
-    sed -i '' "s/^diagram_stale:.*/diagram_status: $status/" "$file"
+    sed -i.arddbak "s/^diagram_stale:.*/diagram_status: $status/" "$file" && rm -f "$file.arddbak"
   else
-    sed -i '' "/^last_updated:/a\\
-diagram_status: $status" "$file"
+    sed -i.arddbak "/^last_updated:/a\\
+diagram_status: $status" "$file" && rm -f "$file.arddbak"
   fi
   echo "  - $name.md -> diagram_status: $status"
 done
