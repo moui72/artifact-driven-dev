@@ -36,7 +36,7 @@ same commit.
 
 ## Phase 2: ardd-state.sh (after Phase 1; subcommand tasks are sequential in one growing script + test file)
 
-- [ ] T003 Scaffold `scripts/ardd-state.sh` (POSIX sh, target-side) with
+- [x] T003 Scaffold `scripts/ardd-state.sh` (POSIX sh, target-side) with
   subcommand dispatch + usage, and `scripts/test-ardd-state.sh` with the
   fixture harness (temp-dir project skeleton; good + bad cases per
   subcommand). Write the test harness first with one failing placeholder
