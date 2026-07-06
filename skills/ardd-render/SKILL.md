@@ -1,3 +1,8 @@
+---
+name: ardd-render
+description: Generate a Mermaid diagram from a renderable artifact and upsert it into README.md.
+---
+
 # /ardd-render
 
 Generate a Mermaid diagram from a project artifact and upsert it into

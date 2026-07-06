@@ -1,3 +1,8 @@
+---
+name: ardd-sync
+description: Mirror the feature register to/from an external issue tracker (GitHub Issues today).
+---
+
 # /ardd-sync
 
 Mirror the feature register (`.project/features/*.md`) to and from an external issue

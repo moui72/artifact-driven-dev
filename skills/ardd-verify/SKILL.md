@@ -1,3 +1,8 @@
+---
+name: ardd-verify
+description: Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer).
+---
+
 # /ardd-verify
 
 Verify artifacts against the actual codebase and report drift. Where

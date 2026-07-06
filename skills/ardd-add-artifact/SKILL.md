@@ -1,3 +1,8 @@
+---
+name: ardd-add-artifact
+description: Create a new, non-standard artifact from a template.
+---
+
 # /ardd-add-artifact
 
 Create a new artifact in `.project/artifacts/`. Usage:

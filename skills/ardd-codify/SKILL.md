@@ -1,3 +1,8 @@
+---
+name: ardd-codify
+description: One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap).
+---
+
 # /ardd-codify
 
 Reverse-engineer project artifacts from an existing codebase. Use this to

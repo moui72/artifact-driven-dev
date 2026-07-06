@@ -1,3 +1,8 @@
+---
+name: ardd-feature
+description: Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet.
+---
+
 # /ardd-feature
 
 Log a feature idea to the backlog — a new file in `.project/features/`

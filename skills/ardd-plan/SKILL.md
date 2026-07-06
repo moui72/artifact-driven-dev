@@ -1,3 +1,8 @@
+---
+name: ardd-plan
+description: Draft a phased implementation plan from artifacts, feedback, and optionally backlogged features; feedback-file arguments scope which feedback is consumed.
+---
+
 # /ardd-plan
 
 Generate an implementation plan from the current artifacts, any open

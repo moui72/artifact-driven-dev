@@ -1,3 +1,8 @@
+---
+name: ardd-research
+description: Targeted investigation written to .project/plans/ — one-off output with no lifecycle.
+---
+
 # /ardd-research
 
 Investigate a specific topic and produce a research document. Usage:

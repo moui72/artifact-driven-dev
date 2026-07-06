@@ -69,7 +69,7 @@ before implementing. State mutations go through
 
 ## Phase 3: Single-source skill descriptions (T007 parallel-safe; T008 after Phase 1 lands so tables generate from settled text)
 
-- [ ] T007 [parallel] Add YAML frontmatter to every `skills/*/SKILL.md`:
+- [x] T007 [parallel] Add YAML frontmatter to every `skills/*/SKILL.md`:
   `name: <skill-name>` and a one-line `description:` (drawn from the
   current README table wording where accurate). Verify skills still
   load as slash commands after install (frontmatter is the standard

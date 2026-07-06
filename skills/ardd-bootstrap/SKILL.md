@@ -1,3 +1,8 @@
+---
+name: ardd-bootstrap
+description: One-time initialization: seed .project/ artifacts from conversation context (greenfield projects).
+---
+
 # /ardd-bootstrap
 
 One-time initialization. Seeds `.project/artifacts/` from the current

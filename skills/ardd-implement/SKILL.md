@@ -1,3 +1,8 @@
+---
+name: ardd-implement
+description: Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge.
+---
+
 # /ardd-implement
 
 Execute uncompleted tasks from a chosen tasks file sequentially. Each task is

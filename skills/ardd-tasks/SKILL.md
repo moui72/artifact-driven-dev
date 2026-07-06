@@ -1,3 +1,8 @@
+---
+name: ardd-tasks
+description: Generate an ordered task list from a plan; selecting a draft plan approves it.
+---
+
 # /ardd-tasks
 
 Generate an ordered task list from a plan. Selecting a `status: draft` plan

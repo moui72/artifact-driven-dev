@@ -1,3 +1,8 @@
+---
+name: ardd-converge
+description: Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement.
+---
+
 # /ardd-converge
 
 Compare the current codebase to a chosen tasks file and append any remaining

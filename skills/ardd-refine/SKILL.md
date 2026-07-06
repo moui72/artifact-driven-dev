@@ -1,3 +1,8 @@
+---
+name: ardd-refine
+description: Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning.
+---
+
 # /ardd-refine
 
 Refine a project artifact. Usage: `/ardd-refine <name>` where name matches a file

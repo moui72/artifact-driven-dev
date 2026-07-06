@@ -1,3 +1,8 @@
+---
+name: ardd-critique
+description: Challenge artifact decisions: simplicity, failure modes, robustness, semantics.
+---
+
 # /ardd-critique
 
 Critically review project artifacts and challenge design decisions. Unlike

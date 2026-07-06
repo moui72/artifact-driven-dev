@@ -1,3 +1,8 @@
+---
+name: ardd-featurize
+description: One-time (after codify): extract a feature register from an existing codebase.
+---
+
 # /ardd-featurize
 
 Extract a feature register from an existing codebase and write it to

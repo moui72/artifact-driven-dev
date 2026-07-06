@@ -1,3 +1,8 @@
+---
+name: ardd-lint
+description: Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment.
+---
+
 # /ardd-lint
 
 Deterministic, non-LLM check of `.project/` state: frontmatter `status`
