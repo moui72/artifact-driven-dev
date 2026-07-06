@@ -62,22 +62,24 @@ listed below.
    ```
    ````
 
-5. **Read `README.md`** from the project root. If it does not exist, create it
-   with only the target section and the diagram.
+5. **Ensure `README.md` exists** at the project root — if not, create it
+   empty (the upsert step appends the section).
 
-6. **Upsert the section:**
-   - Search for the exact target header (e.g., `## Datamodel`) in `README.md`.
-   - **If found**: replace everything between that header line and the next
-     `##`-level header (or end of file) with a blank line followed by the
-     diagram block and a trailing blank line.
-   - **If not found**: append the target header, a blank line, and the diagram
-     block to the end of the file.
+6. **Upsert the section — script-performed** (constitution Principle II;
+   generating the Mermaid content is judgment, splicing it into README is
+   not). Pipe the diagram block into:
 
-7. **Write `README.md`** back to the project root.
+   ```
+   .claude/skills/ardd-scripts/upsert-section.sh README.md "<Section>"
+   ```
 
-8. **Mark it current.** In the artifact's frontmatter, set
-   `diagram_status: current`. Write the updated artifact back to
-   `.project/artifacts/<name>.md`. If the bare form ran (all artifacts), do
-   this for each rendered artifact.
+   where `<Section>` is the header text from the config table without the
+   `##` (e.g. `Datamodel`). It replaces exactly that section's body (or
+   appends the section if absent) and never touches any other line.
 
-9. **Report** in one sentence what was generated and where it was written.
+7. **Mark it current**:
+   `.claude/skills/ardd-scripts/ardd-state.sh stamp
+   .project/artifacts/<name>.md diagram_status current`. If the bare form
+   ran (all artifacts), do this for each rendered artifact.
+
+8. **Report** in one sentence what was generated and where it was written.

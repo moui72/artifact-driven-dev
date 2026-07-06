@@ -140,7 +140,7 @@ same commit.
   `skills/ardd-implement/SKILL.md` step 1,
   `skills/ardd-converge/SKILL.md` step 1, `skills/ardd-tasks/SKILL.md`
   step 1 to consume its output. Add to `install.sh` copied set.
-- [ ] T018 [parallel] `scripts/upsert-section.sh <file> <header>`
+- [x] T018 [parallel] `scripts/upsert-section.sh <file> <header>`
   (reads new body on stdin): replace from `## <header>` to the next
   `##` (or EOF), append the section if absent, never touch anything
   else. Fixture tests first (replace-middle, replace-last, append,

@@ -111,13 +111,15 @@ cp "$SCRIPT_DIR/scripts/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/inflight-workt
 cp "$SCRIPT_DIR/scripts/ardd-state.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh"
 cp "$SCRIPT_DIR/scripts/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh"
 cp "$SCRIPT_DIR/scripts/tasks-list.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh"
+cp "$SCRIPT_DIR/scripts/upsert-section.sh" "$ARDD_SCRIPTS_DIR/upsert-section.sh"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
   "$ARDD_SCRIPTS_DIR/completion-flip-check.sh" \
   "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh" \
   "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh" \
   "$ARDD_SCRIPTS_DIR/project-lock.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh" \
   "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh" \
-  "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh"
+  "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh" \
+  "$ARDD_SCRIPTS_DIR/upsert-section.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
 echo "  ✓ ardd-scripts/completion-flip-check.sh"
@@ -131,6 +133,7 @@ echo "  ✓ ardd-scripts/inflight-worktrees.sh"
 echo "  ✓ ardd-scripts/ardd-state.sh"
 echo "  ✓ ardd-scripts/defects-unsurfaced.sh"
 echo "  ✓ ardd-scripts/tasks-list.sh"
+echo "  ✓ ardd-scripts/upsert-section.sh"
 
 # --- Worktree include ---
 # Claude Code copies gitignored files into a freshly created worktree
