@@ -52,7 +52,7 @@ before implementing. State mutations go through
   twice-burned story, the worktree-info.sh removal note. CLAUDE.md
   keeps current invariants + one-line pointers to the records. Doc
   task — no test; pre-commit suite must stay green.
-- [ ] T006 [parallel] Strip embedded history from shipped skill prose:
+- [x] T006 [parallel] Strip embedded history from shipped skill prose:
   ardd-implement step 2's "History note", step 3's smoke-test
   validation dates, ardd-converge's history note and validation dates,
   ardd-plan's reverted-design explanation in the branch gate — each
@@ -61,7 +61,11 @@ before implementing. State mutations go through
   *instructions* survive verbatim in meaning; target ≥25% token
   reduction across the three files. Land after T011 if the smoke key
   exists by then, else on careful prose review (Production Annotation
-  in the plan).
+  in the plan). [note 2026-07-06: history fully stripped, behavior
+  preserved, landed on prose review (smoke key still unprovisioned);
+  actual reduction 8.5% (40,468→37,046 chars) not ≥25% — the T013/T014
+  rewires had already removed most archaeology, and the remainder is
+  operational instruction, deliberately not cut to hit the number]
 
 ## Phase 3: Single-source skill descriptions (T007 parallel-safe; T008 after Phase 1 lands so tables generate from settled text)
 

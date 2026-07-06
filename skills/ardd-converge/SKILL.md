@@ -23,11 +23,8 @@ when resuming work in a new session.
    exclude/warn before the user picks, so a second run doesn't reconcile
    against state a sibling worktree is actively changing.
 
-   Nothing pre-commits here — under this design no run commits state to the
-   default branch before its work happens on a branch. (This was already
-   true for `/ardd-converge` for a different reason — reconciliation's
-   outcome isn't knowable until steps 4–6 run — but it now holds uniformly
-   across both skills: all state rides the branch and lands on merge.)
+   Nothing pre-commits here — all state rides the branch and lands on
+   merge.
 
 2. **Resolve mode and delegation gate.** Read `workflow_mode` from
    `.project/artifacts/constitution.md` frontmatter (grep it; `solo` |
@@ -40,16 +37,11 @@ when resuming work in a new session.
    `true`, offer delegation.
 
    First, **check for in-flight work** using step 1's
-   `inflight-worktrees.sh` output (this replaces the old harness-`TaskList`
-   check — deterministic, scriptable, and it survives conversation death, so
-   an abandoned subagent's worktree shows up even when no conversation
-   remembers it). If another worktree is mid-run against this repo, surface
-   it and ask whether to wait before starting a second delegated run.
+   `inflight-worktrees.sh` output. If another worktree is mid-run against
+   this repo, surface it and ask whether to wait before starting a second
+   delegated run.
 
-   **Offer delegation, suggesting "yes"** — same live-smoke-test validation
-   as `/ardd-implement` (2026-07-05: a real delegated worktree branched
-   from `origin/<default>` and `worktree-align.sh` fast-forwarded it onto
-   the coordinator's unpushed local commit). Ask:
+   **Offer delegation, suggesting "yes."** Ask:
    - "Yes, delegate to a subagent in an isolated worktree" (recommended)
    - "No, continue on the current branch without a worktree"
 
@@ -72,12 +64,10 @@ when resuming work in a new session.
       instructions as the fallback (`.worktreeinclude` is skipped under a
       `WorktreeCreate` hook, older installs predate it, and the base commit
       may predate the scripts). Worktrees share the repo's object store and
-      local refs, so even though the worktree branched from
-      `origin/<default>` (the harness `worktree.baseRef: fresh` default —
-      not steerable from prose, and it has regressed in both directions
-      across harness versions, so never trust it), the local default
-      branch's unpushed commits are reachable, and the script fast-forwards
-      them in. If it does not print `aligned=true`, **stop and report the
+      local refs, so wherever the worktree branched from (never trust the
+      harness base in either direction), the local default branch's
+      unpushed commits are reachable, and the script fast-forwards them
+      in. If it does not print `aligned=true`, **stop and report the
       failure verbatim — do not attempt reconciliation, and never try a
       manual conflicted merge.** The same present-or-fallback rule applies
       to the other `.claude/skills/ardd-scripts/*.sh` calls in the
@@ -119,12 +109,6 @@ when resuming work in a new session.
    PR, and the register flip rides the branch and lands when the PR
    merges.
 
-   (History note: earlier versions persisted a `worktree_branch:` field and
-   ran a post-merge held-flip step (old step 9) so `features.md` flipped only
-   after a live coordinating conversation confirmed the branch merged. That
-   whole machinery is gone — the flip now rides the branch and lands
-   atomically on merge, so there's nothing to defer or bookkeep.)
-
 3. **Load the chosen file.** Identify all tasks marked `- [x]` (complete) and
    `- [ ]` (incomplete).
 
@@ -164,11 +148,9 @@ when resuming work in a new session.
    whether inline or delegated.** Load the plan and for each slug in its
    `features:` list run `.claude/skills/ardd-scripts/ardd-state.sh
    feature-flip <slug> implemented`, right here (in the worktree, if
-   delegated). The flip rides the branch, so it can't reach the default
-   branch until the branch merges — the register never claims
-   "implemented" before the code lands, and there's no
-   held-flip-until-merge step or inline/delegated split. Run
-   `... touch ardd-converge` once this step's writes are done.
+   delegated) — the flip rides the branch and cannot reach the default
+   branch before the code does. Run `... touch ardd-converge` once this
+   step's writes are done.
 
 8. **Report:**
    - Tasks newly marked complete

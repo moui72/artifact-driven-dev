@@ -20,11 +20,9 @@ self-contained; the agent loads only the artifacts it declares.
    listed worktree already claims one of the tasks files above (same
    filename) at `in-progress`, that file's real state lives in that
    worktree, not here — surface it (worktree path, branch, progress) and
-   exclude it from the pick list (or warn hard if the user insists). This is
-   what lets a second `/ardd-implement` run start safely while another is
-   still in flight: the in-flight truth is on disk in the sibling worktree,
-   not in any conversation's memory, so it survives the first run's
-   conversation ending.
+   exclude it from the pick list (or warn hard if the user insists) — the
+   in-flight truth is on disk in that worktree, not in any conversation's
+   memory.
 
 2. **Resolve mode and branch state (no commit here).** Read
    `workflow_mode` from `.project/artifacts/constitution.md` frontmatter
@@ -40,16 +38,9 @@ self-contained; the agent loads only the artifacts it declares.
    `→completed` flip, and the `tasked→implemented` flip in the register —
    rides the branch the work happens on and reaches the default branch only
    on merge, atomically with the code. There is no pre-delegation flip
-   commit to land on the default branch first. (History note: earlier
-   versions committed a `ready→in-progress` marker here, and persisted a
-   `worktree_branch:` field plus a post-merge held-flip step, so coarse
-   state reached the default branch before the worktree existed. That whole
-   machinery was removed once state started riding the branch: a delegated
-   worktree branches from `origin/<default>`, never the coordinator's
-   unpushed local commit, so the pre-commit never actually reached it — and
-   with state on the branch it's no longer needed. An abandoned worktree
+   commit to land on the default branch first. An abandoned worktree
    simply never lands; the default branch keeps saying `ready`/`tasked`,
-   which is accurate again the moment that worktree is deleted.)
+   which is accurate again the moment that worktree is deleted.
 
 3. **Delegation gate.** Behavior splits on `workflow_mode`.
 
@@ -58,19 +49,11 @@ self-contained; the agent loads only the artifacts it declares.
    already rides that branch. If `on_default` is `true`, offer delegation.
 
    First, **check for in-flight work** using the
-   `inflight-worktrees.sh` output from step 1 (this replaces the old
-   harness-`TaskList` check — the script is deterministic, scriptable, and
-   survives conversation death, so an abandoned subagent's worktree still
-   shows up when no conversation remembers it). If another worktree is
+   `inflight-worktrees.sh` output from step 1. If another worktree is
    mid-run against this repo, surface it (branch, tasks file, progress) and
    ask whether to wait before starting a second delegated run.
 
-   **Offer delegation, suggesting "yes."** The align + enumeration path was
-   validated by a live smoke test (2026-07-05), not just reasoning: a real
-   delegated worktree branched from `origin/<default>` (well behind local
-   state, confirming the base-ref bug persists), and `worktree-align.sh`
-   fast-forwarded it onto the coordinator's unpushed local commit
-   (`aligned=true`). Ask the user:
+   **Offer delegation, suggesting "yes."** Ask the user:
    - "Yes, delegate to a subagent in an isolated worktree" (recommended)
    - "No, continue on the current branch without a worktree"
 
@@ -96,15 +79,11 @@ self-contained; the agent loads only the artifacts it declares.
       worktree-align.sh` to a real absolute path in the subagent's
       instructions as the fallback — `.worktreeinclude` is skipped when a
       `WorktreeCreate` hook is configured, older installs predate it, and
-      a worktree's base commit may predate the scripts entirely (the live
-      smoke test hit exactly that: script absent before alignment, present
-      after). Git worktrees share the repo's object store and local refs,
-      so even though the worktree branched from `origin/<default>` (the
-      harness `worktree.baseRef: fresh` default — not steerable from
-      prose, and it has regressed in both directions across harness
-      versions, so never trust it), the local default branch's unpushed
-      commits are still reachable, and the script fast-forwards them into
-      the fresh branch. If it does not print `aligned=true`, **stop and
+      a worktree's base commit may predate the scripts entirely. Git
+      worktrees share the repo's object store and local refs, so wherever
+      the worktree branched from (never trust the harness base in either
+      direction), the local default branch's unpushed commits are
+      reachable, and the script fast-forwards them into the fresh branch. If it does not print `aligned=true`, **stop and
       report the failure output verbatim — do not attempt any task, and
       never try a manual conflicted merge.** The same present-or-fallback
       rule applies to every other `.claude/skills/ardd-scripts/*.sh` call
@@ -199,13 +178,9 @@ self-contained; the agent loads only the artifacts it declares.
    If its `all_complete=true`, **flip the bound features now — uniformly,
    whether inline or delegated.** Load the plan and for each slug in its
    `features:` list run `ardd-state.sh feature-flip <slug> implemented`,
-   right here (in the worktree, if this is a delegated run). This is safe
-   because the flip rides the branch: it can't reach the default branch
-   until the branch merges, so the register never claims "implemented"
-   before the code has actually landed. There is no held-flip-until-merge
-   step and no inline/delegated split anymore — merge is the single atomic
-   event that lands the code and this flip together. Run
-   `... touch ardd-implement` once this step's writes are done.
+   right here (in the worktree, if this is a delegated run) — the flip
+   rides the branch and cannot reach the default branch before the code
+   does. Run `... touch ardd-implement` once this step's writes are done.
 
    **On the inline (non-delegated) path, this is the run's terminal step:**
    once step 9 commits this final work, **run `/ardd-analyze` now** to refresh

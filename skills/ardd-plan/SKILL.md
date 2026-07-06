@@ -38,15 +38,11 @@ binding (or `[-]`-declining) the other's items.
    - "Yes, create `<suggested-name>`"
    - "Yes, create a branch, but name it: ___"
    - "No, continue on default" (a worktree works too — set one up yourself
-     and re-run from there; this gate deliberately doesn't delegate to a
-     worktree subagent the way `/ardd-implement`/`/ardd-converge` do — the
-     draft plan this run produces (step 9) is itself the state
-     `/ardd-tasks` needs to see on the default branch, and there's no
-     separate coarse marker to pre-commit the way a tasks file's
-     `ready→in-progress` flip provides; isolating the plan in a worktree
-     would just trap it there until a manual merge, severing the
-     plan→tasks handoff. Same reasoning that already keeps `/ardd-tasks`
-     gate-free.)
+     and re-run from there; this gate never delegates to a worktree
+     subagent: the draft plan this run produces (step 9) is itself the
+     state `/ardd-tasks` needs to see, and isolating it in a worktree
+     would trap it there until a manual merge, severing the plan→tasks
+     handoff.)
 
    On yes, run `git checkout -b <name>` and set `<slug>` to `<name>`. On no,
    set `<slug>` to a freshly generated short arbitrary hex token (same
