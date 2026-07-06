@@ -83,7 +83,7 @@ exception. State mutations go through
   "Adding features after..." tail sections, replacing each with a
   pointer to the new guide; link it from README's Install section and
   USAGE. lint-docs green (it validates guide skill references).
-- [ ] T009 (F001) Rewrite USAGE step 1 (well, the setup section after
+- [x] T009 (F001) Rewrite USAGE step 1 (well, the setup section after
   T007) to match ardd-bootstrap's actual behavior: bootstrap creates
   the constitution too (suggestion catalog, workflow_mode question),
   artifact set is judgment-driven; drop the "if you want a

@@ -52,17 +52,18 @@ After discussing your project with Claude, run:
 /ardd-bootstrap
 ```
 
-This reads the conversation and writes initial versions of `infrastructure.md`,
-`datamodel.md`, and `ui.md` into `.project/artifacts/`. Each gets a `status:
-draft` frontmatter field if there are open questions.
+This reads the conversation and writes initial artifacts to
+`.project/artifacts/` — whichever set your project's concerns actually
+call for (a constitution nearly always; infrastructure/datamodel/ui/api
+only when those concerns exist). Each gets `status: draft` if there are
+open questions. When a constitution is among them, bootstrap also offers
+an opinionated suggestion catalog (accept or reject per suggestion) and
+asks once whether the project runs `solo` or `collaborative`
+(`workflow_mode`, which gates branch/delegation behavior later).
 
-If you want a constitution, run:
-
-```
-/ardd-refine constitution
-```
-
-This creates it from scratch and asks you targeted questions to fill it in.
+Adopting ARDD in an existing codebase? Run `/ardd-codify` instead — it
+reverse-engineers the artifacts from the code (see
+[guides/existing-project.md](guides/existing-project.md)).
 
 ---
 
