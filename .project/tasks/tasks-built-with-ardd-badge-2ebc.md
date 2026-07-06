@@ -34,7 +34,7 @@ exception. State mutations go through
 
 ## Phase 2: Migration 0004 — dangling register tags [defect-adjacent; feedback b959 F001]
 
-- [ ] T003 [parallel] `migrations/0004-retag-features-refs.sh`: in
+- [x] T003 [parallel] `migrations/0004-retag-features-refs.sh`: in
   `.project/tasks/*.md` and `.project/feedback/*.md`, rewrite
   bracket-tags naming the removed `features` artifact — drop `features`
   from multi-name tags, remove the whole tag when it named only
