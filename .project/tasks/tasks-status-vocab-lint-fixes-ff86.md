@@ -13,7 +13,7 @@ exception. Mutations via `.claude/skills/ardd-scripts/ardd-state.sh`.
 
 ## Phase 1: Terminal-completion rule + status guidance [feedback 50a5]
 
-- [ ] T001 State the terminal-completion rule in prose (decided
+- [x] T001 State the terminal-completion rule in prose (decided
   2026-07-06: a `completed` tasks file never reopens; later failures
   are new work via /ardd-feedback → plan): add to
   `skills/ardd-implement/SKILL.md`'s Rules section and

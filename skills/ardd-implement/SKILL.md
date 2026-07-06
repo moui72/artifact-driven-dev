@@ -206,6 +206,12 @@ self-contained; the agent loads only the artifacts it declares.
   implementation begins; under test-after or no stated paradigm, write and
   pass it as described in step 6. Don't assume TDD or reference a specific
   principle number if the constitution doesn't name one.
+- **`completed` is terminal.** A tasks file that has reached
+  `status: completed` never reopens — never edit its status back to an
+  earlier value or invent a new one. Failures discovered after completion
+  (a bug in the delivered work, a verification pass that finds problems)
+  are new work: capture them with `/ardd-feedback` and let the next
+  `/ardd-plan` consume them.
 - **Stop and surface blockers** rather than working around them. If a task
   cannot be completed as written, update the tasks file with a note and ask
   the user.
