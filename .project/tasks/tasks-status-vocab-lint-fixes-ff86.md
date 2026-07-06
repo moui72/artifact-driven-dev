@@ -22,7 +22,7 @@ exception. Mutations via `.claude/skills/ardd-scripts/ardd-state.sh`.
   completed one), and extend `skills/ardd-tasks/SKILL.md`'s frontmatter
   template comment: "completed is terminal — post-completion failures
   become new feedback, never a status edit." Doc-only; lint-docs green.
-- [ ] T002 Read sync-tab-scroll's actual
+- [x] T002 Read sync-tab-scroll's actual
   `.project/feedback/feedback-manual-verification-pass-4b3c.md`
   (status `split`) before finalizing T003's wording: determine what
   that agent was expressing — if it's partial consumption, the
@@ -30,7 +30,15 @@ exception. Mutations via `.claude/skills/ardd-scripts/ardd-state.sh`.
   it's a need the convention can't express (e.g. items forked into two
   genuinely separate files), surface that to the user before T003
   instead of assuming. Decision task — record the finding in this
-  file as a note on this line.
+  file as a note on this line. [finding 2026-07-06: `split` expressed
+  per-item redistribution — the file's items were forked into 4 group
+  feedback files for parallel planning, the file kept as a historical
+  record with one item (playback-tempo bug) deliberately left behind,
+  still open. That is partial consumption: the per-item convention
+  covers it (mark relocated items individually with a destination
+  note; the file flips to planned when every item is resolved — the
+  leftover open item is exactly why it can't flip yet). T003's default
+  wording stands.]
 - [ ] T003 lint-project.sh pointed status messages, test-first (bad
   fixtures + message assertions like the placeholder-name one; adjust
   EXPECTED_BAD_FINDINGS): (a) tasks status beginning `reopened` →
