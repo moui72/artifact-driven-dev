@@ -8,31 +8,6 @@ living documents, ~18 skills, several status state machines — so it's worth
 knowing where that overhead pays for itself; see
 [When artifacts earn their keep](#when-artifacts-earn-their-keep) below.
 
-## Future directions
-
-`/ardd-analyze` now runs automatically as the final step of most skills that
-change state it reports on — see the list in `/ardd-analyze`'s own SKILL.md,
-which is canonical. Each skill's own prose tells the agent to invoke it,
-since Claude Code lets a skill's instructions trigger another skill
-directly. That doesn't need a hooks
-system; it only reaches the skills that already end with "now run
-`/ardd-analyze`" written into them.
-
-A real hooks system (pre/post skill execution, similar to spec-kit's
-extension model) is still the more general next step — it would enable
-triggering *arbitrary* validation around *any* skill, including ones this
-repo hasn't anticipated, without editing that skill's prose. The right hook
-points will become clearer after a few more projects use ARDD. Designing them
-now would be speculative.
-
-## Credits
-
-ARDD was inspired by [Spec Kit](https://github.com/github/spec-kit). If you
-need structured requirement discovery, user story generation, or a full
-spec-to-implementation pipeline, Spec Kit is the right tool. ARDD is
-narrower in scope — for when you arrive with architectural clarity and just
-need a system to capture, cross-check, and execute against it.
-
 ## Philosophy
 
 ARDD assumes you arrive with clarity about what you're building and need a
@@ -255,27 +230,32 @@ scripts before a commit is accepted. Git won't enable a tracked hooks
 directory automatically, so this is a one-time, per-clone opt-in, not
 something `install.sh` or any hook can do for you.
 
-### Recovering from a rewritten `main`
+(One-time history note: `main` was rewritten once on 2026-07-04 to add
+commit signatures — recovery steps preserved in
+`docs/decisions/0003-rewritten-main-recovery.md`.)
 
-`main`'s history was rewritten once (2026-07-04) to add commit signatures
-retroactively — content is identical, but every commit hash after
-`bbc2595` changed. If your local clone or fork still has the old history,
-`git pull` will refuse or produce a mess. If you have no local work on
-`main`, the simplest fix is to reset to match the remote:
+## Credits
 
-```sh
-git fetch origin
-git checkout main
-git reset --hard origin/main
-```
+ARDD was inspired by [Spec Kit](https://github.com/github/spec-kit). If you
+need structured requirement discovery, user story generation, or a full
+spec-to-implementation pipeline, Spec Kit is the right tool. ARDD is
+narrower in scope — for when you arrive with architectural clarity and just
+need a system to capture, cross-check, and execute against it.
 
-If you have unpushed commits on top of the old `main`, rebase them onto
-the new history instead of resetting (which would drop them):
+## Future directions
 
-```sh
-git fetch origin
-git rebase --onto origin/main <old-main-tip> <your-branch>
-```
+`/ardd-analyze` now runs automatically as the final step of most skills that
+change state it reports on — see the list in `/ardd-analyze`'s own SKILL.md,
+which is canonical. Each skill's own prose tells the agent to invoke it,
+since Claude Code lets a skill's instructions trigger another skill
+directly. That doesn't need a hooks
+system; it only reaches the skills that already end with "now run
+`/ardd-analyze`" written into them.
 
-This shouldn't happen again — it was a one-time cleanup, not a normal
-practice for this repo.
+A real hooks system (pre/post skill execution, similar to spec-kit's
+extension model) is still the more general next step — it would enable
+triggering *arbitrary* validation around *any* skill, including ones this
+repo hasn't anticipated, without editing that skill's prose. The right hook
+points will become clearer after a few more projects use ARDD. Designing them
+now would be speculative.
+

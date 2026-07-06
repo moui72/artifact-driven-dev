@@ -1,7 +1,7 @@
 ---
 plan: plan-built-with-ardd-badge-2026-07-06.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-06
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -98,7 +98,7 @@ exception. State mutations go through
   mentions including the lint-enum description (now: per-feature
   register `status` plus the other five enums). Doc-only; lint-docs +
   gen-skill-docs --check green.
-- [ ] T011 (F006, F007) [parallel] README structure: move "Future
+- [x] T011 (F006, F007) [parallel] README structure: move "Future
   directions" and "Credits" to the bottom (after Contributing); move
   "Recovering from a rewritten main" into
   docs/decisions/0003-rewritten-main-recovery.md with a one-line

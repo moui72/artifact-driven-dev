@@ -1,6 +1,6 @@
 ---
 slug: built-with-ardd-badge
-status: tasked
+status: implemented
 logged: 2026-07-06
 plan: plan-built-with-ardd-badge-2026-07-06.md
 tasks: tasks-built-with-ardd-badge-2ebc.md
