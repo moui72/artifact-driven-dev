@@ -43,13 +43,20 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-status-vocab-lint-fixes-2026-07-06.md` is **approved** and tasked:
-`tasks-status-vocab-lint-fixes-ff86.md` (`status: ready`, 6 tasks in 2
-phases, branch `status-vocab-lint-fixes`). Phase 1: terminal-completion
-rule in implement/converge/tasks prose (T001), the sync-tab-scroll
-`split`-file reading (T002, resolves the plan's one open question),
-three pointed lint status messages test-first (T003). Phase 2:
-item-line-scoped tag parsing — absence-assertion red first (T004),
-implementation (T005), then unwinding this repo's dodge-vocabulary
-prose (T006). Next: `/ardd-implement` (inline — already on the work
-branch).
+Two threads in flight:
+
+1. **Delegated implementation** — a worktree subagent is executing
+   `tasks-status-vocab-lint-fixes-ff86.md` (visible via
+   `inflight-worktrees.sh`); on report-back the coordinator checks
+   `core.bare` and offers the eager merge.
+2. **New draft plan** — `plan-self-update-from-consumer-2026-07-06.md`
+   (branch `self-update-from-consumer`, targets the
+   `self-update-from-consumer` feature): source-path recording in
+   ardd-version.md, `ardd-update-check.sh`, an `/ardd-update` extension
+   skill (which also closes the invisible-install-suggestions gap that
+   surfaced when the badge offer was never seen), analyze visibility,
+   doc alignment. Next: `/ardd-tasks` to approve it — safe to do while
+   the delegated run is in flight (disjoint files).
+
+Also done out-of-band (2026-07-06): badge injected into both consumer
+READMEs at the user's request — uncommitted in those repos.
