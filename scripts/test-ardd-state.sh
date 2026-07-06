@@ -176,4 +176,50 @@ sh "$STATE" tasks-flip "$TF" abandoned >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "tasks-flip: completed->abandoned refused" 1 "$rc"
 
+# --- feedback-mark / feedback-planned ---
+FB="$WORK/p1/.project/feedback"; mkdir -p "$FB"
+FF="$FB/feedback-x-cd34.md"
+cat > "$FF" <<'EOF'
+---
+status: open      # open -> planned
+created: 2026-07-06
+plan: null        # set to the consuming plan's filename once planned
+---
+# Feedback
+## Bugs
+- [ ] F001 Thing is broken [artifacts: constitution]
+## UX
+- [ ] F002 Thing is confusing
+EOF
+sh "$STATE" feedback-mark "$FF" F001 x >/dev/null
+assert_file_grep "feedback-mark: F001 -> [x]" "^- \[x\] F001 " "$FF"
+sh "$STATE" feedback-mark "$FF" F002 - >/dev/null
+assert_file_grep "feedback-mark: F002 -> [-]" "^- \[-\] F002 " "$FF"
+set +e
+sh "$STATE" feedback-mark "$FF" F002 x >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feedback-mark: re-marking a resolved item refused" 1 "$rc"
+set +e
+sh "$STATE" feedback-mark "$FF" F009 x >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feedback-mark: unknown item refused" 1 "$rc"
+
+FF2="$FB/feedback-y-ef56.md"
+sed 's/status: open/status: open/' "$FF" > "$FF2"   # copy, all items resolved
+sh "$STATE" feedback-planned "$FF2" plan-x-2026-07-06.md >/dev/null
+assert_file_grep "feedback-planned: status flipped" "^status: *planned" "$FF2"
+assert_file_grep "feedback-planned: plan stamped" "^plan: plan-x-2026-07-06.md" "$FF2"
+cat > "$FF" <<'EOF'
+---
+status: open
+created: 2026-07-06
+plan: null
+---
+- [ ] F001 Unresolved item
+EOF
+set +e
+sh "$STATE" feedback-planned "$FF" plan-x-2026-07-06.md >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feedback-planned: refused while items unresolved" 1 "$rc"
+
 exit "$fail"

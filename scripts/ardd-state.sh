@@ -32,6 +32,12 @@ Deterministic state mutations for .project/ files. Subcommands:
                            abandoned allowed from generating/ready/in-progress
   task-check <file> <Tnnn> flip that task's checkbox [ ] -> [x]
   next-task <file>         print the first unchecked task line; exit 1 if none
+  feedback-mark <file> <Fnnn> <x|->
+                           resolve a feedback item: x = incorporated,
+                           - = declined; only unresolved items may be marked
+  feedback-planned <file> <plan-filename>
+                           flip a feedback file open->planned and stamp
+                           plan:; refuses while any item is unresolved
 EOF
 }
 
@@ -156,12 +162,40 @@ cmd_next_task() {
   printf '%s\n' "$line"
 }
 
+cmd_feedback_mark() {
+  file="${1:-}"; id="${2:-}"; mark="${3:-}"
+  [ -n "$file" ] && [ -n "$id" ] && [ -n "$mark" ] || dieu "feedback-mark: need <file> <item-id> <x|->"
+  case "$mark" in x|-) ;; *) dieu "feedback-mark: mark must be x or -, got '$mark'" ;; esac
+  [ -f "$file" ] || die "no such file: $file"
+  if grep -q "^- \[[x-]\] $id " "$file"; then
+    die "feedback-mark: $id already resolved in $file — unresolve manually if this is a genuine reversal"
+  fi
+  grep -q "^- \[ \] $id " "$file" || die "feedback-mark: no unresolved item '$id' in $file"
+  sed -i.arddbak "s/^- \[ \] $id /- [$mark] $id /" "$file" && rm -f "$file.arddbak"
+  echo "feedback-mark: $id -> [$mark] in $file"
+}
+
+cmd_feedback_planned() {
+  file="${1:-}"; plan="${2:-}"
+  [ -n "$file" ] && [ -n "$plan" ] || dieu "feedback-planned: need <file> <plan-filename>"
+  from="$(read_status "$file")"
+  [ "$from" = "open" ] || die "feedback-planned: status is '$from', expected open, in $file"
+  if grep -q '^- \[ \] ' "$file"; then
+    die "feedback-planned: unresolved items remain in $file — mark each x or - first"
+  fi
+  write_status "$file" open planned
+  sed -i.arddbak "s|^plan:[[:space:]]*null.*|plan: $plan|" "$file" && rm -f "$file.arddbak"
+  echo "feedback-planned: $file -> planned, plan: $plan"
+}
+
 cmd="${1:-}"
 [ -n "$cmd" ] || { usage >&2; exit 2; }
 shift
 
 case "$cmd" in
   slug) cmd_slug "$@" ;;
+  feedback-mark) cmd_feedback_mark "$@" ;;
+  feedback-planned) cmd_feedback_planned "$@" ;;
   mint) cmd_mint "$@" ;;
   plan-flip) cmd_plan_flip "$@" ;;
   tasks-flip) cmd_tasks_flip "$@" ;;

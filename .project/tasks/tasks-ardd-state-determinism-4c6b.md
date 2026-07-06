@@ -56,7 +56,7 @@ same commit.
   generating→ready→in-progress→completed/abandoned chain, checkbox flip
   by task ID, first-`- [ ]` locator. Tests first (good fixtures; bad:
   unknown task ID, illegal status jump).
-- [ ] T007 `feedback-mark <file> <item-id> x|-` and
+- [x] T007 `feedback-mark <file> <item-id> x|-` and
   `feedback-planned <file> <plan-filename>`: items addressed by stable
   `F001`-style IDs; `feedback-planned` refuses if any item is still
   `[ ]`. Update `skills/ardd-feedback/SKILL.md`'s template so new

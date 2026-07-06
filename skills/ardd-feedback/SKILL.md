@@ -47,14 +47,20 @@ notes in the next message.
    # Feedback
 
    ## Bugs
-   - [ ] <item> [artifacts: <name>]
+   - [ ] F001 <item> [artifacts: <name>]
 
    ## UX
-   - [ ] <item>
+   - [ ] F002 <item>
 
    ## Reconsidered
-   - [ ] <item> [artifacts: <name>]
+   - [ ] F003 <item> [artifacts: <name>]
    ```
+
+   Every item gets a stable ID — `F001`, `F002`, … — numbered
+   sequentially across the whole file (not per section). These IDs are
+   how `/ardd-plan`'s bookkeeping addresses items
+   (`ardd-state.sh feedback-mark <file> <id> <x|->`), so they must be
+   unique within the file and never renumbered after writing.
 
 5. **Report** the item count by category and the file path, noting that
    `/ardd-plan` will pick this up automatically. Then run `/ardd-analyze` now
