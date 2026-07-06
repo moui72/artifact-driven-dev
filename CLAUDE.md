@@ -24,7 +24,7 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
 ./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
-./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, features.md not updated); used by ardd-analyze
+./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, register not flipped); used by ardd-analyze
 ./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/worktree-align.sh [ref]      # ff-merge local default branch into a fresh delegated worktree; a delegated subagent's mandatory first act
 ./scripts/test-worktree-align.sh       # regression test for worktree-align.sh
@@ -143,9 +143,9 @@ plan and feature slugs that produced them. When editing a skill that reads or
 writes one of these, check every other skill that touches the same field.
 
 **`scripts/lint-project.sh` is the schema-of-record for frontmatter status
-enums and required fields** — not the SKILL.md prose. Enums (five of them:
+enums and required fields** — not the SKILL.md prose. Enums (six of them:
 artifact `status`, `diagram_status`, plan `status`, tasks `status`, feedback
-`status`, plus `features.md`'s per-entry `Status`) live in one block at the
+`status`, plus the per-feature register's `status`) live in one block at the
 top of that script, not scattered through skill prose, precisely so they
 don't drift the way `USAGE.md`'s command names once did. If a skill starts
 writing a new status value (e.g. tasks' `generating` state), update the enum
@@ -171,7 +171,7 @@ three skills still need the same edit.
 
 **Worktree-native state: every piece of state a run produces — the tasks
 file's `ready→in-progress→completed` flips, checkboxes, and the
-`tasked→implemented` flip in `features.md` — rides the branch the work
+`tasked→implemented` flip in the register — rides the branch the work
 happens on, and merge is the single atomic event that lands code and state
 together.** (Why the earlier "state-commit-before-branch" design
 died: `docs/decisions/0001-branch-identity-and-worktree-native-state.md`.)
@@ -210,7 +210,7 @@ A consequence worth stating: an abandoned worktree never poisons the
 default branch — main keeps saying `ready`/`tasked`, which becomes accurate
 again the moment the worktree is deleted. There is no `worktree_branch:`
 bookkeeping, no post-merge held-flip step, and no "delegated subagent must
-not touch features.md" rule anymore: the subagent *does* flip `features.md`
+not touch the register" rule anymore: the subagent *does* flip it
 at completion, in its worktree, precisely because the flip cannot escape to
 the default branch before the code does. After a delegated run reports
 back, the coordinator checks the primary checkout for the `core.bare = true`
@@ -228,7 +228,7 @@ in `constitution.md` frontmatter (absent = `solo`; enum enforced by
   moves to a branch; after the first commit the skill offers to push and
   open a *draft PR* titled with the feature slug(s) — the pushed draft PR
   is this mode's in-flight visibility channel (`gh pr list --draft`). The
-  `features.md` flip rides the branch and lands when the PR merges. Never
+  register flip rides the branch and lands when the PR merges. Never
   push without user confirmation (commits may be unsigned when 1Password is
   locked). One extra constraint: a delegated worktree branches from
   `origin/<default>`, so plan/tasks files must have reached the remote
@@ -242,7 +242,7 @@ hand-built one was tried and removed (Principle VIII; decision record
 
 `ardd-plan` and `ardd-tasks` are both exceptions, for related but distinct
 reasons. `ardd-tasks` has no branch-gate step at all — its own actions
-(plan approval, `features.md` Status flips) are quick state updates with no
+(plan approval, register status flips) are quick state updates with no
 long-running work to isolate. `ardd-plan` *does* have a branch-gate step (a
 plain one, offering only a regular branch, never a worktree) — it
 deliberately never delegates, even though drafting a plan for a targeted
@@ -284,7 +284,7 @@ default branch while a bound feature still says `tasked` in the
 register. Under the current design the flip rides the branch, so a
 merged branch normally carries its own flip — but the check stays wired
 because it's cheap and still catches a delegated run that crashed between
-its `→completed` flip and its `features.md` flip, plus any tasks files
+its `→completed` flip and its register flip, plus any tasks files
 written under the old design. Mechanics: it reads the tasks file's
 `worktree_branch:` frontmatter if present (a field only old-design files
 have — nothing writes it anymore), falling back to the plan's `branch:`
@@ -293,7 +293,7 @@ field (the inline case), checks `git merge-base --is-ancestor <branch>
 `features:` list. `/ardd-analyze` runs it against every completed tasks
 file on each invocation and, on user confirmation, performs the
 `tasked→implemented` flip itself. This is a deliberate, narrow exception
-to `/ardd-analyze` never writing `features.md` (see the single-writer
+to `/ardd-analyze` never writing the register (see the single-writer
 ownership list above) — justified because no other skill invocation is
 left to catch it otherwise.
 

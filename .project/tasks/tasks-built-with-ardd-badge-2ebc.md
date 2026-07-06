@@ -88,7 +88,7 @@ exception. State mutations go through
   the constitution too (suggestion catalog, workflow_mode question),
   artifact set is judgment-driven; drop the "if you want a
   constitution, run /ardd-refine constitution" instruction.
-- [ ] T010 (F002, F003, F004) [parallel] Staleness sweep:
+- [x] T010 (F002, F003, F004) [parallel] Staleness sweep:
   greenfield.md — research is NOT auto-read by /ardd-plan (fold into
   artifacts via /ardd-refine instead) and plan approval happens by
   selection in /ardd-tasks; replace all 7 "ArDD" occurrences with ARDD;

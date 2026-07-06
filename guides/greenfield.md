@@ -1,4 +1,4 @@
-# Starting a greenfield project with ArDD
+# Starting a greenfield project with ARDD
 
 Use this guide when you're starting from scratch — no code yet, just an idea.
 
@@ -9,7 +9,7 @@ key decisions, then run `/ardd-bootstrap` to capture them.
 
 ## Prerequisites
 
-Install ArDD into your new project directory:
+Install ARDD into your new project directory:
 
 ```sh
 cd /path/to/artifact-driven-dev
@@ -113,8 +113,10 @@ algorithmic approaches:
 /ardd-research rate limiting strategy for external EHR API
 ```
 
-Research outputs land in `.project/plans/research-<topic>-<date>.md` and are
-available to `/ardd-plan` automatically.
+Research outputs land in `.project/plans/research-<topic>-<date>.md` —
+one-off documents nothing reads back automatically. Fold standing
+decisions into the relevant artifact with `/ardd-refine` so planning
+sees them; log new backlog-worthy scope with `/ardd-feature`.
 
 ---
 
@@ -126,7 +128,8 @@ Once artifacts are stable:
 /ardd-plan
 ```
 
-Review and approve the phased plan Claude proposes. Then:
+Review the phased plan Claude drafts (it's saved as `status: draft` —
+selecting it in the next step is what approves it). Then:
 
 ```
 /ardd-tasks

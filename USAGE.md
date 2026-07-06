@@ -94,7 +94,7 @@ want a fresh check outside those flows:
 /ardd-analyze
 ```
 
-This reads all four artifacts and reports:
+This reads every artifact and reports:
 - **Conflicts** — artifact A says one thing, artifact B says another
 - **Gaps** — artifact A implies something artifact B never defines
 - **Missing artifacts** — anything still at `status: draft`

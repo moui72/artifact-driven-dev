@@ -1,18 +1,18 @@
-# Adopting ArDD in an existing project
+# Adopting ARDD in an existing project
 
 Use this guide when code already exists — a partial implementation, an MVP,
-or a mature codebase you want to start managing with ArDD.
+or a mature codebase you want to start managing with ARDD.
 
 The process is the same regardless of how complete the project is:
 `/ardd-codify` reads the codebase and generates draft artifacts that capture
 what the code actually does. You then review, fill gaps, and optionally use
-ArDD to plan new work.
+ARDD to plan new work.
 
 ---
 
 ## Prerequisites
 
-Install ArDD into your project:
+Install ARDD into your project:
 
 ```sh
 cd /path/to/artifact-driven-dev
@@ -125,7 +125,7 @@ issues that do appear are usually:
 
 Once artifacts are stable, you have two options:
 
-### Use ArDD to plan new work
+### Use ARDD to plan new work
 
 If you're adding significant new functionality:
 
