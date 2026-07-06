@@ -23,11 +23,11 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-None open — all 4 feedback files are `status: planned`.
-`feedback-repo-critique-docs-ca1d.md` was consumed by
-`plan-repo-critique-docs-2026-07-06.md` this run (all 6 items
-incorporated, marked and flipped via `ardd-state.sh feedback-mark` /
-`feedback-planned`).
+1 open feedback file: `feedback-migration-dangling-tags-b959.md`
+(2026-07-06, 1 bug) — migration 0003 leaves dangling `features`
+bracket-tags in downstream tasks/feedback files; found during the first
+real downstream upgrade (sync-tab-scroll). The 5 older feedback files
+are `planned`.
 
 ## Feature Backlog
 
@@ -49,5 +49,7 @@ the `ANTHROPIC_API_KEY` secret, prove the two scenarios actually run
 (expect a tuning pass — headless `claude -p` against interactive skill
 gates is unexercised), drop `continue-on-error`, then extend scenarios
 toward the uncovered paths (converge/feedback/refine/sync) so the last
-DEFECTS.md entry clears. Otherwise: normal feature work via
-`/ardd-feature` → `/ardd-plan <slug>`.
+DEFECTS.md entry clears. There's also one open feedback item
+(the migration tag gap above) for the next `/ardd-plan` to consume —
+small enough to bundle into whatever plan comes next. Otherwise: normal
+feature work via `/ardd-feature` → `/ardd-plan <slug>`.
