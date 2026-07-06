@@ -41,4 +41,47 @@ out="$(sh "$STATE" no-such-subcommand 2>&1)"; rc=$?
 set -e
 assert_exit "unknown subcommand exits 2" 2 "$rc"
 
+# --- slug: kebab sanitization ---
+assert_eq() { [ "$3" = "$2" ] && ok "$1" || bad "$1 — expected '$2', got '$3'"; }
+
+assert_eq "slug: simple"      "add-user-auth" "$(sh "$STATE" slug 'Add User Auth')"
+assert_eq "slug: punctuation" "fix-api-v2-parsing" "$(sh "$STATE" slug 'fix: API/v2 (parsing!)')"
+assert_eq "slug: collapse runs + trim edges" "a-b" "$(sh "$STATE" slug '--a---b--')"
+long="$(sh "$STATE" slug 'this is a very long feature description that keeps going and going')"
+[ "${#long}" -le 30 ] && ok "slug: truncated to <=30" || bad "slug: truncated to <=30 — got ${#long} chars: $long"
+case "$long" in *-) bad "slug: no trailing dash after truncation — got '$long'" ;; *) ok "slug: no trailing dash after truncation" ;; esac
+set +e
+sh "$STATE" slug '' >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "slug: empty input exits 2" 2 "$rc"
+set +e
+sh "$STATE" slug '!!!' >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "slug: no alphanumerics exits 1" 1 "$rc"
+
+# --- mint: filename minting ---
+today="$(date +%Y-%m-%d)"
+assert_eq "mint plan: date-stamped" "plan-auth-flow-$today.md" "$(sh "$STATE" mint plan auth-flow)"
+t1="$(sh "$STATE" mint tasks auth-flow)"
+case "$t1" in
+  tasks-auth-flow-[0-9a-f][0-9a-f][0-9a-f][0-9a-f].md) ok "mint tasks: slug + 4-hex" ;;
+  *) bad "mint tasks: slug + 4-hex — got '$t1'" ;;
+esac
+t2="$(sh "$STATE" mint tasks auth-flow)"
+[ "$t1" != "$t2" ] && ok "mint tasks: tokens unique across calls" || bad "mint tasks: tokens unique across calls — got '$t1' twice"
+f1="$(sh "$STATE" mint feedback repo-critique)"
+case "$f1" in
+  feedback-repo-critique-[0-9a-f][0-9a-f][0-9a-f][0-9a-f].md) ok "mint feedback: slug + 4-hex" ;;
+  *) bad "mint feedback: slug + 4-hex — got '$f1'" ;;
+esac
+assert_eq "mint research: date-stamped" "research-sqlite-fts-$today.md" "$(sh "$STATE" mint research sqlite-fts)"
+set +e
+sh "$STATE" mint nope x >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "mint: unknown kind exits 2" 2 "$rc"
+set +e
+sh "$STATE" mint plan 'Not A Slug!' >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "mint: rejects non-kebab slug" 1 "$rc"
+
 exit "$fail"

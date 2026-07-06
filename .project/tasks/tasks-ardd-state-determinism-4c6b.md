@@ -42,7 +42,7 @@ same commit.
   subcommand). Write the test harness first with one failing placeholder
   case; add the CI job to `.github/workflows/lint.yml` in the same
   commit (pre-commit hook picks the test up by glob automatically).
-- [ ] T004 `slug`/`mint` subcommands: kebab-sanitization (lowercase,
+- [x] T004 `slug`/`mint` subcommands: kebab-sanitization (lowercase,
   non-alphanumeric runs → `-`), ~30-char truncation, 4-hex token
   generation, and filename minting for plan/tasks/feedback/research
   files. Tests first (fixture strings incl. unicode, punctuation, long
