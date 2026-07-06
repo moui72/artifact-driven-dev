@@ -45,7 +45,7 @@ before implementing. State mutations go through
 
 ## Phase 2: Archaeology strip (parallel-safe vs Phase 1 — touches CLAUDE.md + skills, not README/USAGE)
 
-- [ ] T005 [parallel] Create `docs/decisions/` (source-repo-only, never
+- [x] T005 [parallel] Create `docs/decisions/` (source-repo-only, never
   installed) and move CLAUDE.md's development history into dated
   decision records: the three branch-identity bugs' full narratives,
   the state-commit-before-branch removal story, the gitignore
