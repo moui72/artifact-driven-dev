@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-06
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-repo-critique-docs-2026-07-06.md
 ---
 
 # Feedback — repo critique, part 2 of 2: docs / positioning
@@ -21,17 +21,17 @@ None.
 
 ## UX
 
-- [ ] (P2, docs-touching — same branch as the other README/USAGE items)
+- [x] F001 (P2, docs-touching — same branch as the other README/USAGE items)
   Docs present all 18 skills with equal weight, which reads heavier than
   the system is. Tier the documentation: a core loop (bootstrap/refine →
   plan → tasks → implement, analyze auto-running) presented as *the*
   workflow, with sync/render/critique/verify/featurize/codify/converge/
   feedback documented as opt-in extensions. README/USAGE restructure
   only — no skill behavior change.
-- [ ] (P3, docs-touching — same branch) ADD vs. ARDD naming is
+- [x] F002 (P3, docs-touching — same branch) ADD vs. ARDD naming is
   inconsistent across README, USAGE, skill names, and docs. Pick one name
   and apply it everywhere before developing this publicly.
-- [ ] (P3, docs-touching — same branch) Document inline-on-a-branch as
+- [x] F003 (P3, docs-touching — same branch) Document inline-on-a-branch as
   the blessed degradation path for delegation: the worktree model depends
   on undocumented, regressing harness behavior (`worktree.baseRef`), and
   a harness regression should degrade to a documented fallback, not a
@@ -40,7 +40,7 @@ None.
 
 ## Reconsidered
 
-- [ ] (P2, parallel-safe vs. the docs branch — touches CLAUDE.md and
+- [x] F004 (P2, parallel-safe vs. the docs branch — touches CLAUDE.md and
   skill prose, not README/USAGE) Shipped skill prose and CLAUDE.md carry
   development archaeology (history notes about removed designs,
   smoke-test dates, reverted-approach explanations in ardd-implement /
@@ -51,7 +51,7 @@ None.
   25–30% skill token reduction, no behavior change intended — safest to
   *land* after the smoke test from part 1 exists, but drafting can start
   anytime.
-- [ ] (P2, docs-touching — same branch; also edits ardd-bootstrap)
+- [x] F005 (P2, docs-touching — same branch; also edits ardd-bootstrap)
   The fixed four-artifact set (constitution/infrastructure/datamodel/ui)
   has a web-app bias — this repo's own dogfooded `.project/artifacts/`
   contains only constitution.md and features.md, so the flagship set
@@ -59,7 +59,7 @@ None.
   per project shape (ardd-bootstrap already uses judgment); stop
   presenting them in README/USAGE as the definition of the system ("a
   declared set of living artifacts," not "four living documents").
-- [ ] (P2, parallel-safe vs. the docs branch until its final
+- [x] F006 (P2, parallel-safe vs. the docs branch until its final
   table-regeneration step, which should land after the docs branch
   merges) Skill descriptions are duplicated in four places (README table,
   USAGE, the WORKFLOW.md template embedded in ardd-bootstrap step 6 and

@@ -26,10 +26,11 @@ spot-checks passed. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-1 open feedback file: `feedback-repo-critique-docs-ca1d.md`
-(docs/positioning half of the 2026-07-06 critique) — feed it to the next
-`/ardd-plan` (it now supports feedback-file scoping, though with only one
-open file scoping is moot). The other 3 feedback files are `planned`.
+None open — all 4 feedback files are `status: planned`.
+`feedback-repo-critique-docs-ca1d.md` was consumed by
+`plan-repo-critique-docs-2026-07-06.md` this run (all 6 items
+incorporated, marked and flipped via `ardd-state.sh feedback-mark` /
+`feedback-planned`).
 
 ## Feature Backlog
 
@@ -45,23 +46,14 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-Merged. The plan's tasks file is `completed` (23/23); what landed:
-
-- constitution v1.2.0 (Principle II covers mutations; behavioral-test
-  tier; per-feature register decision)
-- `ardd-state.sh` (13 subcommands, all state transitions script-performed)
-  + `defects-unsurfaced.sh`, `tasks-list.sh`, `upsert-section.sh`,
-  `smoke-assert.sh` — each with fixture tests + CI jobs
-- migration `0003-per-feature-files` (applied live to this repo),
-  `lint-project.sh` per-feature schema + governance-consistency check
-- all ten state-touching skills rewired: prose decides, scripts write
-- `/ardd-plan` feedback-file scoping
-- key-gated smoke workflow (`.github/workflows/smoke.yml`) — skips fast
-  until the `ANTHROPIC_API_KEY` secret is provisioned (deliberate);
-  promotion = provision the secret + drop `continue-on-error`
-
-Pushed and verified. Next:
-`/ardd-plan feedback-repo-critique-docs-ca1d.md` for the docs half of
-the critique — that run will also surface the two new DEFECTS.md entries
-(via `defects-unsurfaced.sh`) and offer fix tasks; the sed -i
-portability fix is small and worth accepting into that plan.
+`plan-repo-critique-docs-2026-07-06.md` is **approved** and tasked:
+`tasks-repo-critique-docs-46a1.md` (`status: ready`, 11 tasks in 4
+phases, on branch `repo-critique-docs`). Phase 1 (README/USAGE
+restructure — name decision T001, tiering, artifact-set demotion,
+delegation-fallback note) is sequential; Phases 2/3 carry parallel-safe
+tasks; Phase 4 fixes both surfaced defects (sed portability with
+backfilled migration tests; second smoke scenario). Next:
+`/ardd-implement` and select that tasks file — T001 asks the ADD-vs-ARDD
+name question first (ARDD recommended). Note this branch also carries
+the still-uncommitted plan/feedback bookkeeping from the /ardd-plan run;
+implement's first commit will land it.
