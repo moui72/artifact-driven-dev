@@ -50,7 +50,7 @@ implement. Skill/doc tasks are the stated exception. Mutations via
 
 ## Phase 3: /ardd-update skill
 
-- [ ] T004 New extension skill `skills/ardd-update/SKILL.md` with
+- [x] T004 New extension skill `skills/ardd-update/SKILL.md` with
   frontmatter (`name: ardd-update`, `tier: extension`, one-line
   `description:`). Steps: (1) read `Source-Path:` from
   .project/ardd-version.md — if absent or not a valid ARDD checkout,
@@ -64,7 +64,7 @@ implement. Skill/doc tasks are the stated exception. Mutations via
   must reach the user verbatim, closing the invisible-offer gap;
   (5) report what changed (old commit → new commit, migrations,
   suggestions) and run /ardd-analyze as the terminal handoff.
-- [ ] T005 Register the new skill: add `ardd-update` to
+- [x] T005 Register the new skill: add `ardd-update` to
   gen-skill-docs.sh's ORDER_extension list, run the generator
   (README + templates/WORKFLOW.md regenerate; drift check green);
   verify lint-docs green (README/USAGE references now resolve since

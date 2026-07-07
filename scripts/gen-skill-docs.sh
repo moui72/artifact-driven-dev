@@ -27,7 +27,7 @@ fm() { # fm <file> <field>
 # from the generated tables.
 ORDER_setup="ardd-bootstrap ardd-codify ardd-featurize"
 ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-tasks ardd-implement"
-ORDER_extension="ardd-analyze ardd-lint ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-add-artifact"
+ORDER_extension="ardd-analyze ardd-lint ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-update ardd-add-artifact"
 
 row_for() { # row_for <skill-name>
   f="skills/$1/SKILL.md"

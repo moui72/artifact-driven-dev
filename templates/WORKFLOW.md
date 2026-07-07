@@ -25,6 +25,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
 | `/ardd-render` | Generate a Mermaid diagram from a renderable artifact and upsert it into README.md. |
 | `/ardd-sync` | Mirror the feature register to/from an external issue tracker (GitHub Issues today). |
+| `/ardd-update` | Update this project's ARDD install from its recorded source checkout — check standing, offer a source pull, re-run install.sh, and relay its output. |
 | `/ardd-add-artifact` | Create a new, non-standard artifact from a template. |
 
 See `STATUS.md` for current artifact statuses, open questions, and the
