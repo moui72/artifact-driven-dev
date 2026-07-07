@@ -29,11 +29,9 @@ the vocabulary/lint batch were consumed this run by
 
 ## Feature Backlog
 
-1 backlogged · 0 planned · 0 tasked · 3 implemented — backlogged:
-`self-update-from-consumer` (update ARDD from inside a consuming repo +
-pending-update notification; both downstream repos silently fell a full
-release behind before today's manual sweep). Target with
-`/ardd-plan self-update-from-consumer`.
+0 backlogged · 0 planned · 0 tasked · 4 implemented —
+`self-update-from-consumer` completed 2026-07-07 (flip rides branch
+`self-update-from-consumer`, lands on merge).
 
 ## In Flight
 
@@ -43,13 +41,13 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-self-update-from-consumer-2026-07-06.md` is **approved** and
-tasked: `tasks-self-update-from-consumer-0399.md` (`status: ready`, 6
-tasks in 3 phases, branch `self-update-from-consumer`, feature flipped
-to `tasked`). Phase 1: Source-Path recording in ardd-version.md
-(test-first). Phase 2: `ardd-update-check.sh` (four machine-readable
-outcomes, local-only) + /ardd-analyze visibility. Phase 3: the
-/ardd-update skill (offer-never-assume pull; relays install output so
-suggestions reach the user), generator registration, doc alignment.
-Next: `/ardd-implement` (inline — already on the work branch). `main`
-is 10 signed commits ahead of origin — push anytime.
+`tasks-self-update-from-consumer-0399.md` is **completed** (6/6) on
+branch `self-update-from-consumer`: Source-Path recorded by install.sh,
+`ardd-update-check.sh` (six machine-readable outcomes, local-only,
+fixture-tested), /ardd-analyze update-availability line, the
+`/ardd-update` extension skill (registered + docs regenerated — the
+drift check correctly forced T004+T005 into one commit), and doc
+alignment. Next: merge this branch into `main` (fast-forward — it
+already contains main), push, and re-install downstream so both
+consumer repos get Source-Path recorded and the /ardd-update skill —
+after which they can self-update without this coordinator.
