@@ -25,7 +25,7 @@ implement. Skill/doc tasks are the stated exception. Mutations via
 
 ## Phase 2: Deterministic update check
 
-- [ ] T002 `scripts/ardd-update-check.sh [target-dir]` (target-side):
+- [x] T002 `scripts/ardd-update-check.sh [target-dir]` (target-side):
   greps `Source-Path:` and the installed commit out of
   `.project/ardd-version.md`; prints exactly one line —
   `no-version-file` (exit 0) when the file is absent;

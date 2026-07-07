@@ -116,6 +116,12 @@ if [ -x "$state" ]; then
 else
   bad "case1b: ardd-state.sh installed and executable (missing or not +x)"
 fi
+uc="$target/.claude/skills/ardd-scripts/ardd-update-check.sh"
+if [ -x "$uc" ]; then
+  ok "case1b2: ardd-update-check.sh installed and executable"
+else
+  bad "case1b2: ardd-update-check.sh installed and executable"
+fi
 
 # --- Case 2: existing .worktreeinclude, unrelated content, NO trailing newline ---
 target="$WORK/case2"
