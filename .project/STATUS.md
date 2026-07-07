@@ -43,13 +43,18 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-status-vocab-lint-fixes-2026-07-06.md` is **approved** and tasked:
-`tasks-status-vocab-lint-fixes-ff86.md` (`status: ready`, 6 tasks in 2
-phases, branch `status-vocab-lint-fixes`). Phase 1: terminal-completion
-rule in implement/converge/tasks prose (T001), the sync-tab-scroll
-`split`-file reading (T002, resolves the plan's one open question),
-three pointed lint status messages test-first (T003). Phase 2:
-item-line-scoped tag parsing — absence-assertion red first (T004),
-implementation (T005), then unwinding this repo's dodge-vocabulary
-prose (T006). Next: `/ardd-implement` (inline — already on the work
-branch).
+The delegated `status-vocab-lint-fixes` run is **merged** (2026-07-06):
+6/6 tasks, first fully-delegated worktree run under the new machinery —
+align verified, all state rode the branch, eager merge landed code and
+completion atomically, `core.bare` stayed clean. Landed: the
+terminal-completion rule in prose, three pointed lint messages for
+invented statuses (`reopened*`/`superseded`/`split` — the sync-tab-scroll
+`split` file turned out to be ordinary partial consumption), bracket-tag
+checks scoped to checklist item lines (mention-vs-use fixed; historical
+prose restored to literal phrasing).
+
+Next: `/ardd-tasks` for `plan-self-update-from-consumer-2026-07-06.md`
+(draft, on branch `self-update-from-consumer` — a plain branch, so it
+won't appear in inflight-worktrees output; don't lose track of it), then
+`/ardd-implement`. `main` is 2 commits ahead of origin — push when
+ready.
