@@ -129,6 +129,12 @@ when resuming work in a new session.
    - Add a `[partial: <what remains>]` note inline for partially done tasks
    - Leave genuinely unstarted tasks unchanged
 
+   Converge marks work done or partial in *non-completed* tasks files
+   only — it never resurrects a `completed` one. `completed` is
+   terminal: if problems are found in work a completed file delivered,
+   that's new work — capture it with `/ardd-feedback` and plan it,
+   never reopen the old file.
+
 6. **Identify gaps** — work that exists in the codebase but has no corresponding
    task (e.g., added during a hotfix), or work implied by the artifacts that
    was never tasked. Append these as new tasks at the end of the relevant phase,

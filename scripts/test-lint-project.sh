@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=24
+EXPECTED_BAD_FINDINGS=27
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -41,6 +41,42 @@ else
     echo "ok: placeholder tag gets pointed message"
   else
     echo "FAIL: placeholder tag gets pointed message"
+    fail=1
+  fi
+  # invented statuses get pointed messages, replacing the generic
+  # "not in {enum}" report (the exact findings count above proves each is
+  # one finding, not two)
+  if grep -q "completed is terminal" /tmp/lint-bad.out; then
+    echo "ok: 'reopened' tasks status gets pointed terminal-completion message"
+  else
+    echo "FAIL: 'reopened' tasks status gets pointed terminal-completion message"
+    fail=1
+  fi
+  if grep -q "did you mean 'abandoned'" /tmp/lint-bad.out; then
+    echo "ok: 'superseded' tasks status gets pointed plan-status message"
+  else
+    echo "FAIL: 'superseded' tasks status gets pointed plan-status message"
+    fail=1
+  fi
+  if grep -q "mark items individually" /tmp/lint-bad.out; then
+    echo "ok: 'split' feedback status gets pointed per-item message"
+  else
+    echo "FAIL: 'split' feedback status gets pointed per-item message"
+    fail=1
+  fi
+  # bracket-tag checks are scoped to checklist item lines: a tag mentioned
+  # in body prose (tasks-foo-aaaa.md's trailing paragraph) must NOT be
+  # reported, while the item-line violations above still are.
+  if grep -q "prose-only-mention" /tmp/lint-bad.out; then
+    echo "FAIL: body-prose bracket-tag must not be reported"
+    fail=1
+  else
+    echo "ok: body-prose bracket-tag is not reported"
+  fi
+  if grep -q "references 'nonexistent'" /tmp/lint-bad.out; then
+    echo "ok: item-line bracket-tag violation still reported"
+  else
+    echo "FAIL: item-line bracket-tag violation still reported"
     fail=1
   fi
 fi

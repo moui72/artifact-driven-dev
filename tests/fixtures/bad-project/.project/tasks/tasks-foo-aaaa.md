@@ -8,3 +8,6 @@ status: done
 
 - [ ] T001 [artifacts: nonexistent] Create table
 - [ ] T003 [artifacts: none] Placeholder-tagged task
+
+Body prose discussing the [artifacts: prose-only-mention] convention must
+not be linted — only checklist item lines carry real tags.

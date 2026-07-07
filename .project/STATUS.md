@@ -43,20 +43,18 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-Two threads in flight:
+The delegated `status-vocab-lint-fixes` run is **merged** (2026-07-06):
+6/6 tasks, first fully-delegated worktree run under the new machinery —
+align verified, all state rode the branch, eager merge landed code and
+completion atomically, `core.bare` stayed clean. Landed: the
+terminal-completion rule in prose, three pointed lint messages for
+invented statuses (`reopened*`/`superseded`/`split` — the sync-tab-scroll
+`split` file turned out to be ordinary partial consumption), bracket-tag
+checks scoped to checklist item lines (mention-vs-use fixed; historical
+prose restored to literal phrasing).
 
-1. **Delegated implementation** — a worktree subagent is executing
-   `tasks-status-vocab-lint-fixes-ff86.md` (visible via
-   `inflight-worktrees.sh`); on report-back the coordinator checks
-   `core.bare` and offers the eager merge.
-2. **New draft plan** — `plan-self-update-from-consumer-2026-07-06.md`
-   (branch `self-update-from-consumer`, targets the
-   `self-update-from-consumer` feature): source-path recording in
-   ardd-version.md, `ardd-update-check.sh`, an `/ardd-update` extension
-   skill (which also closes the invisible-install-suggestions gap that
-   surfaced when the badge offer was never seen), analyze visibility,
-   doc alignment. Next: `/ardd-tasks` to approve it — safe to do while
-   the delegated run is in flight (disjoint files).
-
-Also done out-of-band (2026-07-06): badge injected into both consumer
-READMEs at the user's request — uncommitted in those repos.
+Next: `/ardd-tasks` for `plan-self-update-from-consumer-2026-07-06.md`
+(draft, on branch `self-update-from-consumer` — a plain branch, so it
+won't appear in inflight-worktrees output; don't lose track of it), then
+`/ardd-implement`. `main` is 2 commits ahead of origin — push when
+ready.

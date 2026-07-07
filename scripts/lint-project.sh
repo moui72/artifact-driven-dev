@@ -321,7 +321,17 @@ if [ -d "$PROJECT_DIR/tasks" ]; then
     if frontmatter_has "$f" status; then
       val="$(frontmatter_field "$f" status)"
       if ! in_enum "$val" $TASKS_STATUS_ENUM; then
-        report "$f: status '$val' not in {$TASKS_STATUS_ENUM}"
+        # Pointed messages for invented statuses seen in the wild — each
+        # replaces the generic report (one finding, not two). Prefix match
+        # on 'reopened': the observed value carried an inline annotation.
+        case "$val" in
+          reopened*)
+            report "$f: status '$val' — completed is terminal; capture post-completion failures with /ardd-feedback and plan them as new work" ;;
+          superseded)
+            report "$f: status 'superseded' — did you mean 'abandoned'? superseded is a plan status" ;;
+          *)
+            report "$f: status '$val' not in {$TASKS_STATUS_ENUM}" ;;
+        esac
       elif [ "$val" = "generating" ]; then
         report "$f: status is 'generating' — a previous /ardd-tasks run likely crashed mid-generation; regenerate or fix manually"
       fi
@@ -349,7 +359,13 @@ if [ -d "$PROJECT_DIR/feedback" ]; then
     if frontmatter_has "$f" status; then
       val="$(frontmatter_field "$f" status)"
       if ! in_enum "$val" $FEEDBACK_STATUS_ENUM; then
-        report "$f: status '$val' not in {$FEEDBACK_STATUS_ENUM}"
+        if [ "$val" = "split" ]; then
+          # Invented status seen in the wild — pointed message replaces
+          # the generic report (one finding, not two).
+          report "$f: status 'split' — not a status; mark items individually, the file flips to planned when every item is resolved"
+        else
+          report "$f: status '$val' not in {$FEEDBACK_STATUS_ENUM}"
+        fi
       fi
     fi
   done
@@ -360,6 +376,10 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
   for f in "$PROJECT_DIR"/tasks/tasks-*.md "$PROJECT_DIR"/feedback/feedback-*.md; do
     [ -f "$f" ] || continue
     grep -noE '\[artifacts: [^]]+\]' "$f" | while IFS=: read -r lineno rest; do
+      # Both bracket-tag checks (artifact-reference and placeholder-name)
+      # apply to checklist item lines only — `- [ ]` / `- [x]` / `- [-]`.
+      # A tag mentioned in body prose is prose, not a reference.
+      sed -n "${lineno}p" "$f" | grep -qE '^[[:space:]]*- \[[ x-]\]' || continue
       names="$(printf '%s' "$rest" | sed -E 's/^\[artifacts: //; s/\]$//')"
       old_ifs="$IFS"
       IFS=','
