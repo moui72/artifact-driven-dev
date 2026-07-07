@@ -1,6 +1,6 @@
 ---
 slug: self-update-from-consumer
-status: tasked
+status: implemented
 logged: 2026-07-06
 plan: plan-self-update-from-consumer-2026-07-06.md
 tasks: tasks-self-update-from-consumer-0399.md

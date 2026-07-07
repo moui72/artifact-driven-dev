@@ -133,6 +133,11 @@ reverse-engineer artifacts from the codebase. Review the generated drafts with
 loop (features, feedback, targeted plans) is
 [guides/continuing.md](guides/continuing.md).
 
+**Updating** — from inside a consuming repo, run `/ardd-update`: it finds
+the source checkout recorded at install time, re-runs `install.sh`, and
+relays migrations and suggestions. `/ardd-analyze` tells you when an
+update is available.
+
 **Gitignore the skill files** in the target project. They're regenerated
 output — re-running `install.sh` overwrites them from whatever commit of
 this repo you point it at, so committing them just means merge conflicts

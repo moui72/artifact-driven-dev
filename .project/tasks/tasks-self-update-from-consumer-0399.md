@@ -1,7 +1,7 @@
 ---
 plan: plan-self-update-from-consumer-2026-07-06.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-07
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -72,7 +72,7 @@ implement. Skill/doc tasks are the stated exception. Mutations via
   its skills/*/ glob — confirm by extending no test (the install test
   already asserts skill arrival generically) unless it doesn't, in
   which case add the assertion.
-- [ ] T006 [parallel] Doc alignment: guides/continuing.md's periodic-
+- [x] T006 [parallel] Doc alignment: guides/continuing.md's periodic-
   hygiene bullet becomes "run /ardd-update after upgrading ARDD (or
   when /ardd-analyze reports an update available)"; README's Install
   section gains one line: updating from inside a consumer =
