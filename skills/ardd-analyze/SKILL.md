@@ -54,6 +54,16 @@ the coordinator or the inline path.
    regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
    `/ardd-verify`). If absent, note that verify has never run.
 
+   Also run `.claude/skills/ardd-scripts/ardd-update-check.sh` (the
+   installed copy; coordinator's absolute path as fallback, same
+   present-or-fallback rule as other ardd-scripts calls). On
+   `behind installed=<x> source-tip=<y>`, the report and STATUS.md each
+   gain one line: "ARDD update available: installed <x>, source at <y> —
+   run /ardd-update." On `source-missing`, a gentler line: "ARDD source
+   checkout not found at its recorded path — run /ardd-update to
+   re-record it." `no-version-file`, `no-source-path`, and `up-to-date`
+   stay silent.
+
    Also glob `.project/feedback/feedback-*.md` and read frontmatter. Count
    files with `status: open` — this is read-only visibility; `/ardd-analyze`
    never writes to feedback files (that belongs solely to `/ardd-feedback`

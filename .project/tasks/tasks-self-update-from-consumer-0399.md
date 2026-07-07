@@ -39,7 +39,7 @@ implement. Skill/doc tasks are the stated exception. Mutations via
   network. Test-first (fixture temp repos for all four outcomes, red),
   CI job, ship via install.sh copy + chmod (`.worktreeinclude` already
   covers ardd-scripts), extend the install test to assert it arrives.
-- [ ] T003 Wire visibility into `/ardd-analyze`: its SKILL.md step 1
+- [x] T003 Wire visibility into `/ardd-analyze`: its SKILL.md step 1
   additionally runs `ardd-update-check.sh` (present-or-fallback path
   rule) and, on `behind`, the report and STATUS.md gain one line —
   "ARDD update available: installed <x>, source at <y> — run
