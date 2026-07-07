@@ -47,12 +47,12 @@ exception. State mutations go through
 
 - [x] T004 [parallel] Soften `skills/ardd-tasks/SKILL.md` step 3's
   artifact requirement: "state which artifacts must be loaded, omitting
-  the artifacts bracket-tag entirely when none apply — never write a
-  placeholder name like `none`." Doc-only; lint-docs must stay green.
-- [x] T005 [parallel] lint-project.sh: when a bracket-tag names the
-  literal `none` or `n/a`, report the pointed message "placeholder
-  artifact name — omit the artifacts bracket-tag instead" in place of
-  the generic missing-file error. Bad fixture line added first (red),
+  the tag entirely when none apply — never write
+  `[artifacts: none]`." Doc-only; lint-docs must stay green.
+- [x] T005 [parallel] lint-project.sh: when a tag reads
+  `[artifacts: none]` or `[artifacts: n/a]`, report the pointed message
+  "placeholder artifact name — omit the artifacts bracket-tag instead"
+  in place of the generic missing-file error. Bad fixture line added first (red),
   EXPECTED_BAD_FINDINGS adjusted, test-lint-project green after.
 
 ## Phase 4: Docs review batch [feedback 5ef3]

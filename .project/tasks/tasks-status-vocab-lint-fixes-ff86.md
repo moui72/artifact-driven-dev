@@ -64,7 +64,7 @@ exception. Mutations via `.claude/skills/ardd-scripts/ardd-state.sh`.
   checklist item lines — lines matching the `- [ ]` / `- [x]` / `- [-]`
   prefix. T004's absence assertion goes green; all presence assertions
   stay green; EXPECTED_BAD_FINDINGS reconciled.
-- [ ] T006 Unwind the dodge-vocabulary contortions in this repo's own
+- [x] T006 Unwind the dodge-vocabulary contortions in this repo's own
   `.project/` prose where wording got awkward (b959, 2ebc T004/T005
   text, 50a5) — only where the original phrasing was clearer; these
   files are historical records, so touch wording only, never marks,

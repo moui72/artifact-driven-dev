@@ -8,7 +8,7 @@ plan: plan-status-vocab-lint-fixes-2026-07-06.md
 
 Source: post-0004 downstream lint (2026-07-06). Three independent agent
 runs in consumer repos invented status values the enums don't have —
-the same failure shape as the placeholder-artifact-name `none` (9fc6):
+the same failure shape as `[artifacts: none]` (9fc6):
 when the sanctioned vocabulary lacks a state real use wants, agents
 invent one instead of stopping.
 
