@@ -1,5 +1,5 @@
 ---
-status: draft        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
+status: approved        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
 branch: self-update-from-consumer
 created: 2026-07-06
 features: [self-update-from-consumer]

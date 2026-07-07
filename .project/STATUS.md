@@ -43,18 +43,13 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-The delegated `status-vocab-lint-fixes` run is **merged** (2026-07-06):
-6/6 tasks, first fully-delegated worktree run under the new machinery —
-align verified, all state rode the branch, eager merge landed code and
-completion atomically, `core.bare` stayed clean. Landed: the
-terminal-completion rule in prose, three pointed lint messages for
-invented statuses (`reopened*`/`superseded`/`split` — the sync-tab-scroll
-`split` file turned out to be ordinary partial consumption), bracket-tag
-checks scoped to checklist item lines (mention-vs-use fixed; historical
-prose restored to literal phrasing).
-
-Next: `/ardd-tasks` for `plan-self-update-from-consumer-2026-07-06.md`
-(draft, on branch `self-update-from-consumer` — a plain branch, so it
-won't appear in inflight-worktrees output; don't lose track of it), then
-`/ardd-implement`. `main` is 2 commits ahead of origin — push when
-ready.
+`plan-self-update-from-consumer-2026-07-06.md` is **approved** and
+tasked: `tasks-self-update-from-consumer-0399.md` (`status: ready`, 6
+tasks in 3 phases, branch `self-update-from-consumer`, feature flipped
+to `tasked`). Phase 1: Source-Path recording in ardd-version.md
+(test-first). Phase 2: `ardd-update-check.sh` (four machine-readable
+outcomes, local-only) + /ardd-analyze visibility. Phase 3: the
+/ardd-update skill (offer-never-assume pull; relays install output so
+suggestions reach the user), generator registration, doc alignment.
+Next: `/ardd-implement` (inline — already on the work branch). `main`
+is 10 signed commits ahead of origin — push anytime.
