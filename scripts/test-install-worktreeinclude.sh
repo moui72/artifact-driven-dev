@@ -94,6 +94,21 @@ case "$out" in
   *) ok "badge: silent when README missing" ;;
 esac
 
+# --- Case 1a3: Source-Path recorded in ardd-version.md, absolute, once
+# (and still exactly once after the second install in case 1a2) ---
+vf="$target/.project/ardd-version.md"
+sp_count="$(grep -c '^Source-Path: ' "$vf" 2>/dev/null || true)"
+if [ "$sp_count" = "1" ]; then
+  ok "version file: Source-Path present exactly once after two installs"
+else
+  bad "version file: Source-Path present exactly once (count=$sp_count)"
+fi
+sp_val="$(sed -n 's/^Source-Path: //p' "$vf" | head -1)"
+case "$sp_val" in
+  /*) [ -d "$sp_val" ] && ok "version file: Source-Path absolute and exists" || bad "version file: Source-Path dir missing: $sp_val" ;;
+  *) bad "version file: Source-Path not absolute: '$sp_val'" ;;
+esac
+
 # --- Case 1b: ardd-state.sh ships into ardd-scripts and is executable ---
 state="$target/.claude/skills/ardd-scripts/ardd-state.sh"
 if [ -x "$state" ]; then

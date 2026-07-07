@@ -13,7 +13,7 @@ implement. Skill/doc tasks are the stated exception. Mutations via
 
 ## Phase 1: Record the source path
 
-- [ ] T001 install.sh writes a machine-readable source-path line into
+- [x] T001 install.sh writes a machine-readable source-path line into
   the target's `.project/ardd-version.md`: a line of the exact form
   `Source-Path: /absolute/path/to/artifact-driven-dev` (resolved
   SCRIPT_DIR), placed on its own line after the `_Source: ..._` line.
