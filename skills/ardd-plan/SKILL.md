@@ -55,6 +55,14 @@ binding (or `[-]`-declining) the other's items.
    generation as above) and proceed on the default branch without asking
    again this run.
 
+   If this run discovers it started on a stale branch and merges or
+   rebases the default branch in before proceeding: single-writer report
+   files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) are disposable at
+   merge/rebase — take either side without deliberation, never
+   hand-reconcile, never re-apply; the owning skill regenerates from
+   disk. Conflict markers in a generated report are noise, not data
+   loss.
+
    **Collaborative-mode note.** If `workflow_mode: collaborative` in
    `.project/artifacts/constitution.md` frontmatter (grep it; absent =
    `solo`), remember that a delegated `/ardd-implement` worktree branches

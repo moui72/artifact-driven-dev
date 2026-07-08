@@ -27,7 +27,7 @@ connective prose):
   merges the worktree branch) — and into
   `skills/ardd-converge/SKILL.md`'s matching merge bullet in its step 2.
   lint-docs + gen-skill-docs --check green.
-- [ ] T002 Insert it into `skills/ardd-plan/SKILL.md`'s branch-gate
+- [x] T002 Insert it into `skills/ardd-plan/SKILL.md`'s branch-gate
   (step 1) — covering the observed failure: a plan run discovering its
   branch is stale and merging/rebasing the default branch in before
   proceeding. lint-docs green.
