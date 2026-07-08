@@ -1,7 +1,7 @@
 ---
 plan: plan-status-conflicts-disposable-2026-07-08.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-08
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                      # completed is terminal — post-completion failures
                      # become new feedback (/ardd-feedback), never a
                      # status edit.
@@ -31,7 +31,7 @@ connective prose):
   (step 1) — covering the observed failure: a plan run discovering its
   branch is stale and merging/rebasing the default branch in before
   proceeding. lint-docs green.
-- [ ] T003 Insert a one-sentence version + pointer to README's
+- [x] T003 Insert a one-sentence version + pointer to README's
   concurrency section into CLAUDE.md's single-writer ownership section;
   read README's "Concurrency and .project/ merge conflicts" section and
   align its wording with the canonical sentence's meaning if drifted

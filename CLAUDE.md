@@ -118,7 +118,11 @@ this is not enforceable by a hook, and that was verified, not assumed.**
   on user confirmation, for an orphaned completion flip its
   `completion-flip-check.sh` detects — see the note below)
 
-Every other skill treats these as read-only. A PreToolUse/PostToolUse hook
+Every other skill treats these as read-only. At merge/rebase these files
+are **disposable**: take either side without deliberation — never
+hand-reconcile, never re-apply — and let the owning skill regenerate
+from disk (full treatment: README's "Concurrency and `.project/` merge
+conflicts" section). A PreToolUse/PostToolUse hook
 cannot enforce this: its payload (`tool_name`, `tool_input`, `transcript_path`,
 etc.) carries no field identifying which skill/slash-command is currently
 active, and the transcript format is explicitly undocumented and

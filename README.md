@@ -199,10 +199,12 @@ two sessions sharing one checkout, not as cross-worktree locking.
 When `.project/` files conflict on merge:
 
 - **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `SYNC.md`,
-  `critique.md`) — take either side and re-run the owning skill
-  (`/ardd-analyze`, `/ardd-verify`, `/ardd-sync`, `/ardd-critique`
-  respectively); it regenerates the file from current state, so which side you
-  kept doesn't matter.
+  `critique.md`) — disposable: take either side without deliberation
+  (never hand-reconcile or re-apply changes across a rebase) and re-run
+  the owning skill (`/ardd-analyze`, `/ardd-verify`, `/ardd-sync`,
+  `/ardd-critique` respectively); it regenerates the file from current
+  state, so which side you kept doesn't matter. Conflict markers in a
+  generated report are noise, not data loss.
 - **`.project/features/`** — per-feature files, so two independently-added
   features can't conflict at all; a conflict inside one file means the same
   feature was advanced on two branches — take the further-along status,
