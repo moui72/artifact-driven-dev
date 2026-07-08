@@ -41,10 +41,10 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-status-conflicts-disposable-2026-07-08.md` is **approved** and
-tasked: `tasks-status-conflicts-disposable-01ab.md` (`status: ready`,
-3 doc-only tasks, branch `status-conflicts-disposable`) — the canonical
-disposable-at-merge sentence inserted at implement/converge merge
-bullets, plan's branch gate, and CLAUDE.md. Next: `/ardd-implement`
-(inline — already on the work branch); small enough to run through
-merge in one sitting.
+`tasks-status-conflicts-disposable-01ab.md` is **completed** (3/3): the
+disposable-at-merge rule now lives at every point of action —
+implement/converge merge bullets, plan's branch gate, CLAUDE.md's
+single-writer section — with README's concurrency section aligned.
+Merge this branch into main and push. Standing threads unchanged:
+smoke-key provisioning (970d935b); the self-hosted update-check
+one-commit chase.
