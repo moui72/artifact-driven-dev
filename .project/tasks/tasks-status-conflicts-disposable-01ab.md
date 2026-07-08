@@ -21,7 +21,7 @@ connective prose):
 
 ## Phase 1: The rule at every point of action
 
-- [ ] T001 Insert the canonical sentence into
+- [x] T001 Insert the canonical sentence into
   `skills/ardd-implement/SKILL.md` — in step 3's
   when-the-subagent-reports-back merge bullet (where the coordinator
   merges the worktree branch) — and into

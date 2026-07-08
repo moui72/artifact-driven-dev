@@ -93,8 +93,13 @@ when resuming work in a new session.
    - Offers to merge the worktree branch into the default branch now,
      suggesting **yes** — eager merge keeps the in-flight window short in
      solo mode, landing code and all its state (checkbox reconciliation, the
-     `→completed` flip, any register flip) together. On merge, run
-     `/ardd-analyze`. On decline, note the work stays visible via
+     `→completed` flip, any register flip) together. Single-writer report
+     files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) are disposable
+     at merge/rebase: take either side without deliberation — never
+     hand-reconcile, never re-apply — and let the owning skill
+     regenerate from disk. Conflict markers in a generated report are
+     noise, not data loss.
+     On merge, run `/ardd-analyze`. On decline, note the work stays visible via
      `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section.
 
    A delegated subagent must **never** run `/ardd-analyze` or write
