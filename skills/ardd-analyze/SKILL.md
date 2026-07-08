@@ -61,8 +61,9 @@ the coordinator or the inline path.
    gain one line: "ARDD update available: installed <x>, source at <y> —
    run /ardd-update." On `source-missing`, a gentler line: "ARDD source
    checkout not found at its recorded path — run /ardd-update to
-   re-record it." `no-version-file`, `no-source-path`, and `up-to-date`
-   stay silent.
+   re-record it." `no-version-file`, `no-source-path`, `up-to-date`, and
+   `self-hosted` (this repo is its own ARDD source — the tip comparison
+   is meaningless there) stay silent.
 
    Also glob `.project/feedback/feedback-*.md` and read frontmatter. Count
    files with `status: open` — this is read-only visibility; `/ardd-analyze`

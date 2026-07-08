@@ -24,11 +24,11 @@ before the guard is implemented. T002 is doc-only (stated exception).
   target repo itself; (b) a symlink to the target recorded as
   Source-Path, proving the toplevel comparison beats string compare.
   All six existing outcome cases stay green.
-- [ ] T002 [parallel] `skills/ardd-analyze/SKILL.md`: add `self-hosted`
+- [x] T002 [parallel] `skills/ardd-analyze/SKILL.md`: add `self-hosted`
   to the silent outcomes alongside `no-version-file`, `no-source-path`,
   and `up-to-date`. lint-docs green.
-- [ ] T003 Live verification: run `./scripts/ardd-update-check.sh .`
+- [x] T003 Live verification: run `./scripts/ardd-update-check.sh .`
   (source copy — the installed copy refreshes at the post-merge
   reinstall) against this repo; expect `self-hosted commit=<x>` instead
   of the perpetual `behind` reading. Record the observed line as a note
-  on this task.
+  on this task. [verified 2026-07-08: observed `self-hosted commit=b046c2a`]
