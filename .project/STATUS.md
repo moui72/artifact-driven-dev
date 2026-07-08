@@ -41,8 +41,8 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-Run `/ardd-tasks` for `plan-self-hosted-update-check-2026-07-08.md`
-(`status: draft`, branch `self-hosted-update-check`) — three tasks:
-the toplevel-comparison guard + fixture (test-first, incl. a symlink
-variant), analyze's silent-outcomes line, and a live verification.
-Quick loop; then only smoke-key provisioning (970d935b) remains.
+`plan-self-hosted-update-check-2026-07-08.md` is **approved** and
+tasked: `tasks-self-hosted-update-check-36fd.md` (`status: ready`,
+3 tasks, branch `self-hosted-update-check`). Next: `/ardd-implement`
+(inline) — a quick loop to merge; then only smoke-key provisioning
+(970d935b) remains.
