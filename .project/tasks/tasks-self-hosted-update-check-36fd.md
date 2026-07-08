@@ -1,7 +1,7 @@
 ---
 plan: plan-self-hosted-update-check-2026-07-08.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-08
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                      # completed is terminal — post-completion failures
                      # become new feedback (/ardd-feedback), never a
                      # status edit.

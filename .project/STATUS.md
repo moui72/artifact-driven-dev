@@ -41,8 +41,9 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`plan-self-hosted-update-check-2026-07-08.md` is **approved** and
-tasked: `tasks-self-hosted-update-check-36fd.md` (`status: ready`,
-3 tasks, branch `self-hosted-update-check`). Next: `/ardd-implement`
-(inline) — a quick loop to merge; then only smoke-key provisioning
-(970d935b) remains.
+`tasks-self-hosted-update-check-36fd.md` is **completed** (3/3): the
+update-check now prints `self-hosted commit=<x>` when source == target
+(toplevel comparison, symlink-proof, live-verified), and /ardd-analyze
+treats it as silent — the perpetual false "ARDD update available" in
+this repo is gone. Merge into main and push. Remaining standing thread:
+smoke-key provisioning (970d935b).
