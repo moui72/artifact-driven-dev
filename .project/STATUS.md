@@ -23,9 +23,11 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-None open — all 10 feedback files are `status: planned`. The two from
-the vocabulary/lint batch were consumed this run by
-`plan-status-vocab-lint-fixes-2026-07-06.md`.
+1 open feedback file: `feedback-status-conflicts-disposable-56a9.md`
+(2026-07-07, 1 UX) — agents over-deliberate STATUS.md merge conflicts;
+state the disposable-regenerate rule at the point of action (skill
+prose + CLAUDE.md), optionally a merge-driver suggestion. The 12 older
+feedback files are `planned`.
 
 ## Feature Backlog
 
@@ -41,13 +43,10 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`tasks-self-update-from-consumer-0399.md` is **completed** (6/6) on
-branch `self-update-from-consumer`: Source-Path recorded by install.sh,
-`ardd-update-check.sh` (six machine-readable outcomes, local-only,
-fixture-tested), /ardd-analyze update-availability line, the
-`/ardd-update` extension skill (registered + docs regenerated — the
-drift check correctly forced T004+T005 into one commit), and doc
-alignment. Next: merge this branch into `main` (fast-forward — it
-already contains main), push, and re-install downstream so both
-consumer repos get Source-Path recorded and the /ardd-update skill —
-after which they can self-update without this coordinator.
+All planned work is merged and pushed (cd7dbbe); both consumers are
+self-update capable and up to date. One small open feedback file
+(status-conflicts-disposable, above) awaits the next `/ardd-plan` —
+bundle it with whatever comes next. Standing threads: smoke-key
+provisioning (DEFECTS.md 970d935b); the self-hosted update-check's
+inherent one-commit "behind" reading after version-bump commits (noted
+2026-07-07, harmless, feedback-worthy only if the noise bothers).
