@@ -23,9 +23,12 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-None open — all 13 feedback files are `status: planned`.
-`feedback-status-conflicts-disposable-56a9.md` was consumed this run by
-`plan-status-conflicts-disposable-2026-07-08.md`.
+1 open feedback file: `feedback-self-hosted-update-check-7531.md`
+(2026-07-08, 1 UX) — the self-hosted update-check chase: when source ==
+target repo, the check perpetually reads `behind` by the version-bump
+commit; add a distinct `self-hosted` outcome that analyze treats as
+silent. Small (~5 lines + fixture). The 13 older feedback files are
+`planned`.
 
 ## Feature Backlog
 
@@ -41,10 +44,6 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-`tasks-status-conflicts-disposable-01ab.md` is **completed** (3/3): the
-disposable-at-merge rule now lives at every point of action —
-implement/converge merge bullets, plan's branch gate, CLAUDE.md's
-single-writer section — with README's concurrency section aligned.
-Merge this branch into main and push. Standing threads unchanged:
-smoke-key provisioning (970d935b); the self-hosted update-check
-one-commit chase.
+Queue: one small open feedback file (self-hosted-update-check, above)
+for the next `/ardd-plan` — bundle with whatever comes next, or run it
+solo as a quick fix. Standing thread: smoke-key provisioning (970d935b).
