@@ -23,11 +23,9 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-1 open feedback file: `feedback-status-conflicts-disposable-56a9.md`
-(2026-07-07, 1 UX) — agents over-deliberate STATUS.md merge conflicts;
-state the disposable-regenerate rule at the point of action (skill
-prose + CLAUDE.md), optionally a merge-driver suggestion. The 12 older
-feedback files are `planned`.
+None open — all 13 feedback files are `status: planned`.
+`feedback-status-conflicts-disposable-56a9.md` was consumed this run by
+`plan-status-conflicts-disposable-2026-07-08.md`.
 
 ## Feature Backlog
 
@@ -43,10 +41,12 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-All planned work is merged and pushed (cd7dbbe); both consumers are
-self-update capable and up to date. One small open feedback file
-(status-conflicts-disposable, above) awaits the next `/ardd-plan` —
-bundle it with whatever comes next. Standing threads: smoke-key
-provisioning (DEFECTS.md 970d935b); the self-hosted update-check's
-inherent one-commit "behind" reading after version-bump commits (noted
-2026-07-07, harmless, feedback-worthy only if the noise bothers).
+Run `/ardd-tasks` and select
+`plan-status-conflicts-disposable-2026-07-08.md` (`status: draft`,
+branch `status-conflicts-disposable`) — a small doc-only plan: one
+canonical "single-writer reports are disposable at merge" sentence
+inserted at every point of action (implement/converge merge steps,
+plan's branch gate, CLAUDE.md), prose-only per the 2026-07-08 decision
+(no merge-driver machinery). Standing threads: smoke-key provisioning
+(970d935b); the self-hosted update-check "behind" reading (known
+one-commit chase — reinstall at next merge clears it temporarily).

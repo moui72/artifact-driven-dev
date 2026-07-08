@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-07
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-status-conflicts-disposable-2026-07-08.md
 ---
 
 # Feedback
@@ -15,7 +15,7 @@ None.
 
 ## UX
 
-- [ ] F001 Agents over-deliberate STATUS.md conflicts. The
+- [x] F001 Agents over-deliberate STATUS.md conflicts. The
   disposable-regenerate rule exists (README's concurrency section:
   single-writer report files — STATUS.md, DEFECTS.md, SYNC.md,
   critique.md — take either side and re-run the owning skill), and
