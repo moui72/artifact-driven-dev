@@ -1,5 +1,5 @@
 ---
-status: draft        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
+status: approved        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
 branch: status-conflicts-disposable
 created: 2026-07-08
 features: []

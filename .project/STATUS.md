@@ -41,12 +41,10 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-Run `/ardd-tasks` and select
-`plan-status-conflicts-disposable-2026-07-08.md` (`status: draft`,
-branch `status-conflicts-disposable`) — a small doc-only plan: one
-canonical "single-writer reports are disposable at merge" sentence
-inserted at every point of action (implement/converge merge steps,
-plan's branch gate, CLAUDE.md), prose-only per the 2026-07-08 decision
-(no merge-driver machinery). Standing threads: smoke-key provisioning
-(970d935b); the self-hosted update-check "behind" reading (known
-one-commit chase — reinstall at next merge clears it temporarily).
+`plan-status-conflicts-disposable-2026-07-08.md` is **approved** and
+tasked: `tasks-status-conflicts-disposable-01ab.md` (`status: ready`,
+3 doc-only tasks, branch `status-conflicts-disposable`) — the canonical
+disposable-at-merge sentence inserted at implement/converge merge
+bullets, plan's branch gate, and CLAUDE.md. Next: `/ardd-implement`
+(inline — already on the work branch); small enough to run through
+merge in one sitting.
