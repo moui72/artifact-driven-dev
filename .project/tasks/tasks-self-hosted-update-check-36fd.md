@@ -14,7 +14,7 @@ before the guard is implemented. T002 is doc-only (stated exception).
 
 ## Phase 1
 
-- [ ] T001 Add a self-hosted guard to `scripts/ardd-update-check.sh`:
+- [x] T001 Add a self-hosted guard to `scripts/ardd-update-check.sh`:
   after resolving Source-Path and before comparing tips, compare
   `git -C <source> rev-parse --show-toplevel` against
   `git -C <target> rev-parse --show-toplevel` (resolved toplevels,

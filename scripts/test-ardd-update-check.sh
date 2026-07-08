@@ -64,4 +64,22 @@ printf '# ARDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated
 out="$(sh "$CHECK" "$T5")"
 [ "$out" = "no-source-path" ] && ok "pre-T001 file -> no-source-path" || bad "no-source-path — got '$out'"
 
+# --- self-hosted: recorded Source-Path IS the target repo -> distinct outcome ---
+SH="$WORK/selfhosted"
+mkdir -p "$SH/skills"
+printf '#!/usr/bin/env sh\n' > "$SH/install.sh"
+( cd "$SH" && git init -q -b main && git add -A && git commit -q -m one )
+SHTIP="$(git -C "$SH" rev-parse --short HEAD)"
+mkver "$SH" "$SHTIP" "$SH"
+# advance the tip past the recorded commit (the version-bump chase)
+( cd "$SH" && printf 'y\n' >> install.sh && git add -A && git commit -q -m two )
+out="$(sh "$CHECK" "$SH")"
+[ "$out" = "self-hosted commit=$SHTIP" ] && ok "self-hosted -> distinct outcome, not behind" || bad "self-hosted — got '$out'"
+
+# --- self-hosted via symlink: string compare would miss this ---
+ln -s "$SH" "$WORK/selfhosted-link"
+mkver "$SH" "$SHTIP" "$WORK/selfhosted-link"
+out="$(sh "$CHECK" "$SH")"
+[ "$out" = "self-hosted commit=$SHTIP" ] && ok "self-hosted via symlink (toplevel compare)" || bad "self-hosted symlink — got '$out'"
+
 exit "$fail"
