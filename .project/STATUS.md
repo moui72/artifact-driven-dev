@@ -23,12 +23,9 @@ defect (58bd7dd2) cleared this run. Run `/ardd-verify` to refresh.
 
 ## Feedback
 
-1 open feedback file: `feedback-self-hosted-update-check-7531.md`
-(2026-07-08, 1 UX) — the self-hosted update-check chase: when source ==
-target repo, the check perpetually reads `behind` by the version-bump
-commit; add a distinct `self-hosted` outcome that analyze treats as
-silent. Small (~5 lines + fixture). The 13 older feedback files are
-`planned`.
+None open — all 14 feedback files are `status: planned`.
+`feedback-self-hosted-update-check-7531.md` was consumed this run by
+`plan-self-hosted-update-check-2026-07-08.md`.
 
 ## Feature Backlog
 
@@ -44,6 +41,8 @@ refreshed via `./install.sh .`.
 
 ## Recommended Next Step
 
-Queue: one small open feedback file (self-hosted-update-check, above)
-for the next `/ardd-plan` — bundle with whatever comes next, or run it
-solo as a quick fix. Standing thread: smoke-key provisioning (970d935b).
+Run `/ardd-tasks` for `plan-self-hosted-update-check-2026-07-08.md`
+(`status: draft`, branch `self-hosted-update-check`) — three tasks:
+the toplevel-comparison guard + fixture (test-first, incl. a symlink
+variant), analyze's silent-outcomes line, and a live verification.
+Quick loop; then only smoke-key provisioning (970d935b) remains.

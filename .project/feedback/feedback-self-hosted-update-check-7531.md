@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-08
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-self-hosted-update-check-2026-07-08.md
 ---
 
 # Feedback
@@ -16,7 +16,7 @@ the self-hosted case.
 
 ## UX
 
-- [ ] F001 Self-hosted update-check chase: when Source-Path resolves to
+- [x] F001 Self-hosted update-check chase: when Source-Path resolves to
   the target repo itself, `ardd-update-check.sh` perpetually reports
   `behind` — committing the version record is itself a commit, so the
   recorded commit can never equal the tip. `/ardd-analyze` here will
