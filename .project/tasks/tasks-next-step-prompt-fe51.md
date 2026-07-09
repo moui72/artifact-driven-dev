@@ -37,4 +37,4 @@ The shared convention all three tasks implement: grep `.project/artifacts/consti
 ## Phase 5: Docs + dogfood
 
 - [x] T010 Docs: README.md and USAGE.md — document `next_step_prompt` (both values, absent = false, the ask-once behavior via bootstrap/update) and `/ardd-plan`'s `defect:<id>`/`defects` arguments; update CLAUDE.md's architecture notes if the three-skill scope or the no-version-bump decision needs stating source-side. `./scripts/lint-docs.sh` must pass.
-- [ ] T011 [artifacts: constitution] Dogfood (confirm with user first — their choice at implement time): set `next_step_prompt: true` in this repo's own constitution frontmatter via T006's script path, then re-run `./install.sh .` so the dogfooded skill copies under `.claude/skills/` pick up the Phase 2/3 prose changes.
+- [x] T011 [artifacts: constitution] Dogfood (confirm with user first — their choice at implement time): set `next_step_prompt: true` in this repo's own constitution frontmatter via T006's script path, then re-run `./install.sh .` so the dogfooded skill copies under `.claude/skills/` pick up the Phase 2/3 prose changes.

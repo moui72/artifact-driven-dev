@@ -21,6 +21,7 @@ revision.
 name: constitution
 status: stable
 last_updated: 2026-07-06
+next_step_prompt: true
 ---
 
 # artifact-driven-dev Constitution
