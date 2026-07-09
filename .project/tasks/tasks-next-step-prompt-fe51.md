@@ -1,7 +1,7 @@
 ---
 plan: plan-next-step-prompt-2026-07-09.md
 generated: 2026-07-09
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
                      # completed is terminal — post-completion failures

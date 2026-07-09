@@ -1,6 +1,6 @@
 ---
 slug: next-step-prompt
-status: tasked
+status: implemented
 logged: 2026-07-09
 plan: plan-next-step-prompt-2026-07-09.md
 tasks: tasks-next-step-prompt-fe51.md
