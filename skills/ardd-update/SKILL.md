@@ -46,7 +46,21 @@ Usage: `/ardd-update` — no arguments.
    any they want (e.g. paste the badge into README) but never apply one
    unprompted.
 
-5. **Report** old commit → new commit (from the check in step 2 vs. the
+5. **Ask the next-step-prompt question, once, if never asked.** After the
+   reinstall, check `.project/artifacts/constitution.md` frontmatter (if the
+   file exists): if it lacks a `next_step_prompt` field *entirely*, ask the
+   same question `/ardd-bootstrap` asks — "Should skills end by offering
+   their recommended next step as a one-keypress prompt?" — and write the
+   answer via `.claude/skills/ardd-scripts/ardd-state.sh stamp
+   .project/artifacts/constitution.md next_step_prompt <true|false>`. Field
+   presence (either value) suppresses re-asking forever. On paths that skip
+   this ask — a bare `./install.sh` run, headless/scripted contexts —
+   absent simply stays `false`; never block on the question and never
+   default it on. Like `workflow_mode`, this is a frontmatter workflow
+   field, not constitution content: no Sync Impact Report entry and no
+   constitution version bump applies.
+
+6. **Report** old commit → new commit (from the check in step 2 vs. the
    rewritten `.project/ardd-version.md`), migrations applied, and
    suggestions surfaced. Remind the user to commit
    `.project/ardd-version.md` (and `.ardd-applied` if migrations ran).
