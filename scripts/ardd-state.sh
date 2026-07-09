@@ -47,6 +47,7 @@ Deterministic state mutations for .project/ files. Subcommands:
                            set an optional frontmatter field (add or replace)
   stamp <file> last_updated <YYYY-MM-DD>
   stamp <file> diagram_status <unrendered|stale|current>
+  stamp <file> next_step_prompt <true|false>
                            set an artifact frontmatter field (add or replace)
 EOF
 }
@@ -284,7 +285,13 @@ cmd_stamp() {
         *) dieu "stamp: diagram_status must be unrendered|stale|current, got '$val'" ;;
       esac
       ;;
-    *) dieu "stamp: key must be last_updated|diagram_status, got '$key'" ;;
+    next_step_prompt)
+      case "$val" in
+        true|false) ;;
+        *) dieu "stamp: next_step_prompt must be true|false, got '$val'" ;;
+      esac
+      ;;
+    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
   echo "stamp: $file $key = $val"

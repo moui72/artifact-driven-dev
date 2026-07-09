@@ -291,4 +291,27 @@ sh "$STATE" stamp "$AF" name other >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: unknown key usage error" 2 "$rc"
 
+# stamp next_step_prompt — boolean-validated, add + replace
+CF="$ART/constitution.md"
+cat > "$CF" <<'EOF'
+---
+status: stable
+last_updated: 2026-07-01
+workflow_mode: solo
+---
+# Constitution
+EOF
+sh "$STATE" stamp "$CF" next_step_prompt true >/dev/null
+assert_file_grep "stamp: next_step_prompt set true" "^next_step_prompt: true" "$CF"
+fmend="$(grep -n '^---$' "$CF" | sed -n 2p | cut -d: -f1)"
+nspline="$(grep -n '^next_step_prompt:' "$CF" | cut -d: -f1)"
+[ "$nspline" -lt "$fmend" ] && ok "stamp: next_step_prompt inside frontmatter" || bad "stamp: next_step_prompt inside frontmatter — line $nspline vs closing --- at $fmend"
+sh "$STATE" stamp "$CF" next_step_prompt false >/dev/null
+assert_file_grep "stamp: next_step_prompt replaced with false" "^next_step_prompt: false" "$CF"
+[ "$(grep -c '^next_step_prompt:' "$CF")" = "1" ] && ok "stamp: next_step_prompt no duplicate keys" || bad "stamp: next_step_prompt no duplicate keys"
+set +e
+sh "$STATE" stamp "$CF" next_step_prompt yes >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bad next_step_prompt refused" 2 "$rc"
+
 exit "$fail"
