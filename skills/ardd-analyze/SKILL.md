@@ -199,3 +199,20 @@ the coordinator or the inline path.
    leave it — the same orphaned slug will be reported again on the next
    `/ardd-analyze` run, since `completion-flip-check.sh` re-derives it from
    disk state every time rather than remembering a prior decline.
+
+8. **Next-step prompt (opt-in).** After step 6's STATUS.md write (and step 7,
+   if it ran), check `.project/artifacts/constitution.md` frontmatter for
+   `next_step_prompt: true` (grep the frontmatter block; absent or `false`
+   means the plain-text behavior above is unchanged — stop here). When it is
+   `true` AND the Summary's "Recommended next step" is a concrete runnable
+   `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-verify`), end by
+   presenting it via AskUserQuestion:
+   - Option 1: "Yes — run `/ardd-<next>` now"
+   - Option 2: "No — stop here" (Esc counts as option 2)
+
+   On yes, invoke that skill by name — the existing terminal-handoff
+   mechanism, no value passed back. On no/Esc, stop. Recommendations that
+   are not a skill invocation ("merge and push", "provision the key") always
+   stay plain text, never prompted. Delegated/scripted contexts are
+   unaffected: a project that never opted in has no `next_step_prompt`
+   field, and absent = false.
