@@ -95,6 +95,22 @@ subsequent changes.
    the artifacts being created, skip this — those skills read an absent field
    as `solo`.)
 
+   **Set `next_step_prompt` in the constitution's frontmatter.** Alongside
+   the `workflow_mode` question, ask once: "Should skills end by offering
+   their recommended next step as a one-keypress prompt?" (`true` = at the
+   end of `/ardd-analyze`, `/ardd-plan`, and `/ardd-tasks`, a concrete
+   runnable `/ardd-*` recommendation is offered via AskUserQuestion —
+   yes runs it, no/Esc stops; `false`/absent = recommendations stay plain
+   text). Write the answer via
+   `.claude/skills/ardd-scripts/ardd-state.sh stamp
+   .project/artifacts/constitution.md next_step_prompt <true|false>` after
+   the file is written in step 5. Like `workflow_mode`, this is a
+   frontmatter workflow field, not constitution content — no Sync Impact
+   Report entry and no constitution version bump applies to setting or
+   changing it. Absence means `false`, so existing projects need no
+   migration (and `/ardd-update` offers the same question once to installs
+   whose constitution lacks the field entirely).
+
 5. **Write all artifact files** to `.project/artifacts/`.
 
 6. **Install `.project/WORKFLOW.md`** — a static skill reference shipped
