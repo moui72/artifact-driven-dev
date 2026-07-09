@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=27
+EXPECTED_BAD_FINDINGS=28
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -62,6 +62,14 @@ else
     echo "ok: 'split' feedback status gets pointed per-item message"
   else
     echo "FAIL: 'split' feedback status gets pointed per-item message"
+    fail=1
+  fi
+  # next_step_prompt is optional but, when present, must be exactly
+  # true/false — bad-project's 'yes' must be flagged with the allowed values
+  if grep -q "next_step_prompt 'yes' not in {true false}" /tmp/lint-bad.out; then
+    echo "ok: invalid next_step_prompt value reported with allowed values"
+  else
+    echo "FAIL: invalid next_step_prompt value reported with allowed values"
     fail=1
   fi
   # bracket-tag checks are scoped to checklist item lines: a tag mentioned

@@ -58,6 +58,7 @@ TASKS_STATUS_ENUM="generating ready in-progress completed abandoned"
 FEEDBACK_STATUS_ENUM="open planned"
 FEATURE_STATUS_ENUM="backlogged planned tasked implemented"
 WORKFLOW_MODE_ENUM="solo collaborative"
+NEXT_STEP_PROMPT_ENUM="true false"
 # -----------------------------------------------------------------------
 
 in_enum() {
@@ -128,6 +129,15 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       val="$(frontmatter_field "$f" workflow_mode)"
       if ! in_enum "$val" $WORKFLOW_MODE_ENUM; then
         report "$f: workflow_mode '$val' not in {$WORKFLOW_MODE_ENUM}"
+      fi
+    fi
+
+    # next_step_prompt is optional (absent = false); when present it must
+    # be exactly true or false.
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" next_step_prompt; then
+      val="$(frontmatter_field "$f" next_step_prompt)"
+      if ! in_enum "$val" $NEXT_STEP_PROMPT_ENUM; then
+        report "$f: next_step_prompt '$val' not in {$NEXT_STEP_PROMPT_ENUM}"
       fi
     fi
 

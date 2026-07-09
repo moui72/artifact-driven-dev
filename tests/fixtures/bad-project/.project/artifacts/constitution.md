@@ -8,6 +8,7 @@ Version change: 1.1.0 → 1.2.0 (MINOR)
 status: finished
 last_updated: 2026-01-01
 workflow_mode: team
+next_step_prompt: yes
 ---
 
 # Constitution
