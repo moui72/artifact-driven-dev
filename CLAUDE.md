@@ -244,6 +244,22 @@ There is no custom script for the worktree-creation part itself — a
 hand-built one was tried and removed (Principle VIII; decision record
 0001, bug #1).
 
+**A second constitution frontmatter workflow field, `next_step_prompt:
+true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
+asked once by `/ardd-bootstrap`, and once by `/ardd-update` for installs
+whose constitution lacks the field). When `true`, exactly three skills —
+`/ardd-analyze`, `/ardd-plan`, `/ardd-tasks` — end by offering their
+recommended next step via AskUserQuestion, and only when that
+recommendation is a concrete runnable `/ardd-*` invocation; plan and
+tasks normally hand off to analyze, which then owns the single prompt of
+the turn (one prompt per user-visible turn end — the prose in all three
+skills states this). Set the field via `ardd-state.sh stamp <file>
+next_step_prompt <true|false>`, never by hand-editing. Like
+`workflow_mode`, it's a workflow field, not constitution content: no Sync
+Impact Report entry and no constitution version bump applies. Don't widen
+the three-skill scope casually — every other skill's terminal analyze
+handoff already funnels into `/ardd-analyze`'s prompt.
+
 `ardd-plan` and `ardd-tasks` are both exceptions, for related but distinct
 reasons. `ardd-tasks` has no branch-gate step at all — its own actions
 (plan approval, register status flips) are quick state updates with no

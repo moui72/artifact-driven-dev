@@ -59,7 +59,14 @@ only when those concerns exist). Each gets `status: draft` if there are
 open questions. When a constitution is among them, bootstrap also offers
 an opinionated suggestion catalog (accept or reject per suggestion) and
 asks once whether the project runs `solo` or `collaborative`
-(`workflow_mode`, which gates branch/delegation behavior later).
+(`workflow_mode`, which gates branch/delegation behavior later), and once
+whether skills should end by offering their recommended next step as a
+one-keypress prompt (`next_step_prompt: true|false` — absent means
+`false`; with `true`, `/ardd-analyze`, `/ardd-plan`, and `/ardd-tasks`
+offer a concrete runnable `/ardd-*` recommendation via a yes/no prompt
+instead of plain text). Existing installs whose constitution lacks the
+field get asked the same question once by `/ardd-update`; neither answer
+ever bumps the constitution version.
 
 Adopting ARDD in an existing codebase? Run `/ardd-codify` instead — it
 reverse-engineers the artifacts from the code (see
@@ -181,6 +188,14 @@ delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the
 draft plan it produces is itself the state `/ardd-tasks` needs to see, so
 isolating it in a worktree would just trap it there until a manual merge.
 It still offers a plain branch, same as before.
+
+Passing `defect:<id>` (one or more, using the 8-char identifiers
+`/ardd-verify` records in `DEFECTS.md`) or the literal `defects` scopes
+the defect check to those entries — and re-offers them even if a prior
+plan already surfaced (and you declined) them, which is how a
+previously-declined defect gets pulled back into a plan. The `defect:`
+prefix is what distinguishes these from feature slugs and feedback
+filenames in the same argument list.
 
 ---
 

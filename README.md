@@ -97,6 +97,17 @@ everything else is opt-in. (Generated — see note under Getting started.)
 final step of most state-changing skills, so it isn't a step you have to
 remember — run it by hand anytime for a fresh check.
 
+**Opt-in next-step prompt.** With `next_step_prompt: true` in
+`constitution.md`'s frontmatter, `/ardd-analyze`, `/ardd-plan`, and
+`/ardd-tasks` end by offering their recommended next step as a
+one-keypress prompt (yes runs it; no/Esc stops) — only when that
+recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
+absent field keeps recommendations as plain text, so delegated and
+scripted runs are unaffected. `/ardd-bootstrap` asks the question once at
+setup; `/ardd-update` asks it once for existing installs whose
+constitution lacks the field. Like `workflow_mode`, it's a frontmatter
+workflow field — setting it never bumps the constitution version.
+
 ## Extensions
 
 Opt-in skills for concerns the core loop doesn't force on you.
