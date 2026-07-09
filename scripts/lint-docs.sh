@@ -64,6 +64,25 @@ if [ -f "$SCRIPT_DIR/.lint-docs-failed" ]; then
   exit 1
 fi
 
+# --- skills-CLI compatibility: every SKILL.md needs name + description ---
+# The vercel-labs skills CLI (npx acquisition channel) discovers skills by
+# frontmatter `name:` and `description:`; a missing field silently drops
+# that skill from `npx skills add`. Empty values count as missing.
+fm_fail=0
+for sk in "$SKILLS_DIR"/*/SKILL.md; do
+  [ -f "$sk" ] || continue
+  fm="$(awk '/^---[[:space:]]*$/{c++; next} c==1{print} c>=2{exit}' "$sk")"
+  if ! printf '%s\n' "$fm" | grep -q '^name:[[:space:]]*[^[:space:]]'; then
+    echo "$sk: frontmatter missing 'name:' — required for skills-CLI discovery"
+    fm_fail=1
+  fi
+  if ! printf '%s\n' "$fm" | grep -q '^description:[[:space:]]*[^[:space:]]'; then
+    echo "$sk: frontmatter missing 'description:' — required for skills-CLI discovery"
+    fm_fail=1
+  fi
+done
+[ "$fm_fail" -eq 1 ] && exit 1
+
 # --- generated skill docs must match SKILL.md frontmatter ---------------
 if ! sh "$(dirname "$SCRIPT_DIR")/scripts/gen-skill-docs.sh" --check 2>&1; then
   exit 1

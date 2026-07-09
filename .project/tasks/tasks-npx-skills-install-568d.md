@@ -13,7 +13,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: CLI compatibility (test-first)
 
-- [ ] T001 Make every `skills/*/SKILL.md` discoverable by the vercel-labs skills CLI, which requires frontmatter `name` and `description`. First audit all skill files for missing `name:`/`description:` fields and add any gaps (name = the directory/skill name, e.g. `ardd-plan`). Then extend `scripts/lint-docs.sh` (source-side check, Principle IV) to fail when any `skills/*/SKILL.md` lacks either field. Test-first (Principle V): add the failing case to `scripts/test-lint-docs.sh` (or create a fixture-based case if the test currently only runs against the real repo) and confirm red before the lint change. Same commit.
+- [x] T001 Make every `skills/*/SKILL.md` discoverable by the vercel-labs skills CLI, which requires frontmatter `name` and `description`. First audit all skill files for missing `name:`/`description:` fields and add any gaps (name = the directory/skill name, e.g. `ardd-plan`). Then extend `scripts/lint-docs.sh` (source-side check, Principle IV) to fail when any `skills/*/SKILL.md` lacks either field. Test-first (Principle V): add the failing case to `scripts/test-lint-docs.sh` (or create a fixture-based case if the test currently only runs against the real repo) and confirm red before the lint change. Same commit.
 
 ## Phase 2: /ardd-setup skill [feature: npx-skills-install]
 
