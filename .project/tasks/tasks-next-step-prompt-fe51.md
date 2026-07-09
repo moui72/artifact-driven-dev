@@ -32,7 +32,7 @@ The shared convention all three tasks implement: grep `.project/artifacts/consti
 
 ## Phase 4: Defect-scoping argument (depends on T002)
 
-- [ ] T009 `skills/ardd-plan/SKILL.md`: extend Usage and step 5 — arguments of the form `defect:<id>` name specific `DEFECTS.md` entries and the literal argument `defects` names all current entries; for these, run `defects-unsurfaced.sh --id <id> .../--all` instead of the default mode, re-offering the entries even if their ids already appear in some plan's `surfaced-defects:` list; the present/accept/decline flow, `[defect: <id>]` task tagging, and recording in the drafted plan's `surfaced-defects:` are identical to the existing step 5. The `defect:` prefix is what disambiguates from feature slugs and feedback filenames in the same argument list — state that in Usage. `lint-docs.sh` must pass. [feedback: F001, feedback-plan-target-defects-6a36.md]
+- [x] T009 `skills/ardd-plan/SKILL.md`: extend Usage and step 5 — arguments of the form `defect:<id>` name specific `DEFECTS.md` entries and the literal argument `defects` names all current entries; for these, run `defects-unsurfaced.sh --id <id> .../--all` instead of the default mode, re-offering the entries even if their ids already appear in some plan's `surfaced-defects:` list; the present/accept/decline flow, `[defect: <id>]` task tagging, and recording in the drafted plan's `surfaced-defects:` are identical to the existing step 5. The `defect:` prefix is what disambiguates from feature slugs and feedback filenames in the same argument list — state that in Usage. `lint-docs.sh` must pass. [feedback: F001, feedback-plan-target-defects-6a36.md]
 
 ## Phase 5: Docs + dogfood
 

@@ -26,6 +26,16 @@ argument, step 4 loads all open feedback files as before. This is how two
 open feedback files feed two separate plans without one run accidentally
 binding (or `[-]`-declining) the other's items.
 
+Arguments of the form `defect:<id>` name specific `DEFECTS.md` entries
+(the 8-char identifiers `/ardd-verify` and `defects-unsurfaced.sh`
+compute), and the literal argument `defects` names all current entries —
+these are **defect scopes**: step 5 then runs in explicit-selection mode
+and re-offers the named entries even if a prior plan already surfaced
+them. The `defect:` prefix (and the bare literal `defects`) is what
+disambiguates a defect scope from feature slugs and feedback filenames in
+the same argument list — a plain kebab-case argument is always a feature
+slug, `feedback-*.md` is always a feedback scope.
+
 ## Steps
 
 1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
@@ -212,7 +222,23 @@ binding (or `[-]`-declining) the other's items.
    `DEFECTS.md` entry's stable identifier, unions every plan's
    `surfaced-defects:` frontmatter list, and prints only the
    `<id>\t<claim>` pairs never yet surfaced by a prior `/ardd-plan` run
-   (silent when there's nothing new). For each printed defect: present it
+   (silent when there's nothing new).
+
+   If defect-scope argument(s) were passed (see Usage), run the
+   explicit-selection modes instead of the default: `defects-unsurfaced.sh
+   --id <id>` (once per `defect:<id>` argument, or one call with repeated
+   `--id` flags) for named entries, or `defects-unsurfaced.sh --all` for
+   the literal `defects` argument. Both bypass the surfaced-union filter,
+   deliberately re-offering entries even if their ids already appear in
+   some plan's `surfaced-defects:` list — this is how the user pulls a
+   previously-declined defect back into a plan. An unknown id makes
+   `--id` error; relay that to the user rather than guessing. Everything
+   downstream is identical to the default mode: present each entry,
+   ask accept/decline, tag accepted fix tasks `[defect: <identifier>]`,
+   and record every presented id in this draft plan's
+   `surfaced-defects:` list.
+
+   For each printed defect: present it
    to the user and ask whether to include a fix task for it in this plan. Whether accepted or declined, record its
    identifier in the `surfaced-defects:` list of the plan you're drafting
    (written in step 9) — declining still counts as "surfaced," which is what
