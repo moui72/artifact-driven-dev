@@ -70,6 +70,33 @@ EOF
 out="$(sh "$CHECK" "$WORK/t")"
 [ -z "$out" ] && ok "case3: all surfaced -> silent" || bad "case3: all surfaced -> silent — got: $out"
 
+# --- Case 6: --id names a surfaced entry -> printed anyway (bypasses filter) ---
+out="$(sh "$CHECK" --id "$id1" "$WORK/t")"
+[ "$out" = "$id1	the hook runs every test script" ] && ok "case6: --id hit prints entry despite surfaced" || bad "case6: --id hit prints entry despite surfaced — got: $out"
+
+# --- Case 6b: --id is repeatable -> both named entries print, in order ---
+out="$(sh "$CHECK" --id "$id2" --id "$id1" "$WORK/t")"
+expected="$(printf '%s\t%s\n%s\t%s' "$id2" "Patient table has soft deletes" "$id1" "the hook runs every test script")"
+[ "$out" = "$expected" ] && ok "case6b: repeated --id prints both entries" || bad "case6b: repeated --id prints both entries — got: $out"
+
+# --- Case 7: --id with an id not in DEFECTS.md -> error ---
+if sh "$CHECK" --id cafef00d "$WORK/t" >/dev/null 2>"$WORK/err"; then
+  bad "case7: --id miss errors"
+else
+  ok "case7: --id miss errors"
+fi
+grep -q "cafef00d" "$WORK/err" && ok "case7: error names the missing id" || bad "case7: error names the missing id — got: $(cat "$WORK/err")"
+
+# --- Case 8: --all prints every entry, including already-surfaced ids ---
+out="$(sh "$CHECK" --all "$WORK/t")"
+echo "$out" | grep -q "^$id1	the hook runs every test script$" && ok "case8: --all includes surfaced id1" || bad "case8: --all includes surfaced id1 — got: $out"
+echo "$out" | grep -q "^$id2	Patient table has soft deletes$" && ok "case8: --all includes surfaced id2" || bad "case8: --all includes surfaced id2 — got: $out"
+[ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" = "2" ] && ok "case8: --all exactly two lines" || bad "case8: --all exactly two lines — got: $out"
+
+# --- Case 9: default no-argument mode unchanged (still filtered -> silent) ---
+out="$(sh "$CHECK" "$WORK/t")"
+[ -z "$out" ] && ok "case9: default mode still filtered after option support" || bad "case9: default mode still filtered after option support — got: $out"
+
 # --- Case 4: all-clear DEFECTS.md -> silent ---
 cat > "$P/DEFECTS.md" <<'EOF'
 # Defects
