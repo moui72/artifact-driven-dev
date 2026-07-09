@@ -74,6 +74,7 @@ edit the `description:` there, then re-run it.)
 
 | Command | What it does |
 |---|---|
+| `/ardd-setup` | Complete an npx-acquired install — locate or clone the ARDD source checkout and run install.sh from it. |
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
 | `/ardd-featurize` | One-time (after codify): extract a feature register from an existing codebase. |
