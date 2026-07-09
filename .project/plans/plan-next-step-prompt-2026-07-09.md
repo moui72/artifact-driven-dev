@@ -1,5 +1,5 @@
 ---
-status: draft        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
+status: approved        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
 branch: next-step-prompt
 created: 2026-07-09
 features: [next-step-prompt]
