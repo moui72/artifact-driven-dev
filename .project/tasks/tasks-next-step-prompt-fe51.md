@@ -22,7 +22,7 @@ The shared convention all three tasks implement: grep `.project/artifacts/consti
 
 - [x] T003 Apply the convention to `skills/ardd-analyze/SKILL.md`: after step 6's STATUS.md write (and step 7 if it ran), gate the Summary's "Recommended next step" per the convention above. Note in prose that delegated/scripted contexts are unaffected because absent = false.
 - [x] T004 [parallel] Apply the convention to `skills/ardd-plan/SKILL.md` step 10, offering `/ardd-tasks` (the prompt fires only when analyze isn't about to be the endpoint — plan's step 10 already ends by running /ardd-analyze, so place the gate there consistently: the offer belongs to whichever skill actually ends the turn; state this explicitly to avoid double-prompting when plan hands off to analyze).
-- [ ] T005 [parallel] Apply the convention to `skills/ardd-tasks/SKILL.md` step 7, offering `/ardd-implement` — same double-prompt caveat as T004: tasks ends by running /ardd-analyze, so the prose must ensure exactly one prompt per user-visible turn end.
+- [x] T005 [parallel] Apply the convention to `skills/ardd-tasks/SKILL.md` step 7, offering `/ardd-implement` — same double-prompt caveat as T004: tasks ends by running /ardd-analyze, so the prose must ensure exactly one prompt per user-visible turn end.
 
 ## Phase 3: The ask-once question (depends on T001)
 

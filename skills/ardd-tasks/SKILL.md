@@ -143,3 +143,20 @@ approves it as part of this — there's no separate approval step in
    `tasked`, and — if step 2 approved the plan — that it's now `approved`.
    Then run `/ardd-analyze` now to refresh `STATUS.md` — plan approval and
    the feature-backlog flips in steps 2 and 6 leave it stale otherwise.
+
+   **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
+   frontmatter has `next_step_prompt: true` (grep the frontmatter block;
+   absent or `false` = the plain-text behavior above, unchanged), the
+   recommended next step — `/ardd-implement`, to execute the tasks file
+   just generated — is offered as a one-keypress AskUserQuestion: option 1
+   "Yes — run `/ardd-implement` now", option 2 "No — stop here" (Esc =
+   option 2); on yes, invoke the skill by name (the existing
+   terminal-handoff mechanism, no value passed back). **Exactly one prompt
+   per user-visible turn end**: this step already ends by running
+   `/ardd-analyze`, which carries its own next-step prompt — so when the
+   analyze handoff happens as instructed, the offer belongs to
+   `/ardd-analyze` (whichever skill actually ends the turn owns the
+   prompt) and `/ardd-tasks` must not prompt first. Only if this run ends
+   the turn itself without handing off to analyze does the
+   `/ardd-implement` offer fire here. Recommendations that are not a
+   concrete runnable `/ardd-*` invocation always stay plain text.
