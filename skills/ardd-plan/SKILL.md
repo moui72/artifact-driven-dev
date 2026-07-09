@@ -278,3 +278,20 @@ binding (or `[-]`-declining) the other's items.
     Run `/ardd-analyze` now to refresh `STATUS.md`'s recommended next step —
     artifacts and/or the feature register changed in this run, so don't wait for the
     user to ask for it.
+
+    **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
+    frontmatter has `next_step_prompt: true` (grep the frontmatter block;
+    absent or `false` = the plain-text behavior above, unchanged), the
+    recommended next step — `/ardd-tasks`, to select and approve this
+    plan — is offered as a one-keypress AskUserQuestion: option 1 "Yes —
+    run `/ardd-tasks` now", option 2 "No — stop here" (Esc = option 2); on
+    yes, invoke the skill by name (the existing terminal-handoff
+    mechanism, no value passed back). **Exactly one prompt per
+    user-visible turn end**: this step already ends by running
+    `/ardd-analyze`, which carries its own next-step prompt — so when the
+    analyze handoff happens as instructed, the offer belongs to
+    `/ardd-analyze` (whichever skill actually ends the turn owns the
+    prompt) and `/ardd-plan` must not prompt first. Only if this run ends
+    the turn itself without handing off to analyze does the `/ardd-tasks`
+    offer fire here. Recommendations that are not a concrete runnable
+    `/ardd-*` invocation always stay plain text.
