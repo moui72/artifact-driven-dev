@@ -25,6 +25,19 @@ fi
 # --- Skills ---
 echo "Installing artifact-driven-dev skills into $TARGET ..."
 
+# --- Symlink guard ---
+# The skills CLI's symlink mode (`npx skills add`) leaves .claude/skills/
+# entries pointing into its cache; copying "into" those would write through
+# the link into the cache instead of the project. Replace any symlinked
+# ardd-* entry with a real directory — warn, never fail.
+for entry in "$CLAUDE_SKILLS"/ardd-*; do
+  [ -L "$entry" ] || continue
+  echo "  ! $(basename "$entry") is a symlink (skills-CLI symlink mode?) — replacing with a real copy."
+  echo "    Regenerating through a symlink would write into the CLI cache, not this project;"
+  echo "    prefer the CLI's copy mode if you re-add skills with it."
+  rm "$entry"
+done
+
 installed_skill_names=""
 for skill_dir in "$SKILLS_DIR"/*/; do
   skill_name="$(basename "$skill_dir")"

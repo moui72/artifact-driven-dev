@@ -181,4 +181,36 @@ else
   bad "case3: exactly one pattern line after two installs (got count=$count)"
 fi
 
+# --- Case 4: pre-existing symlinked ardd-* skill dir (skills-CLI symlink
+# mode) -> warned, replaced with a real directory, cache dir untouched ---
+target="$WORK/case4"
+cache="$WORK/case4-cli-cache/ardd-plan"
+mkdir -p "$target" "$cache"
+git init -q "$target"
+git -C "$target" commit -q --allow-empty -m init
+mkdir -p "$target/.claude/skills"
+ln -s "$cache" "$target/.claude/skills/ardd-plan"
+
+out4="$WORK/case4-out"
+( cd "$REPO_ROOT" && sh "$INSTALL_SH" "$target" ) > "$out4" 2>&1
+
+if grep -qi "symlink" "$out4"; then
+  ok "case4: symlink warning printed"
+else
+  bad "case4: symlink warning printed"
+fi
+
+dest="$target/.claude/skills/ardd-plan"
+if [ ! -L "$dest" ] && [ -d "$dest" ] && [ -f "$dest/SKILL.md" ]; then
+  ok "case4: symlink replaced with real directory"
+else
+  bad "case4: symlink replaced with real directory"
+fi
+
+if [ -z "$(ls -A "$cache" 2>/dev/null)" ]; then
+  ok "case4: CLI cache dir not written through"
+else
+  bad "case4: CLI cache dir not written through"
+fi
+
 exit "$fail"
