@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-09 (post-/ardd-tasks, npx-skills-install tasked). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-09 (post-/ardd-implement, npx-skills-install complete). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -17,8 +17,8 @@ None.
 1 defect — see `DEFECTS.md`, last checked 2026-07-06 (third pass):
 the behavioral-smoke-tier claim still exceeds coverage. Reduced-scope
 residue of already-surfaced 970d935b. Run `/ardd-verify` to refresh —
-worth doing soon: the next-step-prompt implementation (merged today)
-added skill behavior verify has never checked.
+increasingly worth doing: both next-step-prompt and npx-skills-install
+(merged/completed today) added behavior verify has never checked.
 
 ## Feedback
 
@@ -26,23 +26,26 @@ None open — all 14 feedback files are `status: planned`.
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 1 tasked · 5 implemented — see
-`.project/features/`. `npx-skills-install` is `tasked`
-(plan approved: `plan-npx-skills-install-2026-07-09.md`; tasks:
-`tasks-npx-skills-install-568d.md`, ready, 0/6).
+0 backlogged · 0 planned · 0 tasked · 6 implemented — see
+`.project/features/`. `npx-skills-install` completed today
+(tasks-npx-skills-install-568d.md, 6/6): npx quick start via the
+vercel-labs skills CLI, `/ardd-setup` bridge skill, install.sh symlink
+guard, lint-docs frontmatter checks. T006's live verification caught
+and fixed a real bug (5 skill descriptions with unquoted colons were
+silently dropped by the CLI's YAML parser).
 
 ## In Flight
 
-On branch `npx-skills-install` (this checkout, not yet merged to
-`main`), all uncommitted: constitution v1.2.2 (npx acquisition-channel
-standing decision), the approved plan, the ready tasks file (0/6), and
-the register flips. No sibling worktrees.
+Branch `npx-skills-install` (this checkout): 6 commits ahead of `main`,
+work complete, awaiting merge. No sibling worktrees.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` and pick `tasks-npx-skills-install-568d.md`
-(6 tasks: CLI frontmatter compat + lint, /ardd-setup skill,
-gen-skill-docs registration, install.sh symlink guard, docs, live npx
-verification — T006 is manual/network-dependent). Standing threads:
-re-sign today's unsigned commits before pushing; smoke-key
-provisioning (970d935b).
+Merge `npx-skills-install` into `main` (fast-forward), then re-run
+`./install.sh .` to refresh the dogfooded skill copies. Before pushing
+anywhere: re-sign today's unsigned commits (1Password was locked all
+session — every commit since `8c7a8db` on main and all 6 on this branch
+are unsigned). After merge+push, re-verify T006's remote form
+(`npx skills add moui72/artifact-driven-dev`). Then `/ardd-verify` to
+refresh DEFECTS.md against today's new behavior. Standing thread:
+smoke-key provisioning (970d935b).
