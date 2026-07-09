@@ -1,7 +1,9 @@
 ---
 slug: npx-skills-install
-status: backlogged
+status: tasked
 logged: 2026-07-09
+plan: plan-npx-skills-install-2026-07-09.md
+tasks: tasks-npx-skills-install-568d.md
 ---
 
 ARDD can be installed into a target project via npx using the vercel-labs skills CLI (https://github.com/vercel-labs/skills), as an alternative entry point to cloning this repo and running ./install.sh.

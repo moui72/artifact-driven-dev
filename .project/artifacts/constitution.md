@@ -1,26 +1,31 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.0 → 1.2.1 (PATCH — wording/naming clarification only)
+Version change: 1.2.1 → 1.2.2 (PATCH — scope wording + one standing
+decision; no principle, standard, or behavior changed)
 
-Rationale: T001 of plan-repo-critique-docs-2026-07-06 (feedback item
-F002): the project used "ADD" and "ARDD" interchangeably across README,
-USAGE, guides, and this constitution. The user chose ARDD (2026-07-06)
-as the single name — it matches every ardd-* skill name. Pure rename;
-no principle, standard, or behavior changed.
+Rationale: /ardd-plan npx-skills-install (2026-07-09): the vercel-labs
+skills CLI (`npx skills add <owner>/<repo>`) becomes a second
+*acquisition* channel for the skill pack. It can only copy/symlink
+SKILL.md directories — it has no install scripts, migrations, or
+post-install steps — so an npx-only install would miss everything else
+install.sh does (non-skill reference dirs, migrations/.ardd-applied,
+ardd-version.md, .worktreeinclude, gitignore checks) and break on the
+first ardd-scripts call. Standing decision recorded: install.sh remains
+the only real install/upgrade entry point; the npx path must converge
+onto it (via /ardd-setup), never duplicate its logic.
 
-Modified sections: Project Scope & Intent wording ("artifact-driven-dev
-(ARDD)"); every prose "ADD" → "ARDD". Footer version updated.
+Modified sections: Project Scope & Intent (acquisition-channel
+paragraph added). Footer version updated.
 
-Previous SIR (1.1.0 → 1.2.0, Principle II mutations + behavioral-test
-tier + register decision) is in git history at this file's prior
-revision.
+Previous SIR (1.2.0 → 1.2.1, ADD→ARDD naming) is in git history at
+this file's prior revision.
 -->
 
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-06
+last_updated: 2026-07-09
 next_step_prompt: true
 ---
 
@@ -48,6 +53,18 @@ worth it because there is no external target codebase to serve as an
 implicit spec for what ARDD itself should do next; the skills, scripts, and
 docs *are* the product, and this constitution is the explicit source of
 truth for the principles they follow.
+
+The pack may be *acquired* through more than one channel — cloning this
+repository, or `npx skills add` via the vercel-labs skills CLI — but
+**`install.sh` is the only real install/upgrade entry point** (standing
+decision, 2026-07-09). The skills CLI can only copy or symlink
+`SKILL.md` directories; it cannot run migrations, create the non-skill
+reference directories, record `ardd-version.md`, or maintain
+`.worktreeinclude` — so any acquisition channel that isn't a clone must
+converge onto `install.sh` (the `/ardd-setup` skill exists for exactly
+this), never reimplement any part of it. Documentation recommends the
+CLI's copy mode, not symlink: `install.sh` regenerates
+`.claude/skills/`, which would fight a symlink farm.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -218,4 +235,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.2.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-06
+**Version**: 1.2.2 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09
