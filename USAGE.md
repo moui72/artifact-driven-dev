@@ -35,6 +35,11 @@ cd /path/to/artifact-driven-dev
 
 Then open Claude Code in your project.
 
+No clone handy? `npx skills add moui72/artifact-driven-dev` (copy mode,
+not symlink) drops the skill files in, then `/ardd-setup` in Claude Code
+completes the install — it locates or clones the source and runs
+`install.sh` for you. README's Install section has the details.
+
 ## Getting started (once per project)
 
 Bring the project under ARDD: seed artifacts, refine until stable. After

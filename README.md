@@ -129,9 +129,28 @@ Opt-in skills for concerns the core loop doesn't force on you.
 
 ## Install
 
+From a clone of this repo:
+
 ```sh
 ./install.sh /path/to/your/project
 ```
+
+Or without cloning first, via the [vercel-labs skills CLI](https://github.com/vercel-labs/skills):
+
+```sh
+cd /path/to/your/project
+npx skills add moui72/artifact-driven-dev   # choose COPY mode, not symlink
+```
+
+then open Claude Code and run `/ardd-setup`. The npx path is an
+*acquisition* channel only — it delivers the skill files, and
+`/ardd-setup` completes the install by locating (or cloning) the source
+and running `install.sh` from it. `install.sh` is the only real
+install/upgrade entry point either way; after `/ardd-setup` runs once,
+both paths are indistinguishable and `/ardd-update` handles updates.
+Avoid the CLI's symlink mode: `install.sh` regenerates
+`.claude/skills/`, and symlinks there would point regeneration into the
+CLI's cache (install.sh replaces any it finds, with a warning).
 
 **New project** — open Claude Code and run `/ardd-bootstrap` to seed artifacts
 from your conversation context. See [guides/greenfield.md](guides/greenfield.md).
