@@ -80,6 +80,12 @@ for sk in "$SKILLS_DIR"/*/SKILL.md; do
     echo "$sk: frontmatter missing 'description:' — required for skills-CLI discovery"
     fm_fail=1
   fi
+  # Unquoted colon-space in the value is invalid strict YAML — the skills
+  # CLI silently drops such a skill (live-verified 2026-07-09). Quote it.
+  if printf '%s\n' "$fm" | grep -q '^description:[[:space:]]*[^"'"'"'[:space:]].*:[[:space:]]'; then
+    echo "$sk: description contains an unquoted colon — strict-YAML parsers drop this skill; wrap the value in quotes"
+    fm_fail=1
+  fi
 done
 [ "$fm_fail" -eq 1 ] && exit 1
 

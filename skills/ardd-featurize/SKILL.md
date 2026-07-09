@@ -1,7 +1,7 @@
 ---
 name: ardd-featurize
 tier: setup
-description: One-time (after codify): extract a feature register from an existing codebase.
+description: "One-time (after codify): extract a feature register from an existing codebase."
 ---
 
 # /ardd-featurize

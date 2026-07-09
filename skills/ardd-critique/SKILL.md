@@ -1,7 +1,7 @@
 ---
 name: ardd-critique
 tier: extension
-description: Challenge artifact decisions: simplicity, failure modes, robustness, semantics.
+description: "Challenge artifact decisions: simplicity, failure modes, robustness, semantics."
 ---
 
 # /ardd-critique

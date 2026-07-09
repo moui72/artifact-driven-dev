@@ -1,7 +1,7 @@
 ---
 name: ardd-codify
 tier: setup
-description: One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap).
+description: "One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap)."
 ---
 
 # /ardd-codify

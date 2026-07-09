@@ -1,7 +1,7 @@
 ---
 plan: plan-npx-skills-install-2026-07-09.md
 generated: 2026-07-09
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
                      # completed is terminal — post-completion failures
@@ -24,4 +24,11 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 ## Phase 3: Docs + live verification
 
 - [x] T005 README.md + USAGE.md: add the npx quick start — `npx skills add <owner>/artifact-driven-dev` (choose copy mode, not symlink) followed by `/ardd-setup` in Claude Code — alongside the existing clone-first instructions, stating plainly that npx is an acquisition channel only and `install.sh` (via `/ardd-setup`) is the installer. README's generated sections must be edited via `scripts/gen-skill-docs.sh` (see T003), hand-edit only the non-generated prose. `./scripts/lint-docs.sh` must pass.
-- [ ] T006 Live verification (manual, network-dependent — no CI job, same gating rationale as the smoke-test tier): in a throwaway directory with `git init`, run `npx skills add` against this repo (copy mode), confirm the ardd skills land under `.claude/skills/`; then simulate `/ardd-setup`'s steps end-to-end (point it at this checkout as the source, run `./install.sh <throwaway>`), confirm the non-skill reference dirs exist, `.project/ardd-version.md` is recorded, `.worktreeinclude` contains `.claude/skills/ardd-*/`, and `ardd-update-check.sh` reports a sensible outcome there. Append a dated findings note to this tasks file (notes only — never touch DEFECTS.md; if a real code-vs-artifact violation surfaces, report it and point at /ardd-verify).
+- [x] T006 Live verification (manual, network-dependent — no CI job, same gating rationale as the smoke-test tier): in a throwaway directory with `git init`, run `npx skills add` against this repo (copy mode), confirm the ardd skills land under `.claude/skills/`; then simulate `/ardd-setup`'s steps end-to-end (point it at this checkout as the source, run `./install.sh <throwaway>`), confirm the non-skill reference dirs exist, `.project/ardd-version.md` is recorded, `.worktreeinclude` contains `.claude/skills/ardd-*/`, and `ardd-update-check.sh` reports a sensible outcome there. Append a dated findings note to this tasks file (notes only — never touch DEFECTS.md; if a real code-vs-artifact violation surfaces, report it and point at /ardd-verify).
+
+## Verification notes (T006, 2026-07-09)
+
+- Source form used: **local path** (`npx skills add <checkout path> --all -y`) — the GitHub shorthand form couldn't be exercised because this branch hasn't been pushed; same discovery/copy code path per the CLI docs. Re-verify the remote form after push.
+- **Finding (fixed in this run):** the CLI's strict YAML parser silently dropped 5 of 20 skills whose `description:` contained an unquoted colon-space (bootstrap, codify, critique, featurize, lint) — no warning, no error. Fix: those descriptions are now double-quoted, `gen-skill-docs.sh`'s `fm()` strips the quotes (generated tables byte-identical), and `lint-docs.sh` gained a check rejecting unquoted colons in descriptions (test-lint-docs.sh cases 7–8, red-first). After the fix, all 20 skills land.
+- The CLI's `--all` installs to `.agents/skills/` ("universal" mode), not `.claude/skills/` — copies, not symlinks. Immaterial for ARDD: `/ardd-setup` → `install.sh` writes the canonical `.claude/skills/` set regardless; README's quick start doesn't promise a landing directory.
+- install.sh on the throwaway: 23 `ardd-*` entries under `.claude/skills/` (20 skills + 3 non-skill reference dirs), `ardd-version.md` recorded with Source-Path, `.worktreeinclude` pattern present exactly once, `ardd-update-check.sh` → `up-to-date`. The npx-then-setup path is end-to-end sound.

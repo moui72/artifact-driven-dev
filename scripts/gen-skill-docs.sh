@@ -18,8 +18,10 @@ set -e
 
 MODE="${1:-generate}"
 
-fm() { # fm <file> <field>
-  awk '/^---$/{n++; next} n==1' "$1" | sed -n "s/^$2:[[:space:]]*//p" | head -1
+fm() { # fm <file> <field> — strips optional surrounding double quotes
+  # (descriptions containing colons must be quoted for strict-YAML parsers)
+  awk '/^---$/{n++; next} n==1' "$1" | sed -n "s/^$2:[[:space:]]*//p" | head -1 \
+    | sed -E 's/^"(.*)"$/\1/'
 }
 
 # Editorial workflow order per tier — skills not listed here append after

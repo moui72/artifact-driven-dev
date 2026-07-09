@@ -80,6 +80,24 @@ if sh "$R/scripts/lint-docs.sh" > "$TMP/out5" 2>&1; then
 fi
 ok "case5: empty description value -> exit 1"
 
+# case 7: unquoted colon-space in description -> fail (strict-YAML parsers,
+# e.g. the skills CLI's, silently drop the skill — live-verified 2026-07-09)
+R="$TMP/colon"; mk_skeleton "$R"
+mk_skill "$R" ardd-zeta 'name: ardd-zeta
+description: One-time: does zeta things.'
+if sh "$R/scripts/lint-docs.sh" > "$TMP/out7" 2>&1; then
+  fail "case7: unquoted colon in description should fail"
+fi
+grep -qi "colon" "$TMP/out7" || fail "case7: error should mention the colon ($(cat "$TMP/out7"))"
+ok "case7: unquoted colon-space in description -> exit 1"
+
+# case 8: quoted description containing a colon -> clean
+R="$TMP/quoted"; mk_skeleton "$R"
+mk_skill "$R" ardd-eta 'name: ardd-eta
+description: "One-time: does eta things."'
+sh "$R/scripts/lint-docs.sh" > "$TMP/out8" 2>&1 || fail "case8: quoted colon description should pass ($(cat "$TMP/out8"))"
+ok "case8: quoted colon description -> clean"
+
 # case 6: the real repo passes (all shipped skills are CLI-discoverable)
 sh "$SCRIPT_DIR/lint-docs.sh" > "$TMP/out6" 2>&1 || fail "case6: real repo should pass ($(cat "$TMP/out6"))"
 ok "case6: real repo clean"
