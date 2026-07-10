@@ -1,27 +1,35 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.3 → 1.2.4 (PATCH — corrects an unsound inference in
-scope wording; no principle or standard changed. One behavior does
-change: new.sh's Claude Code handoff becomes asked-by-default.)
+Version change: 1.2.4 → 1.2.5 (PATCH — corrects a description of
+behavior that already shipped; no principle, standard, or behavior
+changed)
 
-Rationale: /ardd-plan launch-prompt (2026-07-09), consuming
-feedback-launch-prompt-020f.md. v1.2.3 asserted new.sh "must never
-prompt" *because* `curl | sh` hands it a pipe on stdin. The premise is
-true and the conclusion doesn't follow: the script already reopens
-/dev/tty to exec Claude Code, and the same reopen supports a `read`.
-Replaced with the two rules that actually hold — refuse (never ask)
-where writing into an unowned directory is at stake; never block on a
-question that can't be asked (no tty → safe default, never hang). The
-handoff is now offered rather than imposed, with --kickoff/--no-kickoff
-to answer in advance. Recorded as a reversal rather than a silent
-rewrite: the bad inference is named in the artifact so it isn't
-reintroduced.
+Rationale: /ardd-plan defect-doc-drift (2026-07-09), closing two defects
+that /ardd-verify's fourth pass opened against this artifact.
 
-Modified sections: Project Scope & Intent (new.sh's interactivity rules
-replace the "never prompt" absolute). Footer version updated.
+b7d2252c: v1.2.4 stated "never blocks on a question it cannot ask — when
+/dev/tty isn't readable it takes the safe default," collapsing two
+different paths into one. The safe default holds when a question is
+actually pending (no flag, no tty). With an explicit --kickoff and no
+tty there is no pending question — the user answered on the command line
+— and new.sh launches anyway on inherited stdin. test-new.sh case 10
+already encoded that behavior, so a test and this artifact disagreed;
+the test was the evidence and the artifact was the claim, so the
+artifact moved. Both paths are now stated, and the collapsed phrasing is
+named so it isn't restored.
 
-Previous SIR (1.2.2 → 1.2.3, curl|sh acquisition channel) is in git
+f666274c: "resolves a source checkout (cloning one if absent)"
+overstated. Only the owned ~/.ardd/source is ever cloned; a --source or
+$ARDD_SOURCE path that doesn't exist is a hard error.
+
+Neither defect was a code bug. new.sh is unchanged by this revision.
+
+Modified sections: Project Scope & Intent (interactivity rules split the
+pending-question case from the answered-in-advance case; source-checkout
+clause tightened). Footer version updated.
+
+Previous SIR (1.2.3 → 1.2.4, the "never prompt" reversal) is in git
 history at this file's prior revision.
 -->
 
@@ -71,11 +79,12 @@ CLI's copy mode, not symlink: `install.sh` regenerates
 `.claude/skills/`, which would fight a symlink farm.
 
 `new.sh` converges by the most direct route available: it resolves a
-source checkout (cloning one if absent) and then *invokes* `install.sh`
-from it, so it needs no `/ardd-setup`-style bridge and must never grow
-one. It is **source-side** under Principle IV — fetched and executed
-outside any checkout, never shipped into a target project by
-`install.sh`. That it runs with no checkout of its own is a novel
+source checkout — cloning `~/.ardd/source`, the one checkout it owns, if
+that is absent; a `--source` or `$ARDD_SOURCE` path that doesn't exist is
+a hard error, never a clone target — and then *invokes* `install.sh` from
+it, so it needs no `/ardd-setup`-style bridge and must never grow one. It
+is **source-side** under Principle IV — fetched and executed outside any
+checkout, never shipped into a target project by `install.sh`. That it runs with no checkout of its own is a novel
 execution shape, not a third install target: the source/target split
 classifies a file by *where it runs and what it governs*, and `new.sh`
 governs acquisition of the source.
@@ -88,10 +97,22 @@ it to `read` an answer. The rules that actually hold are that `new.sh`
 **refuses rather than asks** wherever writing into a directory it
 doesn't own is at stake — a non-empty target, or a `--source` that isn't
 an ARDD checkout — because those are not decisions worth offering; and
-that it **never blocks on a question it cannot ask** — when `/dev/tty`
-isn't readable it takes the safe default rather than hanging a pipeline
-forever. Between those bounds it may ask, and the Claude Code handoff
-does: it is offered, not imposed, with flags to answer it in advance.
+that it **never blocks on a question it cannot ask**. Between those
+bounds it may ask, and the Claude Code handoff does: it is offered, not
+imposed, with `--kickoff` and `--no-kickoff` to answer in advance.
+
+That second rule is about *pending questions*, not about the terminal,
+and the difference is load-bearing. With no flag and no readable
+`/dev/tty` there is a question and no way to put it, so `new.sh` takes
+the safe default: it declines the launch, prints the command to start
+the session by hand, and exits 0 — the install succeeded, and saying
+otherwise would misreport it. With an explicit `--kickoff` and no
+readable `/dev/tty` there is no pending question at all: the user
+answered it on the command line, so `new.sh` launches anyway, on
+inherited stdin. Declining a flag someone named by hand would be worse
+than an odd session. An earlier revision (v1.2.4) compressed both cases
+into "when `/dev/tty` isn't readable it takes the safe default," which
+is true only of the first — don't restore that phrasing.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -262,4 +283,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.2.4 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09
+**Version**: 1.2.5 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09

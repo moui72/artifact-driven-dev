@@ -145,8 +145,12 @@ your artifacts.
 
 The handoff is a question, not a foregone conclusion. Answer it in advance
 with `--kickoff` (launch, don't ask) or `--no-kickoff` (install, print the
-command to start the session yourself). With no terminal to ask on — a
-scripted or CI run — it declines rather than hangs.
+command to start the session yourself).
+
+With no flag and no terminal to ask on — a scripted or CI run — it declines
+rather than hangs, printing the command instead. `--kickoff` launches
+regardless: you already answered, so there's no question left to fail to
+ask.
 
 `--source <path>` (or `$ARDD_SOURCE`) points at an ARDD checkout you already
 have; a checkout you name that way is only ever read, never pulled or
