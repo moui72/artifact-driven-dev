@@ -19,7 +19,7 @@ internal notes — keep them in sync with the skills themselves.
 
 ```sh
 ./install.sh /path/to/target/project   # install/upgrade skills into a project
-./new.sh [--no-launch] [--source <path>] <target-dir>  # quickstart: create a new project, install, open /ardd-kickoff
+./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-kickoff
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
@@ -70,13 +70,27 @@ under the source/target split it is source-side, classified by what it
 governs (acquiring the source), not by where its output lands. It resolves a
 source checkout and then *invokes* that checkout's `install.sh`; it never
 reimplements any part of it, and must never grow a `/ardd-setup`-style
-bridge, because unlike the npx channel it can just call the installer. Two
-consequences to preserve when editing it: it **cannot prompt** (its stdin is
-the `curl` pipe carrying its own source text — every place an interactive
-installer would ask, it refuses instead), and it only ever clones or pulls
-the checkout it owns at `~/.ardd/source`; a checkout named via `--source` or
-`$ARDD_SOURCE` belongs to the user and is read, never mutated. That last
-rule is also what makes `scripts/test-new.sh` hermetic.
+bridge, because unlike the npx channel it can just call the installer.
+
+Three rules to preserve when editing it (constitution v1.2.4). It **refuses
+rather than asks** wherever writing into a directory it doesn't own is at
+stake — a non-empty target, a `--source` that isn't an ARDD checkout. It
+**never blocks on a question it cannot ask** — no usable `/dev/tty` means
+take the safe default, never hang a pipeline. And it only ever clones or
+pulls the checkout it owns at `~/.ardd/source`; a checkout named via
+`--source` or `$ARDD_SOURCE` belongs to the user and is read, never mutated
+(that last rule is also what makes `scripts/test-new.sh` hermetic).
+
+It *does* prompt, once: the Claude Code handoff is offered on `/dev/tty`,
+with `--kickoff`/`--no-kickoff` to answer in advance. An earlier constitution
+revision (v1.2.3) claimed it "must never prompt" *because* `curl | sh` hands
+it a pipe on stdin — an unsound inference, since the script already reopens
+`/dev/tty` to `exec`, and the same reopen supports a `read`. Don't
+reintroduce the absolute. Two traps that cost real debugging: `[ -r /dev/tty ]`
+tests permission bits and passes on a CI runner with no controlling terminal
+(where the open then fails with `ENXIO`), so use a real open — `tty_ok()`;
+and every branch that decides whether to reach the `read` must be covered by
+a timeout guard in the test, or a regression stalls CI instead of failing it.
 
 **`install.sh` is the only entry point into a target project.** It copies
 `skills/*/SKILL.md` into `.claude/skills/<name>/`, copies

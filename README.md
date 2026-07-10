@@ -139,22 +139,26 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 
 That creates `my-project/`, `git init`s it, clones this repo to
 `~/.ardd/source` (or updates it if it's already there), runs `install.sh`
-from it, and opens Claude Code on `/ardd-kickoff` — which interviews you
-about the design and then runs `/ardd-bootstrap` to write your artifacts.
+from it, and offers to open Claude Code on `/ardd-kickoff` — which
+interviews you about the design and then runs `/ardd-bootstrap` to write
+your artifacts.
 
-`--no-launch` stops after installing and prints the command to start the
-session yourself. `--source <path>` (or `$ARDD_SOURCE`) points at an ARDD
-checkout you already have; a checkout you name that way is only ever read,
-never pulled or modified — only the `~/.ardd/source` clone, which `new.sh`
-creates and owns, is kept up to date for you.
+The handoff is a question, not a foregone conclusion. Answer it in advance
+with `--kickoff` (launch, don't ask) or `--no-kickoff` (install, print the
+command to start the session yourself). With no terminal to ask on — a
+scripted or CI run — it declines rather than hangs.
 
-`new.sh` never prompts — under `curl | sh` its stdin is the pipe carrying
-the script itself, so there's nothing to read an answer from. Wherever an
-interactive installer would ask, it refuses instead: a target directory that
-already holds files, or a `--source` that isn't an ARDD checkout, is an error
-rather than a question. Nothing is overwritten. It's also not a separate
-installer — it resolves a source checkout and then invokes that checkout's
-`install.sh`, which remains the only real install/upgrade entry point.
+`--source <path>` (or `$ARDD_SOURCE`) points at an ARDD checkout you already
+have; a checkout you name that way is only ever read, never pulled or
+modified — only the `~/.ardd/source` clone, which `new.sh` creates and owns,
+is kept up to date for you.
+
+Where `new.sh` *doesn't* ask is anywhere it would be writing into a directory
+it doesn't own: a target that already holds files, or a `--source` that isn't
+an ARDD checkout, is an error rather than a question. Nothing is overwritten.
+It's also not a separate installer — it resolves a source checkout and then
+invokes that checkout's `install.sh`, which remains the only real
+install/upgrade entry point.
 
 For an existing project, use `install.sh` directly:
 

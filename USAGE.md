@@ -27,7 +27,8 @@ left off.
 ## Setup
 
 Brand-new project, nothing installed? One command creates it, installs
-ARDD, and opens the first session:
+ARDD, and offers to open the first session (`--kickoff` / `--no-kickoff`
+answer that offer in advance):
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \

@@ -18,9 +18,13 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 ```
 
 It creates and `git init`s `my-project/`, installs ARDD into it via
-`install.sh`, and opens Claude Code on `/ardd-kickoff` — which conducts the
-Step 1 design conversation as an interview and then runs `/ardd-bootstrap`
-for you. Pick the guide back up at [Step 3](#step-3-refine-each-artifact).
+`install.sh`, and offers to open Claude Code on `/ardd-kickoff` — which
+conducts the Step 1 design conversation as an interview and then runs
+`/ardd-bootstrap` for you. Pick the guide back up at
+[Step 3](#step-3-refine-each-artifact).
+
+Pass `--kickoff` to skip the question and launch, or `--no-kickoff` to
+install and stop.
 
 The rest of this guide is the same path done by hand, which is worth reading
 either way — `/ardd-kickoff` is a convenience, not a different workflow.

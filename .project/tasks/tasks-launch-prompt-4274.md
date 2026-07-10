@@ -1,7 +1,7 @@
 ---
 plan: plan-launch-prompt-2026-07-09.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-09
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: docs
 
-- [ ] T003 Update `README.md`, `USAGE.md`, and `guides/greenfield.md` for the
+- [x] T003 Update `README.md`, `USAGE.md`, and `guides/greenfield.md` for the
       new flags and the asked-by-default handoff. `README.md`'s Quickstart
       currently asserts "`new.sh` never prompts — under `curl | sh` its stdin
       is the pipe carrying the script itself, so there's nothing to read an
@@ -44,13 +44,13 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
       (never asks) on a non-empty target or a bad `--source`. Verify with
       `./scripts/lint-docs.sh`.
 
-- [ ] T004 Update `CLAUDE.md`: the Architecture note currently records "it
+- [x] T004 Update `CLAUDE.md`: the Architecture note currently records "it
       **cannot prompt** (its stdin is the `curl` pipe …)" as a standing
       constraint — replace with the two rules from constitution v1.2.4 (refuse
       where an unowned directory is at stake; never block on a question that
       can't be asked). Update the `new.sh` usage line in the Commands block to
       show `[--kickoff|--no-kickoff]`.
 
-- [ ] T005 Re-run `./install.sh .` to refresh `.project/ardd-version.md`, then
+- [x] T005 Re-run `./install.sh .` to refresh `.project/ardd-version.md`, then
       run `./scripts/lint-docs.sh`, `./scripts/lint-project.sh`, and
       `./scripts/test-new.sh` as a final gate.
