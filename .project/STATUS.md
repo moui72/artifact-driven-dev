@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-09 (post-/ardd-implement, launch-prompt complete). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-09 (post-/ardd-verify, fourth pass). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -17,38 +17,46 @@ track `main`. Neither blocks anything.
 
 ## Code-vs-Artifact Defects
 
-1 defect — see `DEFECTS.md`, last checked 2026-07-06 (third pass): the
-behavioral-smoke-tier claim still exceeds coverage. Reduced-scope residue of
-already-surfaced 970d935b. Now four features stale: `/ardd-verify` has never
-examined `new.sh`, `/ardd-kickoff`, or the v1.2.4 interactivity rules. Worth
-a pass.
+3 defects — see `DEFECTS.md`, last checked 2026-07-09 (fourth pass, the first
+to survey `new.sh`, `/ardd-kickoff`, and constitution v1.2.4).
+
+- `b7d2252c` (drift, **new**) — the constitution's "no readable `/dev/tty` →
+  safe default" bound is stated unconditionally, but `--kickoff` launches
+  anyway on inherited stdin. The behavior is intended; the artifact and
+  `README.md` both describe it wrongly. `README.md`'s "it declines rather
+  than hangs" is simply false when `--kickoff` is passed.
+- `f666274c` (cosmetic, **new**) — "cloning one if absent" overstates: only
+  the owned `~/.ardd/source` is ever cloned; a missing `--source` is a hard
+  error.
+- `970d935b` residue (drift, tracked) — the behavioral-smoke-tier standard
+  still exceeds coverage; no scenario has ever executed, and `/ardd-bootstrap`
+  (now reachable via `/ardd-kickoff`) has never had one.
+
+The two new defects are **unsurfaced**, so the next `/ardd-plan` will offer
+them for inclusion. The smoke residue will not be re-prompted.
 
 ## Feedback
 
 None open — all 15 feedback files are `status: planned`.
-`feedback-launch-prompt-020f.md` was consumed today by
-`plan-launch-prompt-2026-07-09.md`; both its items were incorporated.
 
 ## Feature Backlog
 
 0 backlogged · 0 planned · 0 tasked · 7 implemented — see
-`.project/features/`. The `launch-prompt` work carried no feature slug: it
-came from feedback on an implementation, not from a backlogged idea.
+`.project/features/`.
 
 ## In Flight
 
-Branch `launch-prompt` (this checkout): 3 commits ahead of `main`, work
-complete, awaiting merge. No sibling worktrees.
-
-`main` itself is 7 commits ahead of `origin/main` and unpushed — the SSH
-agent (1Password) was locked all session, so `git push` could not
-authenticate. Commits are signed with the on-disk `id_claude_signing` key and
-verify locally; only the push is blocked.
+Nothing. `main` is clean, and `origin/main` is up to date — today's
+`quickstart-new-project` and `launch-prompt` work is pushed and the public
+`curl` one-liner resolves (verified end to end against the live raw URL at
+commit `4761c17`).
 
 ## Recommended Next Step
 
-Merge `launch-prompt` into `main`, re-run `./install.sh .`, then push once
-1Password is unlocked. The quickstart's public `curl` URL points at `main`,
-so it does not resolve until that push lands. After pushing, run the
-one-liner end to end. Then `/ardd-verify` to refresh `DEFECTS.md` against
-`new.sh`, `/ardd-kickoff`, and v1.2.4.
+Run `/ardd-plan` to fold the two new defects into a plan — both are
+documentation-vs-code drift introduced by today's `launch-prompt` work, and
+both are cheap: reword the constitution's interactivity bound to name the
+`--kickoff`-without-tty path, fix `README.md`'s false "it declines rather than
+hangs" sentence, and tighten "cloning one if absent." Provisioning
+`ANTHROPIC_API_KEY` remains the standing thread that would let the smoke
+scenarios actually run (`970d935b`).
