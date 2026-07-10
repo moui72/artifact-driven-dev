@@ -24,7 +24,7 @@ status: in-progress
 
 ## Phase 2: Correct the mechanical drift
 
-- [ ] T002 [feedback: F001] Fix the skill-count claim in `README.md`'s opening
+- [x] T002 [feedback: F001] Fix the skill-count claim in `README.md`'s opening
   paragraph (currently "~18 skills"; there are 21). Resolve the plan's open
   question first: prefer a claim that cannot rot — "the skills" or "a couple
   dozen skills" over an exact count that drifts every time a skill lands —
