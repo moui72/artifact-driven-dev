@@ -31,7 +31,7 @@ status: in-progress
   but keep the "disciplined, not lightweight" framing that warns a prospective
   adopter about the surface area. Depends on T001. Verify: `diff` touches
   `README.md` only; `./scripts/lint-docs.sh` passes.
-- [ ] T003 [feedback: F001] Rewrite the "Project structure created" block in
+- [x] T003 [feedback: F001] Rewrite the "Project structure created" block in
   `README.md` to match `.project/` and `.claude/` as they actually are. Add
   the missing entries — `features/`, `feedback/`, `STATUS.md`, `DEFECTS.md`,
   `WORKFLOW.md`, and `.claude/skills/ardd-scripts/` — each with a one-line
