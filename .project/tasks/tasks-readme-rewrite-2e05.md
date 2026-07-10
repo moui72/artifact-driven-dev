@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Establish ground truth
 
-- [ ] T001 Read every claim in `README.md` against the repo — not against the
+- [x] T001 Read every claim in `README.md` against the repo — not against the
   README's own account of itself — and write a drift inventory into this
   tasks file (append it under a `## Drift inventory` heading below Phase 4;
   it is scratch state for Phases 2–4, not a shipped artifact). For each
@@ -65,3 +65,29 @@ status: in-progress
   Then delete the `## Drift inventory` scratch section T001 appended — it is
   working state, not shipped documentation. Depends on T002, T003, T004.
   Verify: `diff` touches `README.md` only; `./scripts/lint-docs.sh` passes.
+
+## Drift inventory
+
+_Scratch state from T001 — deleted by T005. Verdicts from reading each claim
+against the repo, not against the README._
+
+- **STALE** — "~18 skills" (line 7). Actual: 21 in `skills/`. → T002.
+- **MISSING** — "Project structure created" block (lines 240–248) omits
+  `.project/features/`, `.project/feedback/`, `.project/STATUS.md`,
+  `.project/DEFECTS.md`, `.project/WORKFLOW.md`, and
+  `.claude/skills/ardd-scripts/`. Present entries (`artifacts/`, `plans/` —
+  "plans and research" is accurate, research does land there —, `tasks/`,
+  `ardd-version.md`, `.claude/skills/`) are correct. → T003.
+- **DANGLING** — "Like `workflow_mode`, it's a frontmatter workflow field"
+  (line ~110) references `workflow_mode`, which is defined nowhere in the
+  README. Only substantive gap. → T004.
+- **DANGLING** — "For an existing project, use `install.sh` directly:"
+  (line 167) ends the Quickstart section by announcing the `## Install`
+  heading that follows it; reads as an orphaned sentence. → T005.
+- **ACCURATE** — the sole internal anchor `#when-artifacts-earn-their-keep`
+  resolves to the "## When artifacts earn their keep" heading. All three
+  `guides/*.md` (continuing, existing-project, greenfield) exist. The
+  `docs/decisions/0003-rewritten-main-recovery.md` reference exists. The
+  `/ardd-setup` npx description matches the shipped skill frontmatter. "Several
+  status state machines" is fair (six frontmatter enums in `lint-project.sh`).
+  No task needed.
