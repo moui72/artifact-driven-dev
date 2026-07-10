@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-10 (post-/ardd-tasks, README rewrite tasks ready). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-10 (post-/ardd-implement, README rewrite complete on branch). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -10,56 +10,46 @@ _Updated: 2026-07-10 (post-/ardd-tasks, README rewrite tasks ready). Keep this c
 
 ## Open Questions
 
-None in the artifact. Plan-scoped questions, none blocking:
-
-- `plan-readme-rewrite-2026-07-10.md` — whether to state a skill count in the
-  README at all (a count is drift-by-construction), and whether
-  `workflow_mode` belongs in the README or only in `CLAUDE.md`.
-- `plan-quickstart-new-project-2026-07-09.md` — whether `new.sh` should
-  optionally `gh repo create`, and whether it should pin a tag rather than
-  track `main`.
+None in the artifact. One plan-scoped set remains, non-blocking:
+`plan-quickstart-new-project-2026-07-09.md` — whether `new.sh` should
+optionally `gh repo create`, and whether it should pin a tag rather than
+track `main`. (The README-rewrite plan's two open questions were both
+resolved during implementation: the skill count was dropped rather than
+corrected, and `workflow_mode` was documented in the README.)
 
 ## Code-vs-Artifact Defects
 
-1 defect — see `DEFECTS.md`, last checked 2026-07-09 (fifth pass). Unchanged.
+1 defect — see `DEFECTS.md`, last checked 2026-07-09 (fifth pass). Unchanged:
+the behavioral-smoke-tier residue (`970d935b`); no scenario has ever executed
+because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced.
 
-The remaining entry is the `970d935b` residue — the behavioral-smoke-tier
-standard still exceeds coverage, and no scenario has ever executed because
-`ANTHROPIC_API_KEY` is deliberately unprovisioned. Tracked, not re-promptable.
-Nothing is unsurfaced, so the next `/ardd-plan` has no defects to offer.
-
-Today's `new.sh` stdin fix (`212d9c1`) landed after this verify pass. It
-contradicted no `DEFECTS.md` claim, but `/ardd-verify` has not run against it.
+Today's `new.sh` stdin fix (`212d9c1`, on `main`) landed after this verify
+pass and hasn't been verified against; it contradicted no `DEFECTS.md` claim.
 
 ## Feedback
 
 None open — all 16 feedback files are `status: planned`.
-`feedback-readme-rewrite-current-state-ec3e.md` was consumed today by
-`plan-readme-rewrite-2026-07-10.md`.
 
 ## Feature Backlog
 
 0 backlogged · 0 planned · 0 tasked · 7 implemented — see
-`.project/features/`. The README rewrite carries no feature slug: it came
-from feedback, not the backlog.
+`.project/features/`.
 
 ## In Flight
 
-On branch `readme-rewrite` (this checkout), uncommitted work: the approved
-plan `plan-readme-rewrite-2026-07-10.md`, its tasks file
-`tasks-readme-rewrite-2e05.md` (`ready`, 0/5), the consumed feedback file,
-and this file. No sibling worktrees. `main` is clean and pushed through
-`212d9c1` (the `new.sh` stdin fix).
+- Branch `readme-rewrite` (this checkout): 6 commits ahead of `main`, tasks
+  file `tasks-readme-rewrite-2e05.md` **completed** (5/5), awaiting merge.
+- Worktree `dev/ardd-feedback-render` (branch `feedback-render-output-target`):
+  no active tasks file — a separate line of work, unrelated to this rewrite.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-readme-rewrite-2e05.md` (5 tasks, 4
-phases, all sequential). Solo mode + a docs-only, single-file diff makes this
-a natural inline run rather than a delegated worktree — the whole task set
-edits `README.md`. The plan is README-only by design; `USAGE.md` and
-`guides/*.md` were deliberately excluded to keep the diff from colliding with
-the same merge-conflict problem the 2026-07-06 docs plan hit.
+Merge `readme-rewrite` into `main` and push. Note the scope: the run touched
+`README.md`, `scripts/gen-skill-docs.sh`, and `templates/WORKFLOW.md` — wider
+than the plan's original README-only intent, by explicit decision, because the
+README's core-loop region is generated and the `workflow_mode` docs had to
+live in the generator to survive regeneration. After merge, `/ardd-verify`
+would fold in both today's `new.sh` fix and this rewrite on its next pass.
 
 The standing thread is unchanged: provisioning `ANTHROPIC_API_KEY` so the two
-existing smoke scenarios actually run — until they do, the behavioral-test
-tier is a claim the repo makes but has never once exercised.
+existing smoke scenarios actually run.
