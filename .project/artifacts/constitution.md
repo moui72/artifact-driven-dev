@@ -1,25 +1,27 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.1 → 1.2.2 (PATCH — scope wording + one standing
+Version change: 1.2.2 → 1.2.3 (PATCH — scope wording + one standing
 decision; no principle, standard, or behavior changed)
 
-Rationale: /ardd-plan npx-skills-install (2026-07-09): the vercel-labs
-skills CLI (`npx skills add <owner>/<repo>`) becomes a second
-*acquisition* channel for the skill pack. It can only copy/symlink
-SKILL.md directories — it has no install scripts, migrations, or
-post-install steps — so an npx-only install would miss everything else
-install.sh does (non-skill reference dirs, migrations/.ardd-applied,
-ardd-version.md, .worktreeinclude, gitignore checks) and break on the
-first ardd-scripts call. Standing decision recorded: install.sh remains
-the only real install/upgrade entry point; the npx path must converge
-onto it (via /ardd-setup), never duplicate its logic.
+Rationale: /ardd-plan quickstart-new-project (2026-07-09): a `new.sh`
+curl-to-sh bootstrap becomes a third *acquisition* channel for the skill
+pack, aimed at the cold-start case the other two don't cover (nothing
+installed, no checkout, no project directory yet). Unlike the npx
+channel, new.sh has no gap to bridge: it resolves a source checkout and
+then *invokes* install.sh directly, so the standing decision recorded at
+1.2.2 extends unchanged rather than needing a second /ardd-setup-style
+convergence skill. Also recorded: new.sh is source-side under Principle
+IV — it is fetched and run, never shipped into a target project — which
+is a novel shape (executed outside any checkout) that the source/target
+split already accommodates without amendment.
 
-Modified sections: Project Scope & Intent (acquisition-channel
-paragraph added). Footer version updated.
+Modified sections: Project Scope & Intent (acquisition-channel paragraph
+extended to three channels; new.sh's install-target side recorded).
+Footer version updated.
 
-Previous SIR (1.2.0 → 1.2.1, ADD→ARDD naming) is in git history at
-this file's prior revision.
+Previous SIR (1.2.1 → 1.2.2, npx acquisition channel) is in git history
+at this file's prior revision.
 -->
 
 ---
@@ -55,7 +57,8 @@ docs *are* the product, and this constitution is the explicit source of
 truth for the principles they follow.
 
 The pack may be *acquired* through more than one channel — cloning this
-repository, or `npx skills add` via the vercel-labs skills CLI — but
+repository, `npx skills add` via the vercel-labs skills CLI, or the
+`new.sh` curl-to-sh bootstrap for a brand-new project — but
 **`install.sh` is the only real install/upgrade entry point** (standing
 decision, 2026-07-09). The skills CLI can only copy or symlink
 `SKILL.md` directories; it cannot run migrations, create the non-skill
@@ -65,6 +68,20 @@ converge onto `install.sh` (the `/ardd-setup` skill exists for exactly
 this), never reimplement any part of it. Documentation recommends the
 CLI's copy mode, not symlink: `install.sh` regenerates
 `.claude/skills/`, which would fight a symlink farm.
+
+`new.sh` converges by the most direct route available: it resolves a
+source checkout (cloning one if absent) and then *invokes* `install.sh`
+from it, so it needs no `/ardd-setup`-style bridge and must never grow
+one. It is **source-side** under Principle IV — fetched and executed
+outside any checkout, never shipped into a target project by
+`install.sh`. That it runs with no checkout of its own is a novel
+execution shape, not a third install target: the source/target split
+classifies a file by *where it runs and what it governs*, and `new.sh`
+governs acquisition of the source. Because `curl | sh` hands the script
+a pipe on stdin, it must never prompt: it refuses (non-empty target, or
+a source path that isn't an ARDD checkout) where an interactive
+installer would ask, and reopens `/dev/tty` only for the terminal
+handoff to Claude Code.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -235,4 +252,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.2.2 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09
+**Version**: 1.2.3 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09

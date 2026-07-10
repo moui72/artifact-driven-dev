@@ -1,24 +1,29 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-09 (post-/ardd-implement, npx-skills-install complete). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-09 (post-/ardd-plan, quickstart-new-project drafted). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.2.2) | — |
+| constitution.md | stable ✅ (v1.2.3) | — |
 
 ## Open Questions
 
-None.
+None in the artifact itself. The draft plan
+`plan-quickstart-new-project-2026-07-09.md` carries two of its own
+(optional `gh repo create`; whether `new.sh` should pin a tag rather than
+track `main`) — plan-scoped, not artifact-scoped, so they don't gate
+planning.
 
 ## Code-vs-Artifact Defects
 
 1 defect — see `DEFECTS.md`, last checked 2026-07-06 (third pass):
 the behavioral-smoke-tier claim still exceeds coverage. Reduced-scope
 residue of already-surfaced 970d935b. Run `/ardd-verify` to refresh —
-increasingly worth doing: both next-step-prompt and npx-skills-install
-(merged/completed today) added behavior verify has never checked.
+increasingly worth doing: next-step-prompt and npx-skills-install (both
+merged) added behavior verify has never checked, and quickstart-new-project
+will add `new.sh` plus a `/ardd-kickoff` skill on top of that.
 
 ## Feedback
 
@@ -26,26 +31,19 @@ None open — all 14 feedback files are `status: planned`.
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 0 tasked · 6 implemented — see
-`.project/features/`. `npx-skills-install` completed today
-(tasks-npx-skills-install-568d.md, 6/6): npx quick start via the
-vercel-labs skills CLI, `/ardd-setup` bridge skill, install.sh symlink
-guard, lint-docs frontmatter checks. T006's live verification caught
-and fixed a real bug (5 skill descriptions with unquoted colons were
-silently dropped by the CLI's YAML parser).
+1 backlogged · 0 planned · 0 tasked · 6 implemented — see
+`.project/features/`. `quickstart-new-project` is backlogged and now has a
+draft plan; selecting that plan in `/ardd-tasks` is what flips it to
+`planned`.
 
 ## In Flight
 
-Branch `npx-skills-install` (this checkout): 6 commits ahead of `main`,
-work complete, awaiting merge. No sibling worktrees.
+Branch `quickstart-new-project` (this checkout): constitution amended to
+v1.2.3 and a draft plan written, not yet committed. No sibling worktrees.
 
 ## Recommended Next Step
 
-Merge `npx-skills-install` into `main` (fast-forward), then re-run
-`./install.sh .` to refresh the dogfooded skill copies. Before pushing
-anywhere: re-sign today's unsigned commits (1Password was locked all
-session — every commit since `8c7a8db` on main and all 6 on this branch
-are unsigned). After merge+push, re-verify T006's remote form
-(`npx skills add moui72/artifact-driven-dev`). Then `/ardd-verify` to
-refresh DEFECTS.md against today's new behavior. Standing thread:
-smoke-key provisioning (970d935b).
+Run `/ardd-tasks` to select and approve
+`plan-quickstart-new-project-2026-07-09.md`, which flips the plan to
+`approved` and the `quickstart-new-project` feature from `backlogged` to
+`planned`, then generates its task list.
