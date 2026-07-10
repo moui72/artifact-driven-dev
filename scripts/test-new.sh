@@ -187,6 +187,25 @@ set -e
   && ok "case8: missing target exits 2 (usage)" \
   || bad "case8: expected exit 2, got $status"
 
+# --- Case 9: the target check runs before source resolution ---
+# Ordering matters for real: with no --source and no $ARDD_SOURCE, resolving
+# the source *clones* ~/.ardd/source over the network. A typo'd target must
+# be rejected before that cost is paid. Assert it by making both inputs bad
+# and requiring the *target* complaint to be the one that surfaces.
+target="$WORK/case9/proj"
+mkdir -p "$target"
+echo "occupied" > "$target/file.txt"
+set +e
+out="$(ARDD_SOURCE="$notardd" sh "$NEW_SH" --no-launch "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 1 ] \
+  && ok "case9: refused (exit 1)" \
+  || bad "case9: expected exit 1, got $status"
+printf '%s' "$out" | grep -q 'not empty' \
+  && ok "case9: target checked before source (target error wins)" \
+  || bad "case9: source resolved before the target was validated"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"
 else

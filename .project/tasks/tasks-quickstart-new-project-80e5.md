@@ -25,7 +25,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
       requiring exit 0. Hermetic: `ARDD_SOURCE` is always set, so no case
       reaches the network.
 
-- [ ] T002 [artifacts: constitution] Implement `new.sh` at the repo root
+- [x] T002 [artifacts: constitution] Implement `new.sh` at the repo root
       (POSIX `sh`, `#!/usr/bin/env sh`, `set -e`) until T001 passes. Usage:
       `new.sh [--no-launch] [--source <path>] <target-dir>`. Order is
       load-bearing: resolve source → `mkdir -p` + `git init` target → invoke
