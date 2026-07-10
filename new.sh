@@ -20,10 +20,11 @@
 # cannot ask*: with no readable /dev/tty it takes the safe default instead of
 # hanging a pipeline forever.
 #
-# Between those bounds it may ask, and the Claude Code handoff does. Both the
-# prompt and the exec read from /dev/tty, not stdin — under `curl | sh` stdin
-# carries this script's own source text, while stdout and the tty are still
-# the terminal.
+# Between those bounds it may ask, and the Claude Code handoff does. The prompt
+# reads from /dev/tty, not stdin — under `curl | sh` stdin carries this script's
+# own source text, while stdout and the tty are still the terminal. The exec,
+# by contrast, must leave stdin alone and let Claude Code open the tty itself;
+# see launch().
 #
 # Source ownership: the default checkout at ~/.ardd/source belongs to this
 # script — it clones it and keeps it current. A checkout named explicitly via
@@ -172,15 +173,14 @@ launch() {
   echo "Opening Claude Code in $target — /ardd-kickoff will walk you through the design."
   echo ""
   cd "$TARGET"
-  # stdin is the curl pipe; the tty is still the terminal. Reopen it so Claude
-  # Code gets a real interactive stdin. With an explicit --kickoff and no tty
-  # to reopen, launch anyway on inherited stdin — the user asked for it by
-  # name, and second-guessing an explicit flag is worse than an odd session.
-  if tty_ok; then
-    exec claude "/ardd-kickoff" < /dev/tty
-  else
-    exec claude "/ardd-kickoff"
-  fi
+  # Do NOT redirect stdin here, even though under `curl | sh` it's the curl
+  # pipe. Claude Code checks `process.stdin.isTTY && process.stdout.isTTY` and
+  # only falls back to opening /dev/tty itself — read-write, which is what its
+  # TUI needs — when that check fails. Feeding it `< /dev/tty` (read-only)
+  # passes the check, so it uses that fd instead and silently accepts no
+  # keystrokes; `<> /dev/tty` makes it exit outright. An EOF'd pipe on stdin is
+  # the input it handles correctly.
+  exec claude "/ardd-kickoff"
 }
 
 # Ask on /dev/tty — never stdin, which is the curl pipe. Bare Enter means yes.

@@ -84,13 +84,21 @@ pulls the checkout it owns at `~/.ardd/source`; a checkout named via
 It *does* prompt, once: the Claude Code handoff is offered on `/dev/tty`,
 with `--kickoff`/`--no-kickoff` to answer in advance. An earlier constitution
 revision (v1.2.3) claimed it "must never prompt" *because* `curl | sh` hands
-it a pipe on stdin — an unsound inference, since the script already reopens
-`/dev/tty` to `exec`, and the same reopen supports a `read`. Don't
-reintroduce the absolute. Two traps that cost real debugging: `[ -r /dev/tty ]`
+it a pipe on stdin — an unsound inference, since a `read` can name `/dev/tty`
+explicitly rather than take whatever stdin holds. Don't
+reintroduce the absolute. Three traps that cost real debugging: `[ -r /dev/tty ]`
 tests permission bits and passes on a CI runner with no controlling terminal
 (where the open then fails with `ENXIO`), so use a real open — `tty_ok()`;
-and every branch that decides whether to reach the `read` must be covered by
-a timeout guard in the test, or a regression stalls CI instead of failing it.
+every branch that decides whether to reach the `read` must be covered by
+a timeout guard in the test, or a regression stalls CI instead of failing it;
+and the `read` prompt's `/dev/tty` discipline must **not** be extended to the
+`exec`, which has the opposite requirement. Claude Code uses `process.stdin`
+only when `stdin.isTTY && stdout.isTTY`, and otherwise opens `/dev/tty` `r+`
+itself. So `exec claude … < /dev/tty` hands it a *read-only* fd that passes
+that check: the TUI paints and then silently ignores every keystroke (`<>
+/dev/tty` makes it exit instead). An EOF'd pipe on stdin is what it handles
+correctly — `launch()` must leave stdin alone. No tty exists in CI to catch
+this, so `test-new.sh` case 14 guards the source line statically.
 
 **`install.sh` is the only entry point into a target project.** It copies
 `skills/*/SKILL.md` into `.claude/skills/<name>/`, copies

@@ -300,6 +300,16 @@ set -e
   && ok "case13: retired --no-launch exits 2 (unknown option)" \
   || bad "case13: expected exit 2, got $status"
 
+# --- Case 14: the launch exec never redirects Claude Code's stdin ---
+# Static, because the failure is invisible without a real tty: Claude Code uses
+# process.stdin only when `stdin.isTTY && stdout.isTTY`, else it opens /dev/tty
+# read-write itself. `exec claude … < /dev/tty` passes that check with a
+# read-only fd, so the TUI paints but accepts no keystrokes; `<>` exits. CI has
+# no tty to reproduce either, so guard the source line instead.
+grep -n 'exec claude' "$NEW_SH" | grep -q '/dev/tty' \
+  && bad "case14: launch exec redirects stdin — Claude Code will ignore keystrokes" \
+  || ok "case14: launch exec leaves stdin alone"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"
 else
