@@ -41,7 +41,7 @@ status: in-progress
 
 ## Phase 3: Close the workflow_mode gap
 
-- [ ] T004 [feedback: F001] Add a short `README.md` section documenting solo
+- [x] T004 [feedback: F001] Add a short `README.md` section documenting solo
   vs. collaborative `workflow_mode`, placed near the existing
   `next_step_prompt` prose (they are siblings — both `constitution.md`
   frontmatter workflow fields, both asked once at bootstrap, neither bumps

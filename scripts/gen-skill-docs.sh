@@ -88,6 +88,19 @@ EOF
 final step of most state-changing skills, so it isn't a step you have to
 remember — run it by hand anytime for a fresh check.
 
+**Solo vs. collaborative mode.** `workflow_mode` in `constitution.md`'s
+frontmatter (one of `solo` | `collaborative`; absent means `solo`) governs
+where in-progress work lives. In **solo** mode — single developer, one
+machine — committing directly to your local default branch is fine for
+inline runs, and delegated runs use an isolated git worktree that merges
+back eagerly on completion; the in-flight view is `inflight-worktrees.sh`.
+In **collaborative** mode nothing is ever committed to the *local* default
+branch: work always moves to a branch, and after the first commit the skill
+offers to push and open a *draft PR* titled with the feature slug — that
+pushed draft PR is the mode's shared in-flight signal, and the register flip
+rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
+mode once at setup and suggests one from what it detects.
+
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
 `constitution.md`'s frontmatter, `/ardd-analyze`, `/ardd-plan`, and
 `/ardd-tasks` end by offering their recommended next step as a
@@ -96,7 +109,7 @@ recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
 absent field keeps recommendations as plain text, so delegated and
 scripted runs are unaffected. `/ardd-bootstrap` asks the question once at
 setup; `/ardd-update` asks it once for existing installs whose
-constitution lacks the field. Like `workflow_mode`, it's a frontmatter
+constitution lacks the field. Like `workflow_mode` above, it's a frontmatter
 workflow field — setting it never bumps the constitution version.
 EOF
 }
@@ -129,6 +142,15 @@ EOF
   table_rows core
   table_rows extension
   cat <<'EOF'
+
+## Operating mode
+
+`workflow_mode` in `constitution.md`'s frontmatter (one of `solo` |
+`collaborative`; absent means `solo`) governs where in-progress work lives.
+**Solo**: committing to your local default branch is fine for inline runs;
+delegated runs use an isolated worktree and merge back on completion. **Collaborative**: nothing lands on the local default branch — work moves to
+a branch and, after the first commit, the skill offers to push and open a
+draft PR titled with the feature slug, which is the shared in-flight signal.
 
 See `STATUS.md` for current artifact statuses, open questions, and the
 recommended next step. Artifacts live in `.project/artifacts/`; the

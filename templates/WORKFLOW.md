@@ -30,6 +30,15 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | `/ardd-update` | Update this project's ARDD install from its recorded source checkout — check standing, offer a source pull, re-run install.sh, and relay its output. |
 | `/ardd-add-artifact` | Create a new, non-standard artifact from a template. |
 
+## Operating mode
+
+`workflow_mode` in `constitution.md`'s frontmatter (one of `solo` |
+`collaborative`; absent means `solo`) governs where in-progress work lives.
+**Solo**: committing to your local default branch is fine for inline runs;
+delegated runs use an isolated worktree and merge back on completion. **Collaborative**: nothing lands on the local default branch — work moves to
+a branch and, after the first commit, the skill offers to push and open a
+draft PR titled with the feature slug, which is the shared in-flight signal.
+
 See `STATUS.md` for current artifact statuses, open questions, and the
 recommended next step. Artifacts live in `.project/artifacts/`; the
 feature register in `.project/features/`.
