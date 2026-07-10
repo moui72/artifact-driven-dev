@@ -1,27 +1,28 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.2 → 1.2.3 (PATCH — scope wording + one standing
-decision; no principle, standard, or behavior changed)
+Version change: 1.2.3 → 1.2.4 (PATCH — corrects an unsound inference in
+scope wording; no principle or standard changed. One behavior does
+change: new.sh's Claude Code handoff becomes asked-by-default.)
 
-Rationale: /ardd-plan quickstart-new-project (2026-07-09): a `new.sh`
-curl-to-sh bootstrap becomes a third *acquisition* channel for the skill
-pack, aimed at the cold-start case the other two don't cover (nothing
-installed, no checkout, no project directory yet). Unlike the npx
-channel, new.sh has no gap to bridge: it resolves a source checkout and
-then *invokes* install.sh directly, so the standing decision recorded at
-1.2.2 extends unchanged rather than needing a second /ardd-setup-style
-convergence skill. Also recorded: new.sh is source-side under Principle
-IV — it is fetched and run, never shipped into a target project — which
-is a novel shape (executed outside any checkout) that the source/target
-split already accommodates without amendment.
+Rationale: /ardd-plan launch-prompt (2026-07-09), consuming
+feedback-launch-prompt-020f.md. v1.2.3 asserted new.sh "must never
+prompt" *because* `curl | sh` hands it a pipe on stdin. The premise is
+true and the conclusion doesn't follow: the script already reopens
+/dev/tty to exec Claude Code, and the same reopen supports a `read`.
+Replaced with the two rules that actually hold — refuse (never ask)
+where writing into an unowned directory is at stake; never block on a
+question that can't be asked (no tty → safe default, never hang). The
+handoff is now offered rather than imposed, with --kickoff/--no-kickoff
+to answer in advance. Recorded as a reversal rather than a silent
+rewrite: the bad inference is named in the artifact so it isn't
+reintroduced.
 
-Modified sections: Project Scope & Intent (acquisition-channel paragraph
-extended to three channels; new.sh's install-target side recorded).
-Footer version updated.
+Modified sections: Project Scope & Intent (new.sh's interactivity rules
+replace the "never prompt" absolute). Footer version updated.
 
-Previous SIR (1.2.1 → 1.2.2, npx acquisition channel) is in git history
-at this file's prior revision.
+Previous SIR (1.2.2 → 1.2.3, curl|sh acquisition channel) is in git
+history at this file's prior revision.
 -->
 
 ---
@@ -77,11 +78,20 @@ outside any checkout, never shipped into a target project by
 `install.sh`. That it runs with no checkout of its own is a novel
 execution shape, not a third install target: the source/target split
 classifies a file by *where it runs and what it governs*, and `new.sh`
-governs acquisition of the source. Because `curl | sh` hands the script
-a pipe on stdin, it must never prompt: it refuses (non-empty target, or
-a source path that isn't an ARDD checkout) where an interactive
-installer would ask, and reopens `/dev/tty` only for the terminal
-handoff to Claude Code.
+governs acquisition of the source.
+
+Two rules bound `new.sh`'s interactivity, and neither is "never prompt."
+An earlier phrasing (v1.2.3) inferred that absolute from `curl | sh`
+handing the script a pipe on stdin, but the inference was unsound: a
+script that can reopen `/dev/tty` to hand off to Claude Code can reopen
+it to `read` an answer. The rules that actually hold are that `new.sh`
+**refuses rather than asks** wherever writing into a directory it
+doesn't own is at stake — a non-empty target, or a `--source` that isn't
+an ARDD checkout — because those are not decisions worth offering; and
+that it **never blocks on a question it cannot ask** — when `/dev/tty`
+isn't readable it takes the safe default rather than hanging a pipeline
+forever. Between those bounds it may ask, and the Claude Code handoff
+does: it is offered, not imposed, with flags to answer it in advance.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -252,4 +262,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.2.3 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09
+**Version**: 1.2.4 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09
