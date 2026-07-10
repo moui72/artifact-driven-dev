@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: new.sh, test-first
 
-- [ ] T001 [artifacts: constitution] Write `scripts/test-new.sh` (POSIX `sh`,
+- [x] T001 [artifacts: constitution] Write `scripts/test-new.sh` (POSIX `sh`,
       `set -e`) and confirm it fails before `new.sh` exists — constitution
       Principle V requires the red state first. Follow the existing
       throwaway-repo pattern in `scripts/test-install-worktreeinclude.sh`
