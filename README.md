@@ -177,7 +177,8 @@ It's also not a separate installer — it resolves a source checkout and then
 invokes that checkout's `install.sh`, which remains the only real
 install/upgrade entry point.
 
-For an existing project, use `install.sh` directly:
+For an existing project — one that already has a checkout — skip `new.sh` and
+install ARDD directly, as described next.
 
 ## Install
 
