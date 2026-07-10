@@ -20,7 +20,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
       steps, does not hang. Wrap case (e) in a timeout guard so a regression
       that blocks on a `read` fails the suite instead of stalling CI forever.
 
-- [ ] T002 [artifacts: constitution] Implement in `new.sh` until T001 passes.
+- [x] T002 [artifacts: constitution] Implement in `new.sh` until T001 passes.
       Rename `--no-launch` to `--no-kickoff` (rename, not alias — it shipped
       only on unpushed local `main`, so an alias would be dead compatibility
       surface, Principle VII). Add `--kickoff`. Passing both is a usage error,

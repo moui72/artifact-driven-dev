@@ -4,7 +4,7 @@
 #   curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
 #     | sh -s -- my-project
 #
-# Usage: new.sh [--no-launch] [--source <path>] <target-dir>
+# Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
 #
 # This is an *acquisition* channel, nothing more. It resolves an ARDD source
 # checkout, creates the target, and then hands off to that checkout's
@@ -13,13 +13,17 @@
 # must never grow a /ardd-setup-style bridge: unlike the npx channel, it can
 # simply invoke the installer directly.
 #
-# It never prompts. Under `curl | sh` this script's stdin *is* the pipe
-# carrying its own source text, so a `read` would consume script or block
-# forever. Everywhere an interactive installer would ask, this one refuses:
-# a non-empty target, or a source path that isn't an ARDD checkout, is an
-# error — not a question. The one exception is the final handoff, which
-# reopens /dev/tty for Claude Code (stdout is still the terminal even when
-# stdin is a pipe).
+# Two rules bound its interactivity (constitution v1.2.4). It *refuses* rather
+# than asks wherever writing into a directory it doesn't own is at stake — a
+# non-empty target, or a --source that isn't an ARDD checkout — because those
+# aren't decisions worth offering. And it *never blocks on a question it
+# cannot ask*: with no readable /dev/tty it takes the safe default instead of
+# hanging a pipeline forever.
+#
+# Between those bounds it may ask, and the Claude Code handoff does. Both the
+# prompt and the exec read from /dev/tty, not stdin — under `curl | sh` stdin
+# carries this script's own source text, while stdout and the tty are still
+# the terminal.
 #
 # Source ownership: the default checkout at ~/.ardd/source belongs to this
 # script — it clones it and keeps it current. A checkout named explicitly via
@@ -30,15 +34,18 @@ set -e
 REPO_URL="https://github.com/moui72/artifact-driven-dev"
 DEFAULT_SOURCE="$HOME/.ardd/source"
 
-no_launch=0
+kickoff=""          # "" = ask; 1 = always; 0 = never
 source_arg=""
 target=""
 
 usage() {
   cat >&2 <<EOF
-Usage: new.sh [--no-launch] [--source <path>] <target-dir>
+Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
 
-  --no-launch      Install, then print the next step instead of opening Claude Code.
+  --kickoff        Open Claude Code on /ardd-kickoff without asking.
+  --no-kickoff     Install, then print the next step instead of opening Claude Code.
+                   With neither flag, you're asked — unless there's no terminal
+                   to ask on, in which case this is the default.
   --source <path>  Use an existing ARDD checkout (also settable as \$ARDD_SOURCE).
                    Read, never modified. Without it, ~/.ardd/source is cloned
                    and kept up to date.
@@ -51,13 +58,18 @@ EOF
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --no-launch) no_launch=1; shift ;;
-    --source)    [ $# -ge 2 ] || usage; source_arg="$2"; shift 2 ;;
-    --source=*)  source_arg="${1#--source=}"; shift ;;
-    -h|--help)   usage ;;
-    -*)          echo "Error: unknown option '$1'" >&2; usage ;;
-    *)           [ -z "$target" ] || { echo "Error: unexpected argument '$1'" >&2; usage; }
-                 target="$1"; shift ;;
+    # Contradictory flags are a usage error, not last-flag-wins: silently
+    # guessing which of two opposite intents was meant is worse than asking.
+    --kickoff)    [ "$kickoff" != "0" ] || { echo "Error: --kickoff and --no-kickoff are mutually exclusive" >&2; usage; }
+                  kickoff=1; shift ;;
+    --no-kickoff) [ "$kickoff" != "1" ] || { echo "Error: --kickoff and --no-kickoff are mutually exclusive" >&2; usage; }
+                  kickoff=0; shift ;;
+    --source)     [ $# -ge 2 ] || usage; source_arg="$2"; shift 2 ;;
+    --source=*)   source_arg="${1#--source=}"; shift ;;
+    -h|--help)    usage ;;
+    -*)           echo "Error: unknown option '$1'" >&2; usage ;;
+    *)            [ -z "$target" ] || { echo "Error: unexpected argument '$1'" >&2; usage; }
+                  target="$1"; shift ;;
   esac
 done
 
@@ -142,25 +154,84 @@ fi
 
 # --- Hand off to the first session -------------------------------------
 
-echo ""
-if [ "$no_launch" -eq 1 ] || ! command -v claude >/dev/null 2>&1 || [ ! -r /dev/tty ]; then
-  if [ "$no_launch" -ne 1 ] && ! command -v claude >/dev/null 2>&1; then
-    echo "Claude Code isn't on your PATH, so I can't open the first session for you."
-  elif [ "$no_launch" -ne 1 ]; then
-    echo "No terminal available, so I can't open the first session for you."
-  fi
-  echo "Start it with:"
+next_steps() { # $1 = optional reason line
+  [ -n "$1" ] && echo "$1"
+  echo "Start the first session with:"
   echo ""
   echo "  cd $target"
   echo "  claude \"/ardd-kickoff\""
   echo ""
-  # The install genuinely succeeded — exiting nonzero here would misreport it.
+}
+
+# Actually open the tty rather than testing its permission bits: `[ -r /dev/tty ]`
+# passes on a CI runner with no controlling terminal, where the open then fails
+# with ENXIO. Only a real open answers "can I interact with a human here?"
+tty_ok() { (exec 3< /dev/tty) 2>/dev/null; }
+
+launch() {
+  echo "Opening Claude Code in $target — /ardd-kickoff will walk you through the design."
+  echo ""
+  cd "$TARGET"
+  # stdin is the curl pipe; the tty is still the terminal. Reopen it so Claude
+  # Code gets a real interactive stdin. With an explicit --kickoff and no tty
+  # to reopen, launch anyway on inherited stdin — the user asked for it by
+  # name, and second-guessing an explicit flag is worse than an odd session.
+  if tty_ok; then
+    exec claude "/ardd-kickoff" < /dev/tty
+  else
+    exec claude "/ardd-kickoff"
+  fi
+}
+
+# Ask on /dev/tty — never stdin, which is the curl pipe. Bare Enter means yes.
+# EOF (a readable but closed tty) means no, matching the no-tty default: never
+# block, never guess. An unrecognized answer re-asks, but only three times, so
+# a wedged terminal can't spin forever.
+ask_kickoff() {
+  attempt=0
+  while [ "$attempt" -lt 3 ]; do
+    printf 'Open Claude Code now and run /ardd-kickoff? [Y/n] ' > /dev/tty
+    if ! IFS= read -r reply < /dev/tty; then
+      echo "" > /dev/tty
+      return 1   # EOF
+    fi
+    case "$reply" in
+      ""|[Yy]|[Yy][Ee][Ss]) return 0 ;;
+      [Nn]|[Nn][Oo])        return 1 ;;
+      *) echo "Please answer y or n." > /dev/tty ;;
+    esac
+    attempt=$((attempt + 1))
+  done
+  echo "No clear answer after 3 tries — not launching." > /dev/tty
+  return 1
+}
+
+echo ""
+
+# The install genuinely succeeded by this point. Every path below exits 0;
+# declining to launch is an outcome, not a failure.
+if [ "$kickoff" = "0" ]; then
+  next_steps ""
   exit 0
 fi
 
-echo "Opening Claude Code in $target — /ardd-kickoff will walk you through the design."
-echo ""
-cd "$TARGET"
-# stdin is the curl pipe; stdout is still the terminal. Reopen the tty so
-# Claude Code gets a real interactive stdin.
-exec claude "/ardd-kickoff" < /dev/tty
+if ! command -v claude >/dev/null 2>&1; then
+  next_steps "Claude Code isn't on your PATH, so I can't open the first session for you."
+  exit 0
+fi
+
+if [ "$kickoff" = "1" ]; then
+  launch
+fi
+
+if ! tty_ok; then
+  next_steps "No terminal available, so I can't open the first session for you."
+  exit 0
+fi
+
+if ! ask_kickoff; then
+  next_steps ""
+  exit 0
+fi
+
+launch
