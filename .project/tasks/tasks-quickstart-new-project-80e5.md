@@ -1,7 +1,7 @@
 ---
 plan: plan-quickstart-new-project-2026-07-09.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-09
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
