@@ -1,7 +1,7 @@
 ---
 plan: plan-quickstart-new-project-2026-07-09.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-09
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -44,7 +44,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
       otherwise print `cd <target> && claude "/ardd-kickoff"` and exit 0 —
       the install succeeded, so a nonzero exit would misreport it.
 
-- [ ] T003 Add a `new-project` job to `.github/workflows/lint.yml` running
+- [x] T003 Add a `new-project` job to `.github/workflows/lint.yml` running
       `./scripts/test-new.sh`, with the `git config --global user.email/
       user.name` step the other git-touching jobs use. Do not add
       `test-new.sh` to any enumerated list — `hooks/pre-commit` discovers
@@ -53,7 +53,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: /ardd-kickoff
 
-- [ ] T004 [parallel] Write `skills/ardd-kickoff/SKILL.md`. Frontmatter:
+- [x] T004 [parallel] Write `skills/ardd-kickoff/SKILL.md`. Frontmatter:
       `name: ardd-kickoff`, `tier: setup`, and a `description:` — quote it if
       it contains a colon (the skills CLI's YAML parser silently drops
       unquoted-colon descriptions; `lint-docs.sh` enforces the presence of
@@ -74,14 +74,14 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
       No test: this is prose, not a deterministic script (constitution
       Principle V's documented exception).
 
-- [ ] T005 Register `ardd-kickoff` in `scripts/gen-skill-docs.sh`'s
+- [x] T005 Register `ardd-kickoff` in `scripts/gen-skill-docs.sh`'s
       `ORDER_setup`, between `ardd-setup` and `ardd-bootstrap`. Then run
       `./scripts/test-gen-skill-docs.sh` — if it asserts against a fixed
       skill set, update its fixture in the same commit.
 
 ## Phase 3: Docs and dogfood
 
-- [ ] T006 Run `./scripts/gen-skill-docs.sh` to regenerate README's skill
+- [x] T006 Run `./scripts/gen-skill-docs.sh` to regenerate README's skill
       tables, then hand-add a `## Quickstart` section to `README.md` directly
       above `## Install`, showing the one-liner and naming what it does
       (creates the dir, `git init`, runs `install.sh`, opens
@@ -89,22 +89,22 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
       remain supported channels. Verify with `./scripts/lint-docs.sh`, which
       requires every `/ardd-*` mentioned in docs to be a real skill.
 
-- [ ] T007 Update `guides/greenfield.md` — lead with the quickstart as the
+- [x] T007 Update `guides/greenfield.md` — lead with the quickstart as the
       front door, retain the existing manual Prerequisites path beneath it,
       and note that `/ardd-kickoff` performs Step 1's design conversation.
       Update `USAGE.md` to match. Re-run `./scripts/lint-docs.sh`.
 
-- [ ] T008 Add `new.sh` and `scripts/test-new.sh` to `CLAUDE.md`'s Commands
+- [x] T008 Add `new.sh` and `scripts/test-new.sh` to `CLAUDE.md`'s Commands
       block, and record under Architecture that `new.sh` is source-side
       (fetched and run, never installed into a target) and converges onto
       `install.sh` by invoking it — never reimplementing it.
 
-- [ ] T009 Update `install.sh`'s closing "Next steps for a new project"
+- [x] T009 Update `install.sh`'s closing "Next steps for a new project"
       message to name `/ardd-kickoff` as step 1 for a brand-new project, with
       `/ardd-bootstrap` as what it leads into. Source-side change to
       user-facing output only; no install behavior changes.
 
-- [ ] T010 Re-run `./install.sh .` to dogfood `ardd-kickoff` into this repo's
+- [x] T010 Re-run `./install.sh .` to dogfood `ardd-kickoff` into this repo's
       own `.claude/skills/` and refresh `.project/ardd-version.md`. Then run
       `./scripts/lint-docs.sh`, `./scripts/lint-project.sh`, and
       `./scripts/test-new.sh` as a final gate.

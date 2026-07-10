@@ -326,7 +326,10 @@ fi
 
 echo ""
 echo "Done. Next steps for a new project:"
-echo "  1. Run /ardd-bootstrap in Claude Code to seed your project artifacts."
+echo "  1. Run /ardd-kickoff in Claude Code — it walks you through the design"
+echo "     conversation, then hands off to /ardd-bootstrap to seed your artifacts."
+echo "     (Already know what you're building? Talk it through, then run"
+echo "     /ardd-bootstrap directly — same destination.)"
 echo "  2. Run /ardd-analyze to check for cross-artifact issues."
 echo "  3. Run /ardd-plan when artifacts are stable."
 echo ""

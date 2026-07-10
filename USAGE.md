@@ -26,7 +26,15 @@ left off.
 
 ## Setup
 
-Install ARDD into your project:
+Brand-new project, nothing installed? One command creates it, installs
+ARDD, and opens the first session:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
+  | sh -s -- my-project
+```
+
+Otherwise, install ARDD into an existing project:
 
 ```sh
 cd /path/to/artifact-driven-dev
@@ -38,7 +46,9 @@ Then open Claude Code in your project.
 No clone handy? `npx skills add moui72/artifact-driven-dev` (copy mode,
 not symlink) drops the skill files in, then `/ardd-setup` in Claude Code
 completes the install — it locates or clones the source and runs
-`install.sh` for you. README's Install section has the details.
+`install.sh` for you. README's Install and Quickstart sections have the
+details. All three channels converge on `install.sh`; it is the only real
+install/upgrade entry point.
 
 ## Getting started (once per project)
 
@@ -56,6 +66,10 @@ After discussing your project with Claude, run:
 ```
 /ardd-bootstrap
 ```
+
+(Or run `/ardd-kickoff` on a greenfield project and let it conduct that
+discussion as an interview before handing off to `/ardd-bootstrap`. The
+quickstart above opens straight into it.)
 
 This reads the conversation and writes initial artifacts to
 `.project/artifacts/` — whichever set your project's concerns actually

@@ -1,6 +1,6 @@
 ---
 slug: quickstart-new-project
-status: tasked
+status: implemented
 logged: 2026-07-09
 plan: plan-quickstart-new-project-2026-07-09.md
 tasks: tasks-quickstart-new-project-80e5.md

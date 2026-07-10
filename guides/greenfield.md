@@ -7,6 +7,26 @@ key decisions, then run `/ardd-bootstrap` to capture them.
 
 ---
 
+## Quickstart
+
+If you have nothing installed yet, one command does everything below through
+Step 2:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
+  | sh -s -- my-project
+```
+
+It creates and `git init`s `my-project/`, installs ARDD into it via
+`install.sh`, and opens Claude Code on `/ardd-kickoff` — which conducts the
+Step 1 design conversation as an interview and then runs `/ardd-bootstrap`
+for you. Pick the guide back up at [Step 3](#step-3-refine-each-artifact).
+
+The rest of this guide is the same path done by hand, which is worth reading
+either way — `/ardd-kickoff` is a convenience, not a different workflow.
+
+---
+
 ## Prerequisites
 
 Install ARDD into your new project directory:
@@ -23,7 +43,8 @@ Then open Claude Code in your project.
 ## Step 1: Have the design conversation
 
 Before running any skill, talk through your project with Claude. This is where
-the real work happens. Cover:
+the real work happens. (`/ardd-kickoff` conducts exactly this conversation as
+an interview, if you'd rather be asked than lead.) Cover:
 
 - **What the system does** — one or two sentences; what problem it solves
 - **Who uses it** — role, technical level, how often
@@ -190,7 +211,7 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 ## What a clean greenfield run looks like
 
 ```
-Session 1: Design conversation → /ardd-bootstrap → /ardd-refine × 3
+Session 1: /ardd-kickoff (or your own design conversation) → /ardd-bootstrap → /ardd-refine × 3
 Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
 Session 3: /ardd-plan → /ardd-tasks → /ardd-implement
 Session N: /ardd-converge → /ardd-implement (resume)

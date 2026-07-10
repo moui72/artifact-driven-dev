@@ -75,6 +75,7 @@ edit the `description:` there, then re-run it.)
 | Command | What it does |
 |---|---|
 | `/ardd-setup` | Complete an npx-acquired install — locate or clone the ARDD source checkout and run install.sh from it. |
+| `/ardd-kickoff` | Greenfield first session: run the design conversation, then hand off to /ardd-bootstrap. |
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
 | `/ardd-featurize` | One-time (after codify): extract a feature register from an existing codebase. |
@@ -127,6 +128,36 @@ Opt-in skills for concerns the core loop doesn't force on you.
 | `/ardd-update` | Update this project's ARDD install from its recorded source checkout — check standing, offer a source pull, re-run install.sh, and relay its output. |
 | `/ardd-add-artifact` | Create a new, non-standard artifact from a template. |
 
+## Quickstart
+
+Brand-new project, nothing installed:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
+  | sh -s -- my-project
+```
+
+That creates `my-project/`, `git init`s it, clones this repo to
+`~/.ardd/source` (or updates it if it's already there), runs `install.sh`
+from it, and opens Claude Code on `/ardd-kickoff` — which interviews you
+about the design and then runs `/ardd-bootstrap` to write your artifacts.
+
+`--no-launch` stops after installing and prints the command to start the
+session yourself. `--source <path>` (or `$ARDD_SOURCE`) points at an ARDD
+checkout you already have; a checkout you name that way is only ever read,
+never pulled or modified — only the `~/.ardd/source` clone, which `new.sh`
+creates and owns, is kept up to date for you.
+
+`new.sh` never prompts — under `curl | sh` its stdin is the pipe carrying
+the script itself, so there's nothing to read an answer from. Wherever an
+interactive installer would ask, it refuses instead: a target directory that
+already holds files, or a `--source` that isn't an ARDD checkout, is an error
+rather than a question. Nothing is overwritten. It's also not a separate
+installer — it resolves a source checkout and then invokes that checkout's
+`install.sh`, which remains the only real install/upgrade entry point.
+
+For an existing project, use `install.sh` directly:
+
 ## Install
 
 From a clone of this repo:
@@ -152,8 +183,11 @@ Avoid the CLI's symlink mode: `install.sh` regenerates
 `.claude/skills/`, and symlinks there would point regeneration into the
 CLI's cache (install.sh replaces any it finds, with a warning).
 
-**New project** — open Claude Code and run `/ardd-bootstrap` to seed artifacts
-from your conversation context. See [guides/greenfield.md](guides/greenfield.md).
+**New project** — open Claude Code and run `/ardd-kickoff`: it walks you
+through the design conversation, then hands off to `/ardd-bootstrap`, which
+seeds artifacts from that context. If you'd rather talk through the design in
+your own words first, skip kickoff and run `/ardd-bootstrap` yourself — same
+destination. See [guides/greenfield.md](guides/greenfield.md).
 
 **Existing project** — open Claude Code and run `/ardd-codify` to
 reverse-engineer artifacts from the codebase. Review the generated drafts with

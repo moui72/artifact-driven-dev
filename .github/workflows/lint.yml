@@ -59,6 +59,13 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-worktreeinclude.sh
 
+  new-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - run: ./scripts/test-new.sh
+
   sibling-tasks-complete:
     runs-on: ubuntu-latest
     steps:
