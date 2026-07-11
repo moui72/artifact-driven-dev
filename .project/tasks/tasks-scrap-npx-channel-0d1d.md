@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Constitution revision (artifact-first)
 
-- [ ] T001 [artifacts: constitution] Revise the acquisition-channels standing
+- [x] T001 [artifacts: constitution] Revise the acquisition-channels standing
   decision in `.project/artifacts/constitution.md` (~lines 68–90): enumerate
   **two** acquisition routes — cloning the repo, and the curl bootstrap
   (`new.sh`, now including the existing-project variant from T003) — both

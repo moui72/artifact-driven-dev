@@ -1,42 +1,40 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.4 → 1.2.5 (PATCH — corrects a description of
-behavior that already shipped; no principle, standard, or behavior
-changed)
+Version change: 1.2.5 → 1.3.0 (MINOR — removes a whole acquisition
+channel and a bridge skill from the governing scope. A material change
+to a standing decision; treated as MINOR by reading "material expansion"
+to cover material contraction, not just addition.)
 
-Rationale: /ardd-plan defect-doc-drift (2026-07-09), closing two defects
-that /ardd-verify's fourth pass opened against this artifact.
+Rationale: /ardd-plan scrap-npx-channel (2026-07-11), consuming
+feedback-scrap-npx-channel-9c51.md. The `npx skills add` acquisition
+channel worked poorly — a ~20-skill picker whose selections install.sh
+discards anyway, and it leaves no owned source checkout — and its only
+real function was delivering the /ardd-setup bridge skill. Both are
+removed: acquisition is now two routes, clone or the new.sh curl
+bootstrap (brand-new-project and existing-project modes), each
+converging directly on install.sh with no bridge. Losing the
+vercel-labs skills-registry discoverability npx provided was a
+consciously accepted trade for a simpler, self-owned install story.
 
-b7d2252c: v1.2.4 stated "never blocks on a question it cannot ask — when
-/dev/tty isn't readable it takes the safe default," collapsing two
-different paths into one. The safe default holds when a question is
-actually pending (no flag, no tty). With an explicit --kickoff and no
-tty there is no pending question — the user answered on the command line
-— and new.sh launches anyway on inherited stdin. test-new.sh case 10
-already encoded that behavior, so a test and this artifact disagreed;
-the test was the evidence and the artifact was the claim, so the
-artifact moved. Both paths are now stated, and the collapsed phrasing is
-named so it isn't restored.
+Modified sections: Project Scope & Intent (acquisition-channels standing
+decision — npx channel and /ardd-setup bridge removed; new.sh's
+bridge-free discipline extended to cover its existing-project mode).
+Footer version updated.
 
-f666274c: "resolves a source checkout (cloning one if absent)"
-overstated. Only the owned ~/.ardd/source is ever cloned; a --source or
-$ARDD_SOURCE path that doesn't exist is a hard error.
+Deferred to implementation under the same plan (not this artifact
+revision): the new.sh existing-project mode itself (test-first),
+deletion of skills/ardd-setup/, and the docs ripple
+(README/USAGE/CLAUDE.md).
 
-Neither defect was a code bug. new.sh is unchanged by this revision.
-
-Modified sections: Project Scope & Intent (interactivity rules split the
-pending-question case from the answered-in-advance case; source-checkout
-clause tightened). Footer version updated.
-
-Previous SIR (1.2.3 → 1.2.4, the "never prompt" reversal) is in git
-history at this file's prior revision.
+Previous SIR (1.2.4 → 1.2.5) is in git history at this file's prior
+revision.
 -->
 
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-09
+last_updated: 2026-07-11
 next_step_prompt: true
 ---
 
@@ -65,24 +63,27 @@ implicit spec for what ARDD itself should do next; the skills, scripts, and
 docs *are* the product, and this constitution is the explicit source of
 truth for the principles they follow.
 
-The pack may be *acquired* through more than one channel — cloning this
-repository, `npx skills add` via the vercel-labs skills CLI, or the
-`new.sh` curl-to-sh bootstrap for a brand-new project — but
+The pack may be *acquired* through more than one route — cloning this
+repository, or the `new.sh` curl-to-sh bootstrap (for a brand-new
+project, or an already-populated one in its existing-project mode) — but
 **`install.sh` is the only real install/upgrade entry point** (standing
-decision, 2026-07-09). The skills CLI can only copy or symlink
-`SKILL.md` directories; it cannot run migrations, create the non-skill
-reference directories, record `ardd-version.md`, or maintain
-`.worktreeinclude` — so any acquisition channel that isn't a clone must
-converge onto `install.sh` (the `/ardd-setup` skill exists for exactly
-this), never reimplement any part of it. Documentation recommends the
-CLI's copy mode, not symlink: `install.sh` regenerates
-`.claude/skills/`, which would fight a symlink farm.
+decision, 2026-07-09; the `npx skills add` channel and its `/ardd-setup`
+bridge were removed 2026-07-11). Every route converges *directly* on
+`install.sh`: it alone runs migrations, creates the non-skill reference
+directories, records `ardd-version.md`, and maintains `.worktreeinclude`.
+There is no partial-delivery channel and no bridge skill — a route either
+*is* a clone or *invokes* `install.sh` itself, and never reimplements any
+part of it.
 
 `new.sh` converges by the most direct route available: it resolves a
 source checkout — cloning `~/.ardd/source`, the one checkout it owns, if
 that is absent; a `--source` or `$ARDD_SOURCE` path that doesn't exist is
 a hard error, never a clone target — and then *invokes* `install.sh` from
-it, so it needs no `/ardd-setup`-style bridge and must never grow one. It
+it, so it needs no bridge skill and must never grow one. This bridge-free
+discipline binds both its modes: the brand-new-project path and the
+existing-project path differ only in whether the target directory is
+expected to be empty (new) or already populated (existing) — never in
+whether they reach `install.sh` directly. It
 is **source-side** under Principle IV — fetched and executed outside any
 checkout, never shipped into a target project by `install.sh`. That it runs with no checkout of its own is a novel
 execution shape, not a third install target: the source/target split
@@ -283,4 +284,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.2.5 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-09
+**Version**: 1.3.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-11
