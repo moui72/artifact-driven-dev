@@ -1,7 +1,7 @@
 ---
 plan: plan-primary-stays-on-main-2026-07-11.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-11
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -40,7 +40,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Verify
 
-- [ ] T003 Run the doc/lint gates and confirm green: `scripts/lint-docs.sh`,
+- [x] T003 Run the doc/lint gates and confirm green: `scripts/lint-docs.sh`,
   `scripts/lint-project.sh`, and `scripts/gen-skill-docs.sh --check`. Confirm
   the constitution's version bookkeeping is internally consistent
   (SIR target == footer version == frontmatter `last_updated` alignment — the
