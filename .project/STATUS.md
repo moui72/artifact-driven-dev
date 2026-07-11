@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-10 (post-/ardd-tasks, eager-backgrounding tasks generated on branch). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-10 (post-/ardd-implement, eager-backgrounding complete on branch). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -10,16 +10,18 @@ _Updated: 2026-07-10 (post-/ardd-tasks, eager-backgrounding tasks generated on b
 
 ## Open Questions
 
-None in the artifact. Two plan-scoped sets remain, both non-blocking:
+None in the artifact. One plan-scoped set remains, non-blocking:
 
-- `plan-eager-backgrounding-2026-07-10.md` (approved) — (1) whether folding a
-  feature branch onto `main` at delegation time blurs "default branch =
-  merged truth" (fine at run start; mid-run would put in-progress state on
-  `main` briefly); (2) auto-delete the folded branch?; (3) solo-mode only?;
-  (4) dedicated `fold-to-main.sh` vs inline git commands.
 - `plan-quickstart-new-project-2026-07-09.md` — whether `new.sh` should
   optionally `gh repo create`, and whether it should pin a tag rather than
   track `main`.
+
+(The eager-backgrounding plan's open questions were resolved during
+implementation: fold restricted to the clean case at the gate (tasks still
+`ready`), converge's in-progress fold accepted as bounded; `fold-to-main.sh`
+does not delete the folded branch (caller's choice); solo-mode only; a
+dedicated script, per the `worktree-align` precedent — see decision record
+0004.)
 
 ## Code-vs-Artifact Defects
 
@@ -39,10 +41,12 @@ None open — all feedback files are `status: planned`.
 
 ## In Flight
 
-- Branch `eager-backgrounding` (this checkout): plan
-  `plan-eager-backgrounding-2026-07-10.md` **approved**, tasks file
-  `tasks-eager-backgrounding-98b6.md` **ready** (0/3) — not yet started, not
-  yet merged to `main`.
+- Branch `eager-backgrounding` (this checkout): tasks file
+  `tasks-eager-backgrounding-98b6.md` **completed** (3/3), 7 commits ahead of
+  `main`, awaiting merge. Delivered: `fold-to-main.sh` (+ test, CI, install
+  wiring); `/ardd-implement` & `/ardd-converge` gates now offer backgrounding
+  regardless of `on_default`, folding to `main` first; CLAUDE.md/USAGE/decision
+  record 0004 updated.
 
 (Note: `main` is mutated by a concurrent session; its own STATUS.md may
 describe different in-flight state. At merge, STATUS.md is disposable — the
@@ -50,9 +54,11 @@ owning skill regenerates it.)
 
 ## Recommended Next Step
 
-Run `/ardd-implement` and select `tasks-eager-backgrounding-98b6.md` to
-execute the three tasks (fold-to-main.sh + test → gate rewrite → doc sweep).
-T001 carries the deterministic test; T002/T003 are skill-prose + doc changes.
+Merge `eager-backgrounding` into `main` (7 commits) — the change is complete
+and green under the pre-commit hook. Note it edits the product skills
+`ardd-implement`/`ardd-converge` and adds `fold-to-main.sh`; this repo's own
+installed copies under `.claude/skills/` won't reflect them until the next
+`install.sh`/`/ardd-update`.
 
 `main` also holds unpushed commits; push when ready. The `ANTHROPIC_API_KEY`
 smoke thread is unchanged.
