@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (catalog-consolidation MERGED to main — 21→18 skills; npx-channel-scrap feedback open). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (npx-scrap plan approved, 6 tasks ready on branch `scrap-npx-channel`; catalog consolidation already merged to main). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -32,13 +32,10 @@ against yet; it contradicts no `DEFECTS.md` claim.
 
 ## Feedback
 
-1 open — `feedback-scrap-npx-channel-9c51.md`: scrap the `npx skills add`
-acquisition channel, replace with an existing-project curl bootstrap (sibling
-to `new.sh`), and delete `/ardd-setup` as dead architecture. F002/F004 tagged
-`[artifacts: constitution]` (reverses the three-channels standing decision).
-Keep separate from the in-flight consolidation run. Will be picked up by the
-next `/ardd-plan`. (`feedback-consolidate-setup-skills-8541.md` is now
-`planned`, consumed by `plan-consolidate-setup-skills-2026-07-11.md`.)
+None open — `feedback-scrap-npx-channel-9c51.md` consumed by
+`plan-scrap-npx-channel-2026-07-11.md` (F001–F004 all incorporated);
+`feedback-consolidate-setup-skills-8541.md` consumed by the (merged)
+consolidation plan. All feedback files are `status: planned`.
 
 ## Feature Backlog
 
@@ -46,32 +43,27 @@ next `/ardd-plan`. (`feedback-consolidate-setup-skills-8541.md` is now
 
 ## In Flight
 
-Nothing in flight — no sibling worktrees, no unmerged branches. The
-generic-render work (generic `diagram_type`-driven `/ardd-render`, lint
-schema, standard templates, migration `0005`, docs → mermaid.js.org) merged
-into `main` (`316705d`); its delegated worktree and the `generic-render` /
-`worktree-agent-*` branches were removed.
+- Branch `scrap-npx-channel` (this checkout) — plan
+  `plan-scrap-npx-channel-2026-07-11.md` **approved**, tasks
+  `tasks-scrap-npx-channel-0d1d.md` **ready** (0/6). Scrap the npx acquisition
+  channel: P1 constitution revision (`[artifacts: constitution]`, needs a
+  version bump), P2 existing-project curl bootstrap (test-first `new.sh`
+  mode), P3 delete `/ardd-setup`, P4 docs, P5 verify. Three open questions
+  carried (constitution bump magnitude, mode-vs-sibling, orphaned-npx-user
+  handling). Not yet committed/merged.
 
 ## Recently Landed
 
-- **Catalog consolidation** merged to `main` (`d9d6d76`, tasks file
-  `tasks-consolidate-setup-skills-1c3f.md` completed 10/10, all commits
-  signed). Source skills 21→18: `/ardd-kickoff`→`/ardd-bootstrap`,
-  `/ardd-featurize`→`/ardd-codify`, `/ardd-tasks`→`/ardd-plan` (now 481
-  lines — the T007 length flag was reviewed and accepted). `analyze`/`lint`
-  re-tiered `core`. `install.sh` now prunes removed ardd skill dirs
-  (`test-install-prune.sh` + CI). No constitution version bump (T009: no
-  principle changed). Three plan open questions remain unresolved (curated
-  default install F006b, deprecation stubs, and the accepted-for-now
-  prose-length gate).
-- **Note:** this repo's own dogfooded install (`.claude/skills/ardd-*/`)
-  still carries the removed `ardd-kickoff`/`ardd-featurize`/`ardd-tasks`
-  dirs — re-run `./install.sh .` to sync and exercise the new prune.
+- **Catalog consolidation** merged to `main` (`d9d6d76`): source skills
+  21→18 (`/ardd-kickoff`→`/ardd-bootstrap`, `/ardd-featurize`→`/ardd-codify`,
+  `/ardd-tasks`→`/ardd-plan`), `analyze`/`lint` re-tiered `core`, `install.sh`
+  prunes removed skill dirs. This repo's own install was re-synced
+  (`./install.sh .`, `ardd-version.md` → `d9d6d76`) — the prune was validated
+  live. Three consolidation-plan open questions still unresolved (curated
+  default install F006b, deprecation stubs, the accepted plan-prose length).
 
 ## Recommended Next Step
 
-`/ardd-plan feedback-scrap-npx-channel-9c51.md` to draft the npx-channel
-replacement (scrap npx → existing-project curl bootstrap → delete
-`/ardd-setup`; touches `constitution.md`). Optionally first `./install.sh .`
-to sync this repo's own install and validate the prune. `main` holds
-unpushed commits — push when ready.
+`/ardd-implement` to execute `tasks-scrap-npx-channel-0d1d.md` (start Phase 1,
+the constitution revision — note T001 wants `/ardd-refine constitution` for
+correct versioning). `main` holds unpushed commits — push when ready.
