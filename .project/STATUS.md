@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (post-/ardd-feedback, generic-configurable-render note captured on main). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (post-/ardd-verify, sixth pass — recent merges clean; render-genericity feedback still open). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -25,9 +25,11 @@ dedicated script, per the `worktree-align` precedent — see decision record
 
 ## Code-vs-Artifact Defects
 
-1 defect — see `DEFECTS.md`, last checked 2026-07-09 (fifth pass). Unchanged:
+1 defect — see `DEFECTS.md`, last checked 2026-07-11 (sixth pass). Unchanged:
 the behavioral-smoke-tier residue (`970d935b`); no scenario has ever executed
-because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced.
+because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced. The sixth
+pass also confirmed the render, principle-agnostic-skills, and
+eager-backgrounding merges introduced no new drift.
 
 ## Feedback
 
