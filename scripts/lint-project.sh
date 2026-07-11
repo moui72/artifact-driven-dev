@@ -52,7 +52,6 @@ report() {
 # --- Schema of record -------------------------------------------------
 ARTIFACT_STATUS_ENUM="draft stable"
 DIAGRAM_STATUS_ENUM="unrendered stale current"
-RENDERABLE_ARTIFACTS="datamodel infrastructure ui"
 PLAN_STATUS_ENUM="draft approved superseded"
 TASKS_STATUS_ENUM="generating ready in-progress completed abandoned"
 FEEDBACK_STATUS_ENUM="open planned"
@@ -162,23 +161,29 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       fi
     fi
 
-    if in_enum "$name" $RENDERABLE_ARTIFACTS; then
-      if ! frontmatter_has "$f" diagram_status; then
-        report "$f: missing required frontmatter field 'diagram_status'"
-      else
-        val="$(frontmatter_field "$f" diagram_status)"
-        if ! in_enum "$val" $DIAGRAM_STATUS_ENUM; then
-          report "$f: diagram_status '$val' not in {$DIAGRAM_STATUS_ENUM}"
-        fi
+    # An artifact is renderable when it declares diagram_type (the literal
+    # Mermaid diagram-type declaration — /ardd-render). Renderability is a
+    # property, not a fixed name-list: there is no RENDERABLE_ARTIFACTS set and
+    # no enum of diagram types (an invalid type surfaces at render, not here).
+    # diagram_status is required once diagram_type is present, and enum-checked
+    # whenever present.
+    if frontmatter_has "$f" diagram_type && ! frontmatter_has "$f" diagram_status; then
+      report "$f: missing required frontmatter field 'diagram_status' (required when diagram_type is present)"
+    fi
+    if frontmatter_has "$f" diagram_status; then
+      val="$(frontmatter_field "$f" diagram_status)"
+      if ! in_enum "$val" $DIAGRAM_STATUS_ENUM; then
+        report "$f: diagram_status '$val' not in {$DIAGRAM_STATUS_ENUM}"
       fi
     fi
 
-    # render_target / render_section are optional per-artifact overrides for
-    # /ardd-render's upsert destination (file + section). Both are free-form
+    # diagram_type / render_hint / render_target / render_section are the
+    # optional per-artifact render fields for /ardd-render. All are free-form
     # strings, so there's no enum to check — only that a present field isn't
-    # empty (an empty value would silently fall back to the default, masking
-    # a typo). Validated on any artifact that carries them.
-    for rfield in render_target render_section; do
+    # empty (an empty value would silently fall back to a default or make a
+    # non-renderable artifact look renderable, masking a typo). Validated on
+    # any artifact that carries them.
+    for rfield in diagram_type render_hint render_target render_section; do
       if frontmatter_has "$f" "$rfield"; then
         val="$(frontmatter_field "$f" "$rfield")"
         if [ -z "$val" ]; then

@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=30
+EXPECTED_BAD_FINDINGS=32
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -84,6 +84,23 @@ else
     echo "ok: empty render_section reported"
   else
     echo "FAIL: empty render_section reported"
+    fail=1
+  fi
+  # renderability is a property (declares diagram_type), not a fixed name-list.
+  # An empty diagram_type is a non-empty-when-present violation, like the other
+  # optional render fields; bad-project's datamodel.md has it empty.
+  if grep -q "diagram_type is present but empty" /tmp/lint-bad.out; then
+    echo "ok: empty diagram_type reported"
+  else
+    echo "FAIL: empty diagram_type reported"
+    fail=1
+  fi
+  # diagram_status is required once diagram_type is present. bad-project's
+  # infrastructure.md declares diagram_type but no diagram_status.
+  if grep -q "required when diagram_type is present" /tmp/lint-bad.out; then
+    echo "ok: missing diagram_status (with diagram_type) reported"
+  else
+    echo "FAIL: missing diagram_status (with diagram_type) reported"
     fail=1
   fi
   # bracket-tag checks are scoped to checklist item lines: a tag mentioned

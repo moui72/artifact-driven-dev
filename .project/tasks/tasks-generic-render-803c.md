@@ -30,7 +30,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Lint schema
 
-- [ ] T002 [parallel] Extend `scripts/lint-project.sh` for the generic model:
+- [x] T002 [parallel] Extend `scripts/lint-project.sh` for the generic model:
   validate `diagram_type` and `render_hint` as non-empty when present
   (mirroring the `render_target`/`render_section` checks); require
   `diagram_status` when `diagram_type` is present; remove the
