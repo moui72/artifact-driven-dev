@@ -1,12 +1,12 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (npx-scrap MERGED to main — constitution v1.3.0, npx channel + /ardd-setup removed, new.sh --existing added). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (primary-stays-on-main invariant MERGED — constitution v1.4.0; worked in a worktree, primary never left main). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.3.0) | — |
+| constitution.md | stable ✅ (v1.4.0) | — |
 
 ## Open Questions
 
@@ -32,38 +32,33 @@ against yet; it contradicts no `DEFECTS.md` claim.
 
 ## Feedback
 
-None open — `feedback-scrap-npx-channel-9c51.md` consumed by
-`plan-scrap-npx-channel-2026-07-11.md` (F001–F004 all incorporated);
-`feedback-consolidate-setup-skills-8541.md` consumed by the (merged)
-consolidation plan. All feedback files are `status: planned`.
+None open — `feedback-primary-worktree-stays-on-main-4985.md` consumed by
+`plan-primary-stays-on-main-2026-07-11.md`; `feedback-scrap-npx-channel-9c51.md`
+and `feedback-consolidate-setup-skills-8541.md` consumed by their (merged)
+plans. All feedback files are `status: planned`.
 
 ## Feature Backlog
 
 0 backlogged · 0 planned · 0 tasked · 7 implemented — see `.project/features/`.
 
-## Recently Landed
+## Recently Landed (2026-07-11 session)
 
-- **npx-channel scrap** merged to `main` (`dc70e63`, tasks
-  `tasks-scrap-npx-channel-0d1d.md` completed 6/6, all commits signed):
-  constitution → **v1.3.0** (npx channel + `/ardd-setup` bridge removed from
-  the acquisition standing decision, MINOR bump w/ SIR); `new.sh` gained an
-  **`--existing`** mode (test-first, cases 15–18) that installs into a
-  populated project and routes the handoff to `/ardd-codify`; `skills/ardd-setup/`
-  deleted; docs (README/USAGE/CLAUDE/WORKFLOW) reconciled to two routes with
-  an orphaned-npx recovery note. Full local CI green (30 checks).
-- **Catalog consolidation** merged earlier (`d9d6d76`): source skills 21→18,
+- **Primary-stays-on-main invariant** merged (`7338a6b`, constitution
+  **v1.4.0**): this repo is the local source consumers install/update from,
+  so its primary/default worktree never leaves `main`; feature work lives in
+  separate worktrees. First exercised on its own implementation — worked in a
+  worktree, primary never left `main`. Also fixes the root cause of the
+  ref-lock anomaly below (a consumer's `ardd-update` found this source off
+  `main` and forced it back mid-commit).
+- **npx-channel scrap** merged (`dc70e63`, v1.3.0): npx channel + `/ardd-setup`
+  removed; `new.sh --existing` mode added (test-first); docs reconciled to two
+  install routes. This repo's own install was re-synced (`ardd-setup` pruned).
+- **Catalog consolidation** merged (`d9d6d76`): source skills 21→18,
   `analyze`/`lint` re-tiered `core`, `install.sh` prunes removed skill dirs.
-- **Note:** this repo's own dogfooded install still carries a stale
-  `.claude/skills/ardd-setup/` — re-run `./install.sh .` to prune it.
-- **Anomaly (resolved, worth watching):** during the T005 commit an external
-  `ardd-update` process stashed the branch WIP and checked out `main`
-  mid-commit (ref-lock failure). Work was recovered from the stash and
-  re-committed; nothing lost. If it recurs, an external/scheduled ardd-update
-  is contending for the working tree.
 
 ## Recommended Next Step
 
-Push `main` when ready (it holds unpushed commits). Optionally `./install.sh .`
-to prune the stale `ardd-setup` from this repo's own install. Two feature-idea
-threads remain from the consolidation plan's open questions (curated default
+Push `main` when ready (it holds this session's unpushed commits). Going
+forward, all feature work in this repo uses a worktree (constitution v1.4.0).
+Optional idea threads still open from the consolidation plan (curated default
 install F006b; plan/tasks prose length) if you want to pursue them.
