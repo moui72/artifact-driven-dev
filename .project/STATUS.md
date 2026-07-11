@@ -1,12 +1,12 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (npx-scrap plan approved, 6 tasks ready on branch `scrap-npx-channel`; catalog consolidation already merged to main). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (npx-scrap MERGED to main — constitution v1.3.0, npx channel + /ardd-setup removed, new.sh --existing added). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.2.5) | — |
+| constitution.md | stable ✅ (v1.3.0) | — |
 
 ## Open Questions
 
@@ -41,29 +41,29 @@ consolidation plan. All feedback files are `status: planned`.
 
 0 backlogged · 0 planned · 0 tasked · 7 implemented — see `.project/features/`.
 
-## In Flight
-
-- Branch `scrap-npx-channel` (this checkout) — plan
-  `plan-scrap-npx-channel-2026-07-11.md` **approved**, tasks
-  `tasks-scrap-npx-channel-0d1d.md` **ready** (0/6). Scrap the npx acquisition
-  channel: P1 constitution revision (`[artifacts: constitution]`, needs a
-  version bump), P2 existing-project curl bootstrap (test-first `new.sh`
-  mode), P3 delete `/ardd-setup`, P4 docs, P5 verify. Three open questions
-  carried (constitution bump magnitude, mode-vs-sibling, orphaned-npx-user
-  handling). Not yet committed/merged.
-
 ## Recently Landed
 
-- **Catalog consolidation** merged to `main` (`d9d6d76`): source skills
-  21→18 (`/ardd-kickoff`→`/ardd-bootstrap`, `/ardd-featurize`→`/ardd-codify`,
-  `/ardd-tasks`→`/ardd-plan`), `analyze`/`lint` re-tiered `core`, `install.sh`
-  prunes removed skill dirs. This repo's own install was re-synced
-  (`./install.sh .`, `ardd-version.md` → `d9d6d76`) — the prune was validated
-  live. Three consolidation-plan open questions still unresolved (curated
-  default install F006b, deprecation stubs, the accepted plan-prose length).
+- **npx-channel scrap** merged to `main` (`dc70e63`, tasks
+  `tasks-scrap-npx-channel-0d1d.md` completed 6/6, all commits signed):
+  constitution → **v1.3.0** (npx channel + `/ardd-setup` bridge removed from
+  the acquisition standing decision, MINOR bump w/ SIR); `new.sh` gained an
+  **`--existing`** mode (test-first, cases 15–18) that installs into a
+  populated project and routes the handoff to `/ardd-codify`; `skills/ardd-setup/`
+  deleted; docs (README/USAGE/CLAUDE/WORKFLOW) reconciled to two routes with
+  an orphaned-npx recovery note. Full local CI green (30 checks).
+- **Catalog consolidation** merged earlier (`d9d6d76`): source skills 21→18,
+  `analyze`/`lint` re-tiered `core`, `install.sh` prunes removed skill dirs.
+- **Note:** this repo's own dogfooded install still carries a stale
+  `.claude/skills/ardd-setup/` — re-run `./install.sh .` to prune it.
+- **Anomaly (resolved, worth watching):** during the T005 commit an external
+  `ardd-update` process stashed the branch WIP and checked out `main`
+  mid-commit (ref-lock failure). Work was recovered from the stash and
+  re-committed; nothing lost. If it recurs, an external/scheduled ardd-update
+  is contending for the working tree.
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-scrap-npx-channel-0d1d.md` (start Phase 1,
-the constitution revision — note T001 wants `/ardd-refine constitution` for
-correct versioning). `main` holds unpushed commits — push when ready.
+Push `main` when ready (it holds unpushed commits). Optionally `./install.sh .`
+to prune the stale `ardd-setup` from this repo's own install. Two feature-idea
+threads remain from the consolidation plan's open questions (curated default
+install F006b; plan/tasks prose length) if you want to pursue them.
