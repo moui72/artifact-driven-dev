@@ -67,16 +67,16 @@ set -e
 [ "$rc" -ne 0 ] && ok "--check fails on drift" || bad "--check fails on drift"
 
 # --- workflow ordering: in the real repo's generated WORKFLOW.md, the
-# core loop must read in execution order (plan before implement, tasks
-# between them) — not glob/alphabetical order ---
+# core loop must read in execution order (plan before implement) — not
+# glob/alphabetical order. (Tasking folded into /ardd-plan, so there's no
+# longer a /ardd-tasks row between them.) ---
 WF="$REPO/templates/WORKFLOW.md"
 lp="$(grep -n '| `/ardd-plan`' "$WF" | cut -d: -f1 | head -1)"
-lt="$(grep -n '| `/ardd-tasks`' "$WF" | cut -d: -f1 | head -1)"
 li="$(grep -n '| `/ardd-implement`' "$WF" | cut -d: -f1 | head -1)"
-if [ -n "$lp" ] && [ -n "$lt" ] && [ -n "$li" ] && [ "$lp" -lt "$lt" ] && [ "$lt" -lt "$li" ]; then
-  ok "workflow order: plan < tasks < implement"
+if [ -n "$lp" ] && [ -n "$li" ] && [ "$lp" -lt "$li" ]; then
+  ok "workflow order: plan < implement"
 else
-  bad "workflow order: plan < tasks < implement (lines: plan=$lp tasks=$lt implement=$li)"
+  bad "workflow order: plan < implement (lines: plan=$lp implement=$li)"
 fi
 
 # --- real repo must currently be in sync (or the commit adding this is wrong) ---

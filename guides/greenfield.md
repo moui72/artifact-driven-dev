@@ -154,16 +154,12 @@ Once artifacts are stable:
 /ardd-plan
 ```
 
-Review the phased plan Claude drafts (it's saved as `status: draft` —
-selecting it in the next step is what approves it). Then:
-
-```
-/ardd-tasks
-```
-
-This asks which approved plan to generate tasks for, then produces
-`.project/tasks/tasks-<slug>-<hex>.md` — an ordered checklist you can review
-and adjust before execution. Then:
+Claude drafts the phased plan, saves it as `status: draft`, and pauses at an
+**approve / revise / stop checkpoint**. Approve it and `/ardd-plan` continues
+in the same run to produce `.project/tasks/tasks-<slug>-<hex>.md` — an ordered
+checklist you can review and adjust before execution. (To task an
+already-written plan without re-drafting it, run `/ardd-plan --from <plan>`.)
+Then:
 
 ```
 /ardd-implement
@@ -218,7 +214,7 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 ```
 Session 1: /ardd-bootstrap (step 0 interviews you, or lead the design yourself) → /ardd-refine × 3
 Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
-Session 3: /ardd-plan → /ardd-tasks → /ardd-implement
+Session 3: /ardd-plan (checkpoint → tasks) → /ardd-implement
 Session N: /ardd-converge → /ardd-implement (resume)
 ```
 

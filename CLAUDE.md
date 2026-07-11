@@ -19,7 +19,7 @@ internal notes — keep them in sync with the skills themselves.
 
 ```sh
 ./install.sh /path/to/target/project   # install/upgrade skills into a project
-./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-kickoff
+./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-bootstrap
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
@@ -152,7 +152,9 @@ this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/critique.md` — written only by `/ardd-critique`
 - `.project/features/*.md` `status` field — mutated only via
   `ardd-state.sh feature-*` subcommands, invoked by `/ardd-feature`,
-  `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`, `/ardd-converge`,
+  `/ardd-plan` (both the `backlogged→planned` approval flip and the
+  `planned→tasked` flip, now that tasking is folded in), `/ardd-implement`,
+  `/ardd-converge`,
   `/ardd-sync` (pull imports new `backlogged` entries), and
   `/ardd-analyze` (one narrow exception: the `tasked→implemented` flip,
   on user confirmation, for an orphaned completion flip its
@@ -202,8 +204,7 @@ current project; it never writes, only reports.
 duplicated prose.** `scripts/branch-info.sh` (installed to
 `.claude/skills/ardd-scripts/`) computes `current`/`default`/`on_default`;
 `ardd-plan`, `ardd-implement`, and `ardd-converge` all shell out to it
-instead of re-deriving the current/default-branch fallback chain
-(`ardd-tasks` deliberately doesn't — see below). What's still duplicated
+instead of re-deriving the current/default-branch fallback chain. What's still duplicated
 across those three, deliberately, is the *interactive* half — suggesting a
 semantic name, asking the user, deciding what to do with the answer —
 because that requires judgment a script doesn't have; skills can't call
@@ -304,33 +305,34 @@ hand-built one was tried and removed (Principle VIII; decision record
 **A second constitution frontmatter workflow field, `next_step_prompt:
 true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
 asked once by `/ardd-bootstrap`, and once by `/ardd-update` for installs
-whose constitution lacks the field). When `true`, exactly three skills —
-`/ardd-analyze`, `/ardd-plan`, `/ardd-tasks` — end by offering their
+whose constitution lacks the field). When `true`, exactly two skills —
+`/ardd-analyze` and `/ardd-plan` — end by offering their
 recommended next step via AskUserQuestion, and only when that
-recommendation is a concrete runnable `/ardd-*` invocation; plan and
-tasks normally hand off to analyze, which then owns the single prompt of
-the turn (one prompt per user-visible turn end — the prose in all three
+recommendation is a concrete runnable `/ardd-*` invocation; plan
+normally hands off to analyze, which then owns the single prompt of
+the turn (one prompt per user-visible turn end — the prose in both
 skills states this). Set the field via `ardd-state.sh stamp <file>
 next_step_prompt <true|false>`, never by hand-editing. Like
 `workflow_mode`, it's a workflow field, not constitution content: no Sync
 Impact Report entry and no constitution version bump applies. Don't widen
-the three-skill scope casually — every other skill's terminal analyze
+the two-skill scope casually — every other skill's terminal analyze
 handoff already funnels into `/ardd-analyze`'s prompt.
 
-`ardd-plan` and `ardd-tasks` are both exceptions, for related but distinct
-reasons. `ardd-tasks` has no branch-gate step at all — its own actions
-(plan approval, register status flips) are quick state updates with no
-long-running work to isolate. `ardd-plan` *does* have a branch-gate step (a
-plain one, offering only a regular branch, never a worktree) — it
-deliberately never delegates, even though drafting a plan for a targeted
-feature can run just as long as implementing one: the draft plan file it
-produces (`.project/plans/plan-*.md`) is itself the artifact `ardd-tasks`
-needs to see. Delegating it to a worktree would trap that file there until
-a manual merge, severing the plan→tasks handoff (`ardd-tasks` globs
-`.project/plans/` on whatever branch it's invoked from, not across
-worktrees). Tried the other way once and reverted — decision record 0001
-has the story if the "make plan consistent with implement/converge"
-temptation recurs.
+`ardd-plan` is the branch-gate exception. It *does* have a branch-gate step
+(a plain one, offering only a regular branch, never a worktree) — but it
+deliberately never delegates, even though it now spans both drafting a plan
+(which can run long for a targeted feature) *and* generating that plan's
+tasks file (the old `/ardd-tasks`, folded in at an approval checkpoint). The
+reason is unchanged by the merge: the plan and tasks files it writes
+(`.project/plans/plan-*.md`, `.project/tasks/tasks-*.md`) are themselves the
+state the next steps (`/ardd-implement`) need to see. Delegating to a worktree
+would trap those files there until a manual merge, severing the handoff.
+`ardd-plan`'s tasking half also has no branch-gate of its own (the single
+step 1 gate covers the whole run) — its plan-approval and register flips are
+quick state updates the workflow wants on the default branch promptly, with
+no separate long-running work to isolate. Tried the delegating-plan variant
+once and reverted — decision record 0001 has the story if the "make plan
+consistent with implement/converge" temptation recurs.
 
 `isolation: "worktree"` creates and names its own worktree/branch — there
 is no parameter to point it at a pre-made one, and the branch name is only

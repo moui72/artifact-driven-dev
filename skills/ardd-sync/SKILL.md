@@ -16,7 +16,7 @@ Usage: `/ardd-sync` runs both phases (push then pull). `/ardd-sync push` or
 `/ardd-sync pull` runs one.
 
 The register owns name, slug, and description — design intent, set by
-`/ardd-feature`, `/ardd-plan`, `/ardd-tasks`, `/ardd-implement`. The tracker
+`/ardd-feature`, `/ardd-plan`, `/ardd-implement`. The tracker
 owns issue state, labels, and discussion — execution visibility. Each field
 syncs in one fixed direction; `/ardd-sync` never overwrites a tracker's
 title/body after creation, and never overwrites a register entry's
@@ -173,7 +173,7 @@ eventually carry links into more than one tracker.
    write-back into the register is importing new entries (step 1). A
    tracker-side status change is always reported, never applied — `Status`
    transitions belong to the ARDD lifecycle skills
-   (`/ardd-plan`/`/ardd-tasks`/`/ardd-implement`), not to this skill. The
+   (`/ardd-plan`/`/ardd-implement`), not to this skill. The
    user reconciles manually or via `/ardd-feedback`.
 
 3. **Report a summary:** issues created, labels updated, issues closed,

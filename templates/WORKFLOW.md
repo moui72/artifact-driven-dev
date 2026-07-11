@@ -14,8 +14,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | `/ardd-feature` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet. |
 | `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume. |
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning. |
-| `/ardd-plan` | Draft a phased implementation plan from artifacts, feedback, and optionally backlogged features; feedback-file arguments scope which feedback is consumed. |
-| `/ardd-tasks` | Generate an ordered task list from a plan; selecting a draft plan approves it. |
+| `/ardd-plan` | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |
 | `/ardd-implement` | Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge. |
 | `/ardd-analyze` | Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills. |
 | `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |

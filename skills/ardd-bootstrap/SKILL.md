@@ -166,7 +166,7 @@ context, so no interview is needed.)
    **Set `next_step_prompt` in the constitution's frontmatter.** Alongside
    the `workflow_mode` question, ask once: "Should skills end by offering
    their recommended next step as a one-keypress prompt?" (`true` = at the
-   end of `/ardd-analyze`, `/ardd-plan`, and `/ardd-tasks`, a concrete
+   end of `/ardd-analyze` and `/ardd-plan`, a concrete
    runnable `/ardd-*` recommendation is offered via AskUserQuestion —
    yes runs it, no/Esc stops; `false`/absent = recommendations stay plain
    text). Write the answer via

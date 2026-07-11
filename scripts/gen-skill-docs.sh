@@ -28,7 +28,7 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
 ORDER_setup="ardd-setup ardd-bootstrap ardd-codify"
-ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-tasks ardd-implement ardd-analyze ardd-lint"
+ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-implement ardd-analyze ardd-lint"
 ORDER_extension="ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-update ardd-add-artifact"
 
 row_for() { # row_for <skill-name>
@@ -104,8 +104,8 @@ rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
 mode once at setup and suggests one from what it detects.
 
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
-`constitution.md`'s frontmatter, `/ardd-analyze`, `/ardd-plan`, and
-`/ardd-tasks` end by offering their recommended next step as a
+`constitution.md`'s frontmatter, `/ardd-analyze` and `/ardd-plan` end by
+offering their recommended next step as a
 one-keypress prompt (yes runs it; no/Esc stops) — only when that
 recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
 absent field keeps recommendations as plain text, so delegated and

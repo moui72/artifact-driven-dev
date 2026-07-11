@@ -86,7 +86,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   advertised surface" (not the status quo) — surface this to the user before
   committing to the monolithic form.
 
-- [ ] T008 Propagate the tasks→plan ripple. Update: the `next_step_prompt`
+- [x] T008 Propagate the tasks→plan ripple. Update: the `next_step_prompt`
   three-skill set to {plan, analyze} everywhere it is enumerated — skill prose
   in `/ardd-analyze` and `/ardd-plan`, and `CLAUDE.md`'s extended
   `next_step_prompt` discussion; rewrite every terminal handoff or prose

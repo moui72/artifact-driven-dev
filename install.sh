@@ -116,7 +116,7 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   by ardd-sync's Push/Pull steps for the three pure decisions it makes
 #   from gh-provided state (dedup match, label-swap action, divergence
 #   detection) — extracted so they're testable without mocking gh itself.
-# project-lock.sh: invoked by ardd-plan/ardd-tasks/ardd-implement/
+# project-lock.sh: invoked by ardd-plan/ardd-implement/
 #   ardd-converge around their multi-file bookkeeping writes — a warn-only
 #   marker for two sessions/agents racing on the same .project/, not real
 #   locking; a `check` never blocks a run, only surfaces a warning.

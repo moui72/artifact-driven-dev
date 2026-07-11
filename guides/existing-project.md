@@ -130,8 +130,7 @@ Once artifacts are stable, you have two options:
 If you're adding significant new functionality:
 
 ```
-/ardd-plan
-/ardd-tasks
+/ardd-plan       # drafts, checkpoints, and (on approval) tasks
 /ardd-implement
 ```
 
@@ -171,7 +170,7 @@ capturing feedback, planning batches. See [continuing.md](continuing.md).
 ```
 Session 1: /ardd-codify (offers feature-register extraction) → read artifacts → /ardd-refine × N
 Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
-Session 3 (optional): /ardd-plan → /ardd-tasks → /ardd-implement
+Session 3 (optional): /ardd-plan (checkpoint → tasks) → /ardd-implement
 Session N: /ardd-feature <description> (log to backlog, anytime)
-Session N+k: /ardd-plan <slug> (design + apply + plan, whenever you pick it up) → /ardd-analyze → /ardd-tasks → /ardd-implement
+Session N+k: /ardd-plan <slug> (design + apply + plan + tasks, whenever you pick it up) → /ardd-analyze → /ardd-implement
 ```

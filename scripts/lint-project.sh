@@ -8,12 +8,12 @@
 #   - cross-file pointers resolve: a tasks file's `plan:` names an existing
 #     plan file; a plan's `features:` slugs exist in features.md; a
 #     features.md entry's `Plan:`/`Tasks:` metadata fields name existing files
-#   - a tasks file stuck at `status: generating` (a crashed /ardd-tasks run)
+#   - a tasks file stuck at `status: generating` (a crashed /ardd-plan tasking run)
 #     is flagged rather than silently accepted as a valid enum value
 #   - an approved/superseded plan whose `features:` slugs are still
 #     `backlogged` in features.md — the fingerprint an approval sequence
 #     interrupted between the plan-status flip and the feature-status flip
-#     would leave (see /ardd-tasks step 2)
+#     would leave (see /ardd-plan step 11)
 #   - the same feature slug listed in the `features:` of two non-superseded
 #     (draft/approved) plans — the file-based fingerprint of two live plans
 #     independently targeting the same feature (see /ardd-plan step 7)
@@ -317,7 +317,7 @@ if [ -d "$PROJECT_DIR/plans" ]; then
               # --- an approved/superseded plan's feature must have moved past backlogged ---
               feature_status="$(feature_status_of "$slug")"
               if [ "$feature_status" = "backlogged" ]; then
-                echo "$f: plan is '$plan_status' but features slug '$slug' is still 'backlogged' in the register — a bookkeeping sequence was likely interrupted (see /ardd-tasks step 2)"
+                echo "$f: plan is '$plan_status' but features slug '$slug' is still 'backlogged' in the register — a bookkeeping sequence was likely interrupted (see /ardd-plan step 11)"
                 echo 1 > "$TARGET/.lint-project-failed"
               fi
             fi
@@ -362,7 +362,7 @@ if [ -d "$PROJECT_DIR/tasks" ]; then
             report "$f: status '$val' not in {$TASKS_STATUS_ENUM}" ;;
         esac
       elif [ "$val" = "generating" ]; then
-        report "$f: status is 'generating' — a previous /ardd-tasks run likely crashed mid-generation; regenerate or fix manually"
+        report "$f: status is 'generating' — a previous /ardd-plan tasking run likely crashed mid-generation; regenerate or fix manually"
       fi
     fi
 

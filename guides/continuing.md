@@ -60,12 +60,16 @@ run consumes them all into one plan; a scoped run leaves the others
 untouched for a later plan. Unsurfaced `DEFECTS.md` entries (from
 `/ardd-verify`) are offered once per defect here too.
 
-## Tasks, implement, merge
+## Approve, task, implement, merge
 
 ```
-/ardd-tasks        # selecting the draft plan approves it
+/ardd-plan         # ...pauses at the approve/revise/stop checkpoint; approving generates the tasks file
 /ardd-implement    # executes; offers worktree delegation from the default branch
 ```
+
+Approving the plan at `/ardd-plan`'s checkpoint is what generates the tasks
+file — there's no separate tasks step. `/ardd-plan --from <plan>`
+re-tasks an already-approved plan.
 
 All run state — checkboxes, status flips, the feature register's
 `tasked → implemented` flip — rides the work branch and lands on merge,
@@ -103,8 +107,8 @@ continues. Reach for it after a crashed run, a manual detour, or any
 ```
 Mon: /ardd-feature (two ideas logged during standup)
 Tue: /ardd-feedback (bug noticed while demoing)
-Wed: /ardd-plan feedback-demo-bug-1a2b.md → /ardd-tasks → /ardd-implement → merge
-Fri: /ardd-plan search-filters → /ardd-tasks → /ardd-implement (delegated) → merge
+Wed: /ardd-plan feedback-demo-bug-1a2b.md (checkpoint → tasks) → /ardd-implement → merge
+Fri: /ardd-plan search-filters (checkpoint → tasks) → /ardd-implement (delegated) → merge
 ```
 
 `STATUS.md` is the re-entry point after any gap — it always names the

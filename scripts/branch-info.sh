@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Deterministic half of the "check branch" step duplicated (by design, per
-# CLAUDE.md) across ardd-plan, ardd-implement, and ardd-tasks: which branch
+# CLAUDE.md) across ardd-plan, ardd-implement, and ardd-converge: which branch
 # are we on, and what's the repo's default branch. The interactive half
 # (suggesting a semantic name, asking the user, creating the branch) stays
 # in each skill's prose — it requires judgment this script doesn't have.

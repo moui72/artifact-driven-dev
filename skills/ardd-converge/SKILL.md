@@ -16,7 +16,8 @@ when resuming work in a new session.
    `.claude/skills/ardd-scripts/tasks-list.sh` — it lists every
    non-abandoned `.project/tasks/tasks-*.md` with status, checkbox
    progress (`x/y`), and plan binding. If it prints nothing, tell the
-   user to run `/ardd-tasks` first. Present the list and ask the user
+   user to run `/ardd-plan` first (it generates the tasks file after its
+   approval checkpoint). Present the list and ask the user
    which to reconcile. If only one exists, still confirm rather than
    auto-selecting.
 

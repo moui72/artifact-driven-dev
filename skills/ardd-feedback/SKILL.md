@@ -85,7 +85,7 @@ notes in the next message.
 loads them as planning input alongside artifacts. Items tagged with an
 artifact produce artifact-revision tasks (tagged
 `[artifacts: name]`, same convention as any other plan task — no separate
-mechanism in `/ardd-tasks` or `/ardd-implement`); untagged items produce
+mechanism in `/ardd-plan`'s tasking half or `/ardd-implement`); untagged items produce
 ordinary code-change tasks.
 
 Each item's checkbox uses the same 3-state resolution convention as

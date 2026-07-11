@@ -7,7 +7,7 @@
 # Files at status: abandoned are excluded unless --all is given (they're
 # superseded forks with nothing to execute against). Replaces the
 # pick-list prose previously duplicated across /ardd-implement,
-# /ardd-converge, and /ardd-tasks step 1 (constitution Principle II).
+# /ardd-converge, and /ardd-plan step 11 (constitution Principle II).
 #
 # Usage: tasks-list.sh [--all] [target-dir]     (default: .)
 

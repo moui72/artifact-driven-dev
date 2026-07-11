@@ -82,7 +82,7 @@ asks once whether the project runs `solo` or `collaborative`
 (`workflow_mode`, which gates branch/delegation behavior later), and once
 whether skills should end by offering their recommended next step as a
 one-keypress prompt (`next_step_prompt: true|false` — absent means
-`false`; with `true`, `/ardd-analyze`, `/ardd-plan`, and `/ardd-tasks`
+`false`; with `true`, `/ardd-analyze` and `/ardd-plan`
 offer a concrete runnable `/ardd-*` recommendation via a yes/no prompt
 instead of plain text). Existing installs whose constitution lacks the
 field get asked the same question once by `/ardd-update`; neither answer
@@ -184,7 +184,7 @@ Bugs, UX friction, reconsidered decisions — each becomes a tracked item
 Reconsidered items tagged with an artifact get an explicit
 confirm-the-reversal prompt at planning time.
 
-### 3. Generate a plan
+### 3. Plan and generate tasks
 
 When you're ready to work a batch:
 
@@ -193,9 +193,11 @@ When you're ready to work a batch:
 ```
 
 Claude reads all stable artifacts and open feedback, drafts a phased
-implementation plan, and presents it for your review. The plan is saved to
-disk immediately as `status: draft` — there's no separate approval step
-here. Running `/ardd-tasks` and selecting it is what approves it.
+implementation plan, writes it to disk as `status: draft`, and then **pauses
+at an explicit approve / revise / stop checkpoint**. Approving is what flips
+the plan to `approved` and continues — in the same run — into generating its
+task list (see below). Revising loops back to redraft; stopping leaves the
+plan as a durable `draft` you can task later with `/ardd-plan --from <plan>`.
 
 Passing a feedback filename (`/ardd-plan feedback-<slug>-<hex>.md`) scopes
 the run to that feedback file — other open feedback files are left
@@ -205,9 +207,9 @@ separate plans cleanly.
 Passing one or more backlogged feature slugs (`/ardd-plan <slug> ...`) does
 real artifact-design work first, which can run long, but `/ardd-plan` never
 delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the
-draft plan it produces is itself the state `/ardd-tasks` needs to see, so
-isolating it in a worktree would just trap it there until a manual merge.
-It still offers a plain branch, same as before.
+plan and tasks file it produces are themselves the state the next steps need
+to see, so isolating them in a worktree would just trap them there until a
+manual merge. It still offers a plain branch, same as before.
 
 Passing `defect:<id>` (one or more, using the 8-char identifiers
 `/ardd-verify` records in `DEFECTS.md`) or the literal `defects` scopes
@@ -217,34 +219,26 @@ previously-declined defect gets pulled back into a plan. The `defect:`
 prefix is what distinguishes these from feature slugs and feedback
 filenames in the same argument list.
 
----
-
-### 4. Generate tasks
-
-```
-/ardd-tasks
-```
-
-Always runs on whatever branch or worktree you invoke it from — no
-worktree gate of its own, since approving the plan and flipping the
-feature-backlog Status are quick state updates with no long-running work
-to isolate. This
-asks which plan to generate tasks for (draft or already-approved), and
-selecting a draft one approves it as part of this step — flips it to
-`approved` and flips its targeted backlog features from `backlogged` to
-`planned`. It then produces `.project/tasks/tasks-<slug>-<hex>.md` — an
-ordered checklist where each task declares which artifacts it needs:
+On approval, `/ardd-plan` continues straight into task generation — there is
+no separate tasks command. It produces
+`.project/tasks/tasks-<slug>-<hex>.md`, an ordered checklist where each task
+declares which artifacts it needs:
 
 ```markdown
 - [ ] T001 [artifacts: datamodel] Create Patient table migration
 - [ ] T002 [artifacts: datamodel, infrastructure] [parallel] Implement MedChart adapter
 ```
 
-Review the task list and adjust before running `/ardd-implement`.
+Approving the plan also flips its targeted backlog features from
+`backlogged` to `planned` to `tasked`. To regenerate a fresh tasks file for
+an already-written plan without re-drafting it — for instance after
+abandoning a stale one — run `/ardd-plan --from <plan-file>`, which skips the
+planning half and re-enters at task generation. Review the task list and
+adjust before running `/ardd-implement`.
 
 ---
 
-### 5. Implement
+### 4. Implement
 
 ```
 /ardd-implement
@@ -284,7 +278,7 @@ branch).
 
 ---
 
-### 6. Resume after interruption
+### 5. Resume after interruption
 
 If `/ardd-implement` is interrupted — or you pick the project up in a new session:
 
