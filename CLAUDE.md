@@ -49,6 +49,26 @@ deterministic check, add both a CI job and a fixture-based regression test in
 the same commit (see `tests/fixtures/`) — don't ship a lint script whose own
 correctness is unverified.
 
+## Working in this repo: the primary checkout stays on `main`
+
+This repo is the local *source* other projects install and update from
+(constitution, Project Scope & Intent — standing decision, 2026-07-11). A
+consumer's `install.sh`/`/ardd-update` reads *this* checkout and installs
+from whatever branch is out, so a feature branch checked out in the primary
+directory serves unmerged, possibly-broken skills to every consumer that
+updates while it's out — and can trigger a consumer's update flow to
+re-checkout `main` under your in-flight work (a real ref-lock collision hit
+this on 2026-07-11). So **when `/ardd-plan` or `/ardd-implement` offers its
+branch gate here, do not take the inline `git checkout -b` option.** Instead
+`git worktree add <path> -b <branch>` and work there — populate that
+worktree's `.claude/skills/` from the primary first, since that dir is
+gitignored and `git worktree add` won't carry it — or use the skills'
+`isolation: "worktree"` delegation. Merge the branch back to `main` when
+done; the primary stays parked on `main` throughout. Recovery if the primary
+is ever found off `main`: `git checkout main` — unmerged work is safe on its
+own branch/worktree. (This binds *this* source repo only; the inline
+branch-gate path is fine in ordinary target projects.)
+
 ## Architecture
 
 **Two install targets, don't conflate them.** Some scripts/docs govern *this*

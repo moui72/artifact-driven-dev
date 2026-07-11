@@ -28,7 +28,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: CLAUDE.md workflow note
 
-- [ ] T002 Add a short workflow note to `CLAUDE.md` (near the Commands /
+- [x] T002 Add a short workflow note to `CLAUDE.md` (near the Commands /
   worktree material) operationalizing T001's decision for anyone working in
   this repo: do feature work in a **separate worktree** and keep the primary
   checkout on `main`; do **not** take `/ardd-plan`/`/ardd-implement`'s inline
