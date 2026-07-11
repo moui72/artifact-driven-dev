@@ -98,7 +98,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 5: Docs reconciliation + verification (depends: Phases 2, 3, 4)
 
-- [ ] T009 [artifacts: constitution] Final catalog reconciliation pass across
+- [x] T009 [artifacts: constitution] Final catalog reconciliation pass across
   `README.md`, `USAGE.md`, `CLAUDE.md`, and `guides/`: every command list,
   count ("21 skills"), and cross-reference reflects the final catalog. Bump
   the constitution version ONLY if a principle actually changed — the

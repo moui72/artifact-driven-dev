@@ -4,7 +4,7 @@ A spec-driven workflow system for Claude Code, in the same lineage as
 [Spec Kit](https://github.com/github/spec-kit) — but built around capturing
 decisions you've already made, rather than discovering them through
 structured elicitation. It's disciplined, not lightweight — a declared set of
-living documents, a couple dozen skills, several status state machines — so
+living documents, over a dozen skills, several status state machines — so
 it's worth knowing where that overhead pays for itself; see
 [When artifacts earn their keep](#when-artifacts-earn-their-keep) below.
 
