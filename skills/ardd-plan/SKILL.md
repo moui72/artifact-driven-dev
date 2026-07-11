@@ -278,12 +278,17 @@ slug, `feedback-*.md` is always a feedback scope.
      which feedback item each such task addresses. Tasks implementing a
      feature targeted in step 3 reference that feature's slug. Tasks fixing a
      defect accepted in step 5 reference that defect's identifier.
-   - **Complexity Tracking** — table of justified deviations from the simplicity
-     principle (if a constitution is present)
+   - **Complexity Tracking** — table of justified deviations, included *only if*
+     the constitution declares a principle requiring complexity to be justified
+     (e.g. a Simplicity/YAGNI principle). Omit the section entirely when no such
+     principle is declared, rather than emitting an empty table.
    - **Open Questions** — anything that must be resolved before or during
      implementation
    - **Production Annotation Summary** — list of known production shortcuts to
-     annotate during implementation
+     annotate during implementation, included *only if* the constitution declares
+     a production-annotations principle (the same condition `/ardd-analyze`
+     step 3 applies). Omit the section entirely when no such principle is
+     declared.
 
 9. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
    frontmatter. As in step 3d, run `.claude/skills/ardd-scripts/project-
