@@ -68,9 +68,9 @@ After discussing your project with Claude, run:
 /ardd-bootstrap
 ```
 
-(Or run `/ardd-kickoff` on a greenfield project and let it conduct that
-discussion as an interview before handing off to `/ardd-bootstrap`. The
-quickstart above opens straight into it.)
+(On a greenfield project `/ardd-bootstrap` conducts that discussion as an
+interview itself, in its step 0, before seeding artifacts. The quickstart
+above opens straight into it.)
 
 This reads the conversation and writes initial artifacts to
 `.project/artifacts/` — whichever set your project's concerns actually

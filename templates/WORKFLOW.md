@@ -9,10 +9,8 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | Command | What it does |
 |---|---|
 | `/ardd-setup` | Complete an npx-acquired install — locate or clone the ARDD source checkout and run install.sh from it. |
-| `/ardd-kickoff` | Greenfield first session: run the design conversation, then hand off to /ardd-bootstrap. |
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
-| `/ardd-featurize` | One-time (after codify): extract a feature register from an existing codebase. |
 | `/ardd-feature` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet. |
 | `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume. |
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning. |

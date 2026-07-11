@@ -43,7 +43,7 @@ usage() {
   cat >&2 <<EOF
 Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
 
-  --kickoff        Open Claude Code on /ardd-kickoff without asking.
+  --kickoff        Open Claude Code on /ardd-bootstrap without asking.
   --no-kickoff     Install, then print the next step instead of opening Claude Code.
                    With neither flag, you're asked — unless there's no terminal
                    to ask on, in which case this is the default.
@@ -160,7 +160,7 @@ next_steps() { # $1 = optional reason line
   echo "Start the first session with:"
   echo ""
   echo "  cd $target"
-  echo "  claude \"/ardd-kickoff\""
+  echo "  claude \"/ardd-bootstrap\""
   echo ""
 }
 
@@ -170,7 +170,7 @@ next_steps() { # $1 = optional reason line
 tty_ok() { (exec 3< /dev/tty) 2>/dev/null; }
 
 launch() {
-  echo "Opening Claude Code in $target — /ardd-kickoff will walk you through the design."
+  echo "Opening Claude Code in $target — /ardd-bootstrap will get your artifacts started."
   echo ""
   cd "$TARGET"
   # Do NOT redirect stdin here, even though under `curl | sh` it's the curl
@@ -180,7 +180,7 @@ launch() {
   # passes the check, so it uses that fd instead and silently accepts no
   # keystrokes; `<> /dev/tty` makes it exit outright. An EOF'd pipe on stdin is
   # the input it handles correctly.
-  exec claude "/ardd-kickoff"
+  exec claude "/ardd-bootstrap"
 }
 
 # Ask on /dev/tty — never stdin, which is the curl pipe. Bare Enter means yes.
@@ -190,7 +190,7 @@ launch() {
 ask_kickoff() {
   attempt=0
   while [ "$attempt" -lt 3 ]; do
-    printf 'Open Claude Code now and run /ardd-kickoff? [Y/n] ' > /dev/tty
+    printf 'Open Claude Code now and run /ardd-bootstrap? [Y/n] ' > /dev/tty
     if ! IFS= read -r reply < /dev/tty; then
       echo "" > /dev/tty
       return 1   # EOF

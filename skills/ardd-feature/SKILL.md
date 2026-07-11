@@ -14,10 +14,10 @@ later, when the idea is targeted by slug in `/ardd-plan <slug>`. This lets
 you accumulate a backlog of ideas and work them in whatever order you like,
 rather than committing to design-and-apply the moment you think of one.
 
-Not to be confused with `/ardd-featurize` — that's the one-time bulk
-extraction of a whole feature register from an existing codebase (run once
-after `/ardd-codify`). `/ardd-feature` logs a single new idea at a time,
-going forward.
+Not to be confused with `/ardd-codify`'s feature-register extraction — that's
+the one-time bulk backfill of a whole register from an existing codebase (an
+offered step of `/ardd-codify`). `/ardd-feature` logs a single new idea at a
+time, going forward.
 
 Usage: `/ardd-feature <description>` where description is a plain-language
 statement of the feature (e.g., "octokit fallback for GitHub similar to the

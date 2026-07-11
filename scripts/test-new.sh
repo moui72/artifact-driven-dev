@@ -163,9 +163,9 @@ set -e
   || bad "case4: expected exit 0, got $status (42 means claude was exec'd)"
 
 # It must still tell the user how to start the session by hand.
-printf '%s' "$out" | grep -q '/ardd-kickoff' \
-  && ok "case4: prints the /ardd-kickoff next step" \
-  || bad "case4: never mentions /ardd-kickoff"
+printf '%s' "$out" | grep -q '/ardd-bootstrap' \
+  && ok "case4: prints the /ardd-bootstrap next step" \
+  || bad "case4: never mentions /ardd-bootstrap"
 
 # --- Case 5: an existing *empty* directory is fine, not a refusal ---
 target="$WORK/case5/proj"
@@ -282,9 +282,9 @@ case "$status" in
   124) bad "case12: timed out — prompted (or read) with no claude to launch" ;;
   *)   bad "case12: expected exit 0, got $status" ;;
 esac
-printf '%s' "$out" | grep -q '/ardd-kickoff' \
-  && ok "case12: still prints the /ardd-kickoff next step" \
-  || bad "case12: never mentions /ardd-kickoff"
+printf '%s' "$out" | grep -q '/ardd-bootstrap' \
+  && ok "case12: still prints the /ardd-bootstrap next step" \
+  || bad "case12: never mentions /ardd-bootstrap"
 
 # --- Case 13: --no-launch is gone, not silently accepted ---
 # It shipped only on unpushed local main, so it was renamed rather than

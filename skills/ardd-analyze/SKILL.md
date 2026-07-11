@@ -19,11 +19,10 @@ canonical list — other docs referencing which skills auto-trigger analyze
 point back here rather than re-enumerating, so it's the one place to update
 when that set changes.
 
-Manual invocation is still the right call after
-`/ardd-codify`/`/ardd-featurize` (deliberately deferred until after a
-`/ardd-refine` pass — running it immediately would just report a wall of
-expected draft-state noise) or anytime you want a fresh check outside those
-flows.
+Manual invocation is still the right call after `/ardd-codify`
+(deliberately deferred until after a `/ardd-refine` pass — running it
+immediately would just report a wall of expected draft-state noise) or
+anytime you want a fresh check outside those flows.
 
 **Run only from the primary checkout, never inside a delegated worktree.**
 `/ardd-analyze` is the sole writer of `STATUS.md`; running it inside a

@@ -169,7 +169,7 @@ capturing feedback, planning batches. See [continuing.md](continuing.md).
 ## Typical flow
 
 ```
-Session 1: /ardd-codify → /ardd-featurize → read artifacts → /ardd-refine × N
+Session 1: /ardd-codify (offers feature-register extraction) → read artifacts → /ardd-refine × N
 Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
 Session 3 (optional): /ardd-plan → /ardd-tasks → /ardd-implement
 Session N: /ardd-feature <description> (log to backlog, anytime)

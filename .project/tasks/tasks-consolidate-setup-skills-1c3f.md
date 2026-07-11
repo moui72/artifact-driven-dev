@@ -48,7 +48,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   featurize's register-writing mechanics (`ardd-state.sh` calls, `backlogged`
   seeding).
 
-- [ ] T005 Propagate the setup-merge ripple and re-green the guards. Update:
+- [x] T005 Propagate the setup-merge ripple and re-green the guards. Update:
   `new.sh` (handoff offer + `--kickoff`/`--no-kickoff` flags now target
   `/ardd-bootstrap`) and its regression test `scripts/test-new.sh`;
   `README.md` Getting-started table (drop kickoff/featurize rows);

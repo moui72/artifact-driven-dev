@@ -75,10 +75,8 @@ edit the `description:` there, then re-run it.)
 | Command | What it does |
 |---|---|
 | `/ardd-setup` | Complete an npx-acquired install — locate or clone the ARDD source checkout and run install.sh from it. |
-| `/ardd-kickoff` | Greenfield first session: run the design conversation, then hand off to /ardd-bootstrap. |
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
-| `/ardd-featurize` | One-time (after codify): extract a feature register from an existing codebase. |
 
 ## The core loop
 
@@ -152,9 +150,9 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 
 That creates `my-project/`, `git init`s it, clones this repo to
 `~/.ardd/source` (or updates it if it's already there), runs `install.sh`
-from it, and offers to open Claude Code on `/ardd-kickoff` — which
-interviews you about the design and then runs `/ardd-bootstrap` to write
-your artifacts.
+from it, and offers to open Claude Code on `/ardd-bootstrap` — which, on a
+cold start, first interviews you about the design (its step 0) and then
+writes your artifacts.
 
 The handoff is a question, not a foregone conclusion. Answer it in advance
 with `--kickoff` (launch, don't ask) or `--no-kickoff` (install, print the
@@ -205,11 +203,12 @@ Avoid the CLI's symlink mode: `install.sh` regenerates
 `.claude/skills/`, and symlinks there would point regeneration into the
 CLI's cache (install.sh replaces any it finds, with a warning).
 
-**New project** — open Claude Code and run `/ardd-kickoff`: it walks you
-through the design conversation, then hands off to `/ardd-bootstrap`, which
-seeds artifacts from that context. If you'd rather talk through the design in
-your own words first, skip kickoff and run `/ardd-bootstrap` yourself — same
-destination. See [guides/greenfield.md](guides/greenfield.md).
+**New project** — open Claude Code and run `/ardd-bootstrap`: it seeds
+artifacts from the conversation, and on a cold start (an empty directory, no
+design discussion yet) first walks you through the design conversation itself
+as step 0. If you'd rather talk the design through in your own words first,
+just do that, then run `/ardd-bootstrap` — same destination. See
+[guides/greenfield.md](guides/greenfield.md).
 
 **Existing project** — open Claude Code and run `/ardd-codify` to
 reverse-engineer artifacts from the codebase. Review the generated drafts with

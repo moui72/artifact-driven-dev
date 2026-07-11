@@ -18,16 +18,17 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 ```
 
 It creates and `git init`s `my-project/`, installs ARDD into it via
-`install.sh`, and offers to open Claude Code on `/ardd-kickoff` — which
-conducts the Step 1 design conversation as an interview and then runs
-`/ardd-bootstrap` for you. Pick the guide back up at
+`install.sh`, and offers to open Claude Code on `/ardd-bootstrap` — which, on
+a cold start, conducts the Step 1 design conversation as an interview (its
+step 0) and then writes your artifacts. Pick the guide back up at
 [Step 3](#step-3-refine-each-artifact).
 
 Pass `--kickoff` to skip the question and launch, or `--no-kickoff` to
 install and stop.
 
 The rest of this guide is the same path done by hand, which is worth reading
-either way — `/ardd-kickoff` is a convenience, not a different workflow.
+either way — the built-in interview is a convenience, not a different
+workflow.
 
 ---
 
@@ -47,8 +48,8 @@ Then open Claude Code in your project.
 ## Step 1: Have the design conversation
 
 Before running any skill, talk through your project with Claude. This is where
-the real work happens. (`/ardd-kickoff` conducts exactly this conversation as
-an interview, if you'd rather be asked than lead.) Cover:
+the real work happens. (`/ardd-bootstrap` conducts exactly this conversation
+as an interview in its step 0, if you'd rather be asked than lead.) Cover:
 
 - **What the system does** — one or two sentences; what problem it solves
 - **Who uses it** — role, technical level, how often
@@ -215,7 +216,7 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 ## What a clean greenfield run looks like
 
 ```
-Session 1: /ardd-kickoff (or your own design conversation) → /ardd-bootstrap → /ardd-refine × 3
+Session 1: /ardd-bootstrap (step 0 interviews you, or lead the design yourself) → /ardd-refine × 3
 Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
 Session 3: /ardd-plan → /ardd-tasks → /ardd-implement
 Session N: /ardd-converge → /ardd-implement (resume)
