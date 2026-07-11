@@ -246,9 +246,15 @@ slug, `feedback-*.md` is always a feedback scope.
    task is added to the Phase Breakdown in step 8, tagged `[defect:
    <identifier>]`.
 
-6. **Check constitution compliance** if `constitution.md` is present. Flag any
-   planned patterns that require a Complexity Tracking entry per the simplicity
-   principle.
+6. **Check constitution compliance** if `constitution.md` is present. Read the
+   principles it *actually declares* — don't assume any fixed set — and flag any
+   planned pattern that violates, or needs justification under, one of those
+   declared principles. In particular, only if the constitution declares a
+   simplicity / complexity-justification principle (e.g. Simplicity/YAGNI with a
+   Complexity Tracking requirement) do you flag patterns that would need a
+   Complexity Tracking entry; if it declares no such principle, there is nothing
+   to flag at that site. Mirror `/ardd-analyze`'s "act only on the principles
+   present" shape rather than presuming a particular principle exists.
 
 7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
