@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-10 (post-/ardd-tasks, principle-agnostic-skills tasks ready on branch). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-10 (post-/ardd-implement, principle-agnostic-skills complete on branch). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -48,20 +48,28 @@ it targets no register slug.)
 
 ## In Flight
 
-- Branch `principle-agnostic-skills` (this checkout): plan approved,
-  `tasks-principle-agnostic-skills-857b.md` **ready** (0/4). Makes
-  `/ardd-plan` naive to which principles a target constitution declares —
-  three conditional-phrasing edits to `skills/ardd-plan/SKILL.md` (Complexity
-  Tracking + Production Annotation Summary gated on the constitution actually
-  declaring those principles), mirroring `/ardd-analyze` step 3, plus a
-  read-through verification task.
+- Branch `principle-agnostic-skills` (this checkout):
+  `tasks-principle-agnostic-skills-857b.md` **completed** (4/4), 4 commits
+  ahead of `main`, awaiting merge. Delivered: `/ardd-plan` steps 6 & 8 now
+  read the constitution's *declared* principles — the Complexity Tracking and
+  Production Annotation Summary sections are gated on those principles
+  actually being declared, mirroring `/ardd-analyze` step 3. Scope guards
+  held: `/ardd-critique`'s lenses and the three "Principle II"
+  meta-references untouched.
 
   (`render-output-target` merged into `main` at `eaff4a0`.)
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-principle-agnostic-skills-857b.md`
-(4 tasks, all in `skills/ardd-plan/SKILL.md`).
+Merge `principle-agnostic-skills` into `main` (4 commits) — the change is
+complete and green under the pre-commit hook. Note the edit lands in the
+product `skills/ardd-plan/SKILL.md`; this repo's own installed copy under
+`.claude/skills/` won't reflect it until the next `install.sh`/`/ardd-update`.
+
+Standing threads, unchanged: `main` holds unpushed commits (push when ready);
+1 open feedback file (`feedback-repo-critique-6ad1.md`); and a `/ardd-verify`
+pass would fold recent merges into `DEFECTS.md`. The `ANTHROPIC_API_KEY`
+smoke thread also remains.
 
 Standing threads, unchanged: `main` holds unpushed commits (push when ready),
 and a `/ardd-verify` pass would fold the merged render-destination change plus
