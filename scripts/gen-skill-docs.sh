@@ -28,8 +28,8 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
 ORDER_setup="ardd-setup ardd-bootstrap ardd-codify"
-ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-tasks ardd-implement"
-ORDER_extension="ardd-analyze ardd-lint ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-update ardd-add-artifact"
+ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-tasks ardd-implement ardd-analyze ardd-lint"
+ORDER_extension="ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-update ardd-add-artifact"
 
 row_for() { # row_for <skill-name>
   f="skills/$1/SKILL.md"
@@ -84,9 +84,11 @@ EOF
   table_rows core
   cat <<'EOF'
 
-`/ardd-analyze` (cross-artifact consistency) runs automatically as the
-final step of most state-changing skills, so it isn't a step you have to
-remember — run it by hand anytime for a fresh check.
+`/ardd-analyze` (cross-artifact consistency) and `/ardd-lint` (`.project/`
+schema validation) are core infrastructure, not opt-in extensions: analyze
+runs automatically as the final step of most state-changing skills, and lint
+runs behind the write-time hook on every `.project/` write. Neither is a step
+you have to remember — run either by hand anytime for a fresh check.
 
 **Solo vs. collaborative mode.** `workflow_mode` in `constitution.md`'s
 frontmatter (one of `solo` | `collaborative`; absent means `solo`) governs

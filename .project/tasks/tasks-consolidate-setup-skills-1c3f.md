@@ -60,7 +60,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Tier hygiene (parallel to Phase 2)
 
-- [ ] T006 [parallel] Re-tier `/ardd-analyze` and `/ardd-lint` from
+- [x] T006 [parallel] Re-tier `/ardd-analyze` and `/ardd-lint` from
   `extension` to core infrastructure. Change the `tier:` frontmatter in both
   SKILL.md files (use `core`, or introduce a `core-infra` value — if a new
   enum value, update the tier check + enum in `scripts/lint-project.sh` and

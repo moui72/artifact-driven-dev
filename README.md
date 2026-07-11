@@ -92,10 +92,14 @@ everything else is opt-in. (Generated — see note under Getting started.)
 | `/ardd-plan` | Draft a phased implementation plan from artifacts, feedback, and optionally backlogged features; feedback-file arguments scope which feedback is consumed. |
 | `/ardd-tasks` | Generate an ordered task list from a plan; selecting a draft plan approves it. |
 | `/ardd-implement` | Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge. |
+| `/ardd-analyze` | Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills. |
+| `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
 
-`/ardd-analyze` (cross-artifact consistency) runs automatically as the
-final step of most state-changing skills, so it isn't a step you have to
-remember — run it by hand anytime for a fresh check.
+`/ardd-analyze` (cross-artifact consistency) and `/ardd-lint` (`.project/`
+schema validation) are core infrastructure, not opt-in extensions: analyze
+runs automatically as the final step of most state-changing skills, and lint
+runs behind the write-time hook on every `.project/` write. Neither is a step
+you have to remember — run either by hand anytime for a fresh check.
 
 **Solo vs. collaborative mode.** `workflow_mode` in `constitution.md`'s
 frontmatter (one of `solo` | `collaborative`; absent means `solo`) governs
@@ -128,8 +132,6 @@ Opt-in skills for concerns the core loop doesn't force on you.
 
 | Command | What it does |
 |---|---|
-| `/ardd-analyze` | Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills. |
-| `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
 | `/ardd-verify` | Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer). |
 | `/ardd-critique` | Challenge artifact decisions: simplicity, failure modes, robustness, semantics. |
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |

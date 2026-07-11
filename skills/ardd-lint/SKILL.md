@@ -1,6 +1,6 @@
 ---
 name: ardd-lint
-tier: extension
+tier: core
 description: "Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment."
 ---
 

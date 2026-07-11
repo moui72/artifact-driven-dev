@@ -1,6 +1,6 @@
 ---
 name: ardd-analyze
-tier: extension
+tier: core
 description: Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills.
 ---
 
