@@ -27,7 +27,7 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # Editorial workflow order per tier — skills not listed here append after
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
-ORDER_setup="ardd-setup ardd-bootstrap ardd-codify"
+ORDER_setup="ardd-bootstrap ardd-codify"
 ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-implement ardd-analyze ardd-lint"
 ORDER_extension="ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-update ardd-add-artifact"
 

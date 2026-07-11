@@ -25,10 +25,13 @@ context, so no interview is needed.)
 0. **Assess context sufficiency (and guard the install).**
 
    - **Guard: is the install complete?** If `.claude/skills/ardd-scripts/`
-     doesn't exist, the skill files arrived without `install.sh` having run
-     (the `npx skills add` path). Stop and point at `/ardd-setup`, which
-     completes the install. Every later step here shells out to
-     `ardd-scripts`, so continuing would fail on the first script call.
+     doesn't exist, the skill files are present but `install.sh` never ran
+     (e.g. copied by hand). Stop and tell the user to complete the install:
+     run `install.sh` from an ARDD checkout against this project, or, from
+     inside the project directory, the one-command bootstrap
+     `curl -fsSL <ardd-repo>/raw/main/new.sh | sh -s -- --existing`. Every
+     later step here shells out to `ardd-scripts`, so continuing would fail on
+     the first script call.
 
    - **Enough context already?** If the conversation has established what the
      project is — its purpose, data, constraints, decisions — proceed to step

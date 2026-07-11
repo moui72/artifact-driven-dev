@@ -46,7 +46,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Delete /ardd-setup (Principle VII)
 
-- [ ] T004 Delete `skills/ardd-setup/` in the same change that removes its last
+- [x] T004 Delete `skills/ardd-setup/` in the same change that removes its last
   references (no dead architecture). Drop the `ardd-setup` name from
   `scripts/lint-docs.sh`'s allowlist, and grep all remaining `skills/*/SKILL.md`
   for `/ardd-setup` / `ardd-setup` and remove/redirect those references. No
