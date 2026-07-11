@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Skill rewrite
 
-- [ ] T001 Rewrite `skills/ardd-render/SKILL.md` to be generic and
+- [x] T001 Rewrite `skills/ardd-render/SKILL.md` to be generic and
   frontmatter-driven. Replace the closed render-config table with the
   `diagram_type`/`render_hint` contract: an artifact is renderable iff it
   declares `diagram_type` (the literal Mermaid diagram-type declaration —

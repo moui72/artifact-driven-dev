@@ -1,7 +1,7 @@
 ---
 name: ardd-render
 tier: extension
-description: Generate a Mermaid diagram from a renderable artifact and upsert it into a configurable destination (README.md by default).
+description: Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination (README.md by default).
 ---
 
 # /ardd-render
@@ -13,92 +13,98 @@ whose `README.md` must stay clean of raw Mermaid (e.g. an npm package page,
 which doesn't render Mermaid fences) can point its diagrams at a
 GitHub-only doc instead.
 
-Usage: `/ardd-render <artifact>` where `<artifact>` is one of the supported types
-listed below.
+Usage: `/ardd-render [<artifact>]` where `<artifact>` is the filename stem of
+an artifact that declares a `diagram_type` (e.g. `datamodel`). With no
+argument, every artifact that declares one is rendered.
 
 ## Render config
 
-| Argument | Artifact(s) to read | Diagram type | Default section |
-|---|---|---|---|
-| `datamodel` | `datamodel.md` | ERD (`erDiagram`) | `## Datamodel` |
-| `infrastructure` | `infrastructure.md` | Container diagram (`graph TD`) | `## Infrastructure` |
-| `ui` | `ui.md` | Component hierarchy (`graph TD`) | `## UI` |
-
-**Destination is per-artifact and optional.** The default target file is
-`README.md` and the default section is the "Default section" column above.
-A renderable artifact may override either via its own frontmatter:
+An artifact is **renderable when it declares `diagram_type`** in its
+frontmatter. There is no fixed list of renderable artifacts and no enumerated
+set of diagram types — any artifact opts in by declaring the Mermaid type it
+should be drawn as. The full render-related frontmatter surface:
 
 ```yaml
-# .project/artifacts/datamodel.md
+# .project/artifacts/<name>.md
+diagram_type: erDiagram        # a Mermaid diagram-type declaration — makes the artifact renderable
+render_hint: |                 # optional; domain guidance for what to draw/omit
+  One block per entity; derive relationships from FK refs; omit index detail.
 render_target: docs/ARCHITECTURE.md   # optional; default README.md
-render_section: Datamodel             # optional; default = the config-table section
+render_section: Datamodel             # optional; default = capitalized artifact stem
+diagram_status: unrendered            # required once diagram_type is present
 ```
 
-`render_target` is a path relative to the project root; `render_section` is
-the header text without the leading `##`. When both are absent, behavior is
-exactly as before — `README.md` and the config-table section.
+- **`diagram_type`** is the *literal Mermaid diagram-type declaration* — the
+  exact token Mermaid uses to open that diagram (`erDiagram`,
+  `sequenceDiagram`, `classDiagram`, `stateDiagram-v2`, `graph TD` /
+  `flowchart LR`, `gantt`, `pie`, `journey`, `mindmap`, `timeline`, …). It is
+  used **verbatim as the first line** of the ```` ```mermaid ```` fence, so a
+  flowchart value carries its own direction (`graph TD`) and needs no
+  orientation guesswork. ARDD keeps no enumerated list of valid values and
+  does not lint against one; the value must nonetheless be a real Mermaid type
+  (not an English label like `entity-relationship`). A typo'd or unsupported
+  value surfaces here, at render time, not at lint. See
+  [mermaid.js.org](https://mermaid.js.org) for the supported types and their
+  syntax.
+- **`render_hint`** (optional) carries domain "emphasize / omit" guidance for
+  what the diagram should show — co-located with the artifact rather than
+  baked into this skill.
+- **`render_target`** is a path relative to the project root; absent →
+  `README.md`.
+- **`render_section`** is the header text without the leading `##`; absent →
+  the artifact's filename stem with its first letter capitalized (`datamodel`
+  → `Datamodel`). Standard templates declare `render_section` explicitly where
+  capitalization wouldn't produce the exact header (e.g. `UI`).
+
+When `render_target` and `render_section` are both absent, a diagram lands in
+`README.md` under the capitalized-stem section.
 
 ## Steps
 
-1. **Parse the argument.**
-   - If not in the render config table, list supported arguments and exit.
-   - If not provided, run steps 2–7 for every row in the render config table
-     in order, then report all diagrams written in a single summary.
+1. **Resolve the target artifact(s).**
+   - **Argument given** (`/ardd-render <name>`): read
+     `.project/artifacts/<name>.md`. If it doesn't exist, or exists but does
+     not declare `diagram_type`, report that it isn't renderable (only
+     artifacts declaring `diagram_type` can be rendered) and exit.
+   - **No argument**: glob `.project/artifacts/*.md` and select every artifact
+     whose frontmatter declares a non-empty `diagram_type`. Run steps 2–7 for
+     each in turn, then report all diagrams written in a single summary. If
+     none declare `diagram_type`, say so and exit.
 
-2. **Read the artifact(s).** Load the primary artifact from the config table.
-   Then check its frontmatter for a `related` field — if present, load each
-   listed artifact from `.project/artifacts/` as supplementary context.
-   Skip any related artifact that does not exist.
-
-   While reading the primary artifact's frontmatter, also capture the
-   optional `render_target` and `render_section` fields. Resolve the
-   destination now, so steps 5–6 use it:
+2. **Read the artifact and its render config.** Load the artifact. Capture
+   from its frontmatter:
+   - `diagram_type` — the Mermaid type declaration (used verbatim in step 4).
+   - `render_hint` — optional generation guidance (used in step 3).
    - `render_target` → the target file (path relative to project root);
      absent → `README.md`.
-   - `render_section` → the section header text (without `##`); absent →
-     the config-table "Default section" for this argument (`Datamodel` /
-     `Infrastructure` / `UI`).
+   - `render_section` → the section header text (without `##`); absent → the
+     artifact's filename stem with its first letter capitalized.
 
-3. **Generate the diagram** appropriate for the argument type:
+   Then check the frontmatter for a `related` field — if present, load each
+   listed artifact from `.project/artifacts/` as supplementary context. Skip
+   any related artifact that does not exist.
 
-   ### `datamodel` → ERD
-   - Use Mermaid `erDiagram` syntax.
-   - Include one block per entity with its fields and types.
-   - Derive relationships from FK references in the artifact (e.g.,
-     `patient_id FK → patients` becomes a `patients ||--o{ appointments : ""`
-     relationship line).
-   - Omit index and normalization detail — the diagram represents structure,
-     not implementation.
+3. **Generate the diagram.** Produce a Mermaid diagram of the declared
+   `diagram_type` from the artifact's content, shaped by `render_hint` if
+   present. The hint states what to emphasize or omit for this artifact's
+   domain; honor it. There is no per-type recipe here — draw the artifact as
+   the type it declares, using idiomatic Mermaid for that type (see
+   [mermaid.js.org](https://mermaid.js.org) for syntax). Keep the diagram
+   high-level: structure and relationships, not implementation detail.
 
-   ### `ui` → Component hierarchy
-   - Use Mermaid `graph TD` syntax.
-   - Show each component as a node. Draw parent→child edges based on the
-     component nesting described in the artifact.
-   - Annotate leaf nodes that receive computed data (e.g., badges computed
-     from encounter history) with a short edge label.
-   - Omit state management detail — structure only.
-
-   ### `infrastructure` → Container diagram
-   - Use Mermaid `graph TD` syntax.
-   - Show the major runtime components (UI, server/API layer, database, sync
-     engine, external EHR APIs) as nodes.
-   - Show data flow between components as directed edges with short labels.
-   - Draw from both `infrastructure.md` and `adapters.md` if available —
-     include one node per EHR adapter.
-   - Keep it high-level: components and flows, not implementation detail.
-
-4. **Wrap the diagram** in a Mermaid code fence:
+4. **Wrap the diagram** in a Mermaid code fence whose first line is the
+   `diagram_type` value verbatim:
 
    ````
    ```mermaid
-   <diagram content>
+   <diagram_type>
+   <diagram body>
    ```
    ````
 
-5. **Ensure the resolved target file exists.** Using the target from step
-   2 (`README.md` unless overridden): if it's missing, `mkdir -p` its parent
-   directory and create the file empty (the upsert step appends the
-   section).
+5. **Ensure the resolved target file exists.** Using the target from step 2
+   (`README.md` unless overridden): if it's missing, `mkdir -p` its parent
+   directory and create the file empty (the upsert step appends the section).
 
 6. **Upsert the section — script-performed** (constitution Principle II;
    generating the Mermaid content is judgment, splicing it into the target
@@ -116,6 +122,6 @@ exactly as before — `README.md` and the config-table section.
 7. **Mark it current**:
    `.claude/skills/ardd-scripts/ardd-state.sh stamp
    .project/artifacts/<name>.md diagram_status current`. If the bare form
-   ran (all artifacts), do this for each rendered artifact.
+   ran (all renderable artifacts), do this for each rendered artifact.
 
 8. **Report** in one sentence what was generated and where it was written.
