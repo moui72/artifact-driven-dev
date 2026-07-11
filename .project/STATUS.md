@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (post-/ardd-implement, generic-render merged to main via delegated subagent). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (post-/ardd-tasks: catalog-consolidation plan approved, 10 tasks ready on branch `consolidate-setup-skills`). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -32,7 +32,9 @@ against yet; it contradicts no `DEFECTS.md` claim.
 
 ## Feedback
 
-None open — all feedback files are `status: planned`.
+None open — `feedback-consolidate-setup-skills-8541.md` was consumed by
+`plan-consolidate-setup-skills-2026-07-11.md` (F001–F003, F005, F006
+incorporated; F004 declined). All feedback files are `status: planned`.
 
 ## Feature Backlog
 
@@ -46,10 +48,20 @@ schema, standard templates, migration `0005`, docs → mermaid.js.org) merged
 into `main` (`316705d`); its delegated worktree and the `generic-render` /
 `worktree-agent-*` branches were removed.
 
+## In Flight
+
+- Branch `consolidate-setup-skills` (this checkout) — plan
+  `plan-consolidate-setup-skills-2026-07-11.md` **approved**, tasks
+  `tasks-consolidate-setup-skills-1c3f.md` **ready** (0/10). Shrink the
+  21-skill catalog: Phase 1 install.sh prune (foundation), Phase 2 setup
+  merges (kickoff→bootstrap, featurize→codify), Phase 3 tier hygiene
+  (analyze/lint → core), Phase 4 core-loop merge (tasks→plan), Phase 5 docs
+  + verify. Three open questions carried in the plan (curated default
+  install F006b, F005 prose-complexity gate, deprecation stubs). Not yet
+  merged to `main`.
+
 ## Recommended Next Step
 
-`main` holds 15 unpushed commits (the render-genericity work plus earlier
-session commits) — push when ready. A `/ardd-verify` pass would fold the
-generic-render, eager-backgrounding, and render-destination merges into
-`DEFECTS.md` (last checked 2026-07-11, sixth pass). The `ANTHROPIC_API_KEY`
-smoke thread is unchanged.
+`/ardd-implement` to execute `tasks-consolidate-setup-skills-1c3f.md`
+(start Phase 1 — the install.sh prune is the foundation both merge phases
+depend on). `main` also holds unpushed commits — push when ready.
