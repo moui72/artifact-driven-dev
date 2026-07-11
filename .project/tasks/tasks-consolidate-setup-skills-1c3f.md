@@ -40,7 +40,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   Do not duplicate the constitution-suggestion catalog into the interview
   (kickoff explicitly warns against this).
 
-- [ ] T004 Merge `/ardd-featurize` into `/ardd-codify` AND delete
+- [x] T004 Merge `/ardd-featurize` into `/ardd-codify` AND delete
   `skills/ardd-featurize/` in the same change (Principle VII). In
   `skills/ardd-codify/SKILL.md`, fold featurize's feature-register extraction
   in as a step after the artifact-reverse-engineering pass (offered, or

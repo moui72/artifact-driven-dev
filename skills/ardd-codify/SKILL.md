@@ -101,16 +101,74 @@ code does, not necessarily what was intended. Review each one with
 
 5. **Write all artifact files** to `.project/artifacts/`.
 
-6. **Install `.project/WORKFLOW.md`** — same as `/ardd-bootstrap` step 6:
+6. **Offer to extract the feature register.** Codify reconstructs *artifacts*
+   (the system's current-state design); the feature register
+   (`.project/features/`) is the complementary capability history. Right after
+   the artifacts land is the moment to backfill it from the same codebase.
+   Offer this to the user — it's optional and can be run later as part of the
+   normal flow — and skip it if declined; otherwise:
+
+   - **Check for an existing register.** If `.project/features/` already has
+     entries (or a legacy `.project/artifacts/features.md` exists), warn and
+     ask for confirmation before overwriting; on denial, skip the rest of this
+     step.
+
+   - **Survey the codebase for capability signals**, in this priority order —
+     earlier sources give the clearest feature names and dates, later ones
+     fill gaps. This complements the step-2 structural survey, which you can
+     reuse: (1) **git log** (`git log --format="%ad %s" --date=short` —
+     `feat:` commits and PR merge titles are most reliable); (2) **changelog**
+     (`CHANGELOG.md`, a `## Changelog`/`## What's New` README section, or
+     `gh release list` / `glab release list` if available); (3) **test
+     descriptions** (`describe`/`it`/`test` names are often the clearest
+     capability documentation); (4) **CLI help text and flag definitions**;
+     (5) **API routes** (group related routes into one feature); (6) **named
+     modules and exported functions**; (7) **README and docs**; (8)
+     **environment variables** (optional integrations are usually discrete
+     features).
+
+   - **Synthesize features.** A feature is a user- or caller-visible
+     capability describable in one sentence. Name at the capability level, not
+     the implementation level ("GitLab REST fallback", not
+     `runGitLabRestFetch`). Merge signals that serve the same capability;
+     split independently-useful or togglable ones. When one commit names
+     multiple features, give each the same date and mark each `[REVIEW: date
+     inferred from bundled commit "<message>"]` — don't drop a feature for
+     sharing a commit. When it's unclear whether something is user-visible,
+     include it and mark `[REVIEW: may be implementation detail rather than
+     user-facing capability]`. Infer the add-date from the git log on the
+     feature's primary file; omit the date if history is ambiguous. Note which
+     artifacts each feature primarily touches.
+
+   - **Write one register file per feature.** Sanitize the slug
+     (`.claude/skills/ardd-scripts/ardd-state.sh slug "<name>"`, 4-char hex
+     suffix on collision), then create the file with the body on stdin:
+
+     ```
+     printf '%s\n' "<one-sentence description>" "Why: <optional>" \
+       | .claude/skills/ardd-scripts/ardd-state.sh feature-create <slug>
+     ```
+
+     `feature-create` writes `status: backlogged`; these are already-shipped
+     capabilities, so immediately advance each one through
+     `ardd-state.sh feature-flip <slug> planned`, `... tasked`,
+     `... implemented` (the script enforces one stage at a time) — extracted
+     history isn't a backlog. Note which artifacts each feature touches as a
+     body line; omit the `Why:` line when there's no non-obvious context.
+     Place `[REVIEW: <reason>]` as the first body line of any uncertain entry.
+
+7. **Install `.project/WORKFLOW.md`** — same as `/ardd-bootstrap`:
    `cp .claude/skills/ardd-artifact-templates/WORKFLOW.md .project/WORKFLOW.md`
    (recommend re-running install.sh if the template is missing).
-7. **Generate `.project/STATUS.md`** summarizing what was written. Use the
+8. **Generate `.project/STATUS.md`** summarizing what was written. Use the
    standard STATUS.md structure (same as `/ardd-bootstrap`). In the
    "Recommended next step" line, direct the user to review draft artifacts with
    `/ardd-refine` and resolve open questions before running `/ardd-analyze`.
 
-8. **Report:**
+9. **Report:**
    - How many artifacts were written and which ones
+   - If the register was extracted: how many features, which sources were most
+     useful, and the count of `[REVIEW: ...]` entries with a brief note on each
    - Total `[OPEN: ...]` items across all artifacts (count only)
    - One sentence on what the codebase survey found that was most surprising
      or ambiguous
