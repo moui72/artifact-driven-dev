@@ -38,9 +38,11 @@ when resuming work in a new session.
    `.claude/skills/ardd-scripts/branch-info.sh` for `current`, `default`,
    and `on_default`. Nothing is committed in this step.
 
-   **Solo mode.** If `on_default` is `false`, continue inline at step 3 —
-   already isolated, state already rides this branch. If `on_default` is
-   `true`, offer delegation.
+   **Solo mode — offer delegation eagerly, regardless of `on_default`.**
+   Being already on a feature branch is *not* a reason to run in the
+   foreground: a branch isolates state, but the point of backgrounding is to
+   free the focused session. So offer to delegate whether or not `on_default`
+   is true. `on_default` only decides *how* to prepare (the fold step below).
 
    First, **check for in-flight work** using step 1's
    `inflight-worktrees.sh` output. If another worktree is mid-run against
@@ -48,13 +50,31 @@ when resuming work in a new session.
    delegated run.
 
    **Offer delegation, suggesting "yes."** Ask:
-   - "Yes, delegate to a subagent in an isolated worktree" (recommended)
-   - "No, continue on the current branch without a worktree"
+   - "Yes, delegate to a background subagent in an isolated worktree"
+     (recommended)
+   - "No, continue inline on the current branch"
 
-   If the user declines but wants isolation, a plain `git checkout -b` here
-   is fine — the inline path on a branch, state riding that branch.
+   On **no**, continue inline at step 3 on the current branch (if
+   `on_default` is `true` and the user wants isolation without a subagent, a
+   plain `git checkout -b` here is fine — the inline path on a branch).
 
-   On yes, delegate step 3 onward to a subagent via the `Agent` tool with
+   On **yes**, prepare based on `on_default`. A delegated subagent's worktree
+   branches from `<default>` and is fast-forwarded onto local `<default>` by
+   `worktree-align.sh`, so it can only see state that has reached local
+   `<default>`:
+   - If `on_default` is `false` (already on a feature branch), **fold that
+     branch into local `<default>` and return the focused session to it**:
+     run `.claude/skills/ardd-scripts/fold-to-main.sh`. On `folded=true` you
+     are now on `<default>` with the branch's state fast-forwarded in (a
+     fast-forward authors no new commit — the "nothing is committed" note
+     above holds) — proceed to delegate. On `folded=false`, **stop and
+     surface the `reason=` verbatim; never resolve** (`dirty`, `detached`, or
+     `diverged` is the user's to sort out). Converge reconciles a possibly
+     already-in-progress tasks file, so this fold may carry in-progress state
+     briefly onto `<default>` until the subagent's branch merges — expected.
+   - If `on_default` is `true`, delegate directly — no fold needed.
+
+   Then delegate step 3 onward to a subagent via the `Agent` tool with
    `isolation: "worktree"`, handing it this skill's remaining steps verbatim
    and the chosen tasks file. `isolation: "worktree"` creates and names its
    own worktree/branch (no parameter points it at a pre-made one) — don't

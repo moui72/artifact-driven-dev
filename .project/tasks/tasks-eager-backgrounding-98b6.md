@@ -29,7 +29,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: eager delegation gates
 
-- [ ] T002 Rewrite the solo-mode delegation gate in
+- [x] T002 Rewrite the solo-mode delegation gate in
   `skills/ardd-implement/SKILL.md` (step 3) and
   `skills/ardd-converge/SKILL.md` (step 2), keeping the two prose blocks
   identical (the deliberate residual duplication). Replace the

@@ -50,9 +50,12 @@ self-contained; the agent loads only the artifacts it declares.
 
 3. **Delegation gate.** Behavior splits on `workflow_mode`.
 
-   **Solo mode.** If `on_default` is `false`, continue inline at step 4 —
-   the run is already isolated on a branch/worktree, so all its state
-   already rides that branch. If `on_default` is `true`, offer delegation.
+   **Solo mode — offer delegation eagerly, regardless of `on_default`.**
+   Being already on a feature branch is *not* a reason to run in the
+   foreground: a branch isolates state, but the point of backgrounding is to
+   free the focused session. So offer to delegate whether or not `on_default`
+   is true. `on_default` no longer decides *whether* to offer — only *how* to
+   prepare (the fold step below).
 
    First, **check for in-flight work** using the
    `inflight-worktrees.sh` output from step 1. If another worktree is
@@ -60,14 +63,35 @@ self-contained; the agent loads only the artifacts it declares.
    ask whether to wait before starting a second delegated run.
 
    **Offer delegation, suggesting "yes."** Ask the user:
-   - "Yes, delegate to a subagent in an isolated worktree" (recommended)
-   - "No, continue on the current branch without a worktree"
+   - "Yes, delegate to a background subagent in an isolated worktree"
+     (recommended)
+   - "No, continue inline on the current branch"
 
-   If the user declines but wants isolation anyway, a plain
-   `git checkout -b <name>` here is fine — that's just the inline path on a
-   branch (step 4 onward), and its state rides that branch the same way.
+   On **no**, continue inline at step 4 on the current branch (if
+   `on_default` is `true` and the user wants isolation without a subagent, a
+   plain `git checkout -b <name>` here is fine — the inline path on a branch,
+   state riding that branch the same way).
 
-   On yes, delegate step 4 onward to a subagent via the `Agent` tool with
+   On **yes**, prepare based on `on_default`. A delegated subagent's worktree
+   branches from `<default>` and is fast-forwarded onto local `<default>` by
+   `worktree-align.sh`, so it can only see run state that has reached local
+   `<default>`:
+   - If `on_default` is `false` (already on a feature branch), **fold that
+     branch into local `<default>` and return the focused session to it**:
+     run `.claude/skills/ardd-scripts/fold-to-main.sh`. On `folded=true` you
+     are now on `<default>` with the branch's state fast-forwarded in — a
+     fast-forward authors no new commit, so the "nothing is committed in this
+     step" note above still holds — proceed to delegate. On `folded=false`,
+     **stop and surface the `reason=` verbatim; never resolve** (a `dirty`,
+     `detached`, or `diverged` tree is the user's to sort out). At this gate
+     the tasks file is still `ready` (step 4 does the `ready→in-progress`
+     flip), so the fold carries only *planned* truth onto `<default>`; the
+     in-flight truth then rides the subagent's worktree as usual. (Resuming a
+     partially-done run on a branch folds the same way, but briefly carries
+     in-progress state onto `<default>` until the subagent's branch merges.)
+   - If `on_default` is `true`, delegate directly — no fold needed.
+
+   Then delegate step 4 onward to a subagent via the `Agent` tool with
    `isolation: "worktree"`, handing it this skill's remaining steps
    verbatim, the chosen tasks file, and the current task pointer.
    `isolation: "worktree"` creates and names its own worktree/branch
