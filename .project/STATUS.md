@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-10 (post-/ardd-plan, eager-backgrounding draft plan on branch). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-10 (post-/ardd-tasks, eager-backgrounding tasks generated on branch). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -12,7 +12,7 @@ _Updated: 2026-07-10 (post-/ardd-plan, eager-backgrounding draft plan on branch)
 
 None in the artifact. Two plan-scoped sets remain, both non-blocking:
 
-- `plan-eager-backgrounding-2026-07-10.md` (draft) — (1) whether folding a
+- `plan-eager-backgrounding-2026-07-10.md` (approved) — (1) whether folding a
   feature branch onto `main` at delegation time blurs "default branch =
   merged truth" (fine at run start; mid-run would put in-progress state on
   `main` briefly); (2) auto-delete the folded branch?; (3) solo-mode only?;
@@ -39,9 +39,10 @@ None open — all feedback files are `status: planned`.
 
 ## In Flight
 
-- Branch `eager-backgrounding` (this checkout): draft plan
-  `plan-eager-backgrounding-2026-07-10.md` written, feedback F001+F002
-  planned — not yet tasked, not yet merged to `main`.
+- Branch `eager-backgrounding` (this checkout): plan
+  `plan-eager-backgrounding-2026-07-10.md` **approved**, tasks file
+  `tasks-eager-backgrounding-98b6.md` **ready** (0/3) — not yet started, not
+  yet merged to `main`.
 
 (Note: `main` is mutated by a concurrent session; its own STATUS.md may
 describe different in-flight state. At merge, STATUS.md is disposable — the
@@ -49,10 +50,9 @@ owning skill regenerates it.)
 
 ## Recommended Next Step
 
-Run `/ardd-tasks` and select `plan-eager-backgrounding-2026-07-10.md` to
-approve it and generate its task list — but first consider weighing in on the
-plan's central open question (folding onto `main` at delegation time), since
-it shapes what the tasks implement.
+Run `/ardd-implement` and select `tasks-eager-backgrounding-98b6.md` to
+execute the three tasks (fold-to-main.sh + test → gate rewrite → doc sweep).
+T001 carries the deterministic test; T002/T003 are skill-prose + doc changes.
 
 `main` also holds unpushed commits; push when ready. The `ANTHROPIC_API_KEY`
 smoke thread is unchanged.
