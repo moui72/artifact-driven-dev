@@ -340,12 +340,16 @@ set -e
 [ "$status" -eq 0 ] \
   && ok "case16: --existing exits 0" \
   || bad "case16: expected exit 0, got $status"
-printf '%s' "$out" | grep -q '/ardd-codify' \
-  && ok "case16: prints the /ardd-codify next step" \
-  || bad "case16: never mentions /ardd-codify"
-printf '%s' "$out" | grep -q '/ardd-bootstrap' \
-  && bad "case16: wrongly suggests /ardd-bootstrap for an existing project" \
-  || ok "case16: does not suggest /ardd-bootstrap"
+# Grep new.sh's *own* handoff line specifically — `claude "/ardd-codify"` — not
+# a bare skill name: install.sh's generic next-steps blurb mentions both
+# /ardd-bootstrap and /ardd-codify in prose, so only the `claude "…"` invocation
+# form distinguishes new.sh's handoff from install.sh's output.
+printf '%s' "$out" | grep -q 'claude "/ardd-codify"' \
+  && ok "case16: handoff points at /ardd-codify" \
+  || bad "case16: handoff does not point at /ardd-codify"
+printf '%s' "$out" | grep -q 'claude "/ardd-bootstrap"' \
+  && bad "case16: handoff wrongly points at /ardd-bootstrap for an existing project" \
+  || ok "case16: handoff does not point at /ardd-bootstrap"
 
 # --- Case 17: --existing on a missing directory is refused (use plain mode) ---
 # Existing mode requires a real, populated project; a non-existent path means

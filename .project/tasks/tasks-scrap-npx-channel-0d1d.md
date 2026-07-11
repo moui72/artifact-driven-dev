@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   new case **red** against current `new.sh` (which has no such mode) before
   T003.
 
-- [ ] T003 Implement the existing-project mode in `new.sh` (POSIX sh) to make
+- [x] T003 Implement the existing-project mode in `new.sh` (POSIX sh) to make
   T002 green. Reuse the existing source-resolution, `/dev/tty` interactivity,
   and `install.sh`-invocation paths — invert only the non-empty-target guard
   for this mode (accept a populated project dir; still refuse a dir it doesn't

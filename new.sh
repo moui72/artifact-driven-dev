@@ -1,17 +1,19 @@
 #!/usr/bin/env sh
-# Create a new project under artifact-driven-dev, in one command.
+# Install artifact-driven-dev in one command — a new project, or an existing one.
 #
 #   curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
-#     | sh -s -- my-project
+#     | sh -s -- my-project                                    # new project
+#   cd my-existing-project && curl -fsSL …/new.sh | sh -s -- --existing   # existing project
 #
 # Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
+#        new.sh --existing [--kickoff|--no-kickoff] [--source <path>] [<project-dir>]
 #
 # This is an *acquisition* channel, nothing more. It resolves an ARDD source
-# checkout, creates the target, and then hands off to that checkout's
+# checkout, prepares the target (creating a new one, or accepting an existing
+# populated project under --existing), and then hands off to that checkout's
 # install.sh — the only real install/upgrade entry point (constitution,
 # Project Scope & Intent). It never reimplements any part of install.sh, and
-# must never grow a /ardd-setup-style bridge: unlike the npx channel, it can
-# simply invoke the installer directly.
+# must never grow a bridge skill: it simply invokes the installer directly.
 #
 # Two rules bound its interactivity (constitution v1.2.4). It *refuses* rather
 # than asks wherever writing into a directory it doesn't own is at stake — a
@@ -38,12 +40,20 @@ DEFAULT_SOURCE="$HOME/.ardd/source"
 kickoff=""          # "" = ask; 1 = always; 0 = never
 source_arg=""
 target=""
+existing=0          # 1 = install into an existing, already-populated project
 
 usage() {
   cat >&2 <<EOF
 Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
+       new.sh --existing [--kickoff|--no-kickoff] [--source <path>] [<project-dir>]
 
-  --kickoff        Open Claude Code on /ardd-bootstrap without asking.
+  --existing       Install ARDD into an existing, already-populated project
+                   (<project-dir> defaults to the current directory). Without
+                   it, new.sh creates a *new* project and refuses a non-empty
+                   target.
+  --kickoff        Open Claude Code on the first step without asking
+                   (/ardd-bootstrap for a new project; /ardd-codify, or
+                   /ardd-analyze if already set up, for an existing one).
   --no-kickoff     Install, then print the next step instead of opening Claude Code.
                    With neither flag, you're asked — unless there's no terminal
                    to ask on, in which case this is the default.
@@ -51,8 +61,9 @@ Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
                    Read, never modified. Without it, ~/.ardd/source is cloned
                    and kept up to date.
 
-Example:
+Examples:
   curl -fsSL $REPO_URL/raw/main/new.sh | sh -s -- my-project
+  cd my-existing-project && curl -fsSL $REPO_URL/raw/main/new.sh | sh -s -- --existing
 EOF
   exit 2
 }
@@ -67,6 +78,7 @@ while [ $# -gt 0 ]; do
                   kickoff=0; shift ;;
     --source)     [ $# -ge 2 ] || usage; source_arg="$2"; shift 2 ;;
     --source=*)   source_arg="${1#--source=}"; shift ;;
+    --existing)   existing=1; shift ;;
     -h|--help)    usage ;;
     -*)           echo "Error: unknown option '$1'" >&2; usage ;;
     *)            [ -z "$target" ] || { echo "Error: unexpected argument '$1'" >&2; usage; }
@@ -74,7 +86,12 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-[ -n "$target" ] || usage
+# In --existing mode a missing target means "here" — the natural invocation is
+# `cd my-project && curl … | sh -s -- --existing`. New-project mode requires
+# an explicit target to create.
+if [ -z "$target" ]; then
+  [ "$existing" -eq 1 ] && target="." || usage
+fi
 
 # --- Validate the target, before touching the network -------------------
 # Cheap checks first: a typo'd target must not cost a clone of ~/.ardd/source.
@@ -82,15 +99,31 @@ done
 # natural order and refusing it would be a papercut, but writing into a
 # directory that already holds real content never is.
 
-if [ -e "$target" ]; then
+if [ "$existing" -eq 1 ]; then
+  # Existing-project mode inverts the guard: a populated project is exactly the
+  # target we want, and the explicit --existing flag is the consent to write
+  # into a directory already holding content. We still refuse a target that is
+  # missing or empty — that is new-project mode, so send the user back to it.
+  [ -d "$target" ] || {
+    echo "Error: --existing needs an existing project directory" >&2
+    echo "       ('$target' is missing or is not a directory)." >&2
+    echo "       For a brand-new project, drop --existing and name a target to create." >&2
+    exit 1
+  }
+  if [ -z "$(find "$target" -mindepth 1 -maxdepth 1 ! -name .git | head -n 1)" ]; then
+    echo "Error: '$target' is empty — --existing is for an already-populated project." >&2
+    echo "       For a brand-new project, drop --existing." >&2
+    exit 1
+  fi
+elif [ -e "$target" ]; then
   [ -d "$target" ] || { echo "Error: '$target' exists and is not a directory." >&2; exit 1; }
   leftovers="$(find "$target" -mindepth 1 -maxdepth 1 ! -name .git | head -n 1)"
   if [ -n "$leftovers" ]; then
     echo "Error: '$target' already exists and is not empty." >&2
     echo "" >&2
     echo "This command creates a *new* project. To add ARDD to an existing one," >&2
-    echo "run install.sh from an ARDD checkout against it:" >&2
-    echo "  /path/to/artifact-driven-dev/install.sh $target" >&2
+    echo "rerun with --existing from inside it:" >&2
+    echo "  cd $target && curl … | sh -s -- --existing" >&2
     exit 1
   fi
 fi
@@ -154,13 +187,23 @@ fi
 "$SRC/install.sh" "$TARGET"
 
 # --- Hand off to the first session -------------------------------------
+# A brand-new project seeds from a blank slate (/ardd-bootstrap). An existing
+# project reverse-engineers its code (/ardd-codify) — or, if it already carries
+# ARDD artifacts, just checks them (/ardd-analyze). install.sh only ever creates
+# .project/ardd-version.md, never .project/artifacts/, so that dir's presence
+# reliably distinguishes an already-set-up project from a first install.
+if [ "$existing" -eq 1 ]; then
+  [ -d "$TARGET/.project/artifacts" ] && handoff_cmd="/ardd-analyze" || handoff_cmd="/ardd-codify"
+else
+  handoff_cmd="/ardd-bootstrap"
+fi
 
 next_steps() { # $1 = optional reason line
   [ -n "$1" ] && echo "$1"
   echo "Start the first session with:"
   echo ""
   echo "  cd $target"
-  echo "  claude \"/ardd-bootstrap\""
+  echo "  claude \"$handoff_cmd\""
   echo ""
 }
 
@@ -170,7 +213,7 @@ next_steps() { # $1 = optional reason line
 tty_ok() { (exec 3< /dev/tty) 2>/dev/null; }
 
 launch() {
-  echo "Opening Claude Code in $target — /ardd-bootstrap will get your artifacts started."
+  echo "Opening Claude Code in $target — $handoff_cmd is your first step."
   echo ""
   cd "$TARGET"
   # Do NOT redirect stdin here, even though under `curl | sh` it's the curl
@@ -180,7 +223,7 @@ launch() {
   # passes the check, so it uses that fd instead and silently accepts no
   # keystrokes; `<> /dev/tty` makes it exit outright. An EOF'd pipe on stdin is
   # the input it handles correctly.
-  exec claude "/ardd-bootstrap"
+  exec claude "$handoff_cmd"
 }
 
 # Ask on /dev/tty — never stdin, which is the curl pipe. Bare Enter means yes.
@@ -190,7 +233,7 @@ launch() {
 ask_kickoff() {
   attempt=0
   while [ "$attempt" -lt 3 ]; do
-    printf 'Open Claude Code now and run /ardd-bootstrap? [Y/n] ' > /dev/tty
+    printf 'Open Claude Code now and run %s? [Y/n] ' "$handoff_cmd" > /dev/tty
     if ! IFS= read -r reply < /dev/tty; then
       echo "" > /dev/tty
       return 1   # EOF
