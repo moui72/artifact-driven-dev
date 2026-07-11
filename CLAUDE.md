@@ -71,12 +71,17 @@ outside any checkout (`curl … | sh`), never installed into a target — so
 under the source/target split it is source-side, classified by what it
 governs (acquiring the source), not by where its output lands. It resolves a
 source checkout and then *invokes* that checkout's `install.sh`; it never
-reimplements any part of it, and must never grow a `/ardd-setup`-style
-bridge, because unlike the npx channel it can just call the installer.
+reimplements any part of it, and must never grow a bridge skill — it calls
+the installer directly. (The `npx skills add` channel and its `/ardd-setup`
+bridge were removed 2026-07-11; a plain clone and `new.sh` are the two
+acquisition routes now, both converging directly on `install.sh`.)
 
-Three rules to preserve when editing it (constitution v1.2.4). It **refuses
+Three rules to preserve when editing it (constitution). It **refuses
 rather than asks** wherever writing into a directory it doesn't own is at
-stake — a non-empty target, a `--source` that isn't an ARDD checkout. It
+stake — a non-empty target in new-project mode, a `--source` that isn't an
+ARDD checkout. (Its `--existing` mode deliberately *accepts* a populated
+target: the explicit flag is the consent new-project mode withholds by
+default, so that guard is inverted, not removed.) It
 **never blocks on a question it cannot ask** — no usable `/dev/tty` means
 take the safe default, never hang a pipeline. And it only ever clones or
 pulls the checkout it owns at `~/.ardd/source`; a checkout named via

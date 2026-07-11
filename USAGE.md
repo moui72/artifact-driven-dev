@@ -44,12 +44,12 @@ cd /path/to/artifact-driven-dev
 
 Then open Claude Code in your project.
 
-No clone handy? `npx skills add moui72/artifact-driven-dev` (copy mode,
-not symlink) drops the skill files in, then `/ardd-setup` in Claude Code
-completes the install — it locates or clones the source and runs
-`install.sh` for you. README's Install and Quickstart sections have the
-details. All three channels converge on `install.sh`; it is the only real
-install/upgrade entry point.
+No clone handy? Use the one-command curl bootstrap — from inside an existing
+project, `curl -fsSL <repo>/raw/main/new.sh | sh -s -- --existing` clones the
+source and runs `install.sh` for you (drop `--existing` and name a target to
+create a new project instead). README's Install and Quickstart sections have
+the details. Both routes — clone or curl bootstrap — converge on `install.sh`;
+it is the only real install/upgrade entry point.
 
 ## Getting started (once per project)
 

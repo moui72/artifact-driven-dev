@@ -74,7 +74,6 @@ edit the `description:` there, then re-run it.)
 
 | Command | What it does |
 |---|---|
-| `/ardd-setup` | Complete an npx-acquired install — locate or clone the ARDD source checkout and run install.sh from it. |
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
 
@@ -187,22 +186,26 @@ From a clone of this repo:
 ./install.sh /path/to/your/project
 ```
 
-Or without cloning first, via the [vercel-labs skills CLI](https://github.com/vercel-labs/skills):
+Or without cloning first, with the one-command curl bootstrap — it resolves a
+source checkout (cloning `~/.ardd/source`, a checkout it owns and keeps
+current, if absent) and runs `install.sh` for you:
 
 ```sh
+# a brand-new project
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh | sh -s -- my-project
+
+# an existing project — run from inside it
 cd /path/to/your/project
-npx skills add moui72/artifact-driven-dev   # choose COPY mode, not symlink
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh | sh -s -- --existing
 ```
 
-then open Claude Code and run `/ardd-setup`. The npx path is an
-*acquisition* channel only — it delivers the skill files, and
-`/ardd-setup` completes the install by locating (or cloning) the source
-and running `install.sh` from it. `install.sh` is the only real
-install/upgrade entry point either way; after `/ardd-setup` runs once,
-both paths are indistinguishable and `/ardd-update` handles updates.
-Avoid the CLI's symlink mode: `install.sh` regenerates
-`.claude/skills/`, and symlinks there would point regeneration into the
-CLI's cache (install.sh replaces any it finds, with a warning).
+Either route converges on `install.sh` — the only real install/upgrade entry
+point — so once it has run, `/ardd-update` handles all updates.
+
+> **Note:** `npx skills add` is no longer a supported install channel. If you
+> have skill files without a completed install (e.g. from a prior `npx`
+> acquisition), finish or repair it by running the `--existing` curl bootstrap
+> above from inside the project.
 
 **New project** — open Claude Code and run `/ardd-bootstrap`: it seeds
 artifacts from the conversation, and on a cold start (an empty directory, no

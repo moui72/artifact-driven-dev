@@ -56,7 +56,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: Docs ripple
 
-- [ ] T005 Reconcile all docs to the two-route model. `README.md` Install
+- [x] T005 Reconcile all docs to the two-route model. `README.md` Install
   section: remove the npx block; document clone + the existing-project curl
   bootstrap. Update `USAGE.md` and `guides/`. `CLAUDE.md`: remove the extended
   npx / `/ardd-setup` discussion (the source/target-split notes about the CLI,
