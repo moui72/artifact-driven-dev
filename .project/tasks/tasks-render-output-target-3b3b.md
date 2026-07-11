@@ -28,7 +28,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Schema + lint
 
-- [ ] T002 [parallel] Extend `scripts/lint-project.sh` to accept the two new
+- [x] T002 [parallel] Extend `scripts/lint-project.sh` to accept the two new
   optional artifact-frontmatter fields from T001: `render_target` (non-empty
   string; reject empty/whitespace-only) and `render_section` (non-empty
   string). Unknown-but-valid values pass; malformed (empty) values fail with

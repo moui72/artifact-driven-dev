@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=28
+EXPECTED_BAD_FINDINGS=30
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -70,6 +70,20 @@ else
     echo "ok: invalid next_step_prompt value reported with allowed values"
   else
     echo "FAIL: invalid next_step_prompt value reported with allowed values"
+    fail=1
+  fi
+  # render_target / render_section are optional per-artifact overrides; when
+  # present they must be non-empty. bad-project's datamodel.md has both empty.
+  if grep -q "render_target is present but empty" /tmp/lint-bad.out; then
+    echo "ok: empty render_target reported"
+  else
+    echo "FAIL: empty render_target reported"
+    fail=1
+  fi
+  if grep -q "render_section is present but empty" /tmp/lint-bad.out; then
+    echo "ok: empty render_section reported"
+  else
+    echo "FAIL: empty render_section reported"
     fail=1
   fi
   # bracket-tag checks are scoped to checklist item lines: a tag mentioned

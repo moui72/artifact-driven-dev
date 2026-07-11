@@ -172,6 +172,20 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
         fi
       fi
     fi
+
+    # render_target / render_section are optional per-artifact overrides for
+    # /ardd-render's upsert destination (file + section). Both are free-form
+    # strings, so there's no enum to check — only that a present field isn't
+    # empty (an empty value would silently fall back to the default, masking
+    # a typo). Validated on any artifact that carries them.
+    for rfield in render_target render_section; do
+      if frontmatter_has "$f" "$rfield"; then
+        val="$(frontmatter_field "$f" "$rfield")"
+        if [ -z "$val" ]; then
+          report "$f: $rfield is present but empty — give it a value or remove the field"
+        fi
+      fi
+    done
   done
 
   # --- feature register ---------------------------------------------
