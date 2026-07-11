@@ -28,7 +28,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Setup-tier merges (depends: Phase 1)
 
-- [ ] T003 Merge `/ardd-kickoff` into `/ardd-bootstrap` AND delete
+- [x] T003 Merge `/ardd-kickoff` into `/ardd-bootstrap` AND delete
   `skills/ardd-kickoff/` in the same change (Principle VII — no dead
   architecture). In `skills/ardd-bootstrap/SKILL.md`, add "step 0 — assess
   context sufficiency": if conversation context already establishes the

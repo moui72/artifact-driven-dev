@@ -11,7 +11,75 @@ conversation context, then generates project workflow documentation.
 Run once at project start; use `/ardd-refine` and `/ardd-add-artifact` for all
 subsequent changes.
 
+Bootstrap seeds artifacts **from conversation context**. Usually that context
+already exists — you've talked the project through, or you're migrating notes.
+But on a cold first session opened straight from the `new.sh` quickstart, the
+directory is empty and there's no conversation yet. Step 0 handles both: when
+context is thin it first conducts the design interview that *creates* that
+context, then proceeds exactly as it would have with a warm conversation.
+(For an *existing codebase*, use `/ardd-codify` instead — the code is the
+context, so no interview is needed.)
+
 ## Steps
+
+0. **Assess context sufficiency (and guard the install).**
+
+   - **Guard: is the install complete?** If `.claude/skills/ardd-scripts/`
+     doesn't exist, the skill files arrived without `install.sh` having run
+     (the `npx skills add` path). Stop and point at `/ardd-setup`, which
+     completes the install. Every later step here shells out to
+     `ardd-scripts`, so continuing would fail on the first script call.
+
+   - **Enough context already?** If the conversation has established what the
+     project is — its purpose, data, constraints, decisions — proceed to step
+     1 and synthesize from it, as bootstrap always has. If context is thin (a
+     cold first session, an empty directory, no design discussion yet),
+     **conduct the design interview below first**, then proceed. Skipping the
+     interview is always fine when the user would rather just talk the project
+     through in their own words — both paths reach the same place.
+
+   **Design interview** (thin-context path only). Cover the seven topics
+   below, roughly in order — data before infrastructure, since storage and
+   sync strategy should follow the schema rather than constrain it. Ask about
+   one topic at a time, in your own words, following up where an answer opens
+   a real question. This is a conversation, not a form: skip what plainly
+   doesn't apply (a CLI tool has no UI topic), and go deeper where the user
+   has clearly already made decisions.
+
+   | Topic | What you're trying to surface |
+   |---|---|
+   | What it does | The problem it solves, in a sentence or two |
+   | Who uses it | Role, technical level, how often |
+   | Data | Entities, where they come from, how they relate |
+   | External integrations | APIs, third-party services, other systems |
+   | Storage | SQL vs NoSQL, hosted vs embedded — and why |
+   | Tech stack | Language, framework, hard constraints |
+   | Principles | What the project won't compromise on |
+
+   Use `AskUserQuestion` where the choice is genuinely discrete (storage
+   engine, language, solo vs collaborative workflow) and plain conversation
+   where it isn't ("what problem does this solve?" has no options list).
+
+   **"I don't know yet" is a first-class answer.** Say so explicitly the
+   first time the user hesitates. Carry every undecided item forward as an
+   `[OPEN: <question>]` for the synthesis below to record — an artifact that
+   honestly admits an open question is worth more than one with an invented
+   decision in it, and `/ardd-analyze` will surface which open items actually
+   block planning. Never resolve an open question by picking something
+   plausible.
+
+   Do not propose constitution principles during the interview. Step 4 has a
+   curated suggestion catalog (`ardd-constitution-data/`) that it filters
+   against the artifacts it's about to create, and offers at the right moment.
+   Duplicating that from memory produces worse suggestions and a confusing
+   double-ask.
+
+   **Reflect the design back** before synthesizing. Summarize what you heard,
+   grouped roughly the way artifacts will be (principles, data,
+   infrastructure, interface), and list every `[OPEN: ...]` item you're
+   carrying. Ask the user to confirm or correct it. This is the last cheap
+   moment to fix a misunderstanding — after the artifacts are written it takes
+   an `/ardd-refine` pass.
 
 1. **Check for existing artifacts.** List `.project/artifacts/`. If any `.md`
    files already exist, warn the user and ask for confirmation before
