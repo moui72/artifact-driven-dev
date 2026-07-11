@@ -75,7 +75,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 5: User docs
 
-- [ ] T005 [parallel] Update `README.md` and `USAGE.md` so the `/ardd-render`
+- [x] T005 [parallel] Update `README.md` and `USAGE.md` so the `/ardd-render`
   description reflects the generic, `diagram_type`-driven model, and **point
   users to the Mermaid docs (mermaid.js.org) for the supported diagram types
   and their syntax** — the canonical source of valid `diagram_type` values

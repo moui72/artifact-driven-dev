@@ -334,33 +334,50 @@ surfaces new backlog-worthy scope instead, use `/ardd-feature`.
 
 ### Visualize your artifacts
 
-To generate a Mermaid diagram and upsert it into `README.md` (the default
-destination):
+An artifact becomes renderable by declaring a `diagram_type` in its
+frontmatter — the Mermaid diagram-type it should be drawn as. There is no
+fixed list of renderable artifacts and no built-in set of diagram types: any
+artifact opts in by declaring one. To generate a Mermaid diagram and upsert it
+into `README.md` (the default destination):
 
 ```
 /ardd-render datamodel
 /ardd-render infrastructure
 ```
 
-`/ardd-render datamodel` produces an ERD from `datamodel.md` and writes it under
-a `## Datamodel` section. `/ardd-render infrastructure` produces a container
-diagram from `infrastructure.md` (and `adapters.md` if present) under
-`## Infrastructure`. GitHub renders Mermaid code fences natively — no extra
-tooling needed.
+`/ardd-render datamodel` renders `datamodel.md` (which declares
+`diagram_type: erDiagram`) and writes it under a `## Datamodel` section;
+`/ardd-render infrastructure` renders `infrastructure.md` under
+`## Infrastructure`. Running bare `/ardd-render` renders every artifact that
+declares a `diagram_type`. GitHub renders Mermaid code fences natively — no
+extra tooling needed.
 
-The destination is configurable per artifact. By default a diagram lands in
-`README.md`; to send it elsewhere, set `render_target` (and optionally
-`render_section`) in the artifact's own frontmatter:
+The render fields live in the artifact's own frontmatter:
 
 ```yaml
 # .project/artifacts/datamodel.md
+diagram_type: erDiagram        # the Mermaid type — declaring it makes the artifact renderable
+render_hint: |                 # optional; domain guidance for what to draw/omit
+  One block per entity; derive relationships from FK refs; omit index detail.
 render_target: docs/ARCHITECTURE.md   # optional; default README.md
-render_section: Datamodel             # optional; default = the section above
+render_section: Datamodel             # optional; default = capitalized artifact stem
 ```
 
-This keeps `README.md` free of raw Mermaid where it must stay clean — e.g. an
-npm package page, whose renderer doesn't render Mermaid fences — while the
-diagram still renders on GitHub in the target doc.
+`diagram_type` is the literal Mermaid diagram-type declaration, used verbatim
+as the first line of the fence — `erDiagram`, `sequenceDiagram`, `graph TD` /
+`flowchart LR`, `classDiagram`, `gantt`, and so on. ARDD keeps no enumerated
+list; **see the Mermaid docs at [mermaid.js.org](https://mermaid.js.org) for
+the supported diagram types and their syntax** — that is the canonical source
+of valid `diagram_type` values. A typo'd or unsupported value surfaces at
+render time, not at lint.
+
+The standard `datamodel` / `infrastructure` / `ui` templates ship with a
+`diagram_type` and a `render_hint` already; other artifacts (`api`, custom
+ones) render only if you add a `diagram_type` yourself.
+
+Setting `render_target` keeps `README.md` free of raw Mermaid where it must
+stay clean — e.g. an npm package page, whose renderer doesn't render Mermaid
+fences — while the diagram still renders on GitHub in the target doc.
 
 ---
 
