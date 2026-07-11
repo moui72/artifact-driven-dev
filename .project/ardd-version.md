@@ -1,6 +1,6 @@
 # ARDD Version
 
-_Source: artifact-driven-dev @ d9d6d76 · Installed/updated 2026-07-11_
+_Source: artifact-driven-dev @ b47f36f · Installed/updated 2026-07-11_
 
 Source-Path: /Users/tylerpeckenpaugh/dev/artifact-driven-dev
 
