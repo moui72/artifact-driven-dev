@@ -110,6 +110,11 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   any in-progress/completed ARDD tasks-file state found in them — the
 #   worktree-native replacement for reading coarse state off the default
 #   branch to see what other delegated work is in flight.
+# fold-to-main.sh: the deterministic half of the eager-background delegation
+#   gate — fast-forward-folds the current feature branch into the local
+#   default branch and checks it out, so a run already on a branch can be
+#   backgrounded (its state reaches local <default> for worktree-align.sh to
+#   carry into the subagent's worktree). Refuses on dirty/detached/diverged.
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
 cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
@@ -120,6 +125,7 @@ cp "$SCRIPT_DIR/scripts/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-label-de
 cp "$SCRIPT_DIR/scripts/sync-divergence.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh"
 cp "$SCRIPT_DIR/scripts/project-lock.sh" "$ARDD_SCRIPTS_DIR/project-lock.sh"
 cp "$SCRIPT_DIR/scripts/worktree-align.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh"
+cp "$SCRIPT_DIR/scripts/fold-to-main.sh" "$ARDD_SCRIPTS_DIR/fold-to-main.sh"
 cp "$SCRIPT_DIR/scripts/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh"
 cp "$SCRIPT_DIR/scripts/ardd-state.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh"
 cp "$SCRIPT_DIR/scripts/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh"
@@ -133,6 +139,7 @@ chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" 
   "$ARDD_SCRIPTS_DIR/sibling-tasks-complete.sh" "$ARDD_SCRIPTS_DIR/sync-slug-match.sh" \
   "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh" \
   "$ARDD_SCRIPTS_DIR/project-lock.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh" \
+  "$ARDD_SCRIPTS_DIR/fold-to-main.sh" \
   "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh" \
   "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh" \
   "$ARDD_SCRIPTS_DIR/upsert-section.sh" "$ARDD_SCRIPTS_DIR/ardd-update-check.sh"
@@ -145,6 +152,7 @@ echo "  ✓ ardd-scripts/sync-label-decision.sh"
 echo "  ✓ ardd-scripts/sync-divergence.sh"
 echo "  ✓ ardd-scripts/project-lock.sh"
 echo "  ✓ ardd-scripts/worktree-align.sh"
+echo "  ✓ ardd-scripts/fold-to-main.sh"
 echo "  ✓ ardd-scripts/inflight-worktrees.sh"
 echo "  ✓ ardd-scripts/ardd-state.sh"
 echo "  ✓ ardd-scripts/defects-unsurfaced.sh"

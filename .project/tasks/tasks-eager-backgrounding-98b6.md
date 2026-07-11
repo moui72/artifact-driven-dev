@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: fold-to-main helper
 
-- [ ] T001 Create `scripts/fold-to-main.sh` and its regression test in one
+- [x] T001 Create `scripts/fold-to-main.sh` and its regression test in one
   commit (Quality Standards: a deterministic check ships with its
   fixture test). The script: resolve the default branch via the same
   fallback chain `branch-info.sh` uses; if the working tree is dirty, print
