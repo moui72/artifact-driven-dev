@@ -1,5 +1,5 @@
 ---
-status: draft        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
+status: approved        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
 branch: generic-render
 created: 2026-07-11
 features: []
