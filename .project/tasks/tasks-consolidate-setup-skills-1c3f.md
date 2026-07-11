@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: install.sh prunes removed ardd skills (foundation)
 
-- [ ] T001 Write a test-first regression test for install.sh skill-pruning
+- [x] T001 Write a test-first regression test for install.sh skill-pruning
   (Principle V — deterministic checks are test-first). Add
   `scripts/test-install-prune.sh` (POSIX sh) that: builds a fixture target,
   runs `install.sh` against it, plants a stale `.claude/skills/ardd-ghost/`
