@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-10
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-eager-backgrounding-2026-07-10.md
 ---
 
 # Feedback
 
 ## Reconsidered
-- [ ] F001 The solo-mode delegation gate defaults to inline whenever
+- [x] F001 The solo-mode delegation gate defaults to inline whenever
   `on_default` is false — i.e. whenever the run is already on a feature
   branch or worktree, it skips the "delegate to a background subagent?"
   offer entirely (`skills/ardd-implement/SKILL.md` step 3: "If `on_default`
@@ -22,7 +22,7 @@ plan: null        # set to the consuming plan's filename once planned
   up even when state isolation is already handled.
 
 ## UX
-- [ ] F002 When the user opts to background/delegate from a focused session
+- [x] F002 When the user opts to background/delegate from a focused session
   that is sitting on a feature branch or worktree, the coordinator (focused)
   session should return to the default branch (`main`) — so the interactive
   session is left clean and free while the delegated subagent works in its
