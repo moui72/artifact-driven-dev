@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-10 (post-/ardd-implement, eager-backgrounding complete on branch). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (post-/ardd-update, reinstall to 0d053f0; principle-agnostic-skills merged). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -31,9 +31,13 @@ because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced.
 
 ## Feedback
 
-None open — all feedback files are `status: planned`.
-(`feedback-eager-backgrounding-return-to-5cde.md` was just consumed by
-`plan-eager-backgrounding-2026-07-10.md`.)
+1 open feedback file — see `.project/feedback/`, picked up by the next
+`/ardd-plan`:
+
+- `feedback-repo-critique-6ad1.md` — standing repo-critique items.
+
+(`feedback-skill-constitution-principle-c-1058.md` was consumed by
+`plan-principle-agnostic-skills-2026-07-10.md` and is now `status: planned`.)
 
 ## Feature Backlog
 
@@ -41,24 +45,19 @@ None open — all feedback files are `status: planned`.
 
 ## In Flight
 
-- Branch `eager-backgrounding` (this checkout): tasks file
-  `tasks-eager-backgrounding-98b6.md` **completed** (3/3), 7 commits ahead of
-  `main`, awaiting merge. Delivered: `fold-to-main.sh` (+ test, CI, install
-  wiring); `/ardd-implement` & `/ardd-converge` gates now offer backgrounding
-  regardless of `on_default`, folding to `main` first; CLAUDE.md/USAGE/decision
-  record 0004 updated.
-
-(Note: `main` is mutated by a concurrent session; its own STATUS.md may
-describe different in-flight state. At merge, STATUS.md is disposable — the
-owning skill regenerates it.)
+Nothing in flight — no other worktrees, no unmerged branches. Both recent
+efforts are merged into `main` (`0d053f0`): the eager-backgrounding work
+(`fold-to-main.sh` + delegation-gate changes) and principle-agnostic-skills
+(`/ardd-plan` steps 6 & 8 now gate Complexity Tracking / Production Annotation
+Summary on the constitution's *declared* principles). The installed
+`.claude/skills/` copies were just regenerated to match via `/ardd-update`.
 
 ## Recommended Next Step
 
-Merge `eager-backgrounding` into `main` (7 commits) — the change is complete
-and green under the pre-commit hook. Note it edits the product skills
-`ardd-implement`/`ardd-converge` and adds `fold-to-main.sh`; this repo's own
-installed copies under `.claude/skills/` won't reflect them until the next
-`install.sh`/`/ardd-update`.
+No pending implementation work. Standing threads:
 
-`main` also holds unpushed commits; push when ready. The `ANTHROPIC_API_KEY`
-smoke thread is unchanged.
+- 1 open feedback file (`feedback-repo-critique-6ad1.md`) — run `/ardd-plan`
+  when ready to consume it.
+- A `/ardd-verify` pass would fold recent merges into `DEFECTS.md`
+  (last checked 2026-07-09).
+- The `ANTHROPIC_API_KEY` smoke thread remains (no scenario has ever run).
