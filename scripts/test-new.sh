@@ -310,6 +310,69 @@ grep -n 'exec claude' "$NEW_SH" | grep -q '/dev/tty' \
   && bad "case14: launch exec redirects stdin — Claude Code will ignore keystrokes" \
   || ok "case14: launch exec leaves stdin alone"
 
+# --- Case 15: --existing installs into a populated project (guard inverted) ---
+# The existing-project mode accepts a non-empty target — that is the whole
+# point. The explicit --existing flag is the consent that case 2 withholds by
+# default; pre-existing content must survive untouched.
+target="$WORK/case15/proj"
+mkdir -p "$target/src"
+git init -q "$target"
+echo "my real project" > "$target/README.md"
+echo "code" > "$target/src/main.py"
+run_new 0 "case15: --existing accepts a populated project" --no-kickoff --existing "$target"
+[ -f "$target/.project/ardd-version.md" ] \
+  && ok "case15: ARDD installed into existing project" \
+  || bad "case15: nothing installed"
+{ [ -f "$target/src/main.py" ] && grep -q "code" "$target/src/main.py"; } \
+  && ok "case15: pre-existing content untouched" \
+  || bad "case15: pre-existing content clobbered"
+
+# --- Case 16: --existing points at /ardd-codify, not /ardd-bootstrap ---
+# A populated project with no .project/ is a codebase to reverse-engineer, so
+# the next-step handoff is /ardd-codify — never /ardd-bootstrap (which seeds
+# from a blank slate).
+target="$WORK/case16/proj"
+mkdir -p "$target"; git init -q "$target"; echo x > "$target/f"
+set +e
+out="$(ARDD_SOURCE="$REPO_ROOT" sh "$NEW_SH" --no-kickoff --existing "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case16: --existing exits 0" \
+  || bad "case16: expected exit 0, got $status"
+printf '%s' "$out" | grep -q '/ardd-codify' \
+  && ok "case16: prints the /ardd-codify next step" \
+  || bad "case16: never mentions /ardd-codify"
+printf '%s' "$out" | grep -q '/ardd-bootstrap' \
+  && bad "case16: wrongly suggests /ardd-bootstrap for an existing project" \
+  || ok "case16: does not suggest /ardd-bootstrap"
+
+# --- Case 17: --existing on a missing directory is refused (use plain mode) ---
+# Existing mode requires a real, populated project; a non-existent path means
+# the user wants new-project mode instead — refuse rather than create it.
+target="$WORK/case17/does-not-exist"
+run_new 1 "case17: --existing on a missing dir refused" --no-kickoff --existing "$target"
+[ -d "$target" ] \
+  && bad "case17: refused but created the dir" \
+  || ok "case17: nothing created on refusal"
+
+# --- Case 18: --existing defaults its target to the current directory ---
+# `cd my-project && curl … | sh -s -- --existing` is the natural invocation
+# from inside an existing project, so a missing target argument is not a usage
+# error in this mode — it means "here".
+target="$WORK/case18/proj"
+mkdir -p "$target"; git init -q "$target"; echo x > "$target/f"
+set +e
+out="$( (cd "$target" && ARDD_SOURCE="$REPO_ROOT" sh "$NEW_SH" --no-kickoff --existing </dev/null) 2>&1 )"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case18: --existing with no target defaults to cwd" \
+  || bad "case18: expected exit 0, got $status"
+[ -f "$target/.project/ardd-version.md" ] \
+  && ok "case18: installed into cwd" \
+  || bad "case18: nothing installed into cwd"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"
 else

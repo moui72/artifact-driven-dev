@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Existing-project curl bootstrap (test-first)
 
-- [ ] T002 Test-first (Principle V). Extend `scripts/test-new.sh` with a case
+- [x] T002 Test-first (Principle V). Extend `scripts/test-new.sh` with a case
   exercising the existing-project bootstrap mode: a **non-empty** target dir
   is accepted and the run converges to `install.sh`; a directory `new.sh`
   doesn't own is still refused (refuse-not-ask); the run never blocks when
