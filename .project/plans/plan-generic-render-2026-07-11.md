@@ -50,13 +50,28 @@ artifact:
 
 ```yaml
 # .project/artifacts/<name>.md
-diagram_type: erDiagram        # a Mermaid type name — makes the artifact renderable
+diagram_type: erDiagram        # a Mermaid diagram-type declaration — makes the artifact renderable
 render_hint: |                 # optional; domain guidance for what to draw/omit
   One block per entity; derive relationships from FK refs; omit index detail.
 render_target: docs/ARCHITECTURE.md   # optional; default README.md (shipped)
 render_section: Datamodel             # optional; default = capitalized artifact stem
 diagram_status: unrendered            # existing; required once diagram_type is present
 ```
+
+**What `diagram_type` holds (design decision, 2026-07-11).** It is the
+*literal Mermaid diagram-type declaration* — the exact token Mermaid uses to
+open that diagram (`erDiagram`, `sequenceDiagram`, `classDiagram`,
+`stateDiagram-v2`, `graph TD`/`flowchart LR`, `gantt`, `pie`, `journey`,
+`mindmap`, `timeline`, …). The render step uses it **verbatim as the first
+line** of the ```` ```mermaid ```` fence, then generates the body. For
+flowcharts the value carries the direction (`graph TD`), used as-is — no
+agent guesswork about orientation; `render_hint` may still refine layout.
+"Free-form" means only that ARDD keeps **no enumerated list** of these and
+does not lint against one — the value must nonetheless be a *real Mermaid
+type* (not an English label like `entity-relationship`). An invalid/typo'd
+value surfaces at render (interactive), not at lint. mermaid.js.org is the
+canonical reference for valid values — which is exactly what the user docs
+(F002) point to.
 
 Resolution / behavior:
 - **Renderability = declares `diagram_type`.** `/ardd-render <name>` renders
