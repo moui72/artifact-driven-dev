@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-11
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-generic-render-2026-07-11.md
 ---
 
 # Feedback
 
 ## Reconsidered
-- [ ] F001 Make `/ardd-render` generic and fully artifact-driven. Today the
+- [x] F001 Make `/ardd-render` generic and fully artifact-driven. Today the
   diagram *kind* is a fixed, closed 1:1 lookup table hardcoded in
   `skills/ardd-render/SKILL.md` (`datamodel`→ERD, `infrastructure`→container,
   `ui`→component hierarchy), keyed by the argument name — the artifact's
@@ -57,7 +57,7 @@ plan: null        # set to the consuming plan's filename once planned
   unsupported type is caught at render (interactive), not at lint.
 
 ## UX
-- [ ] F002 Document for *users* where to see what Mermaid supports — which
+- [x] F002 Document for *users* where to see what Mermaid supports — which
   diagram types and their syntax — in `README.md` and `USAGE.md` (and any
   render guide), pointing to the official Mermaid docs (mermaid.js.org). With
   `diagram_type` becoming free-form (F001), users need a discoverable
