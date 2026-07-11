@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (post-/ardd-plan, generic-render draft plan on branch). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (post-/ardd-tasks, generic-render tasks generated on branch). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -12,7 +12,7 @@ _Updated: 2026-07-11 (post-/ardd-plan, generic-render draft plan on branch). Kee
 
 None in the artifact. Two plan-scoped sets remain, both non-blocking:
 
-- `plan-generic-render-2026-07-11.md` (draft) — (1) `render_section` default
+- `plan-generic-render-2026-07-11.md` (approved) — (1) `render_section` default
   derivation (capitalized stem; standard templates declare explicit headers);
   (2) `render_hint` lint validation (non-empty when present vs. free prose);
   (3) migration scope (only the three historically-renderable artifacts
@@ -42,19 +42,19 @@ None open — all feedback files are `status: planned`.
 
 ## In Flight
 
-- Branch `generic-render` (this checkout): draft plan
-  `plan-generic-render-2026-07-11.md` written, feedback F001+F002 planned —
-  not yet tasked, not yet merged to `main`. Delivers generic, `diagram_type`-
-  driven `/ardd-render` (retiring the closed 3-argument table) across 5
-  phases: skill rewrite, lint schema, standard templates, a migration for
-  existing installs, and user docs pointing to the Mermaid reference.
+- Branch `generic-render` (this checkout): plan
+  `plan-generic-render-2026-07-11.md` **approved**, tasks file
+  `tasks-generic-render-803c.md` **ready** (0/5) — not yet started, not yet
+  merged to `main`. Delivers generic, `diagram_type`-driven `/ardd-render`
+  (retiring the closed 3-argument table): skill rewrite → lint schema →
+  standard templates → migration for existing installs → user docs pointing
+  to the Mermaid reference.
 
 ## Recommended Next Step
 
-Run `/ardd-tasks` and select `plan-generic-render-2026-07-11.md` to approve it
-and generate its task list. The three remaining open questions are minor
-(section-default, `render_hint` validation, migration scope) and can be
-settled during implementation.
+Run `/ardd-implement` and select `tasks-generic-render-803c.md` to execute the
+five tasks (skill rewrite → lint schema / templates / docs in parallel →
+migration). T002 and T004 carry the deterministic tests.
 
 `main` also holds unpushed commits; push when ready. The `ANTHROPIC_API_KEY`
 smoke thread is unchanged.
