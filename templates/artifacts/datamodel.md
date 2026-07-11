@@ -3,6 +3,12 @@ name: datamodel
 status: draft
 last_updated: YYYY-MM-DD
 diagram_status: unrendered
+diagram_type: erDiagram
+render_section: Datamodel
+render_hint: |
+  One block per entity with its fields and types. Derive relationships from
+  FK references (e.g. patient_id FK -> patients). Omit index and
+  normalization detail — the diagram represents structure, not implementation.
 ---
 
 # Data Model

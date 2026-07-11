@@ -3,6 +3,13 @@ name: infrastructure
 status: draft
 last_updated: YYYY-MM-DD
 diagram_status: unrendered
+diagram_type: graph TD
+render_section: Infrastructure
+render_hint: |
+  Major runtime components as nodes (UI, server/API layer, database, sync
+  engine, external APIs). Draw data flow between them as directed edges with
+  short labels. Include one node per adapter if an adapters artifact exists.
+  Keep it high-level: components and flows, not implementation detail.
 ---
 
 # Infrastructure

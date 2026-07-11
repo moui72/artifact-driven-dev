@@ -3,6 +3,12 @@ name: ui
 status: draft
 last_updated: YYYY-MM-DD
 diagram_status: unrendered
+diagram_type: graph TD
+render_section: UI
+render_hint: |
+  Each component as a node, with parent -> child edges based on the component
+  nesting described here. Annotate leaf nodes that receive computed data with
+  a short edge label. Omit state management detail — structure only.
 ---
 
 # UI

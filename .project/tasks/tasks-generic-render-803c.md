@@ -45,7 +45,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Standard artifact templates
 
-- [ ] T003 [parallel] Add the generic render frontmatter to
+- [x] T003 [parallel] Add the generic render frontmatter to
   `templates/artifacts/{datamodel,infrastructure,ui}.md`: `diagram_type`
   (`erDiagram`, `graph TD`, `graph TD` respectively), an explicit
   `render_section` (`Datamodel`, `Infrastructure`, `UI`), and a `render_hint`
