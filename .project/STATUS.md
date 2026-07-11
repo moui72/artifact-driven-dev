@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (post-/ardd-update, reinstall to 0d053f0; principle-agnostic-skills merged). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (post-/ardd-feedback, generic-configurable-render note captured on main). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -34,10 +34,15 @@ because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced.
 1 open feedback file — see `.project/feedback/`, picked up by the next
 `/ardd-plan`:
 
-- `feedback-repo-critique-6ad1.md` — standing repo-critique items.
+- `feedback-generic-configurable-render-di-1738.md` — **new.** Reconsidered:
+  make `/ardd-render` generic and artifact-driven — instead of the fixed
+  three-argument diagram-type table, each artifact declares its own diagram
+  type + Mermaid syntax in frontmatter (the natural extension of the shipped
+  `render_target`/`render_section` pattern). Carries a spike as its crux:
+  do diagram types / Mermaid syntaxes need to be enumerated, or does the
+  agent just know? Untagged (skill-level; no artifact records render config).
 
-(`feedback-skill-constitution-principle-c-1058.md` was consumed by
-`plan-principle-agnostic-skills-2026-07-10.md` and is now `status: planned`.)
+(`feedback-repo-critique-6ad1.md` is `status: planned`, not open.)
 
 ## Feature Backlog
 
@@ -54,10 +59,16 @@ Summary on the constitution's *declared* principles). The installed
 
 ## Recommended Next Step
 
-No pending implementation work. Standing threads:
+Plan the newly captured render-genericity feedback when ready:
+`/ardd-plan feedback-generic-configurable-render-di-1738.md` (scope it to that
+file). Worth settling its spike first — whether diagram types / Mermaid
+syntaxes get enumerated or left to agent knowledge — since that shapes the
+whole design; the plan's Open Questions can hold it, but a prior decision
+saves a redesign.
 
-- 1 open feedback file (`feedback-repo-critique-6ad1.md`) — run `/ardd-plan`
-  when ready to consume it.
+Standing threads:
+
 - A `/ardd-verify` pass would fold recent merges into `DEFECTS.md`
   (last checked 2026-07-09).
 - The `ANTHROPIC_API_KEY` smoke thread remains (no scenario has ever run).
+- `main` holds unpushed commits; push when ready.
