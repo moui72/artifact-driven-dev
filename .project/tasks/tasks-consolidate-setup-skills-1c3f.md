@@ -72,7 +72,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: Core-loop merge — /ardd-tasks → /ardd-plan (depends: Phase 1)
 
-- [ ] T007 Merge `/ardd-tasks` into `/ardd-plan` AND delete `skills/ardd-tasks/`
+- [x] T007 Merge `/ardd-tasks` into `/ardd-plan` AND delete `skills/ardd-tasks/`
   in the same change (Principle VII). The merged `skills/ardd-plan/SKILL.md`
   writes the durable `plan-*.md`, then pauses at an **explicit
   approve/revise/stop checkpoint**, then (on approve) generates and writes

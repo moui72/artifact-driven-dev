@@ -1,21 +1,30 @@
 ---
 name: ardd-plan
 tier: core
-description: Draft a phased implementation plan from artifacts, feedback, and optionally backlogged features; feedback-file arguments scope which feedback is consumed.
+description: Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning.
 ---
 
 # /ardd-plan
 
 Generate an implementation plan from the current artifacts, any open
 feedback (`/ardd-feedback`), and optionally one or more backlogged features
-(`/ardd-feature`). Run `/ardd-analyze` first — do not plan over unresolved
-conflicts.
+(`/ardd-feature`); pause at an explicit approval checkpoint; then, on
+approval, generate the ordered task list the plan implies. One skill spans
+the whole plan→approve→task arc — there is no separate `/ardd-tasks` command.
+Run `/ardd-analyze` first — do not plan over unresolved conflicts.
 
 Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
 <slug> [<slug> ...]` additionally targets one or more backlogged feature
 entries from the feature register (`.project/features/`) — this is where a feature
 idea's artifact design work actually happens (`/ardd-feature` only logs the
 idea; it doesn't touch artifacts).
+
+`/ardd-plan --from <plan-file>` is the **re-task mode**: it skips planning
+entirely and re-enters at the tasking half (step 11) for the named,
+already-written plan — regenerating a fresh tasks file without re-drafting the
+plan. Use it to re-task an approved plan (e.g. after abandoning a stale tasks
+file, or to split tasks differently). The `<plan-file>` is a
+`.project/plans/plan-*.md` filename, with or without its path.
 
 Any argument that looks like a feedback filename (`feedback-*.md`, with or
 without its `.project/feedback/` path) is a **feedback scope** instead of a
@@ -36,10 +45,20 @@ disambiguates a defect scope from feature slugs and feedback filenames in
 the same argument list — a plain kebab-case argument is always a feature
 slug, `feedback-*.md` is always a feedback scope.
 
+## Shape of a run
+
+Steps 1–10 draft and write the plan and stop at the **approval checkpoint**
+(step 10). Only on explicit approval do steps 11–15 approve the plan and
+generate its tasks file. This restores a real approve/revise/stop gate
+between planning and tasking — selecting a plan is a decision, not a
+keystroke. **Re-task mode (`--from <plan-file>`) skips straight to step 11**
+for the named plan; steps 2–10 do not run.
+
 ## Steps
 
 1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
-   `current`, `default`, and `on_default`.
+   `current`, `default`, and `on_default`. (Applies in both normal and
+   `--from` mode.)
 
    If `on_default` is `false`, skip to step 2 and derive `<slug>` from
    `current` via `.claude/skills/ardd-scripts/ardd-state.sh slug "<current>"`
@@ -55,10 +74,9 @@ slug, `feedback-*.md` is always a feedback scope.
    - "Yes, create a branch, but name it: ___"
    - "No, continue on default" (a worktree works too — set one up yourself
      and re-run from there; this gate never delegates to a worktree
-     subagent: the draft plan this run produces (step 9) is itself the
-     state `/ardd-tasks` needs to see, and isolating it in a worktree
-     would trap it there until a manual merge, severing the plan→tasks
-     handoff.)
+     subagent: the draft plan and tasks file this run produces are
+     themselves the state the next steps need to see, and isolating them in
+     a worktree would trap them there until a manual merge.)
 
    On yes, run `git checkout -b <name>` and set `<slug>` to `<name>`. On no,
    set `<slug>` to a freshly generated short arbitrary hex token (same
@@ -77,12 +95,15 @@ slug, `feedback-*.md` is always a feedback scope.
    `.project/artifacts/constitution.md` frontmatter (grep it; absent =
    `solo`), remember that a delegated `/ardd-implement` worktree branches
    from `origin/<default>` and can only see files that have reached the
-   remote. So the plan this run writes (and, later, the tasks file
-   `/ardd-tasks` generates from it) must reach `origin/<default>` — via a
-   merged PR or a push — before delegated implementation can pick it up.
-   Solo mode needs nothing extra here: `worktree-align.sh` fast-forwards the
-   local default branch's unpushed commits into the delegated worktree, so
-   the plan is visible without pushing.
+   remote. So the plan *and* tasks file this run writes must reach
+   `origin/<default>` — via a merged PR or a push — before delegated
+   implementation can pick them up. Solo mode needs nothing extra here:
+   `worktree-align.sh` fast-forwards the local default branch's unpushed
+   commits into the delegated worktree, so both are visible without pushing.
+
+   **Re-task mode:** if invoked with `--from <plan-file>`, do step 1, then
+   skip directly to step 11 with `<plan-file>` as the chosen plan. Steps
+   2–10 do not run.
 
 2. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present. If any are `status: draft`, warn the user and ask whether
@@ -168,9 +189,9 @@ slug, `feedback-*.md` is always a feedback scope.
       internally consistent before the plan itself is drafted against it.
 
    Remember which feature slugs were targeted here — you'll record them in
-   the plan's frontmatter (step 8). Their `Status` flips from `backlogged`
-   to `planned` later, in `/ardd-tasks`, when this plan is selected and
-   approved — not here.
+   the plan's frontmatter (step 9). Their `Status` flips from `backlogged`
+   to `planned` at the tasking half (step 11), when this plan is approved —
+   not here.
 
 4. **Load open feedback.** Glob `.project/feedback/feedback-*.md` and read
    frontmatter. If feedback-scope argument(s) were passed (see Usage),
@@ -259,12 +280,10 @@ slug, `feedback-*.md` is always a feedback scope.
 7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
    plan you're about to draft supersedes one of them. On confirmation, flip
-   that plan's status to `superseded` immediately via `.claude/skills/ardd-scripts/ardd-state.sh plan-flip <file> superseded` — don't wait for this
-   new plan's own approval, which now happens later, when `/ardd-tasks`
-   selects it. A superseded-by-a-draft-that's-never-used plan is
-   an acceptable outcome, not a bug: `/ardd-analyze`/`STATUS.md` surface
-   open draft counts either way, so an abandoned replacement doesn't go
-   unnoticed.
+   that plan's status to `superseded` immediately via `.claude/skills/ardd-scripts/ardd-state.sh plan-flip <file> superseded`. A
+   superseded-by-a-draft-that's-never-approved plan is an acceptable outcome,
+   not a bug: `/ardd-analyze`/`STATUS.md` surface open draft counts either
+   way, so an abandoned replacement doesn't go unnoticed.
 
 8. **Draft the plan** covering:
    - **Goal** — what this plan delivers (one sentence)
@@ -305,30 +324,158 @@ slug, `feedback-*.md` is always a feedback scope.
    ---
    ```
 
-10. **Present a summary** to the user: phases, key decisions, open questions.
-    The plan is saved at `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` as
-    `status: draft` — there's no separate approval step here. Running
-    `/ardd-tasks` and selecting this plan is what approves it (flips it to
-    `approved`, and flips its targeted `features:` slugs from `backlogged`
-    to `planned`) and generates its tasks, in one step.
+10. **Approval checkpoint.** Present a summary to the user — phases, key
+    decisions, open questions — and note the plan is saved at
+    `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` as `status: draft`. Then
+    **pause and ask which of three the user wants** (use `AskUserQuestion`):
 
-    Run `/ardd-analyze` now to refresh `STATUS.md`'s recommended next step —
-    artifacts and/or the feature register changed in this run, so don't wait for the
-    user to ask for it.
+    - **Approve** — proceed to step 11: approve the plan and generate its
+      tasks file, in this same run.
+    - **Revise** — the user wants changes to the plan first. Make them
+      (loop back through steps 8–9 as needed, rewriting the same plan file),
+      then return to this checkpoint. The plan stays `draft`; nothing is
+      approved or tasked until the user approves.
+    - **Stop** — leave the plan at `status: draft` and end the run without
+      tasking. This is a legitimate outcome: the plan is a durable artifact
+      a later `/ardd-plan --from <this plan>` (or a fresh run) can pick up.
+      Skip to the report (step 15), which recommends `/ardd-analyze`.
+
+    Do **not** approve or generate tasks without an explicit approve here —
+    approval is a decision, not a default. (`--from` mode entered at step 11
+    is itself that explicit decision: the user named the plan to task.)
+
+--- tasking half (steps 11–15): reached on Approve, or entered directly by `--from` ---
+
+11. **Approve the plan and flip its features to `planned`.** Run
+    `.claude/skills/ardd-scripts/project-lock.sh check ardd-plan` first —
+    surface any warning but proceed (advisory, never a block).
+
+    First, check for existing tasks files bound to the chosen plan: run
+    `.claude/skills/ardd-scripts/tasks-list.sh --all` and match its
+    plan-binding column against the plan's filename. If one already exists at
+    `ready`, `in-progress`, or `completed`, surface that explicitly and ask
+    for confirmation before continuing ("plan-auth-flow already has
+    tasks-auth-flow-9f3c.md at in-progress, 4/12 complete — generate a new
+    tasks file for this plan anyway?"). Proceeding creates a *new* file, never
+    overwrites an existing one — this is a deliberate fork, not silent data
+    loss. On confirmation, also ask whether to mark each existing
+    non-`completed` tasks file for this plan `abandoned` (skip any already
+    `completed` — a more informative terminal state, and the
+    sibling-completion check treats a `completed` sibling as done). For each
+    the user confirms: `ardd-state.sh tasks-flip <file> abandoned`; leave the
+    rest (e.g. still legitimately worked in parallel). In the normal (fresh)
+    path a plan just written this run has no tasks files, so this is a no-op;
+    it matters in `--from` re-task mode.
+
+    Then, if the plan's `status` is `draft`, approve it and advance its
+    features (all mutations script-performed — constitution Principle II):
+
+    ```
+    ardd-state.sh plan-flip <plan file> approved
+    # then, for each slug in the plan's features: frontmatter list:
+    ardd-state.sh feature-flip <slug> planned
+    ardd-state.sh feature-field <slug> plan <plan filename>
+    ```
+
+    If the chosen plan is already `status: approved` (e.g. a `--from` re-task,
+    or a second tasks-file run against the same plan), skip the flips —
+    nothing to approve. Either way, run `... touch ardd-plan` once this step's
+    writes (if any) are done.
+
+12. **Generate tasks** ordered by dependency. Each task MUST:
+    - Have a unique ID: `T001`, `T002`, etc.
+    - State which artifacts must be loaded before execution, e.g.
+      `[artifacts: datamodel, infrastructure]` — omitting the bracket-tag
+      entirely when no artifact applies; never write a placeholder name
+      like `none`
+    - Be atomic enough that an agent can complete it in one focused session
+    - Be concrete enough to execute without reading the plan (embed necessary
+      context in the task description)
+    - Include a test requirement where applicable, following whatever testing
+      paradigm `constitution.md` declares (Quality Standards or Core
+      Principles) — TDD, test-after, coverage threshold, or none. Tasks are
+      paradigm-agnostic by default; don't assume TDD or any specific
+      principle number if the constitution doesn't state one
+
+    Mark parallelism with `[parallel]` on tasks that touch different files and
+    have no shared dependencies.
+
+13. **Write the tasks file.** Mint its filename from the chosen plan's
+    slug — `.claude/skills/ardd-scripts/ardd-state.sh mint tasks <slug>` —
+    minted at write time so the name is always unique even when
+    regenerating tasks for the same plan; write to
+    `.project/tasks/<that filename>`. Run `.claude/skills/ardd-scripts/project-lock.sh check
+    ardd-plan` before this first write (surface any warning, don't block on
+    it). Write the frontmatter immediately, before generating task
+    content, with `status: generating` — this is what makes an interrupted
+    generation visibly incomplete rather than silently mistaken for `ready`:
+
+    ```yaml
+    ---
+    plan: plan-<slug>-YYYY-MM-DD.md   # exact filename of the source plan — authoritative binding
+    generated: YYYY-MM-DD
+    status: generating   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+                         # (or -> abandoned, if superseded by a new tasks
+                         # file generated for the same plan)
+                         # completed is terminal — post-completion failures
+                         # become new feedback (/ardd-feedback), never a
+                         # status edit.
+    # worktree_branch: <branch>  — added later by /ardd-implement or
+    # /ardd-converge only if this file's work gets delegated to a worktree
+    # subagent; not written here at generation time.
+    ---
+
+    # Tasks
+
+    ## Phase 1: <Name>
+    - [ ] T001 [artifacts: constitution] <description>
+    - [ ] T002 [artifacts: datamodel, infrastructure] [parallel] <description>
+
+    ## Phase 2: <Name>
+    - [ ] T003 [artifacts: datamodel] <description>
+    ```
+
+    Once all tasks are written, flip the file to ready —
+    `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file> ready` —
+    then run `... touch ardd-plan`.
+
+14. **Flip bound features to `tasked`.** Read the chosen plan's frontmatter
+    `features:` list (if any). For each slug:
+
+    ```
+    ardd-state.sh feature-flip <slug> tasked
+    ardd-state.sh feature-field <slug> tasks <this tasks filename>
+    ```
+
+15. **Report** what happened: if a plan was drafted, its phases, key
+    decisions, and open questions; if tasks were generated, the total task
+    count and phase breakdown, any tasks that embed a test requirement, which
+    features (if any) were flipped to `tasked`, and — if step 11 approved the
+    plan — that it's now `approved`. If the run stopped at the checkpoint
+    (step 10, "Stop"), say the plan is saved as `draft` and can be tasked
+    later with `/ardd-plan --from <plan file>`.
+
+    Then run `/ardd-analyze` now to refresh `STATUS.md` — artifacts, the
+    feature register, plan approval, and/or the feature-backlog flips in this
+    run leave it stale otherwise. Don't wait for the user to ask.
 
     **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
     frontmatter has `next_step_prompt: true` (grep the frontmatter block;
     absent or `false` = the plain-text behavior above, unchanged), the
-    recommended next step — `/ardd-tasks`, to select and approve this
-    plan — is offered as a one-keypress AskUserQuestion: option 1 "Yes —
-    run `/ardd-tasks` now", option 2 "No — stop here" (Esc = option 2); on
-    yes, invoke the skill by name (the existing terminal-handoff
-    mechanism, no value passed back). **Exactly one prompt per
-    user-visible turn end**: this step already ends by running
-    `/ardd-analyze`, which carries its own next-step prompt — so when the
-    analyze handoff happens as instructed, the offer belongs to
-    `/ardd-analyze` (whichever skill actually ends the turn owns the
-    prompt) and `/ardd-plan` must not prompt first. Only if this run ends
-    the turn itself without handing off to analyze does the `/ardd-tasks`
-    offer fire here. Recommendations that are not a concrete runnable
-    `/ardd-*` invocation always stay plain text.
+    recommended next step is offered as a one-keypress AskUserQuestion. The
+    recommendation depends on how the run ended: if tasks were generated,
+    it's `/ardd-implement` (to execute the tasks file just written); if the
+    run stopped at the checkpoint with the plan left `draft`, it's
+    `/ardd-plan --from <plan file>` (to task it later) — but a bare re-task
+    with no new decision is rarely the immediate next step, so prefer plain
+    text there unless the user clearly intends to continue. Offer as option 1
+    "Yes — run `<recommendation>` now", option 2 "No — stop here" (Esc =
+    option 2); on yes, invoke by name (the existing terminal-handoff
+    mechanism, no value passed back). **Exactly one prompt per user-visible
+    turn end**: this step already ends by running `/ardd-analyze`, which
+    carries its own next-step prompt — so when the analyze handoff happens as
+    instructed, the offer belongs to `/ardd-analyze` (whichever skill
+    actually ends the turn owns the prompt) and `/ardd-plan` must not prompt
+    first. Only if this run ends the turn itself without handing off to
+    analyze does the offer fire here. Recommendations that are not a concrete
+    runnable `/ardd-*` invocation always stay plain text.
