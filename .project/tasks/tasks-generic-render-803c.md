@@ -1,7 +1,7 @@
 ---
 plan: plan-generic-render-2026-07-11.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-11
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
