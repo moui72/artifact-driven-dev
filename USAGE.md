@@ -329,7 +329,8 @@ surfaces new backlog-worthy scope instead, use `/ardd-feature`.
 
 ### Visualize your artifacts
 
-To generate a Mermaid diagram and upsert it into `README.md`:
+To generate a Mermaid diagram and upsert it into `README.md` (the default
+destination):
 
 ```
 /ardd-render datamodel
@@ -341,6 +342,20 @@ a `## Datamodel` section. `/ardd-render infrastructure` produces a container
 diagram from `infrastructure.md` (and `adapters.md` if present) under
 `## Infrastructure`. GitHub renders Mermaid code fences natively — no extra
 tooling needed.
+
+The destination is configurable per artifact. By default a diagram lands in
+`README.md`; to send it elsewhere, set `render_target` (and optionally
+`render_section`) in the artifact's own frontmatter:
+
+```yaml
+# .project/artifacts/datamodel.md
+render_target: docs/ARCHITECTURE.md   # optional; default README.md
+render_section: Datamodel             # optional; default = the section above
+```
+
+This keeps `README.md` free of raw Mermaid where it must stay clean — e.g. an
+npm package page, whose renderer doesn't render Mermaid fences — while the
+diagram still renders on GitHub in the target doc.
 
 ---
 

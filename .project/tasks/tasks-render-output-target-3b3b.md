@@ -1,7 +1,7 @@
 ---
 plan: plan-render-output-target-2026-07-10.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-10
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -41,7 +41,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Doc sync
 
-- [ ] T003 [parallel] Update `README.md` and `USAGE.md` where they describe
+- [x] T003 [parallel] Update `README.md` and `USAGE.md` where they describe
   `/ardd-render` so they state the diagram destination is configurable
   per-artifact via `render_target`/`render_section`, with `README.md` the
   default when absent. Keep the "GitHub renders Mermaid natively" framing.
