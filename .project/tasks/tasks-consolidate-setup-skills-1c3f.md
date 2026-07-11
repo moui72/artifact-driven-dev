@@ -19,7 +19,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `.github/workflows/lint.yml` in the same commit. Test must fail against
   current install.sh (no prune logic yet).
 
-- [ ] T002 Implement the prune in `install.sh`: after copying `skills/ardd-*/`
+- [x] T002 Implement the prune in `install.sh`: after copying `skills/ardd-*/`
   into `.claude/skills/`, enumerate existing `.claude/skills/ardd-*/` dirs in
   the target and remove any with no counterpart in source `skills/`, excluding
   the non-skill reference-dir allowlist (`ardd-scripts`,

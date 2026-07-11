@@ -48,6 +48,25 @@ for skill_dir in "$SKILLS_DIR"/*/; do
   installed_skill_names="$installed_skill_names $skill_name"
 done
 
+# --- Prune ardd-* skills removed from source (Principle VII) ---
+# Removing a slash command is a breaking change to existing installs, so an
+# upgrade past a skill merge (e.g. /ardd-kickoff folded into /ardd-bootstrap)
+# must delete the dead command's directory — otherwise the retired command
+# lingers in the target's palette. Enumerate the target's own ardd-* dirs and
+# remove any with no counterpart under source `skills/`. Only ardd-owned dirs
+# are ever touched: a hand-written non-ardd skill never matches `ardd-*`, and
+# the three non-skill reference dirs below (this script's own output, with no
+# source `skills/` entry) are explicitly preserved.
+for existing in "$CLAUDE_SKILLS"/ardd-*/; do
+  [ -d "$existing" ] || continue   # no matches -> literal glob, skip
+  existing_name="$(basename "$existing")"
+  case " $installed_skill_names ardd-constitution-data ardd-artifact-templates ardd-scripts " in
+    *" $existing_name "*) continue ;;   # a real source skill or a reference dir
+  esac
+  rm -rf "$existing"
+  echo "  ✗ $existing_name (removed — no longer in ARDD source)"
+done
+
 # --- Constitution suggestion catalog ---
 # Not a skill (no SKILL.md, so it never registers as an invokable command) —
 # reference data /ardd-bootstrap and /ardd-codify read at constitution-
