@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-10
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-render-output-target-2026-07-10.md
 ---
 
 # Feedback
 
 ## Reconsidered
-- [ ] F001 `/ardd-render` hardcodes `README.md` as the upsert target for
+- [x] F001 `/ardd-render` hardcodes `README.md` as the upsert target for
   every diagram type (`skills/ardd-render/SKILL.md` step 6 pipes generated
   Mermaid into `upsert-section.sh README.md "<Section>"` with no override).
   The prior decision — one fixed render target — no longer holds:
