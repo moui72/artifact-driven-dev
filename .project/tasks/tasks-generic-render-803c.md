@@ -59,7 +59,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: Migration for existing installs
 
-- [ ] T004 Create `migrations/0005-artifact-diagram-type.sh` (modeled on
+- [x] T004 Create `migrations/0005-artifact-diagram-type.sh` (modeled on
   `migrations/0002-diagram-status.sh`): for a target project's existing
   `.project/artifacts/{datamodel,infrastructure,ui}.md` that lack a
   `diagram_type` field, insert the same `diagram_type` + `render_section`

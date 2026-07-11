@@ -163,6 +163,12 @@ jobs:
       - uses: actions/checkout@v4
       - run: ./scripts/test-migration-retag.sh
 
+  migration-diagram-type:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-migration-diagram-type.sh
+
   ardd-update-check:
     runs-on: ubuntu-latest
     steps:
