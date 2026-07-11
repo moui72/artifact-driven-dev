@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (post-/ardd-tasks: catalog-consolidation plan approved, 10 tasks ready on branch `consolidate-setup-skills`). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (catalog-consolidation MERGED to main — 21→18 skills; npx-channel-scrap feedback open). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -32,9 +32,13 @@ against yet; it contradicts no `DEFECTS.md` claim.
 
 ## Feedback
 
-None open — `feedback-consolidate-setup-skills-8541.md` was consumed by
-`plan-consolidate-setup-skills-2026-07-11.md` (F001–F003, F005, F006
-incorporated; F004 declined). All feedback files are `status: planned`.
+1 open — `feedback-scrap-npx-channel-9c51.md`: scrap the `npx skills add`
+acquisition channel, replace with an existing-project curl bootstrap (sibling
+to `new.sh`), and delete `/ardd-setup` as dead architecture. F002/F004 tagged
+`[artifacts: constitution]` (reverses the three-channels standing decision).
+Keep separate from the in-flight consolidation run. Will be picked up by the
+next `/ardd-plan`. (`feedback-consolidate-setup-skills-8541.md` is now
+`planned`, consumed by `plan-consolidate-setup-skills-2026-07-11.md`.)
 
 ## Feature Backlog
 
@@ -48,20 +52,26 @@ schema, standard templates, migration `0005`, docs → mermaid.js.org) merged
 into `main` (`316705d`); its delegated worktree and the `generic-render` /
 `worktree-agent-*` branches were removed.
 
-## In Flight
+## Recently Landed
 
-- Branch `consolidate-setup-skills` (this checkout) — plan
-  `plan-consolidate-setup-skills-2026-07-11.md` **approved**, tasks
-  `tasks-consolidate-setup-skills-1c3f.md` **ready** (0/10). Shrink the
-  21-skill catalog: Phase 1 install.sh prune (foundation), Phase 2 setup
-  merges (kickoff→bootstrap, featurize→codify), Phase 3 tier hygiene
-  (analyze/lint → core), Phase 4 core-loop merge (tasks→plan), Phase 5 docs
-  + verify. Three open questions carried in the plan (curated default
-  install F006b, F005 prose-complexity gate, deprecation stubs). Not yet
-  merged to `main`.
+- **Catalog consolidation** merged to `main` (`d9d6d76`, tasks file
+  `tasks-consolidate-setup-skills-1c3f.md` completed 10/10, all commits
+  signed). Source skills 21→18: `/ardd-kickoff`→`/ardd-bootstrap`,
+  `/ardd-featurize`→`/ardd-codify`, `/ardd-tasks`→`/ardd-plan` (now 481
+  lines — the T007 length flag was reviewed and accepted). `analyze`/`lint`
+  re-tiered `core`. `install.sh` now prunes removed ardd skill dirs
+  (`test-install-prune.sh` + CI). No constitution version bump (T009: no
+  principle changed). Three plan open questions remain unresolved (curated
+  default install F006b, deprecation stubs, and the accepted-for-now
+  prose-length gate).
+- **Note:** this repo's own dogfooded install (`.claude/skills/ardd-*/`)
+  still carries the removed `ardd-kickoff`/`ardd-featurize`/`ardd-tasks`
+  dirs — re-run `./install.sh .` to sync and exercise the new prune.
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-consolidate-setup-skills-1c3f.md`
-(start Phase 1 — the install.sh prune is the foundation both merge phases
-depend on). `main` also holds unpushed commits — push when ready.
+`/ardd-plan feedback-scrap-npx-channel-9c51.md` to draft the npx-channel
+replacement (scrap npx → existing-project curl bootstrap → delete
+`/ardd-setup`; touches `constitution.md`). Optionally first `./install.sh .`
+to sync this repo's own install and validate the prune. `main` holds
+unpushed commits — push when ready.
