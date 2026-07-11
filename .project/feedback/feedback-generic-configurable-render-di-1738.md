@@ -43,3 +43,22 @@ plan: null        # set to the consuming plan's filename once planned
   interacts with `lint-project.sh` (which fields become schema) and the
   `RENDERABLE_ARTIFACTS` enum. Untagged — no `.project/artifacts/` file
   records render's diagram-type config; it lives in the skill.
+
+  **Spike resolved (2026-07-11): fully generic.** `diagram_type` is free-form
+  (a Mermaid type name; no enum/registry — agent renders from its Mermaid
+  knowledge); optional per-artifact `render_hint` carries the domain
+  "emphasize/omit" guidance the current step-3 recipes hold, and the three
+  standard artifact templates ship theirs. Renderability becomes a *property*
+  (artifact declares `diagram_type`), retiring the closed table +
+  `RENDERABLE_ARTIFACTS` name-list. `lint-project.sh` gets a non-empty check
+  on `diagram_type` (mirroring `render_target`/`render_section`) and requires
+  `diagram_status` when `diagram_type` is present — no type enumeration.
+  Mermaid syntax is not enumerated in the skill. Accepted cost: a typo'd/
+  unsupported type is caught at render (interactive), not at lint.
+
+## UX
+- [ ] F002 Document for *users* where to see what Mermaid supports — which
+  diagram types and their syntax — in `README.md` and `USAGE.md` (and any
+  render guide), pointing to the official Mermaid docs (mermaid.js.org). With
+  `diagram_type` becoming free-form (F001), users need a discoverable
+  reference for valid values rather than the previously implicit fixed set.
