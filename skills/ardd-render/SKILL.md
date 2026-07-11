@@ -1,24 +1,42 @@
 ---
 name: ardd-render
 tier: extension
-description: Generate a Mermaid diagram from a renderable artifact and upsert it into README.md.
+description: Generate a Mermaid diagram from a renderable artifact and upsert it into a configurable destination (README.md by default).
 ---
 
 # /ardd-render
 
-Generate a Mermaid diagram from a project artifact and upsert it into
-`README.md`. GitHub renders Mermaid code fences natively.
+Generate a Mermaid diagram from a project artifact and upsert it into a
+target markdown file — `README.md` by default, or a per-artifact override
+(see Render config). GitHub renders Mermaid code fences natively; a project
+whose `README.md` must stay clean of raw Mermaid (e.g. an npm package page,
+which doesn't render Mermaid fences) can point its diagrams at a
+GitHub-only doc instead.
 
 Usage: `/ardd-render <artifact>` where `<artifact>` is one of the supported types
 listed below.
 
 ## Render config
 
-| Argument | Artifact(s) to read | Diagram type | README section |
+| Argument | Artifact(s) to read | Diagram type | Default section |
 |---|---|---|---|
 | `datamodel` | `datamodel.md` | ERD (`erDiagram`) | `## Datamodel` |
 | `infrastructure` | `infrastructure.md` | Container diagram (`graph TD`) | `## Infrastructure` |
 | `ui` | `ui.md` | Component hierarchy (`graph TD`) | `## UI` |
+
+**Destination is per-artifact and optional.** The default target file is
+`README.md` and the default section is the "Default section" column above.
+A renderable artifact may override either via its own frontmatter:
+
+```yaml
+# .project/artifacts/datamodel.md
+render_target: docs/ARCHITECTURE.md   # optional; default README.md
+render_section: Datamodel             # optional; default = the config-table section
+```
+
+`render_target` is a path relative to the project root; `render_section` is
+the header text without the leading `##`. When both are absent, behavior is
+exactly as before — `README.md` and the config-table section.
 
 ## Steps
 
@@ -31,6 +49,15 @@ listed below.
    Then check its frontmatter for a `related` field — if present, load each
    listed artifact from `.project/artifacts/` as supplementary context.
    Skip any related artifact that does not exist.
+
+   While reading the primary artifact's frontmatter, also capture the
+   optional `render_target` and `render_section` fields. Resolve the
+   destination now, so steps 5–6 use it:
+   - `render_target` → the target file (path relative to project root);
+     absent → `README.md`.
+   - `render_section` → the section header text (without `##`); absent →
+     the config-table "Default section" for this argument (`Datamodel` /
+     `Infrastructure` / `UI`).
 
 3. **Generate the diagram** appropriate for the argument type:
 
@@ -68,19 +95,22 @@ listed below.
    ```
    ````
 
-5. **Ensure `README.md` exists** at the project root — if not, create it
-   empty (the upsert step appends the section).
+5. **Ensure the resolved target file exists.** Using the target from step
+   2 (`README.md` unless overridden): if it's missing, `mkdir -p` its parent
+   directory and create the file empty (the upsert step appends the
+   section).
 
 6. **Upsert the section — script-performed** (constitution Principle II;
-   generating the Mermaid content is judgment, splicing it into README is
-   not). Pipe the diagram block into:
+   generating the Mermaid content is judgment, splicing it into the target
+   is not). Pipe the diagram block into:
 
    ```
-   .claude/skills/ardd-scripts/upsert-section.sh README.md "<Section>"
+   .claude/skills/ardd-scripts/upsert-section.sh <target file> "<Section>"
    ```
 
-   where `<Section>` is the header text from the config table without the
-   `##` (e.g. `Datamodel`). It replaces exactly that section's body (or
+   where `<target file>` is the resolved target from step 2 (`README.md`
+   unless overridden) and `<Section>` is the resolved section header without
+   the `##` (e.g. `Datamodel`). It replaces exactly that section's body (or
    appends the section if absent) and never touches any other line.
 
 7. **Mark it current**:

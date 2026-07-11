@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Skill wiring
 
-- [ ] T001 Update `skills/ardd-render/SKILL.md` so the render destination is
+- [x] T001 Update `skills/ardd-render/SKILL.md` so the render destination is
   read from the artifact's own frontmatter instead of hardcoded `README.md`.
   In step 2 (already loads the artifact) capture optional `render_target`
   (path, relative to project root) and `render_section` (header text without

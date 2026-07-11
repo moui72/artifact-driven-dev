@@ -25,7 +25,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | `/ardd-critique` | Challenge artifact decisions: simplicity, failure modes, robustness, semantics. |
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
-| `/ardd-render` | Generate a Mermaid diagram from a renderable artifact and upsert it into README.md. |
+| `/ardd-render` | Generate a Mermaid diagram from a renderable artifact and upsert it into a configurable destination (README.md by default). |
 | `/ardd-sync` | Mirror the feature register to/from an external issue tracker (GitHub Issues today). |
 | `/ardd-update` | Update this project's ARDD install from its recorded source checkout — check standing, offer a source pull, re-run install.sh, and relay its output. |
 | `/ardd-add-artifact` | Create a new, non-standard artifact from a template. |
