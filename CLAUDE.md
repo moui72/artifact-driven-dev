@@ -30,6 +30,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/worktree-align.sh [ref]      # ff-merge local default branch into a fresh delegated worktree; a delegated subagent's mandatory first act
 ./scripts/test-worktree-align.sh       # regression test for worktree-align.sh
+./scripts/fold-to-main.sh [default]    # ff-fold current feature branch into local default + checkout it; the eager-background gate's prep step (ardd-implement/converge)
+./scripts/test-fold-to-main.sh         # regression test for fold-to-main.sh
 ./scripts/inflight-worktrees.sh        # enumerate other worktrees + their tasks-file state (solo mode's in-flight visibility channel)
 ./scripts/test-inflight-worktrees.sh   # regression test for inflight-worktrees.sh
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
@@ -218,7 +220,7 @@ happens on, and merge is the single atomic event that lands code and state
 together.** (Why the earlier "state-commit-before-branch" design
 died: `docs/decisions/0001-branch-identity-and-worktree-native-state.md`.)
 The default branch now means *merged truth*; worktrees mean *in-flight
-truth*; and two installed scripts bridge them:
+truth*; and three installed scripts bridge them:
 
 - `scripts/worktree-align.sh` — run as a delegated subagent's mandatory
   first act. `Agent`'s `isolation: "worktree"` branches from
@@ -238,6 +240,18 @@ truth*; and two installed scripts bridge them:
   `.worktreeinclude` is skipped under a `WorktreeCreate` hook, older
   installs predate it, and a worktree's base commit may predate the
   scripts. (Live-validated; see decision record 0001.)
+- `scripts/fold-to-main.sh` — the counterpart to `worktree-align.sh` for the
+  *eager-background* path. Because a delegated worktree branches from
+  `<default>` and align only fast-forwards local `<default>` in, a run that's
+  already on a feature branch can't be backgrounded until its state reaches
+  local `<default>`. This script fast-forward-folds the current branch into
+  the local default branch and checks it out (returning the focused session
+  to `<default>`), refusing (`folded=false reason=dirty|detached|diverged|...`)
+  rather than resolving — same discipline as align. The delegation gate in
+  `ardd-implement`/`ardd-converge` runs it when the user opts to background
+  while on a branch. A fast-forward authors no new commit, so the
+  "no state-commit before the branch" invariant holds. (Decision record
+  0004; supersedes the old "on a branch → run inline" default.)
 - `scripts/inflight-worktrees.sh` — enumerates every *other* worktree of
   the repo and its tasks-file state (branch, status, checkbox progress).
   This is solo mode's coarse-state visibility channel: `ardd-implement`/
@@ -264,7 +278,12 @@ in `constitution.md` frontmatter (absent = `solo`; enum enforced by
 `lint-project.sh`; asked once by `/ardd-bootstrap`, detection-suggested):
 - **solo** — single developer, same machine. Direct commits to the local
   default branch are fine for inline runs; delegated runs use worktrees and
-  merge eagerly on completion. Visibility = `inflight-worktrees.sh`.
+  merge eagerly on completion. The delegation gate offers backgrounding
+  *eagerly* — regardless of whether the run is already on a feature branch;
+  being on a branch isolates state but shouldn't force foreground execution.
+  When the user backgrounds while on a branch, `fold-to-main.sh` folds it
+  into local `<default>` and returns the focused session there first (so the
+  delegated worktree can see the state). Visibility = `inflight-worktrees.sh`.
 - **collaborative** — nothing may be committed to the *local* default
   branch, ever (branch protection makes it unlandable anyway). Work always
   moves to a branch; after the first commit the skill offers to push and

@@ -252,9 +252,14 @@ Review the task list and adjust before running `/ardd-implement`.
 
 Before anything else it checks for sibling worktrees already working a
 tasks file, so a second `/ardd-implement` can start safely while another is
-still in flight. If you're on your default branch it offers to delegate
-execution to a subagent in an isolated worktree — executing tasks is
-exactly the long-running, code-producing work isolation is for. Claude asks
+still in flight. It then offers to delegate execution to a background
+subagent in an isolated worktree — **regardless of which branch you're on**;
+being on a feature branch isolates state but shouldn't tie up your focused
+session. If you accept while already on a feature branch, Claude folds that
+branch into your default branch and returns you to it first (so the delegated
+worktree can see the work), then runs the subagent in the background.
+Executing tasks is exactly the long-running, code-producing work isolation is
+for. Claude asks
 which tasks file to work on, then executes tasks sequentially: loads the
 declared artifacts for each task, writes and runs tests per whatever
 paradigm the constitution declares (TDD, test-after, or none), implements

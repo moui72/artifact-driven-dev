@@ -1,7 +1,7 @@
 ---
 plan: plan-eager-backgrounding-2026-07-10.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-10
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -50,7 +50,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: doc + decision-record sweep
 
-- [ ] T003 Update the prose that explains *why* inline-on-a-branch was the
+- [x] T003 Update the prose that explains *why* inline-on-a-branch was the
   old default so it matches the new behavior: `CLAUDE.md`'s worktree-native
   state / delegation section, and a decision record capturing the
   fold-to-main rationale and the worktree-base obstacle it works around
