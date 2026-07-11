@@ -1,7 +1,7 @@
 ---
 plan: plan-scrap-npx-channel-2026-07-11.md   # exact filename of the source plan — authoritative binding
 generated: 2026-07-11
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -68,7 +68,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 5: Verify
 
-- [ ] T006 Run the full local CI-equivalent and confirm green: `test-new.sh`
+- [x] T006 Run the full local CI-equivalent and confirm green: `test-new.sh`
   (including the new existing-project case), `lint-docs.sh`, `lint-project.sh`,
   and every other `scripts/test-*.sh` this branch touched. Fix any failure
   before marking complete — last gate before the branch is mergeable.
