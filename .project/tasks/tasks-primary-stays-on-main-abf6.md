@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Constitution standing decision
 
-- [ ] T001 [artifacts: constitution] Add a standing decision to
+- [x] T001 [artifacts: constitution] Add a standing decision to
   `constitution.md`'s Project Scope & Intent (adjacent to the acquisition /
   `new.sh` material): **the primary/default worktree of this repo never
   leaves `main`.** Rationale to state: this repo is the local source other

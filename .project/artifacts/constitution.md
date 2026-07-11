@@ -1,33 +1,29 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.2.5 → 1.3.0 (MINOR — removes a whole acquisition
-channel and a bridge skill from the governing scope. A material change
-to a standing decision; treated as MINOR by reading "material expansion"
-to cover material contraction, not just addition.)
+Version change: 1.3.0 → 1.4.0 (MINOR — adds a new material standing
+decision to the governing scope; same magnitude reasoning as the
+1.2.5→1.3.0 acquisition change.)
 
-Rationale: /ardd-plan scrap-npx-channel (2026-07-11), consuming
-feedback-scrap-npx-channel-9c51.md. The `npx skills add` acquisition
-channel worked poorly — a ~20-skill picker whose selections install.sh
-discards anyway, and it leaves no owned source checkout — and its only
-real function was delivering the /ardd-setup bridge skill. Both are
-removed: acquisition is now two routes, clone or the new.sh curl
-bootstrap (brand-new-project and existing-project modes), each
-converging directly on install.sh with no bridge. Losing the
-vercel-labs skills-registry discoverability npx provided was a
-consciously accepted trade for a simpler, self-owned install story.
+Rationale: /ardd-plan primary-stays-on-main (2026-07-11), consuming
+feedback-primary-worktree-stays-on-main-4985.md. This repo is the local
+source other projects install/update from — a consumer's
+install.sh//ardd-update reads this checkout and installs from whatever
+branch is out — so the primary/default worktree must never leave main. A
+checked-out feature branch here serves unmerged skills to consumers and can
+provoke their update flows into re-checking-out main under in-flight work; a
+real ref-lock collision hit exactly this on 2026-07-11. Feature work now
+happens in a separate worktree (git worktree add, or the skills'
+isolation:"worktree" delegation), which branches without moving the primary
+HEAD. Binds this repo specifically, not ordinary target projects.
 
-Modified sections: Project Scope & Intent (acquisition-channels standing
-decision — npx channel and /ardd-setup bridge removed; new.sh's
-bridge-free discipline extended to cover its existing-project mode).
-Footer version updated.
+Modified sections: Project Scope & Intent (new standing decision — primary
+worktree stays on main). Footer version updated.
 
 Deferred to implementation under the same plan (not this artifact
-revision): the new.sh existing-project mode itself (test-first),
-deletion of skills/ardd-setup/, and the docs ripple
-(README/USAGE/CLAUDE.md).
+revision): the CLAUDE.md workflow note (Phase 2).
 
-Previous SIR (1.2.4 → 1.2.5) is in git history at this file's prior
+Previous SIR (1.2.5 → 1.3.0) is in git history at this file's prior
 revision.
 -->
 
@@ -74,6 +70,22 @@ directories, records `ardd-version.md`, and maintains `.worktreeinclude`.
 There is no partial-delivery channel and no bridge skill — a route either
 *is* a clone or *invokes* `install.sh` itself, and never reimplements any
 part of it.
+
+Because this repository is itself the **local source** other projects
+install and update from — a consumer's `install.sh`/`/ardd-update` reads
+this very checkout (via a recorded `Source-Path`, or `~/.ardd/source`) and
+installs from whatever branch is checked out — its primary/default worktree
+**never leaves `main`** (standing decision, 2026-07-11). A feature branch
+checked out here would serve unmerged, possibly-broken skills to every
+consumer that updates while it is out, and can provoke a consumer's update
+flow into re-checking-out `main` underneath in-flight work (a real ref-lock
+collision hit exactly this on 2026-07-11). All feature work therefore happens
+in a **separate worktree** — `git worktree add`, or the skills'
+`isolation: "worktree"` delegation — which branches without moving the
+primary checkout's HEAD; the primary stays parked on `main` as the stable
+source consumers see. This binds *this* repo specifically, as a live install
+source; it is not a constraint on ordinary target projects, whose primary
+checkout may hold a feature branch normally.
 
 `new.sh` converges by the most direct route available: it resolves a
 source checkout — cloning `~/.ardd/source`, the one checkout it owns, if
@@ -284,4 +296,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.3.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-11
+**Version**: 1.4.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-11
