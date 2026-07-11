@@ -106,7 +106,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   principle changes, so likely no bump (confirm and state which). Load
   `constitution.md` to check whether any principle wording needs updating.
 
-- [ ] T010 Run the full local CI-equivalent and confirm green:
+- [x] T010 Run the full local CI-equivalent and confirm green:
   `scripts/lint-docs.sh`, `scripts/lint-project.sh`, `scripts/test-new.sh`,
   `scripts/test-lint-project.sh`, `scripts/test-install-prune.sh` (new), and
   every other `scripts/test-*.sh` touched by this branch. Fix any failures
