@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (post-/ardd-verify, sixth pass — recent merges clean; render-genericity feedback still open). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-11 (post-/ardd-plan, generic-render draft plan on branch). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -10,41 +10,31 @@ _Updated: 2026-07-11 (post-/ardd-verify, sixth pass — recent merges clean; ren
 
 ## Open Questions
 
-None in the artifact. One plan-scoped set remains, non-blocking:
+None in the artifact. Two plan-scoped sets remain, both non-blocking:
 
+- `plan-generic-render-2026-07-11.md` (draft) — (1) `render_section` default
+  derivation (capitalized stem; standard templates declare explicit headers);
+  (2) `render_hint` lint validation (non-empty when present vs. free prose);
+  (3) migration scope (only the three historically-renderable artifacts
+  auto-migrate). The core spike (enumerate diagram types/Mermaid syntax vs.
+  agent knowledge) was resolved before planning: **fully generic**.
 - `plan-quickstart-new-project-2026-07-09.md` — whether `new.sh` should
   optionally `gh repo create`, and whether it should pin a tag rather than
   track `main`.
-
-(The eager-backgrounding plan's open questions were resolved during
-implementation: fold restricted to the clean case at the gate (tasks still
-`ready`), converge's in-progress fold accepted as bounded; `fold-to-main.sh`
-does not delete the folded branch (caller's choice); solo-mode only; a
-dedicated script, per the `worktree-align` precedent — see decision record
-0004.)
 
 ## Code-vs-Artifact Defects
 
 1 defect — see `DEFECTS.md`, last checked 2026-07-11 (sixth pass). Unchanged:
 the behavioral-smoke-tier residue (`970d935b`); no scenario has ever executed
 because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced. The sixth
-pass also confirmed the render, principle-agnostic-skills, and
-eager-backgrounding merges introduced no new drift.
+pass confirmed the render, principle-agnostic-skills, and eager-backgrounding
+merges introduced no new drift.
 
 ## Feedback
 
-1 open feedback file — see `.project/feedback/`, picked up by the next
-`/ardd-plan`:
-
-- `feedback-generic-configurable-render-di-1738.md` — **new.** Reconsidered:
-  make `/ardd-render` generic and artifact-driven — instead of the fixed
-  three-argument diagram-type table, each artifact declares its own diagram
-  type + Mermaid syntax in frontmatter (the natural extension of the shipped
-  `render_target`/`render_section` pattern). Carries a spike as its crux:
-  do diagram types / Mermaid syntaxes need to be enumerated, or does the
-  agent just know? Untagged (skill-level; no artifact records render config).
-
-(`feedback-repo-critique-6ad1.md` is `status: planned`, not open.)
+None open — all feedback files are `status: planned`.
+(`feedback-generic-configurable-render-di-1738.md` was just consumed by
+`plan-generic-render-2026-07-11.md`.)
 
 ## Feature Backlog
 
@@ -52,25 +42,19 @@ eager-backgrounding merges introduced no new drift.
 
 ## In Flight
 
-Nothing in flight — no other worktrees, no unmerged branches. Both recent
-efforts are merged into `main` (`0d053f0`): the eager-backgrounding work
-(`fold-to-main.sh` + delegation-gate changes) and principle-agnostic-skills
-(`/ardd-plan` steps 6 & 8 now gate Complexity Tracking / Production Annotation
-Summary on the constitution's *declared* principles). The installed
-`.claude/skills/` copies were just regenerated to match via `/ardd-update`.
+- Branch `generic-render` (this checkout): draft plan
+  `plan-generic-render-2026-07-11.md` written, feedback F001+F002 planned —
+  not yet tasked, not yet merged to `main`. Delivers generic, `diagram_type`-
+  driven `/ardd-render` (retiring the closed 3-argument table) across 5
+  phases: skill rewrite, lint schema, standard templates, a migration for
+  existing installs, and user docs pointing to the Mermaid reference.
 
 ## Recommended Next Step
 
-Plan the newly captured render-genericity feedback when ready:
-`/ardd-plan feedback-generic-configurable-render-di-1738.md` (scope it to that
-file). Worth settling its spike first — whether diagram types / Mermaid
-syntaxes get enumerated or left to agent knowledge — since that shapes the
-whole design; the plan's Open Questions can hold it, but a prior decision
-saves a redesign.
+Run `/ardd-tasks` and select `plan-generic-render-2026-07-11.md` to approve it
+and generate its task list. The three remaining open questions are minor
+(section-default, `render_hint` validation, migration scope) and can be
+settled during implementation.
 
-Standing threads:
-
-- A `/ardd-verify` pass would fold recent merges into `DEFECTS.md`
-  (last checked 2026-07-09).
-- The `ANTHROPIC_API_KEY` smoke thread remains (no scenario has ever run).
-- `main` holds unpushed commits; push when ready.
+`main` also holds unpushed commits; push when ready. The `ANTHROPIC_API_KEY`
+smoke thread is unchanged.
