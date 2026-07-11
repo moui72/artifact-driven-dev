@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-10
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-principle-agnostic-skills-2026-07-10.md
 ---
 
 # Feedback
 
 ## Reconsidered
-- [ ] F001 Skills hardcode references to *target-project* constitution
+- [x] F001 Skills hardcode references to *target-project* constitution
   principles that a given target may not have. `/ardd-plan` step 6 ("Flag
   any planned patterns that require a Complexity Tracking entry per the
   simplicity principle"), step 8's **Complexity Tracking** deliverable
