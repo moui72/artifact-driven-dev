@@ -26,13 +26,9 @@ pass; a `/ardd-defects` pass is due after v1.0.0 ships.
 
 ## Feedback
 
-1 open — `feedback-pre-release-ratchets-4d67.md` (6 items from the 1.0
-regret sweep: ardd-version.md structured Source-Commit + hash/path
-hardening; pack semver + append-only-migrations policy [constitution];
-register `retired` state + npx-skills-install flip [constitution]; lint
-unknown-enum tolerance message; mint hex tokens for plan/research; lint
-sentinel mktemp fix). Consume with `/ardd-plan
-feedback-pre-release-ratchets-4d67.md` — must land before T008.
+None open — `feedback-pre-release-ratchets-4d67.md` (6 items, all accepted)
+consumed by `plan-pre-release-ratchets-2026-07-12.md`.
+
 
 ## Release arc (strictly sequenced)
 
@@ -46,8 +42,11 @@ feedback-pre-release-ratchets-4d67.md` — must land before T008.
    bodies, name==dirname, owned-filename gate); naming system codified in
    CLAUDE.md; `docs/release-notes-v1.md` ready for T008's `--notes-file`;
    signed rollback tag `pre-surface-cleanup` (unpushed).
-2. ⏳ **pre-release-ratchets** — plan + implement the 6 feedback items
-   (small; roughly one commit's worth).
+2. ⏳ **pre-release-ratchets** — planned + tasked
+   (`plan-pre-release-ratchets-2026-07-12.md` approved →
+   `tasks-pre-release-ratchets-4d55.md` ready, 0/5): constitution v1.6.0
+   (retired enum, pack semver, append-only migrations), ardd-version.md
+   hardening, mint/lint fixes. Run `/ardd-implement`.
 3. ⏳ **remote-install-source T008–T010** (`tasks-remote-install-source-
    18d3.md` in-progress, 7/10): cut v1.0.0 with the release-notes file,
    repoint five consumers, retire the primary-stays-on-main mandate.
