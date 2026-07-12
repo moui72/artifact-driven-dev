@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Decides whether any issue-search candidate already carries a given
-# feature slug's ardd-sync marker. GitHub's search endpoint is lexical, not
-# exact, so `/ardd-sync` Push step 2's `gh issue list --search` call can
+# feature slug's ardd-sync marker (historic name, persisted in issue bodies). GitHub's search endpoint is lexical, not
+# exact, so `/ardd-tracker` Push step 2's `gh issue list --search` call can
 # return a false-positive candidate (e.g. a similar-but-different slug); this
 # script does the exact check that decides whether to reuse a candidate's
 # issue number or fall through to creating a new one.

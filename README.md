@@ -135,7 +135,7 @@ Opt-in skills for concerns the core loop doesn't force on you.
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
 | `/ardd-render` | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination (README.md by default). |
-| `/ardd-sync` | Mirror the feature register to/from an external issue tracker (GitHub Issues today). |
+| `/ardd-tracker` | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync). |
 | `/ardd-update` | Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
 | `/ardd-add-artifact` | Create a new, non-standard artifact from a template. |
 
@@ -306,10 +306,10 @@ two sessions sharing one checkout, not as cross-worktree locking.
 
 When `.project/` files conflict on merge:
 
-- **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `SYNC.md`,
+- **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
   `audit.md`) — disposable: take either side without deliberation
   (never hand-reconcile or re-apply changes across a rebase) and re-run
-  the owning skill (`/ardd-analyze`, `/ardd-verify`, `/ardd-sync`,
+  the owning skill (`/ardd-analyze`, `/ardd-verify`, `/ardd-tracker`,
   `/ardd-audit` respectively); it regenerates the file from current
   state, so which side you kept doesn't matter. Conflict markers in a
   generated report are noise, not data loss.

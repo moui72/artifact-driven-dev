@@ -106,7 +106,7 @@ for the named plan; steps 2–10 do not run.
 
    If this run discovers it started on a stale branch and merges or
    rebases the default branch in before proceeding: single-writer report
-   files (STATUS.md, DEFECTS.md, SYNC.md, audit.md) are disposable at
+   files (STATUS.md, DEFECTS.md, TRACKER.md, audit.md) are disposable at
    merge/rebase — take either side without deliberation, never
    hand-reconcile, never re-apply; the owning skill regenerates from
    disk. Conflict markers in a generated report are noise, not data

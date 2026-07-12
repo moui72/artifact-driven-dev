@@ -44,7 +44,7 @@ tasks encode._
   regression test added to the migrations test in the same commit,
   test-first. Update CLAUDE.md's single-writer list entry.
 
-- [ ] T003 Rename `ardd-sync` → `ardd-tracker` (co-atomic with its
+- [x] T003 Rename `ardd-sync` → `ardd-tracker` (co-atomic with its
   migration): same recipe as T002 — dir, `name:`, F007 description
   "(formerly ardd-sync)", all `/ardd-sync` and `SYNC.md` references,
   owned file `TRACKER.md` + legacy-adoption step,

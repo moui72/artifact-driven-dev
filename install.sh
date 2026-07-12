@@ -113,7 +113,7 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   the same plan is done before flipping that plan's features to
 #   implemented — those two skills used to duplicate this check as prose.
 # sync-slug-match.sh / sync-label-decision.sh / sync-divergence.sh: invoked
-#   by ardd-sync's Push/Pull steps for the three pure decisions it makes
+#   by ardd-tracker's Push/Pull steps for the three pure decisions it makes
 #   from gh-provided state (dedup match, label-swap action, divergence
 #   detection) — extracted so they're testable without mocking gh itself.
 # project-lock.sh: invoked by ardd-plan/ardd-implement/

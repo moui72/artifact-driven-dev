@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Decides the ardd:* label-swap or close action /ardd-sync's Push step 3
+# Decides the ardd:* label-swap or close action /ardd-tracker's Push step 3
 # needs to take for one already-linked features.md entry.
 #
 # Usage: ./scripts/sync-label-decision.sh <status> <current-label> <issue-state>

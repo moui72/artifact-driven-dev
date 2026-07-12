@@ -1,10 +1,10 @@
 ---
-name: ardd-sync
+name: ardd-tracker
 tier: extension
-description: Mirror the feature register to/from an external issue tracker (GitHub Issues today).
+description: "Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync)."
 ---
 
-# /ardd-sync
+# /ardd-tracker
 
 Mirror the feature register (`.project/features/*.md`) to and from an external issue
 tracker. GitHub Issues (via the `gh` CLI) is the only backend today; the
@@ -12,13 +12,13 @@ design keeps the entry format, field-ownership rule, and phase structure
 provider-agnostic so Jira and others can be added later as a branch inside
 push/pull, not a redesign.
 
-Usage: `/ardd-sync` runs both phases (push then pull). `/ardd-sync push` or
-`/ardd-sync pull` runs one.
+Usage: `/ardd-tracker` runs both phases (push then pull). `/ardd-tracker push` or
+`/ardd-tracker pull` runs one.
 
 The register owns name, slug, and description — design intent, set by
 `/ardd-feature`, `/ardd-plan`, `/ardd-implement`. The tracker
 owns issue state, labels, and discussion — execution visibility. Each field
-syncs in one fixed direction; `/ardd-sync` never overwrites a tracker's
+syncs in one fixed direction; `/ardd-tracker` never overwrites a tracker's
 title/body after creation, and never overwrites a register entry's
 `status` from tracker state. This is why conflicts can't occur — see Pull, step 2,
 for the one deliberate exception (report-only, never applied).
@@ -52,8 +52,7 @@ eventually carry links into more than one tracker.
 1. **Read the register.** Glob `.project/features/*.md` and read each
    file's frontmatter (`slug`, `status`, `gh_issue`) and body (first line
    = description, optional `Why:` line). Before any register write in
-   this phase, run `.claude/skills/ardd-scripts/project-lock.sh check
-   ardd-sync` — if it warns, surface it to the user (another invocation
+   this phase, run `.claude/skills/ardd-scripts/project-lock.sh check   ardd-tracker` — if it warns, surface it to the user (another invocation
    touched `.project/` recently) but proceed regardless; this is
    advisory, never a block. (A legacy single-file features.md means the
    project predates migration 0003 — tell the user to re-run install.sh
@@ -67,7 +66,11 @@ eventually carry links into more than one tracker.
      `ardd-sync:slug=<slug>`) — GitHub search parses `word:word` as a
      `qualifier:value` pair, so a colon inside the term gets silently
      dropped instead of matched literally, which would defeat the dedup
-     this search exists for. Confirmed empirically: a colon-bearing search
+     this search exists for. The marker keeps its historic `ardd-sync-`
+     prefix on purpose: it is persisted data in existing issue bodies, and
+     a renamed marker would orphan every issue created before the
+     ardd-sync→ardd-tracker rename — never "modernize" it.
+     Confirmed empirically: a colon-bearing search
      term returned unfiltered generic results instead of zero hits, while
      the hyphenated form returned a clean, correct empty result. GitHub's
      search is lexical, not exact, so a result can be a false positive (a
@@ -100,7 +103,7 @@ eventually carry links into more than one tracker.
    - Either way, record the link:
      `ardd-state.sh feature-field <slug> gh_issue <n>`.
    - After this phase's register writes are done, run
-     `.claude/skills/ardd-scripts/project-lock.sh touch ardd-sync`.
+     `.claude/skills/ardd-scripts/project-lock.sh touch ardd-tracker`.
 
 3. **For each entry with an existing `gh_issue` field:**
    - Read current state: `gh issue view <n> --json state,labels`.
@@ -119,7 +122,7 @@ eventually carry links into more than one tracker.
 ### Pull (GitHub → register) — run unless invoked as `push`
 
 1. **Import new feature requests.** Before this phase's register writes,
-   run `.claude/skills/ardd-scripts/project-lock.sh check ardd-sync` — if it
+   run `.claude/skills/ardd-scripts/project-lock.sh check ardd-tracker` — if it
    warns, surface it to the user but proceed regardless; advisory, never a
    block. List open issues labeled `ardd-import`
    (`gh issue list --label ardd-import --limit 200
@@ -137,19 +140,22 @@ eventually carry links into more than one tracker.
      isn't re-imported next run.
 
    Once the imported entries are written, run
-   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-sync`.
+   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-tracker`.
 
-2. **Report divergence — do not apply it.** For every already-linked entry,
+2. **Report divergence — do not apply it.** Adoption first: if
+   `.project/TRACKER.md` is absent but the legacy `SYNC.md` exists (an
+   install predating the v1.0.0 rename), rename it to `TRACKER.md` before
+   writing. Then, for every already-linked entry,
    run `.claude/skills/ardd-scripts/sync-divergence.sh <slug> <issue-number>
    <status> <open-or-closed>` — it decides whether current issue state
    diverges from what `status` implies (closed but not `implemented`;
    reopened but `implemented`) and prints the ready-to-use `## Diverged`
-   line if so, nothing otherwise. Collect its output into `.project/SYNC.md`
+   line if so, nothing otherwise. Collect its output into `.project/TRACKER.md`
    — full overwrite every run, mirroring `/ardd-verify`'s `DEFECTS.md`
    pattern, including an explicit all-clear state:
 
    ```markdown
-   # Sync
+   # Tracker
 
    _Last synced: YYYY-MM-DD_
 
@@ -162,7 +168,7 @@ eventually carry links into more than one tracker.
    or, when nothing diverged:
 
    ```markdown
-   # Sync
+   # Tracker
 
    _Last synced: YYYY-MM-DD_
 
@@ -177,5 +183,5 @@ eventually carry links into more than one tracker.
    user reconciles manually or via `/ardd-feedback`.
 
 3. **Report a summary:** issues created, labels updated, issues closed,
-   entries imported, and the divergence count from `SYNC.md` (or "all
+   entries imported, and the divergence count from `TRACKER.md` (or "all
    clear").

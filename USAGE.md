@@ -395,11 +395,11 @@ fences — while the diagram still renders on GitHub in the target doc.
 To mirror the feature register (`.project/features/`) to GitHub Issues and back:
 
 ```
-/ardd-sync
+/ardd-tracker
 ```
 
-Or run one direction only: `/ardd-sync push` (create/update issues from
-backlog entries) or `/ardd-sync pull` (import issues labeled `ardd-import` as
+Or run one direction only: `/ardd-tracker push` (create/update issues from
+backlog entries) or `/ardd-tracker pull` (import issues labeled `ardd-import` as
 new backlog entries, and report — but not apply — any tracker-side state
 that's diverged from the register, e.g. an issue closed manually).
 
@@ -422,7 +422,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: claude -p "/ardd-sync"
+      - run: claude -p "/ardd-tracker"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```

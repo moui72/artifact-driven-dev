@@ -209,14 +209,14 @@ against.
 this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/STATUS.md` — written only by `/ardd-analyze`
 - `.project/DEFECTS.md` — written only by `/ardd-verify`
-- `.project/SYNC.md` — written only by `/ardd-sync`
+- `.project/TRACKER.md` — written only by `/ardd-tracker`
 - `.project/audit.md` — written only by `/ardd-audit`
 - `.project/features/*.md` `status` field — mutated only via
   `ardd-state.sh feature-*` subcommands, invoked by `/ardd-feature`,
   `/ardd-plan` (both the `backlogged→planned` approval flip and the
   `planned→tasked` flip, now that tasking is folded in), `/ardd-implement`,
   `/ardd-converge`,
-  `/ardd-sync` (pull imports new `backlogged` entries), and
+  `/ardd-tracker` (pull imports new `backlogged` entries), and
   `/ardd-analyze` (one narrow exception: the `tasked→implemented` flip,
   on user confirmation, for an orphaned completion flip its
   `completion-flip-check.sh` detects — see the note below)
@@ -462,7 +462,7 @@ per Principle VI).** A determinism audit that produced `ardd-state.sh`,
 explicitly rejected these — don't re-propose scripting them without new
 evidence: `audit.md`'s staleness date-compare (advisory, low blast
 radius); STATUS.md count assembly (its counts are byproducts of the
-scripts above); `ardd-sync`'s remaining `gh` glue (error handling needs
+scripts above); `ardd-tracker`'s remaining `gh` glue (error handling needs
 judgment; the decisions are already in the three `sync-*.sh` scripts);
 the post-delegation `core.bare` check (a one-line `git config --get`);
 and all genuine-judgment steps (Mermaid diagram content, feature naming,

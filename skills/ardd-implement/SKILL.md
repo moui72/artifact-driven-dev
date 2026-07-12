@@ -167,7 +167,7 @@ self-contained; the agent loads only the artifacts it declares.
        suggesting **yes** — eager merge is what keeps the in-flight window
        short in solo mode, landing code and all its state (checkboxes,
        `→completed`, any register flip) together. Single-writer report
-       files (STATUS.md, DEFECTS.md, SYNC.md, audit.md) are disposable
+       files (STATUS.md, DEFECTS.md, TRACKER.md, audit.md) are disposable
        at merge/rebase: take either side without deliberation — never
        hand-reconcile, never re-apply — and let the owning skill
        regenerate from disk. Conflict markers in a generated report are
