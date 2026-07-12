@@ -92,7 +92,7 @@ status: in-progress
 
 ## Phase 4: Docs
 
-- [ ] T007 [parallel] Update README.md and USAGE.md acquisition/update
+- [x] T007 [parallel] Update README.md and USAGE.md acquisition/update
   sections and CLAUDE.md (commands block: add `release.sh`,
   `source-resolve.sh`, their tests; architecture notes: the release
   channel, dev-mode escape, and that the primary-stays-on-main section is

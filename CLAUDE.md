@@ -21,6 +21,10 @@ internal notes — keep them in sync with the skills themselves.
 ./install.sh /path/to/target/project   # install/upgrade skills into a project
 ./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-bootstrap
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
+./scripts/release.sh [--dry-run] <vX.Y.Z> # cut a release: validate (clean/on-default/suite green), SSH-signed tag, push, gh release
+./scripts/test-release.sh              # regression test for release.sh's refusal logic (fixture repos; network steps untested by design)
+./scripts/source-resolve.sh [path]     # resolve a Source-Path to the release channel: fetch ~/.ardd/source, checkout latest semver tag; other paths = channel=dev, never mutated
+./scripts/test-source-resolve.sh       # regression test for source-resolve.sh (local fixture remotes; pins v:refname ordering)
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
@@ -50,6 +54,14 @@ the same commit (see `tests/fixtures/`) — don't ship a lint script whose own
 correctness is unverified.
 
 ## Working in this repo: the primary checkout stays on `main`
+
+> **Slated for retirement (plan-remote-install-source, Phase 6).** The
+> release channel below removes this section's reason to exist: once the
+> first release is cut and all consumers are repointed to resolve tagged
+> releases via `~/.ardd/source`, no consumer reads this checkout live and
+> the mandate becomes unnecessary. Until that amendment actually lands, it
+> remains **fully binding** — including for the implementation work of that
+> very plan.
 
 This repo is the local *source* other projects install and update from
 (constitution, Project Scope & Intent — standing decision, 2026-07-11). A
@@ -128,6 +140,28 @@ that check: the TUI paints and then silently ignores every keystroke (`<>
 /dev/tty` makes it exit instead). An EOF'd pipe on stdin is what it handles
 correctly — `launch()` must leave stdin alone. No tty exists in CI to catch
 this, so `test-new.sh` case 14 guards the source line statically.
+
+**GitHub releases are the stable install channel; a live checkout is
+explicit dev-mode** (constitution standing decision, 2026-07-12). Consumers
+install from the latest semver tag, resolved through `~/.ardd/source` — the
+one checkout the tooling owns and may mutate. The pieces: `scripts/release.sh`
+cuts a release (validate → SSH-signed annotated tag → push → `gh release`;
+refusals fixture-tested, the network block thin and untested by design);
+`scripts/source-resolve.sh` (installed to `ardd-scripts`) resolves a recorded
+`Source-Path` — owned checkout: fetch tags offline-tolerantly and check out
+the latest strict-`vX.Y.Z` tag via `git tag --sort=v:refname` (ordering
+pinned by fixture tests, incl. v1.10.0 > v1.9.0 — no hand-rolled compare
+needed); any other existing checkout: `channel=dev`, read and never mutated.
+`new.sh` duplicates that selection rule minimally (it runs with no checkout
+to source scripts from); `ardd-update-check.sh`'s `behind` means "not the
+latest release's commit" (no tags yet → tip comparison, `note=no-releases`);
+`install.sh` records `Source-Ref: <tag>` when the source HEAD sits exactly at
+a release tag. Dev-mode (`--source`/`$ARDD_SOURCE`, or a `Source-Path`
+naming a live checkout) is the deliberate escape hatch for the
+edit-a-skill, test-it-in-a-consumer loop — `/ardd-update` warns and asks
+before proceeding on it. There is no tip-of-main channel (Principle VI).
+Cutting a release is the act that publishes skill changes to consumers;
+merging to `main` alone no longer does.
 
 **`install.sh` is the only entry point into a target project.** It copies
 `skills/*/SKILL.md` into `.claude/skills/<name>/`, copies

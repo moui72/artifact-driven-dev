@@ -27,7 +27,9 @@ left off.
 ## Setup
 
 Brand-new project, nothing installed? One command creates it, installs
-ARDD, and offers to open the first session (`--kickoff` / `--no-kickoff`
+ARDD from the **latest tagged release** (releases are the stable install
+channel — the tooling keeps its own `~/.ardd/source` checkout pinned to
+one), and offers to open the first session (`--kickoff` / `--no-kickoff`
 answer that offer in advance):
 
 ```sh
@@ -35,7 +37,12 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
   | sh -s -- my-project
 ```
 
-Otherwise, install ARDD into an existing project:
+Already have a project? Run the same bootstrap from inside it with
+`--existing` — `curl -fsSL <repo>/raw/main/new.sh | sh -s -- --existing` —
+and it installs the latest release there instead.
+
+Installing from your own clone is dev-mode — for hacking on ARDD itself; it
+installs whatever state the clone holds, and `/ardd-update` warns about it:
 
 ```sh
 cd /path/to/artifact-driven-dev
@@ -44,12 +51,10 @@ cd /path/to/artifact-driven-dev
 
 Then open Claude Code in your project.
 
-No clone handy? Use the one-command curl bootstrap — from inside an existing
-project, `curl -fsSL <repo>/raw/main/new.sh | sh -s -- --existing` clones the
-source and runs `install.sh` for you (drop `--existing` and name a target to
-create a new project instead). README's Install and Quickstart sections have
-the details. Both routes — clone or curl bootstrap — converge on `install.sh`;
-it is the only real install/upgrade entry point.
+README's Install and Quickstart sections have the details. All routes
+converge on `install.sh`; it is the only real install/upgrade entry point.
+Once it has run, `/ardd-update` handles updates — resolving the recorded
+source to the latest release before reinstalling.
 
 ## Getting started (once per project)
 

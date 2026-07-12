@@ -149,10 +149,13 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 ```
 
 That creates `my-project/`, `git init`s it, clones this repo to
-`~/.ardd/source` (or updates it if it's already there), runs `install.sh`
-from it, and offers to open Claude Code on `/ardd-bootstrap` — which, on a
-cold start, first interviews you about the design (its step 0) and then
-writes your artifacts.
+`~/.ardd/source` (or refreshes it if it's already there), pins that checkout
+to the **latest tagged release** — releases are the stable install channel;
+you never install from the moving tip of a checkout — runs `install.sh` from
+it, and offers to open Claude Code on `/ardd-bootstrap` — which, on a cold
+start, first interviews you about the design (its step 0) and then writes
+your artifacts. (No releases tagged yet? It says so and installs from the
+default branch. Offline? It warns and uses the checkout as it stands.)
 
 The handoff is a question, not a foregone conclusion. Answer it in advance
 with `--kickoff` (launch, don't ask) or `--no-kickoff` (install, print the
@@ -164,9 +167,11 @@ regardless: you already answered, so there's no question left to fail to
 ask.
 
 `--source <path>` (or `$ARDD_SOURCE`) points at an ARDD checkout you already
-have; a checkout you name that way is only ever read, never pulled or
-modified — only the `~/.ardd/source` clone, which `new.sh` creates and owns,
-is kept up to date for you.
+have — this is **dev-mode**, the escape hatch for working on ARDD itself:
+the checkout is used exactly as it stands (live tip, not a release), and is
+only ever read, never pulled, moved, or modified. Only the `~/.ardd/source`
+clone, which `new.sh` creates and owns, is kept at the latest release for
+you.
 
 Where `new.sh` *doesn't* ask is anywhere it would be writing into a directory
 it doesn't own: a target that already holds files, or a `--source` that isn't
@@ -180,15 +185,10 @@ install ARDD directly, as described next.
 
 ## Install
 
-From a clone of this repo:
-
-```sh
-./install.sh /path/to/your/project
-```
-
-Or without cloning first, with the one-command curl bootstrap — it resolves a
-source checkout (cloning `~/.ardd/source`, a checkout it owns and keeps
-current, if absent) and runs `install.sh` for you:
+The stable channel is **tagged GitHub releases**, resolved through the
+`~/.ardd/source` checkout the tooling owns: the curl bootstrap below (and
+`/ardd-update` afterwards) fetches tags and installs from the latest
+release, never from the tip of a live checkout.
 
 ```sh
 # a brand-new project
@@ -199,8 +199,19 @@ cd /path/to/your/project
 curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh | sh -s -- --existing
 ```
 
+Installing from your own clone of this repo is **dev-mode** — the loop for
+hacking on ARDD itself. It installs whatever state the clone holds, and
+`/ardd-update` will warn about it on every later update:
+
+```sh
+./install.sh /path/to/your/project
+```
+
 Either route converges on `install.sh` — the only real install/upgrade entry
-point — so once it has run, `/ardd-update` handles all updates.
+point — so once it has run, `/ardd-update` handles all updates: it resolves
+the recorded source, moves the owned checkout to the latest release (a
+dev-mode checkout gets a warning and a confirmation instead), and re-runs
+`install.sh` from it.
 
 > **Note:** `npx skills add` is no longer a supported install channel. If you
 > have skill files without a completed install (e.g. from a prior `npx`
