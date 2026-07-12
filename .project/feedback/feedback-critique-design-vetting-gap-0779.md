@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-12
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-skill-surface-cleanup-2026-07-12.md
 ---
 
 # Feedback
@@ -18,7 +18,7 @@ are breaking changes.**_
 
 ## Reconsidered
 
-- [ ] F001 Rename the read-only/report-owner family so each skill names its
+- [x] F001 Rename the read-only/report-owner family so each skill names its
   question and its owned file: `ardd-critique` → **`ardd-audit`**
   (critique.md → audit.md), `ardd-analyze` → **`ardd-status`** (owns
   STATUS.md; description still leads with "cross-artifact consistency
@@ -31,14 +31,14 @@ are breaking changes.**_
   family member. Migrations rename target-side files
   (critique.md→audit.md, SYNC.md→TRACKER.md).
 
-- [ ] F002 Rename the capture/action skills that lure wrongly:
+- [x] F002 Rename the capture/action skills that lure wrongly:
   `ardd-feature` → **`ardd-backlog`** (its own first paragraph disclaims
   its name; **command rename only** — `.project/features/` and the
   `ardd-state.sh feature-*` subcommands keep their names: data model vs
   command surface), and `ardd-render` → **`ardd-diagram`** (states the
   object; taken because renames are free only pre-v1.0.0).
 
-- [ ] F003 Fold `ardd-converge` into `ardd-implement` and delete it
+- [x] F003 Fold `ardd-converge` into `ardd-implement` and delete it
   (Principle VII). Unique content to migrate: the
   reconcile-claimed-vs-actual preamble (genuine judgment, stays prose) and
   the gap-identification sweep. Trigger is mechanical inside implement: a
@@ -51,13 +51,13 @@ are breaking changes.**_
   blind spot unchanged by the fold: an interrupted inline run on a plain
   branch is invisible from the default branch.
 
-- [ ] F004 Fold `ardd-add-artifact` into `ardd-refine` and delete it
+- [x] F004 Fold `ardd-add-artifact` into `ardd-refine` and delete it
   (Principle VII). Verified: refine step 1 already creates a missing named
   artifact from the same `ardd-artifact-templates`; add-artifact's only
   unique content (~5 lines: conflict check, WORKFLOW.md row, CLAUDE.md
   registration note) moves into refine's create branch.
 
-- [ ] F005 Merge `ardd-bootstrap` + `ardd-codify` into a single
+- [x] F005 Merge `ardd-bootstrap` + `ardd-codify` into a single
   **`ardd-init`** that detects its mode (existing source files → codify's
   reverse-engineering path; greenfield → bootstrap's interview path, with
   an explicit override). Their steps 4–8 (constitution suggestions,
@@ -68,7 +68,7 @@ are breaking changes.**_
 
 ## UX
 
-- [ ] F006 `/ardd-research` widens to explicitly own **pre-artifact design
+- [x] F006 `/ardd-research` widens to explicitly own **pre-artifact design
   vetting** alongside fact-finding: given a stated proposal, load current
   artifacts, apply the audit lens list *by reference* (one canonical
   list), and answer goals / challenges / which committed decisions it
@@ -79,7 +79,7 @@ are breaking changes.**_
   One-sentence routing hint in `ardd-backlog` and `ardd-plan`:
   substantial or decision-reversing ideas get `/ardd-research` first.
 
-- [ ] F007 Codify the naming + description system (CLAUDE.md conventions,
+- [x] F007 Codify the naming + description system (CLAUDE.md conventions,
   applied to every skill description in the same change): report-owners
   are nouns named after the file they own (status/STATUS.md,
   defects/DEFECTS.md, audit/audit.md, tracker/TRACKER.md); lifecycle
@@ -89,7 +89,7 @@ are breaking changes.**_
   in order: object, data-flow direction, and — for no-input skills — an
   explicit "takes no X; for X use /ardd-Y" redirect clause.
 
-- [ ] F009 Cross-route the two capture skills instead of merging them
+- [x] F009 Cross-route the two capture skills instead of merging them
   (merge explicitly evaluated and rejected — the folds' bar was shared
   object AND consumers; feedback files and register entries share neither:
   transient multi-item file consumed wholesale vs durable slug-addressable
@@ -109,7 +109,7 @@ are breaking changes.**_
 
 ## Bugs
 
-- [ ] F008 Argument guards on the two no-input report skills, mirroring
+- [x] F008 Argument guards on the two no-input report skills, mirroring
   `/ardd-plan`'s argument disambiguation: `ardd-audit` rejects any
   argument that isn't an existing artifact name with a redirect to
   `/ardd-research <proposal>` (the documented misuse); `ardd-defects`
