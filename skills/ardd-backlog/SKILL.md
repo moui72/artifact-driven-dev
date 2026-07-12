@@ -14,9 +14,9 @@ later, when the idea is targeted by slug in `/ardd-plan <slug>`. This lets
 you accumulate a backlog of ideas and work them in whatever order you like,
 rather than committing to design-and-apply the moment you think of one.
 
-Not to be confused with `/ardd-codify`'s feature-register extraction — that's
+Not to be confused with `/ardd-init`'s feature-register extraction — that's
 the one-time bulk backfill of a whole register from an existing codebase (an
-offered step of `/ardd-codify`). `/ardd-backlog` logs a single new idea at a
+offered step of `/ardd-init`'s existing-codebase path). `/ardd-backlog` logs a single new idea at a
 time, going forward.
 
 Usage: `/ardd-backlog <description>` where description is a plain-language

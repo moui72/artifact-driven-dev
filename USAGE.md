@@ -17,7 +17,7 @@ The common defaults:
 - **ui** — what users see and how the app behaves
 
 A CLI tool might carry only a constitution and an `api.md`; this repo's
-own `.project/` carries only a constitution. `/ardd-bootstrap` suggests a
+own `.project/` carries only a constitution. `/ardd-init` suggests a
 set; `/ardd-refine <new-name>` extends it anytime.
 
 You refine these iteratively. When they're stable, you generate a plan, then
@@ -70,10 +70,10 @@ research — is opt-in and can be ignored until you want it.
 After discussing your project with Claude, run:
 
 ```
-/ardd-bootstrap
+/ardd-init
 ```
 
-(On a greenfield project `/ardd-bootstrap` conducts that discussion as an
+(On a greenfield project `/ardd-init` conducts that discussion as an
 interview itself, in its step 0, before seeding artifacts. The quickstart
 above opens straight into it.)
 
@@ -93,7 +93,7 @@ instead of plain text). Existing installs whose constitution lacks the
 field get asked the same question once by `/ardd-update`; neither answer
 ever bumps the constitution version.
 
-Adopting ARDD in an existing codebase? Run `/ardd-codify` instead — it
+Adopting ARDD in an existing codebase? Run `/ardd-init` there too — it detects the code and
 reverse-engineers the artifacts from the code (see
 [guides/existing-project.md](guides/existing-project.md)).
 

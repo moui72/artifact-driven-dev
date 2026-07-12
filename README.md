@@ -35,7 +35,7 @@ specifically when the codebase *can't* serve as that implicit spec:
   actively moving away from. An agent copying it faithfully reproduces
   exactly what you're trying to escape. Artifacts let you declare the target
   state independent of what the code currently does — though ARDD doesn't
-  detect the pivot for you: `/ardd-codify` captures the codebase's *current*
+  detect the pivot for you: `/ardd-init`'s existing-codebase path captures the codebase's *current*
   patterns as a starting draft, and you still have to refine artifacts
   toward where you actually want to end up.
 
@@ -51,7 +51,7 @@ already a good implicit spec.
 
 A declared set of living documents that evolve throughout the project —
 typically a constitution plus whichever concerns your project actually
-has. There is no fixed set: `/ardd-bootstrap` proposes artifacts based on
+has. There is no fixed set: `/ardd-init` proposes artifacts based on
 what your project needs (this repo's own dogfooded `.project/` carries
 only a constitution), and `/ardd-refine <name>` creates non-standard ones
 anytime. The common defaults:
@@ -74,8 +74,7 @@ edit the `description:` there, then re-run it.)
 
 | Command | What it does |
 |---|---|
-| `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
-| `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
+| `/ardd-init` | One-time initialization of .project/ — detects greenfield vs existing code, then seeds artifacts from the design conversation (interviewing first if needed) or reverse-engineers them from the codebase; seeds .project/ artifacts, not CLAUDE.md (for CLAUDE.md use the built-in /init). |
 
 ## The core loop
 
@@ -109,7 +108,7 @@ In **collaborative** mode nothing is ever committed to the *local* default
 branch: work always moves to a branch, and after the first commit the skill
 offers to push and open a *draft PR* titled with the feature slug — that
 pushed draft PR is the mode's shared in-flight signal, and the register flip
-rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
+rides the branch to land when the PR merges. `/ardd-init` asks which
 mode once at setup and suggests one from what it detects.
 
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
@@ -118,7 +117,7 @@ offering their recommended next step as a
 one-keypress prompt (yes runs it; no/Esc stops) — only when that
 recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
 absent field keeps recommendations as plain text, so delegated and
-scripted runs are unaffected. `/ardd-bootstrap` asks the question once at
+scripted runs are unaffected. `/ardd-init` asks the question once at
 setup; `/ardd-update` asks it once for existing installs whose
 constitution lacks the field. Like `workflow_mode` above, it's a frontmatter
 workflow field — setting it never bumps the constitution version.
@@ -150,7 +149,7 @@ That creates `my-project/`, `git init`s it, clones this repo to
 `~/.ardd/source` (or refreshes it if it's already there), pins that checkout
 to the **latest tagged release** — releases are the stable install channel;
 you never install from the moving tip of a checkout — runs `install.sh` from
-it, and offers to open Claude Code on `/ardd-bootstrap` — which, on a cold
+it, and offers to open Claude Code on `/ardd-init` — which, on a cold
 start, first interviews you about the design (its step 0) and then writes
 your artifacts. (No releases tagged yet? It says so and installs from the
 default branch. Offline? It warns and uses the checkout as it stands.)
@@ -216,14 +215,14 @@ dev-mode checkout gets a warning and a confirmation instead), and re-runs
 > acquisition), finish or repair it by running the `--existing` curl bootstrap
 > above from inside the project.
 
-**New project** — open Claude Code and run `/ardd-bootstrap`: it seeds
+**New project** — open Claude Code and run `/ardd-init`: it seeds
 artifacts from the conversation, and on a cold start (an empty directory, no
 design discussion yet) first walks you through the design conversation itself
 as step 0. If you'd rather talk the design through in your own words first,
-just do that, then run `/ardd-bootstrap` — same destination. See
+just do that, then run `/ardd-init` — same destination. See
 [guides/greenfield.md](guides/greenfield.md).
 
-**Existing project** — open Claude Code and run `/ardd-codify` to
+**Existing project** — open Claude Code and run `/ardd-init` to
 reverse-engineer artifacts from the codebase. Review the generated drafts with
 `/ardd-refine`, then run `/ardd-status` before planning new work. See
 [guides/existing-project.md](guides/existing-project.md).

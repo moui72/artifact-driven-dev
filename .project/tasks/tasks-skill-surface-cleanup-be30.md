@@ -113,7 +113,7 @@ tasks encode._
   registration note) into refine's existing create path; update references
   (README/USAGE tables regenerate via gen-skill-docs.sh).
 
-- [ ] T011 Merge bootstrap+codify into new `skills/ardd-init/`, delete both:
+- [x] T011 Merge bootstrap+codify into new `skills/ardd-init/`, delete both:
   mode detection (existing source files → codify's reverse-engineering
   path; greenfield → interview path) + one confirmation question, no flags;
   F007-formula description written fresh (no "formerly" — two ancestors)

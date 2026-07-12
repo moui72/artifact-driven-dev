@@ -41,7 +41,7 @@ that has open questions instead of a single one:
    - **Seed it** from conversation context and any description the user
      gave. Replace all placeholder tokens; use `[OPEN: <question>]` for
      anything unresolved.
-   - **Set frontmatter explicitly**, matching `/ardd-codify` step 4's field
+   - **Set frontmatter explicitly**, matching `/ardd-init`'s frontmatter field
      list: `status: <draft if open questions remain, else stable>` and
      `last_updated: <today YYYY-MM-DD>`. Add `diagram_status: unrendered`
      if the new artifact is a renderable one (`datamodel`,

@@ -10,7 +10,7 @@ Verify artifacts against the actual codebase and report drift. Where
 `/ardd-status` checks artifacts against each other and against
 `constitution.md` (cheap, docs-only), `/ardd-defects` checks artifacts against
 what the code actually does (expensive — requires re-surveying source,
-similar cost to `/ardd-codify`). Run this before major planning or
+similar cost to `/ardd-init`'s codebase survey). Run this before major planning or
 periodically to catch documentation that has drifted from implementation —
 not as a routine post-refine check. `/ardd-status` is the cheap, frequent
 check; `/ardd-defects` is the expensive, occasional one.
@@ -26,7 +26,7 @@ log.
    artifacts).
 
 2. **Survey the codebase** for each artifact's claims, using an approach
-   similar to `/ardd-codify` step 2 — read only what's relevant to what the
+   similar to `/ardd-init`'s codebase survey — read only what's relevant to what the
    artifact documents:
    - `datamodel.md` → schema files, ORM models, typed data structures,
      request/response types on both server and client

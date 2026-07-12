@@ -50,7 +50,7 @@ done
 
 # --- Prune ardd-* skills removed from source (Principle VII) ---
 # Removing a slash command is a breaking change to existing installs, so an
-# upgrade past a skill merge (e.g. /ardd-kickoff folded into /ardd-bootstrap)
+# upgrade past a skill merge (e.g. bootstrap+codify merged into /ardd-init)
 # must delete the dead command's directory — otherwise the retired command
 # lingers in the target's palette. Enumerate the target's own ardd-* dirs and
 # remove any with no counterpart under source `skills/`. Only ardd-owned dirs
@@ -69,7 +69,7 @@ done
 
 # --- Constitution suggestion catalog ---
 # Not a skill (no SKILL.md, so it never registers as an invokable command) —
-# reference data /ardd-bootstrap and /ardd-codify read at constitution-
+# reference data /ardd-init reads at constitution-
 # creation time. Lives under .claude/skills/ardd-* so it's covered by the
 # same gitignore guidance already given for ardd-* skill directories below.
 mkdir -p "$CONSTITUTION_DATA_DIR"
@@ -77,8 +77,8 @@ cp "$SCRIPT_DIR/templates/constitution-suggestions.md" "$CONSTITUTION_DATA_DIR/c
 echo "  ✓ ardd-constitution-data/constitution-suggestions.md"
 
 # --- Artifact templates ---
-# Not skills either — structure skeletons /ardd-bootstrap, /ardd-refine, and
-# /ardd-refine's create path fill in from context when creating/refining one.
+# Not skills either — structure skeletons /ardd-init and /ardd-refine's
+# create path fill in from context when creating/refining an artifact.
 # These previously only existed in the ADD source repo, never in a target
 # project, so the "look for templates/artifacts/<name>.md in the ADD
 # installation" instruction those skills carried was a no-op outside this
@@ -364,10 +364,9 @@ fi
 
 echo ""
 echo "Done. Next steps for a new project:"
-echo "  1. Run /ardd-bootstrap in Claude Code — it seeds your artifacts from the"
-echo "     conversation, and on a cold start first walks you through the design"
-echo "     conversation itself (its step 0). Existing codebase? Run /ardd-codify"
-echo "     instead."
+echo "  1. Run /ardd-init in Claude Code — it detects greenfield vs existing"
+echo "     code, then seeds your artifacts from the conversation (interviewing"
+echo "     you first on a cold start) or reverse-engineers them from the code."
 echo "  2. Run /ardd-status to check for cross-artifact issues."
 echo "  3. Run /ardd-plan when artifacts are stable."
 echo ""

@@ -67,7 +67,7 @@ Usage: `/ardd-update` — no arguments.
 5. **Ask the next-step-prompt question, once, if never asked.** After the
    reinstall, check `.project/artifacts/constitution.md` frontmatter (if the
    file exists): if it lacks a `next_step_prompt` field *entirely*, ask the
-   same question `/ardd-bootstrap` asks — "Should skills end by offering
+   same question `/ardd-init` asks — "Should skills end by offering
    their recommended next step as a one-keypress prompt?" — and write the
    answer via `.claude/skills/ardd-scripts/ardd-state.sh stamp
    .project/artifacts/constitution.md next_step_prompt <true|false>`. Field
@@ -80,7 +80,7 @@ Usage: `/ardd-update` — no arguments.
 
    **Backfill `delegation` and `merge_policy` the same way.** In the same
    check: if the constitution frontmatter lacks a `delegation` field
-   *entirely*, ask the same question `/ardd-bootstrap` asks — "When
+   *entirely*, ask the same question `/ardd-init` asks — "When
    `/ardd-implement` could run in the background, what
    should they do?" (`eager` | `ask` | `inline`) — and stamp the answer via
    `ardd-state.sh stamp .project/artifacts/constitution.md delegation

@@ -51,6 +51,11 @@ for doc in $DOCS; do
           echo 1 > "$SCRIPT_DIR/.lint-docs-failed"
         fi
         ;;
+      init)
+        # Claude Code's own built-in /init (generates CLAUDE.md) is a real
+        # command outside skills/ — ardd-init's docs reference it in their
+        # redirect clause, so it must not trip the bare-suffix check below.
+        ;;
       *)
         # Bare name (no ardd- prefix) — flag if it matches a skill's
         # unprefixed suffix, since that's the missing-prefix bug class.

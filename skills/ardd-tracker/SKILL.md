@@ -94,7 +94,7 @@ eventually carry links into more than one tracker.
      sees the other's. That's a documented, known limitation, not a gap to
      silently paper over.
    - Otherwise create it. If `Status` is `implemented` (e.g. a legacy or
-     `/ardd-codify`-extracted entry never synced before), create it with no
+     `/ardd-init`-extracted entry never synced before), create it with no
      status label and close it immediately after (`gh issue close <n>`) —
      `implemented` has no `ardd:*` label, only closed state, and step 2's
      `--label ardd:<status>` below only applies to `backlogged`/`planned`/

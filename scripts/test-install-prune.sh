@@ -3,7 +3,7 @@
 # no dead architecture in a target install). On re-run, install.sh must
 # remove any .claude/skills/ardd-*/ directory in the target that no longer
 # has a counterpart under the source `skills/` — so an upgrade past a skill
-# merge (e.g. /ardd-kickoff folded into /ardd-bootstrap) doesn't leave the
+# merge (e.g. bootstrap+codify merged into /ardd-init) doesn't leave the
 # removed command installed. It must NOT touch:
 #   - the non-skill reference dirs (ardd-scripts, ardd-artifact-templates,
 #     ardd-constitution-data), which have no source skills/ counterpart but

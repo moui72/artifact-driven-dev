@@ -19,7 +19,7 @@ canonical list — other docs referencing which skills auto-trigger analyze
 point back here rather than re-enumerating, so it's the one place to update
 when that set changes.
 
-Manual invocation is still the right call after `/ardd-codify`
+Manual invocation is still the right call after `/ardd-init`
 (deliberately deferred until after a `/ardd-refine` pass — running it
 immediately would just report a wall of expected draft-state noise) or
 anytime you want a fresh check outside those flows.
@@ -163,7 +163,7 @@ the coordinator or the inline path.
    ```
 
 6. **Write `.project/STATUS.md`** from the analysis results. Use the same
-   structure defined in `/ardd-bootstrap`:
+   structure defined in `/ardd-init`:
    - Artifact status table (name, stable ✅ / draft ⚠️, open question count or —)
    - Open questions grouped by artifact (omit artifacts with none)
    - A line surfacing `DEFECTS.md`'s summary (count + last-checked date, or

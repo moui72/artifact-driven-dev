@@ -98,7 +98,7 @@ fi
   && ok "case1: ardd-scripts installed" \
   || bad "case1: ardd-scripts missing"
 
-[ -f "$target/.claude/skills/ardd-bootstrap/SKILL.md" ] \
+[ -f "$target/.claude/skills/ardd-init/SKILL.md" ] \
   && ok "case1: skills installed" \
   || bad "case1: skills missing"
 
@@ -163,9 +163,9 @@ set -e
   || bad "case4: expected exit 0, got $status (42 means claude was exec'd)"
 
 # It must still tell the user how to start the session by hand.
-printf '%s' "$out" | grep -q '/ardd-bootstrap' \
-  && ok "case4: prints the /ardd-bootstrap next step" \
-  || bad "case4: never mentions /ardd-bootstrap"
+printf '%s' "$out" | grep -q '/ardd-init' \
+  && ok "case4: prints the /ardd-init next step" \
+  || bad "case4: never mentions /ardd-init"
 
 # --- Case 5: an existing *empty* directory is fine, not a refusal ---
 target="$WORK/case5/proj"
@@ -282,9 +282,9 @@ case "$status" in
   124) bad "case12: timed out — prompted (or read) with no claude to launch" ;;
   *)   bad "case12: expected exit 0, got $status" ;;
 esac
-printf '%s' "$out" | grep -q '/ardd-bootstrap' \
-  && ok "case12: still prints the /ardd-bootstrap next step" \
-  || bad "case12: never mentions /ardd-bootstrap"
+printf '%s' "$out" | grep -q '/ardd-init' \
+  && ok "case12: still prints the /ardd-init next step" \
+  || bad "case12: never mentions /ardd-init"
 
 # --- Case 13: --no-launch is gone, not silently accepted ---
 # It shipped only on unpushed local main, so it was renamed rather than
@@ -327,10 +327,10 @@ run_new 0 "case15: --existing accepts a populated project" --no-kickoff --existi
   && ok "case15: pre-existing content untouched" \
   || bad "case15: pre-existing content clobbered"
 
-# --- Case 16: --existing points at /ardd-codify, not /ardd-bootstrap ---
-# A populated project with no .project/ is a codebase to reverse-engineer, so
-# the next-step handoff is /ardd-codify — never /ardd-bootstrap (which seeds
-# from a blank slate).
+# --- Case 16: --existing hands off to /ardd-init (mode detection lives in
+# the skill now — bootstrap/codify merged at v1.0.0). A populated project
+# with no .project/ still gets /ardd-init; the skill detects the existing
+# codebase and takes its reverse-engineering path.
 target="$WORK/case16/proj"
 mkdir -p "$target"; git init -q "$target"; echo x > "$target/f"
 set +e
@@ -340,16 +340,16 @@ set -e
 [ "$status" -eq 0 ] \
   && ok "case16: --existing exits 0" \
   || bad "case16: expected exit 0, got $status"
-# Grep new.sh's *own* handoff line specifically — `claude "/ardd-codify"` — not
-# a bare skill name: install.sh's generic next-steps blurb mentions both
-# /ardd-bootstrap and /ardd-codify in prose, so only the `claude "…"` invocation
-# form distinguishes new.sh's handoff from install.sh's output.
-printf '%s' "$out" | grep -q 'claude "/ardd-codify"' \
-  && ok "case16: handoff points at /ardd-codify" \
-  || bad "case16: handoff does not point at /ardd-codify"
-printf '%s' "$out" | grep -q 'claude "/ardd-bootstrap"' \
-  && bad "case16: handoff wrongly points at /ardd-bootstrap for an existing project" \
-  || ok "case16: handoff does not point at /ardd-bootstrap"
+# Grep new.sh's *own* handoff line specifically — `claude "/ardd-init"` — not
+# a bare skill name: install.sh's generic next-steps blurb mentions /ardd-init
+# in prose too, so only the `claude "…"` invocation form distinguishes
+# new.sh's handoff from install.sh's output.
+printf '%s' "$out" | grep -q 'claude "/ardd-init"' \
+  && ok "case16: handoff points at /ardd-init" \
+  || bad "case16: handoff does not point at /ardd-init"
+printf '%s' "$out" | grep -q 'claude "/ardd-bootstrap"\|claude "/ardd-codify"' \
+  && bad "case16: handoff still points at a pre-merge setup skill" \
+  || ok "case16: no pre-merge setup-skill handoff"
 
 # --- Case 17: --existing on a missing directory is refused (use plain mode) ---
 # Existing mode requires a real, populated project; a non-existent path means

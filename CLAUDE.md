@@ -19,7 +19,7 @@ internal notes — keep them in sync with the skills themselves.
 
 ```sh
 ./install.sh /path/to/target/project   # install/upgrade skills into a project
-./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-bootstrap
+./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-init
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
 ./scripts/release.sh [--dry-run] <vX.Y.Z> # cut a release: validate (clean/on-default/suite green), SSH-signed tag, push, gh release
 ./scripts/test-release.sh              # regression test for release.sh's refusal logic (fixture repos; network steps untested by design)
@@ -335,7 +335,7 @@ branch — eager merge is what keeps solo mode's in-flight window short.
 
 **Two operating modes**, declared as `workflow_mode: solo | collaborative`
 in `constitution.md` frontmatter (absent = `solo`; enum enforced by
-`lint-project.sh`; asked once by `/ardd-bootstrap`, detection-suggested):
+`lint-project.sh`; asked once by `/ardd-init`, detection-suggested):
 - **solo** — single developer, same machine. Direct commits to the local
   default branch are fine for inline runs; `/ardd-plan` doesn't even ask —
   no branch gate in solo mode, plan+tasks commit straight to the current
@@ -365,7 +365,7 @@ hand-built one was tried and removed (Principle VIII; decision record
 
 **A second constitution frontmatter workflow field, `next_step_prompt:
 true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
-asked once by `/ardd-bootstrap`, and once by `/ardd-update` for installs
+asked once by `/ardd-init`, and once by `/ardd-update` for installs
 whose constitution lacks the field). When `true`, exactly two skills —
 `/ardd-status` and `/ardd-plan` — end by offering their
 recommended next step via AskUserQuestion, and only when that

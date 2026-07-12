@@ -3,7 +3,7 @@
 Use this guide when you're starting from scratch — no code yet, just an idea.
 
 The short version: talk through your project with Claude until you've made the
-key decisions, then run `/ardd-bootstrap` to capture them.
+key decisions, then run `/ardd-init` to capture them.
 
 ---
 
@@ -18,7 +18,7 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 ```
 
 It creates and `git init`s `my-project/`, installs ARDD into it via
-`install.sh`, and offers to open Claude Code on `/ardd-bootstrap` — which, on
+`install.sh`, and offers to open Claude Code on `/ardd-init` — which, on
 a cold start, conducts the Step 1 design conversation as an interview (its
 step 0) and then writes your artifacts. Pick the guide back up at
 [Step 3](#step-3-refine-each-artifact).
@@ -48,7 +48,7 @@ Then open Claude Code in your project.
 ## Step 1: Have the design conversation
 
 Before running any skill, talk through your project with Claude. This is where
-the real work happens. (`/ardd-bootstrap` conducts exactly this conversation
+the real work happens. (`/ardd-init` conducts exactly this conversation
 as an interview in its step 0, if you'd rather be asked than lead.) Cover:
 
 - **What the system does** — one or two sentences; what problem it solves
@@ -61,14 +61,14 @@ as an interview in its step 0, if you'd rather be asked than lead.) Cover:
 
 You don't need to resolve everything. Unresolved decisions become `[OPEN: ...]`
 items in the artifacts. The goal is to get the known decisions out of your head
-and into the conversation so `/ardd-bootstrap` has something to work with.
+and into the conversation so `/ardd-init` has something to work with.
 
 ---
 
 ## Step 2: Bootstrap your artifacts
 
 ```
-/ardd-bootstrap
+/ardd-init
 ```
 
 Claude reads the conversation and writes initial versions of the standard
@@ -212,7 +212,7 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 ## What a clean greenfield run looks like
 
 ```
-Session 1: /ardd-bootstrap (step 0 interviews you, or lead the design yourself) → /ardd-refine × 3
+Session 1: /ardd-init (step 2 interviews you, or lead the design yourself) → /ardd-refine × 3
 Session 2: /ardd-status → /ardd-refine (fixes) → /ardd-status (clean)
 Session 3: /ardd-plan (checkpoint → tasks) → /ardd-implement
 Session N: /ardd-implement (reconcile, then resume)

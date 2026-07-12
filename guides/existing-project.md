@@ -4,7 +4,7 @@ Use this guide when code already exists — a partial implementation, an MVP,
 or a mature codebase you want to start managing with ARDD.
 
 The process is the same regardless of how complete the project is:
-`/ardd-codify` reads the codebase and generates draft artifacts that capture
+`/ardd-init` (existing-codebase path) reads the codebase and generates draft artifacts that capture
 what the code actually does. You then review, fill gaps, and optionally use
 ARDD to plan new work.
 
@@ -26,7 +26,7 @@ Then open Claude Code in your project.
 ## Step 1: Run codify
 
 ```
-/ardd-codify
+/ardd-init
 ```
 
 Claude surveys the codebase — schema files, routes, components, config,
@@ -168,7 +168,7 @@ capturing feedback, planning batches. See [continuing.md](continuing.md).
 ## Typical flow
 
 ```
-Session 1: /ardd-codify (offers feature-register extraction) → read artifacts → /ardd-refine × N
+Session 1: /ardd-init (offers feature-register extraction) → read artifacts → /ardd-refine × N
 Session 2: /ardd-status → /ardd-refine (fixes) → /ardd-status (clean)
 Session 3 (optional): /ardd-plan (checkpoint → tasks) → /ardd-implement
 Session N: /ardd-backlog <description> (log to backlog, anytime)

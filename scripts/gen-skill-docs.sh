@@ -27,7 +27,7 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # Editorial workflow order per tier — skills not listed here append after
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
-ORDER_setup="ardd-bootstrap ardd-codify"
+ORDER_setup="ardd-init"
 ORDER_core="ardd-backlog ardd-feedback ardd-refine ardd-plan ardd-implement ardd-status ardd-lint"
 ORDER_extension="ardd-defects ardd-audit ardd-research ardd-diagram ardd-tracker ardd-update"
 
@@ -100,7 +100,7 @@ In **collaborative** mode nothing is ever committed to the *local* default
 branch: work always moves to a branch, and after the first commit the skill
 offers to push and open a *draft PR* titled with the feature slug — that
 pushed draft PR is the mode's shared in-flight signal, and the register flip
-rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
+rides the branch to land when the PR merges. `/ardd-init` asks which
 mode once at setup and suggests one from what it detects.
 
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
@@ -109,7 +109,7 @@ offering their recommended next step as a
 one-keypress prompt (yes runs it; no/Esc stops) — only when that
 recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
 absent field keeps recommendations as plain text, so delegated and
-scripted runs are unaffected. `/ardd-bootstrap` asks the question once at
+scripted runs are unaffected. `/ardd-init` asks the question once at
 setup; `/ardd-update` asks it once for existing installs whose
 constitution lacks the field. Like `workflow_mode` above, it's a frontmatter
 workflow field — setting it never bumps the constitution version.
