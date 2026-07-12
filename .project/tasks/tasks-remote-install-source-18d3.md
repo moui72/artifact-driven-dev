@@ -25,7 +25,7 @@ status: in-progress
 
 ## Phase 2: Resolution + update-check (target-side)
 
-- [ ] T002 [artifacts: constitution] Create `scripts/source-resolve.sh`
+- [x] T002 [artifacts: constitution] Create `scripts/source-resolve.sh`
   (POSIX sh, installed to `ardd-scripts` by install.sh — add it to the
   install list): given the recorded `Source-Path` (argument or read from
   `.project/ardd-version.md`), if the path is the tooling-owned

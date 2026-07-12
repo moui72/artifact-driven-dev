@@ -122,6 +122,12 @@ if [ -x "$uc" ]; then
 else
   bad "case1b2: ardd-update-check.sh installed and executable"
 fi
+sr="$target/.claude/skills/ardd-scripts/source-resolve.sh"
+if [ -x "$sr" ]; then
+  ok "case1b3: source-resolve.sh installed and executable"
+else
+  bad "case1b3: source-resolve.sh installed and executable"
+fi
 
 # --- Case 2: existing .worktreeinclude, unrelated content, NO trailing newline ---
 target="$WORK/case2"
