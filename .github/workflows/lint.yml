@@ -66,6 +66,13 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-worktreeinclude.sh
 
+  merge-driver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - run: ./scripts/test-merge-driver.sh
+
   install-gitattributes:
     runs-on: ubuntu-latest
     steps:

@@ -24,7 +24,7 @@ status: in-progress
   idempotent re-run, user-line preserved, warning printed when driver
   unset, silent when set) — red before implementation.
 
-- [ ] T002 End-to-end behavior regression test
+- [x] T002 End-to-end behavior regression test
   (`scripts/test-merge-driver.sh` + CI job in the same commit): in a
   throwaway repo with the attributes file and `merge.ours.driver true`,
   two branches editing `.project/STATUS.md` divergently merge cleanly with
