@@ -1,6 +1,6 @@
 ---
 slug: background-by-default-flow
-status: tasked
+status: implemented
 logged: 2026-07-11
 plan: plan-background-by-default-flow-2026-07-12.md
 tasks: tasks-background-by-default-flow-8e91.md
