@@ -209,7 +209,10 @@ real artifact-design work first, which can run long, but `/ardd-plan` never
 delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the
 plan and tasks file it produces are themselves the state the next steps need
 to see, so isolating them in a worktree would just trap them there until a
-manual merge. It still offers a plain branch, same as before.
+manual merge. In solo mode it doesn't prompt about branches at all: the plan
+and tasks files commit to the branch you're on (normally the default
+branch). In `workflow_mode: collaborative` it still offers a plain branch,
+same as before.
 
 Passing `defect:<id>` (one or more, using the 8-char identifiers
 `/ardd-verify` records in `DEFECTS.md`) or the literal `defects` scopes

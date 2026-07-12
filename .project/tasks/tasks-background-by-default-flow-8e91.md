@@ -35,7 +35,7 @@ status: in-progress
   branch `/ardd-implement`'s inline path *would* create, or omit — resolve
   with T009's findings; keep the two consistent).
 
-- [ ] T003 [parallel] Update the docs that narrate the plan branch gate:
+- [x] T003 [parallel] Update the docs that narrate the plan branch gate:
   CLAUDE.md's "ardd-plan is the branch-gate exception" paragraph and
   two-operating-modes section, plus USAGE.md/README.md wherever they describe
   `/ardd-plan` prompting for a branch. Run `./scripts/lint-docs.sh` and the

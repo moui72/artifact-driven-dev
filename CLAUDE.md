@@ -58,8 +58,10 @@ from whatever branch is out, so a feature branch checked out in the primary
 directory serves unmerged, possibly-broken skills to every consumer that
 updates while it's out — and can trigger a consumer's update flow to
 re-checkout `main` under your in-flight work (a real ref-lock collision hit
-this on 2026-07-11). So **when `/ardd-plan` or `/ardd-implement` offers its
-branch gate here, do not take the inline `git checkout -b` option.** Instead
+this on 2026-07-11). So **when a skill offers a
+branch gate here (e.g. `/ardd-implement`'s — solo-mode `/ardd-plan` no
+longer has one and its quick plan/tasks/state commits to `main` are fine),
+do not take the inline `git checkout -b` option.** Instead
 `git worktree add <path> -b <branch>` and work there — populate that
 worktree's `.claude/skills/` from the primary first, since that dir is
 gitignored and `git worktree add` won't carry it — or use the skills'
@@ -303,7 +305,9 @@ branch — eager merge is what keeps solo mode's in-flight window short.
 in `constitution.md` frontmatter (absent = `solo`; enum enforced by
 `lint-project.sh`; asked once by `/ardd-bootstrap`, detection-suggested):
 - **solo** — single developer, same machine. Direct commits to the local
-  default branch are fine for inline runs; delegated runs use worktrees and
+  default branch are fine for inline runs; `/ardd-plan` doesn't even ask —
+  no branch gate in solo mode, plan+tasks commit straight to the current
+  (normally default) branch; delegated runs use worktrees and
   merge eagerly on completion. The delegation gate offers backgrounding
   *eagerly* — regardless of whether the run is already on a feature branch;
   being on a branch isolates state but shouldn't force foreground execution.
@@ -343,21 +347,29 @@ Impact Report entry and no constitution version bump applies. Don't widen
 the two-skill scope casually — every other skill's terminal analyze
 handoff already funnels into `/ardd-analyze`'s prompt.
 
-`ardd-plan` is the branch-gate exception. It *does* have a branch-gate step
-(a plain one, offering only a regular branch, never a worktree) — but it
-deliberately never delegates, even though it now spans both drafting a plan
-(which can run long for a targeted feature) *and* generating that plan's
-tasks file (the old `/ardd-tasks`, folded in at an approval checkpoint). The
-reason is unchanged by the merge: the plan and tasks files it writes
+`ardd-plan` never delegates — and in solo mode it no longer gates. In solo
+mode (`workflow_mode` absent or `solo`) there is no branch-gate prompt at
+all: the run proceeds on the current branch (normally the default branch)
+and commits plan+tasks there — a `ready` tasks file on the default branch
+is planned truth, already accepted there (decision record 0005). Only
+collaborative mode keeps the branch-gate step (a plain one, offering only
+a regular branch, never a worktree). In both modes it deliberately never
+delegates, even though it spans both drafting a plan (which can run long
+for a targeted feature) *and* generating that plan's tasks file (the old
+`/ardd-tasks`, folded in at an approval checkpoint). The reason is
+unchanged: the plan and tasks files it writes
 (`.project/plans/plan-*.md`, `.project/tasks/tasks-*.md`) are themselves the
 state the next steps (`/ardd-implement`) need to see. Delegating to a worktree
 would trap those files there until a manual merge, severing the handoff.
-`ardd-plan`'s tasking half also has no branch-gate of its own (the single
-step 1 gate covers the whole run) — its plan-approval and register flips are
-quick state updates the workflow wants on the default branch promptly, with
-no separate long-running work to isolate. Tried the delegating-plan variant
-once and reverted — decision record 0001 has the story if the "make plan
-consistent with implement/converge" temptation recurs.
+`ardd-plan`'s tasking half also has no branch-gate of its own — its
+plan-approval and register flips are quick state updates the workflow wants
+on the default branch promptly, with no separate long-running work to
+isolate. The plan's `branch:` frontmatter names the branch inline
+implementation *would* use; in the solo no-gate flow that ref may never be
+created, and `completion-flip-check.sh` treats a nonexistent ref as
+not-merged (silent). Tried the delegating-plan variant once and reverted —
+decision record 0001 has the story if the "make plan consistent with
+implement/converge" temptation recurs.
 
 `isolation: "worktree"` creates and names its own worktree/branch — there
 is no parameter to point it at a pre-made one, and the branch name is only
