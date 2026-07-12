@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Constitution amendment
 
-- [ ] T001 [artifacts: constitution] Amend the constitution (v1.5.0 →
+- [x] T001 [artifacts: constitution] Amend the constitution (v1.5.0 →
   v1.6.0, MINOR, one SIR, `last_updated` stamped via `ardd-state.sh
   stamp`): (a) the feature-register standing decision's enum becomes
   `backlogged|planned|tasked|implemented|retired` (`retired` = terminal:

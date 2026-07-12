@@ -1,31 +1,36 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.4.0 → 1.5.0 (MINOR — adds a new material standing
-decision to the governing scope; same magnitude reasoning as the 1.3.0
-and 1.4.0 acquisition changes.)
+Version change: 1.5.0 → 1.6.0 (MINOR — material expansion of two existing
+standing decisions: the release-channel decision gains the pack's own
+versioning/migration policy, and the feature-register decision gains a
+terminal state plus explicit status semantics.)
 
-Rationale: /ardd-plan remote-install-source (2026-07-12). Consumers reading
-a live local checkout is the root cause of the primary-stays-on-main
-mandate and the 2026-07-11 ref-lock collision: whatever branch is checked
-out is silently "released" to every consumer that updates. GitHub releases
-(semver tags) become the stable install channel — /ardd-update and new.sh
-resolve the latest release tag via ~/.ardd/source; a live local checkout as
-install source becomes explicit dev-mode (--source/$ARDD_SOURCE), warned as
-such. Push/release becomes the deliberate release act.
+Rationale: /ardd-plan pre-release-ratchets (2026-07-12), consuming
+feedback-pre-release-ratchets-4d67.md. The interfaces v1.0.0 freezes need
+their policy stated before any consumer pins a release: (a) what a release
+version number *means* for a skill pack (which changes are breaking) was
+nowhere written down; (b) migrations being re-runnable-by-filename makes
+renumbering/deleting them silently corrupting, so append-only must be a
+stated rule, and `.ardd-applied` uncommitted means every teammate re-runs
+every migration; (c) the feature register had no way to say "shipped, then
+deliberately removed" — the npx-skills-install channel removal (2026-07-11)
+left its register entry asserting `implemented` about a system that no
+longer contains it.
 
-Modified sections: Project Scope & Intent (new standing decision — GitHub
-releases are the stable install channel; a retirement note appended to the
-primary-stays-on-main decision, which stays binding until the release
-channel is live and consumers are repointed). Footer version updated.
+Modified sections: Quality Standards → feature-register standing decision
+(enum gains terminal `retired`; new semantics sentence — status asserts
+present truth); Project Scope & Intent → release-channel standing decision
+(pack versioning policy: MAJOR/MINOR/PATCH meanings for a skill pack;
+migrations are append-only; `.ardd-applied` should be committed). Footer
+version updated.
 
 Deferred to implementation under the same plan (not this artifact
-revision): release-cutting mechanics, /ardd-update and new.sh resolution
-changes, ardd-update-check tag comparison, the consumer repoint sweep, and
-the eventual primary-stays-on-main retirement (a separate future
-amendment once no consumer reads the dev checkout live).
+revision): the `retired` enum/flip-arc mechanics in lint-project.sh and
+ardd-state.sh, the ardd-version.md hardening, mint tokens, and the
+unknown-enum version-skew hint.
 
-Previous SIR (1.3.0 → 1.4.0) is in git history at this file's prior
+Previous SIR (1.4.0 → 1.5.0) is in git history at this file's prior
 revision.
 -->
 
@@ -113,6 +118,21 @@ changes which checkout and ref the resolution layer hands it, not the
 entry point itself. Cutting a release (tag + `gh release`) is thereby the
 deliberate act that publishes skill changes to consumers — merging to
 `main` alone no longer does.
+
+Release versions follow semver with skill-pack semantics: **MAJOR** for a
+removed or renamed slash command, or a breaking change to a script's
+output contract or a `.project/` schema (an existing key or field changes
+meaning or disappears); **MINOR** for an additive skill, knob, or
+schema-widening change (a new enum value, a new optional field, a new
+output key); **PATCH** for prose and fixes that change no interface.
+**Migrations are append-only**: a `migrations/*.sh` file, once released,
+is never renumbered, renamed, or deleted — the target's `.ardd-applied`
+keys by filename, so a rename re-runs the migration on every consumer and
+a deletion silently orphans its record; any release must be able to
+upgrade any older install by replaying the migrations it hasn't recorded.
+`.ardd-applied` itself **should be committed** in the target project:
+left uncommitted, every teammate's first `/ardd-update` re-runs every
+migration from scratch.
 
 `new.sh` converges by the most direct route available: it resolves a
 source checkout — cloning `~/.ardd/source`, the one checkout it owns, if
@@ -284,9 +304,13 @@ before being built, not discovered as duplicated work later.
   `.project/features/<slug>.md`, not a single `features.md` — merge and
   parse robustness win over single-file glanceability, especially for
   collaborative mode and tracker sync. Schema per file — frontmatter,
-  required: `slug`, `status` (`backlogged|planned|tasked|implemented`),
-  `logged` (YYYY-MM-DD); optional: `plan` and `tasks` (filenames of the
-  binding plan/tasks files), `gh_issue` (issue number). Body: a
+  required: `slug`, `status`
+  (`backlogged|planned|tasked|implemented|retired`), `logged`
+  (YYYY-MM-DD); optional: `plan` and `tasks` (filenames of the binding
+  plan/tasks files), `gh_issue` (issue number). A feature's `status`
+  asserts what is true of the system NOW, not what was once reached:
+  `retired` is the terminal state for a feature that shipped and was then
+  deliberately removed — it never flips back out. Body: a
   one-sentence description, optionally followed by a `Why:` line.
   Register-wide views are produced by enumeration (glob), never by a
   second hand-maintained index file. This decision was made explicitly
@@ -323,4 +347,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.5.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
+**Version**: 1.6.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
