@@ -1,12 +1,12 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (background-by-default-flow planned and tasked — ready for /ardd-implement). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-12 (background-by-default-flow MERGED — delegated worktree run, ff to `b5ff7c8`; knobs live: `delegation: eager`, `merge_policy: auto`). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.4.0) | — |
+| constitution.md | stable ✅ (v1.4.0, + `delegation`/`merge_policy` workflow fields) | — |
 
 ## Open Questions
 
@@ -19,8 +19,9 @@ None in the artifact. One plan-scoped set remains, non-blocking:
 ## Code-vs-Artifact Defects
 
 1 defect — see `DEFECTS.md`, last checked 2026-07-11 (sixth pass). Unchanged:
-the behavioral-smoke-tier residue (`970d935b`); no scenario has ever executed
-because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced.
+the behavioral-smoke-tier residue (`970d935b`); `ANTHROPIC_API_KEY` still
+unprovisioned. The background-by-default-flow merge post-dates the sixth pass
+and hasn't been verified against yet.
 
 ## Feedback
 
@@ -28,38 +29,40 @@ None open — all feedback files are `status: planned`.
 
 ## Feature Backlog
 
-2 backlogged · 0 planned · 1 tasked · 7 implemented — see `.project/features/`.
+2 backlogged · 0 planned · 0 tasked · 8 implemented — see `.project/features/`.
 
-- `background-by-default-flow` — **tasked**:
-  `plan-background-by-default-flow-2026-07-12.md` (approved) →
-  `tasks-background-by-default-flow-8e91.md` (ready, 10 tasks / 5 phases).
-- `disposable-report-merge-driver` — backlogged: mechanize the
-  disposable-report rule as a `.gitattributes` merge driver so parallel
-  merges never conflict on generated reports.
-- `worktree-reap-and-fanout` — backlogged: reap merged delegated worktrees;
-  delegation gate fans out one worktree per independent ready tasks file.
-  (Depends on the merge driver for safe out-of-order landings.)
+- `disposable-report-merge-driver` — backlogged: `.gitattributes` merge
+  driver for the disposable single-writer reports; what makes parallel
+  auto-merges conflict-free.
+- `worktree-reap-and-fanout` — backlogged: deterministic reap of merged
+  delegated worktrees + delegation-gate fan-out. (Depends on the merge
+  driver.)
 
 ## Critique
 
 `.project/critique.md` (2026-07-11) has 5 open findings on the constitution:
-3 suggestions (each with a `/ardd-refine`//`/ardd-feature` command), 1
-question (register enum lacks a removed/retired state — `npx-skills-install`
-still reads `implemented`), 1 risk (smoke CI never runs). Work them from the
-checklist directly.
+3 suggestions, 1 question (register enum lacks a removed/retired state), 1
+risk (smoke CI never runs). Work them from the checklist directly.
 
-## Recently Landed (2026-07-11 session)
+## Recently Landed (2026-07-12)
 
-- **Primary-stays-on-main invariant** merged (`7338a6b`, constitution
-  **v1.4.0**): this repo's primary worktree never leaves `main`; feature work
-  lives in separate worktrees.
-- **npx-channel scrap** merged (`dc70e63`, v1.3.0): two install routes remain,
-  both converging directly on `install.sh`.
-- **Catalog consolidation** merged (`d9d6d76`): source skills 21→18.
+- **background-by-default-flow** merged (`b5ff7c8`, 12 commits, delegated
+  worktree run): solo `/ardd-plan` commits plan+tasks straight to the default
+  branch (no branch gate); `delegation: eager|ask|inline` and
+  `merge_policy: auto|ask` constitution workflow knobs consumed by
+  `/ardd-implement`//`/ardd-converge` (bootstrap asks once, update
+  backfills); `fold-to-main.sh` reframed as recovery path; decision record
+  0005; `ardd-state.sh stamp` learned both keys; this repo dogfoods
+  `eager`+`auto`. Skills reinstalled into `.claude/skills/`.
+- **Field note from the run**: the first delegation attempt blocked because
+  the plan/tasks files were written but uncommitted on `main` — exactly the
+  gap T002 closed (solo plan *commits* to default; the commit is the
+  handoff). Also observed: a paused delegated run with zero commits had its
+  harness worktree auto-reaped between turns — candidate `/ardd-feedback`.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-background-by-default-flow-8e91.md`
-(10 tasks; T001 and T010 carry user checkpoints for knob names and dogfood
-values). The critique checklist and the unpushed `main` commits remain open
-threads.
+Push `main` when ready (it holds this session's 13 unpushed commits, all
+signed). Optional threads: log the reaped-worktree observation via
+`/ardd-feedback`; work the critique checklist; plan
+`disposable-report-merge-driver` (it unlocks `worktree-reap-and-fanout`).
