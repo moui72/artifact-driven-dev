@@ -1,12 +1,12 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (background-by-default-flow MERGED — delegated worktree run, ff to `b5ff7c8`; knobs live: `delegation: eager`, `merge_policy: auto`). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-12 (constitution v1.5.0 — GitHub releases are the stable install channel; remote-install-source planned+tasked, ready for /ardd-implement). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.4.0, + `delegation`/`merge_policy` workflow fields) | — |
+| constitution.md | stable ✅ (v1.5.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -29,12 +29,13 @@ None open — all feedback files are `status: planned`.
 
 ## Feature Backlog
 
-3 backlogged · 0 planned · 0 tasked · 8 implemented — see `.project/features/`.
+2 backlogged · 0 planned · 1 tasked · 8 implemented — see `.project/features/`.
 
-- `remote-install-source` — backlogged: install.sh//ardd-update default to
-  the latest tagged GitHub release instead of a live local checkout
-  (release-cutting process included); endgame retires the
-  primary-stays-on-main mandate via constitution amendment.
+- `remote-install-source` — **tasked**:
+  `plan-remote-install-source-2026-07-12.md` (approved) →
+  `tasks-remote-install-source-18d3.md` (ready, 10 tasks / 6 phases;
+  constitution v1.5.0 amendment already applied). Phase 6 retires the
+  primary-stays-on-main mandate.
 - `disposable-report-merge-driver` — backlogged: `.gitattributes` merge
   driver for the disposable single-writer reports; what makes parallel
   auto-merges conflict-free.
@@ -66,8 +67,9 @@ risk (smoke CI never runs). Work them from the checklist directly.
 
 ## Recommended Next Step
 
-Run `/ardd-plan remote-install-source` — it's the root-cause fix (retires
-the primary-stays-on-main mandate) and defines the release discipline the
-other consumers update against. Other threads: `main` has 2 unpushed
-commits (STATUS refreshes); log the reaped-worktree observation via
-`/ardd-feedback`; critique checklist; `disposable-report-merge-driver`.
+Run `/ardd-implement` to execute `tasks-remote-install-source-18d3.md`
+(10 tasks; user checkpoints at T001 signed-tags, T008 version+push, T009
+repoint scope, T010 retirement magnitude — T008–T010 need the user
+present, so a delegated run should stop after Phase 4 and hand back).
+Other threads: unpushed `main` commits; reaped-worktree `/ardd-feedback`;
+critique checklist; `disposable-report-merge-driver`.
