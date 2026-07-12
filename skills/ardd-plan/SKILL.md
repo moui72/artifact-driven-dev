@@ -17,7 +17,8 @@ Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
 <slug> [<slug> ...]` additionally targets one or more backlogged feature
 entries from the feature register (`.project/features/`) — this is where a feature
 idea's artifact design work actually happens (`/ardd-backlog` only logs the
-idea; it doesn't touch artifacts).
+idea; it doesn't touch artifacts). Substantial or decision-reversing ideas:
+vet with `/ardd-research` first, before planning them.
 
 `/ardd-plan --from <plan-file>` is the **re-task mode**: it skips planning
 entirely and re-enters at the tasking half (step 11) for the named,

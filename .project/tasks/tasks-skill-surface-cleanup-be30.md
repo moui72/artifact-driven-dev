@@ -129,7 +129,7 @@ tasks encode._
 
 ## Phase 3: Routing behavior
 
-- [ ] T012 Widen `ardd-research` with the proposal-vetting mode: usage line
+- [x] T012 Widen `ardd-research` with the proposal-vetting mode: usage line
   and an explicit proposal-vetting example invocation; steps for the
   proposal object (load current artifacts, apply `ardd-audit`'s lens list
   BY REFERENCE — name the section, don't duplicate the list — and answer

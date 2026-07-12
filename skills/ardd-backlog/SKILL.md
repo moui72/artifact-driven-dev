@@ -21,7 +21,9 @@ time, going forward.
 
 Usage: `/ardd-backlog <description>` where description is a plain-language
 statement of the feature (e.g., "octokit fallback for GitHub similar to the
-existing GitLab REST fallback").
+existing GitLab REST fallback"). Substantial or decision-reversing ideas:
+vet with `/ardd-research` first — its proposal-vetting mode pressure-tests
+the idea against the current artifacts before it earns a backlog entry.
 
 ## Steps
 
