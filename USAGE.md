@@ -252,7 +252,11 @@ tasks file, so a second `/ardd-implement` can start safely while another is
 still in flight. It then offers to delegate execution to a background
 subagent in an isolated worktree — **regardless of which branch you're on**;
 being on a feature branch isolates state but shouldn't tie up your focused
-session. If you accept while already on a feature branch, Claude folds that
+session. The `delegation` field in `constitution.md`'s frontmatter tunes
+this gate: `eager` delegates without asking, `ask` (or absent) offers each
+time, `inline` never offers. If delegation proceeds while you're on a
+feature branch (a recovery case now that solo `/ardd-plan` doesn't create
+one), Claude folds that
 branch into your default branch and returns you to it first (so the delegated
 worktree can see the work), then runs the subagent in the background.
 Executing tasks is exactly the long-running, code-producing work isolation is
@@ -275,9 +279,12 @@ code. So the feature register never claims work is done before the code has
 landed, and until merge the in-flight truth is visible via the sibling-
 worktree check above and `/ardd-analyze`'s "In Flight" section. On a
 delegated run's completion, Claude offers to merge the worktree branch
-right away (in `workflow_mode: collaborative`, merging goes through a
+right away — or, with `merge_policy: auto` in `constitution.md`'s
+frontmatter, merges it without asking when the merge is fast-forward or
+conflict-free (any conflict stops and asks; nothing is ever auto-resolved).
+(In `workflow_mode: collaborative`, merging goes through a
 pushed draft PR instead — nothing is committed to your local default
-branch).
+branch, and `merge_policy` is never consulted.)
 
 ---
 

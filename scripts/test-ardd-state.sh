@@ -314,4 +314,27 @@ sh "$STATE" stamp "$CF" next_step_prompt yes >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: bad next_step_prompt refused" 2 "$rc"
 
+# stamp delegation / merge_policy — enum-validated, add + replace
+sh "$STATE" stamp "$CF" delegation eager >/dev/null
+assert_file_grep "stamp: delegation set eager" "^delegation: eager" "$CF"
+fmend="$(grep -n '^---$' "$CF" | sed -n 2p | cut -d: -f1)"
+dline="$(grep -n '^delegation:' "$CF" | cut -d: -f1)"
+[ "$dline" -lt "$fmend" ] && ok "stamp: delegation inside frontmatter" || bad "stamp: delegation inside frontmatter — line $dline vs closing --- at $fmend"
+sh "$STATE" stamp "$CF" delegation inline >/dev/null
+assert_file_grep "stamp: delegation replaced with inline" "^delegation: inline" "$CF"
+[ "$(grep -c '^delegation:' "$CF")" = "1" ] && ok "stamp: delegation no duplicate keys" || bad "stamp: delegation no duplicate keys"
+set +e
+sh "$STATE" stamp "$CF" delegation sometimes >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bad delegation refused" 2 "$rc"
+sh "$STATE" stamp "$CF" merge_policy auto >/dev/null
+assert_file_grep "stamp: merge_policy set auto" "^merge_policy: auto" "$CF"
+sh "$STATE" stamp "$CF" merge_policy ask >/dev/null
+assert_file_grep "stamp: merge_policy replaced with ask" "^merge_policy: ask" "$CF"
+[ "$(grep -c '^merge_policy:' "$CF")" = "1" ] && ok "stamp: merge_policy no duplicate keys" || bad "stamp: merge_policy no duplicate keys"
+set +e
+sh "$STATE" stamp "$CF" merge_policy yolo >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bad merge_policy refused" 2 "$rc"
+
 exit "$fail"

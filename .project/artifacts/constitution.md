@@ -32,6 +32,8 @@ name: constitution
 status: stable
 last_updated: 2026-07-11
 next_step_prompt: true
+delegation: eager
+merge_policy: auto
 ---
 
 # artifact-driven-dev Constitution

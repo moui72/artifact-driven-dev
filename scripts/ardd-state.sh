@@ -48,6 +48,8 @@ Deterministic state mutations for .project/ files. Subcommands:
   stamp <file> last_updated <YYYY-MM-DD>
   stamp <file> diagram_status <unrendered|stale|current>
   stamp <file> next_step_prompt <true|false>
+  stamp <file> delegation <eager|ask|inline>
+  stamp <file> merge_policy <auto|ask>
                            set an artifact frontmatter field (add or replace)
 EOF
 }
@@ -291,7 +293,19 @@ cmd_stamp() {
         *) dieu "stamp: next_step_prompt must be true|false, got '$val'" ;;
       esac
       ;;
-    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt, got '$key'" ;;
+    delegation)
+      case "$val" in
+        eager|ask|inline) ;;
+        *) dieu "stamp: delegation must be eager|ask|inline, got '$val'" ;;
+      esac
+      ;;
+    merge_policy)
+      case "$val" in
+        auto|ask) ;;
+        *) dieu "stamp: merge_policy must be auto|ask, got '$val'" ;;
+      esac
+      ;;
+    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|merge_policy, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
   echo "stamp: $file $key = $val"

@@ -101,7 +101,7 @@ status: in-progress
   script in the same commit (test-first). Feed the outcome back into T002's
   `branch:` field wording if they landed inconsistently.
 
-- [ ] T010 [artifacts: constitution] Stamp this repo's own constitution with
+- [x] T010 [artifacts: constitution] Stamp this repo's own constitution with
   the user-chosen dogfood values (plan Open Question 4 — ask before
   stamping: `eager`+`auto` exercises the feature, `ask`+`ask` is
   conservative) via `ardd-state.sh stamp`, run `./scripts/lint-project.sh`
