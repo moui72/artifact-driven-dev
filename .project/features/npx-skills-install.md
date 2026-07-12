@@ -1,6 +1,6 @@
 ---
 slug: npx-skills-install
-status: implemented
+status: retired
 logged: 2026-07-09
 plan: plan-npx-skills-install-2026-07-09.md
 tasks: tasks-npx-skills-install-568d.md

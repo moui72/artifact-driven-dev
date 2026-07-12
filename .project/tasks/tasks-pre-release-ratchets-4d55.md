@@ -24,7 +24,7 @@ status: in-progress
 
 ## Phase 2: Mechanical hardening (test-first throughout)
 
-- [ ] T002 [artifacts: constitution] Add `retired` to
+- [x] T002 [artifacts: constitution] Add `retired` to
   `FEATURE_STATUS_ENUM` in `scripts/lint-project.sh` AND the
   `implemented→retired` arc to `ardd-state.sh feature-flip` in the same
   commit (forward-only discipline otherwise unchanged; retired is

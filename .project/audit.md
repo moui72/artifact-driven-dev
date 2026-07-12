@@ -42,7 +42,7 @@ _Updated: 2026-07-11_
   lens asks about. Either provision the key or tighten the standard's wording
   so a never-run job doesn't count as compliance.
 
-- [ ] **[Q]** The feature-register status enum
+- [x] **[Q]** resolved: present-truth + retired, constitution v1.6.0 — The feature-register status enum
   (`backlogged|planned|tasked|implemented`, a standing decision in this
   constitution) has no terminal state for a feature that shipped and was
   later removed. `npx-skills-install` still reads `status: implemented`

@@ -42,7 +42,9 @@ Deterministic state mutations for .project/ files. Subcommands:
                            as status: backlogged; body read from stdin
   feature-flip <slug> <status>
                            advance a feature one stage along
-                           backlogged->planned->tasked->implemented
+                           backlogged->planned->tasked->implemented->retired
+                           (retired = shipped then deliberately removed;
+                           terminal — no arc out of it)
   feature-field <slug> <plan|tasks|gh_issue> <value>
                            set an optional frontmatter field (add or replace)
   stamp <file> last_updated <YYYY-MM-DD>
@@ -239,8 +241,8 @@ cmd_feature_flip() {
   slug="${1:-}"; to="${2:-}"
   [ -n "$slug" ] && [ -n "$to" ] || dieu "feature-flip: need <slug> <status>"
   case "$to" in
-    planned|tasked|implemented) ;;
-    *) dieu "feature-flip: target must be planned|tasked|implemented, got '$to'" ;;
+    planned|tasked|implemented|retired) ;;
+    *) dieu "feature-flip: target must be planned|tasked|implemented|retired, got '$to'" ;;
   esac
   f="$(feature_file "$slug")"
   [ -f "$f" ] || die "feature-flip: no such feature: $f"
@@ -250,8 +252,8 @@ cmd_feature_flip() {
     return 0
   fi
   case "$from-$to" in
-    backlogged-planned|planned-tasked|tasked-implemented) ;;
-    *) die "feature-flip: illegal transition $from -> $to for $slug (one stage at a time)" ;;
+    backlogged-planned|planned-tasked|tasked-implemented|implemented-retired) ;;
+    *) die "feature-flip: illegal transition $from -> $to for $slug (one stage at a time; retired is terminal)" ;;
   esac
   write_status "$f" "$from" "$to"
   echo "feature-flip: $slug $from -> $to"

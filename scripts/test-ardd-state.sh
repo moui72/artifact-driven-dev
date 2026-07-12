@@ -247,6 +247,25 @@ set +e
 set -e
 assert_exit "feature-flip: unknown slug refused" 1 "$rc"
 
+# retired: terminal, reachable only from implemented (constitution v1.6.0)
+( cd "$FPROJ" && printf 'Old channel.\n' | sh "$STATE" feature-create old-channel >/dev/null )
+RFEAT="$FPROJ/.project/features/old-channel.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip old-channel planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip old-channel tasked >/dev/null )
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip old-channel retired ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: tasked->retired refused" 1 "$rc"
+assert_file_grep "feature-flip: still tasked after refusal" "^status: tasked" "$RFEAT"
+( cd "$FPROJ" && sh "$STATE" feature-flip old-channel implemented >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip old-channel retired >/dev/null )
+assert_file_grep "feature-flip: implemented->retired" "^status: retired" "$RFEAT"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip old-channel implemented ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: out of retired refused" 1 "$rc"
+assert_file_grep "feature-flip: retired is terminal" "^status: retired" "$RFEAT"
+
 ( cd "$FPROJ" && sh "$STATE" feature-field dark-mode plan plan-dark-mode-2026-07-06.md >/dev/null )
 assert_file_grep "feature-field: plan added" "^plan: plan-dark-mode-2026-07-06.md" "$FEAT"
 ( cd "$FPROJ" && sh "$STATE" feature-field dark-mode plan plan-other-2026-07-07.md >/dev/null )
