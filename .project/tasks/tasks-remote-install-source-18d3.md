@@ -101,13 +101,13 @@ status: in-progress
 
 ## Phase 5: First release + consumer repoint
 
-- [ ] T008 Cut the first release: confirm the version with the user (plan
+- [x] T008 Cut the first release: confirm the version with the user (plan
   Open Question 1 — proposed `v1.0.0`), run the full suite, then
   `scripts/release.sh <version>` for real (this is the one deliberate
   network step; it requires the session to push — get explicit user
   confirmation per the push convention).
 
-- [ ] T009 Repoint sweep: confirm with the user which of the five consumers
+- [x] T009 Repoint sweep: confirm with the user which of the five consumers
   move to the release channel (plan Open Question 3 — default all:
   atelier, yet-another-rank-games, yet-another-rank-games-2,
   assisted-review, sync-tab-scroll); for each, refresh `~/.ardd/source` to

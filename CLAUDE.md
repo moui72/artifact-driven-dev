@@ -53,36 +53,6 @@ deterministic check, add both a CI job and a fixture-based regression test in
 the same commit (see `tests/fixtures/`) — don't ship a lint script whose own
 correctness is unverified.
 
-## Working in this repo: the primary checkout stays on `main`
-
-> **Slated for retirement (plan-remote-install-source, Phase 6).** The
-> release channel below removes this section's reason to exist: once the
-> first release is cut and all consumers are repointed to resolve tagged
-> releases via `~/.ardd/source`, no consumer reads this checkout live and
-> the mandate becomes unnecessary. Until that amendment actually lands, it
-> remains **fully binding** — including for the implementation work of that
-> very plan.
-
-This repo is the local *source* other projects install and update from
-(constitution, Project Scope & Intent — standing decision, 2026-07-11). A
-consumer's `install.sh`/`/ardd-update` reads *this* checkout and installs
-from whatever branch is out, so a feature branch checked out in the primary
-directory serves unmerged, possibly-broken skills to every consumer that
-updates while it's out — and can trigger a consumer's update flow to
-re-checkout `main` under your in-flight work (a real ref-lock collision hit
-this on 2026-07-11). So **when a skill offers a
-branch gate here (e.g. `/ardd-implement`'s — solo-mode `/ardd-plan` no
-longer has one and its quick plan/tasks/state commits to `main` are fine),
-do not take the inline `git checkout -b` option.** Instead
-`git worktree add <path> -b <branch>` and work there — populate that
-worktree's `.claude/skills/` from the primary first, since that dir is
-gitignored and `git worktree add` won't carry it — or use the skills'
-`isolation: "worktree"` delegation. Merge the branch back to `main` when
-done; the primary stays parked on `main` throughout. Recovery if the primary
-is ever found off `main`: `git checkout main` — unmerged work is safe on its
-own branch/worktree. (This binds *this* source repo only; the inline
-branch-gate path is fine in ordinary target projects.)
-
 ## Architecture
 
 **Two install targets, don't conflate them.** Some scripts/docs govern *this*

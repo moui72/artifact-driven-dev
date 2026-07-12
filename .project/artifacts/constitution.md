@@ -1,36 +1,29 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.5.0 → 1.6.0 (MINOR — material expansion of two existing
-standing decisions: the release-channel decision gains the pack's own
-versioning/migration policy, and the feature-register decision gains a
-terminal state plus explicit status semantics.)
+Version change: 1.6.0 → 1.7.0 (MINOR — retires a Project Scope standing
+decision whose rationale no longer holds; not a Core Principle removal, so
+not MAJOR per the governance rules.)
 
-Rationale: /ardd-plan pre-release-ratchets (2026-07-12), consuming
-feedback-pre-release-ratchets-4d67.md. The interfaces v1.0.0 freezes need
-their policy stated before any consumer pins a release: (a) what a release
-version number *means* for a skill pack (which changes are breaking) was
-nowhere written down; (b) migrations being re-runnable-by-filename makes
-renumbering/deleting them silently corrupting, so append-only must be a
-stated rule, and `.ardd-applied` uncommitted means every teammate re-runs
-every migration; (c) the feature register had no way to say "shipped, then
-deliberately removed" — the npx-skills-install channel removal (2026-07-11)
-left its register entry asserting `implemented` about a system that no
-longer contains it.
+Rationale: remote-install-source plan, Phase 6 (2026-07-12). The
+primary-stays-on-main standing decision (v1.4.0) existed because consumers
+read this live checkout directly — whatever branch was checked out was
+silently served to every consumer that updated. The release channel
+(v1.5.0) removed that hazard at the root, and its precondition is now
+verified: `v0.9.0` is published, and all five known consumers resolve
+tagged releases via `~/.ardd/source` (`Source-Path` repointed,
+`ardd-update-check` reports at-release everywhere). No consumer reads this
+checkout live, so the mandate is unnecessary — deleted rather than kept as
+lore (Principle VII). The primary worktree may hold a feature branch like
+any ordinary project again.
 
-Modified sections: Quality Standards → feature-register standing decision
-(enum gains terminal `retired`; new semantics sentence — status asserts
-present truth); Project Scope & Intent → release-channel standing decision
-(pack versioning policy: MAJOR/MINOR/PATCH meanings for a skill pack;
-migrations are append-only; `.ardd-applied` should be committed). Footer
-version updated.
+Modified sections: Project Scope & Intent (primary-stays-on-main paragraph
+and its retirement note replaced by a short retirement record pointing at
+docs/decisions/0006-release-channel.md). Footer version updated. CLAUDE.md's
+corresponding workflow section is removed under the same plan (not part of
+this artifact revision).
 
-Deferred to implementation under the same plan (not this artifact
-revision): the `retired` enum/flip-arc mechanics in lint-project.sh and
-ardd-state.sh, the ardd-version.md hardening, mint tokens, and the
-unknown-enum version-skew hint.
-
-Previous SIR (1.4.0 → 1.5.0) is in git history at this file's prior
+Previous SIR (1.5.0 → 1.6.0) is in git history at this file's prior
 revision.
 -->
 
@@ -80,25 +73,16 @@ There is no partial-delivery channel and no bridge skill — a route either
 *is* a clone or *invokes* `install.sh` itself, and never reimplements any
 part of it.
 
-Because this repository is itself the **local source** other projects
-install and update from — a consumer's `install.sh`/`/ardd-update` reads
-this very checkout (via a recorded `Source-Path`, or `~/.ardd/source`) and
-installs from whatever branch is checked out — its primary/default worktree
-**never leaves `main`** (standing decision, 2026-07-11). A feature branch
-checked out here would serve unmerged, possibly-broken skills to every
-consumer that updates while it is out, and can provoke a consumer's update
-flow into re-checking-out `main` underneath in-flight work (a real ref-lock
-collision hit exactly this on 2026-07-11). All feature work therefore happens
-in a **separate worktree** — `git worktree add`, or the skills'
-`isolation: "worktree"` delegation — which branches without moving the
-primary checkout's HEAD; the primary stays parked on `main` as the stable
-source consumers see. This binds *this* repo specifically, as a live install
-source; it is not a constraint on ordinary target projects, whose primary
-checkout may hold a feature branch normally. (This decision is slated for
-retirement once the release-channel decision below is implemented and all
-consumers are repointed — at that point no consumer reads this checkout
-live and the mandate becomes unnecessary; until that future amendment
-lands, it remains fully binding.)
+The former primary-stays-on-main standing decision (v1.4.0–v1.6.0) is
+**retired** (2026-07-12): it existed because consumers once read this live
+checkout directly, so a checked-out feature branch was silently "released"
+to every consumer that updated. The release-channel decision below removed
+that hazard at the root — consumers resolve tagged releases via
+`~/.ardd/source`, and as of `v0.9.0` every known consumer has been
+repointed; no one reads this checkout live. This repo's primary worktree
+may now hold a feature branch like any ordinary project. The full arc
+(hazard → mandate → root-cause fix → retirement) is recorded in
+`docs/decisions/0006-release-channel.md`.
 
 **GitHub releases are the stable install channel** (standing decision,
 2026-07-12). Consumers install and update from tagged releases (semver),
@@ -347,4 +331,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.6.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
+**Version**: 1.7.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
