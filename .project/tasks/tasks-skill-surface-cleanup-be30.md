@@ -172,7 +172,7 @@ tasks encode._
   STATUS-visible close-out report, not by editing the other tasks file).
   `lint-docs.sh` (extended) green.
 
-- [ ] T016 `install.sh` prune output learns the rename map: renamed skills
+- [x] T016 `install.sh` prune output learns the rename map: renamed skills
   print `✗ ardd-analyze (renamed — now /ardd-status)` (six entries), folded
   skills print `✗ ardd-converge (folded into /ardd-implement)` (four
   entries), unknown stale dirs keep today's message. Extend the prune

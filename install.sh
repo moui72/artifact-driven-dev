@@ -64,7 +64,21 @@ for existing in "$CLAUDE_SKILLS"/ardd-*/; do
     *" $existing_name "*) continue ;;   # a real source skill or a reference dir
   esac
   rm -rf "$existing"
-  echo "  ✗ $existing_name (removed — no longer in ARDD source)"
+  # v1.0.0 transition map: renamed skills point at the new command, folded
+  # skills at their destination; anything else keeps the generic message.
+  case "$existing_name" in
+    ardd-analyze)      echo "  ✗ ardd-analyze (renamed — now /ardd-status)" ;;
+    ardd-critique)     echo "  ✗ ardd-critique (renamed — now /ardd-audit)" ;;
+    ardd-verify)       echo "  ✗ ardd-verify (renamed — now /ardd-defects)" ;;
+    ardd-sync)         echo "  ✗ ardd-sync (renamed — now /ardd-tracker)" ;;
+    ardd-feature)      echo "  ✗ ardd-feature (renamed — now /ardd-backlog)" ;;
+    ardd-render)       echo "  ✗ ardd-render (renamed — now /ardd-diagram)" ;;
+    ardd-converge)     echo "  ✗ ardd-converge (folded into /ardd-implement)" ;;
+    ardd-add-artifact) echo "  ✗ ardd-add-artifact (folded into /ardd-refine)" ;;
+    ardd-bootstrap)    echo "  ✗ ardd-bootstrap (folded into /ardd-init)" ;;
+    ardd-codify)       echo "  ✗ ardd-codify (folded into /ardd-init)" ;;
+    *)                 echo "  ✗ $existing_name (removed — no longer in ARDD source)" ;;
+  esac
 done
 
 # --- Constitution suggestion catalog ---

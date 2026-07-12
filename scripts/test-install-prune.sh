@@ -49,11 +49,19 @@ skills_dir="$target/.claude/skills"
 mkdir -p "$skills_dir/ardd-ghost"
 printf -- '---\nname: ardd-ghost\n---\n' > "$skills_dir/ardd-ghost/SKILL.md"
 
+# A v1.0.0-renamed skill dir (old name) and a folded skill dir — pruned
+# like any stale dir, but the output must say what replaced each.
+mkdir -p "$skills_dir/ardd-analyze"
+printf -- '---\nname: ardd-analyze\n---\n' > "$skills_dir/ardd-analyze/SKILL.md"
+mkdir -p "$skills_dir/ardd-converge"
+printf -- '---\nname: ardd-converge\n---\n' > "$skills_dir/ardd-converge/SKILL.md"
+
 # A hand-written, non-ardd skill ARDD must never touch.
 mkdir -p "$skills_dir/my-custom"
 printf -- '---\nname: my-custom\n---\n# mine\n' > "$skills_dir/my-custom/SKILL.md"
 
-run_install "$target"   # re-run: prune should remove ONLY ardd-ghost
+# re-run: prune should remove ardd-ghost, ardd-analyze, ardd-converge only
+prune_out="$( cd "$REPO_ROOT" && sh "$INSTALL_SH" "$target" )"
 
 # --- Assertions ---
 if [ -d "$skills_dir/ardd-ghost" ]; then
@@ -67,6 +75,22 @@ if [ -d "$skills_dir/my-custom" ] && [ -f "$skills_dir/my-custom/SKILL.md" ]; th
 else
   bad "hand-written my-custom/ survives"
 fi
+
+# Rename-aware prune output: a renamed dir names its new command, a folded
+# dir names its destination, an unknown stale dir keeps the generic message.
+[ ! -d "$skills_dir/ardd-analyze" ] \
+  && ok "renamed-dir ardd-analyze removed" || bad "renamed-dir ardd-analyze removed"
+[ ! -d "$skills_dir/ardd-converge" ] \
+  && ok "folded-dir ardd-converge removed" || bad "folded-dir ardd-converge removed"
+printf '%s' "$prune_out" | grep -q 'ardd-analyze (renamed — now /ardd-status)' \
+  && ok "renamed-dir message names /ardd-status" \
+  || bad "renamed-dir message names /ardd-status"
+printf '%s' "$prune_out" | grep -q 'ardd-converge (folded into /ardd-implement)' \
+  && ok "folded-dir message names /ardd-implement" \
+  || bad "folded-dir message names /ardd-implement"
+printf '%s' "$prune_out" | grep -q 'ardd-ghost (removed — no longer in ARDD source)' \
+  && ok "unknown stale dir keeps the generic message" \
+  || bad "unknown stale dir keeps the generic message"
 
 for ref in ardd-scripts ardd-artifact-templates ardd-constitution-data; do
   if [ -d "$skills_dir/$ref" ]; then
