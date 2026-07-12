@@ -54,7 +54,7 @@ status: in-progress
   self-hosted unchanged) — extend fixtures first, confirm red, then
   implement.
 
-- [ ] T004 Extend `install.sh` to record `Source-Ref: <tag>` in the target's
+- [x] T004 Extend `install.sh` to record `Source-Ref: <tag>` in the target's
   `.project/ardd-version.md` when the source checkout's HEAD is exactly at
   a semver tag (`git describe --exact-match --tags`, filtered to `v*`),
   omitting the line otherwise; keep `Source-Path` as-is. Extend the

@@ -109,6 +109,43 @@ case "$sp_val" in
   *) bad "version file: Source-Path not absolute: '$sp_val'" ;;
 esac
 
+# --- Case 1a4: Source-Ref recorded when the source HEAD is exactly at a
+# semver tag, omitted otherwise (release-channel standing decision).
+# Hermetic: a minimal fixture *source* checkout in temp, so tagging never
+# touches the real repo.
+FIXSRC="$WORK/fixture-source"
+mkdir -p "$FIXSRC"
+cp -R "$REPO_ROOT/skills" "$REPO_ROOT/templates" "$REPO_ROOT/scripts" "$REPO_ROOT/migrations" "$FIXSRC/"
+cp "$REPO_ROOT/install.sh" "$FIXSRC/"
+( cd "$FIXSRC" && git init -q -b main && git add -A && git commit -q -m fixture )
+git -C "$FIXSRC" tag v9.9.9
+
+t_at="$WORK/case1a4-at-tag"; mkdir -p "$t_at"; git init -q "$t_at"
+( cd "$FIXSRC" && sh "$FIXSRC/install.sh" "$t_at" ) >/dev/null
+ref_val="$(sed -n 's/^Source-Ref: //p' "$t_at/.project/ardd-version.md" | head -1)"
+if [ "$ref_val" = "v9.9.9" ]; then
+  ok "version file: Source-Ref recorded when source HEAD is at a tag"
+else
+  bad "version file: Source-Ref at tag (got '$ref_val')"
+fi
+
+# Move the fixture source past the tag: the line must be omitted, and a
+# re-install over the at-tag record must drop it (the file is rewritten).
+( cd "$FIXSRC" && printf 'drift\n' >> README.md 2>/dev/null || printf 'drift\n' > drift.txt; git add -A && git commit -q -m drift )
+t_off="$WORK/case1a4-off-tag"; mkdir -p "$t_off"; git init -q "$t_off"
+( cd "$FIXSRC" && sh "$FIXSRC/install.sh" "$t_off" ) >/dev/null
+if grep -q '^Source-Ref: ' "$t_off/.project/ardd-version.md"; then
+  bad "version file: Source-Ref wrongly recorded off-tag"
+else
+  ok "version file: Source-Ref omitted when source HEAD is not at a tag"
+fi
+( cd "$FIXSRC" && sh "$FIXSRC/install.sh" "$t_at" ) >/dev/null
+if grep -q '^Source-Ref: ' "$t_at/.project/ardd-version.md"; then
+  bad "version file: stale Source-Ref survives an off-tag re-install"
+else
+  ok "version file: off-tag re-install drops the stale Source-Ref"
+fi
+
 # --- Case 1b: ardd-state.sh ships into ardd-scripts and is executable ---
 state="$target/.claude/skills/ardd-scripts/ardd-state.sh"
 if [ -x "$state" ]; then
