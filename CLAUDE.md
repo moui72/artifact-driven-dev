@@ -468,6 +468,29 @@ reconcile mode's gap identification).
 
 ## Conventions
 
+- **Skill naming system (codified at v1.0.0 — apply it to any new or
+  renamed skill):**
+  - **Report-owner skills are nouns, named for the file they own**:
+    `/ardd-status` → `STATUS.md`, `/ardd-defects` → `DEFECTS.md`,
+    `/ardd-audit` → `audit.md`, `/ardd-tracker` → `TRACKER.md`. The command
+    answers "which file does this regenerate?" — if a new skill owns a
+    report file, name the skill for the file, not for the verb that
+    produces it.
+  - **Lifecycle actions are imperative verbs**: `/ardd-plan`,
+    `/ardd-implement`, `/ardd-refine`, `/ardd-init`. You're telling the
+    agent to do the thing.
+  - **Capture skills are named for what you hand them**: `/ardd-backlog`
+    (a feature idea), `/ardd-feedback` (an observation about existing
+    behavior), `/ardd-research` (a question or proposal). Named for the
+    input, not the storage mechanism.
+  - **The description formula** (frontmatter `description:`): object →
+    data-flow → redirect clause. State what the skill operates on, where
+    its output lands (the file it writes or the state it flips), and —
+    when a plausibly-confusable neighbor exists — one clause routing the
+    wrong input to the right skill ("bugs … belong in /ardd-feedback
+    instead"; "takes no proposal input — vet with /ardd-research").
+    Renamed skills carry "(formerly ardd-X)" for one release cycle after
+    v1.0.0 — drop those suffixes in the release after next, not sooner.
 - **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `refactor:`,
   `chore:`, `docs:`, etc.) — matches existing repo history.
 - **Skill files are the product.** A `SKILL.md` edit is a behavior change to

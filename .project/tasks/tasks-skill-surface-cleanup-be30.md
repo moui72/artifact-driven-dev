@@ -1,7 +1,7 @@
 ---
 plan: plan-skill-surface-cleanup-2026-07-12.md
 generated: 2026-07-12
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -186,7 +186,7 @@ tasks encode._
 
 ## Phase 5: Codify + close out
 
-- [ ] T018 CLAUDE.md gains the naming-system conventions section
+- [x] T018 CLAUDE.md gains the naming-system conventions section
   (report-owners = nouns named for their file; lifecycle actions =
   imperative verbs; capture skills = named for what you hand them; the
   description formula: object → data-flow → redirect clause) and its
