@@ -43,7 +43,7 @@ status: in-progress
 
 ## Phase 3: Knob consumption in implement/converge
 
-- [ ] T004 [artifacts: constitution] Edit the delegation gate in
+- [x] T004 [artifacts: constitution] Edit the delegation gate in
   `skills/ardd-implement/SKILL.md` (step 3) and
   `skills/ardd-converge/SKILL.md` (its equivalent step): read `delegation`
   from `.project/artifacts/constitution.md` frontmatter (grep the

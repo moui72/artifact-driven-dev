@@ -63,21 +63,35 @@ self-contained; the agent loads only the artifacts it declares.
    mid-run against this repo, surface it (branch, tasks file, progress) and
    ask whether to wait before starting a second delegated run.
 
-   **Offer delegation, suggesting "yes."** Ask the user:
-   - "Yes, delegate to a background subagent in an isolated worktree"
-     (recommended)
-   - "No, continue inline on the current branch"
+   **Consult the `delegation` knob.** Read `delegation` from
+   `.project/artifacts/constitution.md` frontmatter (grep the frontmatter
+   block, same as `workflow_mode`; **absent = `ask`** — schema-of-record:
+   `scripts/lint-project.sh`):
+   - `eager` — delegate to a background worktree subagent **without
+     prompting**: treat this as an accepted "yes" and go straight to the
+     preparation below. (The in-flight check above still asks when it found
+     another run mid-flight — that's a safety question, not the delegation
+     offer.)
+   - `ask` (or absent) — **offer delegation, suggesting "yes."** Ask the
+     user:
+     - "Yes, delegate to a background subagent in an isolated worktree"
+       (recommended)
+     - "No, continue inline on the current branch"
+   - `inline` — proceed inline at step 4 without offering.
 
-   On **no**, continue inline at step 4 on the current branch (if
-   `on_default` is `true` and the user wants isolation without a subagent, a
-   plain `git checkout -b <name>` here is fine — the inline path on a branch,
-   state riding that branch the same way).
+   On **no** (or `delegation: inline`), continue inline at step 4 on the
+   current branch (if `on_default` is `true` and the user wants isolation
+   without a subagent, a plain `git checkout -b <name>` here is fine — the
+   inline path on a branch, state riding that branch the same way).
 
-   On **yes**, prepare based on `on_default`. A delegated subagent's worktree
+   On **yes** (or `delegation: eager`), prepare based on `on_default`. A
+   delegated subagent's worktree
    branches from `<default>` and is fast-forwarded onto local `<default>` by
    `worktree-align.sh`, so it can only see run state that has reached local
    `<default>`:
-   - If `on_default` is `false` (already on a feature branch), **fold that
+   - If `on_default` is `false` — a recovery path now that solo
+     `/ardd-plan` no longer creates a branch (a resumed older run, or a
+     branch made by hand) — **fold that
      branch into local `<default>` and return the focused session to it**:
      run `.claude/skills/ardd-scripts/fold-to-main.sh`. On `folded=true` you
      are now on `<default>` with the branch's state fast-forwarded in — a
