@@ -1,7 +1,9 @@
 ---
 slug: remote-install-source
-status: backlogged
+status: tasked
 logged: 2026-07-12
+plan: plan-remote-install-source-2026-07-12.md
+tasks: tasks-remote-install-source-18d3.md
 ---
 
 install.sh and /ardd-update install from GitHub — defaulting to the latest tagged GitHub release (with tip-of-main and an explicit --source/--dev local-checkout escape hatch for dogfooding) — instead of reading a live local checkout, with a release-cutting process (gh release + semver tag) added to this repo so consumers pin stable versions.

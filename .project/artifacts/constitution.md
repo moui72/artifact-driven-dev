@@ -1,36 +1,38 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.3.0 → 1.4.0 (MINOR — adds a new material standing
-decision to the governing scope; same magnitude reasoning as the
-1.2.5→1.3.0 acquisition change.)
+Version change: 1.4.0 → 1.5.0 (MINOR — adds a new material standing
+decision to the governing scope; same magnitude reasoning as the 1.3.0
+and 1.4.0 acquisition changes.)
 
-Rationale: /ardd-plan primary-stays-on-main (2026-07-11), consuming
-feedback-primary-worktree-stays-on-main-4985.md. This repo is the local
-source other projects install/update from — a consumer's
-install.sh//ardd-update reads this checkout and installs from whatever
-branch is out — so the primary/default worktree must never leave main. A
-checked-out feature branch here serves unmerged skills to consumers and can
-provoke their update flows into re-checking-out main under in-flight work; a
-real ref-lock collision hit exactly this on 2026-07-11. Feature work now
-happens in a separate worktree (git worktree add, or the skills'
-isolation:"worktree" delegation), which branches without moving the primary
-HEAD. Binds this repo specifically, not ordinary target projects.
+Rationale: /ardd-plan remote-install-source (2026-07-12). Consumers reading
+a live local checkout is the root cause of the primary-stays-on-main
+mandate and the 2026-07-11 ref-lock collision: whatever branch is checked
+out is silently "released" to every consumer that updates. GitHub releases
+(semver tags) become the stable install channel — /ardd-update and new.sh
+resolve the latest release tag via ~/.ardd/source; a live local checkout as
+install source becomes explicit dev-mode (--source/$ARDD_SOURCE), warned as
+such. Push/release becomes the deliberate release act.
 
-Modified sections: Project Scope & Intent (new standing decision — primary
-worktree stays on main). Footer version updated.
+Modified sections: Project Scope & Intent (new standing decision — GitHub
+releases are the stable install channel; a retirement note appended to the
+primary-stays-on-main decision, which stays binding until the release
+channel is live and consumers are repointed). Footer version updated.
 
 Deferred to implementation under the same plan (not this artifact
-revision): the CLAUDE.md workflow note (Phase 2).
+revision): release-cutting mechanics, /ardd-update and new.sh resolution
+changes, ardd-update-check tag comparison, the consumer repoint sweep, and
+the eventual primary-stays-on-main retirement (a separate future
+amendment once no consumer reads the dev checkout live).
 
-Previous SIR (1.2.5 → 1.3.0) is in git history at this file's prior
+Previous SIR (1.3.0 → 1.4.0) is in git history at this file's prior
 revision.
 -->
 
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-11
+last_updated: 2026-07-12
 next_step_prompt: true
 delegation: eager
 merge_policy: auto
@@ -87,7 +89,30 @@ in a **separate worktree** — `git worktree add`, or the skills'
 primary checkout's HEAD; the primary stays parked on `main` as the stable
 source consumers see. This binds *this* repo specifically, as a live install
 source; it is not a constraint on ordinary target projects, whose primary
-checkout may hold a feature branch normally.
+checkout may hold a feature branch normally. (This decision is slated for
+retirement once the release-channel decision below is implemented and all
+consumers are repointed — at that point no consumer reads this checkout
+live and the mandate becomes unnecessary; until that future amendment
+lands, it remains fully binding.)
+
+**GitHub releases are the stable install channel** (standing decision,
+2026-07-12). Consumers install and update from tagged releases (semver),
+not from the tip of a live checkout: `/ardd-update` and `new.sh` resolve
+the source by fetching `~/.ardd/source` — the one checkout the tooling
+owns — and checking out the **latest release tag** before invoking
+`install.sh` from it. Installing from a live local checkout (`--source
+<path>` / `$ARDD_SOURCE`, or a `Source-Path` recording one) is explicit
+dev-mode, warned as such — the escape hatch that keeps the edit-a-skill,
+test-it-in-a-consumer dogfooding loop possible, never the default. There
+is no tip-of-main channel (Principle VI — add one only if real evidence
+demands it). Resolution never blocks offline: when the network is
+unavailable, fall back to the existing `~/.ardd/source` state with a
+warning — the same never-hang discipline `new.sh` already follows.
+`install.sh` remains the only install/upgrade entry point; this decision
+changes which checkout and ref the resolution layer hands it, not the
+entry point itself. Cutting a release (tag + `gh release`) is thereby the
+deliberate act that publishes skill changes to consumers — merging to
+`main` alone no longer does.
 
 `new.sh` converges by the most direct route available: it resolves a
 source checkout — cloning `~/.ardd/source`, the one checkout it owns, if
@@ -298,4 +323,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.4.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-11
+**Version**: 1.5.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
