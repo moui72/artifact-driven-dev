@@ -53,7 +53,7 @@ status: in-progress
   proceed inline without offering. The same edit lands in both skills (the
   interactive half is deliberately duplicated prose — CLAUDE.md).
 
-- [ ] T005 [artifacts: constitution] Edit the post-delegation completion step
+- [x] T005 [artifacts: constitution] Edit the post-delegation completion step
   in the same two skills: read `merge_policy` (absent = `ask`). `auto` =
   merge the subagent-reported branch into the local default branch when the
   merge is fast-forward or completes without conflicts, then run the existing

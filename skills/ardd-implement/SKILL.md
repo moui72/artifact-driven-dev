@@ -149,18 +149,32 @@ self-contained; the agent loads only the artifacts it declares.
      `true`, runs `git config core.bare false` and tells the user (a known
      side effect of `Agent` worktree creation flipping the primary
      checkout's config, which otherwise breaks ordinary git there).
-   - Offers to merge the worktree branch into the default branch now,
-     suggesting **yes** — eager merge is what keeps the in-flight window
-     short in solo mode, landing code and all its state (checkboxes,
-     `→completed`, any register flip) together. Single-writer report
-     files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) are disposable
-     at merge/rebase: take either side without deliberation — never
-     hand-reconcile, never re-apply — and let the owning skill
-     regenerate from disk. Conflict markers in a generated report are
-     noise, not data loss.
-     On merge, run `/ardd-analyze`. On decline, note the work stays visible via
-     `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section until
-     merged.
+   - Consults the **`merge_policy` knob**: read `merge_policy` from
+     `.project/artifacts/constitution.md` frontmatter (grep the frontmatter
+     block; **absent = `ask`** — schema-of-record:
+     `scripts/lint-project.sh`). Solo mode only — collaborative mode merges
+     through the PR and never consults it.
+     - `auto` — merge the **subagent-reported** branch (never an in-memory
+       name) into the local default branch now, without prompting, when the
+       merge fast-forwards or completes without conflicts; then run the
+       existing post-merge steps unchanged (`/ardd-analyze`). On **any**
+       conflict: `git merge --abort`, surface the conflict, and fall back
+       to asking — never auto-resolve, not even the disposable report
+       files (their take-either-side rule stays an interactive judgment
+       until the merge-driver feature lands).
+     - `ask` (or absent) — offer to merge the worktree branch into the
+       default branch now,
+       suggesting **yes** — eager merge is what keeps the in-flight window
+       short in solo mode, landing code and all its state (checkboxes,
+       `→completed`, any register flip) together. Single-writer report
+       files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) are disposable
+       at merge/rebase: take either side without deliberation — never
+       hand-reconcile, never re-apply — and let the owning skill
+       regenerate from disk. Conflict markers in a generated report are
+       noise, not data loss.
+       On merge, run `/ardd-analyze`. On decline, note the work stays visible via
+       `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section until
+       merged.
 
    Note: a delegated subagent must **never** run `/ardd-analyze` or write
    `STATUS.md` — either would trap `STATUS.md` inside the worktree branch.
