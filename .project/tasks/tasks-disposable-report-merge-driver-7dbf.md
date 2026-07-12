@@ -34,7 +34,7 @@ status: in-progress
   (`.github/workflows/lint.yml`); `hooks/pre-commit` picks it up by glob
   automatically.
 
-- [ ] T003 Dogfood: run `./install.sh .` so this repo gets
+- [x] T003 Dogfood: run `./install.sh .` so this repo gets
   `.project/.gitattributes`; set `git config merge.ours.driver true` here
   (our clone, our opt-in); live-verify with a real throwaway two-branch
   STATUS.md conflict in this repo (create branch, divergent edits, merge,
