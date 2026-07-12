@@ -50,7 +50,7 @@ status: in-progress
   new-format file, prefix match across widths, moved/missing
   `Source-Path` with and without an existing `~/.ardd/source`.
 
-- [ ] T004 Three small fixes, one commit each or one combined commit,
+- [x] T004 Three small fixes, one commit each or one combined commit,
   test-first: (a) `ardd-state.sh mint plan|research` keeps the date and
   gains the hex4 token — `plan-<slug>-<YYYY-MM-DD>-<hex4>.md` — updating
   the mint format comments and `test-ardd-state.sh` mint cases, with

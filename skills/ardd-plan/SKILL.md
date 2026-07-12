@@ -331,7 +331,7 @@ for the named plan; steps 2–10 do not run.
      step 3 applies). Omit the section entirely when no such principle is
      declared.
 
-9. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` with
+9. **Write the plan** to `.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md` with
    frontmatter. As in step 3d, run `.claude/skills/ardd-scripts/project-
    lock.sh check ardd-plan` first (surface any warning, don't block on it),
    and `... touch ardd-plan` after writing:
@@ -348,7 +348,7 @@ for the named plan; steps 2–10 do not run.
 
 10. **Approval checkpoint.** Present a summary to the user — phases, key
     decisions, open questions — and note the plan is saved at
-    `.project/plans/plan-<slug>-<YYYY-MM-DD>.md` as `status: draft`. Then
+    `.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md` as `status: draft`. Then
     **pause and ask which of three the user wants** (use `AskUserQuestion`):
 
     - **Approve** — proceed to step 11: approve the plan and generate its
@@ -434,7 +434,7 @@ for the named plan; steps 2–10 do not run.
 
     ```yaml
     ---
-    plan: plan-<slug>-YYYY-MM-DD.md   # exact filename of the source plan — authoritative binding
+    plan: plan-<slug>-YYYY-MM-DD-<hex4>.md   # exact filename of the source plan — authoritative binding
     generated: YYYY-MM-DD
     status: generating   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                          # (or -> abandoned, if superseded by a new tasks

@@ -18,10 +18,10 @@ usage: ardd-state.sh <subcommand> [args...]
 
 Deterministic state mutations for .project/ files. Subcommands:
   slug <text>              print a kebab-case slug (<=30 chars) for <text>
-  mint plan <slug>         print plan-<slug>-<YYYY-MM-DD>.md
+  mint plan <slug>         print plan-<slug>-<YYYY-MM-DD>-<hex4>.md (fresh token)
   mint tasks <slug>        print tasks-<slug>-<hex4>.md   (fresh token)
   mint feedback <slug>     print feedback-<slug>-<hex4>.md (fresh token)
-  mint research <slug>     print research-<slug>-<YYYY-MM-DD>.md
+  mint research <slug>     print research-<slug>-<YYYY-MM-DD>-<hex4>.md (fresh token)
   plan-flip <file> <approved|superseded>
                            flip a plan's frontmatter status; refuses
                            illegal transitions (legal: draft->approved,
@@ -106,8 +106,8 @@ cmd_mint() {
   esac
   require_kebab "$slug"
   case "$kind" in
-    plan)     printf 'plan-%s-%s.md\n' "$slug" "$(date +%Y-%m-%d)" ;;
-    research) printf 'research-%s-%s.md\n' "$slug" "$(date +%Y-%m-%d)" ;;
+    plan)     printf 'plan-%s-%s-%s.md\n' "$slug" "$(date +%Y-%m-%d)" "$(hex4)" ;;
+    research) printf 'research-%s-%s-%s.md\n' "$slug" "$(date +%Y-%m-%d)" "$(hex4)" ;;
     tasks)    printf 'tasks-%s-%s.md\n' "$slug" "$(hex4)" ;;
     feedback) printf 'feedback-%s-%s.md\n' "$slug" "$(hex4)" ;;
   esac

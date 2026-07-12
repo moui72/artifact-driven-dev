@@ -61,7 +61,13 @@ assert_exit "slug: no alphanumerics exits 1" 1 "$rc"
 
 # --- mint: filename minting ---
 today="$(date +%Y-%m-%d)"
-assert_eq "mint plan: date-stamped" "plan-auth-flow-$today.md" "$(sh "$STATE" mint plan auth-flow)"
+p1="$(sh "$STATE" mint plan auth-flow)"
+case "$p1" in
+  plan-auth-flow-$today-[0-9a-f][0-9a-f][0-9a-f][0-9a-f].md) ok "mint plan: date + 4-hex token" ;;
+  *) bad "mint plan: date + 4-hex token — got '$p1'" ;;
+esac
+p2="$(sh "$STATE" mint plan auth-flow)"
+[ "$p1" != "$p2" ] && ok "mint plan: unique across same-day calls" || bad "mint plan: unique across same-day calls — got '$p1' twice"
 t1="$(sh "$STATE" mint tasks auth-flow)"
 case "$t1" in
   tasks-auth-flow-[0-9a-f][0-9a-f][0-9a-f][0-9a-f].md) ok "mint tasks: slug + 4-hex" ;;
@@ -74,7 +80,13 @@ case "$f1" in
   feedback-repo-critique-[0-9a-f][0-9a-f][0-9a-f][0-9a-f].md) ok "mint feedback: slug + 4-hex" ;;
   *) bad "mint feedback: slug + 4-hex — got '$f1'" ;;
 esac
-assert_eq "mint research: date-stamped" "research-sqlite-fts-$today.md" "$(sh "$STATE" mint research sqlite-fts)"
+r1="$(sh "$STATE" mint research sqlite-fts)"
+case "$r1" in
+  research-sqlite-fts-$today-[0-9a-f][0-9a-f][0-9a-f][0-9a-f].md) ok "mint research: date + 4-hex token" ;;
+  *) bad "mint research: date + 4-hex token — got '$r1'" ;;
+esac
+r2="$(sh "$STATE" mint research sqlite-fts)"
+[ "$r1" != "$r2" ] && ok "mint research: unique across same-day calls" || bad "mint research: unique across same-day calls — got '$r1' twice"
 set +e
 sh "$STATE" mint nope x >/dev/null 2>&1; rc=$?
 set -e

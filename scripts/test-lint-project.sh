@@ -135,5 +135,46 @@ else
   fi
 fi
 
+# --- unknown-enum messages carry the version-skew hint ---
+# An unrecognized status may be a typo, or a file written by a newer ARDD
+# than this install — the message must say so and point at /ardd-update.
+if grep -q "status 'shipped' not in {.*} (or written by a newer ARDD than this install — run /ardd-update)" /tmp/lint-bad.out; then
+  echo "ok: unknown-enum message carries version-skew hint"
+else
+  echo "FAIL: unknown-enum message carries version-skew hint"
+  fail=1
+fi
+# the pointed invented-status messages stay pointed, no hint bolted on
+if grep -q "completed is terminal.*run /ardd-update" /tmp/lint-bad.out; then
+  echo "FAIL: pointed messages must not gain the version-skew hint"
+  fail=1
+else
+  echo "ok: pointed messages keep their own text"
+fi
+
+# --- a stale .lint-project-failed sentinel never poisons a clean run ---
+# (an interrupted pre-mktemp run could leave one in the target root; the
+# sentinel now lives in mktemp space and the root file is ignored)
+STALEWORK="$(mktemp -d)"
+cp -R "$FIXTURES/good-project/." "$STALEWORK/"
+echo 1 > "$STALEWORK/.lint-project-failed"
+if "$LINT" "$STALEWORK" > /tmp/lint-stale.out 2>&1; then
+  echo "ok: stale sentinel ignored — clean run exits 0"
+else
+  echo "FAIL: stale sentinel ignored — clean run exits 0:"
+  cat /tmp/lint-stale.out
+  fail=1
+fi
+# and a run never writes a sentinel into the target root at all
+rm -f "$STALEWORK/.lint-project-failed"
+"$LINT" "$STALEWORK" > /dev/null 2>&1 || true
+if [ -f "$STALEWORK/.lint-project-failed" ]; then
+  echo "FAIL: no sentinel file written into the target root"
+  fail=1
+else
+  echo "ok: no sentinel file written into the target root"
+fi
+rm -rf "$STALEWORK" /tmp/lint-stale.out
+
 rm -f /tmp/lint-good.out /tmp/lint-bad.out
 exit "$fail"

@@ -39,6 +39,14 @@
 set -e
 
 TARGET="${1:-.}"
+
+# Findings reported inside piped-while subshells can't set the parent's
+# fail flag; they mark this mktemp sentinel instead. It never lives in the
+# target root (an interrupted run must not leave litter there — a stale
+# pre-1.0 root sentinel is simply ignored) and the trap cleans it up on any
+# exit, including interruption.
+SENTINEL="$(mktemp)"
+trap 'rm -f "$SENTINEL"' EXIT INT TERM
 PROJECT_DIR="$TARGET/.project"
 FEATURES_FILE="$PROJECT_DIR/artifacts/features.md"   # legacy pre-0003 register
 FEATURES_DIR="$PROJECT_DIR/features"                 # register of record
@@ -48,6 +56,12 @@ report() {
   echo "$1"
   fail=1
 }
+
+# Appended to every unknown-enum finding: an unrecognized status may be a
+# typo, or a file written by a newer ARDD whose widened enum this install's
+# validator predates (the 1.0-compatible version-skew mechanism — a real
+# Schema-Version marker is explicitly deferred post-1.0).
+SKEW_HINT=" (or written by a newer ARDD than this install — run /ardd-update)"
 
 # --- Schema of record -------------------------------------------------
 ARTIFACT_STATUS_ENUM="draft stable"
@@ -118,7 +132,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     else
       val="$(frontmatter_field "$f" status)"
       if ! in_enum "$val" $ARTIFACT_STATUS_ENUM; then
-        report "$f: status '$val' not in {$ARTIFACT_STATUS_ENUM}"
+        report "$f: status '$val' not in {$ARTIFACT_STATUS_ENUM}$SKEW_HINT"
       fi
     fi
 
@@ -129,7 +143,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     if [ "$name" = "constitution" ] && frontmatter_has "$f" workflow_mode; then
       val="$(frontmatter_field "$f" workflow_mode)"
       if ! in_enum "$val" $WORKFLOW_MODE_ENUM; then
-        report "$f: workflow_mode '$val' not in {$WORKFLOW_MODE_ENUM}"
+        report "$f: workflow_mode '$val' not in {$WORKFLOW_MODE_ENUM}$SKEW_HINT"
       fi
     fi
 
@@ -138,7 +152,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     if [ "$name" = "constitution" ] && frontmatter_has "$f" next_step_prompt; then
       val="$(frontmatter_field "$f" next_step_prompt)"
       if ! in_enum "$val" $NEXT_STEP_PROMPT_ENUM; then
-        report "$f: next_step_prompt '$val' not in {$NEXT_STEP_PROMPT_ENUM}"
+        report "$f: next_step_prompt '$val' not in {$NEXT_STEP_PROMPT_ENUM}$SKEW_HINT"
       fi
     fi
 
@@ -148,13 +162,13 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     if [ "$name" = "constitution" ] && frontmatter_has "$f" delegation; then
       val="$(frontmatter_field "$f" delegation)"
       if ! in_enum "$val" $DELEGATION_ENUM; then
-        report "$f: delegation '$val' not in {$DELEGATION_ENUM}"
+        report "$f: delegation '$val' not in {$DELEGATION_ENUM}$SKEW_HINT"
       fi
     fi
     if [ "$name" = "constitution" ] && frontmatter_has "$f" merge_policy; then
       val="$(frontmatter_field "$f" merge_policy)"
       if ! in_enum "$val" $MERGE_POLICY_ENUM; then
-        report "$f: merge_policy '$val' not in {$MERGE_POLICY_ENUM}"
+        report "$f: merge_policy '$val' not in {$MERGE_POLICY_ENUM}$SKEW_HINT"
       fi
     fi
 
@@ -191,7 +205,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     if frontmatter_has "$f" diagram_status; then
       val="$(frontmatter_field "$f" diagram_status)"
       if ! in_enum "$val" $DIAGRAM_STATUS_ENUM; then
-        report "$f: diagram_status '$val' not in {$DIAGRAM_STATUS_ENUM}"
+        report "$f: diagram_status '$val' not in {$DIAGRAM_STATUS_ENUM}$SKEW_HINT"
       fi
     fi
 
@@ -238,7 +252,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       else
         val="$(frontmatter_field "$f" status)"
         if ! in_enum "$val" $FEATURE_STATUS_ENUM; then
-          report "$f: status '$val' not in {$FEATURE_STATUS_ENUM}"
+          report "$f: status '$val' not in {$FEATURE_STATUS_ENUM}$SKEW_HINT"
         fi
       fi
       if ! frontmatter_has "$f" logged; then
@@ -273,8 +287,8 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       slug="$(printf '%s' "$line" | sed -E 's/_Slug: `([^`]+)`.*/\1/')"
       val="$(printf '%s' "$line" | sed -E 's/.*Status: ([a-z]+)$/\1/')"
       if ! in_enum "$val" $FEATURE_STATUS_ENUM; then
-        echo "$features_file: feature '$slug' status '$val' not in {$FEATURE_STATUS_ENUM}"
-        echo 1 > "$TARGET/.lint-project-failed"
+        echo "$features_file: feature '$slug' status '$val' not in {$FEATURE_STATUS_ENUM}$SKEW_HINT"
+        echo 1 > "$SENTINEL"
       fi
     done
     grep -E '_Slug: `' "$features_file" | while IFS= read -r line; do
@@ -283,11 +297,11 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       tasksref="$(printf '%s' "$line" | grep -oE 'Tasks: [^·_]+' | sed -E 's/^Tasks:[[:space:]]*//; s/[[:space:]]+$//')"
       if [ -n "$planref" ] && [ ! -f "$PROJECT_DIR/plans/$planref" ]; then
         echo "$features_file: feature '$slug' Plan reference '$planref' — no $PROJECT_DIR/plans/$planref"
-        echo 1 > "$TARGET/.lint-project-failed"
+        echo 1 > "$SENTINEL"
       fi
       if [ -n "$tasksref" ] && [ ! -f "$PROJECT_DIR/tasks/$tasksref" ]; then
         echo "$features_file: feature '$slug' Tasks reference '$tasksref' — no $PROJECT_DIR/tasks/$tasksref"
-        echo 1 > "$TARGET/.lint-project-failed"
+        echo 1 > "$SENTINEL"
       fi
     done
   fi
@@ -310,7 +324,7 @@ if [ -d "$PROJECT_DIR/plans" ]; then
       val="$(frontmatter_field "$f" status)"
       plan_status="$val"
       if ! in_enum "$val" $PLAN_STATUS_ENUM; then
-        report "$f: status '$val' not in {$PLAN_STATUS_ENUM}"
+        report "$f: status '$val' not in {$PLAN_STATUS_ENUM}$SKEW_HINT"
       fi
     fi
 
@@ -330,13 +344,13 @@ if [ -d "$PROJECT_DIR/plans" ]; then
             fi
             if ! feature_exists "$slug"; then
               echo "$f: features slug '$slug' not found in the feature register"
-              echo 1 > "$TARGET/.lint-project-failed"
+              echo 1 > "$SENTINEL"
             elif [ "$plan_status" = "approved" ] || [ "$plan_status" = "superseded" ]; then
               # --- an approved/superseded plan's feature must have moved past backlogged ---
               feature_status="$(feature_status_of "$slug")"
               if [ "$feature_status" = "backlogged" ]; then
                 echo "$f: plan is '$plan_status' but features slug '$slug' is still 'backlogged' in the register — a bookkeeping sequence was likely interrupted (see /ardd-plan step 11)"
-                echo 1 > "$TARGET/.lint-project-failed"
+                echo 1 > "$SENTINEL"
               fi
             fi
           fi
@@ -377,7 +391,7 @@ if [ -d "$PROJECT_DIR/tasks" ]; then
           superseded)
             report "$f: status 'superseded' — did you mean 'abandoned'? superseded is a plan status" ;;
           *)
-            report "$f: status '$val' not in {$TASKS_STATUS_ENUM}" ;;
+            report "$f: status '$val' not in {$TASKS_STATUS_ENUM}$SKEW_HINT" ;;
         esac
       elif [ "$val" = "generating" ]; then
         report "$f: status is 'generating' — a previous /ardd-plan tasking run likely crashed mid-generation; regenerate or fix manually"
@@ -411,7 +425,7 @@ if [ -d "$PROJECT_DIR/feedback" ]; then
           # the generic report (one finding, not two).
           report "$f: status 'split' — not a status; mark items individually, the file flips to planned when every item is resolved"
         else
-          report "$f: status '$val' not in {$FEEDBACK_STATUS_ENUM}"
+          report "$f: status '$val' not in {$FEEDBACK_STATUS_ENUM}$SKEW_HINT"
         fi
       fi
     fi
@@ -435,10 +449,10 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
         n="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
         if [ "$n" = "none" ] || [ "$n" = "n/a" ]; then
           echo "$f:$lineno: placeholder artifact name '$n' — omit the artifacts bracket-tag entirely when no artifact applies"
-          echo 1 > "$TARGET/.lint-project-failed"
+          echo 1 > "$SENTINEL"
         elif [ -n "$n" ] && [ ! -f "$PROJECT_DIR/artifacts/$n.md" ]; then
           echo "$f:$lineno: [artifacts: ...] references '$n' — no $PROJECT_DIR/artifacts/$n.md"
-          echo 1 > "$TARGET/.lint-project-failed"
+          echo 1 > "$SENTINEL"
         fi
         IFS=','
       done
@@ -447,8 +461,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
   done
 fi
 
-if [ -f "$TARGET/.lint-project-failed" ]; then
-  rm -f "$TARGET/.lint-project-failed"
+if [ -s "$SENTINEL" ]; then
   fail=1
 fi
 
