@@ -1,8 +1,8 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (RELEASE ARC COMPLETE — v0.9.0 published, five
-consumers on the release channel, primary-stays-on-main mandate retired at
-constitution v1.7.0). Keep this current as artifacts are refined and open
+_Updated: 2026-07-12 (merge driver LIVE — report files merge conflict-free
+with the driver set; smoke tier expanded to reconcile/init; v0.9.0 out,
+mandate retired at v1.7.0). Keep this current as artifacts are refined and open
 questions are resolved._
 
 ## Artifact Status
@@ -18,13 +18,13 @@ None in the artifact. One plan-scoped item remains, non-blocking
 
 ## Code-vs-Artifact Defects
 
-1 defect — see `DEFECTS.md`, last checked 2026-07-12 (**seventh pass** —
-all four post-sixth-pass merges and the release arc verified clean). The
-one defect is the smoke-tier successor entry: scenarios updated to the new
-surface but still never executed (key unprovisioned), and the
-state-mutating surface has outgrown them (reconcile mode, init, tracker,
-cross-routing). Its claim text changed, so the next `/ardd-plan` will
-correctly re-offer it for accept/decline.
+1 defect — see `DEFECTS.md`, last checked 2026-07-12 (seventh pass). The
+smoke-tier entry (`7efff3a5`) was accepted into the merge-driver plan:
+scenarios for Reconcile mode and both `/ardd-init` modes now exist
+(structurally verified; still gated on the deliberately-unprovisioned
+`ANTHROPIC_API_KEY`, now documented at the point of contact). The residual
+"never executed" state clears when the key is provisioned — next
+`/ardd-defects` pass will re-derive the narrowed entry.
 
 ## Feedback
 
@@ -54,15 +54,11 @@ None open — all feedback files consumed and `planned`.
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 8 implemented · 1 retired — see `.project/features/`.
+1 backlogged · 9 implemented · 1 retired — see `.project/features/`.
 
-- `disposable-report-merge-driver` — **tasked**:
-  `plan-disposable-report-merge-driver-2026-07-12-c310.md` (approved) →
-  `tasks-disposable-report-merge-driver-7dbf.md` (ready, 0/6; includes the
-  accepted smoke-tier defect `7efff3a5` expansion). Unlocks fan-out.
-- `worktree-reap-and-fanout` — backlogged: deterministic reap of merged
-  delegated worktrees + delegation-gate fan-out (depends on the merge
-  driver).
+- `worktree-reap-and-fanout` — backlogged, now UNBLOCKED: deterministic
+  reap of merged delegated worktrees + delegation-gate fan-out (its merge-
+  driver dependency landed).
 
 ## Audit
 
@@ -73,8 +69,8 @@ it) and 1 risk (smoke key unprovisioned). The register-enum [Q] is resolved.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` on `tasks-disposable-report-merge-driver-7dbf.md`
-(6 tasks; T003's dogfood driver-config step happens on the primary at merge
-time). `main` has unpushed commits — push when ready. Remaining threads:
-audit checklist (one item moot post-retirement), `worktree-reap-and-fanout`
-once the driver lands.
+`/ardd-plan worktree-reap-and-fanout` — the last backlogged feature, now
+unblocked (parallel background runs with conflict-free merges + automatic
+worktree hygiene). `main` has unpushed commits — push when ready. Also
+open: audit checklist (one item moot post-retirement); provisioning the
+smoke key when desired.
