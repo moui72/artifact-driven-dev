@@ -356,6 +356,9 @@ if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     echo "  Commit .project/ardd-version.md instead — it's the lightweight,"
     echo "  human-readable record of which ARDD version produced them."
     echo ""
+    echo "  Commit .ardd-applied too — it records which migrations have run;"
+    echo "  left uncommitted, every teammate re-runs every migration."
+    echo ""
     echo "  Also gitignore .project/.lock if it appears — it's project-"
     echo "  lock.sh's transient concurrency marker, not project history."
   else

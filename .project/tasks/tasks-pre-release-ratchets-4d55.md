@@ -63,7 +63,7 @@ status: in-progress
 
 ## Phase 3: Close out
 
-- [ ] T005 Docs: README/USAGE update-guidance sections mention the release
+- [x] T005 Docs: README/USAGE update-guidance sections mention the release
   semver policy in one sentence each where they describe `/ardd-update`;
   `install.sh`'s gitignore/output guidance notes `.ardd-applied` should be
   committed. Full pre-commit suite + extended lint-docs + `lint-project.sh`

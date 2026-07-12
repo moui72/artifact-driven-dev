@@ -54,7 +54,9 @@ Then open Claude Code in your project.
 README's Install and Quickstart sections have the details. All routes
 converge on `install.sh`; it is the only real install/upgrade entry point.
 Once it has run, `/ardd-update` handles updates — resolving the recorded
-source to the latest release before reinstalling.
+source to the latest release before reinstalling. Releases are semver with
+skill-pack semantics: MAJOR removes or renames a slash command (or breaks a
+script/schema contract), MINOR is additive, PATCH is prose and fixes.
 
 ## Getting started (once per project)
 

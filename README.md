@@ -229,7 +229,10 @@ Either route converges on `install.sh` — the only real install/upgrade entry
 point — so once it has run, `/ardd-update` handles all updates: it resolves
 the recorded source, moves the owned checkout to the latest release (a
 dev-mode checkout gets a warning and a confirmation instead), and re-runs
-`install.sh` from it.
+`install.sh` from it. Release versions are semver with skill-pack
+semantics — MAJOR for a removed/renamed slash command or a breaking
+script/schema change, MINOR for additive skills or knobs, PATCH for prose
+and fixes — so a MAJOR bump is the cue to read the release notes first.
 
 > **Note:** `npx skills add` is no longer a supported install channel. If you
 > have skill files without a completed install (e.g. from a prior `npx`
