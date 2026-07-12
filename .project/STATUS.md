@@ -18,10 +18,13 @@ None in the artifact. One plan-scoped item remains, non-blocking
 
 ## Code-vs-Artifact Defects
 
-1 defect — see `DEFECTS.md`, last checked 2026-07-11 (sixth pass): the
-behavioral-smoke-tier residue (`970d935b`, key unprovisioned). Three large
-merges plus the release arc post-date that pass — a `/ardd-defects` run is
-the natural next audit of the tree.
+1 defect — see `DEFECTS.md`, last checked 2026-07-12 (**seventh pass** —
+all four post-sixth-pass merges and the release arc verified clean). The
+one defect is the smoke-tier successor entry: scenarios updated to the new
+surface but still never executed (key unprovisioned), and the
+state-mutating surface has outgrown them (reconcile mode, init, tracker,
+cross-routing). Its claim text changed, so the next `/ardd-plan` will
+correctly re-offer it for accept/decline.
 
 ## Feedback
 
