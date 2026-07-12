@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Release mechanics (source-side)
 
-- [ ] T001 [artifacts: constitution] Create `scripts/release.sh <vX.Y.Z>`
+- [x] T001 [artifacts: constitution] Create `scripts/release.sh <vX.Y.Z>`
   (POSIX sh): refuse unless the working tree is clean, HEAD is on the
   default branch (use `branch-info.sh`), the version argument matches
   `^v[0-9]+\.[0-9]+\.[0-9]+$`, the tag doesn't already exist, and the full
