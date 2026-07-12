@@ -1,10 +1,10 @@
 ---
-name: ardd-analyze
+name: ardd-status
 tier: core
-description: Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills.
+description: "Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze)."
 ---
 
-# /ardd-analyze
+# /ardd-status
 
 Non-destructive cross-artifact consistency and quality check. Discovers and
 reads all artifacts present in `.project/artifacts/`, then reports gaps,
@@ -25,7 +25,7 @@ immediately would just report a wall of expected draft-state noise) or
 anytime you want a fresh check outside those flows.
 
 **Run only from the primary checkout, never inside a delegated worktree.**
-`/ardd-analyze` is the sole writer of `STATUS.md`; running it inside a
+`/ardd-status` is the sole writer of `STATUS.md`; running it inside a
 worktree would trap that write on the worktree's branch instead of the
 default branch. Delegated `/ardd-implement`/`/ardd-converge` subagents are
 told explicitly not to invoke it — the terminal analyze handoff belongs to
@@ -49,7 +49,7 @@ the coordinator or the inline path.
    report section and STATUS.md line below (omit when nothing is in flight).
 
    Also check for `.project/DEFECTS.md`. If present, read its last-verified
-   date and defect count — this is read-only: `/ardd-analyze` never
+   date and defect count — this is read-only: `/ardd-status` never
    regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
    `/ardd-verify`). If absent, note that verify has never run.
 
@@ -65,14 +65,14 @@ the coordinator or the inline path.
    is meaningless there) stay silent.
 
    Also glob `.project/feedback/feedback-*.md` and read frontmatter. Count
-   files with `status: open` — this is read-only visibility; `/ardd-analyze`
+   files with `status: open` — this is read-only visibility; `/ardd-status`
    never writes to feedback files (that belongs solely to `/ardd-feedback`
    and `/ardd-plan`).
 
    Also glob `.project/features/*.md` (the per-feature register) if
    present. Count entries by frontmatter `status`
    (`backlogged`/`planned`/`tasked`/`implemented`) — read-only visibility;
-   `/ardd-analyze` never writes to the register except the one narrow,
+   `/ardd-status` never writes to the register except the one narrow,
    explicit exception in step 5a below.
 
    Also glob `.project/tasks/tasks-*.md` for files at `status: completed`.
@@ -136,7 +136,7 @@ the coordinator or the inline path.
      /ardd-verify to refresh.
    (Or, if DEFECTS.md is absent: "Never checked — run /ardd-verify to compare
    artifacts against the codebase." This section is visibility only —
-   `/ardd-analyze` does not read code itself and does not regenerate
+   `/ardd-status` does not read code itself and does not regenerate
    DEFECTS.md.)
 
    ## Feedback
@@ -182,21 +182,21 @@ the coordinator or the inline path.
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 
-   STATUS.md is the single re-entry point after any interruption. `/ardd-analyze`
+   STATUS.md is the single re-entry point after any interruption. `/ardd-status`
    is its only writer — other skills prompt the user to run it rather than
    writing STATUS.md themselves.
 
 7. **If step 1 found any orphaned completion flips**, ask the user whether
    to perform the flip for each one now via
    `.claude/skills/ardd-scripts/ardd-state.sh feature-flip <slug>
-   implemented`. This is `/ardd-analyze`'s one narrow,
+   implemented`. This is `/ardd-status`'s one narrow,
    explicit exception to never writing the register — mirroring the
    tasks-file-completion exception already documented for
    `/ardd-implement`/`/ardd-converge` — since the whole reason this check
    exists is that no other skill run is left to catch it. On confirmation,
    flip the entry and note it in the report already written; on decline,
    leave it — the same orphaned slug will be reported again on the next
-   `/ardd-analyze` run, since `completion-flip-check.sh` re-derives it from
+   `/ardd-status` run, since `completion-flip-check.sh` re-derives it from
    disk state every time rather than remembering a prior decline.
 
 8. **Next-step prompt (opt-in).** After step 6's STATUS.md write (and step 7,

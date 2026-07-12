@@ -106,7 +106,7 @@ until each artifact reflects your actual decisions.
 - Resolve data model decisions before infrastructure ones — the storage and sync
   strategy should follow the schema, not the other way around.
 - It's fine to leave `[OPEN: ...]` items in place for decisions you genuinely
-  can't make yet. `/ardd-analyze` will surface them and tell you which ones
+  can't make yet. `/ardd-status` will surface them and tell you which ones
   block planning.
 
 ---
@@ -114,7 +114,7 @@ until each artifact reflects your actual decisions.
 ## Step 4: Check consistency
 
 ```
-/ardd-analyze
+/ardd-status
 ```
 
 This reads all artifacts and reports:
@@ -124,7 +124,7 @@ This reads all artifacts and reports:
 - **Violations** — decisions that break a constitution principle
 - **Draft blockers** — artifacts still at `status: draft`
 
-Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean and all
+Fix issues with `/ardd-refine` until `/ardd-status` reports clean and all
 artifacts are `stable`.
 
 ---
@@ -213,10 +213,10 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 
 ```
 Session 1: /ardd-bootstrap (step 0 interviews you, or lead the design yourself) → /ardd-refine × 3
-Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
+Session 2: /ardd-status → /ardd-refine (fixes) → /ardd-status (clean)
 Session 3: /ardd-plan (checkpoint → tasks) → /ardd-implement
 Session N: /ardd-converge → /ardd-implement (resume)
 ```
 
-Each session can stand alone. `/ardd-analyze` is your re-entry point after
+Each session can stand alone. `/ardd-status` is your re-entry point after
 any gap — it tells you exactly where things stand and what to do next.

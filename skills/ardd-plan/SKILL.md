@@ -11,7 +11,7 @@ feedback (`/ardd-feedback`), and optionally one or more backlogged features
 (`/ardd-feature`); pause at an explicit approval checkpoint; then, on
 approval, generate the ordered task list the plan implies. One skill spans
 the whole plan→approve→task arc — there is no separate task-generation command.
-Run `/ardd-analyze` first — do not plan over unresolved conflicts.
+Run `/ardd-status` first — do not plan over unresolved conflicts.
 
 Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
 <slug> [<slug> ...]` additionally targets one or more backlogged feature
@@ -204,7 +204,7 @@ for the named plan; steps 2–10 do not run.
         a judgment call — set it while editing the artifact body.
 
    e. **Run a scoped cross-artifact check** — the same checks as
-      `/ardd-analyze` steps 2–4, scoped to the artifacts just changed: verify
+      `/ardd-status` steps 2–4, scoped to the artifacts just changed: verify
       new concepts are defined wherever referenced, flag new constitution
       violations, report new `[OPEN: ...]` items. This keeps the artifact set
       internally consistent before the plan itself is drafted against it.
@@ -295,7 +295,7 @@ for the named plan; steps 2–10 do not run.
    simplicity / complexity-justification principle (e.g. Simplicity/YAGNI with a
    Complexity Tracking requirement) do you flag patterns that would need a
    Complexity Tracking entry; if it declares no such principle, there is nothing
-   to flag at that site. Mirror `/ardd-analyze`'s "act only on the principles
+   to flag at that site. Mirror `/ardd-status`'s "act only on the principles
    present" shape rather than presuming a particular principle exists.
 
 7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
@@ -303,7 +303,7 @@ for the named plan; steps 2–10 do not run.
    plan you're about to draft supersedes one of them. On confirmation, flip
    that plan's status to `superseded` immediately via `.claude/skills/ardd-scripts/ardd-state.sh plan-flip <file> superseded`. A
    superseded-by-a-draft-that's-never-approved plan is an acceptable outcome,
-   not a bug: `/ardd-analyze`/`STATUS.md` surface open draft counts either
+   not a bug: `/ardd-status`/`STATUS.md` surface open draft counts either
    way, so an abandoned replacement doesn't go unnoticed.
 
 8. **Draft the plan** covering:
@@ -326,7 +326,7 @@ for the named plan; steps 2–10 do not run.
      implementation
    - **Production Annotation Summary** — list of known production shortcuts to
      annotate during implementation, included *only if* the constitution declares
-     a production-annotations principle (the same condition `/ardd-analyze`
+     a production-annotations principle (the same condition `/ardd-status`
      step 3 applies). Omit the section entirely when no such principle is
      declared.
 
@@ -359,7 +359,7 @@ for the named plan; steps 2–10 do not run.
     - **Stop** — leave the plan at `status: draft` and end the run without
       tasking. This is a legitimate outcome: the plan is a durable artifact
       a later `/ardd-plan --from <this plan>` (or a fresh run) can pick up.
-      Skip to the report (step 15), which recommends `/ardd-analyze`.
+      Skip to the report (step 15), which recommends `/ardd-status`.
 
     Do **not** approve or generate tasks without an explicit approve here —
     approval is a decision, not a default. (`--from` mode entered at step 11
@@ -476,7 +476,7 @@ for the named plan; steps 2–10 do not run.
     (step 10, "Stop"), say the plan is saved as `draft` and can be tasked
     later with `/ardd-plan --from <plan file>`.
 
-    Then run `/ardd-analyze` now to refresh `STATUS.md` — artifacts, the
+    Then run `/ardd-status` now to refresh `STATUS.md` — artifacts, the
     feature register, plan approval, and/or the feature-backlog flips in this
     run leave it stale otherwise. Don't wait for the user to ask.
 
@@ -493,9 +493,9 @@ for the named plan; steps 2–10 do not run.
     "Yes — run `<recommendation>` now", option 2 "No — stop here" (Esc =
     option 2); on yes, invoke by name (the existing terminal-handoff
     mechanism, no value passed back). **Exactly one prompt per user-visible
-    turn end**: this step already ends by running `/ardd-analyze`, which
+    turn end**: this step already ends by running `/ardd-status`, which
     carries its own next-step prompt — so when the analyze handoff happens as
-    instructed, the offer belongs to `/ardd-analyze` (whichever skill
+    instructed, the offer belongs to `/ardd-status` (whichever skill
     actually ends the turn owns the prompt) and `/ardd-plan` must not prompt
     first. Only if this run ends the turn itself without handing off to
     analyze does the offer fire here. Recommendations that are not a concrete

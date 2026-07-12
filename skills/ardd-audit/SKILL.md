@@ -7,7 +7,7 @@ description: "Challenge artifact decisions — simplicity, failure modes, robust
 # /ardd-audit
 
 Critically review project artifacts and challenge design decisions. Unlike
-`/ardd-analyze` (which checks consistency and completeness), this skill asks
+`/ardd-status` (which checks consistency and completeness), this skill asks
 whether the decisions themselves are good — then persists findings to
 `.project/audit.md` as a working checklist.
 

@@ -15,7 +15,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning. |
 | `/ardd-plan` | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |
 | `/ardd-implement` | Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge. |
-| `/ardd-analyze` | Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills. |
+| `/ardd-status` | Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze). |
 | `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
 | `/ardd-verify` | Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer). |
 | `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique). |

@@ -7,12 +7,12 @@ description: Check artifacts against the actual codebase and record drift in DEF
 # /ardd-verify
 
 Verify artifacts against the actual codebase and report drift. Where
-`/ardd-analyze` checks artifacts against each other and against
+`/ardd-status` checks artifacts against each other and against
 `constitution.md` (cheap, docs-only), `/ardd-verify` checks artifacts against
 what the code actually does (expensive — requires re-surveying source,
 similar cost to `/ardd-codify`). Run this before major planning or
 periodically to catch documentation that has drifted from implementation —
-not as a routine post-refine check. `/ardd-analyze` is the cheap, frequent
+not as a routine post-refine check. `/ardd-status` is the cheap, frequent
 check; `/ardd-verify` is the expensive, occasional one.
 
 Findings go into `.project/DEFECTS.md` only. This skill never writes into
@@ -88,6 +88,6 @@ log.
    - Defect count, grouped by artifact
    - One line per defect (artifact, claim, actual behavior)
 
-   Then run `/ardd-analyze` now to surface `DEFECTS.md`'s summary in
+   Then run `/ardd-status` now to surface `DEFECTS.md`'s summary in
    `STATUS.md` — `/ardd-verify` does not touch `STATUS.md` itself, so
    without this the defect line there stays stale.

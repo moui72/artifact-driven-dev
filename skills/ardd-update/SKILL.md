@@ -98,5 +98,5 @@ Usage: `/ardd-update` — no arguments.
    rewritten `.project/ardd-version.md`), migrations applied, and
    suggestions surfaced. Remind the user to commit
    `.project/ardd-version.md` (and `.ardd-applied` if migrations ran).
-   Then run `/ardd-analyze` — its update-availability line should now
+   Then run `/ardd-status` — its update-availability line should now
    be clear, and any register/schema migrations get re-checked.

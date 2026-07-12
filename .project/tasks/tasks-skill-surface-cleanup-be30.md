@@ -53,7 +53,7 @@ tasks encode._
   `sync-*.sh` script header comments' references (scripts keep their
   filenames — out of scope per plan).
 
-- [ ] T004 Rename `ardd-analyze` → `ardd-status`: dir, `name:`, F007
+- [x] T004 Rename `ardd-analyze` → `ardd-status`: dir, `name:`, F007
   description leading with "full cross-artifact consistency check" (cost
   signal) and ending "(formerly ardd-analyze)"; sweep the terminal-handoff
   references in every skill that names `/ardd-analyze` (the canonical list

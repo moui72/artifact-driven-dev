@@ -66,5 +66,5 @@ existing GitLab REST fallback").
    items) when ready to design and plan this feature — that's when affected
    artifacts get identified, proposed, and applied.
 
-6. Run `/ardd-analyze` now to refresh `STATUS.md`'s Feature Backlog count —
+6. Run `/ardd-status` now to refresh `STATUS.md`'s Feature Backlog count —
    the entry appended in step 4 leaves it stale otherwise.

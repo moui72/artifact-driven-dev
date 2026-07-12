@@ -16,14 +16,14 @@ If invoked without a `<name>` (just `/ardd-refine`), refine every artifact
 that has open questions instead of a single one:
 
 1. Read `.project/STATUS.md` for the open-question counts per artifact (run
-   `/ardd-analyze` first if `STATUS.md` is missing or stale).
+   `/ardd-status` first if `STATUS.md` is missing or stale).
 2. Build the list of artifacts with at least one open question, sorted by
    open-question count descending (most open issues first). Skip any artifact
    with zero open questions.
 3. Run the normal refine steps below (steps 1–7) on each artifact in that
    order, using its open questions as the guidance/clarifying-question input
    for step 2 instead of asking from scratch.
-4. After the pass, run `/ardd-analyze` once automatically to refresh
+4. After the pass, run `/ardd-status` once automatically to refresh
    `STATUS.md` for all refined artifacts, rather than after each one — skip
    the per-artifact trigger in step 7 below while running in this mode.
 
@@ -69,7 +69,7 @@ that has open questions instead of a single one:
 
 7. **Report** what changed in 2–3 sentences. Note any open questions deferred
    for a future `/ardd-refine` pass. If invoked for a single artifact (not
-   via no-argument mode), run `/ardd-analyze` now to refresh `STATUS.md` with
+   via no-argument mode), run `/ardd-status` now to refresh `STATUS.md` with
    the updated artifact status and open questions — in no-argument mode this
    is skipped here since it already runs once after the full pass (above).
 

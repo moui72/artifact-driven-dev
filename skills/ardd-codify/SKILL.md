@@ -163,7 +163,7 @@ code does, not necessarily what was intended. Review each one with
 8. **Generate `.project/STATUS.md`** summarizing what was written. Use the
    standard STATUS.md structure (same as `/ardd-bootstrap`). In the
    "Recommended next step" line, direct the user to review draft artifacts with
-   `/ardd-refine` and resolve open questions before running `/ardd-analyze`.
+   `/ardd-refine` and resolve open questions before running `/ardd-status`.
 
 9. **Report:**
    - How many artifacts were written and which ones
@@ -177,4 +177,4 @@ code does, not necessarily what was intended. Review each one with
      `/ardd-verify` next to log them in `DEFECTS.md`, then `/ardd-feature` to
      backlog closing each gap
    - Recommended next step: `/ardd-refine <artifact>` for whichever artifact
-     has the most open questions, then `/ardd-analyze` when all are resolved
+     has the most open questions, then `/ardd-status` when all are resolved

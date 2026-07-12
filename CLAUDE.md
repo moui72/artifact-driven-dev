@@ -30,7 +30,7 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
 ./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
-./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, register not flipped); used by ardd-analyze
+./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, register not flipped); used by ardd-status
 ./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/worktree-align.sh [ref]      # ff-merge local default branch into a fresh delegated worktree; a delegated subagent's mandatory first act
 ./scripts/test-worktree-align.sh       # regression test for worktree-align.sh
@@ -207,7 +207,7 @@ against.
 
 **Single-writer ownership of generated files is, deliberately, prose-only —
 this is not enforceable by a hook, and that was verified, not assumed.**
-- `.project/STATUS.md` — written only by `/ardd-analyze`
+- `.project/STATUS.md` — written only by `/ardd-status`
 - `.project/DEFECTS.md` — written only by `/ardd-verify`
 - `.project/TRACKER.md` — written only by `/ardd-tracker`
 - `.project/audit.md` — written only by `/ardd-audit`
@@ -217,7 +217,7 @@ this is not enforceable by a hook, and that was verified, not assumed.**
   `planned→tasked` flip, now that tasking is folded in), `/ardd-implement`,
   `/ardd-converge`,
   `/ardd-tracker` (pull imports new `backlogged` entries), and
-  `/ardd-analyze` (one narrow exception: the `tasked→implemented` flip,
+  `/ardd-status` (one narrow exception: the `tasked→implemented` flip,
   on user confirmation, for an orphaned completion flip its
   `completion-flip-check.sh` detects — see the note below)
 
@@ -322,7 +322,7 @@ truth*; and three installed scripts bridge them:
   old harness-`TaskList` coordination check — deterministic, scriptable,
   and it survives conversation death, since an abandoned subagent's
   worktree is still on disk when no conversation remembers it), and
-  `/ardd-analyze` sources `STATUS.md`'s "In Flight" section from it.
+  `/ardd-status` sources `STATUS.md`'s "In Flight" section from it.
 
 A consequence worth stating: an abandoned worktree never poisons the
 default branch — main keeps saying `ready`/`tasked`, which becomes accurate
@@ -369,7 +369,7 @@ hand-built one was tried and removed (Principle VIII; decision record
 true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
 asked once by `/ardd-bootstrap`, and once by `/ardd-update` for installs
 whose constitution lacks the field). When `true`, exactly two skills —
-`/ardd-analyze` and `/ardd-plan` — end by offering their
+`/ardd-status` and `/ardd-plan` — end by offering their
 recommended next step via AskUserQuestion, and only when that
 recommendation is a concrete runnable `/ardd-*` invocation; plan
 normally hands off to analyze, which then owns the single prompt of
@@ -379,7 +379,7 @@ next_step_prompt <true|false>`, never by hand-editing. Like
 `workflow_mode`, it's a workflow field, not constitution content: no Sync
 Impact Report entry and no constitution version bump applies. Don't widen
 the two-skill scope casually — every other skill's terminal analyze
-handoff already funnels into `/ardd-analyze`'s prompt.
+handoff already funnels into `/ardd-status`'s prompt.
 
 `ardd-plan` never delegates — and in solo mode it no longer gates. In solo
 mode (`workflow_mode` absent or `solo`) there is no branch-gate prompt at
@@ -440,20 +440,20 @@ written under the old design. Mechanics: it reads the tasks file's
 have — nothing writes it anymore), falling back to the plan's `branch:`
 field (the inline case), checks `git merge-base --is-ancestor <branch>
 <default>`, and reports any still-`tasked` slug from the plan's
-`features:` list. `/ardd-analyze` runs it against every completed tasks
+`features:` list. `/ardd-status` runs it against every completed tasks
 file on each invocation and, on user confirmation, performs the
 `tasked→implemented` flip itself. This is a deliberate, narrow exception
-to `/ardd-analyze` never writing the register (see the single-writer
+to `/ardd-status` never writing the register (see the single-writer
 ownership list above) — justified because no other skill invocation is
 left to catch it otherwise.
 
 That's a different thing from a skill telling the agent, as its own last
 step, to run another skill and stop — a terminal handoff, not a subroutine
-call. Most skills that change state `/ardd-analyze` reports on end by
-instructing the agent to run `/ardd-analyze` directly, since Claude Code
+call. Most skills that change state `/ardd-status` reports on end by
+instructing the agent to run `/ardd-status` directly, since Claude Code
 lets a skill's prose trigger another skill by name. No shared logic and no
 value passed back — analyze re-derives everything itself from disk, same as
-if the user had typed it. See `/ardd-analyze`'s own SKILL.md for the
+if the user had typed it. See `/ardd-status`'s own SKILL.md for the
 canonical list of which skills do this.
 
 **Mechanization non-goals (audited 2026-07-06, deliberately NOT scripted

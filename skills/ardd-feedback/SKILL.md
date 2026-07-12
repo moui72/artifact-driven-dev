@@ -76,7 +76,7 @@ notes in the next message.
    unique within the file and never renumbered after writing.
 
 5. **Report** the item count by category and the file path, noting that
-   `/ardd-plan` will pick this up automatically. Then run `/ardd-analyze` now
+   `/ardd-plan` will pick this up automatically. Then run `/ardd-status` now
    to reflect the open feedback count in `STATUS.md`.
 
 ## Consumption by /ardd-plan

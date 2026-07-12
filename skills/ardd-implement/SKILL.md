@@ -37,7 +37,7 @@ self-contained; the agent loads only the artifacts it declares.
    `solo` | `collaborative`; **absent means `solo`**. Then run
    `.claude/skills/ardd-scripts/branch-info.sh` for `current`, `default`,
    and `on_default`. If the chosen file's status is already `completed`, run
-   `/ardd-analyze` now to refresh `STATUS.md`, report success, and stop —
+   `/ardd-status` now to refresh `STATUS.md`, report success, and stop —
    nothing to branch or delegate for. Otherwise proceed to step 3.
 
    **Nothing is committed in this step.** Under this design all state a run
@@ -157,7 +157,7 @@ self-contained; the agent loads only the artifacts it declares.
      - `auto` — merge the **subagent-reported** branch (never an in-memory
        name) into the local default branch now, without prompting, when the
        merge fast-forwards or completes without conflicts; then run the
-       existing post-merge steps unchanged (`/ardd-analyze`). On **any**
+       existing post-merge steps unchanged (`/ardd-status`). On **any**
        conflict: `git merge --abort`, surface the conflict, and fall back
        to asking — never auto-resolve, not even the disposable report
        files (their take-either-side rule stays an interactive judgment
@@ -172,11 +172,11 @@ self-contained; the agent loads only the artifacts it declares.
        hand-reconcile, never re-apply — and let the owning skill
        regenerate from disk. Conflict markers in a generated report are
        noise, not data loss.
-       On merge, run `/ardd-analyze`. On decline, note the work stays visible via
-       `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section until
+       On merge, run `/ardd-status`. On decline, note the work stays visible via
+       `inflight-worktrees.sh` and `/ardd-status`'s in-flight section until
        merged.
 
-   Note: a delegated subagent must **never** run `/ardd-analyze` or write
+   Note: a delegated subagent must **never** run `/ardd-status` or write
    `STATUS.md` — either would trap `STATUS.md` inside the worktree branch.
    The terminal analyze handoff belongs to the coordinator (or the inline
    path), never the delegated subagent.
@@ -247,10 +247,10 @@ self-contained; the agent loads only the artifacts it declares.
    does. Run `... touch ardd-implement` once this step's writes are done.
 
    **On the inline (non-delegated) path, this is the run's terminal step:**
-   once step 9 commits this final work, **run `/ardd-analyze` now** to refresh
+   once step 9 commits this final work, **run `/ardd-status` now** to refresh
    `STATUS.md` — don't rely on the next loop iteration's early-exit (step 2)
    to discover completion after the fact. A delegated subagent must **not**
-   run it here (see the note in step 3); its `/ardd-analyze` runs on the
+   run it here (see the note in step 3); its `/ardd-status` runs on the
    coordinator after the worktree branch merges.
 
 9. **Commit** the work with a concise message referencing the task ID.

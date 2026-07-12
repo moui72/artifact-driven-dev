@@ -133,7 +133,7 @@ when resuming work in a new session.
      - `auto` — merge the **subagent-reported** branch (never an in-memory
        name) into the local default branch now, without prompting, when the
        merge fast-forwards or completes without conflicts; then run the
-       existing post-merge steps unchanged (`/ardd-analyze`). On **any**
+       existing post-merge steps unchanged (`/ardd-status`). On **any**
        conflict: `git merge --abort`, surface the conflict, and fall back
        to asking — never auto-resolve, not even the disposable report
        files (their take-either-side rule stays an interactive judgment
@@ -148,10 +148,10 @@ when resuming work in a new session.
        hand-reconcile, never re-apply — and let the owning skill
        regenerate from disk. Conflict markers in a generated report are
        noise, not data loss.
-       On merge, run `/ardd-analyze`. On decline, note the work stays visible via
-       `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section.
+       On merge, run `/ardd-status`. On decline, note the work stays visible via
+       `inflight-worktrees.sh` and `/ardd-status`'s in-flight section.
 
-   A delegated subagent must **never** run `/ardd-analyze` or write
+   A delegated subagent must **never** run `/ardd-status` or write
    `STATUS.md` — either traps `STATUS.md` in the worktree branch. The
    terminal analyze handoff belongs to the coordinator (or inline path).
 
@@ -226,9 +226,9 @@ when resuming work in a new session.
      lands on merge)
    - Recommended next step (usually: run `/ardd-implement` to continue)
 
-   If step 7 flipped the file to `completed`, run `/ardd-analyze` now to
+   If step 7 flipped the file to `completed`, run `/ardd-status` now to
    refresh `STATUS.md` — same trigger condition as `/ardd-implement`'s
    tasks-file completion. Otherwise (still `in-progress`), skip it; nothing
    changed that `STATUS.md` needs to reflect yet. (If this run is a delegated
-   subagent, it does *not* run `/ardd-analyze` — see step 2; the coordinator
+   subagent, it does *not* run `/ardd-status` — see step 2; the coordinator
    does, after merge.)

@@ -97,7 +97,7 @@ continues. Reach for it after a crashed run, a manual detour, or any
   rather than just consistency-checking.
 - `/ardd-lint` — anytime, free: structural validation of `.project/`
   (also runs automatically if the write-time hook is configured).
-- `/ardd-update` — when `/ardd-analyze` reports an update available (or
+- `/ardd-update` — when `/ardd-status` reports an update available (or
   anytime): finds the recorded source checkout, offers a pull, re-runs
   install.sh, and relays its output — migrations and suggestions reach
   your session.

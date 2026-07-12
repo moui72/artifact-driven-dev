@@ -67,7 +67,7 @@ context, so no interview is needed.)
    first time the user hesitates. Carry every undecided item forward as an
    `[OPEN: <question>]` for the synthesis below to record — an artifact that
    honestly admits an open question is worth more than one with an invented
-   decision in it, and `/ardd-analyze` will surface which open items actually
+   decision in it, and `/ardd-status` will surface which open items actually
    block planning. Never resolve an open question by picking something
    plausible.
 
@@ -161,7 +161,7 @@ context, so no interview is needed.)
    default. Write the chosen value as `workflow_mode: <value>` in
    `constitution.md`'s frontmatter. This field gates the branch/delegation
    behavior of `/ardd-implement`, `/ardd-converge`, `/ardd-plan`, and
-   `/ardd-analyze`. Its absence means `solo`, so projects bootstrapped before
+   `/ardd-status`. Its absence means `solo`, so projects bootstrapped before
    this field existed need no migration. (If `constitution.md` isn't among
    the artifacts being created, skip this — those skills read an absent field
    as `solo`.)
@@ -169,7 +169,7 @@ context, so no interview is needed.)
    **Set `next_step_prompt` in the constitution's frontmatter.** Alongside
    the `workflow_mode` question, ask once: "Should skills end by offering
    their recommended next step as a one-keypress prompt?" (`true` = at the
-   end of `/ardd-analyze` and `/ardd-plan`, a concrete
+   end of `/ardd-status` and `/ardd-plan`, a concrete
    runnable `/ardd-*` recommendation is offered via AskUserQuestion —
    yes runs it, no/Esc stops; `false`/absent = recommendations stay plain
    text). Write the answer via
@@ -218,7 +218,7 @@ context, so no interview is needed.)
 
 8. **Report** what was created, how many open questions exist per artifact,
    which constitution suggestions (if any) were accepted, and the
-   recommended next step (usually `/ardd-analyze` then `/ardd-refine` on
+   recommended next step (usually `/ardd-status` then `/ardd-refine` on
    draft artifacts).
 
 ## STATUS.md structure
@@ -243,7 +243,7 @@ _Updated: [YYYY-MM-DD]. Keep this current as artifacts are refined and open ques
 
 - [worktree branch / tasks file / progress, or draft PR — work not yet
   merged to the default branch. Omit this section when nothing is in flight.
-  Written by /ardd-analyze from `inflight-worktrees.sh` (and `gh pr list
+  Written by /ardd-status from `inflight-worktrees.sh` (and `gh pr list
   --draft` in collaborative mode).]
 
 ## Recommended Next Step

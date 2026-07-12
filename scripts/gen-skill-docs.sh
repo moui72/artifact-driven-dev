@@ -28,7 +28,7 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
 ORDER_setup="ardd-bootstrap ardd-codify"
-ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-implement ardd-analyze ardd-lint"
+ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-implement ardd-status ardd-lint"
 ORDER_extension="ardd-verify ardd-audit ardd-converge ardd-research ardd-render ardd-tracker ardd-update ardd-add-artifact"
 
 row_for() { # row_for <skill-name>
@@ -84,7 +84,7 @@ EOF
   table_rows core
   cat <<'EOF'
 
-`/ardd-analyze` (cross-artifact consistency) and `/ardd-lint` (`.project/`
+`/ardd-status` (cross-artifact consistency) and `/ardd-lint` (`.project/`
 schema validation) are core infrastructure, not opt-in extensions: analyze
 runs automatically as the final step of most state-changing skills, and lint
 runs behind the write-time hook on every `.project/` write. Neither is a step
@@ -104,7 +104,7 @@ rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
 mode once at setup and suggests one from what it detects.
 
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
-`constitution.md`'s frontmatter, `/ardd-analyze` and `/ardd-plan` end by
+`constitution.md`'s frontmatter, `/ardd-status` and `/ardd-plan` end by
 offering their recommended next step as a
 one-keypress prompt (yes runs it; no/Esc stops) — only when that
 recommendation is a concrete runnable `/ardd-*` invocation. `false` or an

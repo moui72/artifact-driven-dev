@@ -63,7 +63,7 @@ Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
                    target.
   --kickoff        Open Claude Code on the first step without asking
                    (/ardd-bootstrap for a new project; /ardd-codify, or
-                   /ardd-analyze if already set up, for an existing one).
+                   /ardd-status if already set up, for an existing one).
   --no-kickoff     Install, then print the next step instead of opening Claude Code.
                    With neither flag, you're asked — unless there's no terminal
                    to ask on, in which case this is the default.
@@ -224,11 +224,11 @@ fi
 # --- Hand off to the first session -------------------------------------
 # A brand-new project seeds from a blank slate (/ardd-bootstrap). An existing
 # project reverse-engineers its code (/ardd-codify) — or, if it already carries
-# ARDD artifacts, just checks them (/ardd-analyze). install.sh only ever creates
+# ARDD artifacts, just checks them (/ardd-status). install.sh only ever creates
 # .project/ardd-version.md, never .project/artifacts/, so that dir's presence
 # reliably distinguishes an already-set-up project from a first install.
 if [ "$existing" -eq 1 ]; then
-  [ -d "$TARGET/.project/artifacts" ] && handoff_cmd="/ardd-analyze" || handoff_cmd="/ardd-codify"
+  [ -d "$TARGET/.project/artifacts" ] && handoff_cmd="/ardd-status" || handoff_cmd="/ardd-codify"
 else
   handoff_cmd="/ardd-bootstrap"
 fi

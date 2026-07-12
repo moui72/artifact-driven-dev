@@ -101,7 +101,7 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   Agent tool's own `isolation: "worktree"` — no custom script for that
 #   part; a hand-built one (worktree-info.sh) was tried and removed after
 #   turning out to duplicate what the tool already does, incompatibly.
-# completion-flip-check.sh: invoked by ardd-analyze against every
+# completion-flip-check.sh: invoked by ardd-status against every
 #   status: completed tasks file, to detect a plan whose branch already
 #   merged into the default branch but whose bound features are still
 #   Status: tasked — the orphaned-completion-flip case that arises because
@@ -368,7 +368,7 @@ echo "  1. Run /ardd-bootstrap in Claude Code — it seeds your artifacts from t
 echo "     conversation, and on a cold start first walks you through the design"
 echo "     conversation itself (its step 0). Existing codebase? Run /ardd-codify"
 echo "     instead."
-echo "  2. Run /ardd-analyze to check for cross-artifact issues."
+echo "  2. Run /ardd-status to check for cross-artifact issues."
 echo "  3. Run /ardd-plan when artifacts are stable."
 echo ""
-echo "For an existing project, run /ardd-analyze to verify everything looks right."
+echo "For an existing project, run /ardd-status to verify everything looks right."

@@ -10,7 +10,7 @@ Deterministic, non-LLM check of `.project/` state: frontmatter `status`
 fields are valid values, required frontmatter fields are present, and
 `[artifacts: ...]` tags on tasks/feedback lines reference artifact files that
 actually exist. This is a fast structural check, not a substitute for
-`/ardd-analyze` — it catches malformed bookkeeping (a typo'd status, a
+`/ardd-status` — it catches malformed bookkeeping (a typo'd status, a
 missing field, a stale reference), not whether the decisions themselves are
 consistent or good.
 

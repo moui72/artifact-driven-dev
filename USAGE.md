@@ -60,7 +60,7 @@ source to the latest release before reinstalling.
 
 Bring the project under ARDD: seed artifacts, refine until stable. After
 this you live in [the core loop](#the-core-loop) below. Consistency
-checking (`/ardd-analyze`) runs automatically at the end of most
+checking (`/ardd-status`) runs automatically at the end of most
 state-changing skills. Everything under [Extensions](#extensions) —
 diagrams, tracker sync, design audits, code-vs-artifact verification,
 research — is opt-in and can be ignored until you want it.
@@ -87,7 +87,7 @@ asks once whether the project runs `solo` or `collaborative`
 (`workflow_mode`, which gates branch/delegation behavior later), and once
 whether skills should end by offering their recommended next step as a
 one-keypress prompt (`next_step_prompt: true|false` — absent means
-`false`; with `true`, `/ardd-analyze` and `/ardd-plan`
+`false`; with `true`, `/ardd-status` and `/ardd-plan`
 offer a concrete runnable `/ardd-*` recommendation via a yes/no prompt
 instead of plain text). Existing installs whose constitution lacks the
 field get asked the same question once by `/ardd-update`; neither answer
@@ -119,11 +119,11 @@ it also handles version bumping and the sync impact report.
 
 `/ardd-refine` and most other skills that change project state now run this
 for you automatically as their final step, so you usually won't need to
-invoke it by hand — see `/ardd-analyze`'s own SKILL.md for the exact list. To run it standalone — e.g. before planning, or any time you
+invoke it by hand — see `/ardd-status`'s own SKILL.md for the exact list. To run it standalone — e.g. before planning, or any time you
 want a fresh check outside those flows:
 
 ```
-/ardd-analyze
+/ardd-status
 ```
 
 This reads every artifact and reports:
@@ -140,7 +140,7 @@ This reads every artifact and reports:
   file, checkbox progress) or, in collaborative mode, an open draft PR —
   work that exists on disk but hasn't merged to your default branch yet.
 
-Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean — each
+Fix issues with `/ardd-refine` until `/ardd-status` reports clean — each
 `/ardd-refine` pass triggers the next check itself.
 
 #### Which checking skill do I want?
@@ -149,7 +149,7 @@ Four skills check your project, at different layers. They don't overlap:
 
 | Skill | What it checks | When to run |
 |---|---|---|
-| `/ardd-analyze` | Cross-artifact **consistency** — conflicts, gaps, draft artifacts, constitution violations, orphaned completion flips, in-flight work. Uses LLM judgment. | Before planning. Auto-runs as the final step of most state-changing skills. |
+| `/ardd-status` | Cross-artifact **consistency** — conflicts, gaps, draft artifacts, constitution violations, orphaned completion flips, in-flight work. Uses LLM judgment. | Before planning. Auto-runs as the final step of most state-changing skills. |
 | `/ardd-lint` | **Structural** validity only — frontmatter `status`/required fields and `[artifacts: ...]` references. Fast, deterministic, no LLM judgment. | Anytime, cheaply — especially after hand-editing anything in `.project/`. |
 | `/ardd-verify` | Artifacts vs. the **actual codebase** — drift between what an artifact says and what the code does, recorded in `DEFECTS.md`. | Periodically, or before major planning. |
 | `/ardd-audit` | The **decisions themselves** — simplicity, failure modes, robustness, semantics. Challenges intent, doesn't just check consistency. | When you want a design pressure-tested, not just checked. |
@@ -282,7 +282,7 @@ feature-backlog flip (`tasked` → `implemented`) — rides the work branch and
 reaches your default branch when that branch merges, atomically with the
 code. So the feature register never claims work is done before the code has
 landed, and until merge the in-flight truth is visible via the sibling-
-worktree check above and `/ardd-analyze`'s "In Flight" section. On a
+worktree check above and `/ardd-status`'s "In Flight" section. On a
 delegated run's completion, Claude offers to merge the worktree branch
 right away — or, with `merge_policy: auto` in `constitution.md`'s
 frontmatter, merges it without asking when the merge is fast-forward or
@@ -314,7 +314,7 @@ Each artifact has a `status` field in its frontmatter:
 - `draft` — has open questions; not safe to plan against
 - `stable` — decisions are made; ready for planning
 
-`/ardd-refine` sets this for you. `/ardd-analyze` will warn if you try to plan over a
+`/ardd-refine` sets this for you. `/ardd-status` will warn if you try to plan over a
 `draft` artifact.
 
 ---

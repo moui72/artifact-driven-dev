@@ -42,4 +42,4 @@ Create a new artifact in `.project/artifacts/`. Usage:
 6. **Update `CLAUDE.md`** — add the new artifact to the artifacts list.
 
 7. **Report** what was created. If other artifacts may reference this one,
-   run `/ardd-analyze` now instead of just suggesting it.
+   run `/ardd-status` now instead of just suggesting it.

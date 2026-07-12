@@ -90,10 +90,10 @@ everything else is opt-in. (Generated — see note under Getting started.)
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning. |
 | `/ardd-plan` | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |
 | `/ardd-implement` | Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge. |
-| `/ardd-analyze` | Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills. |
+| `/ardd-status` | Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze). |
 | `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
 
-`/ardd-analyze` (cross-artifact consistency) and `/ardd-lint` (`.project/`
+`/ardd-status` (cross-artifact consistency) and `/ardd-lint` (`.project/`
 schema validation) are core infrastructure, not opt-in extensions: analyze
 runs automatically as the final step of most state-changing skills, and lint
 runs behind the write-time hook on every `.project/` write. Neither is a step
@@ -113,7 +113,7 @@ rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
 mode once at setup and suggests one from what it detects.
 
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
-`constitution.md`'s frontmatter, `/ardd-analyze` and `/ardd-plan` end by
+`constitution.md`'s frontmatter, `/ardd-status` and `/ardd-plan` end by
 offering their recommended next step as a
 one-keypress prompt (yes runs it; no/Esc stops) — only when that
 recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
@@ -227,7 +227,7 @@ just do that, then run `/ardd-bootstrap` — same destination. See
 
 **Existing project** — open Claude Code and run `/ardd-codify` to
 reverse-engineer artifacts from the codebase. Review the generated drafts with
-`/ardd-refine`, then run `/ardd-analyze` before planning new work. See
+`/ardd-refine`, then run `/ardd-status` before planning new work. See
 [guides/existing-project.md](guides/existing-project.md).
 
 **Established project** — already set up and shipping? The steady-state
@@ -236,7 +236,7 @@ loop (features, feedback, targeted plans) is
 
 **Updating** — from inside a consuming repo, run `/ardd-update`: it finds
 the source checkout recorded at install time, re-runs `install.sh`, and
-relays migrations and suggestions. `/ardd-analyze` tells you when an
+relays migrations and suggestions. `/ardd-status` tells you when an
 update is available.
 
 **Gitignore the skill files** in the target project. They're regenerated
@@ -272,7 +272,7 @@ silent forever once anything is already ignored.
   feedback/            # captured bugs/UX/reconsidered notes, consumed by the next plan
   plans/               # generated plans and research
   tasks/               # tasks-<slug>-<hex>.md — the execution queue, one per plan run
-  STATUS.md            # re-entry point after any interruption (written only by /ardd-analyze)
+  STATUS.md            # re-entry point after any interruption (written only by /ardd-status)
   DEFECTS.md           # code-vs-artifact drift (written only by /ardd-verify)
   WORKFLOW.md          # generated tour of the installed skills
   ardd-version.md      # commit this — records which ARDD source commit is installed
@@ -309,7 +309,7 @@ When `.project/` files conflict on merge:
 - **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
   `audit.md`) — disposable: take either side without deliberation
   (never hand-reconcile or re-apply changes across a rebase) and re-run
-  the owning skill (`/ardd-analyze`, `/ardd-verify`, `/ardd-tracker`,
+  the owning skill (`/ardd-status`, `/ardd-verify`, `/ardd-tracker`,
   `/ardd-audit` respectively); it regenerates the file from current
   state, so which side you kept doesn't matter. Conflict markers in a
   generated report are noise, not data loss.
@@ -360,13 +360,13 @@ need a system to capture, cross-check, and execute against it.
 
 ## Future directions
 
-`/ardd-analyze` now runs automatically as the final step of most skills that
-change state it reports on — see the list in `/ardd-analyze`'s own SKILL.md,
+`/ardd-status` now runs automatically as the final step of most skills that
+change state it reports on — see the list in `/ardd-status`'s own SKILL.md,
 which is canonical. Each skill's own prose tells the agent to invoke it,
 since Claude Code lets a skill's instructions trigger another skill
 directly. That doesn't need a hooks
 system; it only reaches the skills that already end with "now run
-`/ardd-analyze`" written into them.
+`/ardd-status`" written into them.
 
 A real hooks system (pre/post skill execution, similar to spec-kit's
 extension model) is still the more general next step — it would enable
