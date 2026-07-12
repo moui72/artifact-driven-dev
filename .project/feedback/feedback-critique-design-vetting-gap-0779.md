@@ -89,6 +89,24 @@ are breaking changes.**_
   in order: object, data-flow direction, and — for no-input skills — an
   explicit "takes no X; for X use /ardd-Y" redirect clause.
 
+- [ ] F009 Cross-route the two capture skills instead of merging them
+  (merge explicitly evaluated and rejected — the folds' bar was shared
+  object AND consumers; feedback files and register entries share neither:
+  transient multi-item file consumed wholesale vs durable slug-addressable
+  lifecycle entity bound by plans, checked by completion-flip-check.sh, and
+  mirrored by the tracker skill; a merged command would be a pure
+  dispatcher making misroutes silent). Instead: (a) mutual "instead"
+  clauses in both descriptions — feedback's ends "new-capability ideas
+  belong in /ardd-backlog instead", backlog's ends "bugs and UX problems
+  with existing behavior belong in /ardd-feedback instead"; (b)
+  `ardd-feedback`'s classification step gains a fourth per-item outcome:
+  an item that is a new capability → offer (confirmed, never automatic)
+  to file it via `ardd-state.sh slug` + `feature-create` and omit it from
+  the feedback file; (c) `ardd-backlog` step 1 gains the mirror check
+  (description is a complaint about existing behavior → offer to capture
+  as feedback instead). Cross-routing is per-item and user-confirmed —
+  the two stores have different visibility (GitHub vs local-only).
+
 ## Bugs
 
 - [ ] F008 Argument guards on the two no-input report skills, mirroring
