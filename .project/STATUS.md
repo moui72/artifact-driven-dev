@@ -1,15 +1,14 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (skill-surface cleanup MERGED — 14-skill surface live;
-one step left before v1.0.0: the pre-release-ratchets plan, then the release
-arc T008–T010). Keep this current as artifacts are refined and open
+_Updated: 2026-07-12 (ratchets MERGED — constitution v1.6.0; everything before
+v1.0.0 is done: only the release arc T008–T010 remains). Keep this current as artifacts are refined and open
 questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.5.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.6.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -42,31 +41,34 @@ consumed by `plan-pre-release-ratchets-2026-07-12.md`.
    bodies, name==dirname, owned-filename gate); naming system codified in
    CLAUDE.md; `docs/release-notes-v1.md` ready for T008's `--notes-file`;
    signed rollback tag `pre-surface-cleanup` (unpushed).
-2. ⏳ **pre-release-ratchets** — planned + tasked
-   (`plan-pre-release-ratchets-2026-07-12.md` approved →
-   `tasks-pre-release-ratchets-4d55.md` ready, 0/5): constitution v1.6.0
-   (retired enum, pack semver, append-only migrations), ardd-version.md
-   hardening, mint/lint fixes. Run `/ardd-implement`.
+2. ✅ **pre-release-ratchets** MERGED (`5a7b48a`, 7 commits): constitution
+   **v1.6.0** (retired enum + present-truth semantics; pack semver policy —
+   this changeset itself classifies MINOR; append-only migrations;
+   committed-.ardd-applied); `Source-Commit:` structured field with
+   prefix-match + prose fallback + owned-checkout fallback
+   (`fallback=owned`, additive token); mint hex tokens for plan/research;
+   unknown-enum version-skew hint; mktemp lint sentinel.
+   `npx-skills-install` flipped `retired`; audit.md [Q] resolved.
 3. ⏳ **remote-install-source T008–T010** (`tasks-remote-install-source-
    18d3.md` in-progress, 7/10): cut v1.0.0 with the release-notes file,
    repoint five consumers, retire the primary-stays-on-main mandate.
 
 ## Feature Backlog
 
-2 backlogged · 0 planned · 1 tasked · 8 implemented — see
-`.project/features/`. (`npx-skills-install` flips to `retired` when the
-ratchets plan lands the new enum.) Backlogged:
+2 backlogged · 0 planned · 1 tasked · 7 implemented · 1 retired — see
+`.project/features/`. Backlogged:
 `disposable-report-merge-driver`, `worktree-reap-and-fanout`.
 
 ## Audit
 
-`.project/audit.md` (migrated from critique.md, 5 open items, checkboxes
-intact): the register-enum **[Q]** is answered (present truth + `retired` —
-rides the ratchets plan; mark it resolved when that lands); 3 suggestions +
-1 risk (smoke key) remain to work from the checklist.
+`.project/audit.md`: 4 open items (3 suggestions + 1 risk — smoke key);
+the register-enum **[Q]** is resolved (present-truth + `retired`, v1.6.0).
 
 ## Recommended Next Step
 
-Run `/ardd-plan feedback-pre-release-ratchets-4d67.md` — the last gate
-before the release arc resumes. `main` holds many unpushed commits and the
-unpushed `pre-surface-cleanup` tag; push when ready.
+Resume the release arc: `/ardd-implement` on
+`tasks-remote-install-source-18d3.md` (7/10 — T008 cut v1.0.0 with
+`docs/release-notes-v1.md`, T009 repoint five consumers, T010 retire the
+primary-stays-on-main mandate; all three interactive). `main` holds many
+unpushed commits plus the unpushed `pre-surface-cleanup` tag — T008's
+release push carries them.
