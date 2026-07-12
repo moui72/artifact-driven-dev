@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-11 (primary-stays-on-main invariant MERGED — constitution v1.4.0; worked in a worktree, primary never left main). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-12 (background-by-default-flow planned and tasked — ready for /ardd-implement). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -16,49 +16,50 @@ None in the artifact. One plan-scoped set remains, non-blocking:
   optionally `gh repo create`, and whether it should pin a tag rather than
   track `main`.
 
-(The generic-render plan's three open questions were resolved during
-implementation: `render_section` defaults to the capitalized filename stem
-with standard templates declaring explicit headers; `render_hint` is
-non-empty-checked when present; the migration auto-backfills only the three
-historically-renderable artifacts.)
-
 ## Code-vs-Artifact Defects
 
 1 defect — see `DEFECTS.md`, last checked 2026-07-11 (sixth pass). Unchanged:
 the behavioral-smoke-tier residue (`970d935b`); no scenario has ever executed
-because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced. The
-generic-render merge post-dates the sixth pass and hasn't been verified
-against yet; it contradicts no `DEFECTS.md` claim.
+because `ANTHROPIC_API_KEY` is unprovisioned. Nothing unsurfaced.
 
 ## Feedback
 
-None open — `feedback-primary-worktree-stays-on-main-4985.md` consumed by
-`plan-primary-stays-on-main-2026-07-11.md`; `feedback-scrap-npx-channel-9c51.md`
-and `feedback-consolidate-setup-skills-8541.md` consumed by their (merged)
-plans. All feedback files are `status: planned`.
+None open — all feedback files are `status: planned`.
 
 ## Feature Backlog
 
-0 backlogged · 0 planned · 0 tasked · 7 implemented — see `.project/features/`.
+2 backlogged · 0 planned · 1 tasked · 7 implemented — see `.project/features/`.
+
+- `background-by-default-flow` — **tasked**:
+  `plan-background-by-default-flow-2026-07-12.md` (approved) →
+  `tasks-background-by-default-flow-8e91.md` (ready, 10 tasks / 5 phases).
+- `disposable-report-merge-driver` — backlogged: mechanize the
+  disposable-report rule as a `.gitattributes` merge driver so parallel
+  merges never conflict on generated reports.
+- `worktree-reap-and-fanout` — backlogged: reap merged delegated worktrees;
+  delegation gate fans out one worktree per independent ready tasks file.
+  (Depends on the merge driver for safe out-of-order landings.)
+
+## Critique
+
+`.project/critique.md` (2026-07-11) has 5 open findings on the constitution:
+3 suggestions (each with a `/ardd-refine`//`/ardd-feature` command), 1
+question (register enum lacks a removed/retired state — `npx-skills-install`
+still reads `implemented`), 1 risk (smoke CI never runs). Work them from the
+checklist directly.
 
 ## Recently Landed (2026-07-11 session)
 
 - **Primary-stays-on-main invariant** merged (`7338a6b`, constitution
-  **v1.4.0**): this repo is the local source consumers install/update from,
-  so its primary/default worktree never leaves `main`; feature work lives in
-  separate worktrees. First exercised on its own implementation — worked in a
-  worktree, primary never left `main`. Also fixes the root cause of the
-  ref-lock anomaly below (a consumer's `ardd-update` found this source off
-  `main` and forced it back mid-commit).
-- **npx-channel scrap** merged (`dc70e63`, v1.3.0): npx channel + `/ardd-setup`
-  removed; `new.sh --existing` mode added (test-first); docs reconciled to two
-  install routes. This repo's own install was re-synced (`ardd-setup` pruned).
-- **Catalog consolidation** merged (`d9d6d76`): source skills 21→18,
-  `analyze`/`lint` re-tiered `core`, `install.sh` prunes removed skill dirs.
+  **v1.4.0**): this repo's primary worktree never leaves `main`; feature work
+  lives in separate worktrees.
+- **npx-channel scrap** merged (`dc70e63`, v1.3.0): two install routes remain,
+  both converging directly on `install.sh`.
+- **Catalog consolidation** merged (`d9d6d76`): source skills 21→18.
 
 ## Recommended Next Step
 
-Push `main` when ready (it holds this session's unpushed commits). Going
-forward, all feature work in this repo uses a worktree (constitution v1.4.0).
-Optional idea threads still open from the consolidation plan (curated default
-install F006b; plan/tasks prose length) if you want to pursue them.
+Run `/ardd-implement` to execute `tasks-background-by-default-flow-8e91.md`
+(10 tasks; T001 and T010 carry user checkpoints for knob names and dogfood
+values). The critique checklist and the unpushed `main` commits remain open
+threads.
