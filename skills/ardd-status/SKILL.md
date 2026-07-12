@@ -1,33 +1,33 @@
 ---
-name: ardd-analyze
+name: ardd-status
 tier: core
-description: Cross-artifact consistency check; writes STATUS.md (its single writer). Auto-runs after most state-changing skills.
+description: "Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze)."
 ---
 
-# /ardd-analyze
+# /ardd-status
 
 Non-destructive cross-artifact consistency and quality check. Discovers and
 reads all artifacts present in `.project/artifacts/`, then reports gaps,
 contradictions, and implied-but-undefined decisions.
 
-`/ardd-feature`, `/ardd-plan`, `/ardd-refine`,
-`/ardd-feedback`, `/ardd-implement` and `/ardd-converge` (both on
-tasks-file completion), `/ardd-add-artifact` (when relevant), and
-`/ardd-verify` invoke this skill automatically as their final step, since
+`/ardd-backlog`, `/ardd-plan`, `/ardd-refine`,
+`/ardd-feedback`, `/ardd-implement` (on tasks-file completion, in both
+execution and reconcile mode), `/ardd-refine`'s create path (when relevant), and
+`/ardd-defects` invoke this skill automatically as their final step, since
 each of those changes state `STATUS.md` should reflect. This is the
 canonical list — other docs referencing which skills auto-trigger analyze
 point back here rather than re-enumerating, so it's the one place to update
 when that set changes.
 
-Manual invocation is still the right call after `/ardd-codify`
+Manual invocation is still the right call after `/ardd-init`
 (deliberately deferred until after a `/ardd-refine` pass — running it
 immediately would just report a wall of expected draft-state noise) or
 anytime you want a fresh check outside those flows.
 
 **Run only from the primary checkout, never inside a delegated worktree.**
-`/ardd-analyze` is the sole writer of `STATUS.md`; running it inside a
+`/ardd-status` is the sole writer of `STATUS.md`; running it inside a
 worktree would trap that write on the worktree's branch instead of the
-default branch. Delegated `/ardd-implement`/`/ardd-converge` subagents are
+default branch. Delegated Delegated `/ardd-implement` subagents are
 told explicitly not to invoke it — the terminal analyze handoff belongs to
 the coordinator or the inline path.
 
@@ -49,9 +49,9 @@ the coordinator or the inline path.
    report section and STATUS.md line below (omit when nothing is in flight).
 
    Also check for `.project/DEFECTS.md`. If present, read its last-verified
-   date and defect count — this is read-only: `/ardd-analyze` never
+   date and defect count — this is read-only: `/ardd-status` never
    regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
-   `/ardd-verify`). If absent, note that verify has never run.
+   `/ardd-defects`). If absent, note that verify has never run.
 
    Also run `.claude/skills/ardd-scripts/ardd-update-check.sh` (the
    installed copy; coordinator's absolute path as fallback, same
@@ -65,14 +65,14 @@ the coordinator or the inline path.
    is meaningless there) stay silent.
 
    Also glob `.project/feedback/feedback-*.md` and read frontmatter. Count
-   files with `status: open` — this is read-only visibility; `/ardd-analyze`
+   files with `status: open` — this is read-only visibility; `/ardd-status`
    never writes to feedback files (that belongs solely to `/ardd-feedback`
    and `/ardd-plan`).
 
    Also glob `.project/features/*.md` (the per-feature register) if
    present. Count entries by frontmatter `status`
    (`backlogged`/`planned`/`tasked`/`implemented`) — read-only visibility;
-   `/ardd-analyze` never writes to the register except the one narrow,
+   `/ardd-status` never writes to the register except the one narrow,
    explicit exception in step 5a below.
 
    Also glob `.project/tasks/tasks-*.md` for files at `status: completed`.
@@ -80,8 +80,7 @@ the coordinator or the inline path.
    <file>` — detects the orphaned-completion-flip failure mode: a plan
    whose branch has already merged into the default branch, but whose bound
    features are still `tasked` in the register rather than
-   `implemented`. This happens because `/ardd-implement`'s and
-   `/ardd-converge`'s post-merge flip step assumes a live coordinating
+   `implemented`. This happens because `/ardd-implement`'s post-merge flip step assumes a live coordinating
    conversation checks back after the worktree branch merges — but merge is
    manual/async, so in the common case that conversation is gone before it
    happens and the flip never lands. Collect any printed slugs.
@@ -126,17 +125,17 @@ the coordinator or the inline path.
    - [ANNOTATION MISSING] <shortcut without a production annotation>
 
    ## Diagrams
-   - <name>.md — current ✅ / stale ⚠️ (run /ardd-render <name>) / unrendered ⚠️ (never generated — run /ardd-render <name>)
+   - <name>.md — current ✅ / stale ⚠️ (run /ardd-diagram <name>) / unrendered ⚠️ (never generated — run /ardd-diagram <name>)
    (Only list renderable artifacts: datamodel, infrastructure, ui. Read each
    one's `diagram_status` frontmatter field directly — do not infer from
    whether a README section merely exists.)
 
    ## Code-vs-Artifact Defects
    - <N> known defects — see DEFECTS.md, last checked YYYY-MM-DD. Run
-     /ardd-verify to refresh.
-   (Or, if DEFECTS.md is absent: "Never checked — run /ardd-verify to compare
+     /ardd-defects to refresh.
+   (Or, if DEFECTS.md is absent: "Never checked — run /ardd-defects to compare
    artifacts against the codebase." This section is visibility only —
-   `/ardd-analyze` does not read code itself and does not regenerate
+   `/ardd-status` does not read code itself and does not regenerate
    DEFECTS.md.)
 
    ## Feedback
@@ -164,7 +163,7 @@ the coordinator or the inline path.
    ```
 
 6. **Write `.project/STATUS.md`** from the analysis results. Use the same
-   structure defined in `/ardd-bootstrap`:
+   structure defined in `/ardd-init`:
    - Artifact status table (name, stable ✅ / draft ⚠️, open question count or —)
    - Open questions grouped by artifact (omit artifacts with none)
    - A line surfacing `DEFECTS.md`'s summary (count + last-checked date, or
@@ -182,21 +181,21 @@ the coordinator or the inline path.
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 
-   STATUS.md is the single re-entry point after any interruption. `/ardd-analyze`
+   STATUS.md is the single re-entry point after any interruption. `/ardd-status`
    is its only writer — other skills prompt the user to run it rather than
    writing STATUS.md themselves.
 
 7. **If step 1 found any orphaned completion flips**, ask the user whether
    to perform the flip for each one now via
    `.claude/skills/ardd-scripts/ardd-state.sh feature-flip <slug>
-   implemented`. This is `/ardd-analyze`'s one narrow,
+   implemented`. This is `/ardd-status`'s one narrow,
    explicit exception to never writing the register — mirroring the
    tasks-file-completion exception already documented for
-   `/ardd-implement`/`/ardd-converge` — since the whole reason this check
+   `/ardd-implement` — since the whole reason this check
    exists is that no other skill run is left to catch it. On confirmation,
    flip the entry and note it in the report already written; on decline,
    leave it — the same orphaned slug will be reported again on the next
-   `/ardd-analyze` run, since `completion-flip-check.sh` re-derives it from
+   `/ardd-status` run, since `completion-flip-check.sh` re-derives it from
    disk state every time rather than remembering a prior decline.
 
 8. **Next-step prompt (opt-in).** After step 6's STATUS.md write (and step 7,
@@ -204,7 +203,7 @@ the coordinator or the inline path.
    `next_step_prompt: true` (grep the frontmatter block; absent or `false`
    means the plain-text behavior above is unchanged — stop here). When it is
    `true` AND the Summary's "Recommended next step" is a concrete runnable
-   `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-verify`), end by
+   `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-defects`), end by
    presenting it via AskUserQuestion:
    - Option 1: "Yes — run `/ardd-<next>` now"
    - Option 2: "No — stop here" (Esc counts as option 2)

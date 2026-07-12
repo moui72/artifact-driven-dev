@@ -1,7 +1,7 @@
 ---
 plan: plan-skill-surface-cleanup-2026-07-12.md
 generated: 2026-07-12
-status: ready
+status: completed
 ---
 
 # Tasks
@@ -14,7 +14,7 @@ tasks encode._
 
 ## Phase 0: Net and tag
 
-- [ ] T001 Cut the rollback ref and fix the verification net first. (a)
+- [x] T001 Cut the rollback ref and fix the verification net first. (a)
   Create a signed annotated pre-cleanup tag `pre-surface-cleanup` on current
   main (plain `git tag -s`, no gh release; do NOT push — the coordinator
   pushes on merge). (b) Test-first, extend `scripts/lint-docs.sh`: add
@@ -30,7 +30,7 @@ tasks encode._
 
 ## Phase 1: Renames (each task independently green)
 
-- [ ] T002 Rename `ardd-critique` → `ardd-audit` (co-atomic with its
+- [x] T002 Rename `ardd-critique` → `ardd-audit` (co-atomic with its
   migration): `git mv skills/ardd-critique skills/ardd-audit`; frontmatter
   `name: ardd-audit`; description rewritten per the plan's F007 formula
   ending "(formerly ardd-critique)"; every prose reference to
@@ -44,7 +44,7 @@ tasks encode._
   regression test added to the migrations test in the same commit,
   test-first. Update CLAUDE.md's single-writer list entry.
 
-- [ ] T003 Rename `ardd-sync` → `ardd-tracker` (co-atomic with its
+- [x] T003 Rename `ardd-sync` → `ardd-tracker` (co-atomic with its
   migration): same recipe as T002 — dir, `name:`, F007 description
   "(formerly ardd-sync)", all `/ardd-sync` and `SYNC.md` references,
   owned file `TRACKER.md` + legacy-adoption step,
@@ -53,7 +53,7 @@ tasks encode._
   `sync-*.sh` script header comments' references (scripts keep their
   filenames — out of scope per plan).
 
-- [ ] T004 Rename `ardd-analyze` → `ardd-status`: dir, `name:`, F007
+- [x] T004 Rename `ardd-analyze` → `ardd-status`: dir, `name:`, F007
   description leading with "full cross-artifact consistency check" (cost
   signal) and ending "(formerly ardd-analyze)"; sweep the terminal-handoff
   references in every skill that names `/ardd-analyze` (the canonical list
@@ -62,23 +62,23 @@ tasks encode._
   scope prose (CLAUDE.md + skill bodies). STATUS.md keeps its name; the
   single-writer entry updates to `/ardd-status`.
 
-- [ ] T005 Rename `ardd-verify` → `ardd-defects`: dir, `name:`, F007
+- [x] T005 Rename `ardd-verify` → `ardd-defects`: dir, `name:`, F007
   description ending "(formerly ardd-verify)"; DEFECTS.md keeps its name;
   sweep `/ardd-verify` references (skills bodies, CLAUDE.md, README/USAGE);
   single-writer entry updates.
 
-- [ ] T006 Rename `ardd-feature` → `ardd-backlog`: dir, `name:`, F007
+- [x] T006 Rename `ardd-feature` → `ardd-backlog`: dir, `name:`, F007
   description ending "(formerly ardd-feature)" with the F009 "instead"
   clause ("bugs and UX problems with existing behavior belong in
   /ardd-feedback instead"); command references sweep. Explicitly out:
   `.project/features/` and `ardd-state.sh feature-*` keep their names.
 
-- [ ] T007 Rename `ardd-render` → `ardd-diagram`: dir, `name:`, F007
+- [x] T007 Rename `ardd-render` → `ardd-diagram`: dir, `name:`, F007
   description ending "(formerly ardd-render)"; sweep references
   (`render_target`/`render_section` frontmatter fields keep their names —
   data schema, not command surface).
 
-- [ ] T008 Edit `scripts/gen-skill-docs.sh` itself: ORDER_setup/core/
+- [x] T008 Edit `scripts/gen-skill-docs.sh` itself: ORDER_setup/core/
   extension lists and its embedded boilerplate prose to the new names
   (drop folded skills — converge/add-artifact/bootstrap/codify leave the
   lists in Phase 2 tasks; coordinate: this task may run after T011 or
@@ -93,7 +93,7 @@ tasks encode._
 
 ## Phase 2: Folds
 
-- [ ] T009 Fold converge into implement, delete `skills/ardd-converge/`:
+- [x] T009 Fold converge into implement, delete `skills/ardd-converge/`:
   implement's pick-list step gains the reconcile branch — when the chosen
   file is `in-progress` and no live worktree claims it
   (`inflight-worktrees.sh`), the pick confirmation becomes ONE prompt with
@@ -108,12 +108,12 @@ tasks encode._
   regenerate. Lint + suite green (T001's extended lint now guards skill
   bodies).
 
-- [ ] T010 Fold add-artifact into refine, delete `skills/ardd-add-artifact/`:
+- [x] T010 Fold add-artifact into refine, delete `skills/ardd-add-artifact/`:
   absorb its unique lines (conflict check, WORKFLOW.md row note, CLAUDE.md
   registration note) into refine's existing create path; update references
   (README/USAGE tables regenerate via gen-skill-docs.sh).
 
-- [ ] T011 Merge bootstrap+codify into new `skills/ardd-init/`, delete both:
+- [x] T011 Merge bootstrap+codify into new `skills/ardd-init/`, delete both:
   mode detection (existing source files → codify's reverse-engineering
   path; greenfield → interview path) + one confirmation question, no flags;
   F007-formula description written fresh (no "formerly" — two ancestors)
@@ -129,7 +129,7 @@ tasks encode._
 
 ## Phase 3: Routing behavior
 
-- [ ] T012 Widen `ardd-research` with the proposal-vetting mode: usage line
+- [x] T012 Widen `ardd-research` with the proposal-vetting mode: usage line
   and an explicit proposal-vetting example invocation; steps for the
   proposal object (load current artifacts, apply `ardd-audit`'s lens list
   BY REFERENCE — name the section, don't duplicate the list — and answer
@@ -140,14 +140,14 @@ tasks encode._
   `ardd-plan` ("substantial or decision-reversing ideas: vet with
   /ardd-research first").
 
-- [ ] T013 Argument guards, mirroring `/ardd-plan`'s disambiguation, as an
+- [x] T013 Argument guards, mirroring `/ardd-plan`'s disambiguation, as an
   explicit early step: `ardd-audit` rejects any argument that isn't an
   existing `.project/artifacts/*.md` name with redirect text pointing to
   `/ardd-research <proposal>`; `ardd-defects` rejects freeform arguments
   with redirect text pointing to `/ardd-feedback`. Both descriptions carry
   the "takes no proposal/observation input" clause.
 
-- [ ] T014 Feedback/backlog cross-routing: `ardd-feedback`'s classification
+- [x] T014 Feedback/backlog cross-routing: `ardd-feedback`'s classification
   step gains the fourth outcome (item is a new capability → candidate for
   the register) with BATCHED confirmation — one grouped prompt listing all
   re-file candidates, per-item accept/decline within it, never N sequential
@@ -159,7 +159,7 @@ tasks encode._
 
 ## Phase 4: Docs (structural rewrites — not token sweeps)
 
-- [ ] T015 Rewrite, don't sweep: USAGE core loop renumbered (the "resume
+- [x] T015 Rewrite, don't sweep: USAGE core loop renumbered (the "resume
   after interruption" step dissolves into implement's step; init replaces
   the bootstrap/codify pair in "seed your artifacts"); README Philosophy
   verb list rewritten to the new surface; README Concurrency section's
@@ -172,13 +172,13 @@ tasks encode._
   STATUS-visible close-out report, not by editing the other tasks file).
   `lint-docs.sh` (extended) green.
 
-- [ ] T016 `install.sh` prune output learns the rename map: renamed skills
+- [x] T016 `install.sh` prune output learns the rename map: renamed skills
   print `✗ ardd-analyze (renamed — now /ardd-status)` (six entries), folded
   skills print `✗ ardd-converge (folded into /ardd-implement)` (four
   entries), unknown stale dirs keep today's message. Extend the prune
   regression test with a renamed-dir and folded-dir case, test-first.
 
-- [ ] T017 `migrations/0008-workflow-table.sh`: if a target has
+- [x] T017 `migrations/0008-workflow-table.sh`: if a target has
   `.project/WORKFLOW.md`, upsert its skills table section from the shipped
   template via `scripts/upsert-section.sh` (consumers must not carry a
   table of dead commands); no-op when absent; idempotent; fixture
@@ -186,7 +186,7 @@ tasks encode._
 
 ## Phase 5: Codify + close out
 
-- [ ] T018 CLAUDE.md gains the naming-system conventions section
+- [x] T018 CLAUDE.md gains the naming-system conventions section
   (report-owners = nouns named for their file; lifecycle actions =
   imperative verbs; capture skills = named for what you hand them; the
   description formula: object → data-flow → redirect clause) and its

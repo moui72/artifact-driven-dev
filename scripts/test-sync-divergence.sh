@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Regression test for sync-divergence.sh: given a features.md Status and its
 # linked issue's actual open/closed state, has the tracker diverged from
-# features.md (/ardd-sync's Pull step 2: closed-but-not-implemented, or
+# features.md (/ardd-tracker's Pull step 2: closed-but-not-implemented, or
 # reopened-but-implemented)?
 
 set -e

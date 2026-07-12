@@ -3,7 +3,7 @@
 Use this guide when you're starting from scratch — no code yet, just an idea.
 
 The short version: talk through your project with Claude until you've made the
-key decisions, then run `/ardd-bootstrap` to capture them.
+key decisions, then run `/ardd-init` to capture them.
 
 ---
 
@@ -18,9 +18,9 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 ```
 
 It creates and `git init`s `my-project/`, installs ARDD into it via
-`install.sh`, and offers to open Claude Code on `/ardd-bootstrap` — which, on
+`install.sh`, and offers to open Claude Code on `/ardd-init` — which, on
 a cold start, conducts the Step 1 design conversation as an interview (its
-step 0) and then writes your artifacts. Pick the guide back up at
+greenfield interview) and then writes your artifacts. Pick the guide back up at
 [Step 3](#step-3-refine-each-artifact).
 
 Pass `--kickoff` to skip the question and launch, or `--no-kickoff` to
@@ -48,8 +48,8 @@ Then open Claude Code in your project.
 ## Step 1: Have the design conversation
 
 Before running any skill, talk through your project with Claude. This is where
-the real work happens. (`/ardd-bootstrap` conducts exactly this conversation
-as an interview in its step 0, if you'd rather be asked than lead.) Cover:
+the real work happens. (`/ardd-init` conducts exactly this conversation
+as an interview, if you'd rather be asked than lead.) Cover:
 
 - **What the system does** — one or two sentences; what problem it solves
 - **Who uses it** — role, technical level, how often
@@ -61,14 +61,14 @@ as an interview in its step 0, if you'd rather be asked than lead.) Cover:
 
 You don't need to resolve everything. Unresolved decisions become `[OPEN: ...]`
 items in the artifacts. The goal is to get the known decisions out of your head
-and into the conversation so `/ardd-bootstrap` has something to work with.
+and into the conversation so `/ardd-init` has something to work with.
 
 ---
 
-## Step 2: Bootstrap your artifacts
+## Step 2: Initialize your artifacts
 
 ```
-/ardd-bootstrap
+/ardd-init
 ```
 
 Claude reads the conversation and writes initial versions of the standard
@@ -106,7 +106,7 @@ until each artifact reflects your actual decisions.
 - Resolve data model decisions before infrastructure ones — the storage and sync
   strategy should follow the schema, not the other way around.
 - It's fine to leave `[OPEN: ...]` items in place for decisions you genuinely
-  can't make yet. `/ardd-analyze` will surface them and tell you which ones
+  can't make yet. `/ardd-status` will surface them and tell you which ones
   block planning.
 
 ---
@@ -114,7 +114,7 @@ until each artifact reflects your actual decisions.
 ## Step 4: Check consistency
 
 ```
-/ardd-analyze
+/ardd-status
 ```
 
 This reads all artifacts and reports:
@@ -124,7 +124,7 @@ This reads all artifacts and reports:
 - **Violations** — decisions that break a constitution principle
 - **Draft blockers** — artifacts still at `status: draft`
 
-Fix issues with `/ardd-refine` until `/ardd-analyze` reports clean and all
+Fix issues with `/ardd-refine` until `/ardd-status` reports clean and all
 artifacts are `stable`.
 
 ---
@@ -142,7 +142,7 @@ algorithmic approaches:
 Research outputs land in `.project/plans/research-<topic>-<date>.md` —
 one-off documents nothing reads back automatically. Fold standing
 decisions into the relevant artifact with `/ardd-refine` so planning
-sees them; log new backlog-worthy scope with `/ardd-feature`.
+sees them; log new backlog-worthy scope with `/ardd-backlog`.
 
 ---
 
@@ -186,10 +186,10 @@ If `/ardd-implement` gets interrupted, or you pick the project up in a new
 session:
 
 ```
-/ardd-converge
+/ardd-implement --reconcile <tasks-file>
 ```
 
-This asks which tasks file to reconcile, compares the codebase to it, marks completed work, notes partial
+Reconcile mode compares the codebase to the tasks file, marks completed work, notes partial
 work, and appends gaps as new tasks. Then run `/ardd-implement` again to
 continue.
 
@@ -200,9 +200,9 @@ continue.
 At any point, generate Mermaid diagrams into `README.md`:
 
 ```
-/ardd-render datamodel
-/ardd-render infrastructure
-/ardd-render ui
+/ardd-diagram datamodel
+/ardd-diagram infrastructure
+/ardd-diagram ui
 ```
 
 GitHub renders Mermaid code fences natively — no extra tooling needed.
@@ -212,11 +212,11 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 ## What a clean greenfield run looks like
 
 ```
-Session 1: /ardd-bootstrap (step 0 interviews you, or lead the design yourself) → /ardd-refine × 3
-Session 2: /ardd-analyze → /ardd-refine (fixes) → /ardd-analyze (clean)
+Session 1: /ardd-init (step 2 interviews you, or lead the design yourself) → /ardd-refine × 3
+Session 2: /ardd-status → /ardd-refine (fixes) → /ardd-status (clean)
 Session 3: /ardd-plan (checkpoint → tasks) → /ardd-implement
-Session N: /ardd-converge → /ardd-implement (resume)
+Session N: /ardd-implement (reconcile, then resume)
 ```
 
-Each session can stand alone. `/ardd-analyze` is your re-entry point after
+Each session can stand alone. `/ardd-status` is your re-entry point after
 any gap — it tells you exactly where things stand and what to do next.

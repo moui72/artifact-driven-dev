@@ -13,7 +13,7 @@ continuously; each plan run turns a batch of them into shipped code.**
 ## Log ideas the moment you have them
 
 ```
-/ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
+/ardd-backlog octokit fallback for GitHub similar to the GitLab REST fallback
 ```
 
 This records the idea in the feature register
@@ -58,7 +58,7 @@ artifacts inconsistent between edits.
 Scoping to a feedback file matters when several are open: an unscoped
 run consumes them all into one plan; a scoped run leaves the others
 untouched for a later plan. Unsurfaced `DEFECTS.md` entries (from
-`/ardd-verify`) are offered once per defect here too.
+`/ardd-defects`) are offered once per defect here too.
 
 ## Approve, task, implement, merge
 
@@ -80,24 +80,26 @@ either way.
 ## When things get interrupted
 
 ```
-/ardd-converge
+/ardd-implement --reconcile <tasks-file>
 ```
 
-Reconciles the codebase against a tasks file — marks work that's
-actually done, notes partial work, appends gaps — then `/ardd-implement`
-continues. Reach for it after a crashed run, a manual detour, or any
-"I did some of this by hand" situation.
+Reconcile mode compares the codebase against the tasks file — marks work
+that's actually done, notes partial work, appends gaps — then the same
+run (or the next `/ardd-implement`) continues. `/ardd-implement` also
+offers this itself when you pick an interrupted (`in-progress`, unclaimed)
+file. Reach for the explicit flag after a crashed run, a manual detour, or
+any "I did some of this by hand" situation.
 
 ## Periodic hygiene
 
-- `/ardd-verify` — occasionally, or before major planning: checks
+- `/ardd-defects` — occasionally, or before major planning: checks
   artifacts against the *code* and records drift in `DEFECTS.md`; each
   defect is offered as a fix task by the next plan run, exactly once.
-- `/ardd-critique` — when a design decision deserves pressure-testing
+- `/ardd-audit` — when a design decision deserves pressure-testing
   rather than just consistency-checking.
 - `/ardd-lint` — anytime, free: structural validation of `.project/`
   (also runs automatically if the write-time hook is configured).
-- `/ardd-update` — when `/ardd-analyze` reports an update available (or
+- `/ardd-update` — when `/ardd-status` reports an update available (or
   anytime): finds the recorded source checkout, offers a pull, re-runs
   install.sh, and relays its output — migrations and suggestions reach
   your session.
@@ -105,7 +107,7 @@ continues. Reach for it after a crashed run, a manual detour, or any
 ## A typical week
 
 ```
-Mon: /ardd-feature (two ideas logged during standup)
+Mon: /ardd-backlog (two ideas logged during standup)
 Tue: /ardd-feedback (bug noticed while demoing)
 Wed: /ardd-plan feedback-demo-bug-1a2b.md (checkpoint → tasks) → /ardd-implement → merge
 Fri: /ardd-plan search-filters (checkpoint → tasks) → /ardd-implement (delegated) → merge

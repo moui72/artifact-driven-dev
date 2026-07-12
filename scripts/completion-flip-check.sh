@@ -7,7 +7,7 @@
 # merge, so a merged branch normally carries its own flip — this check is
 # the legacy/crash safety net: it catches tasks files written under the
 # old held-flip design, and a delegated run that crashed between its
-# `->completed` flip and its features.md flip. /ardd-analyze wires this in
+# `->completed` flip and its features.md flip. /ardd-status wires this in
 # as a read-only detector.
 #
 # Which branch actually had the work: the tasks file's own

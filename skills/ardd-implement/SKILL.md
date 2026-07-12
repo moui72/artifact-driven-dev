@@ -1,13 +1,22 @@
 ---
 name: ardd-implement
 tier: core
-description: Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge.
+description: "Execute tasks sequentially — offers worktree delegation; all state rides the work branch and lands on merge. --reconcile <file> re-syncs an interrupted tasks file with the codebase first (absorbs ardd-converge)."
 ---
 
 # /ardd-implement
 
 Execute uncompleted tasks from a chosen tasks file sequentially. Each task is
 self-contained; the agent loads only the artifacts it declares.
+
+Usage: `/ardd-implement` picks a tasks file and executes it.
+`/ardd-implement --reconcile <file>` skips the pick list and enters
+**Reconcile mode** (see the section below) for the named tasks file —
+comparing the codebase to the file and updating checkboxes/gaps rather than
+executing tasks. Explicit `--reconcile` also works on `ready` files (e.g.
+hotfix work that landed without ever being tasked, overlapping the file's
+tasks); the offered reconcile in step 1 only triggers for `in-progress`
+files.
 
 ## Steps
 
@@ -31,13 +40,32 @@ self-contained; the agent loads only the artifacts it declares.
    in-flight truth is on disk in that worktree, not in any conversation's
    memory.
 
+   **Reconcile branch of the pick confirmation.** If the chosen file's
+   status is `in-progress` and no live worktree claims it (per the
+   `inflight-worktrees.sh` output above), the run that started it was
+   likely interrupted — its checkboxes may be behind what the codebase
+   actually contains. Fold the choice into the pick confirmation itself:
+   ONE prompt with two outcomes, never a separate stacked gate after it —
+   - "Reconcile against the codebase first (recommended after an
+     interruption)" — this run enters **Reconcile mode** (section below)
+     for the chosen file.
+   - "Continue from the next unchecked task" — proceed normally, trusting
+     the checkboxes as they stand.
+
+   (A pre-existing, accepted blind spot: the in-flight check sees
+   *worktrees*, not plain branches. An inline run interrupted on a plain
+   `git checkout -b` branch appears here as an unclaimed `in-progress`
+   file even though its real state rides that branch — if the user knows
+   such a branch exists, switch to it instead of reconciling from the
+   default branch's stale copy.)
+
 2. **Resolve mode and branch state (no commit here).** Read
    `workflow_mode` from `.project/artifacts/constitution.md` frontmatter
    (grep the frontmatter, same pattern as other frontmatter reads) — one of
    `solo` | `collaborative`; **absent means `solo`**. Then run
    `.claude/skills/ardd-scripts/branch-info.sh` for `current`, `default`,
    and `on_default`. If the chosen file's status is already `completed`, run
-   `/ardd-analyze` now to refresh `STATUS.md`, report success, and stop —
+   `/ardd-status` now to refresh `STATUS.md`, report success, and stop —
    nothing to branch or delegate for. Otherwise proceed to step 3.
 
    **Nothing is committed in this step.** Under this design all state a run
@@ -106,9 +134,10 @@ self-contained; the agent loads only the artifacts it declares.
      in-progress state onto `<default>` until the subagent's branch merges.)
    - If `on_default` is `true`, delegate directly — no fold needed.
 
-   Then delegate step 4 onward to a subagent via the `Agent` tool with
-   `isolation: "worktree"`, handing it this skill's remaining steps
-   verbatim, the chosen tasks file, and the current task pointer.
+   Then delegate step 4 onward — or, when this run is in Reconcile mode,
+   the Reconcile-mode steps below instead — to a subagent via the `Agent`
+   tool with `isolation: "worktree"`, handing it this skill's remaining
+   steps verbatim, the chosen tasks file, and the current task pointer.
    `isolation: "worktree"` creates and names its own worktree/branch
    (there's no parameter to point it at a pre-made one) — do not pre-create
    a worktree with any other script, and do not name it; the branch name is
@@ -157,7 +186,7 @@ self-contained; the agent loads only the artifacts it declares.
      - `auto` — merge the **subagent-reported** branch (never an in-memory
        name) into the local default branch now, without prompting, when the
        merge fast-forwards or completes without conflicts; then run the
-       existing post-merge steps unchanged (`/ardd-analyze`). On **any**
+       existing post-merge steps unchanged (`/ardd-status`). On **any**
        conflict: `git merge --abort`, surface the conflict, and fall back
        to asking — never auto-resolve, not even the disposable report
        files (their take-either-side rule stays an interactive judgment
@@ -167,16 +196,16 @@ self-contained; the agent loads only the artifacts it declares.
        suggesting **yes** — eager merge is what keeps the in-flight window
        short in solo mode, landing code and all its state (checkboxes,
        `→completed`, any register flip) together. Single-writer report
-       files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) are disposable
+       files (STATUS.md, DEFECTS.md, TRACKER.md, audit.md) are disposable
        at merge/rebase: take either side without deliberation — never
        hand-reconcile, never re-apply — and let the owning skill
        regenerate from disk. Conflict markers in a generated report are
        noise, not data loss.
-       On merge, run `/ardd-analyze`. On decline, note the work stays visible via
-       `inflight-worktrees.sh` and `/ardd-analyze`'s in-flight section until
+       On merge, run `/ardd-status`. On decline, note the work stays visible via
+       `inflight-worktrees.sh` and `/ardd-status`'s in-flight section until
        merged.
 
-   Note: a delegated subagent must **never** run `/ardd-analyze` or write
+   Note: a delegated subagent must **never** run `/ardd-status` or write
    `STATUS.md` — either would trap `STATUS.md` inside the worktree branch.
    The terminal analyze handoff belongs to the coordinator (or the inline
    path), never the delegated subagent.
@@ -247,10 +276,10 @@ self-contained; the agent loads only the artifacts it declares.
    does. Run `... touch ardd-implement` once this step's writes are done.
 
    **On the inline (non-delegated) path, this is the run's terminal step:**
-   once step 9 commits this final work, **run `/ardd-analyze` now** to refresh
+   once step 9 commits this final work, **run `/ardd-status` now** to refresh
    `STATUS.md` — don't rely on the next loop iteration's early-exit (step 2)
    to discover completion after the fact. A delegated subagent must **not**
-   run it here (see the note in step 3); its `/ardd-analyze` runs on the
+   run it here (see the note in step 3); its `/ardd-status` runs on the
    coordinator after the worktree branch merges.
 
 9. **Commit** the work with a concise message referencing the task ID.
@@ -286,6 +315,74 @@ self-contained; the agent loads only the artifacts it declares.
 - **Do not touch `DEFECTS.md`.** If a task incidentally reveals a pre-existing
   code-vs-artifact violation unrelated to the task itself, don't write to
   `.project/DEFECTS.md` directly — that would break its single-writer
-  ownership by `/ardd-verify`. Report the finding in the task's output instead
-  and tell the user to run `/ardd-verify` to capture it properly on its next
+  ownership by `/ardd-defects`. Report the finding in the task's output instead
+  and tell the user to run `/ardd-defects` to capture it properly on its next
   full pass.
+
+## Reconcile mode (formerly the `ardd-converge` skill)
+
+Compare the current codebase to the chosen tasks file and bring the file
+back in line with reality — checkboxes that are behind, work that landed
+without a task. Entered via the step-1 reconcile offer (an unclaimed
+`in-progress` file) or explicitly via `/ardd-implement --reconcile <file>`
+(any non-completed file, including `ready`). Steps 2–3 (mode resolution and
+the delegation gate) run exactly as for execution; a delegated reconcile
+subagent follows the same align-first preamble. Then, instead of steps
+4–10:
+
+1. **Load the chosen file.** Identify all tasks marked `- [x]` (complete)
+   and `- [ ]` (incomplete).
+
+2. **Inspect the codebase** against each incomplete task. For each `- [ ]`
+   task, determine whether the work is actually done despite the open
+   checkbox (e.g. a previous run completed it but didn't mark it),
+   partially done, or truly not started.
+
+3. **Reconcile the task list:**
+   - Mark tasks complete (`- [x]`) if the work is verifiably done in the
+     codebase
+   - Add a `[partial: <what remains>]` note inline for partially done tasks
+   - Leave genuinely unstarted tasks unchanged
+
+   Reconcile marks work done or partial in *non-completed* tasks files
+   only — it never resurrects a `completed` one. `completed` is terminal:
+   if problems are found in work a completed file delivered, that's new
+   work — capture it with `/ardd-feedback` and plan it, never reopen the
+   old file.
+
+4. **Identify gaps** — work that exists in the codebase but has no
+   corresponding task (e.g. added during a hotfix), or work implied by the
+   artifacts that was never tasked. This is a judgment step, not a diff:
+   read what the plan intended and what the tree contains. Append gaps as
+   new tasks at the end of the relevant phase, using the next available
+   task ID.
+
+5. **Write the updated file back** to its original path. Run
+   `.claude/skills/ardd-scripts/project-lock.sh check ardd-implement`
+   first — surface any warning to the user (another invocation touched
+   `.project/` recently) but proceed regardless; advisory, never a block.
+   Update the frontmatter `status` to the reconciled state via
+   `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file> <status>`:
+   `completed` if every task is now `- [x]` with no gaps appended,
+   `in-progress` otherwise. (Checkbox marks made in step 3 go through
+   `ardd-state.sh task-check <file> <task-id>` too — deciding *whether*
+   work is done is judgment; the mark itself is script-performed.)
+
+   If the status is now `completed`, run
+   `.claude/skills/ardd-scripts/sibling-tasks-complete.sh <this file's
+   path>` and, on `all_complete=true`, flip the bound features exactly as
+   in step 8 of the execution path (uniformly, whether inline or
+   delegated — the flip rides the branch). Run `... touch ardd-implement`
+   once this step's writes are done.
+
+6. **Report:** tasks newly marked complete, tasks found partial (with what
+   remains), new tasks appended, any features flipped to `implemented`
+   (the flip rides this branch and lands on merge), and the recommended
+   next step (usually: run `/ardd-implement` to continue with the
+   remaining tasks).
+
+   If step 5 flipped the file to `completed`, run `/ardd-status` now to
+   refresh `STATUS.md` — same trigger condition as the execution path's
+   completion. Otherwise skip it. (A delegated reconcile subagent does
+   *not* run `/ardd-status` — see the note in step 3; the coordinator
+   does, after merge.)

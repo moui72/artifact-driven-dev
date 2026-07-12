@@ -2,7 +2,7 @@
 # Regression test for sync-label-decision.sh: given features.md's Status for
 # an entry, the ardd:* label currently on its linked issue (or "none"), and
 # the issue's open/closed state, what label-swap or close action does
-# /ardd-sync's Push step 3 need to take?
+# /ardd-tracker's Push step 3 need to take?
 
 set -e
 

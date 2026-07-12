@@ -1,13 +1,13 @@
 ---
 name: ardd-feedback
 tier: core
-description: Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume.
+description: "Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume — new-capability ideas belong in /ardd-backlog instead."
 ---
 
 # /ardd-feedback
 
 Capture feedback from manually inspecting the running implementation — bugs,
-UX issues, or decisions you've reconsidered. Unlike `/ardd-critique` (Claude
+UX issues, or decisions you've reconsidered. Unlike `/ardd-audit` (Claude
 challenging artifact decisions on paper), this is you reporting what you
 found by actually looking at the thing. Feedback is organized into a
 per-invocation file that `/ardd-plan` later consumes.
@@ -26,9 +26,25 @@ notes in the next message.
    - **UX** — works as intended but the experience should change
    - **Reconsidered** — a prior decision (yours or an artifact's) no longer
      holds
+   - **New capability** — not a problem with existing behavior at all, but
+     something the system doesn't do yet. These belong in the feature
+     register (`/ardd-backlog`'s territory), not a feedback file — see the
+     re-file step below.
 
    Split compound notes into separate items. Don't invent items the user
    didn't raise.
+
+   **Re-file new-capability items — one batched confirmation.** If any
+   items classified as new capabilities exist, present them in ONE grouped
+   prompt (AskUserQuestion, multiSelect on) listing every re-file
+   candidate, with per-item accept/decline inside it — never N sequential
+   prompts. For each accepted item: derive a slug
+   (`.claude/skills/ardd-scripts/ardd-state.sh slug "<item>"`), create the
+   register entry (`printf '%s\n' "<description>" | ardd-state.sh
+   feature-create <slug>`), and omit the item from the feedback file
+   written in step 4. Declined items stay in the feedback file under the
+   closest existing category (the user has said it isn't a feature — treat
+   their judgment as final for this run).
 
 3. **Tag each item** with the artifact(s) it touches, if identifiable (e.g.
    `[artifacts: ui]`), and a file/location reference if the user gave one.
@@ -75,8 +91,9 @@ notes in the next message.
    (`ardd-state.sh feedback-mark <file> <id> <x|->`), so they must be
    unique within the file and never renumbered after writing.
 
-5. **Report** the item count by category and the file path, noting that
-   `/ardd-plan` will pick this up automatically. Then run `/ardd-analyze` now
+5. **Report** the item count by category (including any items re-filed to
+   the feature register in step 2) and the file path, noting that
+   `/ardd-plan` will pick this up automatically. Then run `/ardd-status` now
    to reflect the open feedback count in `STATUS.md`.
 
 ## Consumption by /ardd-plan
@@ -89,7 +106,7 @@ mechanism in `/ardd-plan`'s tasking half or `/ardd-implement`); untagged items p
 ordinary code-change tasks.
 
 Each item's checkbox uses the same 3-state resolution convention as
-`critique.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
+`audit.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
 plan, `[-]` declined (an override the user chose not to take). `/ardd-plan`
 step 5 already writes these marks as it processes each item — feedback shares
 the convention rather than inventing its own.

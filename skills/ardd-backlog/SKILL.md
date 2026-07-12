@@ -1,10 +1,10 @@
 ---
-name: ardd-feature
+name: ardd-backlog
 tier: core
-description: Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet.
+description: "Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature)."
 ---
 
-# /ardd-feature
+# /ardd-backlog
 
 Log a feature idea to the backlog — a new file in `.project/features/`
 (the per-feature register; constitution standing decision 2026-07-06). This
@@ -14,14 +14,16 @@ later, when the idea is targeted by slug in `/ardd-plan <slug>`. This lets
 you accumulate a backlog of ideas and work them in whatever order you like,
 rather than committing to design-and-apply the moment you think of one.
 
-Not to be confused with `/ardd-codify`'s feature-register extraction — that's
+Not to be confused with `/ardd-init`'s feature-register extraction — that's
 the one-time bulk backfill of a whole register from an existing codebase (an
-offered step of `/ardd-codify`). `/ardd-feature` logs a single new idea at a
+offered step of `/ardd-init`'s existing-codebase path). `/ardd-backlog` logs a single new idea at a
 time, going forward.
 
-Usage: `/ardd-feature <description>` where description is a plain-language
+Usage: `/ardd-backlog <description>` where description is a plain-language
 statement of the feature (e.g., "octokit fallback for GitHub similar to the
-existing GitLab REST fallback").
+existing GitLab REST fallback"). Substantial or decision-reversing ideas:
+vet with `/ardd-research` first — its proposal-vetting mode pressure-tests
+the idea against the current artifacts before it earns a backlog entry.
 
 ## Steps
 
@@ -30,6 +32,13 @@ existing GitLab REST fallback").
    full design detail), ask one clarifying question. Do not ask questions
    answerable by reading the artifacts.
 
+   **Mirror check:** if the description is actually a complaint about
+   *existing* behavior — a bug, a UX problem, something that works but
+   shouldn't work that way — it belongs in a feedback file, not the
+   register. Offer to capture it as `/ardd-feedback <the observation>`
+   instead; only log it here if the user confirms it really is a new
+   capability.
+
 2. **Derive a slug.** Choose the wording (judgment — prefer a short
    capability-level noun phrase), then sanitize it deterministically:
    `.claude/skills/ardd-scripts/ardd-state.sh slug "<text>"`. Check for a
@@ -37,7 +46,7 @@ existing GitLab REST fallback").
    append a freshly generated 4-char hex token.
 
 3. **Create the register entry.** Before writing, run
-   `.claude/skills/ardd-scripts/project-lock.sh check ardd-feature` — if it
+   `.claude/skills/ardd-scripts/project-lock.sh check ardd-backlog` — if it
    warns, surface the warning to the user (another invocation touched
    `.project/` recently) but proceed regardless; this is advisory, never a
    block. Then create the file (script-performed; it refuses a duplicate
@@ -53,7 +62,7 @@ existing GitLab REST fallback").
    won't be obvious from code or artifacts later — omit it when the
    motivation is already obvious. The script writes the frontmatter
    (`slug`, `status: backlogged`, `logged: <today>`). After writing, run
-   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-feature`.
+   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-backlog`.
 
 4. **Legacy note.** If the project still has a single-file
    `.project/artifacts/features.md`, the register predates migration
@@ -66,5 +75,5 @@ existing GitLab REST fallback").
    items) when ready to design and plan this feature — that's when affected
    artifacts get identified, proposed, and applied.
 
-6. Run `/ardd-analyze` now to refresh `STATUS.md`'s Feature Backlog count —
+6. Run `/ardd-status` now to refresh `STATUS.md`'s Feature Backlog count —
    the entry appended in step 4 leaves it stale otherwise.

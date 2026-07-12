@@ -62,8 +62,8 @@ Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
                    it, new.sh creates a *new* project and refuses a non-empty
                    target.
   --kickoff        Open Claude Code on the first step without asking
-                   (/ardd-bootstrap for a new project; /ardd-codify, or
-                   /ardd-analyze if already set up, for an existing one).
+                   (/ardd-init, which detects greenfield vs existing code;
+                   /ardd-status instead if the project is already set up).
   --no-kickoff     Install, then print the next step instead of opening Claude Code.
                    With neither flag, you're asked — unless there's no terminal
                    to ask on, in which case this is the default.
@@ -222,15 +222,16 @@ fi
 "$SRC/install.sh" "$TARGET"
 
 # --- Hand off to the first session -------------------------------------
-# A brand-new project seeds from a blank slate (/ardd-bootstrap). An existing
-# project reverse-engineers its code (/ardd-codify) — or, if it already carries
-# ARDD artifacts, just checks them (/ardd-analyze). install.sh only ever creates
-# .project/ardd-version.md, never .project/artifacts/, so that dir's presence
-# reliably distinguishes an already-set-up project from a first install.
-if [ "$existing" -eq 1 ]; then
-  [ -d "$TARGET/.project/artifacts" ] && handoff_cmd="/ardd-analyze" || handoff_cmd="/ardd-codify"
+# Both new and existing projects initialize with /ardd-init — the skill
+# itself detects greenfield vs existing-code and confirms with the user.
+# A project that already carries ARDD artifacts just gets checked
+# (/ardd-status). install.sh only ever creates .project/ardd-version.md,
+# never .project/artifacts/, so that dir's presence reliably distinguishes
+# an already-set-up project from a first install.
+if [ "$existing" -eq 1 ] && [ -d "$TARGET/.project/artifacts" ]; then
+  handoff_cmd="/ardd-status"
 else
-  handoff_cmd="/ardd-bootstrap"
+  handoff_cmd="/ardd-init"
 fi
 
 next_steps() { # $1 = optional reason line

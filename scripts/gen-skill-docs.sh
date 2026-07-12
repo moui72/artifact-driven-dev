@@ -27,9 +27,9 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # Editorial workflow order per tier — skills not listed here append after
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
-ORDER_setup="ardd-bootstrap ardd-codify"
-ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-implement ardd-analyze ardd-lint"
-ORDER_extension="ardd-verify ardd-critique ardd-converge ardd-research ardd-render ardd-sync ardd-update ardd-add-artifact"
+ORDER_setup="ardd-init"
+ORDER_core="ardd-backlog ardd-feedback ardd-refine ardd-plan ardd-implement ardd-status ardd-lint"
+ORDER_extension="ardd-defects ardd-audit ardd-research ardd-diagram ardd-tracker ardd-update"
 
 row_for() { # row_for <skill-name>
   f="skills/$1/SKILL.md"
@@ -84,7 +84,7 @@ EOF
   table_rows core
   cat <<'EOF'
 
-`/ardd-analyze` (cross-artifact consistency) and `/ardd-lint` (`.project/`
+`/ardd-status` (cross-artifact consistency) and `/ardd-lint` (`.project/`
 schema validation) are core infrastructure, not opt-in extensions: analyze
 runs automatically as the final step of most state-changing skills, and lint
 runs behind the write-time hook on every `.project/` write. Neither is a step
@@ -100,16 +100,16 @@ In **collaborative** mode nothing is ever committed to the *local* default
 branch: work always moves to a branch, and after the first commit the skill
 offers to push and open a *draft PR* titled with the feature slug — that
 pushed draft PR is the mode's shared in-flight signal, and the register flip
-rides the branch to land when the PR merges. `/ardd-bootstrap` asks which
+rides the branch to land when the PR merges. `/ardd-init` asks which
 mode once at setup and suggests one from what it detects.
 
 **Opt-in next-step prompt.** With `next_step_prompt: true` in
-`constitution.md`'s frontmatter, `/ardd-analyze` and `/ardd-plan` end by
+`constitution.md`'s frontmatter, `/ardd-status` and `/ardd-plan` end by
 offering their recommended next step as a
 one-keypress prompt (yes runs it; no/Esc stops) — only when that
 recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
 absent field keeps recommendations as plain text, so delegated and
-scripted runs are unaffected. `/ardd-bootstrap` asks the question once at
+scripted runs are unaffected. `/ardd-init` asks the question once at
 setup; `/ardd-update` asks it once for existing installs whose
 constitution lacks the field. Like `workflow_mode` above, it's a frontmatter
 workflow field — setting it never bumps the constitution version.

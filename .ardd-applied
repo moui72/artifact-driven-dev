@@ -3,3 +3,6 @@
 0003-per-feature-files.sh
 0004-retag-features-refs.sh
 0005-artifact-diagram-type.sh
+0006-critique-to-audit.sh
+0007-sync-to-tracker.sh
+0008-workflow-table.sh

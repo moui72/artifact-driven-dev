@@ -50,7 +50,7 @@ done
 
 # --- Prune ardd-* skills removed from source (Principle VII) ---
 # Removing a slash command is a breaking change to existing installs, so an
-# upgrade past a skill merge (e.g. /ardd-kickoff folded into /ardd-bootstrap)
+# upgrade past a skill merge (e.g. bootstrap+codify merged into /ardd-init)
 # must delete the dead command's directory — otherwise the retired command
 # lingers in the target's palette. Enumerate the target's own ardd-* dirs and
 # remove any with no counterpart under source `skills/`. Only ardd-owned dirs
@@ -64,12 +64,26 @@ for existing in "$CLAUDE_SKILLS"/ardd-*/; do
     *" $existing_name "*) continue ;;   # a real source skill or a reference dir
   esac
   rm -rf "$existing"
-  echo "  ✗ $existing_name (removed — no longer in ARDD source)"
+  # v1.0.0 transition map: renamed skills point at the new command, folded
+  # skills at their destination; anything else keeps the generic message.
+  case "$existing_name" in
+    ardd-analyze)      echo "  ✗ ardd-analyze (renamed — now /ardd-status)" ;;
+    ardd-critique)     echo "  ✗ ardd-critique (renamed — now /ardd-audit)" ;;
+    ardd-verify)       echo "  ✗ ardd-verify (renamed — now /ardd-defects)" ;;
+    ardd-sync)         echo "  ✗ ardd-sync (renamed — now /ardd-tracker)" ;;
+    ardd-feature)      echo "  ✗ ardd-feature (renamed — now /ardd-backlog)" ;;
+    ardd-render)       echo "  ✗ ardd-render (renamed — now /ardd-diagram)" ;;
+    ardd-converge)     echo "  ✗ ardd-converge (folded into /ardd-implement)" ;;
+    ardd-add-artifact) echo "  ✗ ardd-add-artifact (folded into /ardd-refine)" ;;
+    ardd-bootstrap)    echo "  ✗ ardd-bootstrap (folded into /ardd-init)" ;;
+    ardd-codify)       echo "  ✗ ardd-codify (folded into /ardd-init)" ;;
+    *)                 echo "  ✗ $existing_name (removed — no longer in ARDD source)" ;;
+  esac
 done
 
 # --- Constitution suggestion catalog ---
 # Not a skill (no SKILL.md, so it never registers as an invokable command) —
-# reference data /ardd-bootstrap and /ardd-codify read at constitution-
+# reference data /ardd-init reads at constitution-
 # creation time. Lives under .claude/skills/ardd-* so it's covered by the
 # same gitignore guidance already given for ardd-* skill directories below.
 mkdir -p "$CONSTITUTION_DATA_DIR"
@@ -77,8 +91,8 @@ cp "$SCRIPT_DIR/templates/constitution-suggestions.md" "$CONSTITUTION_DATA_DIR/c
 echo "  ✓ ardd-constitution-data/constitution-suggestions.md"
 
 # --- Artifact templates ---
-# Not skills either — structure skeletons /ardd-bootstrap, /ardd-refine, and
-# /ardd-add-artifact fill in from context when creating/refining an artifact.
+# Not skills either — structure skeletons /ardd-init and /ardd-refine's
+# create path fill in from context when creating/refining an artifact.
 # These previously only existed in the ADD source repo, never in a target
 # project, so the "look for templates/artifacts/<name>.md in the ADD
 # installation" instruction those skills carried was a no-op outside this
@@ -94,30 +108,30 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 # lint-project.sh: invoked by /ardd-lint against this project's own
 #   .project/ state. Schema-of-record for status enums and required
 #   frontmatter fields lives in this script, not in prose; see its header.
-# branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-converge's "check
+# branch-info.sh: invoked by ardd-plan/ardd-implement's "check
 #   branch" step for the deterministic current/default-branch detection
-#   those skills used to duplicate as prose. ardd-implement/ardd-converge's
+#   those skills used to duplicate as prose. ardd-implement's
 #   worktree isolation (when their branch-gate step delegates) is the
 #   Agent tool's own `isolation: "worktree"` — no custom script for that
 #   part; a hand-built one (worktree-info.sh) was tried and removed after
 #   turning out to duplicate what the tool already does, incompatibly.
-# completion-flip-check.sh: invoked by ardd-analyze against every
+# completion-flip-check.sh: invoked by ardd-status against every
 #   status: completed tasks file, to detect a plan whose branch already
 #   merged into the default branch but whose bound features are still
 #   Status: tasked — the orphaned-completion-flip case that arises because
-#   ardd-implement/ardd-converge's post-merge flip assumes a live
+#   ardd-implement's post-merge flip assumes a live
 #   conversation checks back after merge, which in practice often doesn't
 #   happen.
-# sibling-tasks-complete.sh: invoked by ardd-implement/ardd-converge on a
+# sibling-tasks-complete.sh: invoked by ardd-implement on a
 #   tasks file's own completion, to check whether every tasks file bound to
 #   the same plan is done before flipping that plan's features to
 #   implemented — those two skills used to duplicate this check as prose.
 # sync-slug-match.sh / sync-label-decision.sh / sync-divergence.sh: invoked
-#   by ardd-sync's Push/Pull steps for the three pure decisions it makes
+#   by ardd-tracker's Push/Pull steps for the three pure decisions it makes
 #   from gh-provided state (dedup match, label-swap action, divergence
 #   detection) — extracted so they're testable without mocking gh itself.
 # project-lock.sh: invoked by ardd-plan/ardd-implement/
-#   ardd-converge around their multi-file bookkeeping writes — a warn-only
+#   around their multi-file bookkeeping writes — a warn-only
 #   marker for two sessions/agents racing on the same .project/, not real
 #   locking; a `check` never blocks a run, only surfaces a warning.
 # worktree-align.sh: run as the first step inside a freshly created
@@ -364,11 +378,10 @@ fi
 
 echo ""
 echo "Done. Next steps for a new project:"
-echo "  1. Run /ardd-bootstrap in Claude Code — it seeds your artifacts from the"
-echo "     conversation, and on a cold start first walks you through the design"
-echo "     conversation itself (its step 0). Existing codebase? Run /ardd-codify"
-echo "     instead."
-echo "  2. Run /ardd-analyze to check for cross-artifact issues."
+echo "  1. Run /ardd-init in Claude Code — it detects greenfield vs existing"
+echo "     code, then seeds your artifacts from the conversation (interviewing"
+echo "     you first on a cold start) or reverse-engineers them from the code."
+echo "  2. Run /ardd-status to check for cross-artifact issues."
 echo "  3. Run /ardd-plan when artifacts are stable."
 echo ""
-echo "For an existing project, run /ardd-analyze to verify everything looks right."
+echo "For an existing project, run /ardd-status to verify everything looks right."

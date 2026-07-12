@@ -1,7 +1,7 @@
 # Constitution Suggestions
 
-A catalog of well-known, battle-tested principles/standards that `/ardd-
-bootstrap` and `/ardd-codify` offer — never assume — when a project's
+A catalog of well-known, battle-tested principles/standards that
+`/ardd-init` offers — never assumes — when a project's
 `constitution.md` is first created. Order is deterministic and becomes the
 numbering order for accepted Core Principles (in the order presented here,
 after any principles already synthesized from conversation or inferred from
@@ -13,9 +13,9 @@ Any entry can be accepted while its neighbors are rejected — wording must
 not depend on a sibling being present.
 
 Signals are read from what the invoking skill already knows: which
-artifacts are being created (`/ardd-bootstrap` step 2 / `/ardd-codify` step
-3), and stack/framework facts already established (conversation for
-bootstrap, the codebase survey for codify). When a signal is ambiguous,
+artifacts are being created (`/ardd-init` step 3 / its codebase survey, step
+3), and stack/framework facts already established (the conversation on the
+greenfield path, the codebase survey on the existing-codebase path). When a signal is ambiguous,
 treat it as met — bias toward offering, not toward filtering out.
 
 ---

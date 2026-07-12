@@ -19,7 +19,7 @@ internal notes — keep them in sync with the skills themselves.
 
 ```sh
 ./install.sh /path/to/target/project   # install/upgrade skills into a project
-./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-bootstrap
+./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-init
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
 ./scripts/release.sh [--dry-run] <vX.Y.Z> # cut a release: validate (clean/on-default/suite green), SSH-signed tag, push, gh release
 ./scripts/test-release.sh              # regression test for release.sh's refusal logic (fixture repos; network steps untested by design)
@@ -28,13 +28,13 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
-./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
+./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
-./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, register not flipped); used by ardd-analyze
+./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, register not flipped); used by ardd-status
 ./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/worktree-align.sh [ref]      # ff-merge local default branch into a fresh delegated worktree; a delegated subagent's mandatory first act
 ./scripts/test-worktree-align.sh       # regression test for worktree-align.sh
-./scripts/fold-to-main.sh [default]    # ff-fold current feature branch into local default + checkout it; the eager-background gate's prep step (ardd-implement/converge)
+./scripts/fold-to-main.sh [default]    # ff-fold current feature branch into local default + checkout it; the eager-background gate's prep step (ardd-implement)
 ./scripts/test-fold-to-main.sh         # regression test for fold-to-main.sh
 ./scripts/inflight-worktrees.sh        # enumerate other worktrees + their tasks-file state (solo mode's in-flight visibility channel)
 ./scripts/test-inflight-worktrees.sh   # regression test for inflight-worktrees.sh
@@ -207,17 +207,16 @@ against.
 
 **Single-writer ownership of generated files is, deliberately, prose-only —
 this is not enforceable by a hook, and that was verified, not assumed.**
-- `.project/STATUS.md` — written only by `/ardd-analyze`
-- `.project/DEFECTS.md` — written only by `/ardd-verify`
-- `.project/SYNC.md` — written only by `/ardd-sync`
-- `.project/critique.md` — written only by `/ardd-critique`
+- `.project/STATUS.md` — written only by `/ardd-status`
+- `.project/DEFECTS.md` — written only by `/ardd-defects`
+- `.project/TRACKER.md` — written only by `/ardd-tracker`
+- `.project/audit.md` — written only by `/ardd-audit`
 - `.project/features/*.md` `status` field — mutated only via
-  `ardd-state.sh feature-*` subcommands, invoked by `/ardd-feature`,
+  `ardd-state.sh feature-*` subcommands, invoked by `/ardd-backlog`,
   `/ardd-plan` (both the `backlogged→planned` approval flip and the
   `planned→tasked` flip, now that tasking is folded in), `/ardd-implement`,
-  `/ardd-converge`,
-  `/ardd-sync` (pull imports new `backlogged` entries), and
-  `/ardd-analyze` (one narrow exception: the `tasked→implemented` flip,
+  `/ardd-tracker` (pull imports new `backlogged` entries), and
+  `/ardd-status` (one narrow exception: the `tasked→implemented` flip,
   on user confirmation, for an orphaned completion flip its
   `completion-flip-check.sh` detects — see the note below)
 
@@ -264,7 +263,7 @@ current project; it never writes, only reports.
 **The "check branch" step's deterministic half is a shared script, not
 duplicated prose.** `scripts/branch-info.sh` (installed to
 `.claude/skills/ardd-scripts/`) computes `current`/`default`/`on_default`;
-`ardd-plan`, `ardd-implement`, and `ardd-converge` all shell out to it
+`ardd-plan` and `ardd-implement` both shell out to it
 instead of re-deriving the current/default-branch fallback chain. What's still duplicated
 across those three, deliberately, is the *interactive* half — suggesting a
 semantic name, asking the user, deciding what to do with the answer —
@@ -310,19 +309,18 @@ truth*; and three installed scripts bridge them:
   the local default branch and checks it out (returning the focused session
   to `<default>`), refusing (`folded=false reason=dirty|detached|diverged|...`)
   rather than resolving — same discipline as align. The delegation gate in
-  `ardd-implement`/`ardd-converge` runs it when the user opts to background
+  `ardd-implement` runs it when the user opts to background
   while on a branch. A fast-forward authors no new commit, so the
   "no state-commit before the branch" invariant holds. (Decision record
   0004; supersedes the old "on a branch → run inline" default.)
 - `scripts/inflight-worktrees.sh` — enumerates every *other* worktree of
   the repo and its tasks-file state (branch, status, checkbox progress).
-  This is solo mode's coarse-state visibility channel: `ardd-implement`/
-  `ardd-converge` run it before the pick list (so a second run can start
+  This is solo mode's coarse-state visibility channel: `ardd-implement` runs it before the pick list (so a second run can start
   safely while another is in flight) and before delegating (it replaced the
   old harness-`TaskList` coordination check — deterministic, scriptable,
   and it survives conversation death, since an abandoned subagent's
   worktree is still on disk when no conversation remembers it), and
-  `/ardd-analyze` sources `STATUS.md`'s "In Flight" section from it.
+  `/ardd-status` sources `STATUS.md`'s "In Flight" section from it.
 
 A consequence worth stating: an abandoned worktree never poisons the
 default branch — main keeps saying `ready`/`tasked`, which becomes accurate
@@ -337,7 +335,7 @@ branch — eager merge is what keeps solo mode's in-flight window short.
 
 **Two operating modes**, declared as `workflow_mode: solo | collaborative`
 in `constitution.md` frontmatter (absent = `solo`; enum enforced by
-`lint-project.sh`; asked once by `/ardd-bootstrap`, detection-suggested):
+`lint-project.sh`; asked once by `/ardd-init`, detection-suggested):
 - **solo** — single developer, same machine. Direct commits to the local
   default branch are fine for inline runs; `/ardd-plan` doesn't even ask —
   no branch gate in solo mode, plan+tasks commit straight to the current
@@ -367,9 +365,9 @@ hand-built one was tried and removed (Principle VIII; decision record
 
 **A second constitution frontmatter workflow field, `next_step_prompt:
 true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
-asked once by `/ardd-bootstrap`, and once by `/ardd-update` for installs
+asked once by `/ardd-init`, and once by `/ardd-update` for installs
 whose constitution lacks the field). When `true`, exactly two skills —
-`/ardd-analyze` and `/ardd-plan` — end by offering their
+`/ardd-status` and `/ardd-plan` — end by offering their
 recommended next step via AskUserQuestion, and only when that
 recommendation is a concrete runnable `/ardd-*` invocation; plan
 normally hands off to analyze, which then owns the single prompt of
@@ -379,7 +377,7 @@ next_step_prompt <true|false>`, never by hand-editing. Like
 `workflow_mode`, it's a workflow field, not constitution content: no Sync
 Impact Report entry and no constitution version bump applies. Don't widen
 the two-skill scope casually — every other skill's terminal analyze
-handoff already funnels into `/ardd-analyze`'s prompt.
+handoff already funnels into `/ardd-status`'s prompt.
 
 `ardd-plan` never delegates — and in solo mode it no longer gates. In solo
 mode (`workflow_mode` absent or `solo`) there is no branch-gate prompt at
@@ -403,7 +401,7 @@ implementation *would* use; in the solo no-gate flow that ref may never be
 created, and `completion-flip-check.sh` treats a nonexistent ref as
 not-merged (silent). Tried the delegating-plan variant once and reverted —
 decision record 0001 has the story if the "make plan consistent with
-implement/converge" temptation recurs.
+implement" temptation recurs.
 
 `isolation: "worktree"` creates and names its own worktree/branch — there
 is no parameter to point it at a pre-made one, and the branch name is only
@@ -440,36 +438,59 @@ written under the old design. Mechanics: it reads the tasks file's
 have — nothing writes it anymore), falling back to the plan's `branch:`
 field (the inline case), checks `git merge-base --is-ancestor <branch>
 <default>`, and reports any still-`tasked` slug from the plan's
-`features:` list. `/ardd-analyze` runs it against every completed tasks
+`features:` list. `/ardd-status` runs it against every completed tasks
 file on each invocation and, on user confirmation, performs the
 `tasked→implemented` flip itself. This is a deliberate, narrow exception
-to `/ardd-analyze` never writing the register (see the single-writer
+to `/ardd-status` never writing the register (see the single-writer
 ownership list above) — justified because no other skill invocation is
 left to catch it otherwise.
 
 That's a different thing from a skill telling the agent, as its own last
 step, to run another skill and stop — a terminal handoff, not a subroutine
-call. Most skills that change state `/ardd-analyze` reports on end by
-instructing the agent to run `/ardd-analyze` directly, since Claude Code
+call. Most skills that change state `/ardd-status` reports on end by
+instructing the agent to run `/ardd-status` directly, since Claude Code
 lets a skill's prose trigger another skill by name. No shared logic and no
 value passed back — analyze re-derives everything itself from disk, same as
-if the user had typed it. See `/ardd-analyze`'s own SKILL.md for the
+if the user had typed it. See `/ardd-status`'s own SKILL.md for the
 canonical list of which skills do this.
 
 **Mechanization non-goals (audited 2026-07-06, deliberately NOT scripted
 per Principle VI).** A determinism audit that produced `ardd-state.sh`,
 `defects-unsurfaced.sh`, `tasks-list.sh`, and `upsert-section.sh` also
 explicitly rejected these — don't re-propose scripting them without new
-evidence: `critique.md`'s staleness date-compare (advisory, low blast
+evidence: `audit.md`'s staleness date-compare (advisory, low blast
 radius); STATUS.md count assembly (its counts are byproducts of the
-scripts above); `ardd-sync`'s remaining `gh` glue (error handling needs
+scripts above); `ardd-tracker`'s remaining `gh` glue (error handling needs
 judgment; the decisions are already in the three `sync-*.sh` scripts);
 the post-delegation `core.bare` check (a one-line `git config --get`);
 and all genuine-judgment steps (Mermaid diagram content, feature naming,
-converge's gap identification).
+reconcile mode's gap identification).
 
 ## Conventions
 
+- **Skill naming system (codified at v1.0.0 — apply it to any new or
+  renamed skill):**
+  - **Report-owner skills are nouns, named for the file they own**:
+    `/ardd-status` → `STATUS.md`, `/ardd-defects` → `DEFECTS.md`,
+    `/ardd-audit` → `audit.md`, `/ardd-tracker` → `TRACKER.md`. The command
+    answers "which file does this regenerate?" — if a new skill owns a
+    report file, name the skill for the file, not for the verb that
+    produces it.
+  - **Lifecycle actions are imperative verbs**: `/ardd-plan`,
+    `/ardd-implement`, `/ardd-refine`, `/ardd-init`. You're telling the
+    agent to do the thing.
+  - **Capture skills are named for what you hand them**: `/ardd-backlog`
+    (a feature idea), `/ardd-feedback` (an observation about existing
+    behavior), `/ardd-research` (a question or proposal). Named for the
+    input, not the storage mechanism.
+  - **The description formula** (frontmatter `description:`): object →
+    data-flow → redirect clause. State what the skill operates on, where
+    its output lands (the file it writes or the state it flips), and —
+    when a plausibly-confusable neighbor exists — one clause routing the
+    wrong input to the right skill ("bugs … belong in /ardd-feedback
+    instead"; "takes no proposal input — vet with /ardd-research").
+    Renamed skills carry "(formerly ardd-X)" for one release cycle after
+    v1.0.0 — drop those suffixes in the release after next, not sooner.
 - **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `refactor:`,
   `chore:`, `docs:`, etc.) — matches existing repo history.
 - **Skill files are the product.** A `SKILL.md` edit is a behavior change to

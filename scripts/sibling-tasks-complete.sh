@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Shared "are all sibling tasks files for this plan done?" check, used by
-# /ardd-implement (on a tasks file's own completion) and /ardd-converge (on
+# /ardd-implement (on a tasks file's own completion, and in reconcile mode on
 # reconciling a tasks file to completed) to decide whether to flip that
 # plan's bound features from tasked -> implemented. A plan can have more
 # than one tasks file (see /ardd-plan step 11's "deliberate fork" case for a

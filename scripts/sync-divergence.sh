@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 # Decides whether a linked issue's state has diverged from features.md, per
-# /ardd-sync's Pull step 2: closed-but-not-implemented, or
-# reopened-but-implemented. Report-only — /ardd-sync never applies this,
-# only records it in SYNC.md.
+# /ardd-tracker's Pull step 2: closed-but-not-implemented, or
+# reopened-but-implemented. Report-only — /ardd-tracker never applies this,
+# only records it in TRACKER.md.
 #
 # Usage: ./scripts/sync-divergence.sh <slug> <issue-number> <status> <issue-state>
 #   status:      backlogged | planned | tasked | implemented
 #   issue-state: open | closed
 #
-# Prints the SYNC.md "## Diverged" line if diverged, nothing otherwise.
+# Prints the TRACKER.md "## Diverged" line if diverged, nothing otherwise.
 
 set -e
 
