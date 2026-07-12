@@ -54,11 +54,12 @@ None open — all feedback files consumed and `planned`.
 
 ## Feature Backlog
 
-2 backlogged · 8 implemented · 1 retired — see `.project/features/`.
+1 backlogged · 1 tasked · 8 implemented · 1 retired — see `.project/features/`.
 
-- `disposable-report-merge-driver` — backlogged: `.gitattributes` merge
-  driver for the disposable single-writer reports; unlocks parallel
-  auto-merge fan-out.
+- `disposable-report-merge-driver` — **tasked**:
+  `plan-disposable-report-merge-driver-2026-07-12-c310.md` (approved) →
+  `tasks-disposable-report-merge-driver-7dbf.md` (ready, 0/6; includes the
+  accepted smoke-tier defect `7efff3a5` expansion). Unlocks fan-out.
 - `worktree-reap-and-fanout` — backlogged: deterministic reap of merged
   delegated worktrees + delegation-gate fan-out (depends on the merge
   driver).
@@ -72,9 +73,8 @@ it) and 1 risk (smoke key unprovisioned). The register-enum [Q] is resolved.
 
 ## Recommended Next Step
 
-`main` has 2 unpushed commits (the retirement + close-out) — push when
-ready. Then, in whatever order appeals: `/ardd-defects` (three merges since
-the last pass), the audit checklist (one item is now moot), or
-`/ardd-plan disposable-report-merge-driver` (starts the parallel-agent
-thread). Post-v0.9.0 stabilization feedback accumulates via `/ardd-feedback`
-toward v1.0.0.
+Run `/ardd-implement` on `tasks-disposable-report-merge-driver-7dbf.md`
+(6 tasks; T003's dogfood driver-config step happens on the primary at merge
+time). `main` has unpushed commits — push when ready. Remaining threads:
+audit checklist (one item moot post-retirement), `worktree-reap-and-fanout`
+once the driver lands.
