@@ -82,7 +82,7 @@ status: in-progress
   ask). Answers stamped via `ardd-state.sh stamp <constitution> <field>
   <value>`, never hand-edited.
 
-- [ ] T008 [artifacts: constitution] Add the backfill-ask to
+- [x] T008 [artifacts: constitution] Add the backfill-ask to
   `skills/ardd-update/SKILL.md`, exactly mirroring the `next_step_prompt`
   backfill: after re-running install.sh, if the target's constitution
   frontmatter lacks `delegation` (or, in solo mode, `merge_policy`), ask the

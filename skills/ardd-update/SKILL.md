@@ -60,6 +60,22 @@ Usage: `/ardd-update` — no arguments.
    field, not constitution content: no Sync Impact Report entry and no
    constitution version bump applies.
 
+   **Backfill `delegation` and `merge_policy` the same way.** In the same
+   check: if the constitution frontmatter lacks a `delegation` field
+   *entirely*, ask the same question `/ardd-bootstrap` asks — "When
+   `/ardd-implement`/`/ardd-converge` could run in the background, what
+   should they do?" (`eager` | `ask` | `inline`) — and stamp the answer via
+   `ardd-state.sh stamp .project/artifacts/constitution.md delegation
+   <value>`. If `workflow_mode` is `solo` (or absent) and the frontmatter
+   lacks `merge_policy`, also ask "When a delegated background run
+   completes, merge its branch into your default branch automatically?"
+   (`auto` | `ask`) and stamp it likewise. Never ask `merge_policy` in
+   collaborative mode — it isn't consulted there. Field presence (either
+   value) suppresses re-asking forever; on paths that skip the ask (bare
+   `./install.sh`, headless/scripted contexts) absent simply stays `ask` —
+   never block, never default to `eager`/`auto`. Same workflow-field rules
+   as above: no Sync Impact Report entry, no version bump.
+
 6. **Report** old commit → new commit (from the check in step 2 vs. the
    rewritten `.project/ardd-version.md`), migrations applied, and
    suggestions surfaced. Remind the user to commit
