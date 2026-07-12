@@ -23,7 +23,7 @@ status: in-progress
 
 ## Phase 2: Solo plan commits to default
 
-- [ ] T002 [artifacts: constitution] Rewrite `skills/ardd-plan/SKILL.md`
+- [x] T002 [artifacts: constitution] Rewrite `skills/ardd-plan/SKILL.md`
   step 1: in solo mode (`workflow_mode` absent or `solo`) there is no
   branch-gate prompt — the run proceeds on the current branch (normally the
   default branch) and commits plan+tasks there; derive the plan-name slug

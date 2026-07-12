@@ -57,31 +57,52 @@ for the named plan; steps 2–10 do not run.
 ## Steps
 
 1. **Check branch.** Run `.claude/skills/ardd-scripts/branch-info.sh` for
-   `current`, `default`, and `on_default`. (Applies in both normal and
-   `--from` mode.)
+   `current`, `default`, and `on_default`, and grep
+   `.project/artifacts/constitution.md` frontmatter for `workflow_mode`
+   (absent = `solo`). (Applies in both normal and `--from` mode.)
 
-   If `on_default` is `false`, skip to step 2 and derive `<slug>` from
-   `current` via `.claude/skills/ardd-scripts/ardd-state.sh slug "<current>"`
+   If `on_default` is `false` (either mode), skip to step 2 and derive
+   `<slug>` from `current` via
+   `.claude/skills/ardd-scripts/ardd-state.sh slug "<current>"`
    (deterministic kebab sanitization — don't hand-derive it).
 
-   If `on_default` is `true`, suggest a branch name — a semantic kebab-case
-   slug derived from the conversation/artifacts if the topic is clear,
-   otherwise a short arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2`
-   → `f2ed`). If one or more feature slugs were passed as arguments, prefer
-   the first feature slug as the suggested branch name instead of generating
-   one. Ask the user:
+   **Solo mode has no branch gate.** If `on_default` is `true` and
+   `workflow_mode` is `solo` (or absent), do not prompt — proceed on the
+   current branch (normally the default branch) and commit the plan and
+   tasks files there: a `ready` tasks file on the default branch is planned
+   truth, already accepted there (decision record 0005). Set `<slug>` to the
+   first feature-slug argument if any were passed, else a freshly generated
+   short arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`).
+   A worktree still works if you want isolation — set one up yourself and
+   re-run from there; this skill never delegates to a worktree subagent:
+   the draft plan and tasks file this run produces are themselves the state
+   the next steps need to see, and isolating them in a worktree would trap
+   them there until a manual merge.
+
+   **Collaborative mode keeps the gate.** If `on_default` is `true` and
+   `workflow_mode` is `collaborative`, suggest a branch name — a semantic
+   kebab-case slug derived from the conversation/artifacts if the topic is
+   clear, otherwise a short arbitrary slug (4 hex chars, as above). If one
+   or more feature slugs were passed as arguments, prefer the first feature
+   slug as the suggested branch name instead of generating one. Ask the
+   user:
    - "Yes, create `<suggested-name>`"
    - "Yes, create a branch, but name it: ___"
    - "No, continue on default" (a worktree works too — set one up yourself
      and re-run from there; this gate never delegates to a worktree
-     subagent: the draft plan and tasks file this run produces are
-     themselves the state the next steps need to see, and isolating them in
-     a worktree would trap them there until a manual merge.)
+     subagent, for the same trapped-state reason as above.)
 
    On yes, run `git checkout -b <name>` and set `<slug>` to `<name>`. On no,
    set `<slug>` to a freshly generated short arbitrary hex token (same
    generation as above) and proceed on the default branch without asking
    again this run.
+
+   Either way, the plan's `branch: <slug>` frontmatter (step 9) records the
+   branch name `/ardd-implement`'s inline path *would* create for this
+   plan's work — when no branch was created here (the solo no-gate path,
+   or a collaborative "No"), that ref may never come to exist, and that's
+   fine: `completion-flip-check.sh` treats a nonexistent ref as not-merged
+   and stays silent.
 
    If this run discovers it started on a stale branch and merges or
    rebases the default branch in before proceeding: single-writer report
@@ -317,7 +338,7 @@ for the named plan; steps 2–10 do not run.
    ```yaml
    ---
    status: draft        # draft -> approved -> superseded (schema-of-record: scripts/lint-project.sh)
-   branch: <slug>
+   branch: <slug>       # the branch inline implementation would use; may never be created (see step 1)
    created: YYYY-MM-DD
    features: [<slug>, ...]   # feature slugs targeted in step 3; omit or [] if none
    surfaced-defects: [<id>, ...]   # DEFECTS.md identifiers surfaced in step 5; omit or [] if none
