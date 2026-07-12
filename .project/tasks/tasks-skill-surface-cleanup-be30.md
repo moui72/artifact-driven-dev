@@ -140,7 +140,7 @@ tasks encode._
   `ardd-plan` ("substantial or decision-reversing ideas: vet with
   /ardd-research first").
 
-- [ ] T013 Argument guards, mirroring `/ardd-plan`'s disambiguation, as an
+- [x] T013 Argument guards, mirroring `/ardd-plan`'s disambiguation, as an
   explicit early step: `ardd-audit` rejects any argument that isn't an
   existing `.project/artifacts/*.md` name with redirect text pointing to
   `/ardd-research <proposal>`; `ardd-defects` rejects freeform arguments

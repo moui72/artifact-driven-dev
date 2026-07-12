@@ -129,8 +129,8 @@ Opt-in skills for concerns the core loop doesn't force on you.
 
 | Command | What it does |
 |---|---|
-| `/ardd-defects` | Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task (formerly ardd-verify). |
-| `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique). |
+| `/ardd-defects` | Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead (formerly ardd-verify). |
+| `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead (formerly ardd-critique). |
 | `/ardd-research` | Targeted investigation or proposal vetting, written to .project/plans/ — one-off output with no lifecycle; substantial or decision-reversing ideas get vetted here before they reach the backlog or a plan. |
 | `/ardd-diagram` | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render). |
 | `/ardd-tracker` | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync). |

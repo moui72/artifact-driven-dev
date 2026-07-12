@@ -1,7 +1,7 @@
 ---
 name: ardd-audit
 tier: extension
-description: "Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique)."
+description: "Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead (formerly ardd-critique)."
 ---
 
 # /ardd-audit
@@ -15,6 +15,15 @@ Usage: `/ardd-audit` to review all artifacts, or `/ardd-audit <name>`
 to focus on a single artifact.
 
 ## Steps
+
+0. **Reject non-artifact arguments** (mirrors `/ardd-plan`'s argument
+disambiguation, as an explicit early step). The only legal argument is the
+name of an existing `.project/artifacts/*.md` file (with or without the
+`.md`). Anything else — a proposal, an idea, a "what if we..." — is not an
+artifact to audit: stop and redirect to `/ardd-research <proposal>`, whose
+proposal-vetting mode applies this skill's lenses to a *hypothetical*
+change; this skill audits only decisions already recorded in artifacts. Do
+not silently ignore the argument and run a full pass anyway.
 
 1. **Check for an existing `.project/audit.md`.**
 

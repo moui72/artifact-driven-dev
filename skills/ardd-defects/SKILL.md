@@ -1,7 +1,7 @@
 ---
 name: ardd-defects
 tier: extension
-description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task (formerly ardd-verify)."
+description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead (formerly ardd-verify)."
 ---
 
 # /ardd-defects
@@ -20,6 +20,15 @@ artifact bodies — artifacts describe intended/current design, not a defect
 log.
 
 ## Steps
+
+0. **Reject freeform arguments** (mirrors `/ardd-plan`'s argument
+disambiguation, as an explicit early step). This skill takes no
+observation or scope input: it always runs its own full artifact-vs-code
+pass. If the invocation carries any argument (e.g. a bug you noticed, a
+file path, a description of drift), stop and redirect: an observation
+about the implementation belongs in `/ardd-feedback <observation>`, which
+captures it for the next plan — this skill would either duplicate it or
+lose it. Do not silently ignore the argument and run anyway.
 
 1. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present (excluding `DEFECTS.md` and `STATUS.md`, which are not
