@@ -1,7 +1,7 @@
 ---
 plan: plan-background-by-default-flow-2026-07-12.md
 generated: 2026-07-12
-status: ready
+status: in-progress
 ---
 
 # Tasks
