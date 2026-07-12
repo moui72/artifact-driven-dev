@@ -25,7 +25,18 @@ and hasn't been verified against yet.
 
 ## Feedback
 
-None open — all feedback files are `status: planned`.
+1 open — `feedback-critique-design-vetting-gap-0779.md` (3 items: critique's
+description lures agents into forward-looking design vetting; no
+argument guard for non-artifact args; roster gap — no pre-artifact
+design-proposal review step). Sourced from a real sync-tab-scroll session;
+will be picked up by the next `/ardd-plan`.
+
+## In Flight
+
+- Delegated worktree `agent-a1e8aacec3b90131c`
+  (branch `worktree-agent-a1e8aacec3b90131c`) —
+  `tasks-remote-install-source-18d3.md` in-progress, 1/10 (running T001–T007;
+  Phases 5–6 return to the coordinator).
 
 ## Feature Backlog
 
