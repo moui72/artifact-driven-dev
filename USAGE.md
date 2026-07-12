@@ -21,7 +21,7 @@ own `.project/` carries only a constitution. `/ardd-bootstrap` suggests a
 set; `/ardd-add-artifact` extends it anytime.
 
 You refine these iteratively. When they're stable, you generate a plan, then
-tasks, then execute. If work gets interrupted, `/ardd-converge` picks up where you
+tasks, then execute. If work gets interrupted, `/ardd-implement`'s reconcile mode picks up where you
 left off.
 
 ## Setup
@@ -211,7 +211,7 @@ separate plans cleanly.
 
 Passing one or more backlogged feature slugs (`/ardd-plan <slug> ...`) does
 real artifact-design work first, which can run long, but `/ardd-plan` never
-delegates to a worktree the way `/ardd-implement`/`/ardd-converge` do — the
+delegates to a worktree the way `/ardd-implement` do — the
 plan and tasks file it produces are themselves the state the next steps need
 to see, so isolating them in a worktree would just trap them there until a
 manual merge. In solo mode it doesn't prompt about branches at all: the plan
@@ -298,10 +298,12 @@ branch, and `merge_policy` is never consulted.)
 If `/ardd-implement` is interrupted — or you pick the project up in a new session:
 
 ```
-/ardd-converge
+/ardd-implement --reconcile <tasks-file>
 ```
 
-Same worktree-delegation offer and state model as `/ardd-implement`. This asks which tasks file to reconcile, compares the codebase against it,
+Same worktree-delegation offer and state model as a normal `/ardd-implement`
+run (reconcile is a mode of the same skill; picking an interrupted file in
+the pick list offers it too). It compares the codebase against the file,
 marks tasks that are already done, notes partial work, and appends any gaps
 as new tasks. Then you can run `/ardd-implement` again to continue.
 

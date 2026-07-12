@@ -94,9 +94,9 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 # lint-project.sh: invoked by /ardd-lint against this project's own
 #   .project/ state. Schema-of-record for status enums and required
 #   frontmatter fields lives in this script, not in prose; see its header.
-# branch-info.sh: invoked by ardd-plan/ardd-implement/ardd-converge's "check
+# branch-info.sh: invoked by ardd-plan/ardd-implement's "check
 #   branch" step for the deterministic current/default-branch detection
-#   those skills used to duplicate as prose. ardd-implement/ardd-converge's
+#   those skills used to duplicate as prose. ardd-implement's
 #   worktree isolation (when their branch-gate step delegates) is the
 #   Agent tool's own `isolation: "worktree"` — no custom script for that
 #   part; a hand-built one (worktree-info.sh) was tried and removed after
@@ -105,10 +105,10 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   status: completed tasks file, to detect a plan whose branch already
 #   merged into the default branch but whose bound features are still
 #   Status: tasked — the orphaned-completion-flip case that arises because
-#   ardd-implement/ardd-converge's post-merge flip assumes a live
+#   ardd-implement's post-merge flip assumes a live
 #   conversation checks back after merge, which in practice often doesn't
 #   happen.
-# sibling-tasks-complete.sh: invoked by ardd-implement/ardd-converge on a
+# sibling-tasks-complete.sh: invoked by ardd-implement on a
 #   tasks file's own completion, to check whether every tasks file bound to
 #   the same plan is done before flipping that plan's features to
 #   implemented — those two skills used to duplicate this check as prose.
@@ -117,7 +117,7 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   from gh-provided state (dedup match, label-swap action, divergence
 #   detection) — extracted so they're testable without mocking gh itself.
 # project-lock.sh: invoked by ardd-plan/ardd-implement/
-#   ardd-converge around their multi-file bookkeeping writes — a warn-only
+#   around their multi-file bookkeeping writes — a warn-only
 #   marker for two sessions/agents racing on the same .project/, not real
 #   locking; a `check` never blocks a run, only surfaces a warning.
 # worktree-align.sh: run as the first step inside a freshly created

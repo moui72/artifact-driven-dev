@@ -186,10 +186,10 @@ If `/ardd-implement` gets interrupted, or you pick the project up in a new
 session:
 
 ```
-/ardd-converge
+/ardd-implement --reconcile <tasks-file>
 ```
 
-This asks which tasks file to reconcile, compares the codebase to it, marks completed work, notes partial
+Reconcile mode compares the codebase to the tasks file, marks completed work, notes partial
 work, and appends gaps as new tasks. Then run `/ardd-implement` again to
 continue.
 
@@ -215,7 +215,7 @@ GitHub renders Mermaid code fences natively — no extra tooling needed.
 Session 1: /ardd-bootstrap (step 0 interviews you, or lead the design yourself) → /ardd-refine × 3
 Session 2: /ardd-status → /ardd-refine (fixes) → /ardd-status (clean)
 Session 3: /ardd-plan (checkpoint → tasks) → /ardd-implement
-Session N: /ardd-converge → /ardd-implement (resume)
+Session N: /ardd-implement (reconcile, then resume)
 ```
 
 Each session can stand alone. `/ardd-status` is your re-entry point after

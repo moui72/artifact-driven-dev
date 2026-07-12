@@ -23,7 +23,7 @@
 # runs isolated in separate worktrees.
 #
 # Callers pass their own skill name as <label> (e.g. `ardd-plan`,
-# `ardd-implement`, `ardd-converge`), which is what lets `check`
+# `ardd-implement`), which is what lets `check`
 # name the other writer — a future caller adding lock support should follow
 # the same convention rather than reverse-engineer it from the existing ones.
 

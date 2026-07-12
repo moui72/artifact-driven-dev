@@ -2,7 +2,7 @@
 # Fold the current feature branch into the local default branch (fast-forward
 # only) and check out the default branch. This is the deterministic half of
 # the eager-background delegation gate (/ardd-implement step 3,
-# /ardd-converge step 2): to background a run that is already on a feature
+# reconcile mode): to background a run that is already on a feature
 # branch, the run's state must reach the local default branch so a delegated
 # worktree — which branches from <default> and is fast-forwarded by
 # worktree-align.sh — can see it, while the focused session is left clean on

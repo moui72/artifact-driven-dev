@@ -160,7 +160,7 @@ context, so no interview is needed.)
    there's no git remote at all → suggest `solo`; otherwise ask with no
    default. Write the chosen value as `workflow_mode: <value>` in
    `constitution.md`'s frontmatter. This field gates the branch/delegation
-   behavior of `/ardd-implement`, `/ardd-converge`, `/ardd-plan`, and
+   behavior of `/ardd-implement`, `/ardd-plan`, and
    `/ardd-status`. Its absence means `solo`, so projects bootstrapped before
    this field existed need no migration. (If `constitution.md` isn't among
    the artifacts being created, skip this — those skills read an absent field
@@ -184,7 +184,7 @@ context, so no interview is needed.)
 
    **Set `delegation` (and, in solo mode, `merge_policy`) in the
    constitution's frontmatter.** Alongside the questions above, ask once:
-   "When `/ardd-implement`/`/ardd-converge` could run in the background,
+   "When `/ardd-implement` could run in the background,
    what should they do?" — `eager` (delegate to a background worktree
    subagent without asking), `ask` (offer each time; today's behavior), or
    `inline` (never offer, run in the foreground). Then, **only if the

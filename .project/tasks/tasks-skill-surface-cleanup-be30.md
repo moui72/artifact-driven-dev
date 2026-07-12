@@ -93,7 +93,7 @@ tasks encode._
 
 ## Phase 2: Folds
 
-- [ ] T009 Fold converge into implement, delete `skills/ardd-converge/`:
+- [x] T009 Fold converge into implement, delete `skills/ardd-converge/`:
   implement's pick-list step gains the reconcile branch — when the chosen
   file is `in-progress` and no live worktree claims it
   (`inflight-worktrees.sh`), the pick confirmation becomes ONE prompt with

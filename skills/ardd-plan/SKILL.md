@@ -441,9 +441,9 @@ for the named plan; steps 2–10 do not run.
                          # completed is terminal — post-completion failures
                          # become new feedback (/ardd-feedback), never a
                          # status edit.
-    # worktree_branch: <branch>  — added later by /ardd-implement or
-    # /ardd-converge only if this file's work gets delegated to a worktree
-    # subagent; not written here at generation time.
+    # worktree_branch: <branch>  — legacy field from the old design; nothing
+    # writes it anymore (completion-flip-check.sh still reads it from files
+    # that predate worktree-native state); not written here at generation time.
     ---
 
     # Tasks

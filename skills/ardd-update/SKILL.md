@@ -81,7 +81,7 @@ Usage: `/ardd-update` — no arguments.
    **Backfill `delegation` and `merge_policy` the same way.** In the same
    check: if the constitution frontmatter lacks a `delegation` field
    *entirely*, ask the same question `/ardd-bootstrap` asks — "When
-   `/ardd-implement`/`/ardd-converge` could run in the background, what
+   `/ardd-implement` could run in the background, what
    should they do?" (`eager` | `ask` | `inline`) — and stamp the answer via
    `ardd-state.sh stamp .project/artifacts/constitution.md delegation
    <value>`. If `workflow_mode` is `solo` (or absent) and the frontmatter

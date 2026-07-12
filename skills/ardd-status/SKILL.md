@@ -11,8 +11,8 @@ reads all artifacts present in `.project/artifacts/`, then reports gaps,
 contradictions, and implied-but-undefined decisions.
 
 `/ardd-backlog`, `/ardd-plan`, `/ardd-refine`,
-`/ardd-feedback`, `/ardd-implement` and `/ardd-converge` (both on
-tasks-file completion), `/ardd-add-artifact` (when relevant), and
+`/ardd-feedback`, `/ardd-implement` (on tasks-file completion, in both
+execution and reconcile mode), `/ardd-add-artifact` (when relevant), and
 `/ardd-defects` invoke this skill automatically as their final step, since
 each of those changes state `STATUS.md` should reflect. This is the
 canonical list — other docs referencing which skills auto-trigger analyze
@@ -27,7 +27,7 @@ anytime you want a fresh check outside those flows.
 **Run only from the primary checkout, never inside a delegated worktree.**
 `/ardd-status` is the sole writer of `STATUS.md`; running it inside a
 worktree would trap that write on the worktree's branch instead of the
-default branch. Delegated `/ardd-implement`/`/ardd-converge` subagents are
+default branch. Delegated Delegated `/ardd-implement` subagents are
 told explicitly not to invoke it — the terminal analyze handoff belongs to
 the coordinator or the inline path.
 
@@ -80,8 +80,7 @@ the coordinator or the inline path.
    <file>` — detects the orphaned-completion-flip failure mode: a plan
    whose branch has already merged into the default branch, but whose bound
    features are still `tasked` in the register rather than
-   `implemented`. This happens because `/ardd-implement`'s and
-   `/ardd-converge`'s post-merge flip step assumes a live coordinating
+   `implemented`. This happens because `/ardd-implement`'s post-merge flip step assumes a live coordinating
    conversation checks back after the worktree branch merges — but merge is
    manual/async, so in the common case that conversation is gone before it
    happens and the flip never lands. Collect any printed slugs.
@@ -192,7 +191,7 @@ the coordinator or the inline path.
    implemented`. This is `/ardd-status`'s one narrow,
    explicit exception to never writing the register — mirroring the
    tasks-file-completion exception already documented for
-   `/ardd-implement`/`/ardd-converge` — since the whole reason this check
+   `/ardd-implement` — since the whole reason this check
    exists is that no other skill run is left to catch it. On confirmation,
    flip the entry and note it in the report already written; on decline,
    leave it — the same orphaned slug will be reported again on the next

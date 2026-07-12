@@ -28,13 +28,13 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
-./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement/converge)
+./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement)
 ./scripts/test-branch-info.sh          # regression test for branch-info.sh's default-branch fallback chain
 ./scripts/completion-flip-check.sh <tasks-file> # detect an orphaned tasked->implemented flip (branch merged, register not flipped); used by ardd-status
 ./scripts/test-completion-flip-check.sh # regression test for completion-flip-check.sh
 ./scripts/worktree-align.sh [ref]      # ff-merge local default branch into a fresh delegated worktree; a delegated subagent's mandatory first act
 ./scripts/test-worktree-align.sh       # regression test for worktree-align.sh
-./scripts/fold-to-main.sh [default]    # ff-fold current feature branch into local default + checkout it; the eager-background gate's prep step (ardd-implement/converge)
+./scripts/fold-to-main.sh [default]    # ff-fold current feature branch into local default + checkout it; the eager-background gate's prep step (ardd-implement)
 ./scripts/test-fold-to-main.sh         # regression test for fold-to-main.sh
 ./scripts/inflight-worktrees.sh        # enumerate other worktrees + their tasks-file state (solo mode's in-flight visibility channel)
 ./scripts/test-inflight-worktrees.sh   # regression test for inflight-worktrees.sh
@@ -215,7 +215,6 @@ this is not enforceable by a hook, and that was verified, not assumed.**
   `ardd-state.sh feature-*` subcommands, invoked by `/ardd-backlog`,
   `/ardd-plan` (both the `backlogged→planned` approval flip and the
   `planned→tasked` flip, now that tasking is folded in), `/ardd-implement`,
-  `/ardd-converge`,
   `/ardd-tracker` (pull imports new `backlogged` entries), and
   `/ardd-status` (one narrow exception: the `tasked→implemented` flip,
   on user confirmation, for an orphaned completion flip its
@@ -264,7 +263,7 @@ current project; it never writes, only reports.
 **The "check branch" step's deterministic half is a shared script, not
 duplicated prose.** `scripts/branch-info.sh` (installed to
 `.claude/skills/ardd-scripts/`) computes `current`/`default`/`on_default`;
-`ardd-plan`, `ardd-implement`, and `ardd-converge` all shell out to it
+`ardd-plan` and `ardd-implement` both shell out to it
 instead of re-deriving the current/default-branch fallback chain. What's still duplicated
 across those three, deliberately, is the *interactive* half — suggesting a
 semantic name, asking the user, deciding what to do with the answer —
@@ -310,14 +309,13 @@ truth*; and three installed scripts bridge them:
   the local default branch and checks it out (returning the focused session
   to `<default>`), refusing (`folded=false reason=dirty|detached|diverged|...`)
   rather than resolving — same discipline as align. The delegation gate in
-  `ardd-implement`/`ardd-converge` runs it when the user opts to background
+  `ardd-implement` runs it when the user opts to background
   while on a branch. A fast-forward authors no new commit, so the
   "no state-commit before the branch" invariant holds. (Decision record
   0004; supersedes the old "on a branch → run inline" default.)
 - `scripts/inflight-worktrees.sh` — enumerates every *other* worktree of
   the repo and its tasks-file state (branch, status, checkbox progress).
-  This is solo mode's coarse-state visibility channel: `ardd-implement`/
-  `ardd-converge` run it before the pick list (so a second run can start
+  This is solo mode's coarse-state visibility channel: `ardd-implement` runs it before the pick list (so a second run can start
   safely while another is in flight) and before delegating (it replaced the
   old harness-`TaskList` coordination check — deterministic, scriptable,
   and it survives conversation death, since an abandoned subagent's
@@ -403,7 +401,7 @@ implementation *would* use; in the solo no-gate flow that ref may never be
 created, and `completion-flip-check.sh` treats a nonexistent ref as
 not-merged (silent). Tried the delegating-plan variant once and reverted —
 decision record 0001 has the story if the "make plan consistent with
-implement/converge" temptation recurs.
+implement" temptation recurs.
 
 `isolation: "worktree"` creates and names its own worktree/branch — there
 is no parameter to point it at a pre-made one, and the branch name is only
@@ -466,7 +464,7 @@ scripts above); `ardd-tracker`'s remaining `gh` glue (error handling needs
 judgment; the decisions are already in the three `sync-*.sh` scripts);
 the post-delegation `core.bare` check (a one-line `git config --get`);
 and all genuine-judgment steps (Mermaid diagram content, feature naming,
-converge's gap identification).
+reconcile mode's gap identification).
 
 ## Conventions
 

@@ -80,13 +80,15 @@ either way.
 ## When things get interrupted
 
 ```
-/ardd-converge
+/ardd-implement --reconcile <tasks-file>
 ```
 
-Reconciles the codebase against a tasks file — marks work that's
-actually done, notes partial work, appends gaps — then `/ardd-implement`
-continues. Reach for it after a crashed run, a manual detour, or any
-"I did some of this by hand" situation.
+Reconcile mode compares the codebase against the tasks file — marks work
+that's actually done, notes partial work, appends gaps — then the same
+run (or the next `/ardd-implement`) continues. `/ardd-implement` also
+offers this itself when you pick an interrupted (`in-progress`, unclaimed)
+file. Reach for the explicit flag after a crashed run, a manual detour, or
+any "I did some of this by hand" situation.
 
 ## Periodic hygiene
 
