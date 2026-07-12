@@ -63,7 +63,7 @@ status: in-progress
   merge-driver feature lands). `merge_policy` is consulted in solo mode only.
   Reword `fold-to-main.sh` mentions in both skills to recovery-path framing.
 
-- [ ] T006 [parallel] Write
+- [x] T006 [parallel] Write
   `docs/decisions/0005-background-by-default.md`: what changed relative to
   decision 0004 (plan stops authoring the branch fold-to-main existed to
   undo), why fold demotes to a recovery path rather than being deleted

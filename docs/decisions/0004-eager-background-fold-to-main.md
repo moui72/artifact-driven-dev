@@ -1,7 +1,11 @@
 # 0004 — Eager background delegation via fold-to-main
 
 _2026-07-10. Reverses the "on a branch → run inline" delegation default
-(`/ardd-implement`, `/ardd-converge`)._
+(`/ardd-implement`, `/ardd-converge`). Extended by
+[0005 — Background by default](0005-background-by-default.md): solo
+`/ardd-plan` stopped authoring the branch the fold existed to undo, so the
+fold is now a recovery path, and the `delegation`/`merge_policy` knobs can
+remove the gate's prompts entirely._
 
 ## The old default and why it was wrong
 
