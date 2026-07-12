@@ -99,4 +99,34 @@ sh "$ASSERT" "$T" --tasks-status .project/tasks/tasks-dm-aaaa.md in-progress >/d
 set -e
 [ "$rc" -ne 0 ] && ok "--tasks-status wrong value fails" || bad "--tasks-status wrong value fails"
 
+# --- --task-checked: checked passes; unchecked and missing ids fail ---
+cat > "$T/.project/tasks/tasks-dm-bbbb.md" <<'EOF'
+---
+plan: plan-dm-2026-07-06.md
+generated: 2026-07-06
+status: in-progress
+---
+# Tasks
+- [x] T001 already reconciled
+- [ ] T002 still open
+EOF
+sh "$ASSERT" "$T" --task-checked .project/tasks/tasks-dm-bbbb.md T001 \
+  && ok "--task-checked passes on a checked task" || bad "--task-checked passes on a checked task"
+set +e
+sh "$ASSERT" "$T" --task-checked .project/tasks/tasks-dm-bbbb.md T002 >/dev/null 2>&1; rc=$?
+set -e
+[ "$rc" -ne 0 ] && ok "--task-checked fails on an unchecked task" || bad "--task-checked fails on an unchecked task"
+set +e
+sh "$ASSERT" "$T" --task-checked .project/tasks/tasks-dm-bbbb.md T099 >/dev/null 2>&1; rc=$?
+set -e
+[ "$rc" -ne 0 ] && ok "--task-checked fails on a missing task id" || bad "--task-checked fails on a missing task id"
+# T001 must not match T0011 (id is a whole token)
+cat >> "$T/.project/tasks/tasks-dm-bbbb.md" <<'EOF'
+- [x] T0011 lookalike id
+EOF
+set +e
+sh "$ASSERT" "$T" --task-checked .project/tasks/tasks-dm-bbbb.md T0012 >/dev/null 2>&1; rc=$?
+set -e
+[ "$rc" -ne 0 ] && ok "--task-checked does not prefix-match lookalike ids" || bad "--task-checked does not prefix-match lookalike ids"
+
 exit "$fail"

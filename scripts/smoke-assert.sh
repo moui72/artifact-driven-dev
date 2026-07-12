@@ -11,6 +11,7 @@
 #   --feature <slug> <status>     register entry must have that status
 #   --plan-status <relpath> <status>    plan frontmatter status must match
 #   --tasks-status <relpath> <status>   tasks frontmatter status must match
+#   --task-checked <relpath> <id>       task <id>'s checkbox must be [x]
 #
 # Usage: smoke-assert.sh <target-dir> [assertions...]
 # Exit 0 if every assertion holds, 1 otherwise.
@@ -55,6 +56,18 @@ while [ $# -gt 0 ]; do
       else
         actual="$(sed -n 's/^status:[[:space:]]*\([a-z-]*\).*/\1/p' "$f" | head -1)"
         [ "$actual" = "$3" ] || report "$kind $2 status '$actual', expected '$3'"
+      fi
+      shift 3 ;;
+    --task-checked)
+      f="$TARGET/$2"
+      if [ ! -f "$f" ]; then
+        report "tasks file missing: $2"
+      elif grep -q "^- \[x\] $3\([[:space:]]\|$\)" "$f"; then
+        : # checked — holds
+      elif grep -q "^- \[ \] $3\([[:space:]]\|$\)" "$f"; then
+        report "task $3 in $2 is unchecked, expected [x]"
+      else
+        report "task $3 not found in $2"
       fi
       shift 3 ;;
     *)

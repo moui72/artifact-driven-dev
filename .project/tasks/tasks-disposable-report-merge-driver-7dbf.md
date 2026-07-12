@@ -53,7 +53,7 @@ status: in-progress
 
 ## Phase 3: Smoke-tier expansion [defect: 7efff3a5]
 
-- [ ] T005 [defect: 7efff3a5] Add smoke scenarios for the surfaces the
+- [x] T005 [defect: 7efff3a5] Add smoke scenarios for the surfaces the
   sixth/seventh-pass defect names, following the existing
   scenario + `smoke-assert.sh` pattern in `.github/workflows/smoke.yml`:
   (a) Reconcile mode — seed the fixture project with an `in-progress`

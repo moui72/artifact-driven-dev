@@ -120,3 +120,191 @@ jobs:
             --absent ".project/DEFECTS.md" \
             --absent ".project/SYNC.md" \
             --absent ".project/TRACKER.md"
+
+  # Scenario 3 [defect: 7efff3a5]: reconcile mode. Seed a target whose
+  # codebase work is ahead of its in-progress tasks file's checkboxes
+  # (T001's deliverable already exists on disk, unchecked), run
+  # `/ardd-implement --reconcile`, and assert the checkboxes advanced and
+  # every status is still legal (smoke-assert always lints).
+  reconcile-smoke:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for API key
+        id: key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "ANTHROPIC_API_KEY not provisioned — skipping smoke run (expected until the secret is added)."
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up interrupted-run fixture
+        if: steps.key.outputs.present == 'true'
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI"
+          mkdir -p /tmp/reconcile-target/.project/artifacts \
+                   /tmp/reconcile-target/.project/features \
+                   /tmp/reconcile-target/.project/plans \
+                   /tmp/reconcile-target/.project/tasks
+          cd /tmp/reconcile-target
+          git init -q -b main
+          cat > .project/artifacts/constitution.md <<'EOF'
+          ---
+          name: constitution
+          status: stable
+          last_updated: 2026-07-12
+          workflow_mode: solo
+          ---
+          # Smoke Constitution
+
+          ## Core Principles
+
+          ### I. Simplicity
+
+          Keep it minimal.
+          EOF
+          cat > .project/features/hello-command.md <<'EOF'
+          ---
+          slug: hello-command
+          status: tasked
+          logged: 2026-07-12
+          ---
+          A hello command that prints a greeting.
+          EOF
+          cat > .project/plans/plan-hello-command-2026-07-12.md <<'EOF'
+          ---
+          status: approved
+          branch: hello-command
+          created: 2026-07-12
+          features: [hello-command]
+          ---
+          # Plan: hello command
+
+          Two tiny shell scripts at the project root.
+          EOF
+          cat > .project/tasks/tasks-hello-command-cafe.md <<'EOF'
+          ---
+          plan: plan-hello-command-2026-07-12.md
+          generated: 2026-07-12
+          status: in-progress
+          ---
+          # Tasks
+
+          - [ ] T001 Create hello.sh at the project root: a POSIX sh script that prints "hello"
+          - [ ] T002 Create bye.sh at the project root: a POSIX sh script that prints "bye"
+          EOF
+          # Codebase ahead of the checkboxes: T001's deliverable already
+          # exists, but its box is unchecked (interrupted run).
+          printf '#!/usr/bin/env sh\necho "hello"\n' > hello.sh
+          chmod +x hello.sh
+          git add -A && git commit -q -m "fixture: interrupted run, T001 done on disk but unchecked"
+          cd "$GITHUB_WORKSPACE"
+          ./install.sh /tmp/reconcile-target
+
+      - name: Install Claude Code CLI
+        if: steps.key.outputs.present == 'true'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: "Smoke flow: /ardd-implement --reconcile"
+        if: steps.key.outputs.present == 'true'
+        working-directory: /tmp/reconcile-target
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "/ardd-implement --reconcile .project/tasks/tasks-hello-command-cafe.md — reconcile and then continue inline to completion" --dangerously-skip-permissions
+
+      - name: "Scenario 3 assertions: checkboxes advanced, statuses legal"
+        if: steps.key.outputs.present == 'true'
+        run: |
+          ./scripts/smoke-assert.sh /tmp/reconcile-target \
+            --task-checked ".project/tasks/tasks-hello-command-cafe.md" T001 \
+            --exists "hello.sh" \
+            --absent ".project/DEFECTS.md" \
+            --absent ".project/TRACKER.md"
+
+  # Scenario 4 [defect: 7efff3a5]: /ardd-init, both modes. Greenfield —
+  # a scripted design-conversation prompt stands in for the interview;
+  # assert the constitution was seeded with valid frontmatter (smoke-assert
+  # lints) and STATUS.md exists. Existing-code — a minimal fixture codebase;
+  # assert artifacts were reverse-engineered.
+  init-smoke:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for API key
+        id: key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "ANTHROPIC_API_KEY not provisioned — skipping smoke run (expected until the secret is added)."
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up targets (greenfield + existing-code fixtures)
+        if: steps.key.outputs.present == 'true'
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI"
+          mkdir -p /tmp/init-greenfield
+          cd /tmp/init-greenfield
+          git init -q -b main
+          git commit -q --allow-empty -m "empty project"
+          mkdir -p /tmp/init-existing
+          cd /tmp/init-existing
+          git init -q -b main
+          printf '#!/usr/bin/env sh\n# greet: print a greeting for the given name\necho "hello ${1:-world}"\n' > greet.sh
+          chmod +x greet.sh
+          printf '# greet\n\nA tiny CLI that prints a greeting.\n' > README.md
+          git add -A && git commit -q -m "existing codebase fixture"
+          cd "$GITHUB_WORKSPACE"
+          ./install.sh /tmp/init-greenfield
+          ./install.sh /tmp/init-existing
+
+      - name: Install Claude Code CLI
+        if: steps.key.outputs.present == 'true'
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: "Smoke flow: /ardd-init greenfield (scripted design conversation)"
+        if: steps.key.outputs.present == 'true'
+        working-directory: /tmp/init-greenfield
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "/ardd-init — greenfield project. Design decisions, in lieu of the interview: a tiny CLI named greet that prints a greeting; POSIX sh; no external dependencies; workflow_mode solo; next_step_prompt false. Use these decisions as given — do not ask questions." --dangerously-skip-permissions
+
+      - name: "Scenario 4a assertions: greenfield artifacts seeded"
+        if: steps.key.outputs.present == 'true'
+        run: |
+          ./scripts/smoke-assert.sh /tmp/init-greenfield \
+            --exists ".project/artifacts/constitution.md" \
+            --exists ".project/STATUS.md" \
+            --absent ".project/DEFECTS.md" \
+            --absent ".project/TRACKER.md"
+
+      - name: "Smoke flow: /ardd-init existing-code"
+        if: steps.key.outputs.present == 'true'
+        working-directory: /tmp/init-existing
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "/ardd-init — existing codebase: reverse-engineer the artifacts from the code as it stands. Pick workflow_mode solo and next_step_prompt false — do not ask questions." --dangerously-skip-permissions
+
+      - name: "Scenario 4b assertions: artifacts reverse-engineered"
+        if: steps.key.outputs.present == 'true'
+        run: |
+          ./scripts/smoke-assert.sh /tmp/init-existing \
+            --exists ".project/artifacts/constitution.md" \
+            --absent ".project/DEFECTS.md" \
+            --absent ".project/TRACKER.md"
