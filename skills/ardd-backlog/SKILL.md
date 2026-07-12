@@ -32,6 +32,13 @@ the idea against the current artifacts before it earns a backlog entry.
    full design detail), ask one clarifying question. Do not ask questions
    answerable by reading the artifacts.
 
+   **Mirror check:** if the description is actually a complaint about
+   *existing* behavior — a bug, a UX problem, something that works but
+   shouldn't work that way — it belongs in a feedback file, not the
+   register. Offer to capture it as `/ardd-feedback <the observation>`
+   instead; only log it here if the user confirms it really is a new
+   capability.
+
 2. **Derive a slug.** Choose the wording (judgment — prefer a short
    capability-level noun phrase), then sanitize it deterministically:
    `.claude/skills/ardd-scripts/ardd-state.sh slug "<text>"`. Check for a

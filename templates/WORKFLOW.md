@@ -10,7 +10,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 |---|---|
 | `/ardd-init` | One-time initialization of .project/ — detects greenfield vs existing code, then seeds artifacts from the design conversation (interviewing first if needed) or reverse-engineers them from the codebase; seeds .project/ artifacts, not CLAUDE.md (for CLAUDE.md use the built-in /init). |
 | `/ardd-backlog` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature). |
-| `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume. |
+| `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume — new-capability ideas belong in /ardd-backlog instead. |
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning; given a name that doesn't exist yet, it creates the artifact from a template (absorbs ardd-add-artifact). |
 | `/ardd-plan` | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |
 | `/ardd-implement` | Execute tasks sequentially — offers worktree delegation; all state rides the work branch and lands on merge. --reconcile <file> re-syncs an interrupted tasks file with the codebase first (absorbs ardd-converge). |

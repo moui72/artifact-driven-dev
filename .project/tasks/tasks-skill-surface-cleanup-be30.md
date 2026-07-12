@@ -147,7 +147,7 @@ tasks encode._
   with redirect text pointing to `/ardd-feedback`. Both descriptions carry
   the "takes no proposal/observation input" clause.
 
-- [ ] T014 Feedback/backlog cross-routing: `ardd-feedback`'s classification
+- [x] T014 Feedback/backlog cross-routing: `ardd-feedback`'s classification
   step gains the fourth outcome (item is a new capability → candidate for
   the register) with BATCHED confirmation — one grouped prompt listing all
   re-file candidates, per-item accept/decline within it, never N sequential
