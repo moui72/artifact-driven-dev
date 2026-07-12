@@ -1,7 +1,7 @@
 ---
 plan: plan-pre-release-ratchets-2026-07-12.md
 generated: 2026-07-12
-status: ready
+status: in-progress
 ---
 
 # Tasks
