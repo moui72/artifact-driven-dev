@@ -74,14 +74,14 @@ After discussing your project with Claude, run:
 ```
 
 (On a greenfield project `/ardd-init` conducts that discussion as an
-interview itself, in its step 0, before seeding artifacts. The quickstart
+interview itself before seeding artifacts. The quickstart
 above opens straight into it.)
 
 This reads the conversation and writes initial artifacts to
 `.project/artifacts/` — whichever set your project's concerns actually
 call for (a constitution nearly always; infrastructure/datamodel/ui/api
 only when those concerns exist). Each gets `status: draft` if there are
-open questions. When a constitution is among them, bootstrap also offers
+open questions. When a constitution is among them, init also offers
 an opinionated suggestion catalog (accept or reject per suggestion) and
 asks once whether the project runs `solo` or `collaborative`
 (`workflow_mode`, which gates branch/delegation behavior later), and once
@@ -291,21 +291,12 @@ conflict-free (any conflict stops and asks; nothing is ever auto-resolved).
 pushed draft PR instead — nothing is committed to your local default
 branch, and `merge_policy` is never consulted.)
 
----
-
-### 5. Resume after interruption
-
-If `/ardd-implement` is interrupted — or you pick the project up in a new session:
-
-```
-/ardd-implement --reconcile <tasks-file>
-```
-
-Same worktree-delegation offer and state model as a normal `/ardd-implement`
-run (reconcile is a mode of the same skill; picking an interrupted file in
-the pick list offers it too). It compares the codebase against the file,
-marks tasks that are already done, notes partial work, and appends any gaps
-as new tasks. Then you can run `/ardd-implement` again to continue.
+**Interrupted?** Run `/ardd-implement` again — when you pick an
+`in-progress` file no worktree claims, it offers to reconcile against the
+codebase first (marking work already done, noting partial work, appending
+gaps) before continuing. `/ardd-implement --reconcile <tasks-file>` enters
+that mode explicitly, and works on `ready` files too. There is no separate
+resume skill.
 
 ---
 

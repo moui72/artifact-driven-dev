@@ -159,7 +159,7 @@ tasks encode._
 
 ## Phase 4: Docs (structural rewrites — not token sweeps)
 
-- [ ] T015 Rewrite, don't sweep: USAGE core loop renumbered (the "resume
+- [x] T015 Rewrite, don't sweep: USAGE core loop renumbered (the "resume
   after interruption" step dissolves into implement's step; init replaces
   the bootstrap/codify pair in "seed your artifacts"); README Philosophy
   verb list rewritten to the new surface; README Concurrency section's

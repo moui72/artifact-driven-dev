@@ -15,11 +15,12 @@ system to capture, cross-check, and execute against those decisions — not
 one that generates the decisions for you through structured discovery. The
 workflow is:
 
-1. **Capture** decisions in living artifacts
-2. **Analyze** artifacts for consistency before planning
-3. **Plan** once artifacts are stable
-4. **Execute** against an ordered task list
-5. **Converge** when work is interrupted
+1. **Capture** decisions in living artifacts (`/ardd-refine`, `/ardd-backlog`,
+   `/ardd-feedback`)
+2. **Check** artifacts for consistency before planning (`/ardd-status`)
+3. **Plan** once artifacts are stable (`/ardd-plan`)
+4. **Execute** against an ordered task list (`/ardd-implement` — which also
+   reconciles the list with reality after an interruption)
 
 ## When artifacts earn their keep
 
@@ -135,6 +136,26 @@ Opt-in skills for concerns the core loop doesn't force on you.
 | `/ardd-diagram` | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render). |
 | `/ardd-tracker` | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync). |
 | `/ardd-update` | Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
+
+## Renamed in v1.0.0
+
+The skill surface was finalized for v1.0.0: six renames and four skills
+folded into surviving ones. Old commands are gone (install.sh prunes them
+and points at the replacement); files they owned are migrated
+automatically.
+
+| Before v1.0.0 | Now |
+|---|---|
+| `ardd-analyze` | `/ardd-status` |
+| `ardd-critique` | `/ardd-audit` (legacy owned file `critique.md` → `audit.md`) |
+| `ardd-verify` | `/ardd-defects` (DEFECTS.md keeps its name) |
+| `ardd-sync` | `/ardd-tracker` (legacy owned file `SYNC.md` → `TRACKER.md`) |
+| `ardd-feature` | `/ardd-backlog` (`.project/features/` keeps its name) |
+| `ardd-render` | `/ardd-diagram` |
+| `ardd-converge` | folded into `/ardd-implement` (reconcile mode — offered on pick, or `--reconcile <file>`) |
+| `ardd-add-artifact` | folded into `/ardd-refine` (naming a new artifact enters its create path) |
+| `ardd-bootstrap` | merged into `/ardd-init` (greenfield path) |
+| `ardd-codify` | merged into `/ardd-init` (existing-codebase path) |
 
 ## Quickstart
 

@@ -20,7 +20,7 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new
 It creates and `git init`s `my-project/`, installs ARDD into it via
 `install.sh`, and offers to open Claude Code on `/ardd-init` — which, on
 a cold start, conducts the Step 1 design conversation as an interview (its
-step 0) and then writes your artifacts. Pick the guide back up at
+greenfield interview) and then writes your artifacts. Pick the guide back up at
 [Step 3](#step-3-refine-each-artifact).
 
 Pass `--kickoff` to skip the question and launch, or `--no-kickoff` to
@@ -49,7 +49,7 @@ Then open Claude Code in your project.
 
 Before running any skill, talk through your project with Claude. This is where
 the real work happens. (`/ardd-init` conducts exactly this conversation
-as an interview in its step 0, if you'd rather be asked than lead.) Cover:
+as an interview, if you'd rather be asked than lead.) Cover:
 
 - **What the system does** — one or two sentences; what problem it solves
 - **Who uses it** — role, technical level, how often
@@ -65,7 +65,7 @@ and into the conversation so `/ardd-init` has something to work with.
 
 ---
 
-## Step 2: Bootstrap your artifacts
+## Step 2: Initialize your artifacts
 
 ```
 /ardd-init
