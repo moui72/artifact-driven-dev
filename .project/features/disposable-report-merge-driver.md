@@ -1,6 +1,6 @@
 ---
 slug: disposable-report-merge-driver
-status: tasked
+status: implemented
 logged: 2026-07-11
 plan: plan-disposable-report-merge-driver-2026-07-12-c310.md
 tasks: tasks-disposable-report-merge-driver-7dbf.md
