@@ -126,7 +126,7 @@ the coordinator or the inline path.
    - [ANNOTATION MISSING] <shortcut without a production annotation>
 
    ## Diagrams
-   - <name>.md — current ✅ / stale ⚠️ (run /ardd-render <name>) / unrendered ⚠️ (never generated — run /ardd-render <name>)
+   - <name>.md — current ✅ / stale ⚠️ (run /ardd-diagram <name>) / unrendered ⚠️ (never generated — run /ardd-diagram <name>)
    (Only list renderable artifacts: datamodel, infrastructure, ui. Read each
    one's `diagram_status` frontmatter field directly — do not infer from
    whether a README section merely exists.)

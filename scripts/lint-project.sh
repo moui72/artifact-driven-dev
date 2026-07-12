@@ -180,7 +180,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     fi
 
     # An artifact is renderable when it declares diagram_type (the literal
-    # Mermaid diagram-type declaration — /ardd-render). Renderability is a
+    # Mermaid diagram-type declaration — /ardd-diagram). Renderability is a
     # property, not a fixed name-list: there is no RENDERABLE_ARTIFACTS set and
     # no enum of diagram types (an invalid type surfaces at render, not here).
     # diagram_status is required once diagram_type is present, and enum-checked
@@ -196,7 +196,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     fi
 
     # diagram_type / render_hint / render_target / render_section are the
-    # optional per-artifact render fields for /ardd-render. All are free-form
+    # optional per-artifact render fields for /ardd-diagram. All are free-form
     # strings, so there's no enum to check — only that a present field isn't
     # empty (an empty value would silently fall back to a default or make a
     # non-renderable artifact look renderable, masking a typo). Validated on

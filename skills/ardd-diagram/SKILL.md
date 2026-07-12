@@ -1,10 +1,10 @@
 ---
-name: ardd-render
+name: ardd-diagram
 tier: extension
-description: Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination (README.md by default).
+description: "Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render)."
 ---
 
-# /ardd-render
+# /ardd-diagram
 
 Generate a Mermaid diagram from a project artifact and upsert it into a
 target markdown file — `README.md` by default, or a per-artifact override
@@ -13,7 +13,7 @@ whose `README.md` must stay clean of raw Mermaid (e.g. an npm package page,
 which doesn't render Mermaid fences) can point its diagrams at a
 GitHub-only doc instead.
 
-Usage: `/ardd-render [<artifact>]` where `<artifact>` is the filename stem of
+Usage: `/ardd-diagram [<artifact>]` where `<artifact>` is the filename stem of
 an artifact that declares a `diagram_type` (e.g. `datamodel`). With no
 argument, every artifact that declares one is rendered.
 
@@ -62,7 +62,7 @@ When `render_target` and `render_section` are both absent, a diagram lands in
 ## Steps
 
 1. **Resolve the target artifact(s).**
-   - **Argument given** (`/ardd-render <name>`): read
+   - **Argument given** (`/ardd-diagram <name>`): read
      `.project/artifacts/<name>.md`. If it doesn't exist, or exists but does
      not declare `diagram_type`, report that it isn't renderable (only
      artifacts declaring `diagram_type` can be rendered) and exit.

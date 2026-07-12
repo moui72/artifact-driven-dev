@@ -2,7 +2,7 @@
 # Migration 0005: give the historically-renderable artifacts a diagram_type
 # (plus an explicit render_section) so they keep rendering after the closed
 # render-config table was retired (Principle VII — delete the table, carry
-# existing projects forward). /ardd-render now renders any artifact that
+# existing projects forward). /ardd-diagram now renders any artifact that
 # declares diagram_type; before this migration datamodel/infrastructure/ui
 # declared none and would silently stop rendering on upgrade.
 #

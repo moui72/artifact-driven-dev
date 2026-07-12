@@ -350,14 +350,14 @@ artifact opts in by declaring one. To generate a Mermaid diagram and upsert it
 into `README.md` (the default destination):
 
 ```
-/ardd-render datamodel
-/ardd-render infrastructure
+/ardd-diagram datamodel
+/ardd-diagram infrastructure
 ```
 
-`/ardd-render datamodel` renders `datamodel.md` (which declares
+`/ardd-diagram datamodel` renders `datamodel.md` (which declares
 `diagram_type: erDiagram`) and writes it under a `## Datamodel` section;
-`/ardd-render infrastructure` renders `infrastructure.md` under
-`## Infrastructure`. Running bare `/ardd-render` renders every artifact that
+`/ardd-diagram infrastructure` renders `infrastructure.md` under
+`## Infrastructure`. Running bare `/ardd-diagram` renders every artifact that
 declares a `diagram_type`. GitHub renders Mermaid code fences natively — no
 extra tooling needed.
 

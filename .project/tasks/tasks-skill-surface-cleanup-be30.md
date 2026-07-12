@@ -73,7 +73,7 @@ tasks encode._
   /ardd-feedback instead"); command references sweep. Explicitly out:
   `.project/features/` and `ardd-state.sh feature-*` keep their names.
 
-- [ ] T007 Rename `ardd-render` → `ardd-diagram`: dir, `name:`, F007
+- [x] T007 Rename `ardd-render` → `ardd-diagram`: dir, `name:`, F007
   description ending "(formerly ardd-render)"; sweep references
   (`render_target`/`render_section` frontmatter fields keep their names —
   data schema, not command surface).

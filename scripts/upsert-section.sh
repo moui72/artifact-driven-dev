@@ -3,7 +3,7 @@
 # section of a markdown file. The new body is read from stdin. Replaces
 # from the exact header line to (not including) the next "## " line or
 # EOF; appends "## <header>" + body at EOF when the section is absent.
-# Never touches any other line — this is the text surgery /ardd-render
+# Never touches any other line — this is the text surgery /ardd-diagram
 # step 6 previously described in prose, where an LLM slip could eat
 # unrelated README content (constitution Principle II).
 #

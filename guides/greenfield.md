@@ -200,9 +200,9 @@ continue.
 At any point, generate Mermaid diagrams into `README.md`:
 
 ```
-/ardd-render datamodel
-/ardd-render infrastructure
-/ardd-render ui
+/ardd-diagram datamodel
+/ardd-diagram infrastructure
+/ardd-diagram ui
 ```
 
 GitHub renders Mermaid code fences natively — no extra tooling needed.
