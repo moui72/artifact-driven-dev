@@ -29,8 +29,12 @@ None open — all feedback files are `status: planned`.
 
 ## Feature Backlog
 
-2 backlogged · 0 planned · 0 tasked · 8 implemented — see `.project/features/`.
+3 backlogged · 0 planned · 0 tasked · 8 implemented — see `.project/features/`.
 
+- `remote-install-source` — backlogged: install.sh//ardd-update default to
+  the latest tagged GitHub release instead of a live local checkout
+  (release-cutting process included); endgame retires the
+  primary-stays-on-main mandate via constitution amendment.
 - `disposable-report-merge-driver` — backlogged: `.gitattributes` merge
   driver for the disposable single-writer reports; what makes parallel
   auto-merges conflict-free.
@@ -62,7 +66,8 @@ risk (smoke CI never runs). Work them from the checklist directly.
 
 ## Recommended Next Step
 
-Push `main` when ready (it holds this session's 13 unpushed commits, all
-signed). Optional threads: log the reaped-worktree observation via
-`/ardd-feedback`; work the critique checklist; plan
-`disposable-report-merge-driver` (it unlocks `worktree-reap-and-fanout`).
+Run `/ardd-plan remote-install-source` — it's the root-cause fix (retires
+the primary-stays-on-main mandate) and defines the release discipline the
+other consumers update against. Other threads: `main` has 2 unpushed
+commits (STATUS refreshes); log the reaped-worktree observation via
+`/ardd-feedback`; critique checklist; `disposable-report-merge-driver`.
