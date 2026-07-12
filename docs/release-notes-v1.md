@@ -1,13 +1,13 @@
-# ARDD v1.0.0 release notes
+# ARDD v0.9.0 release notes
 
 The first tagged release finalizes the public skill surface.
 
-The skill surface was finalized for v1.0.0: six renames and four skills
+The skill surface was finalized for v0.9.0: six renames and four skills
 folded into surviving ones. Old commands are gone (install.sh prunes them
 and points at the replacement); files they owned are migrated
 automatically.
 
-| Before v1.0.0 | Now |
+| Before v0.9.0 | Now |
 |---|---|
 | `ardd-analyze` | `/ardd-status` |
 | `ardd-critique` | `/ardd-audit` (legacy owned file `critique.md` → `audit.md`) |

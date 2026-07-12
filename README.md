@@ -137,14 +137,14 @@ Opt-in skills for concerns the core loop doesn't force on you.
 | `/ardd-tracker` | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync). |
 | `/ardd-update` | Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
 
-## Renamed in v1.0.0
+## Renamed in v0.9.0
 
-The skill surface was finalized for v1.0.0: six renames and four skills
+The skill surface was finalized for v0.9.0: six renames and four skills
 folded into surviving ones. Old commands are gone (install.sh prunes them
 and points at the replacement); files they owned are migrated
 automatically.
 
-| Before v1.0.0 | Now |
+| Before v0.9.0 | Now |
 |---|---|
 | `ardd-analyze` | `/ardd-status` |
 | `ardd-critique` | `/ardd-audit` (legacy owned file `critique.md` → `audit.md`) |
