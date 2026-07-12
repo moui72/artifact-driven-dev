@@ -1,7 +1,9 @@
 ---
 slug: disposable-report-merge-driver
-status: backlogged
+status: tasked
 logged: 2026-07-11
+plan: plan-disposable-report-merge-driver-2026-07-12-c310.md
+tasks: tasks-disposable-report-merge-driver-7dbf.md
 ---
 
 The disposable-report rule for single-writer files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) is mechanized as a git merge driver — .gitattributes marks those paths merge=ours with the driver enabled per clone alongside core.hooksPath — so parallel work-branch merges never conflict on generated reports.
