@@ -83,7 +83,7 @@ code does, not necessarily what was intended. Review each one with
      the same way other inferred content is marked for the user to see and
      correct. Never write to `DEFECTS.md` or the feature register here — report the
      violated count in step 8 instead, recommending `/ardd-defects` (to log
-     each gap in `DEFECTS.md`) followed by `/ardd-feature` to backlog closing
+     each gap in `DEFECTS.md`) followed by `/ardd-backlog` to backlog closing
      it. This preserves those files' existing single-writer ownership.
 
    Use the standard section structure for each known artifact type (see
@@ -174,7 +174,7 @@ code does, not necessarily what was intended. Review each one with
      or ambiguous
    - Which constitution suggestions (if any) were accepted, and how many of
      those are marked `[VIOLATED: ...]` — if any are, recommend running
-     `/ardd-defects` next to log them in `DEFECTS.md`, then `/ardd-feature` to
+     `/ardd-defects` next to log them in `DEFECTS.md`, then `/ardd-backlog` to
      backlog closing each gap
    - Recommended next step: `/ardd-refine <artifact>` for whichever artifact
      has the most open questions, then `/ardd-status` when all are resolved

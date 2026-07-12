@@ -142,7 +142,7 @@ algorithmic approaches:
 Research outputs land in `.project/plans/research-<topic>-<date>.md` —
 one-off documents nothing reads back automatically. Fold standing
 decisions into the relevant artifact with `/ardd-refine` so planning
-sees them; log new backlog-worthy scope with `/ardd-feature`.
+sees them; log new backlog-worthy scope with `/ardd-backlog`.
 
 ---
 

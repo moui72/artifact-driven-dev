@@ -58,4 +58,4 @@ Investigate a specific topic and produce a research document. Usage:
    step to actually record it — a research doc is a one-off write with no
    lifecycle, so nothing else in the system will pick it up automatically.
    If it instead surfaces new backlog-worthy scope rather than a decision,
-   recommend `/ardd-feature` instead.
+   recommend `/ardd-backlog` instead.

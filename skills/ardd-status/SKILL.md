@@ -10,7 +10,7 @@ Non-destructive cross-artifact consistency and quality check. Discovers and
 reads all artifacts present in `.project/artifacts/`, then reports gaps,
 contradictions, and implied-but-undefined decisions.
 
-`/ardd-feature`, `/ardd-plan`, `/ardd-refine`,
+`/ardd-backlog`, `/ardd-plan`, `/ardd-refine`,
 `/ardd-feedback`, `/ardd-implement` and `/ardd-converge` (both on
 tasks-file completion), `/ardd-add-artifact` (when relevant), and
 `/ardd-defects` invoke this skill automatically as their final step, since

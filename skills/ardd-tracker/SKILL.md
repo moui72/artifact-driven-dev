@@ -16,7 +16,7 @@ Usage: `/ardd-tracker` runs both phases (push then pull). `/ardd-tracker push` o
 `/ardd-tracker pull` runs one.
 
 The register owns name, slug, and description — design intent, set by
-`/ardd-feature`, `/ardd-plan`, `/ardd-implement`. The tracker
+`/ardd-backlog`, `/ardd-plan`, `/ardd-implement`. The tracker
 owns issue state, labels, and discussion — execution visibility. Each field
 syncs in one fixed direction; `/ardd-tracker` never overwrites a tracker's
 title/body after creation, and never overwrites a register entry's
@@ -132,7 +132,7 @@ eventually carry links into more than one tracker.
    applied by stakeholders themselves, never inferred, so a stray bug report
    never gets treated as a feature idea. For each:
    - Derive a slug from the title: `ardd-state.sh slug "<title>"`, with
-     the same hex-suffix collision handling as `/ardd-feature` step 2.
+     the same hex-suffix collision handling as `/ardd-backlog` step 2.
    - Create the entry (description from the issue body, stripping any
      `<!-- ardd-sync-slug-... -->` marker from a prior push cycle):
      `printf '%s\n' "<description>" | ardd-state.sh feature-create <slug>`,

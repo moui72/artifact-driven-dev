@@ -131,7 +131,7 @@ to focus on a single artifact.
 
    Rules for commands on Suggestions:
    - Use `/ardd-refine <artifact> <directive>` for artifact changes.
-   - Use `/ardd-feature <description>` if the finding implies a cross-artifact
+   - Use `/ardd-backlog <description>` if the finding implies a cross-artifact
      change.
    - The directive must be specific enough to act on without re-reading the
      finding (e.g., "consolidate AiNote and StoredNote into a single Note type

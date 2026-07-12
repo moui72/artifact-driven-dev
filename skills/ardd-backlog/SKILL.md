@@ -1,10 +1,10 @@
 ---
-name: ardd-feature
+name: ardd-backlog
 tier: core
-description: Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet.
+description: "Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature)."
 ---
 
-# /ardd-feature
+# /ardd-backlog
 
 Log a feature idea to the backlog — a new file in `.project/features/`
 (the per-feature register; constitution standing decision 2026-07-06). This
@@ -16,10 +16,10 @@ rather than committing to design-and-apply the moment you think of one.
 
 Not to be confused with `/ardd-codify`'s feature-register extraction — that's
 the one-time bulk backfill of a whole register from an existing codebase (an
-offered step of `/ardd-codify`). `/ardd-feature` logs a single new idea at a
+offered step of `/ardd-codify`). `/ardd-backlog` logs a single new idea at a
 time, going forward.
 
-Usage: `/ardd-feature <description>` where description is a plain-language
+Usage: `/ardd-backlog <description>` where description is a plain-language
 statement of the feature (e.g., "octokit fallback for GitHub similar to the
 existing GitLab REST fallback").
 
@@ -37,7 +37,7 @@ existing GitLab REST fallback").
    append a freshly generated 4-char hex token.
 
 3. **Create the register entry.** Before writing, run
-   `.claude/skills/ardd-scripts/project-lock.sh check ardd-feature` — if it
+   `.claude/skills/ardd-scripts/project-lock.sh check ardd-backlog` — if it
    warns, surface the warning to the user (another invocation touched
    `.project/` recently) but proceed regardless; this is advisory, never a
    block. Then create the file (script-performed; it refuses a duplicate
@@ -53,7 +53,7 @@ existing GitLab REST fallback").
    won't be obvious from code or artifacts later — omit it when the
    motivation is already obvious. The script writes the frontmatter
    (`slug`, `status: backlogged`, `logged: <today>`). After writing, run
-   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-feature`.
+   `.claude/skills/ardd-scripts/project-lock.sh touch ardd-backlog`.
 
 4. **Legacy note.** If the project still has a single-file
    `.project/artifacts/features.md`, the register predates migration

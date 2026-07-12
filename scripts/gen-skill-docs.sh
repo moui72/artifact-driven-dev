@@ -28,7 +28,7 @@ fm() { # fm <file> <field> — strips optional surrounding double quotes
 # the ordered ones, alphabetically, so a new skill can't silently vanish
 # from the generated tables.
 ORDER_setup="ardd-bootstrap ardd-codify"
-ORDER_core="ardd-feature ardd-feedback ardd-refine ardd-plan ardd-implement ardd-status ardd-lint"
+ORDER_core="ardd-backlog ardd-feedback ardd-refine ardd-plan ardd-implement ardd-status ardd-lint"
 ORDER_extension="ardd-defects ardd-audit ardd-converge ardd-research ardd-render ardd-tracker ardd-update ardd-add-artifact"
 
 row_for() { # row_for <skill-name>

@@ -167,7 +167,7 @@ continuously; each plan run turns a batch of them into shipped code.
 ### 1. Log ideas as they occur
 
 ```
-/ardd-feature octokit fallback for GitHub similar to the GitLab REST fallback
+/ardd-backlog octokit fallback for GitHub similar to the GitLab REST fallback
 ```
 
 This records the idea in the feature register (`.project/features/<slug>.md`,
@@ -337,7 +337,7 @@ Research outputs go to `.project/plans/research-<topic>-<date>.md`. This is a
 one-off write with no lifecycle — nothing reads it back automatically. If the
 recommendation is a standing decision, fold it into the relevant artifact
 with `/ardd-refine` so `/ardd-plan` picks it up the normal way; if it
-surfaces new backlog-worthy scope instead, use `/ardd-feature`.
+surfaces new backlog-worthy scope instead, use `/ardd-backlog`.
 
 ---
 

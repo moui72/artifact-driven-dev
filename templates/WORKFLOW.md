@@ -10,7 +10,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 |---|---|
 | `/ardd-bootstrap` | One-time initialization: seed .project/ artifacts from conversation context (greenfield projects). |
 | `/ardd-codify` | One-time: reverse-engineer artifacts from an existing codebase (instead of bootstrap). |
-| `/ardd-feature` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet. |
+| `/ardd-backlog` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature). |
 | `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume. |
 | `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning. |
 | `/ardd-plan` | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |

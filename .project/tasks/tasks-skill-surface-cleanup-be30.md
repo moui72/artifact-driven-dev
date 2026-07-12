@@ -67,7 +67,7 @@ tasks encode._
   sweep `/ardd-verify` references (skills bodies, CLAUDE.md, README/USAGE);
   single-writer entry updates.
 
-- [ ] T006 Rename `ardd-feature` → `ardd-backlog`: dir, `name:`, F007
+- [x] T006 Rename `ardd-feature` → `ardd-backlog`: dir, `name:`, F007
   description ending "(formerly ardd-feature)" with the F009 "instead"
   clause ("bugs and UX problems with existing behavior belong in
   /ardd-feedback instead"); command references sweep. Explicitly out:

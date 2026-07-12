@@ -8,7 +8,7 @@ description: Draft a phased plan from artifacts, feedback, and backlogged featur
 
 Generate an implementation plan from the current artifacts, any open
 feedback (`/ardd-feedback`), and optionally one or more backlogged features
-(`/ardd-feature`); pause at an explicit approval checkpoint; then, on
+(`/ardd-backlog`); pause at an explicit approval checkpoint; then, on
 approval, generate the ordered task list the plan implies. One skill spans
 the whole plan→approve→task arc — there is no separate task-generation command.
 Run `/ardd-status` first — do not plan over unresolved conflicts.
@@ -16,7 +16,7 @@ Run `/ardd-status` first — do not plan over unresolved conflicts.
 Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
 <slug> [<slug> ...]` additionally targets one or more backlogged feature
 entries from the feature register (`.project/features/`) — this is where a feature
-idea's artifact design work actually happens (`/ardd-feature` only logs the
+idea's artifact design work actually happens (`/ardd-backlog` only logs the
 idea; it doesn't touch artifacts).
 
 `/ardd-plan --from <plan-file>` is the **re-task mode**: it skips planning
@@ -131,7 +131,7 @@ for the named plan; steps 2–10 do not run.
    to proceed.
 
 3. **If feature slugs were passed as arguments**, design and apply their
-   artifact changes now — this absorbs what `/ardd-feature` used to do
+   artifact changes now — this absorbs what `/ardd-backlog` used to do
    eagerly, deferred to the moment you actually choose to work an idea:
 
    a. **Look up each slug** in the feature register — read

@@ -212,7 +212,7 @@ this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/TRACKER.md` — written only by `/ardd-tracker`
 - `.project/audit.md` — written only by `/ardd-audit`
 - `.project/features/*.md` `status` field — mutated only via
-  `ardd-state.sh feature-*` subcommands, invoked by `/ardd-feature`,
+  `ardd-state.sh feature-*` subcommands, invoked by `/ardd-backlog`,
   `/ardd-plan` (both the `backlogged→planned` approval flip and the
   `planned→tasked` flip, now that tasking is folded in), `/ardd-implement`,
   `/ardd-converge`,
