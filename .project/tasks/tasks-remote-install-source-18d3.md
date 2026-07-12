@@ -43,7 +43,7 @@ status: in-progress
   dev path untouched, detached-at-tag re-resolve, no-tags repo →
   `ref=<default-branch>` with `warning=no-tags`). CI job same commit.
 
-- [ ] T003 Rework `scripts/ardd-update-check.sh` to compare the installed
+- [x] T003 Rework `scripts/ardd-update-check.sh` to compare the installed
   commit against the source's latest release tag: `behind` now means "the
   installed commit is not the latest release's commit," printing
   `behind installed=<x> latest-release=<tag>`; keep `self-hosted`,

@@ -31,16 +31,46 @@ mkver() { # mkver <target> <commit> <source-path>
   printf '# ARDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated 2026-07-07_\n\nSource-Path: %s\n' "$2" "$3" > "$1/.project/ardd-version.md"
 }
 
-# --- up-to-date ---
+# --- up-to-date (source has no releases yet -> tip comparison, noted) ---
 T1="$WORK/t1"; mkver "$T1" "$TIP1" "$SRC"
 out="$(sh "$CHECK" "$T1")"
-[ "$out" = "up-to-date commit=$TIP1" ] && ok "up-to-date" || bad "up-to-date — got '$out'"
+[ "$out" = "up-to-date commit=$TIP1 note=no-releases" ] && ok "up-to-date (no releases)" || bad "up-to-date (no releases) — got '$out'"
 
-# --- behind (source advances) ---
+# --- behind (source advances, still no releases -> tip comparison, noted) ---
 ( cd "$SRC" && printf 'x\n' >> install.sh && git add -A && git commit -q -m two )
 TIP2="$(git -C "$SRC" rev-parse --short HEAD)"
 out="$(sh "$CHECK" "$T1")"
-[ "$out" = "behind installed=$TIP1 source-tip=$TIP2" ] && ok "behind" || bad "behind — got '$out'"
+[ "$out" = "behind installed=$TIP1 source-tip=$TIP2 note=no-releases" ] && ok "behind (no releases)" || bad "behind (no releases) — got '$out'"
+
+# --- behind-release: a release exists and the install predates it ---
+# behind now means "not the latest release's commit", not "not the tip".
+git -C "$SRC" tag v1.0.0
+out="$(sh "$CHECK" "$T1")"
+[ "$out" = "behind installed=$TIP1 latest-release=v1.0.0" ] && ok "behind-release" || bad "behind-release — got '$out'"
+
+# --- at-release: installed at the latest release's commit ---
+T1R="$WORK/t1r"; mkver "$T1R" "$TIP2" "$SRC"
+out="$(sh "$CHECK" "$T1R")"
+[ "$out" = "up-to-date commit=$TIP2" ] && ok "at-release" || bad "at-release — got '$out'"
+
+# --- at-release even when the source tip has moved past the release ---
+( cd "$SRC" && printf 'y\n' >> install.sh && git add -A && git commit -q -m three )
+out="$(sh "$CHECK" "$T1R")"
+[ "$out" = "up-to-date commit=$TIP2" ] && ok "at-release, tip ahead of release" || bad "at-release, tip ahead — got '$out'"
+
+# --- latest release ordering: v1.10.0 > v1.9.0, decoys ignored ---
+git -C "$SRC" tag v1.9.0
+TIP3="$(git -C "$SRC" rev-parse --short HEAD)"
+( cd "$SRC" && printf 'z\n' >> install.sh && git add -A && git commit -q -m four )
+git -C "$SRC" tag v1.10.0
+git -C "$SRC" tag v1.10.1-rc1
+TIP4="$(git -C "$SRC" rev-parse --short HEAD)"
+T1S="$WORK/t1s"; mkver "$T1S" "$TIP3" "$SRC"
+out="$(sh "$CHECK" "$T1S")"
+[ "$out" = "behind installed=$TIP3 latest-release=v1.10.0" ] && ok "release ordering (v1.10.0 > v1.9.0, rc ignored)" || bad "release ordering — got '$out'"
+T1T="$WORK/t1t"; mkver "$T1T" "$TIP4" "$SRC"
+out="$(sh "$CHECK" "$T1T")"
+[ "$out" = "up-to-date commit=$TIP4" ] && ok "at latest release v1.10.0" || bad "at latest release — got '$out'"
 
 # --- source-missing: recorded path gone ---
 T2="$WORK/t2"; mkver "$T2" "$TIP1" "$WORK/nowhere"
