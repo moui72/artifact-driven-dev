@@ -1,6 +1,6 @@
 ---
 slug: remote-install-source
-status: tasked
+status: implemented
 logged: 2026-07-12
 plan: plan-remote-install-source-2026-07-12.md
 tasks: tasks-remote-install-source-18d3.md

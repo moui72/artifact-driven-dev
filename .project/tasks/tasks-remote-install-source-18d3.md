@@ -1,7 +1,7 @@
 ---
 plan: plan-remote-install-source-2026-07-12.md
 generated: 2026-07-12
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -120,7 +120,7 @@ status: in-progress
 
 ## Phase 6: Retire the mandate
 
-- [ ] T010 [artifacts: constitution] Only after T009 is verified: amend the
+- [x] T010 [artifacts: constitution] Only after T009 is verified: amend the
   constitution to retire the primary-stays-on-main standing decision
   (replace the paragraph + its retirement note with a brief pointer to the
   release-channel decision and the decision record; new SIR; version bump
