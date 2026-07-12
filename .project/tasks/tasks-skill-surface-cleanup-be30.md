@@ -178,7 +178,7 @@ tasks encode._
   entries), unknown stale dirs keep today's message. Extend the prune
   regression test with a renamed-dir and folded-dir case, test-first.
 
-- [ ] T017 `migrations/0008-workflow-table.sh`: if a target has
+- [x] T017 `migrations/0008-workflow-table.sh`: if a target has
   `.project/WORKFLOW.md`, upsert its skills table section from the shipped
   template via `scripts/upsert-section.sh` (consumers must not carry a
   table of dead commands); no-op when absent; idempotent; fixture
