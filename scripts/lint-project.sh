@@ -159,7 +159,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     fi
 
     # --- constitution governance bookkeeping consistency ---
-    # The exact drift /ardd-verify caught once (v1.1.0 defects): footer
+    # The exact drift /ardd-defects caught once (v1.1.0 defects): footer
     # Version/Last Amended vs frontmatter last_updated vs the Sync Impact
     # Report's target version. Checked only when the markers exist — a
     # minimal constitution without a footer/SIR is fine.

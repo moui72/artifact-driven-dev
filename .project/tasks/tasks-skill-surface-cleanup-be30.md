@@ -62,7 +62,7 @@ tasks encode._
   scope prose (CLAUDE.md + skill bodies). STATUS.md keeps its name; the
   single-writer entry updates to `/ardd-status`.
 
-- [ ] T005 Rename `ardd-verify` → `ardd-defects`: dir, `name:`, F007
+- [x] T005 Rename `ardd-verify` → `ardd-defects`: dir, `name:`, F007
   description ending "(formerly ardd-verify)"; DEFECTS.md keeps its name;
   sweep `/ardd-verify` references (skills bodies, CLAUDE.md, README/USAGE);
   single-writer entry updates.

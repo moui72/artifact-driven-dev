@@ -1,19 +1,19 @@
 ---
-name: ardd-verify
+name: ardd-defects
 tier: extension
-description: Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer).
+description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task (formerly ardd-verify)."
 ---
 
-# /ardd-verify
+# /ardd-defects
 
 Verify artifacts against the actual codebase and report drift. Where
 `/ardd-status` checks artifacts against each other and against
-`constitution.md` (cheap, docs-only), `/ardd-verify` checks artifacts against
+`constitution.md` (cheap, docs-only), `/ardd-defects` checks artifacts against
 what the code actually does (expensive — requires re-surveying source,
 similar cost to `/ardd-codify`). Run this before major planning or
 periodically to catch documentation that has drifted from implementation —
 not as a routine post-refine check. `/ardd-status` is the cheap, frequent
-check; `/ardd-verify` is the expensive, occasional one.
+check; `/ardd-defects` is the expensive, occasional one.
 
 Findings go into `.project/DEFECTS.md` only. This skill never writes into
 artifact bodies — artifacts describe intended/current design, not a defect
@@ -52,7 +52,7 @@ log.
    annotations, or `[OPEN: ...]` items inside `.project/artifacts/*.md`.
 
 5. **Write `.project/DEFECTS.md`** — full overwrite, never an append. This
-   mirrors `STATUS.md`'s ownership pattern: `/ardd-verify` is the single
+   mirrors `STATUS.md`'s ownership pattern: `/ardd-defects` is the single
    writer, and every run fully regenerates the file from a fresh survey, so a
    defect that's since been fixed in code silently drops out on the next run
    rather than requiring anyone to remember to remove it.
@@ -89,5 +89,5 @@ log.
    - One line per defect (artifact, claim, actual behavior)
 
    Then run `/ardd-status` now to surface `DEFECTS.md`'s summary in
-   `STATUS.md` — `/ardd-verify` does not touch `STATUS.md` itself, so
+   `STATUS.md` — `/ardd-defects` does not touch `STATUS.md` itself, so
    without this the defect line there stays stale.

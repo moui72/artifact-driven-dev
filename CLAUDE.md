@@ -208,7 +208,7 @@ against.
 **Single-writer ownership of generated files is, deliberately, prose-only —
 this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/STATUS.md` — written only by `/ardd-status`
-- `.project/DEFECTS.md` — written only by `/ardd-verify`
+- `.project/DEFECTS.md` — written only by `/ardd-defects`
 - `.project/TRACKER.md` — written only by `/ardd-tracker`
 - `.project/audit.md` — written only by `/ardd-audit`
 - `.project/features/*.md` `status` field — mutated only via

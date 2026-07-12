@@ -13,7 +13,7 @@ contradictions, and implied-but-undefined decisions.
 `/ardd-feature`, `/ardd-plan`, `/ardd-refine`,
 `/ardd-feedback`, `/ardd-implement` and `/ardd-converge` (both on
 tasks-file completion), `/ardd-add-artifact` (when relevant), and
-`/ardd-verify` invoke this skill automatically as their final step, since
+`/ardd-defects` invoke this skill automatically as their final step, since
 each of those changes state `STATUS.md` should reflect. This is the
 canonical list — other docs referencing which skills auto-trigger analyze
 point back here rather than re-enumerating, so it's the one place to update
@@ -51,7 +51,7 @@ the coordinator or the inline path.
    Also check for `.project/DEFECTS.md`. If present, read its last-verified
    date and defect count — this is read-only: `/ardd-status` never
    regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
-   `/ardd-verify`). If absent, note that verify has never run.
+   `/ardd-defects`). If absent, note that verify has never run.
 
    Also run `.claude/skills/ardd-scripts/ardd-update-check.sh` (the
    installed copy; coordinator's absolute path as fallback, same
@@ -133,8 +133,8 @@ the coordinator or the inline path.
 
    ## Code-vs-Artifact Defects
    - <N> known defects — see DEFECTS.md, last checked YYYY-MM-DD. Run
-     /ardd-verify to refresh.
-   (Or, if DEFECTS.md is absent: "Never checked — run /ardd-verify to compare
+     /ardd-defects to refresh.
+   (Or, if DEFECTS.md is absent: "Never checked — run /ardd-defects to compare
    artifacts against the codebase." This section is visibility only —
    `/ardd-status` does not read code itself and does not regenerate
    DEFECTS.md.)
@@ -204,7 +204,7 @@ the coordinator or the inline path.
    `next_step_prompt: true` (grep the frontmatter block; absent or `false`
    means the plain-text behavior above is unchanged — stop here). When it is
    `true` AND the Summary's "Recommended next step" is a concrete runnable
-   `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-verify`), end by
+   `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-defects`), end by
    presenting it via AskUserQuestion:
    - Option 1: "Yes — run `/ardd-<next>` now"
    - Option 2: "No — stop here" (Esc counts as option 2)

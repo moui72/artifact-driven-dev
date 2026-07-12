@@ -286,6 +286,6 @@ self-contained; the agent loads only the artifacts it declares.
 - **Do not touch `DEFECTS.md`.** If a task incidentally reveals a pre-existing
   code-vs-artifact violation unrelated to the task itself, don't write to
   `.project/DEFECTS.md` directly — that would break its single-writer
-  ownership by `/ardd-verify`. Report the finding in the task's output instead
-  and tell the user to run `/ardd-verify` to capture it properly on its next
+  ownership by `/ardd-defects`. Report the finding in the task's output instead
+  and tell the user to run `/ardd-defects` to capture it properly on its next
   full pass.

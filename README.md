@@ -130,7 +130,7 @@ Opt-in skills for concerns the core loop doesn't force on you.
 
 | Command | What it does |
 |---|---|
-| `/ardd-verify` | Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer). |
+| `/ardd-defects` | Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task (formerly ardd-verify). |
 | `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique). |
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
@@ -273,7 +273,7 @@ silent forever once anything is already ignored.
   plans/               # generated plans and research
   tasks/               # tasks-<slug>-<hex>.md — the execution queue, one per plan run
   STATUS.md            # re-entry point after any interruption (written only by /ardd-status)
-  DEFECTS.md           # code-vs-artifact drift (written only by /ardd-verify)
+  DEFECTS.md           # code-vs-artifact drift (written only by /ardd-defects)
   WORKFLOW.md          # generated tour of the installed skills
   ardd-version.md      # commit this — records which ARDD source commit is installed
 .claude/
@@ -309,7 +309,7 @@ When `.project/` files conflict on merge:
 - **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
   `audit.md`) — disposable: take either side without deliberation
   (never hand-reconcile or re-apply changes across a rebase) and re-run
-  the owning skill (`/ardd-status`, `/ardd-verify`, `/ardd-tracker`,
+  the owning skill (`/ardd-status`, `/ardd-defects`, `/ardd-tracker`,
   `/ardd-audit` respectively); it regenerates the file from current
   state, so which side you kept doesn't matter. Conflict markers in a
   generated report are noise, not data loss.

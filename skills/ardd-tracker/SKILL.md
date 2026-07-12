@@ -52,7 +52,8 @@ eventually carry links into more than one tracker.
 1. **Read the register.** Glob `.project/features/*.md` and read each
    file's frontmatter (`slug`, `status`, `gh_issue`) and body (first line
    = description, optional `Why:` line). Before any register write in
-   this phase, run `.claude/skills/ardd-scripts/project-lock.sh check   ardd-tracker` — if it warns, surface it to the user (another invocation
+   this phase, run `.claude/skills/ardd-scripts/project-lock.sh check
+   ardd-tracker` — if it warns, surface it to the user (another invocation
    touched `.project/` recently) but proceed regardless; this is
    advisory, never a block. (A legacy single-file features.md means the
    project predates migration 0003 — tell the user to re-run install.sh
@@ -151,7 +152,7 @@ eventually carry links into more than one tracker.
    diverges from what `status` implies (closed but not `implemented`;
    reopened but `implemented`) and prints the ready-to-use `## Diverged`
    line if so, nothing otherwise. Collect its output into `.project/TRACKER.md`
-   — full overwrite every run, mirroring `/ardd-verify`'s `DEFECTS.md`
+   — full overwrite every run, mirroring `/ardd-defects`'s `DEFECTS.md`
    pattern, including an explicit all-clear state:
 
    ```markdown

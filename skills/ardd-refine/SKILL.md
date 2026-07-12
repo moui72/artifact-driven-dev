@@ -48,7 +48,7 @@ that has open questions instead of a single one:
    If the user mentions a known code-vs-artifact violation (e.g., something
    visible in `.project/DEFECTS.md`), do not write violation narrative into
    the artifact body — the artifact describes the intended/current design,
-   not a defect log. Point the user at `DEFECTS.md` / `/ardd-verify` instead.
+   not a defect log. Point the user at `DEFECTS.md` / `/ardd-defects` instead.
 
 4. **Special rules for `constitution`:**
    - Follow version-bump semantics (MAJOR/MINOR/PATCH).

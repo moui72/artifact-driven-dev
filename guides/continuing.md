@@ -58,7 +58,7 @@ artifacts inconsistent between edits.
 Scoping to a feedback file matters when several are open: an unscoped
 run consumes them all into one plan; a scoped run leaves the others
 untouched for a later plan. Unsurfaced `DEFECTS.md` entries (from
-`/ardd-verify`) are offered once per defect here too.
+`/ardd-defects`) are offered once per defect here too.
 
 ## Approve, task, implement, merge
 
@@ -90,7 +90,7 @@ continues. Reach for it after a crashed run, a manual detour, or any
 
 ## Periodic hygiene
 
-- `/ardd-verify` — occasionally, or before major planning: checks
+- `/ardd-defects` — occasionally, or before major planning: checks
   artifacts against the *code* and records drift in `DEFECTS.md`; each
   defect is offered as a fix task by the next plan run, exactly once.
 - `/ardd-audit` — when a design decision deserves pressure-testing

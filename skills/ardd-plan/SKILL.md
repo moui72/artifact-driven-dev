@@ -36,7 +36,7 @@ open feedback files feed two separate plans without one run accidentally
 binding (or `[-]`-declining) the other's items.
 
 Arguments of the form `defect:<id>` name specific `DEFECTS.md` entries
-(the 8-char identifiers `/ardd-verify` and `defects-unsurfaced.sh`
+(the 8-char identifiers `/ardd-defects` and `defects-unsurfaced.sh`
 compute), and the literal argument `defects` names all current entries —
 these are **defect scopes**: step 5 then runs in explicit-selection mode
 and re-offers the named entries even if a prior plan already surfaced
@@ -194,7 +194,7 @@ for the named plan; steps 2–10 do not run.
       - Preserve all existing content not touched by this feature.
       - Add `[OPEN: ...]` items for decisions the feature introduces but
         doesn't resolve (genuine undecided-design-question gaps only — point
-        to `DEFECTS.md`/`/ardd-verify` for known code-vs-artifact violations
+        to `DEFECTS.md`/`/ardd-defects` for known code-vs-artifact violations
         instead of narrating them into the artifact body).
       - Update frontmatter on each changed artifact via
         `.claude/skills/ardd-scripts/ardd-state.sh stamp <file> ...`:

@@ -17,7 +17,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | `/ardd-implement` | Execute tasks sequentially; offers worktree delegation, all state rides the work branch and lands on merge. |
 | `/ardd-status` | Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze). |
 | `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
-| `/ardd-verify` | Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer). |
+| `/ardd-defects` | Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task (formerly ardd-verify). |
 | `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique). |
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
