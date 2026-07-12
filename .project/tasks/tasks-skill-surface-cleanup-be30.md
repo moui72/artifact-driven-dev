@@ -78,7 +78,7 @@ tasks encode._
   (`render_target`/`render_section` frontmatter fields keep their names —
   data schema, not command surface).
 
-- [ ] T008 Edit `scripts/gen-skill-docs.sh` itself: ORDER_setup/core/
+- [x] T008 Edit `scripts/gen-skill-docs.sh` itself: ORDER_setup/core/
   extension lists and its embedded boilerplate prose to the new names
   (drop folded skills — converge/add-artifact/bootstrap/codify leave the
   lists in Phase 2 tasks; coordinate: this task may run after T011 or

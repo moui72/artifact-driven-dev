@@ -85,22 +85,25 @@ jobs:
             --exists ".project/plans/$plan" \
             --feature "$slug" backlogged
           # Single-writer discipline: the plan run must not have created
-          # DEFECTS.md or SYNC.md (owned by verify/sync respectively).
+          # DEFECTS.md, SYNC.md, or TRACKER.md (owned by ardd-defects/ardd-tracker;
+          # SYNC.md is the pre-v1.0.0 legacy name — assert both).
           ./scripts/smoke-assert.sh /tmp/smoke-target \
             --absent ".project/DEFECTS.md" \
-            --absent ".project/SYNC.md"
+            --absent ".project/SYNC.md" \
+            --absent ".project/TRACKER.md"
 
-      # Scenario 2 [defect: 970d935b]: the tasks->implement mutation path.
-      # /ardd-tasks approves the scenario-1 plan (plan-flip, feature-flip
-      # planned->tasked); /ardd-implement executes to completion
-      # (tasks-flip, task-check, feature-flip implemented).
-      - name: "Scenario 2: /ardd-tasks then /ardd-implement"
+      # Scenario 2 [defect: 970d935b]: the approve->implement mutation path.
+      # /ardd-plan --from approves the scenario-1 plan and generates its
+      # tasks file (plan-flip, feature-flip planned->tasked); /ardd-implement
+      # executes to completion (tasks-flip, task-check, feature-flip
+      # implemented).
+      - name: "Scenario 2: approve + task the plan, then /ardd-implement"
         if: steps.key.outputs.present == 'true'
         working-directory: /tmp/smoke-target
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          claude -p "/ardd-tasks — select the only draft plan and approve it" --dangerously-skip-permissions
+          claude -p "/ardd-plan --from $(ls .project/plans | grep '^plan-' | head -1) — approve it and generate its tasks" --dangerously-skip-permissions
           claude -p "/ardd-implement — work the only actionable tasks file inline to completion" --dangerously-skip-permissions
 
       - name: "Scenario 2 assertions: approved plan, completed tasks, implemented feature"
@@ -115,4 +118,5 @@ jobs:
             --tasks-status ".project/tasks/$tasks" completed \
             --feature "$slug" implemented \
             --absent ".project/DEFECTS.md" \
-            --absent ".project/SYNC.md"
+            --absent ".project/SYNC.md" \
+            --absent ".project/TRACKER.md"

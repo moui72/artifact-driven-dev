@@ -3,7 +3,7 @@
 # body, one per stdin line, tab-separated) and a target slug, does any
 # candidate's body carry that slug's exact ardd-sync-slug marker? Guards
 # against GitHub search returning a similar-but-different slug's issue (see
-# skills/ardd-sync/SKILL.md's marker-format note on why an exact boundary
+# skills/ardd-tracker/SKILL.md's marker-format note on why an exact boundary
 # match matters, not a loose substring one).
 
 set -e
