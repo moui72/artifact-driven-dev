@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Schema of record (test-first)
 
-- [ ] T001 [artifacts: constitution] Add `delegation` (`eager|ask|inline`) and
+- [x] T001 [artifacts: constitution] Add `delegation` (`eager|ask|inline`) and
   `merge_policy` (`auto|ask`) to `scripts/lint-project.sh`'s
   constitution-frontmatter validation as optional, enum-checked-when-present
   fields, declared in the enum block at the top of the script (schema-of-record).

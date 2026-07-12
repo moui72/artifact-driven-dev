@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=32
+EXPECTED_BAD_FINDINGS=34
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -70,6 +70,21 @@ else
     echo "ok: invalid next_step_prompt value reported with allowed values"
   else
     echo "FAIL: invalid next_step_prompt value reported with allowed values"
+    fail=1
+  fi
+  # delegation / merge_policy are optional constitution workflow fields
+  # (absent = ask); when present they must be in their enums — bad-project's
+  # 'sometimes' / 'yolo' must be flagged with the allowed values
+  if grep -q "delegation 'sometimes' not in {eager ask inline}" /tmp/lint-bad.out; then
+    echo "ok: invalid delegation value reported with allowed values"
+  else
+    echo "FAIL: invalid delegation value reported with allowed values"
+    fail=1
+  fi
+  if grep -q "merge_policy 'yolo' not in {auto ask}" /tmp/lint-bad.out; then
+    echo "ok: invalid merge_policy value reported with allowed values"
+  else
+    echo "FAIL: invalid merge_policy value reported with allowed values"
     fail=1
   fi
   # render_target / render_section are optional per-artifact overrides; when

@@ -9,6 +9,8 @@ status: finished
 last_updated: 2026-01-01
 workflow_mode: team
 next_step_prompt: yes
+delegation: sometimes
+merge_policy: yolo
 ---
 
 # Constitution

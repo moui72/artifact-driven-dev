@@ -9,6 +9,8 @@ status: stable
 last_updated: 2026-01-01
 workflow_mode: solo
 next_step_prompt: true
+delegation: eager
+merge_policy: auto
 ---
 
 # Constitution

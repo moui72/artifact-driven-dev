@@ -58,6 +58,8 @@ FEEDBACK_STATUS_ENUM="open planned"
 FEATURE_STATUS_ENUM="backlogged planned tasked implemented"
 WORKFLOW_MODE_ENUM="solo collaborative"
 NEXT_STEP_PROMPT_ENUM="true false"
+DELEGATION_ENUM="eager ask inline"
+MERGE_POLICY_ENUM="auto ask"
 # -----------------------------------------------------------------------
 
 in_enum() {
@@ -137,6 +139,22 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       val="$(frontmatter_field "$f" next_step_prompt)"
       if ! in_enum "$val" $NEXT_STEP_PROMPT_ENUM; then
         report "$f: next_step_prompt '$val' not in {$NEXT_STEP_PROMPT_ENUM}"
+      fi
+    fi
+
+    # delegation / merge_policy are optional workflow fields (absent = ask
+    # for both — today's prompting behavior); when present they must be in
+    # their enums.
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" delegation; then
+      val="$(frontmatter_field "$f" delegation)"
+      if ! in_enum "$val" $DELEGATION_ENUM; then
+        report "$f: delegation '$val' not in {$DELEGATION_ENUM}"
+      fi
+    fi
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" merge_policy; then
+      val="$(frontmatter_field "$f" merge_policy)"
+      if ! in_enum "$val" $MERGE_POLICY_ENUM; then
+        report "$f: merge_policy '$val' not in {$MERGE_POLICY_ENUM}"
       fi
     fi
 
