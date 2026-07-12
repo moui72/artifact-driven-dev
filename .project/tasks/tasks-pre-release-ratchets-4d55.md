@@ -37,7 +37,7 @@ status: in-progress
   constitution v1.6.0" — user-directed resolution per the audit
   resolution workflow).
 
-- [ ] T003 Harden `ardd-version.md`: `install.sh` writes a structured
+- [x] T003 Harden `ardd-version.md`: `install.sh` writes a structured
   `Source-Commit: <full-sha>` line (prose `_Source: … @ <short>` stays,
   now decorative); `scripts/ardd-update-check.sh` and
   `scripts/source-resolve.sh` prefer `Source-Commit:` and compare by

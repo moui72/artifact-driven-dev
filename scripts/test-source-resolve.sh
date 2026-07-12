@@ -174,6 +174,33 @@ case "$out" in
   *) bad "case9: got '$out'" ;;
 esac
 
+# --- Case 10: recorded Source-Path gone -> fall back to the owned checkout.
+# Only a version-file path falls back (a moved machine); an explicit
+# argument never does (case 6 is the guard). ---
+TGT2="$WORK/target-moved"; mkdir -p "$TGT2/.project"
+printf '# ARDD Version\n\n_Source: artifact-driven-dev @ abc1234 · Installed/updated 2026-07-12_\n\nSource-Path: %s\n' "$WORK/vanished" \
+  > "$TGT2/.project/ardd-version.md"
+set +e
+out="$( (cd "$TGT2" && sh "$RESOLVE") 2>&1 )"
+status=$?
+set -e
+[ "$status" -eq 0 ] && [ "$out" = "resolved=$OWNED ref=v1.11.0 channel=release fallback=owned" ] \
+  && ok "case10: moved Source-Path -> owned fallback" \
+  || bad "case10: got '$out' (rc=$status)"
+
+# --- Case 11: recorded Source-Path gone AND no owned checkout -> missing ---
+set +e
+out="$( (cd "$TGT2" && ARDD_HOME="$WORK/absent-home" sh "$RESOLVE") 2>&1 )"
+status=$?
+set -e
+[ "$status" -eq 1 ] \
+  && ok "case11: exit 1" \
+  || bad "case11: expected exit 1, got $status"
+case "$out" in
+  "resolved=false reason=missing path=$WORK/vanished"*) ok "case11: reason=missing, original path reported" ;;
+  *) bad "case11: got '$out'" ;;
+esac
+
 if [ "$fail" -eq 0 ]; then
   echo "test-source-resolve: all cases pass"
 else

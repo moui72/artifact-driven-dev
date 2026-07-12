@@ -13,6 +13,11 @@ CHECK="$SCRIPT_DIR/ardd-update-check.sh"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
+# Hermetic: the script under test falls back to ${ARDD_HOME:-$HOME/.ardd}/source
+# when the recorded Source-Path is invalid — pin ARDD_HOME to a nonexistent
+# dir so the machine's real ~/.ardd never leaks into these cases.
+export ARDD_HOME="$WORK/no-ardd-home"
+
 git() { command git -c commit.gpgsign=false -c core.hooksPath=/dev/null "$@"; }
 
 fail=0
@@ -111,5 +116,50 @@ ln -s "$SH" "$WORK/selfhosted-link"
 mkver "$SH" "$SHTIP" "$WORK/selfhosted-link"
 out="$(sh "$CHECK" "$SH")"
 [ "$out" = "self-hosted commit=$SHTIP" ] && ok "self-hosted via symlink (toplevel compare)" || bad "self-hosted symlink — got '$out'"
+
+# --- Source-Commit (new format): preferred over the prose line, compared by
+# --- prefix so short-vs-full and future width changes never break it. The
+# --- prose line carries a deliberate decoy commit to prove preference.
+mkver2() { # mkver2 <target> <commit> <source-path>
+  mkdir -p "$1/.project"
+  printf '# ARDD Version\n\n_Source: artifact-driven-dev @ 0000000 · Installed/updated 2026-07-12_\n\nSource-Path: %s\nSource-Commit: %s\n' "$3" "$2" > "$1/.project/ardd-version.md"
+}
+FULL4="$(git -C "$SRC" rev-parse HEAD)"          # commit of v1.10.0
+FULL3="$(git -C "$SRC" rev-parse "$TIP3")"       # commit of v1.9.0
+
+T6="$WORK/t6"; mkver2 "$T6" "$FULL4" "$SRC"
+out="$(sh "$CHECK" "$T6")"
+[ "$out" = "up-to-date commit=$FULL4" ] && ok "Source-Commit preferred, full-vs-short prefix match" || bad "Source-Commit full sha — got '$out'"
+
+T7="$WORK/t7"; mkver2 "$T7" "$FULL3" "$SRC"
+out="$(sh "$CHECK" "$T7")"
+[ "$out" = "behind installed=$FULL3 latest-release=v1.10.0" ] && ok "Source-Commit behind release" || bad "Source-Commit behind — got '$out'"
+
+# width variance: a 12-char recorded commit still prefix-matches
+INST12="$(printf '%s' "$FULL4" | cut -c1-12)"
+T8="$WORK/t8"; mkver2 "$T8" "$INST12" "$SRC"
+out="$(sh "$CHECK" "$T8")"
+[ "$out" = "up-to-date commit=$INST12" ] && ok "prefix match across widths (12-char)" || bad "prefix width — got '$out'"
+
+# --- moved Source-Path: fall back to the owned checkout when it exists ---
+FBHOME="$WORK/ardd-home"; mkdir -p "$FBHOME"
+git clone -q "$SRC" "$FBHOME/source"
+mkdir -p "$FBHOME/source/skills"   # SRC's skills/ is empty; clones drop empty dirs
+T9="$WORK/t9"; mkver2 "$T9" "$FULL4" "$WORK/nowhere"
+out="$(ARDD_HOME="$FBHOME" sh "$CHECK" "$T9")"
+[ "$out" = "up-to-date commit=$FULL4 fallback=owned" ] && ok "moved Source-Path -> owned fallback" || bad "owned fallback — got '$out'"
+
+# without an owned checkout the moved path stays source-missing (asserted
+# above with the pinned nonexistent ARDD_HOME; re-check with new format)
+out="$(sh "$CHECK" "$T9")"
+[ "$out" = "source-missing path=$WORK/nowhere" ] && ok "moved Source-Path, no owned -> source-missing" || bad "moved, no owned — got '$out'"
+
+# --- producer contract: install.sh writes Source-Commit as the full sha ---
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+TP="$WORK/producer"; mkdir -p "$TP"
+( cd "$REPO_ROOT" && sh ./install.sh "$TP" ) >/dev/null 2>&1
+want="$(command git -C "$REPO_ROOT" rev-parse HEAD)"
+got="$(sed -n 's/^Source-Commit: //p' "$TP/.project/ardd-version.md" | head -1)"
+[ "$got" = "$want" ] && ok "install.sh writes Source-Commit (full sha)" || bad "install.sh Source-Commit — got '$got', want '$want'"
 
 exit "$fail"

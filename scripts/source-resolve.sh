@@ -16,6 +16,10 @@
 #                                                        owned, no releases yet -> default branch
 #   ... warning=offline                                  fetch failed; resolved from existing state
 #   resolved=<path> channel=dev                          any other existing ARDD checkout (never mutated)
+#   ... fallback=owned                                   recorded Source-Path was invalid; resolved the
+#                                                        owned checkout instead (additive token; only a
+#                                                        version-file path falls back, never an explicit
+#                                                        argument — the user named that one deliberately)
 #   resolved=false reason=missing|not-ardd|no-source-path  (exit 1)
 #
 # Only the tooling-owned checkout at $ARDD_HOME/source (~/.ardd/source) is
@@ -30,6 +34,7 @@
 set -e
 
 SRC="${1:-}"
+FROM_VF=""
 
 if [ -z "$SRC" ]; then
   VF=".project/ardd-version.md"
@@ -37,6 +42,20 @@ if [ -z "$SRC" ]; then
   if [ -z "$SRC" ]; then
     echo "resolved=false reason=no-source-path"
     exit 1
+  fi
+  FROM_VF=1
+fi
+
+# A recorded (version-file) Source-Path that no longer exists on this
+# machine — moved machine, re-cloned source — falls back to the owned
+# checkout when that one qualifies, flagged with an additive fallback=owned
+# token. An explicit argument never falls back: the user named it.
+FALLBACK=""
+if [ -n "$FROM_VF" ] && { [ ! -d "$SRC" ] || [ ! -f "$SRC/install.sh" ] || [ ! -d "$SRC/skills" ]; }; then
+  owned_fb="${ARDD_HOME:-$HOME/.ardd}/source"
+  if [ -d "$owned_fb" ] && [ -f "$owned_fb/install.sh" ] && [ -d "$owned_fb/skills" ]; then
+    SRC="$owned_fb"
+    FALLBACK=" fallback=owned"
   fi
 fi
 
@@ -58,7 +77,7 @@ src_phys="$(cd "$SRC" && pwd -P)"
 owned_phys="$( [ -d "$OWNED" ] && cd "$OWNED" && pwd -P || echo "$OWNED" )"
 
 if [ "$src_phys" != "$owned_phys" ]; then
-  echo "resolved=$SRC channel=dev"
+  echo "resolved=$SRC channel=dev$FALLBACK"
   exit 0
 fi
 
@@ -75,7 +94,7 @@ tag="$(git -C "$SRC" tag --list 'v[0-9]*' --sort=v:refname \
 
 if [ -n "$tag" ]; then
   git -C "$SRC" checkout --quiet "$tag"
-  echo "resolved=$SRC ref=$tag channel=release$warn"
+  echo "resolved=$SRC ref=$tag channel=release$warn$FALLBACK"
   exit 0
 fi
 
@@ -89,4 +108,4 @@ if [ -z "$default" ]; then
   fi
 fi
 git -C "$SRC" checkout --quiet "$default"
-echo "resolved=$SRC ref=$default channel=release warning=no-tags$warn"
+echo "resolved=$SRC ref=$default channel=release warning=no-tags$warn$FALLBACK"
