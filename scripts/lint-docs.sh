@@ -14,6 +14,13 @@ DOCS="$REPO_DIR/README.md $REPO_DIR/USAGE.md"
 for g in "$REPO_DIR"/guides/*.md; do
   [ -f "$g" ] && DOCS="$DOCS $g"
 done
+# Skill bodies and templates are scanned for command tokens too (markdown
+# only — never .sh files, whose comments false-positive): a rename that
+# misses a terminal-handoff reference inside another skill, or a template
+# naming a dead command, must fail here.
+for g in "$SKILLS_DIR"/*/SKILL.md "$REPO_DIR"/templates/*.md "$REPO_DIR"/templates/artifacts/*.md; do
+  [ -f "$g" ] && DOCS="$DOCS $g"
+done
 
 skill_names="$(ls "$SKILLS_DIR")"
 
@@ -76,6 +83,15 @@ for sk in "$SKILLS_DIR"/*/SKILL.md; do
     echo "$sk: frontmatter missing 'name:' — required for skills-CLI discovery"
     fm_fail=1
   fi
+  # Frontmatter name must equal the directory name — a rename that moves
+  # the directory but forgets `name:` (or vice versa) registers the skill
+  # under the wrong command.
+  dir_name="$(basename "$(dirname "$sk")")"
+  fm_name="$(printf '%s\n' "$fm" | sed -n 's/^name:[[:space:]]*//p' | head -1)"
+  if [ -n "$fm_name" ] && [ "$fm_name" != "$dir_name" ]; then
+    echo "$sk: frontmatter name '$fm_name' != directory name '$dir_name'"
+    fm_fail=1
+  fi
   if ! printf '%s\n' "$fm" | grep -q '^description:[[:space:]]*[^[:space:]]'; then
     echo "$sk: frontmatter missing 'description:' — required for skills-CLI discovery"
     fm_fail=1
@@ -88,6 +104,36 @@ for sk in "$SKILLS_DIR"/*/SKILL.md; do
   fi
 done
 [ "$fm_fail" -eq 1 ] && exit 1
+
+# --- owned-report-filename gate (v1.0.0 transition guard) ----------------
+# lint-docs checks command tokens only, so a renamed skill's OLD owned-file
+# name (critique.md, SYNC.md) would otherwise linger silently in live
+# source. Once the renamed skill directory exists, the legacy literal must
+# not appear in skills/, scripts/, install.sh, new.sh, README, USAGE, or
+# templates. Exempt: lines mentioning "legacy" (the adoption steps and the
+# migrations must name the old file), test fixtures (scripts/test-*.sh),
+# migrations/ (they perform the rename), and this script itself.
+gate_fail=0
+gate_scan() { # gate_scan <escaped-literal> <display-name>
+  for f in "$SKILLS_DIR"/*/SKILL.md "$REPO_DIR"/scripts/*.sh \
+           "$REPO_DIR/install.sh" "$REPO_DIR/new.sh" \
+           "$REPO_DIR/README.md" "$REPO_DIR/USAGE.md" \
+           "$REPO_DIR"/templates/*.md "$REPO_DIR"/templates/artifacts/*.md; do
+    [ -f "$f" ] || continue
+    case "$f" in
+      */scripts/lint-docs.sh|*/scripts/test-*.sh) continue ;;
+    esac
+    hits="$(grep -n "$1" "$f" 2>/dev/null | grep -iv 'legacy' || true)"
+    if [ -n "$hits" ]; then
+      echo "$f: legacy owned-file name '$2' still referenced (renamed at v1.0.0):"
+      printf '%s\n' "$hits" | sed 's/^/  /'
+      gate_fail=1
+    fi
+  done
+}
+[ -d "$SKILLS_DIR/ardd-audit" ]   && gate_scan 'critique\.md' 'critique.md'
+[ -d "$SKILLS_DIR/ardd-tracker" ] && gate_scan 'SYNC\.md' 'SYNC.md'
+[ "$gate_fail" -eq 1 ] && exit 1
 
 # --- generated skill docs must match SKILL.md frontmatter ---------------
 if ! sh "$(dirname "$SCRIPT_DIR")/scripts/gen-skill-docs.sh" --check 2>&1; then

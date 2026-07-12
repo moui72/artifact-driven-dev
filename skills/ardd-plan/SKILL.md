@@ -10,7 +10,7 @@ Generate an implementation plan from the current artifacts, any open
 feedback (`/ardd-feedback`), and optionally one or more backlogged features
 (`/ardd-feature`); pause at an explicit approval checkpoint; then, on
 approval, generate the ordered task list the plan implies. One skill spans
-the whole plan→approve→task arc — there is no separate `/ardd-tasks` command.
+the whole plan→approve→task arc — there is no separate task-generation command.
 Run `/ardd-analyze` first — do not plan over unresolved conflicts.
 
 Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan

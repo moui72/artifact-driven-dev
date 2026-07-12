@@ -1,7 +1,7 @@
 # Constitution Suggestions
 
-A catalog of well-known, battle-tested principles/standards that `/ardd-
-bootstrap` and `/ardd-codify` offer — never assume — when a project's
+A catalog of well-known, battle-tested principles/standards that
+`/ardd-bootstrap` and `/ardd-codify` offer — never assume — when a project's
 `constitution.md` is first created. Order is deterministic and becomes the
 numbering order for accepted Core Principles (in the order presented here,
 after any principles already synthesized from conversation or inferred from

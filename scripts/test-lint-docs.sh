@@ -98,6 +98,71 @@ description: "One-time: does eta things."'
 sh "$R/scripts/lint-docs.sh" > "$TMP/out8" 2>&1 || fail "case8: quoted colon description should pass ($(cat "$TMP/out8"))"
 ok "case8: quoted colon description -> clean"
 
+# case 9: a skill body referencing an unknown /ardd-* command -> fail
+# (skill bodies are part of the scanned doc set — a rename that misses a
+# terminal-handoff reference inside another skill must not pass)
+R="$TMP/skillbody"; mk_skeleton "$R"
+mk_skill "$R" ardd-theta 'name: ardd-theta
+description: Does theta things.'
+printf '\nWhen done, run /ardd-nonexistent to finish.\n' >> "$R/skills/ardd-theta/SKILL.md"
+if sh "$R/scripts/lint-docs.sh" > "$TMP/out9" 2>&1; then
+  fail "case9: unknown command in a skill body should fail"
+fi
+grep -q "ardd-nonexistent" "$TMP/out9" || fail "case9: error should name the command ($(cat "$TMP/out9"))"
+ok "case9: unknown command in skill body -> exit 1"
+
+# case 10: templates/*.md referencing an unknown /ardd-* command -> fail
+R="$TMP/tmpl"; mk_skeleton "$R"
+mk_skill "$R" ardd-iota 'name: ardd-iota
+description: Does iota things.'
+mkdir -p "$R/templates"
+printf 'Run /ardd-ghost when ready.\n' > "$R/templates/WORKFLOW.md"
+if sh "$R/scripts/lint-docs.sh" > "$TMP/out10" 2>&1; then
+  fail "case10: unknown command in templates/*.md should fail"
+fi
+grep -q "ardd-ghost" "$TMP/out10" || fail "case10: error should name the command ($(cat "$TMP/out10"))"
+ok "case10: unknown command in templates -> exit 1"
+
+# case 11: frontmatter name != directory name -> fail
+R="$TMP/mismatch"; mk_skeleton "$R"
+mk_skill "$R" ardd-kappa 'name: ardd-oldname
+description: Does kappa things.'
+if sh "$R/scripts/lint-docs.sh" > "$TMP/out11" 2>&1; then
+  fail "case11: name/dirname mismatch should fail"
+fi
+grep -q "ardd-kappa" "$TMP/out11" || fail "case11: error should name the directory ($(cat "$TMP/out11"))"
+ok "case11: frontmatter name != dirname -> exit 1"
+
+# case 12: owned-report-filename gate — once skills/ardd-audit exists, a
+# live "critique.md" literal in a skill body fails; a line marked as the
+# legacy-adoption step (contains "legacy") is exempt.
+R="$TMP/gate"; mk_skeleton "$R"
+mk_skill "$R" ardd-audit 'name: ardd-audit
+description: Audits things.'
+printf '\nWrite findings to critique.md now.\n' >> "$R/skills/ardd-audit/SKILL.md"
+if sh "$R/scripts/lint-docs.sh" > "$TMP/out12" 2>&1; then
+  fail "case12: live critique.md literal after rename should fail"
+fi
+grep -q "critique" "$TMP/out12" || fail "case12: error should name the literal ($(cat "$TMP/out12"))"
+ok "case12: post-rename critique.md literal -> exit 1"
+
+# case 12b: same literal on a legacy-adoption line -> exempt, clean
+R="$TMP/gateok"; mk_skeleton "$R"
+mk_skill "$R" ardd-audit 'name: ardd-audit
+description: Audits things.'
+printf '\nIf audit.md is absent but the legacy critique.md exists, rename it.\n' >> "$R/skills/ardd-audit/SKILL.md"
+sh "$R/scripts/lint-docs.sh" > "$TMP/out12b" 2>&1 || fail "case12b: legacy-adoption line should be exempt ($(cat "$TMP/out12b"))"
+ok "case12b: legacy-marked critique.md line -> clean"
+
+# case 12c: gate inert while the renamed skill dir is absent (pre-rename
+# trees stay green)
+R="$TMP/gateoff"; mk_skeleton "$R"
+mk_skill "$R" ardd-lambda 'name: ardd-lambda
+description: Does lambda things.'
+printf '\nWrite findings to critique.md now.\n' >> "$R/skills/ardd-lambda/SKILL.md"
+sh "$R/scripts/lint-docs.sh" > "$TMP/out12c" 2>&1 || fail "case12c: gate should be inert without skills/ardd-audit ($(cat "$TMP/out12c"))"
+ok "case12c: gate inert pre-rename"
+
 # case 6: the real repo passes (all shipped skills are CLI-discoverable)
 sh "$SCRIPT_DIR/lint-docs.sh" > "$TMP/out6" 2>&1 || fail "case6: real repo should pass ($(cat "$TMP/out6"))"
 ok "case6: real repo clean"
