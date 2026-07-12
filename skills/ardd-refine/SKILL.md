@@ -1,14 +1,16 @@
 ---
 name: ardd-refine
 tier: core
-description: Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning.
+description: "Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning; given a name that doesn't exist yet, it creates the artifact from a template (absorbs ardd-add-artifact)."
 ---
 
 # /ardd-refine
 
 Refine a project artifact. Usage: `/ardd-refine <name>` where name matches a file
 in `.project/artifacts/` (e.g., `constitution`, `infrastructure`, `datamodel`,
-`ui`, or any custom artifact added with `/ardd-add-artifact`).
+`ui`, or any custom artifact). Naming an artifact that doesn't exist yet
+enters the create path (step 1) — there is no separate add-artifact
+command.
 
 ## No-argument mode
 
@@ -30,10 +32,29 @@ that has open questions instead of a single one:
 ## Steps
 
 1. **Load the artifact** from `.project/artifacts/<name>.md`. If it does not
-   exist, offer to create it — look for a template at `.claude/skills/ardd-
-   artifact-templates/<name>.md` (installed by `install.sh`), falling back
-   to `.claude/skills/ardd-artifact-templates/generic.md`, or to no fixed
-   structure if the templates directory isn't present.
+   exist, offer to create it (the create path, formerly
+   `ardd-add-artifact`):
+   - **Find a template.** Look for `.claude/skills/ardd-artifact-templates/
+     <name>.md` (installed by `install.sh`), falling back to
+     `.claude/skills/ardd-artifact-templates/generic.md`, or to no fixed
+     structure if the templates directory isn't present.
+   - **Seed it** from conversation context and any description the user
+     gave. Replace all placeholder tokens; use `[OPEN: <question>]` for
+     anything unresolved.
+   - **Set frontmatter explicitly**, matching `/ardd-codify` step 4's field
+     list: `status: <draft if open questions remain, else stable>` and
+     `last_updated: <today YYYY-MM-DD>`. Add `diagram_status: unrendered`
+     if the new artifact is a renderable one (`datamodel`,
+     `infrastructure`, `ui`) — creation never generates a diagram itself,
+     so a renderable artifact always starts `unrendered`, never `current`.
+   - **Register it**: add a row for the new artifact to
+     `.project/WORKFLOW.md`'s Artifacts table, and add it to the artifacts
+     list in `CLAUDE.md`.
+   - Then continue with the steps below on the freshly created file (steps
+     2–3 typically have little to change on a just-seeded artifact; if
+     nothing further is needed, skip to step 7's report — and since other
+     artifacts may reference the new one, run `/ardd-status` rather than
+     just suggesting it).
 
 2. **Understand the user's intent.** The user may have provided guidance in
    their invocation (e.g., `/ardd-refine datamodel add a source_ehr field`).

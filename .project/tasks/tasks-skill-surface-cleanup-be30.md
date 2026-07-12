@@ -108,7 +108,7 @@ tasks encode._
   regenerate. Lint + suite green (T001's extended lint now guards skill
   bodies).
 
-- [ ] T010 Fold add-artifact into refine, delete `skills/ardd-add-artifact/`:
+- [x] T010 Fold add-artifact into refine, delete `skills/ardd-add-artifact/`:
   absorb its unique lines (conflict check, WORKFLOW.md row note, CLAUDE.md
   registration note) into refine's existing create path; update references
   (README/USAGE tables regenerate via gen-skill-docs.sh).

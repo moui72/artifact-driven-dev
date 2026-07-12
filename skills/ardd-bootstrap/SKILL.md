@@ -8,7 +8,7 @@ description: "One-time initialization: seed .project/ artifacts from conversatio
 
 One-time initialization. Seeds `.project/artifacts/` from the current
 conversation context, then generates project workflow documentation.
-Run once at project start; use `/ardd-refine` and `/ardd-add-artifact` for all
+Run once at project start; use `/ardd-refine` (which also creates new artifacts) for all
 subsequent changes.
 
 Bootstrap seeds artifacts **from conversation context**. Usually that context

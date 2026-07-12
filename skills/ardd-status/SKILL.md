@@ -12,7 +12,7 @@ contradictions, and implied-but-undefined decisions.
 
 `/ardd-backlog`, `/ardd-plan`, `/ardd-refine`,
 `/ardd-feedback`, `/ardd-implement` (on tasks-file completion, in both
-execution and reconcile mode), `/ardd-add-artifact` (when relevant), and
+execution and reconcile mode), `/ardd-refine`'s create path (when relevant), and
 `/ardd-defects` invoke this skill automatically as their final step, since
 each of those changes state `STATUS.md` should reflect. This is the
 canonical list — other docs referencing which skills auto-trigger analyze

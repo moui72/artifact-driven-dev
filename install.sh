@@ -78,7 +78,7 @@ echo "  ✓ ardd-constitution-data/constitution-suggestions.md"
 
 # --- Artifact templates ---
 # Not skills either — structure skeletons /ardd-bootstrap, /ardd-refine, and
-# /ardd-add-artifact fill in from context when creating/refining an artifact.
+# /ardd-refine's create path fill in from context when creating/refining one.
 # These previously only existed in the ADD source repo, never in a target
 # project, so the "look for templates/artifacts/<name>.md in the ADD
 # installation" instruction those skills carried was a no-op outside this

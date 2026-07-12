@@ -18,7 +18,7 @@ The common defaults:
 
 A CLI tool might carry only a constitution and an `api.md`; this repo's
 own `.project/` carries only a constitution. `/ardd-bootstrap` suggests a
-set; `/ardd-add-artifact` extends it anytime.
+set; `/ardd-refine <new-name>` extends it anytime.
 
 You refine these iteratively. When they're stable, you generate a plan, then
 tasks, then execute. If work gets interrupted, `/ardd-implement`'s reconcile mode picks up where you
