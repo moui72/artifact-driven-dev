@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (constitution v1.5.0 — GitHub releases are the stable install channel; remote-install-source planned+tasked, ready for /ardd-implement). Keep this current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-12 (skill-surface cleanup approved and tasked after 3-agent review; release plan paused at 7/10 pending it). Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -25,18 +25,23 @@ and hasn't been verified against yet.
 
 ## Feedback
 
-1 open — `feedback-critique-design-vetting-gap-0779.md` (3 items: critique's
-description lures agents into forward-looking design vetting; no
-argument guard for non-artifact args; roster gap — no pre-artifact
-design-proposal review step). Sourced from a real sync-tab-scroll session;
-will be picked up by the next `/ardd-plan`.
+None open — `feedback-critique-design-vetting-gap-0779.md` (9 items, all
+accepted) consumed by `plan-skill-surface-cleanup-2026-07-12.md`.
 
-## In Flight
+## Two plans in flight, strictly sequenced
 
-- Delegated worktree `agent-a1e8aacec3b90131c`
-  (branch `worktree-agent-a1e8aacec3b90131c`) —
-  `tasks-remote-install-source-18d3.md` in-progress, 1/10 (running T001–T007;
-  Phases 5–6 return to the coordinator).
+1. **skill-surface-cleanup** (approved; `tasks-skill-surface-cleanup-be30.md`
+   ready, 0/18): 17→13 skills — renames (audit/status/defects/tracker/
+   backlog/diagram), folds (converge→implement, add-artifact→refine,
+   bootstrap+codify→init), research proposal mode, guards, cross-routing,
+   tombstones, migrations 0006–0008. Revised through three independent
+   reviews (UX/DevX, architecture, release-path). **One worktree branch,
+   single merge — no per-phase merges** (consumers read this checkout live).
+2. **remote-install-source** (`tasks-remote-install-source-18d3.md`
+   in-progress, 7/10): T008 cut v1.0.0 (+ `docs/release-notes-v1.md` from
+   the cleanup as `--notes-file`), T009 repoint five consumers, T010 retire
+   the primary-stays-on-main mandate — **resumes only after the cleanup
+   merges** (renames after v1.0.0 would be breaking).
 
 ## Feature Backlog
 
@@ -78,9 +83,9 @@ risk (smoke CI never runs). Work them from the checklist directly.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-remote-install-source-18d3.md`
-(10 tasks; user checkpoints at T001 signed-tags, T008 version+push, T009
-repoint scope, T010 retirement magnitude — T008–T010 need the user
-present, so a delegated run should stop after Phase 4 and hand back).
-Other threads: unpushed `main` commits; reaped-worktree `/ardd-feedback`;
-critique checklist; `disposable-report-merge-driver`.
+Run `/ardd-implement` to execute `tasks-skill-surface-cleanup-be30.md`
+(18 tasks, delegated as ONE background run, single merge on completion).
+Then resume `tasks-remote-install-source-18d3.md` T008–T010 (release cut,
+consumer repoint, mandate retirement). Other threads: unpushed `main`
+commits; reaped-worktree `/ardd-feedback`; critique checklist (migrates to
+audit.md during the cleanup); `disposable-report-merge-driver`.
