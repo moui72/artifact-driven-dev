@@ -1,0 +1,5 @@
+# ARDD: generated single-writer reports — keep current side on merge (added by install.sh)
+STATUS.md merge=ours
+DEFECTS.md merge=ours
+TRACKER.md merge=ours
+audit.md merge=ours
