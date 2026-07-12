@@ -92,7 +92,7 @@ status: in-progress
 
 ## Phase 5: Dogfood and closeout
 
-- [ ] T009 Verify `scripts/completion-flip-check.sh` degrades gracefully when
+- [x] T009 Verify `scripts/completion-flip-check.sh` degrades gracefully when
   a plan's `branch:` names a branch that was never created (the solo
   no-branch flow): build a throwaway-repo test case with a completed tasks
   file whose plan `branch:` has no ref, confirm the script reports

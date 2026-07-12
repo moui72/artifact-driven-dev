@@ -166,4 +166,20 @@ sed -i.bak 's/^status: tasked/status: implemented/' "$repo/.project/features/dem
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
 assert_eq "case10: per-feature register, already implemented -> silent" "" "$out"
 
+# --- Case 11 (solo no-branch flow, decision 0005): the plan's branch:
+# names a branch that was never created — /ardd-plan's solo path commits
+# plan+tasks to the default branch without ever creating the branch the
+# field names — and there's no worktree_branch. The feature is still
+# tasked, so the only thing keeping the check silent is the missing ref:
+# it must degrade cleanly (empty stdout, empty stderr, exit 0), never
+# error. ---
+sed -i.bak 's/^status: implemented/status: tasked/' "$repo/.project/features/demo-feature.md" && rm -f "$repo/.project/features/demo-feature.md.bak"
+write_plan "$repo" "never-created-solo-branch" "[demo-feature]"
+write_tasks "$repo" "completed"
+rc=0
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md" 2>"$WORK/case11.err")" || rc=$?
+assert_eq "case11: no-branch flow, nonexistent ref -> silent stdout" "" "$out"
+assert_eq "case11: no-branch flow, nonexistent ref -> silent stderr" "" "$(cat "$WORK/case11.err")"
+assert_eq "case11: no-branch flow, nonexistent ref -> exit 0" "0" "$rc"
+
 exit "$fail"
