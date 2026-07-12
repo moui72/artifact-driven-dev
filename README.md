@@ -384,6 +384,16 @@ scripts before a commit is accepted. Git won't enable a tracked hooks
 directory automatically, so this is a one-time, per-clone opt-in, not
 something `install.sh` or any hook can do for you.
 
+A note on the behavioral smoke tier (`.github/workflows/smoke.yml`): its
+scenarios run real headless skill flows against throwaway targets, but the
+`ANTHROPIC_API_KEY` secret is **deliberately unprovisioned**, so every
+smoke job currently skips fast and is advisory (`continue-on-error`).
+Provisioning that secret in the repo's Actions settings is the single
+manual step that turns the scenarios live; until then they are validated
+structurally only. If you change a skill's state-mutating path, keep the
+scenarios current in the same change — details in the workflow's header
+comment.
+
 (One-time history note: `main` was rewritten once on 2026-07-04 to add
 commit signatures — recovery steps preserved in
 `docs/decisions/0003-rewritten-main-recovery.md`.)

@@ -66,7 +66,7 @@ status: in-progress
   reverse-engineered. Scenarios stay secret-gated and path-filtered
   exactly as the existing two.
 
-- [ ] T006 [defect: 7efff3a5] Document the smoke tier's standing state
+- [x] T006 [defect: 7efff3a5] Document the smoke tier's standing state
   where contributors will see it: a short note in the workflow README (or
   `.github/workflows/smoke.yml` header comment + README) stating the
   `ANTHROPIC_API_KEY` secret is deliberately unprovisioned, what

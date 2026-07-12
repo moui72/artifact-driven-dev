@@ -1,11 +1,23 @@
-# Behavioral smoke test (constitution Quality Standards, behavioral-test
-# tier): install ADD into a throwaway target project, run one
-# state-mutating skill flow headlessly, and assert on the file outcomes.
+# Behavioral smoke tests (constitution Quality Standards, behavioral-test
+# tier): install ARDD into throwaway target projects, run state-mutating
+# skill flows headlessly, and assert on the file outcomes via
+# scripts/smoke-assert.sh.
 #
-# PRODUCTION ANNOTATION (decided 2026-07-06, plan-ardd-state-determinism):
-# the ANTHROPIC_API_KEY secret is deliberately NOT provisioned yet, so the
-# job skips fast when it's absent and carries continue-on-error. Promotion
-# to a required check = provision the secret and remove continue-on-error.
+# STANDING STATE — the ANTHROPIC_API_KEY secret is deliberately NOT
+# provisioned (decided 2026-07-06, plan-ardd-state-determinism; reaffirmed
+# 2026-07-12): every job checks for it, skips fast when absent, and
+# carries continue-on-error, so these scenarios currently validate
+# structure only, never execute. Provisioning the secret (repo settings →
+# Actions secrets) is the single manual step that turns them live;
+# promotion to a required check = provision it and remove
+# continue-on-error.
+#
+# MAINTENANCE RULE (constitution Quality Standards): scenarios must be
+# kept current with the state-mutating skill paths. When a skill gains or
+# changes a mutation path (a new mode, a new file it writes, a new status
+# flip), extend or adjust a scenario here in the same change — a skipped
+# scenario that has drifted from the skill it exercises is worse than none
+# once the key goes live.
 name: smoke
 
 on:
