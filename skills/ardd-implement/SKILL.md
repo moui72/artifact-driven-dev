@@ -186,18 +186,25 @@ files.
      - `auto` — merge the **subagent-reported** branch (never an in-memory
        name) into the local default branch now, without prompting, when the
        merge fast-forwards or completes without conflicts; then run the
-       existing post-merge steps unchanged (`/ardd-status`). On **any**
-       conflict: `git merge --abort`, surface the conflict, and fall back
-       to asking — never auto-resolve, not even the disposable report
-       files (their take-either-side rule stays an interactive judgment
-       until the merge-driver feature lands).
+       existing post-merge steps unchanged (`/ardd-status`). With the
+       merge driver configured (`.project/.gitattributes` marks the
+       report files `merge=ours`; per-clone opt-in
+       `git config merge.ours.driver true` — install.sh suggests it),
+       divergent report files merge clean automatically, keeping the
+       current side. On **any** conflict that still surfaces:
+       `git merge --abort`, surface the conflict, and fall back to
+       asking — never auto-resolve by hand; the interactive
+       take-either-side rule below is the unconfigured-driver fallback.
      - `ask` (or absent) — offer to merge the worktree branch into the
        default branch now,
        suggesting **yes** — eager merge is what keeps the in-flight window
        short in solo mode, landing code and all its state (checkboxes,
        `→completed`, any register flip) together. Single-writer report
        files (STATUS.md, DEFECTS.md, TRACKER.md, audit.md) are disposable
-       at merge/rebase: take either side without deliberation — never
+       at merge/rebase: with the merge driver configured
+       (`.project/.gitattributes` + `git config merge.ours.driver true`)
+       they merge clean automatically, keeping the current side; when
+       it isn't, take either side without deliberation — never
        hand-reconcile, never re-apply — and let the owning skill
        regenerate from disk. Conflict markers in a generated report are
        noise, not data loss.

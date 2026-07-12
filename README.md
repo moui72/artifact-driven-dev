@@ -325,6 +325,22 @@ its lock file lives inside each worktree's own `.project/`, so two worktrees
 of the same repo won't see each other's runs. Treat it as insurance against
 two sessions sharing one checkout, not as cross-worktree locking.
 
+The take-either-side rule for the four generated report files is git
+mechanism now, not just convention: `install.sh` ships
+`.project/.gitattributes` marking `STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
+and `audit.md` `merge=ours`. Git deliberately won't honor repo-committed
+merge-driver *definitions*, so the driver is a per-clone opt-in (same
+posture as `core.hooksPath`):
+
+```sh
+git config merge.ours.driver true
+```
+
+With that set, parallel branches never conflict on the report files — the
+merge keeps the current branch's version, and the owning skill regenerates
+from disk. Without it, git falls back to a normal text merge and the rules
+below apply.
+
 When `.project/` files conflict on merge:
 
 - **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
@@ -333,7 +349,8 @@ When `.project/` files conflict on merge:
   the owning skill (`/ardd-status`, `/ardd-defects`, `/ardd-tracker`,
   `/ardd-audit` respectively); it regenerates the file from current
   state, so which side you kept doesn't matter. Conflict markers in a
-  generated report are noise, not data loss.
+  generated report are noise, not data loss. (Configuring the merge
+  driver above makes this case disappear entirely.)
 - **`.project/features/`** — per-feature files, so two independently-added
   features can't conflict at all; a conflict inside one file means the same
   feature was advanced on two branches — take the further-along status,

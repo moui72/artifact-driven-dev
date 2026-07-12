@@ -41,7 +41,10 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
 ./scripts/test-hooks-pre-commit.sh     # regression test for hooks/pre-commit's aggregation/short-circuit logic
+./scripts/test-install-gitattributes.sh # regression test for install.sh's .project/.gitattributes (merge=ours) handling
+./scripts/test-merge-driver.sh         # end-to-end pin: merge=ours keeps ours with the driver set, degrades to a normal conflict without it
 git config core.hooksPath hooks        # one-time, per-clone opt-in — enables hooks/pre-commit (see constitution.md)
+git config merge.ours.driver true      # one-time, per-clone opt-in — conflict-free merges for the generated .project/ report files
 ```
 
 All lint/test scripts run in CI (`.github/workflows/lint.yml`) on
@@ -194,7 +197,15 @@ Every other skill treats these as read-only. At merge/rebase these files
 are **disposable**: take either side without deliberation — never
 hand-reconcile, never re-apply — and let the owning skill regenerate
 from disk (full treatment: README's "Concurrency and `.project/` merge
-conflicts" section). A PreToolUse/PostToolUse hook
+conflicts" section). That rule is git mechanism now: `install.sh` ships
+`.project/.gitattributes` marking the four report files `merge=ours`, and
+with the per-clone opt-in `git config merge.ours.driver true` (suggested
+and checked by install.sh, hooksPath-style — never set for the user, since
+git refuses to honor repo-committed driver definitions) they merge clean
+keeping the current side. Unconfigured, git degrades to a normal text
+merge and the interactive take-either-side rule covers it — nothing gets
+worse. Behavior pinned by `scripts/test-merge-driver.sh`; install handling
+by `scripts/test-install-gitattributes.sh`. A PreToolUse/PostToolUse hook
 cannot enforce this: its payload (`tool_name`, `tool_input`, `transcript_path`,
 etc.) carries no field identifying which skill/slash-command is currently
 active, and the transcript format is explicitly undocumented and

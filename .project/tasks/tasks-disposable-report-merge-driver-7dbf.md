@@ -42,7 +42,7 @@ status: in-progress
 
 ## Phase 2: Prose catch-up
 
-- [ ] T004 [parallel] Update the prose that says the rule is
+- [x] T004 [parallel] Update the prose that says the rule is
   interactive-only: `skills/ardd-implement/SKILL.md`'s `merge_policy: auto`
   conflict note ("never auto-resolve, not even the disposable report files
   … until the merge-driver feature lands" → with the driver configured,
