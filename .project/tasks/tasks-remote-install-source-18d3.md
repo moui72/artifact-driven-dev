@@ -79,7 +79,7 @@ status: in-progress
   test-first, keeping every branch under the timeout guard per the
   existing test discipline.
 
-- [ ] T006 [artifacts: constitution] Update `skills/ardd-update/SKILL.md`:
+- [x] T006 [artifacts: constitution] Update `skills/ardd-update/SKILL.md`:
   its source-standing step now runs `source-resolve.sh` (worktree
   copy/absolute-path fallback rule as with other ardd-scripts); on
   `channel=release` proceed and report the resolved tag; on `channel=dev`
