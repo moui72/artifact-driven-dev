@@ -224,6 +224,74 @@ else
   echo "  ✓ .worktreeinclude appended ($WORKTREEINCLUDE_PATTERN)"
 fi
 
+# --- Merge attributes for single-writer report files ---
+# The four generated report files (STATUS.md, DEFECTS.md, TRACKER.md,
+# audit.md) are disposable at merge: take either side without deliberation
+# and let the owning skill regenerate from disk. `merge=ours` makes that
+# rule git mechanism instead of prose — with the driver configured, parallel
+# branches never conflict on them. The attributes file lives inside
+# .project/ (the directory ARDD owns — never the target's root
+# .gitattributes, same ceiling discipline as the gitignore suggestion).
+# Idempotent create-or-append: missing entries are added, existing entries
+# never duplicated, user-added lines preserved.
+#
+# Git deliberately ignores repo-committed merge-driver *definitions*
+# (arbitrary command execution), so the driver itself is a per-clone opt-in
+# — checked and suggested below, hooksPath-style, never set by this script.
+GITATTRIBUTES="$TARGET/.project/.gitattributes"
+GITATTRIBUTES_COMMENT="# ARDD: generated single-writer reports — keep current side on merge (added by install.sh)"
+MERGE_OURS_ENTRIES="STATUS.md
+DEFECTS.md
+TRACKER.md
+audit.md"
+
+mkdir -p "$TARGET/.project"
+ga_missing=""
+for report in $MERGE_OURS_ENTRIES; do
+  if [ ! -f "$GITATTRIBUTES" ] || ! grep -qxF "$report merge=ours" "$GITATTRIBUTES"; then
+    ga_missing="$ga_missing $report"
+  fi
+done
+
+if [ -z "$ga_missing" ]; then
+  echo "  – .project/.gitattributes already has all merge=ours entries"
+else
+  if [ ! -f "$GITATTRIBUTES" ]; then
+    printf '%s\n' "$GITATTRIBUTES_COMMENT" > "$GITATTRIBUTES"
+    ga_verb="created"
+  else
+    # Guard against a missing trailing newline in the existing file gluing
+    # our appended lines onto its last line.
+    if [ -s "$GITATTRIBUTES" ] && [ -n "$(tail -c1 "$GITATTRIBUTES")" ]; then
+      printf '\n' >> "$GITATTRIBUTES"
+    fi
+    printf '%s\n' "$GITATTRIBUTES_COMMENT" >> "$GITATTRIBUTES"
+    ga_verb="appended"
+  fi
+  for report in $ga_missing; do
+    printf '%s merge=ours\n' "$report" >> "$GITATTRIBUTES"
+  done
+  echo "  ✓ .project/.gitattributes $ga_verb (merge=ours:$ga_missing)"
+fi
+
+# Suggest-and-check for the driver definition (never mutate the user's
+# config): with the attributes present but the driver unconfigured, git
+# falls back to its normal text merge — a conflict, handled by the
+# interactive take-either-side rule, so nothing gets worse; configuring the
+# driver is what makes report merges conflict-free.
+if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1 \
+  && grep -q 'merge=ours' "$GITATTRIBUTES" 2>/dev/null \
+  && ! git -C "$TARGET" config --get merge.ours.driver >/dev/null 2>&1; then
+  echo ""
+  echo "Note: .project/.gitattributes marks the generated report files"
+  echo "merge=ours, but this clone has no 'ours' merge driver configured, so"
+  echo "git falls back to a normal text merge (a conflict you resolve by"
+  echo "taking either side). To make those merges automatic, opt in once per"
+  echo "clone:"
+  echo ""
+  echo "  git config merge.ours.driver true"
+fi
+
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
   echo ""

@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Driver mechanism (test-first)
 
-- [ ] T001 Extend `install.sh` to ship/maintain `.project/.gitattributes`
+- [x] T001 Extend `install.sh` to ship/maintain `.project/.gitattributes`
   in the target: entries `STATUS.md merge=ours`, `DEFECTS.md merge=ours`,
   `TRACKER.md merge=ours`, `audit.md merge=ours` (paths relative to
   `.project/` — the attributes file lives inside the directory ARDD owns,
