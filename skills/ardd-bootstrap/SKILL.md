@@ -182,6 +182,28 @@ context, so no interview is needed.)
    migration (and `/ardd-update` offers the same question once to installs
    whose constitution lacks the field entirely).
 
+   **Set `delegation` (and, in solo mode, `merge_policy`) in the
+   constitution's frontmatter.** Alongside the questions above, ask once:
+   "When `/ardd-implement`/`/ardd-converge` could run in the background,
+   what should they do?" — `eager` (delegate to a background worktree
+   subagent without asking), `ask` (offer each time; today's behavior), or
+   `inline` (never offer, run in the foreground). Then, **only if the
+   answered `workflow_mode` is `solo`**, ask: "When a delegated background
+   run completes, merge its branch into your default branch automatically?"
+   — `auto` (merge without asking when it's fast-forward or conflict-free;
+   any conflict still stops and asks) or `ask` (offer each time). Don't ask
+   `merge_policy` in collaborative mode — it is never consulted there
+   (merging goes through the PR), so asking would imply an effect it
+   doesn't have; it can be stamped later if the project switches modes.
+   Write the answers via `.claude/skills/ardd-scripts/ardd-state.sh stamp
+   .project/artifacts/constitution.md delegation <eager|ask|inline>` (and
+   `... merge_policy <auto|ask>`) after the file is written in step 5 —
+   never hand-edit. Like the fields above these are frontmatter workflow
+   fields, not constitution content — no Sync Impact Report entry, no
+   version bump. Absence means `ask` for both, so existing projects need
+   no migration (and `/ardd-update` backfills the question(s) once for
+   installs whose constitution lacks them).
+
 5. **Write all artifact files** to `.project/artifacts/`.
 
 6. **Install `.project/WORKFLOW.md`** — a static skill reference shipped

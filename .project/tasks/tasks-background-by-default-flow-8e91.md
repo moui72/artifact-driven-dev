@@ -74,7 +74,7 @@ status: in-progress
 
 ## Phase 4: Ask-once wiring
 
-- [ ] T007 [artifacts: constitution] Add the two questions to
+- [x] T007 [artifacts: constitution] Add the two questions to
   `skills/ardd-bootstrap/SKILL.md` alongside the existing
   `workflow_mode`/`next_step_prompt` questions: `delegation` asked in both
   modes; `merge_policy` asked only when the answered mode is `solo` (it is
