@@ -93,7 +93,7 @@ continues. Reach for it after a crashed run, a manual detour, or any
 - `/ardd-verify` — occasionally, or before major planning: checks
   artifacts against the *code* and records drift in `DEFECTS.md`; each
   defect is offered as a fix task by the next plan run, exactly once.
-- `/ardd-critique` — when a design decision deserves pressure-testing
+- `/ardd-audit` — when a design decision deserves pressure-testing
   rather than just consistency-checking.
 - `/ardd-lint` — anytime, free: structural validation of `.project/`
   (also runs automatically if the write-time hook is configured).

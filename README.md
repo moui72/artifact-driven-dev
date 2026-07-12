@@ -131,7 +131,7 @@ Opt-in skills for concerns the core loop doesn't force on you.
 | Command | What it does |
 |---|---|
 | `/ardd-verify` | Check artifacts against the actual codebase and record drift in DEFECTS.md (its single writer). |
-| `/ardd-critique` | Challenge artifact decisions: simplicity, failure modes, robustness, semantics. |
+| `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique). |
 | `/ardd-converge` | Reconcile the codebase with a tasks file after an interruption; same delegation and state model as implement. |
 | `/ardd-research` | Targeted investigation written to .project/plans/ — one-off output with no lifecycle. |
 | `/ardd-render` | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination (README.md by default). |
@@ -307,10 +307,10 @@ two sessions sharing one checkout, not as cross-worktree locking.
 When `.project/` files conflict on merge:
 
 - **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `SYNC.md`,
-  `critique.md`) — disposable: take either side without deliberation
+  `audit.md`) — disposable: take either side without deliberation
   (never hand-reconcile or re-apply changes across a rebase) and re-run
   the owning skill (`/ardd-analyze`, `/ardd-verify`, `/ardd-sync`,
-  `/ardd-critique` respectively); it regenerates the file from current
+  `/ardd-audit` respectively); it regenerates the file from current
   state, so which side you kept doesn't matter. Conflict markers in a
   generated report are noise, not data loss.
 - **`.project/features/`** — per-feature files, so two independently-added

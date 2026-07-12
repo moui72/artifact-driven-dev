@@ -81,7 +81,7 @@ For custom artifacts, follow the sections already present in the file.
 Any artifact documenting a known production shortcut or gap does so under a
 `## Production Annotations` heading, never as inline prose in another
 section — this is what lets `/ardd-plan`'s Production Annotation Summary
-step and `/ardd-critique` find them reliably. If you find one written inline
+step and `/ardd-audit` find them reliably. If you find one written inline
 elsewhere while refining, move it under `## Production Annotations` (adding
 the section if it doesn't exist yet) rather than leaving it in place.
 

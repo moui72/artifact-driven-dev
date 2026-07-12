@@ -210,7 +210,7 @@ this is not enforceable by a hook, and that was verified, not assumed.**
 - `.project/STATUS.md` — written only by `/ardd-analyze`
 - `.project/DEFECTS.md` — written only by `/ardd-verify`
 - `.project/SYNC.md` — written only by `/ardd-sync`
-- `.project/critique.md` — written only by `/ardd-critique`
+- `.project/audit.md` — written only by `/ardd-audit`
 - `.project/features/*.md` `status` field — mutated only via
   `ardd-state.sh feature-*` subcommands, invoked by `/ardd-feature`,
   `/ardd-plan` (both the `backlogged→planned` approval flip and the
@@ -460,7 +460,7 @@ canonical list of which skills do this.
 per Principle VI).** A determinism audit that produced `ardd-state.sh`,
 `defects-unsurfaced.sh`, `tasks-list.sh`, and `upsert-section.sh` also
 explicitly rejected these — don't re-propose scripting them without new
-evidence: `critique.md`'s staleness date-compare (advisory, low blast
+evidence: `audit.md`'s staleness date-compare (advisory, low blast
 radius); STATUS.md count assembly (its counts are byproducts of the
 scripts above); `ardd-sync`'s remaining `gh` glue (error handling needs
 judgment; the decisions are already in the three `sync-*.sh` scripts);

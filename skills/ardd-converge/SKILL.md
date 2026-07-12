@@ -143,7 +143,7 @@ when resuming work in a new session.
        suggesting **yes** — eager merge keeps the in-flight window short in
        solo mode, landing code and all its state (checkbox reconciliation, the
        `→completed` flip, any register flip) together. Single-writer report
-       files (STATUS.md, DEFECTS.md, SYNC.md, critique.md) are disposable
+       files (STATUS.md, DEFECTS.md, SYNC.md, audit.md) are disposable
        at merge/rebase: take either side without deliberation — never
        hand-reconcile, never re-apply — and let the owning skill
        regenerate from disk. Conflict markers in a generated report are

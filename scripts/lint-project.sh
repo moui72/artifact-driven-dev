@@ -18,7 +18,7 @@
 #     (draft/approved) plans — the file-based fingerprint of two live plans
 #     independently targeting the same feature (see /ardd-plan step 7)
 #
-# Deliberately NOT validated: critique.md, DEFECTS.md, SYNC.md, and STATUS.md.
+# Deliberately NOT validated: audit.md, DEFECTS.md, SYNC.md, and STATUS.md.
 # These are single-writer report files with looser, informal schemas by
 # design — their content is prose a human reads, not machine-checkable state —
 # so their absence from the checks above is intentional, not an oversight.

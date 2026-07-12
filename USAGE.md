@@ -62,7 +62,7 @@ Bring the project under ARDD: seed artifacts, refine until stable. After
 this you live in [the core loop](#the-core-loop) below. Consistency
 checking (`/ardd-analyze`) runs automatically at the end of most
 state-changing skills. Everything under [Extensions](#extensions) —
-diagrams, tracker sync, critique, code-vs-artifact verification,
+diagrams, tracker sync, design audits, code-vs-artifact verification,
 research — is opt-in and can be ignored until you want it.
 
 ### Seed your artifacts
@@ -152,7 +152,7 @@ Four skills check your project, at different layers. They don't overlap:
 | `/ardd-analyze` | Cross-artifact **consistency** — conflicts, gaps, draft artifacts, constitution violations, orphaned completion flips, in-flight work. Uses LLM judgment. | Before planning. Auto-runs as the final step of most state-changing skills. |
 | `/ardd-lint` | **Structural** validity only — frontmatter `status`/required fields and `[artifacts: ...]` references. Fast, deterministic, no LLM judgment. | Anytime, cheaply — especially after hand-editing anything in `.project/`. |
 | `/ardd-verify` | Artifacts vs. the **actual codebase** — drift between what an artifact says and what the code does, recorded in `DEFECTS.md`. | Periodically, or before major planning. |
-| `/ardd-critique` | The **decisions themselves** — simplicity, failure modes, robustness, semantics. Challenges intent, doesn't just check consistency. | When you want a design pressure-tested, not just checked. |
+| `/ardd-audit` | The **decisions themselves** — simplicity, failure modes, robustness, semantics. Challenges intent, doesn't just check consistency. | When you want a design pressure-tested, not just checked. |
 
 ---
 

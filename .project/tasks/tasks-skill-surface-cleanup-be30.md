@@ -14,7 +14,7 @@ tasks encode._
 
 ## Phase 0: Net and tag
 
-- [ ] T001 Cut the rollback ref and fix the verification net first. (a)
+- [x] T001 Cut the rollback ref and fix the verification net first. (a)
   Create a signed annotated pre-cleanup tag `pre-surface-cleanup` on current
   main (plain `git tag -s`, no gh release; do NOT push — the coordinator
   pushes on merge). (b) Test-first, extend `scripts/lint-docs.sh`: add
@@ -30,7 +30,7 @@ tasks encode._
 
 ## Phase 1: Renames (each task independently green)
 
-- [ ] T002 Rename `ardd-critique` → `ardd-audit` (co-atomic with its
+- [x] T002 Rename `ardd-critique` → `ardd-audit` (co-atomic with its
   migration): `git mv skills/ardd-critique skills/ardd-audit`; frontmatter
   `name: ardd-audit`; description rewritten per the plan's F007 formula
   ending "(formerly ardd-critique)"; every prose reference to

@@ -1,29 +1,32 @@
 ---
-name: ardd-critique
+name: ardd-audit
 tier: extension
-description: "Challenge artifact decisions: simplicity, failure modes, robustness, semantics."
+description: "Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md (formerly ardd-critique)."
 ---
 
-# /ardd-critique
+# /ardd-audit
 
 Critically review project artifacts and challenge design decisions. Unlike
 `/ardd-analyze` (which checks consistency and completeness), this skill asks
 whether the decisions themselves are good — then persists findings to
-`.project/critique.md` as a working checklist.
+`.project/audit.md` as a working checklist.
 
-Usage: `/ardd-critique` to review all artifacts, or `/ardd-critique <name>`
+Usage: `/ardd-audit` to review all artifacts, or `/ardd-audit <name>`
 to focus on a single artifact.
 
 ## Steps
 
-1. **Check for an existing `.project/critique.md`.**
+1. **Check for an existing `.project/audit.md`.**
 
+   - Adoption first: if `audit.md` is absent but the legacy `critique.md` exists
+     (an install predating the v1.0.0 rename), rename it to `audit.md` and
+     continue as if `audit.md` had always been there.
    - If it exists and has unresolved items (`- [ ]`):
      - Report the count of open items grouped by artifact.
      - Check whether any artifacts have been updated (via `last_updated`
-       frontmatter) since the critique file was last written (check the
+       frontmatter) since the audit file was last written (check the
        file's own `_Updated:` line). If any have, note them: "N artifact(s)
-       updated since last critique — findings for those may be stale."
+       updated since last audit — findings for those may be stale."
      - Present three options and wait for the user to choose:
        1. Continue working through existing findings (exit — user will
           use `/ardd-refine` directly from the checklist)
@@ -100,14 +103,14 @@ to focus on a single artifact.
    than one that turns out to be wrong — the user can reject it; they can't
    act on one never raised.
 
-5. **Write `.project/critique.md`.** If refreshing a single artifact's section,
+5. **Write `.project/audit.md`.** If refreshing a single artifact's section,
    upsert only that section and preserve the rest. Otherwise write the full
    file.
 
    Format:
 
    ```markdown
-   # Critique
+   # Audit
    _Updated: YYYY-MM-DD_
 
    ## <artifact name>
@@ -141,10 +144,10 @@ to focus on a single artifact.
 
 ## Resolution workflow
 
-As the user works through findings, they update `.project/critique.md` directly:
+As the user works through findings, they update `.project/audit.md` directly:
 
 - `- [ ]` → open
 - `- [x]` → resolved (ran the command or took equivalent action)
 - `- [-]` → rejected or deferred (with an optional note on the same line)
 
-The next `/ardd-critique` run will see these statuses and report accordingly.
+The next `/ardd-audit` run will see these statuses and report accordingly.

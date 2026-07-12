@@ -7,7 +7,7 @@ description: Capture bugs/UX/reconsidered decisions from inspecting the implemen
 # /ardd-feedback
 
 Capture feedback from manually inspecting the running implementation — bugs,
-UX issues, or decisions you've reconsidered. Unlike `/ardd-critique` (Claude
+UX issues, or decisions you've reconsidered. Unlike `/ardd-audit` (Claude
 challenging artifact decisions on paper), this is you reporting what you
 found by actually looking at the thing. Feedback is organized into a
 per-invocation file that `/ardd-plan` later consumes.
@@ -89,7 +89,7 @@ mechanism in `/ardd-plan`'s tasking half or `/ardd-implement`); untagged items p
 ordinary code-change tasks.
 
 Each item's checkbox uses the same 3-state resolution convention as
-`critique.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
+`audit.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
 plan, `[-]` declined (an override the user chose not to take). `/ardd-plan`
 step 5 already writes these marks as it processes each item — feedback shares
 the convention rather than inventing its own.
