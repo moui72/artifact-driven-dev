@@ -31,6 +31,16 @@
 # Source ownership: the default checkout at ~/.ardd/source belongs to this
 # script — it clones it and keeps it current. A checkout named explicitly via
 # --source or $ARDD_SOURCE belongs to the user; it is read and never mutated.
+#
+# Release channel (constitution, standing decision 2026-07-12): the owned
+# checkout is pinned to the latest semver release tag after every
+# clone/refresh — consumers install from releases, never from a live tip.
+# The selection logic is deliberately duplicated (minimally) from
+# scripts/source-resolve.sh: new.sh runs with no checkout of its own, so it
+# cannot source ardd-scripts. An offline refresh warns and proceeds with
+# the checkout as it stands; a source with no releases yet stays on the
+# default branch, noted. --source/$ARDD_SOURCE remains dev-mode: used
+# exactly as given.
 
 set -e
 
@@ -134,6 +144,21 @@ fi
 
 is_ardd_checkout() { [ -f "$1/install.sh" ] && [ -d "$1/skills" ]; }
 
+# Pin the owned checkout to its latest release tag (strict vX.Y.Z; ordering
+# via v:refname — same rule as source-resolve.sh, duplicated minimally
+# because new.sh has no checkout to source it from). No releases yet is a
+# note, not a failure: install from the default branch as it stands.
+pin_release() {
+  release_tag="$(git -C "$SRC" tag --list 'v[0-9]*' --sort=v:refname \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+  if [ -n "$release_tag" ]; then
+    git -C "$SRC" checkout --quiet "$release_tag"
+    echo "Using ARDD release $release_tag."
+  else
+    echo "  ! no releases tagged yet — installing from the default branch as it stands."
+  fi
+}
+
 if [ -n "$source_arg" ]; then
   SRC="$source_arg"; owned=0
 elif [ -n "${ARDD_SOURCE:-}" ]; then
@@ -153,8 +178,17 @@ if [ -e "$SRC" ]; then
   fi
   if [ "$owned" -eq 1 ]; then
     echo "Updating ARDD source at $SRC ..."
-    git -C "$SRC" pull --ff-only \
-      || echo "  ! pull failed — continuing with the checkout as it stands on disk."
+    # Fetch tags first (the owned checkout may sit detached at a release,
+    # where a pull has nothing to merge onto); offline is a warning, never
+    # a failure — install from the checkout as it stands on disk.
+    git -C "$SRC" fetch --tags --quiet \
+      || echo "  ! fetch failed — continuing with the checkout as it stands on disk."
+    pin_release
+    if [ -z "$release_tag" ] && [ -n "$(git -C "$SRC" branch --show-current)" ]; then
+      # No releases and still on a branch: stay current the old way.
+      git -C "$SRC" pull --ff-only --quiet \
+        || echo "  ! pull failed — continuing with the checkout as it stands on disk."
+    fi
   fi
 else
   if [ "$owned" -eq 0 ]; then
@@ -164,6 +198,7 @@ else
   echo "Cloning ARDD source into $SRC ..."
   mkdir -p "$(dirname "$SRC")"
   git clone --quiet "$REPO_URL" "$SRC"
+  pin_release
 fi
 
 SRC="$(cd "$SRC" && pwd)"

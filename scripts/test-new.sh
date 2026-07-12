@@ -377,6 +377,113 @@ set -e
   && ok "case18: installed into cwd" \
   || bad "case18: nothing installed into cwd"
 
+# --- Cases 19–22: release-channel pinning of the owned checkout ---
+# new.sh must move the checkout it owns (~/.ardd/source) to the latest
+# semver release tag after refreshing it, tolerate offline refreshes, note
+# a source with no releases, and keep --source/$ARDD_SOURCE dev-mode:
+# used exactly as given, never mutated. Hermetic: $HOME is pinned into the
+# temp dir so the "owned" path never leaves it, and the owned checkout is
+# always pre-seeded from a local fixture origin — no case may reach the
+# clone-from-GitHub path.
+
+# A fixture origin that is a fully installable ARDD checkout, tagged so
+# that lexical ordering would pick the wrong release (v1.10.0 > v1.9.0).
+FIXORIGIN="$WORK/fix-origin"
+mkdir -p "$FIXORIGIN"
+cp -R "$REPO_ROOT/skills" "$REPO_ROOT/templates" "$REPO_ROOT/scripts" "$REPO_ROOT/migrations" "$FIXORIGIN/"
+cp "$REPO_ROOT/install.sh" "$FIXORIGIN/"
+( cd "$FIXORIGIN" && git init -q -b main && git add -A && git commit -q -m one )
+git -C "$FIXORIGIN" tag v1.9.0
+( cd "$FIXORIGIN" && printf 'marker\n' > release-marker && git add -A && git commit -q -m two )
+git -C "$FIXORIGIN" tag v1.10.0
+
+# --- Case 19: owned checkout is refreshed and pinned to the latest tag ---
+FAKEHOME="$WORK/home19"
+mkdir -p "$FAKEHOME/.ardd"
+git clone -q "$FIXORIGIN" "$FAKEHOME/.ardd/source"
+git -C "$FAKEHOME/.ardd/source" checkout -q v1.9.0   # stale, detached at an old release
+target="$WORK/case19/proj"
+set +e
+out="$(with_timeout 60 env HOME="$FAKEHOME" ARDD_SOURCE= \
+  sh "$NEW_SH" --no-kickoff "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case19: owned-source install exits 0" \
+  || { bad "case19: expected exit 0, got $status"; printf '%s\n' "$out" | sed 's/^/    /'; }
+[ "$(git -C "$FAKEHOME/.ardd/source" describe --exact-match --tags 2>/dev/null)" = "v1.10.0" ] \
+  && ok "case19: owned checkout moved to latest release (v1.10.0 > v1.9.0)" \
+  || bad "case19: owned checkout not at v1.10.0"
+grep -q '^Source-Ref: v1.10.0$' "$target/.project/ardd-version.md" 2>/dev/null \
+  && ok "case19: install recorded Source-Ref v1.10.0" \
+  || bad "case19: Source-Ref v1.10.0 not recorded"
+
+# --- Case 20: no releases tagged -> default branch, noted, still installs ---
+FIXORIGIN2="$WORK/fix-origin-notags"
+mkdir -p "$FIXORIGIN2"
+cp -R "$REPO_ROOT/skills" "$REPO_ROOT/templates" "$REPO_ROOT/scripts" "$REPO_ROOT/migrations" "$FIXORIGIN2/"
+cp "$REPO_ROOT/install.sh" "$FIXORIGIN2/"
+( cd "$FIXORIGIN2" && git init -q -b main && git add -A && git commit -q -m one )
+FAKEHOME="$WORK/home20"
+mkdir -p "$FAKEHOME/.ardd"
+git clone -q "$FIXORIGIN2" "$FAKEHOME/.ardd/source"
+target="$WORK/case20/proj"
+set +e
+out="$(with_timeout 60 env HOME="$FAKEHOME" ARDD_SOURCE= \
+  sh "$NEW_SH" --no-kickoff "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case20: no-tags source still installs" \
+  || bad "case20: expected exit 0, got $status"
+printf '%s' "$out" | grep -qi 'no releases' \
+  && ok "case20: notes that no releases exist" \
+  || bad "case20: no-releases note missing"
+[ "$(git -C "$FAKEHOME/.ardd/source" branch --show-current)" = "main" ] \
+  && ok "case20: owned checkout stays on the default branch" \
+  || bad "case20: owned checkout left the default branch"
+
+# --- Case 21: offline refresh warns and proceeds with existing state ---
+FAKEHOME="$WORK/home21"
+mkdir -p "$FAKEHOME/.ardd"
+git clone -q "$FIXORIGIN" "$FAKEHOME/.ardd/source"
+git -C "$FAKEHOME/.ardd/source" remote set-url origin "$WORK/gone-remote"
+target="$WORK/case21/proj"
+set +e
+out="$(with_timeout 60 env HOME="$FAKEHOME" ARDD_SOURCE= \
+  sh "$NEW_SH" --no-kickoff "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case21: offline refresh still installs" \
+  || bad "case21: expected exit 0, got $status"
+[ "$(git -C "$FAKEHOME/.ardd/source" describe --exact-match --tags 2>/dev/null)" = "v1.10.0" ] \
+  && ok "case21: pinned from existing (already-cloned) tags" \
+  || bad "case21: not pinned to v1.10.0 from existing state"
+
+# --- Case 22: a --source/$ARDD_SOURCE checkout with tags is never moved ---
+# Dev-mode: the user's checkout is used exactly as given — no fetch, no
+# tag checkout — even though releases exist in it.
+DEVSRC="$WORK/case22/dev-src"
+mkdir -p "$WORK/case22"
+git clone -q "$FIXORIGIN" "$DEVSRC"
+dev_head="$(git -C "$DEVSRC" rev-parse HEAD)"
+target="$WORK/case22/proj"
+set +e
+out="$(with_timeout 60 env ARDD_SOURCE="$DEVSRC" \
+  sh "$NEW_SH" --no-kickoff "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case22: dev-mode source installs" \
+  || bad "case22: expected exit 0, got $status"
+[ "$(git -C "$DEVSRC" rev-parse HEAD)" = "$dev_head" ] \
+  && ok "case22: dev-mode source HEAD untouched" \
+  || bad "case22: dev-mode source HEAD moved"
+[ "$(git -C "$DEVSRC" branch --show-current)" = "main" ] \
+  && ok "case22: dev-mode source still on its branch (not detached at a tag)" \
+  || bad "case22: dev-mode source was detached/moved to a tag"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"
 else

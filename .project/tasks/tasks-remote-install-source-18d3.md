@@ -65,7 +65,7 @@ status: in-progress
 
 ## Phase 3: Acquisition routes
 
-- [ ] T005 [artifacts: constitution] Update `new.sh`: after cloning or
+- [x] T005 [artifacts: constitution] Update `new.sh`: after cloning or
   refreshing the `~/.ardd/source` checkout it owns, fetch tags and check
   out the latest release tag (same selection rule as T002 — but new.sh
   runs with no checkout of its own, so the logic must be inline or
