@@ -172,6 +172,16 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       fi
     fi
 
+    # update_check_max_age_days is optional (absent = the update check never
+    # fetches); when present it must be a positive integer.
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" update_check_max_age_days; then
+      val="$(frontmatter_field "$f" update_check_max_age_days)"
+      case "$val" in
+        0*|*[!0-9]*|'')
+          report "$f: update_check_max_age_days '$val' is not a positive integer (1, 2, ...)$SKEW_HINT" ;;
+      esac
+    fi
+
     # --- constitution governance bookkeeping consistency ---
     # The exact drift /ardd-defects caught once (v1.1.0 defects): footer
     # Version/Last Amended vs frontmatter last_updated vs the Sync Impact

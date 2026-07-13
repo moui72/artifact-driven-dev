@@ -11,6 +11,7 @@ workflow_mode: solo
 next_step_prompt: true
 delegation: eager
 merge_policy: auto
+update_check_max_age_days: 7
 ---
 
 # Constitution

@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=34
+EXPECTED_BAD_FINDINGS=35
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -85,6 +85,15 @@ else
     echo "ok: invalid merge_policy value reported with allowed values"
   else
     echo "FAIL: invalid merge_policy value reported with allowed values"
+    fail=1
+  fi
+  # update_check_max_age_days is optional (absent = never fetch); when
+  # present it must be a positive integer — bad-project's '0' must be
+  # flagged with the field name and the allowed shape
+  if grep -q "update_check_max_age_days '0' is not a positive integer" /tmp/lint-bad.out; then
+    echo "ok: invalid update_check_max_age_days value reported with allowed shape"
+  else
+    echo "FAIL: invalid update_check_max_age_days value reported with allowed shape"
     fail=1
   fi
   # render_target / render_section are optional per-artifact overrides; when
