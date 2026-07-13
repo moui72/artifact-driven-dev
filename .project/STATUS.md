@@ -1,13 +1,13 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-13 (`github-pages-docs-site` delivered:
-`tasks-github-pages-docs-site-d8e2.md` completed 9/9 inline, feature →
-`implemented`, pushed. The docs/ tree now renders at
-https://moui72.github.io/artifact-driven-dev/ — MkDocs Material, strict
-link validation as the CI docs check, deploy on push to `main`,
-`build_type=workflow`. `main` is fully pushed; the pending backlog of
-commits went out as the next beta with the Phase 2 push.) Keep this
-current as artifacts are refined and open questions are resolved._
+_Updated: 2026-07-13 (`plan-approval-presentation` planned+tasked —
+`plan-plan-approval-presentation-2026-07-13-14cf.md` approved,
+`tasks-plan-approval-presentation-99dd.md` ready (3 tasks), feature →
+`tasked`. Refines `/ardd-plan`'s approval checkpoint to present the plan's
+real structure instead of a freehand re-summary; browser/Artifact rendering
+vetted and dropped (`research-plan-approval-rendering-termin-2026-07-13-3758.md`).
+Not yet committed. Prior: `github-pages-docs-site` delivered and pushed.)
+Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -47,7 +47,10 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-0 backlogged · 12 implemented · 1 retired — see `.project/features/`.
+0 backlogged · 1 tasked · 12 implemented · 1 retired — see
+`.project/features/`. Tasked: `plan-approval-presentation` —
+`tasks-plan-approval-presentation-99dd.md` ready (3 tasks); run
+`/ardd-implement` to execute.
 Newest implemented: `github-pages-docs-site` (2026-07-13) — docs/ rendered
 at https://moui72.github.io/artifact-driven-dev/ (MkDocs Material; PR
 builds are the link check via `mkdocs build --strict`; docs-config-only
@@ -67,6 +70,8 @@ Nothing — no sibling worktrees, no reap candidates; `main` is even with
 
 ## Recommended Next Step
 
-Dispatch the stable release workflow when you want consumers on the
-accumulated work — everything else is clean. (Optional: `/ardd-defects`
-to re-verify against the new docs-site surfaces.)
+`/ardd-implement` to execute `tasks-plan-approval-presentation-99dd.md`
+(3 tasks, the approval-checkpoint refinement). Also standing: dispatch the
+stable release workflow when you want consumers on the accumulated work;
+optionally `/ardd-defects` to re-verify against the docs-site surfaces.
+Everything else is clean.

@@ -1,0 +1,15 @@
+---
+plan: plan-plan-approval-presentation-2026-07-13-14cf.md
+generated: 2026-07-13
+status: ready
+---
+
+# Tasks
+
+## Phase 1: Rewrite the approval-checkpoint presentation and verify docs
+
+- [ ] T001 [artifacts: constitution] Rewrite step 10 ("Approval checkpoint") in `skills/ardd-plan/SKILL.md`. Replace the freehand "Present a summary to the user — phases, key decisions, open questions" instruction with a bounded, four-element presentation drawn verbatim from the drafted plan, in this order: (1) the plan's **Goal** sentence, reproduced verbatim and bolded — never paraphrased; (2) a **phase table** with columns `Phase | Delivers | Depends on`, one row per phase from the plan's Phase Breakdown — and an explicit note that the checkpoint runs BEFORE tasking (step 12), so there are no `T###` IDs or final task counts yet and the agent must NOT invent a task-count column (an optional count of Phase Breakdown work-items is allowed only where the draft enumerated them, labeled as plan items, never tasks); (3) the plan's **Open Questions** list, reproduced verbatim (not summarized); (4) the saved plan path (as today) PLUS an explicit invitation to open the `.md` in an editor / markdown preview for the full plan, framing the terminal view as the decision-relevant skeleton and the file as the full-fidelity source (Scope, Technical Approach, Complexity Tracking, etc.). Preserve the existing Approve/Revise/Stop `AskUserQuestion` gate and the pre-tasking framing exactly — this task changes only what is shown before the gate question, not the gate. Treat as a public-API-grade edit (Constitution Principle I). Keep the instruction a summary-plus-pointer, not a full inline dump of the plan.
+
+- [ ] T002 [parallel] Verify user-facing docs stay in sync. Grep `docs/guides/core-loop.md`, `docs/reference/skills/ardd-plan.md`, `docs/concepts.md`, and `docs/index.md` for any description of *how* the plan is presented at the approval checkpoint (as opposed to the approve/revise/stop *gate*). These currently describe the gate, not the presentation format, so the expected outcome is no change — but confirm explicitly; if any doc does describe the format, update it to match T001's new structure. Then run `scripts/lint-docs.sh` and confirm it passes (no broken skill-name references). Depends on T001.
+
+- [ ] T003 [parallel] Manually verify the rewritten step 10 against a real plan as a fixture. Using `.project/plans/plan-plan-approval-presentation-2026-07-13-14cf.md` (this plan) as the input, confirm the new instruction can be executed faithfully: the Goal sentence, a `Phase | Delivers | Depends on` table, and the Open Questions list are all reproducible verbatim from that plan's sections, and the file-open pointer names the correct path. Confirm no `T###`/task-count column is produced (the plan had none at checkpoint time). Report the rendered result for a sanity read. Depends on T001. (No automated test exists for SKILL.md behavior by design — this manual fixture check is the verification.)
