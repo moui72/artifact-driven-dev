@@ -1,12 +1,12 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-13 (documentation rewritten ground-up: minimal README,
-USAGE as index + How-do-I routing + picker ergonomics notes,
-docs/{concepts,install,example}.md, 9 guides incl. from-spec-kit, full
-reference set with generator-backed skill pages; validated by a
-four-agent review — doc findings fixed, system findings planned and
-tasked). Keep this current as artifacts are refined and open questions
-are resolved._
+_Updated: 2026-07-13 (constitution-suggestions catalog review planned and
+tasked: 14 feedback findings negotiated — 13 incorporated, F013 secrets
+entry declined —
+`plan-constitution-suggestions-quality-2026-07-13-4de0.md` approved,
+`tasks-constitution-suggestions-quality-e071.md` ready, 12 tasks / 4
+phases, net 21→20 catalog entries). Keep this current as artifacts are
+refined and open questions are resolved._
 
 ## Artifact Status
 
@@ -29,13 +29,12 @@ surfaces DEFECTS.md was verified against — worth a re-run after it lands.
 
 ## Feedback
 
-None open — `feedback-docs-review-findings-f868.md` (all 5 items
-incorporated) was consumed by
-`plan-docs-review-findings-2026-07-13-1cf4.md` and delivered:
-`tasks-docs-review-findings-3aec.md` **completed 6/6** (2026-07-13,
-delegated worktree run, merged fast-forward to `main`, worktree reaped).
-Skill-prose fixes, `retired` documented, "(formerly ardd-X)" suffixes
-dropped, CLAUDE.md convention updated.
+None open —
+`feedback-constitution-suggestions-quality-review-123a.md` (14 items:
+13 incorporated, F013 secrets-hygiene entry declined) was consumed by
+`plan-constitution-suggestions-quality-2026-07-13-4de0.md` (approved
+2026-07-13); its tasks file
+`tasks-constitution-suggestions-quality-e071.md` is **ready**, 0/12.
 
 ## Recent Releases
 
@@ -69,6 +68,9 @@ was reaped.
 
 ## Recommended Next Step
 
-Push `main` — publishes the stale-update-network-check feature as the
-next beta (v0.9.3-beta.1; MINOR-worthy content: additive knob + script
-behavior). Cut the next stable whenever you want consumers to have it.
+`/ardd-implement` — execute
+`tasks-constitution-suggestions-quality-e071.md` (12 tasks: catalog
+header criterion, 3 removals, Production Annotations move, Deterministic
+Gates merge, Single Source of State reword, Test-First fold-in, 4 new
+agent-failure-mode entries, verification pass). (Push of `main` for the
+stale-update-network-check beta remains available whenever wanted.)
