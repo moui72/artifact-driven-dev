@@ -30,11 +30,12 @@ surfaces DEFECTS.md was verified against — worth a re-run after it lands.
 ## Feedback
 
 None open — `feedback-docs-review-findings-f868.md` (all 5 items
-incorporated) consumed by `plan-docs-review-findings-2026-07-13-1cf4.md`
-(approved 2026-07-13), which produced
-`tasks-docs-review-findings-3aec.md` (**ready**, 6 tasks / 4 phases:
-skill-prose fixes, document `retired`, drop the "(formerly ardd-X)"
-suffixes + regenerate, CLAUDE.md convention note).
+incorporated) was consumed by
+`plan-docs-review-findings-2026-07-13-1cf4.md` and delivered:
+`tasks-docs-review-findings-3aec.md` **completed 6/6** (2026-07-13,
+delegated worktree run, merged fast-forward to `main`, worktree reaped).
+Skill-prose fixes, `retired` documented, "(formerly ardd-X)" suffixes
+dropped, CLAUDE.md convention updated.
 
 ## Recent Releases
 
@@ -46,9 +47,10 @@ consumers repointed. Full history: GitHub Releases and
 
 ## Feature Backlog
 
-0 backlogged · 10 implemented · 1 retired — see `.project/features/`.
-The register is fully worked; new scope arrives via `/ardd-backlog` or
-the open feedback above.
+1 backlogged · 10 implemented · 1 retired — see `.project/features/`.
+Backlogged: `stale-update-network-check` (opt-in age-gated network fetch
+for /ardd-status's update check). Target it with
+`/ardd-plan stale-update-network-check`.
 
 ## Audit
 
@@ -59,11 +61,12 @@ and 1 risk (smoke key unprovisioned).
 
 ## In Flight
 
-Nothing — no sibling worktrees, no reap candidates. (The docs rewrite is
-committed and pushed — `694431d`, published as v0.9.2-beta.1; the new
-plan/tasks/feedback state sits uncommitted in the working tree.)
+Nothing — the delegated docs-review-findings run merged and its worktree
+was reaped.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-docs-review-findings-3aec.md`
-(6 prose/frontmatter tasks, PATCH-level).
+Push `main` (publishes a beta with the docs rewrite + review fixes), then
+dispatch the stable-release workflow when ready so stable consumers pick
+it all up. Backlog when you want it: `/ardd-plan
+stale-update-network-check`.
