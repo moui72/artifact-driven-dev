@@ -23,10 +23,13 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
+    - navigation.tabs
+    - navigation.sections
     - navigation.top
     - navigation.footer
     - search.suggest
     - toc.follow
+    - content.code.copy
 
 markdown_extensions:
   - admonition
@@ -37,6 +40,14 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+
+# The decision records under docs/decisions/ are source-repo development
+# history, not user-facing docs — kept in the repo (linked from CLAUDE.md
+# and cross-referenced by other decision records) but excluded from the
+# published site. Excluding them from the build also keeps --strict happy:
+# an in-repo-but-not-in-nav file would otherwise trip omitted_files.
+exclude_docs: |
+  decisions/
 
 # Any dead internal link fails the CI build via `mkdocs build --strict`.
 validation:
@@ -79,13 +90,5 @@ nav:
       - Project files: reference/project-files.md
       - Configuration: reference/configuration.md
       - Scripts: reference/scripts.md
-  - Decisions:
-      - Overview: decisions/README.md
-      - 0001 Branch identity and worktree-native state: decisions/0001-branch-identity-and-worktree-native-state.md
-      - 0002 The gitignore ceiling: decisions/0002-gitignore-ceiling.md
-      - 0003 Rewritten-main recovery: decisions/0003-rewritten-main-recovery.md
-      - 0004 Eager background fold-to-main: decisions/0004-eager-background-fold-to-main.md
-      - 0005 Background by default: decisions/0005-background-by-default.md
-      - 0006 Release channel: decisions/0006-release-channel.md
-      - 0007 Two-channel git ops: decisions/0007-two-channel-git-ops.md
-  - Release notes: release-notes-v1.md
+  - Troubleshooting: troubleshooting.md
+  - Release notes: release-notes.md
