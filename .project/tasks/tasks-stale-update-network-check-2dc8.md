@@ -1,7 +1,7 @@
 ---
 plan: plan-stale-update-network-check-2026-07-13-cc79.md
 generated: 2026-07-13
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
