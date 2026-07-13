@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-12
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-git-ops-channels-2026-07-12-e77e.md
 ---
 
 # Feedback
@@ -16,7 +16,7 @@ with `/ardd-research` before `/ardd-plan` consumes it._
 
 ## Reconsidered
 
-- [ ] F001 Push to `main` publishes a **beta** prerelease automatically
+- [x] F001 Push to `main` publishes a **beta** prerelease automatically
   (e.g. `0.9.1-beta1`) via a GitHub workflow on push. This reverses the
   v1.5.0 decision's "merging to `main` alone no longer publishes" — under
   the new model, pushing main IS the beta-publish act; only *stable* stays
@@ -24,7 +24,7 @@ with `/ardd-research` before `/ardd-plan` consumes it._
   prerelease format `-beta.N`?) are plan-time decisions.
   [artifacts: constitution]
 
-- [ ] F002 Stable releases move from the local `release.sh` run to an
+- [x] F002 Stable releases move from the local `release.sh` run to an
   **explicitly invoked GitHub workflow** (workflow_dispatch) that
   fast-forward-merges `main` into a `release` branch and publishes the
   stable tag (e.g. `0.9.2`). The `release` branch becomes the stable
@@ -35,7 +35,7 @@ with `/ardd-research` before `/ardd-plan` consumes it._
   signing story or unsigned-in-CI policy), and branch protection on
   `release`. [artifacts: constitution]
 
-- [ ] F003 `/ardd-update` and the install/resolve scripts gain **channel
+- [x] F003 `/ardd-update` and the install/resolve scripts gain **channel
   targeting**: `stable` (default — latest non-prerelease tag, today's
   behavior), `beta` (latest prerelease from main's auto-publishes), or
   local tip (dev-mode `--source`, existing, explicitly documented as
