@@ -1,7 +1,7 @@
 ---
 name: ardd-backlog
 tier: core
-description: "Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature)."
+description: "Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead."
 ---
 
 # /ardd-backlog

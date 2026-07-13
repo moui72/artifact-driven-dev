@@ -2,7 +2,7 @@
 
 _Tier: core_
 
-> Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze).
+> Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills.
 
 <!-- generated:end — the header above is generated from skills/ardd-status/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 

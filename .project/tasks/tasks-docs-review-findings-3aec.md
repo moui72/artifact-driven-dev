@@ -35,13 +35,13 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: drop the "(formerly ardd-X)" suffixes (F005)
 
-- [ ] T004 (F005) Remove the trailing "(formerly ardd-*)" clause from the
+- [x] T004 (F005) Remove the trailing "(formerly ardd-*)" clause from the
   `description:` frontmatter of `skills/ardd-audit`, `ardd-backlog`,
   `ardd-defects`, `ardd-diagram`, `ardd-status`, and `ardd-tracker`. Keep
   each description's object → data-flow → redirect structure and the
   quoted-value colon rule intact; do not touch the "(absorbs ...)" clauses
   in `ardd-implement`/`ardd-refine` (fold routing, not rename history).
-- [ ] T005 (F005; after T004) Run `scripts/gen-skill-docs.sh` to regenerate
+- [x] T005 (F005; after T004) Run `scripts/gen-skill-docs.sh` to regenerate
   the README Skills table, `docs/reference/skills/*` headers + index, and
   `templates/WORKFLOW.md`; then verify `scripts/gen-skill-docs.sh --check`,
   `scripts/lint-docs.sh`, and the full `scripts/test-*.sh` suite pass.

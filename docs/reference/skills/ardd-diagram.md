@@ -2,7 +2,7 @@
 
 _Tier: extension_
 
-> Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render).
+> Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default.
 
 <!-- generated:end — the header above is generated from skills/ardd-diagram/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 

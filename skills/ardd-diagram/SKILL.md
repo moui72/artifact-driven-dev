@@ -1,7 +1,7 @@
 ---
 name: ardd-diagram
 tier: extension
-description: "Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render)."
+description: "Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default."
 ---
 
 # /ardd-diagram

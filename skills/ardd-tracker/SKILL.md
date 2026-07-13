@@ -1,7 +1,7 @@
 ---
 name: ardd-tracker
 tier: extension
-description: "Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync)."
+description: "Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md."
 ---
 
 # /ardd-tracker

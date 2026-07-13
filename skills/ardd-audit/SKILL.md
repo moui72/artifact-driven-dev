@@ -1,7 +1,7 @@
 ---
 name: ardd-audit
 tier: extension
-description: "Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead (formerly ardd-critique)."
+description: "Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead."
 ---
 
 # /ardd-audit

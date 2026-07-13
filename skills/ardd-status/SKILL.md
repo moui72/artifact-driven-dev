@@ -1,7 +1,7 @@
 ---
 name: ardd-status
 tier: core
-description: "Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze)."
+description: "Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills."
 ---
 
 # /ardd-status

@@ -2,7 +2,7 @@
 
 _Tier: extension_
 
-> Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead (formerly ardd-critique).
+> Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead.
 
 <!-- generated:end — the header above is generated from skills/ardd-audit/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 

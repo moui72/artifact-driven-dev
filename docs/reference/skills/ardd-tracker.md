@@ -2,7 +2,7 @@
 
 _Tier: extension_
 
-> Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync).
+> Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md.
 
 <!-- generated:end — the header above is generated from skills/ardd-tracker/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 

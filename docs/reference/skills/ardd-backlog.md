@@ -2,7 +2,7 @@
 
 _Tier: core_
 
-> Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature).
+> Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead.
 
 <!-- generated:end — the header above is generated from skills/ardd-backlog/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 

@@ -1,7 +1,7 @@
 ---
 name: ardd-defects
 tier: extension
-description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead (formerly ardd-verify)."
+description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead."
 ---
 
 # /ardd-defects
