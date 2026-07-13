@@ -46,7 +46,7 @@ status: in-progress
   In Flight section as "merged, reapable" (visibility only — status never
   mutates worktrees).
 
-- [ ] T003 Dogfood verification: in this repo, create a throwaway branch +
+- [x] T003 Dogfood verification: in this repo, create a throwaway branch +
   worktree, commit a trivial change there, merge it to the default branch,
   then run `worktree-reap.sh` from the primary and confirm it reaps
   exactly that worktree (and nothing else); confirm `--dry-run` had listed
