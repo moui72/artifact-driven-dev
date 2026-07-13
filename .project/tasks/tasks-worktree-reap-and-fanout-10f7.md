@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Reap script (test-first)
 
-- [ ] T001 Create `scripts/worktree-reap.sh` (POSIX sh, target-side —
+- [x] T001 Create `scripts/worktree-reap.sh` (POSIX sh, target-side —
   installed to `ardd-scripts`): enumerate every worktree of the repo except
   the primary and the current one (`git worktree list --porcelain`); for
   each, a reap candidate iff its branch is fully merged into the local
