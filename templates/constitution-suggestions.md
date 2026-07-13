@@ -101,6 +101,12 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** A type used in more than one place is a named, exported type with a single source of truth — not independently retyped at each usage site, even when the inline shapes happen to match today.
 **Rationale:** Structurally identical inline types give the type system no way to flag a future divergence; a shared name is what keeps two usage sites in sync as one of them changes.
 
+### Type-System Strictness
+**Section:** Core Principle
+**Signal:** The project uses a statically-typed language (e.g. TypeScript, a typed ORM schema)
+**Suggested text:** The strictest practical compiler settings are on from the start. Escape hatches — `any`-equivalents, unchecked casts, suppression comments — each require an adjacent justification at the use site.
+**Rationale:** Escape hatches added under pressure silently disable the type system exactly where it was needed most.
+
 ---
 
 ## Signal: an API surface exists (`api.md` being created, or routes/RPC observed)
@@ -168,6 +174,12 @@ treat it as met — bias toward offering, not toward filtering out.
 **Signal:** A package manifest exists (`package.json`, `pyproject.toml`, etc.)
 **Suggested text:** A manifest's declared name, dependencies, and scripts match the actual package and files on disk. A stale script entry or unused dependency is treated as a bug, not background noise.
 **Rationale:** Stale manifest entries are cheap to introduce and easy to ignore, but they mislead the next person who trusts the manifest as documentation of what actually runs.
+
+### Dependencies Are Decisions
+**Section:** Quality Standard
+**Signal:** A package manifest exists (`package.json`, `pyproject.toml`, etc.)
+**Suggested text:** Adding a dependency is an explicit, surfaced decision, not a default — prefer the standard library and dependencies already present, and name any new dependency in the plan or change description along with what it's for. Dependency versions are resolved by the package manager at add time (e.g. `npm install <pkg>`, `uv add`, `cargo add`), never hand-written into the manifest from memory; pinning to an older release is a deliberate, stated exception, named at the point of use.
+**Rationale:** Dependency sprawl is easy to add and expensive to audit or remove, and versions written from memory reflect a knowledge cutoff, not the current release, quietly importing stale majors and known-fixed bugs.
 
 ### Dispatch Surfaces Decomposed by Concern
 **Section:** Core Principle
