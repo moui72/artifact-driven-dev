@@ -57,6 +57,12 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** Before implementing a custom mechanism to solve a problem in a concern already owned by a depended-on library, check whether that library already has a built-in, idiomatic way to solve it. Reaching for a hand-built solution without checking first is surfaced as a question before being built, not discovered as duplicated work later.
 **Rationale:** Hand-built mechanisms that duplicate a library's own built-in behavior create a maintenance burden and a recurring class of bugs where the custom logic and the library's internal assumptions drift out of sync.
 
+### No Silent Error Swallowing
+**Section:** Core Principle
+**Signal:** Always
+**Suggested text:** A caught error is either recovered from meaningfully — the operation can genuinely continue — or re-raised/propagated. Catch-and-continue with only a log line, or with nothing, is a documented, per-site exception, never a default pattern.
+**Rationale:** Swallowed errors turn failures into silent corruption discovered far from their cause.
+
 ---
 
 ## Signal: a backend/service or stateful runtime exists (`infrastructure.md`, `datamodel.md`, and/or `ui.md` present)
