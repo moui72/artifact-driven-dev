@@ -121,18 +121,6 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** UI is reasonably usable without a mouse or perfect vision: logical tab order, readable contrast, labeled form controls. Full WCAG 2.1 AA compliance is a separate, explicit decision — state here whether this project requires it or is scoped to this baseline only.
 **Rationale:** Baseline accessibility costs little when designed in from the start and is expensive to retrofit; naming the bar explicitly avoids an unstated assumption in either direction.
 
-### Performance Budgets for User-Observable Operations
-**Section:** Quality Standard
-**Signal:** `ui.md` is among the artifacts being created
-**Suggested text:** Any user-observable operation where latency matters (page load, a real-time update, a search result) has a stated performance budget, defined per feature when the operation is added.
-**Rationale:** Without a stated budget, performance regressions are only caught after a user notices, rather than checked against an agreed threshold as the feature ships.
-
-### Component/Handler Reference Cleanup Across Framework Lifecycle Hooks
-**Section:** Quality Standard
-**Signal:** `ui.md` names a reactive framework (React, Vue, Svelte, Alpine, or similar)
-**Suggested text:** Component or handler references that must survive across the framework's lifecycle hooks are documented at the point of definition — not left as a bare comment warning a future reader not to break them.
-**Rationale:** A framework's lifecycle boundaries are exactly where hard-to-diagnose state bugs accumulate; documenting the constraint at its source is cheaper than rediscovering it during a refactor.
-
 ---
 
 ## Signal: project frames itself as portfolio/demo/internal
@@ -168,12 +156,6 @@ treat it as met — bias toward offering, not toward filtering out.
 **Signal:** A package manifest exists (`package.json`, `pyproject.toml`, etc.)
 **Suggested text:** A manifest's declared name, dependencies, and scripts match the actual package and files on disk. A stale script entry or unused dependency is treated as a bug, not background noise.
 **Rationale:** Stale manifest entries are cheap to introduce and easy to ignore, but they mislead the next person who trusts the manifest as documentation of what actually runs.
-
-### No Vendored Dependency With a Nested `.git`
-**Section:** Quality Standard
-**Signal:** Always (cheap to ask regardless of stack)
-**Suggested text:** No vendored third-party code carries its own nested `.git` directory. If a dependency must be vendored, its provenance is recorded in a README note and it is committed as plain files, or added as a real git submodule.
-**Rationale:** A silently nested `.git` directory breaks tooling that assumes one repository root and obscures where the vendored code actually came from.
 
 ### Dispatch Surfaces Decomposed by Concern
 **Section:** Core Principle
