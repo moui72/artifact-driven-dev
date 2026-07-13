@@ -1,20 +1,20 @@
 ---
 plan: plan-stale-update-network-check-2026-07-13-cc79.md
 generated: 2026-07-13
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
 
 ## Phase 1: plumbing (field exists and validates)
 
-- [ ] T001 [parallel] (stale-update-network-check) Add
+- [x] T001 [parallel] (stale-update-network-check) Add
   `update_check_max_age_days` to `scripts/ardd-state.sh`'s `stamp` key
   allowlist, accepting only positive integers (refuse `0`, negatives,
   non-numeric — nonzero exit, same refusal style as the other stamp keys).
   Add cases to `scripts/test-ardd-state.sh` in the same commit: set,
   replace, no-duplicate-keys, and at least two refused junk values.
-- [ ] T002 [parallel] (stale-update-network-check) Validate
+- [x] T002 [parallel] (stale-update-network-check) Validate
   `update_check_max_age_days` in `scripts/lint-project.sh`'s
   constitution-frontmatter checks: when present it must be a positive
   integer (message names the field and the allowed shape, carrying the
@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: the fetch (test-first, then implement)
 
-- [ ] T003 (stale-update-network-check; after T001) Extend
+- [x] T003 (stale-update-network-check; after T001) Extend
   `scripts/test-ardd-update-check.sh` with local-fixture-remote cases (no
   real network — same fixture-repo pattern the file already uses):
   (a) field set + FETCH_HEAD older than N days (or absent) + a new tag on
@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   comparison proceeds against local state, exit 0; (e) dev-mode and
   self-hosted sources never fetch regardless of the field. Expect these
   to fail until T004.
-- [ ] T004 (stale-update-network-check; after T003) Implement the
+- [x] T004 (stale-update-network-check; after T003) Implement the
   conditional fetch in `scripts/ardd-update-check.sh`: read
   `update_check_max_age_days` from `.project/artifacts/constitution.md`
   frontmatter (absent/invalid → skip, preserving current behavior); only
@@ -49,7 +49,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: docs
 
-- [ ] T005 (stale-update-network-check; after T004) Document the knob in
+- [x] T005 (stale-update-network-check; after T004) Document the knob in
   `docs/reference/configuration.md` (name, positive-integer value, absent
   = never fetch, stamped via `ardd-state.sh stamp`, not asked by
   /ardd-init or /ardd-update, when and what it fetches, the

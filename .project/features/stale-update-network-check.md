@@ -1,6 +1,6 @@
 ---
 slug: stale-update-network-check
-status: tasked
+status: implemented
 logged: 2026-07-13
 plan: plan-stale-update-network-check-2026-07-13-cc79.md
 tasks: tasks-stale-update-network-check-2dc8.md
