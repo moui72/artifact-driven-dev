@@ -219,7 +219,7 @@ with `/ardd-refine` before planning new work.
      accepted here are numbered sequentially, immediately after any
      principles already synthesized/inferred, in the catalog's own order
      for ties. Quality Standard entries become bullets (or the named
-     subsection, for Pre-commit Enforcement). Project Scope notes are
+     subsection, for Deterministic Gates). Project Scope notes are
      appended to Project Scope & Intent. Leave wording refinement to a
      later `/ardd-refine constitution` pass — don't rewrite the suggested
      text here.
