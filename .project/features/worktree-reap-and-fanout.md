@@ -1,6 +1,6 @@
 ---
 slug: worktree-reap-and-fanout
-status: tasked
+status: implemented
 logged: 2026-07-11
 plan: plan-worktree-reap-and-fanout-2026-07-12-c560.md
 tasks: tasks-worktree-reap-and-fanout-10f7.md
