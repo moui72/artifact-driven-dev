@@ -28,7 +28,12 @@ scenarios for Reconcile mode and both `/ardd-init` modes now exist
 
 ## Feedback
 
-None open — all feedback files consumed and `planned`.
+1 open — `feedback-git-ops-channels-9f03.md` (3 Reconsidered items, all
+[artifacts: constitution]): two-channel release model — push-to-main
+auto-publishes betas via CI, stable releases via an explicitly dispatched
+workflow that ff-merges main→release branch, and channel targeting
+(stable/beta/dev-tip) in update/resolve scripts. Decision-reversing →
+vet with /ardd-research before /ardd-plan consumes it.
 
 ## Released: v0.9.0 (2026-07-12)
 
