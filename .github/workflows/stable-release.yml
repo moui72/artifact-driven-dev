@@ -1,0 +1,106 @@
+# stable-release — the deliberate act that publishes skill changes to
+# stable consumers (constitution v1.8.0, two-channel standing decision;
+# the v1.5.0 spirit relocated from a local command to this dispatch
+# button, which works from anywhere — including a phone).
+#
+# On dispatch (bump: patch/minor/major, default patch):
+#   1. verify the lint/test workflow is green on the main tip (no
+#      waiting — dispatch again once CI finishes);
+#   2. fast-forward-merge main into the `release` branch — created on
+#      first run; refused (fail, no force) if release has diverged. The
+#      branch is both the stable pointer and the stable raw-URL base for
+#      new.sh acquisition (raw.githubusercontent.com/…/release/new.sh);
+#   3. compute the tag via scripts/next-version.sh stable <bump> and
+#      publish a full release. The tag is created server-side by
+#      `gh release create` (GitHub API -> web-flow Verified; no CI
+#      signing keys).
+#
+# All version logic lives in scripts/next-version.sh (fixture-tested);
+# this YAML is thin glue, per the plan's Complexity Tracking.
+
+name: stable-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump for this stable release'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+concurrency:
+  group: stable-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish-stable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse a dispatch from any ref but main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "stable releases are cut from main only (dispatched on '${{ github.ref }}')" >&2
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Require the lint/test suite green on the main tip
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/lint.yml/runs?head_sha=$GITHUB_SHA&per_page=1" \
+            --jq '.workflow_runs[0] | {status: .status, conclusion: .conclusion}' 2>/dev/null || echo '')"
+          status="$(printf '%s' "$run_json" | jq -r '.status // empty' 2>/dev/null || true)"
+          conclusion="$(printf '%s' "$run_json" | jq -r '.conclusion // empty' 2>/dev/null || true)"
+          if [ "$status" = "completed" ] && [ "$conclusion" = "success" ]; then
+            echo "lint suite green for $GITHUB_SHA"
+          else
+            echo "lint suite is '${status:-not started}'/'${conclusion:-n/a}' for $GITHUB_SHA — dispatch again once it's green" >&2
+            exit 1
+          fi
+
+      - name: Fast-forward main into the release branch
+        run: |
+          if git ls-remote --exit-code origin refs/heads/release >/dev/null 2>&1; then
+            git fetch origin release
+            # ff-only discipline: refuse rather than resolve. release only
+            # ever advances along main; anything else means someone
+            # committed to it directly — a state for a human, not a force.
+            if ! git merge-base --is-ancestor origin/release "$GITHUB_SHA"; then
+              echo "release has commits that are not on main — refusing a non-fast-forward merge" >&2
+              exit 1
+            fi
+            if [ "$(git rev-parse origin/release)" = "$GITHUB_SHA" ]; then
+              echo "release already at the main tip"
+            fi
+          else
+            echo "release branch does not exist yet — creating it at the main tip"
+          fi
+          git push origin "$GITHUB_SHA:refs/heads/release"
+
+      - name: Compute the next stable tag
+        id: version
+        run: |
+          git fetch --tags origin
+          tag="$(sh scripts/next-version.sh stable "${{ inputs.bump }}")"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "next stable: $tag"
+
+      - name: Publish the release (API-created tag)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --generate-notes \
+            --target "$GITHUB_SHA" \
+            --title "${{ steps.version.outputs.tag }}"

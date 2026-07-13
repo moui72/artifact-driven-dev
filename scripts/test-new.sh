@@ -484,6 +484,122 @@ set -e
   && ok "case22: dev-mode source still on its branch (not detached at a tag)" \
   || bad "case22: dev-mode source was detached/moved to a tag"
 
+# --- Cases 23–27: the beta channel (--beta) and channel recording --------
+# Two-channel decision (constitution v1.8.0): --beta selects the latest
+# tag among stable+prerelease (versionsort.suffix=-beta. — a newer stable
+# beats an older beta, the pinned ordering trap) and records
+# `Channel: beta` in the target's ardd-version.md via $ARDD_CHANNEL;
+# without it everything stays stable, recorded as `Channel: stable`.
+
+# --- Case 23: default install records Channel: stable ---
+target="$WORK/case23/proj"
+run_new 0 "case23: default install succeeds" --no-kickoff "$target"
+grep -q '^Channel: stable$' "$target/.project/ardd-version.md" 2>/dev/null \
+  && ok "case23: Channel: stable recorded by default" \
+  || bad "case23: Channel: stable not recorded"
+
+# --- Case 24: --beta pins the owned checkout to the latest prerelease ---
+FIXORIGIN3="$WORK/fix-origin-beta"
+mkdir -p "$FIXORIGIN3"
+cp -R "$REPO_ROOT/skills" "$REPO_ROOT/templates" "$REPO_ROOT/scripts" "$REPO_ROOT/migrations" "$FIXORIGIN3/"
+cp "$REPO_ROOT/install.sh" "$FIXORIGIN3/"
+( cd "$FIXORIGIN3" && git init -q -b main && git add -A && git commit -q -m one )
+git -C "$FIXORIGIN3" tag v1.10.0
+( cd "$FIXORIGIN3" && printf 'beta1\n' > beta-marker && git add -A && git commit -q -m two )
+git -C "$FIXORIGIN3" tag v1.10.1-beta.1
+
+FAKEHOME="$WORK/home24"
+mkdir -p "$FAKEHOME/.ardd"
+git clone -q "$FIXORIGIN3" "$FAKEHOME/.ardd/source"
+target="$WORK/case24/proj"
+set +e
+out="$(with_timeout 60 env HOME="$FAKEHOME" ARDD_SOURCE= \
+  sh "$NEW_SH" --no-kickoff --beta "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case24: --beta install exits 0" \
+  || { bad "case24: expected exit 0, got $status"; printf '%s\n' "$out" | sed 's/^/    /'; }
+[ "$(git -C "$FAKEHOME/.ardd/source" describe --exact-match --tags 2>/dev/null)" = "v1.10.1-beta.1" ] \
+  && ok "case24: owned checkout pinned to the prerelease" \
+  || bad "case24: owned checkout not at v1.10.1-beta.1"
+grep -q '^Channel: beta$' "$target/.project/ardd-version.md" 2>/dev/null \
+  && ok "case24: Channel: beta recorded" \
+  || bad "case24: Channel: beta not recorded"
+grep -q '^Source-Ref: v1.10.1-beta.1$' "$target/.project/ardd-version.md" 2>/dev/null \
+  && ok "case24: Source-Ref records the beta tag" \
+  || bad "case24: Source-Ref v1.10.1-beta.1 not recorded"
+
+# --- Case 25: without --beta the same source still pins stable ---
+FAKEHOME="$WORK/home25"
+mkdir -p "$FAKEHOME/.ardd"
+git clone -q "$FIXORIGIN3" "$FAKEHOME/.ardd/source"
+target="$WORK/case25/proj"
+set +e
+out="$(with_timeout 60 env HOME="$FAKEHOME" ARDD_SOURCE= \
+  sh "$NEW_SH" --no-kickoff "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case25: stable install from a beta-tagged source exits 0" \
+  || bad "case25: expected exit 0, got $status"
+[ "$(git -C "$FAKEHOME/.ardd/source" describe --exact-match --tags 2>/dev/null)" = "v1.10.0" ] \
+  && ok "case25: prerelease invisible without --beta (pinned v1.10.0)" \
+  || bad "case25: owned checkout not at v1.10.0"
+
+# --- Case 26: the ordering trap — a newer stable beats the older beta ---
+( cd "$FIXORIGIN3" && printf 'stable\n' >> beta-marker && git add -A && git commit -q -m three )
+git -C "$FIXORIGIN3" tag v1.10.1
+FAKEHOME="$WORK/home26"
+mkdir -p "$FAKEHOME/.ardd"
+git clone -q "$FIXORIGIN3" "$FAKEHOME/.ardd/source"
+target="$WORK/case26/proj"
+set +e
+out="$(with_timeout 60 env HOME="$FAKEHOME" ARDD_SOURCE= \
+  sh "$NEW_SH" --no-kickoff --beta "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case26: --beta with a newer stable exits 0" \
+  || bad "case26: expected exit 0, got $status"
+[ "$(git -C "$FAKEHOME/.ardd/source" describe --exact-match --tags 2>/dev/null)" = "v1.10.1" ] \
+  && ok "case26: newer stable beats older beta (ordering trap)" \
+  || bad "case26: owned checkout not at v1.10.1 ($(git -C "$FAKEHOME/.ardd/source" describe --exact-match --tags 2>/dev/null))"
+
+# --- Case 27: --beta with a dev-mode source — never moved, channel still recorded ---
+DEVSRC27="$WORK/case27/dev-src"
+mkdir -p "$WORK/case27"
+git clone -q "$FIXORIGIN3" "$DEVSRC27"
+dev_head="$(git -C "$DEVSRC27" rev-parse HEAD)"
+target="$WORK/case27/proj"
+set +e
+out="$(with_timeout 60 env ARDD_SOURCE="$DEVSRC27" \
+  sh "$NEW_SH" --no-kickoff --beta "$target" </dev/null 2>&1)"
+status=$?
+set -e
+[ "$status" -eq 0 ] \
+  && ok "case27: --beta with dev-mode source exits 0" \
+  || bad "case27: expected exit 0, got $status"
+[ "$(git -C "$DEVSRC27" rev-parse HEAD)" = "$dev_head" ] \
+  && ok "case27: dev-mode source untouched under --beta" \
+  || bad "case27: dev-mode source HEAD moved"
+grep -q '^Channel: beta$' "$target/.project/ardd-version.md" 2>/dev/null \
+  && ok "case27: Channel: beta recorded even in dev-mode" \
+  || bad "case27: Channel: beta not recorded"
+
+# --- Case 28: documented stable curl base is the release branch (static) ---
+# Under beta-on-push, main explicitly serves the beta channel, so the
+# stable acquisition URL must name the release branch — which only the
+# docs/messages move to; resolution itself still goes through tags in
+# ~/.ardd/source, so new.sh keeps working while the branch doesn't exist
+# yet. Static, like case 14: there is no network here to exercise a URL.
+grep -q 'artifact-driven-dev/release/new.sh' "$NEW_SH" \
+  && ok "case28: stable curl base documents the release branch" \
+  || bad "case28: no release-branch curl base documented in new.sh"
+grep -qi 'beta' "$NEW_SH" \
+  && ok "case28: new.sh documents the beta channel" \
+  || bad "case28: new.sh never mentions the beta channel"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"
 else

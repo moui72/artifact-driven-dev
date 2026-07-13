@@ -1,12 +1,20 @@
 #!/usr/bin/env sh
 # Install artifact-driven-dev in one command — a new project, or an existing one.
 #
-#   curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
-#     | sh -s -- my-project                                    # new project
-#   cd my-existing-project && curl -fsSL …/new.sh | sh -s -- --existing   # existing project
+#   curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh \
+#     | sh -s -- my-project                                    # new project (stable)
+#   cd my-existing-project && curl -fsSL …/release/new.sh | sh -s -- --existing  # existing project
 #
-# Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
-#        new.sh --existing [--kickoff|--no-kickoff] [--source <path>] [<project-dir>]
+# The `release` branch is the stable raw-URL base (two-channel decision,
+# constitution v1.8.0): under beta-on-push, `main` explicitly serves the
+# beta channel, so fetch this script from …/main/new.sh only when you want
+# the beta/dev edge. Which *base* served the script doesn't set the
+# channel — the --beta flag does; resolution goes through tags in
+# ~/.ardd/source either way, so both bases work even before the release
+# branch's first stable is cut.
+#
+# Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
+#        new.sh --existing [--kickoff|--no-kickoff] [--beta] [--source <path>] [<project-dir>]
 #
 # This is an *acquisition* channel, nothing more. It resolves an ARDD source
 # checkout, prepares the target (creating a new one, or accepting an existing
@@ -32,15 +40,21 @@
 # script — it clones it and keeps it current. A checkout named explicitly via
 # --source or $ARDD_SOURCE belongs to the user; it is read and never mutated.
 #
-# Release channel (constitution, standing decision 2026-07-12): the owned
-# checkout is pinned to the latest semver release tag after every
+# Release channel (constitution v1.8.0, two-channel standing decision):
+# the owned checkout is pinned to the latest release tag after every
 # clone/refresh — consumers install from releases, never from a live tip.
-# The selection logic is deliberately duplicated (minimally) from
-# scripts/source-resolve.sh: new.sh runs with no checkout of its own, so it
-# cannot source ardd-scripts. An offline refresh warns and proceeds with
-# the checkout as it stands; a source with no releases yet stays on the
-# default branch, noted. --source/$ARDD_SOURCE remains dev-mode: used
-# exactly as given.
+# Default channel is stable (strict vX.Y.Z tags); --beta admits
+# vX.Y.Z-beta.N prereleases too, ordered under versionsort.suffix=-beta.
+# so a newer stable still beats an older beta (git's default version sort
+# gets that wrong — the pinned ordering trap). The chosen channel is
+# handed to install.sh as $ARDD_CHANNEL, which records it in the target's
+# ardd-version.md for /ardd-update to honor. The selection logic is
+# deliberately duplicated (minimally) from scripts/source-resolve.sh:
+# new.sh runs with no checkout of its own, so it cannot source
+# ardd-scripts. An offline refresh warns and proceeds with the checkout
+# as it stands; a source with no releases yet stays on the default
+# branch, noted. --source/$ARDD_SOURCE remains dev-mode: used exactly as
+# given (--beta still records the channel, but never moves that checkout).
 
 set -e
 
@@ -51,11 +65,12 @@ kickoff=""          # "" = ask; 1 = always; 0 = never
 source_arg=""
 target=""
 existing=0          # 1 = install into an existing, already-populated project
+channel="stable"    # stable | beta (--beta); recorded via $ARDD_CHANNEL
 
 usage() {
   cat >&2 <<EOF
-Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
-       new.sh --existing [--kickoff|--no-kickoff] [--source <path>] [<project-dir>]
+Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
+       new.sh --existing [--kickoff|--no-kickoff] [--beta] [--source <path>] [<project-dir>]
 
   --existing       Install ARDD into an existing, already-populated project
                    (<project-dir> defaults to the current directory). Without
@@ -67,13 +82,17 @@ Usage: new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>
   --no-kickoff     Install, then print the next step instead of opening Claude Code.
                    With neither flag, you're asked — unless there's no terminal
                    to ask on, in which case this is the default.
+  --beta           Track the beta channel: install the latest release
+                   *including* vX.Y.Z-beta.N prereleases (published on every
+                   push to main), and record the channel for /ardd-update.
+                   Default is stable — tagged full releases only.
   --source <path>  Use an existing ARDD checkout (also settable as \$ARDD_SOURCE).
                    Read, never modified. Without it, ~/.ardd/source is cloned
                    and kept up to date.
 
-Examples:
-  curl -fsSL $REPO_URL/raw/main/new.sh | sh -s -- my-project
-  cd my-existing-project && curl -fsSL $REPO_URL/raw/main/new.sh | sh -s -- --existing
+Examples (stable base = the release branch; use main for the beta edge):
+  curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- my-project
+  cd my-existing-project && curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- --existing
 EOF
   exit 2
 }
@@ -88,6 +107,7 @@ while [ $# -gt 0 ]; do
                   kickoff=0; shift ;;
     --source)     [ $# -ge 2 ] || usage; source_arg="$2"; shift 2 ;;
     --source=*)   source_arg="${1#--source=}"; shift ;;
+    --beta)       channel="beta"; shift ;;
     --existing)   existing=1; shift ;;
     -h|--help)    usage ;;
     -*)           echo "Error: unknown option '$1'" >&2; usage ;;
@@ -144,16 +164,25 @@ fi
 
 is_ardd_checkout() { [ -f "$1/install.sh" ] && [ -d "$1/skills" ]; }
 
-# Pin the owned checkout to its latest release tag (strict vX.Y.Z; ordering
-# via v:refname — same rule as source-resolve.sh, duplicated minimally
-# because new.sh has no checkout to source it from). No releases yet is a
-# note, not a failure: install from the default branch as it stands.
+# Pin the owned checkout to its latest release tag on the chosen channel
+# (same rules as source-resolve.sh --channel, duplicated minimally because
+# new.sh has no checkout to source it from). stable: strict vX.Y.Z only.
+# beta: prereleases count too, under versionsort.suffix=-beta. — the
+# suffix is load-bearing (default version sort puts vX.Y.Z-beta.N after
+# vX.Y.Z, so a stale beta would shadow a newer stable without it). No
+# releases yet is a note, not a failure: install from the default branch
+# as it stands.
 pin_release() {
-  release_tag="$(git -C "$SRC" tag --list 'v[0-9]*' --sort=v:refname \
-    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+  if [ "$channel" = "beta" ]; then
+    release_tag="$(git -C "$SRC" -c versionsort.suffix=-beta. tag --list 'v[0-9]*' --sort=v:refname \
+      | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-beta\.[0-9]+)?$' | tail -n 1 || true)"
+  else
+    release_tag="$(git -C "$SRC" tag --list 'v[0-9]*' --sort=v:refname \
+      | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+  fi
   if [ -n "$release_tag" ]; then
     git -C "$SRC" checkout --quiet "$release_tag"
-    echo "Using ARDD release $release_tag."
+    echo "Using ARDD release $release_tag ($channel channel)."
   else
     echo "  ! no releases tagged yet — installing from the default branch as it stands."
   fi
@@ -218,8 +247,9 @@ fi
 # --- Converge on install.sh -------------------------------------------
 # Its output (migrations, gitignore guidance, warnings) is the user's only
 # view of install-time housekeeping. Relay it verbatim; never summarize.
+# $ARDD_CHANNEL tells it which channel to record in ardd-version.md.
 
-"$SRC/install.sh" "$TARGET"
+ARDD_CHANNEL="$channel" "$SRC/install.sh" "$TARGET"
 
 # --- Hand off to the first session -------------------------------------
 # Both new and existing projects initialize with /ardd-init — the skill

@@ -1,29 +1,43 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.6.0 → 1.7.0 (MINOR — retires a Project Scope standing
-decision whose rationale no longer holds; not a Core Principle removal, so
-not MAJOR per the governance rules.)
+Version change: 1.7.0 → 1.8.0 (MINOR — materially expands the
+release-channel standing decision to two channels and extends the
+pack-semver policy with prerelease semantics; no principle is removed or
+redefined.)
 
-Rationale: remote-install-source plan, Phase 6 (2026-07-12). The
-primary-stays-on-main standing decision (v1.4.0) existed because consumers
-read this live checkout directly — whatever branch was checked out was
-silently served to every consumer that updated. The release channel
-(v1.5.0) removed that hazard at the root, and its precondition is now
-verified: `v0.9.0` is published, and all five known consumers resolve
-tagged releases via `~/.ardd/source` (`Source-Path` repointed,
-`ardd-update-check` reports at-release everywhere). No consumer reads this
-checkout live, so the mandate is unnecessary — deleted rather than kept as
-lore (Principle VII). The primary worktree may hold a feature branch like
-any ordinary project again.
+Rationale: plan-git-ops-channels-2026-07-12-e77e (2026-07-12), design
+vetted in research-two-channel-git-ops-2026-07-12-450d.md. Hours after
+`v0.9.0` shipped under the one-channel model, its friction surfaced:
+consumers had no way to track fresh work without the maintainer cutting a
+release by hand, and stable publishing depended on one configured local
+machine (validations + signing key). The two-channel design fixes both:
+pushing `main` publishes a beta prerelease automatically (CI, gated on the
+suite), and the stable release relocates to a dispatched GitHub workflow —
+the deliberate act survives as a button click that works from anywhere.
 
-Modified sections: Project Scope & Intent (primary-stays-on-main paragraph
-and its retirement note replaced by a short retirement record pointing at
-docs/decisions/0006-release-channel.md). Footer version updated. CLAUDE.md's
-corresponding workflow section is removed under the same plan (not part of
-this artifact revision).
+This amendment knowingly reverses three recorded decisions (all named in
+the research doc's Findings):
+1. The v1.5.0 release-channel decision's "merging to `main` alone no
+   longer publishes" — pushing `main` now publishes *beta*; only stable
+   stays deliberate (partial reversal, same spirit for stable).
+2. The pre-release-ratchets plan's Out-of-scope "no tip-of-main channel
+   (Principle VI — add one only if real evidence demands it)" — the beta
+   channel is that channel, formalized; the demanding evidence is the
+   channel request arriving hours after v0.9.0.
+3. `release.sh` as *the* publish path (T001 of remote-install-source) —
+   its validate-then-tag role moves to CI gating plus the workflows;
+   the local script is retired (Principle VII).
 
-Previous SIR (1.5.0 → 1.6.0) is in git history at this file's prior
+Modified sections: Project Scope & Intent (release-channel standing
+decision rewritten for two channels: beta-on-push, dispatched stable via
+ff-merge to the `release` branch — the stable pointer AND the stable
+raw-URL base for `new.sh` acquisition — with GitHub-API-created tags;
+consumer channels stable/beta/dev-mode). Release-versioning paragraph
+(prerelease `vX.Y.Z-beta.N` semantics appended: betas make no
+compatibility promises). Footer version updated.
+
+Previous SIR (1.6.0 → 1.7.0) is in git history at this file's prior
 revision.
 -->
 
@@ -84,24 +98,39 @@ may now hold a feature branch like any ordinary project. The full arc
 (hazard → mandate → root-cause fix → retirement) is recorded in
 `docs/decisions/0006-release-channel.md`.
 
-**GitHub releases are the stable install channel** (standing decision,
-2026-07-12). Consumers install and update from tagged releases (semver),
-not from the tip of a live checkout: `/ardd-update` and `new.sh` resolve
-the source by fetching `~/.ardd/source` — the one checkout the tooling
-owns — and checking out the **latest release tag** before invoking
-`install.sh` from it. Installing from a live local checkout (`--source
-<path>` / `$ARDD_SOURCE`, or a `Source-Path` recording one) is explicit
-dev-mode, warned as such — the escape hatch that keeps the edit-a-skill,
-test-it-in-a-consumer dogfooding loop possible, never the default. There
-is no tip-of-main channel (Principle VI — add one only if real evidence
-demands it). Resolution never blocks offline: when the network is
-unavailable, fall back to the existing `~/.ardd/source` state with a
-warning — the same never-hang discipline `new.sh` already follows.
-`install.sh` remains the only install/upgrade entry point; this decision
-changes which checkout and ref the resolution layer hands it, not the
-entry point itself. Cutting a release (tag + `gh release`) is thereby the
-deliberate act that publishes skill changes to consumers — merging to
-`main` alone no longer does.
+**Two release channels: beta on push, stable by dispatch** (standing
+decision, 2026-07-12; rewrites the one-channel decision of earlier the
+same day — reversal arc in the v1.8.0 Sync Impact Report and
+`research-two-channel-git-ops-2026-07-12-450d.md`). Pushing `main` **is
+the beta-publish act**: a CI workflow (`.github/workflows/
+beta-release.yml`), gated on the full lint/test workflow passing for the
+same commit, tags the push `vX.Y.Z-beta.N` (semver-canonical prerelease
+format) and publishes a GitHub *prerelease*. The **deliberate act for
+stable** relocates from a local command to a dispatched workflow
+(`.github/workflows/stable-release.yml`): it verifies CI green on the
+`main` tip, fast-forward-merges `main` into the **`release` branch** —
+which is both the stable pointer and the stable raw-URL base for `new.sh`
+acquisition (`raw.githubusercontent.com/…/release/new.sh`; `main` serves
+the beta/dev base) — and tags via the GitHub API (`gh release create`
+creates the tag server-side, shown Verified via GitHub's web-flow key; no
+CI signing keys to manage). All next-version computation lives in one
+source-side script, `scripts/next-version.sh`, under
+`versionsort.suffix=-beta.` ordering (the empirically-pinned trap: default
+version sort places `v0.9.1-beta.2` *after* `v0.9.1`). Consumers target a
+recorded **channel**: `stable` (default — tagged full releases, today's
+behavior, resolved via `~/.ardd/source` exactly as before), `beta`
+(opt-in per consumer — latest tag including prereleases, where a newer
+stable still beats an older beta), or dev-mode (`--source <path>` /
+`$ARDD_SOURCE`, or a `Source-Path` recording a live checkout —
+maintainer-only, warned as such, unchanged). Resolution never blocks
+offline: when the network is unavailable, fall back to the existing
+`~/.ardd/source` state with a warning — the same never-hang discipline
+`new.sh` already follows. `install.sh` remains the only install/upgrade
+entry point; this decision changes which checkout and ref the resolution
+layer hands it, not the entry point itself. Dispatching the stable
+workflow is thereby the deliberate act that publishes skill changes to
+stable consumers — the v1.5.0 spirit, relocated from a machine to a
+button; pushing `main` publishes only to the opt-in beta channel.
 
 Release versions follow semver with skill-pack semantics: **MAJOR** for a
 removed or renamed slash command, or a breaking change to a script's
@@ -109,6 +138,12 @@ output contract or a `.project/` schema (an existing key or field changes
 meaning or disappears); **MINOR** for an additive skill, knob, or
 schema-widening change (a new enum value, a new optional field, a new
 output key); **PATCH** for prose and fixes that change no interface.
+**Prerelease tags** (`vX.Y.Z-beta.N`, published automatically on push to
+`main`) carry the version the *next* stable release will claim, but make
+**no compatibility promises** of their own: a beta may change or revert
+anything relative to a prior beta of the same version, and only the
+stable `vX.Y.Z` release binds the semver contract above. Beta consumers
+accept that by opting in.
 **Migrations are append-only**: a `migrations/*.sh` file, once released,
 is never renumbered, renamed, or deleted — the target's `.ardd-applied`
 keys by filename, so a rename re-runs the migration on every consumer and
@@ -331,4 +366,4 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.7.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
+**Version**: 1.8.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12

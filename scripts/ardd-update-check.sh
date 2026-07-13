@@ -24,6 +24,13 @@
 #   fallback=owned    the recorded Source-Path was invalid and the check ran
 #                     against ${ARDD_HOME:-$HOME/.ardd}/source instead (a
 #                     moved machine / re-cloned source)
+#   channel=beta      the version file records `Channel: beta` (two-channel
+#                     decision, v1.8.0), so "latest release" was computed
+#                     among stable+prerelease tags under
+#                     versionsort.suffix=-beta. ordering — a newer stable
+#                     still beats an older beta (the pinned trap). Absent
+#                     or `Channel: stable` = today's strict-vX.Y.Z behavior
+#                     with no token, so pre-channel files keep parsing.
 #
 # The installed commit is read from the structured `Source-Commit:` line
 # (full sha, written by install.sh since the pre-1.0 hardening) and compared
@@ -93,21 +100,31 @@ if [ -z "$tip" ]; then
   exit 0
 fi
 
-# Latest release = highest strict-semver tag (same selection rule as
-# source-resolve.sh: v:refname ordering, vX.Y.Z only — pre-releases and
-# decoy tags never count as releases).
-latest="$(git -C "$src" tag --list 'v[0-9]*' --sort=v:refname 2>/dev/null \
-  | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+# Compare within the recorded channel (absent or unrecognized = stable —
+# old files keep parsing). Latest release = highest tag admitted by the
+# channel's filter, same selection rules as source-resolve.sh --channel:
+# stable = strict vX.Y.Z only; beta = stable+prerelease under
+# versionsort.suffix=-beta. (newer stable beats older beta).
+channel="$(sed -n 's/^Channel: //p' "$VF" | head -1)"
+chtoken=""
+if [ "$channel" = "beta" ]; then
+  chtoken=" channel=beta"
+  latest="$(git -C "$src" -c versionsort.suffix=-beta. tag --list 'v[0-9]*' --sort=v:refname 2>/dev/null \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-beta\.[0-9]+)?$' | tail -n 1 || true)"
+else
+  latest="$(git -C "$src" tag --list 'v[0-9]*' --sort=v:refname 2>/dev/null \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+fi
 
 if [ -n "$latest" ]; then
   release_commit="$(git -C "$src" rev-parse --short "$latest^{commit}" 2>/dev/null || true)"
   if same_commit "$installed" "$release_commit"; then
-    echo "up-to-date commit=$installed$fallback"
+    echo "up-to-date commit=$installed$fallback$chtoken"
   else
-    echo "behind installed=$installed latest-release=$latest$fallback"
+    echo "behind installed=$installed latest-release=$latest$fallback$chtoken"
   fi
 elif same_commit "$installed" "$tip"; then
-  echo "up-to-date commit=$installed note=no-releases$fallback"
+  echo "up-to-date commit=$installed note=no-releases$fallback$chtoken"
 else
-  echo "behind installed=$installed source-tip=$tip note=no-releases$fallback"
+  echo "behind installed=$installed source-tip=$tip note=no-releases$fallback$chtoken"
 fi
