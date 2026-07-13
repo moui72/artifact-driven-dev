@@ -138,7 +138,12 @@ read and never mutated.
 
 Compares the installed commit against the source's latest release tag
 within the recorded channel — `behind` means "not the latest release's
-commit". No tags yet → tip comparison (`note=no-releases`).
+commit". No tags yet → tip comparison (`note=no-releases`). Local git
+only by default; with `update_check_max_age_days` set in the
+constitution it first fetches tags on the owned checkout when
+`FETCH_HEAD` is older than N days (failure → `note=fetch-failed`,
+comparison proceeds locally) — see
+[configuration.md](configuration.md).
 
 ### `lint-project.sh [target-dir]`
 

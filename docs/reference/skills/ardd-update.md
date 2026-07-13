@@ -34,7 +34,11 @@ runs it, which is exactly why this skill exists.
 2. **Report standing** via `ardd-update-check.sh` — behind, up-to-date
    (a reinstall is still offered; it repairs files and re-surfaces
    suggestions), or the source can't be found (you're asked for the
-   path; the filesystem is never searched).
+   path; the filesystem is never searched). The check itself is
+   local-git-only unless the constitution opts in via
+   `update_check_max_age_days` (see
+   [configuration.md](../configuration.md)) — fetching otherwise
+   belongs to `source-resolve.sh` in step 1.
 3. **Dev-mode only: offer a pull** — never assumed, never on a dirty
    tree, never a push. The owned checkout was already moved in step 1.
 4. **Reinstall**: runs `<source>/install.sh` against the project and

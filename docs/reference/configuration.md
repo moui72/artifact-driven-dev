@@ -3,9 +3,10 @@
 ARDD's behavior knobs live in `constitution.md`'s **frontmatter** — they
 are workflow settings, not constitution content: setting or changing one
 never bumps the constitution version and never touches the Sync Impact
-Report. `next_step_prompt`, `delegation`, and `merge_policy` are stamped
-via `ardd-state.sh stamp <file> <field> <value>`, never hand-edited;
-`workflow_mode` is written into the frontmatter by `/ardd-init` directly.
+Report. `next_step_prompt`, `delegation`, `merge_policy`, and
+`update_check_max_age_days` are stamped via `ardd-state.sh stamp <file>
+<field> <value>`, never hand-edited; `workflow_mode` is written into the
+frontmatter by `/ardd-init` directly.
 Every one has a safe default when absent — projects initialized before a
 field existed need no migration.
 
@@ -69,6 +70,25 @@ ask it there).
   nothing is ever auto-resolved.
 - `ask` — offer the merge each time, suggesting yes (eager merging keeps
   the in-flight window short).
+
+## `update_check_max_age_days` — opt-in freshness fetch for the update check
+
+A positive integer — absent = never fetch (the default: the update check
+is local-git-only). Neither `/ardd-init` nor `/ardd-update` asks for it;
+opt in deliberately:
+
+```sh
+ardd-state.sh stamp .project/artifacts/constitution.md update_check_max_age_days 7
+```
+
+When set, `ardd-update-check.sh` runs `git fetch --tags` on the source
+before comparing — but only when the source is the release-channel owned
+checkout (`~/.ardd/source`; a dev-mode checkout is read, never mutated,
+and the self-hosted case never fetches) *and* the checkout's
+`.git/FETCH_HEAD` is older than N days (missing = stale). A failed fetch
+appends `note=fetch-failed` to the check's output line and the comparison
+proceeds against local tags — offline machines lose nothing. An invalid
+value behaves like absent (and is flagged by `lint-project.sh`).
 
 ## Related per-clone git opt-ins (not frontmatter)
 
