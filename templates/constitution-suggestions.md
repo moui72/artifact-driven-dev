@@ -53,7 +53,7 @@ treat it as met — bias toward offering, not toward filtering out.
 
 ---
 
-## Signal: a backend/service exists (`infrastructure.md` and/or `datamodel.md` present)
+## Signal: a backend/service or stateful runtime exists (`infrastructure.md`, `datamodel.md`, and/or `ui.md` present)
 
 ### Observability
 **Section:** Core Principle
@@ -69,9 +69,9 @@ treat it as met — bias toward offering, not toward filtering out.
 
 ### Single Source of State
 **Section:** Core Principle
-**Signal:** `infrastructure.md` and/or `ui.md` describe a client or server runtime with meaningful in-memory state
-**Suggested text:** Application state lives in one reactive store per runtime. Shared mutable objects threaded by reference between modules, as a substitute for the store, are not permitted; modules that need to see the same state read from and write through the store.
-**Rationale:** Hand-rolled shared-state objects produce non-obvious data flow and require a comment justifying the workaround instead of just using the store that already exists for this purpose.
+**Signal:** `infrastructure.md` or `ui.md` describes a runtime with meaningful in-memory state
+**Suggested text:** Each piece of shared application state has one owning module or store per runtime. Other modules read from and write through that owner — never by threading shared mutable objects between modules by reference as a substitute for it.
+**Rationale:** Hand-rolled shared-state objects produce non-obvious data flow and untraceable mutation; a single named owner is what keeps every reader and writer of a piece of state discoverable.
 
 ---
 
