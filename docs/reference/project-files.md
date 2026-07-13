@@ -48,6 +48,11 @@ tasks file is generated; `/ardd-implement` flips `tasked → implemented`
 when every tasks file bound to the plan completes (with `/ardd-status`
 performing that last flip in the orphaned-completion case).
 
+`retired` means "shipped, then deliberately removed" — it is entered only
+from `implemented` and is terminal. No skill automates removal decisions,
+so the flip is performed manually:
+`ardd-state.sh feature-flip <slug> retired`.
+
 `completed` and `planned` (feedback) are terminal: a completed tasks file
 never reopens (post-completion failures become new feedback), and a
 planned feedback file is a historical record.

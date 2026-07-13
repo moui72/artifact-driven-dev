@@ -69,7 +69,7 @@ DIAGRAM_STATUS_ENUM="unrendered stale current"
 PLAN_STATUS_ENUM="draft approved superseded"
 TASKS_STATUS_ENUM="generating ready in-progress completed abandoned"
 FEEDBACK_STATUS_ENUM="open planned"
-FEATURE_STATUS_ENUM="backlogged planned tasked implemented retired"
+FEATURE_STATUS_ENUM="backlogged planned tasked implemented retired"  # retired = shipped, then deliberately removed; only from implemented; terminal; manual via ardd-state.sh feature-flip (no skill automates removal)
 WORKFLOW_MODE_ENUM="solo collaborative"
 NEXT_STEP_PROMPT_ENUM="true false"
 DELEGATION_ENUM="eager ask inline"

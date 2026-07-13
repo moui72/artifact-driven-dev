@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: document `retired` (F004)
 
-- [ ] T003 [parallel] (F004) Document `retired`'s semantics — "shipped, then
+- [x] T003 [parallel] (F004) Document `retired`'s semantics — "shipped, then
   deliberately removed"; entered only from `implemented`; terminal; flipped
   manually via `ardd-state.sh feature-flip <slug> retired` because no skill
   automates removal decisions — in `docs/reference/project-files.md` (as a
