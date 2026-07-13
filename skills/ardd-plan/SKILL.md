@@ -346,10 +346,34 @@ for the named plan; steps 2–10 do not run.
    ---
    ```
 
-10. **Approval checkpoint.** Present a summary to the user — phases, key
-    decisions, open questions — and note the plan is saved at
-    `.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md` as `status: draft`. Then
-    **pause and ask which of three the user wants** (use `AskUserQuestion`):
+10. **Approval checkpoint.** Present a bounded, faithful skeleton of the
+    plan drawn **verbatim from the plan you just wrote** — not a freehand
+    re-summary. Show exactly these four elements, in order:
+
+    1. **Goal** — reproduce the plan's **Goal** sentence verbatim and
+       **bolded**. Never paraphrase it; this is the one line the user is
+       approving.
+    2. **Phase table** — a markdown table with columns `Phase | Delivers |
+       Depends on`, one row per phase in the plan's **Phase Breakdown**
+       (`Delivers` = that phase's described increment; `Depends on` = its
+       stated dependency, or `—`). This checkpoint runs **before tasking**
+       (step 12), so there are **no `T###` IDs or task counts yet** — do
+       **not** add a task-count column or invent one. (You may add an
+       optional count of a phase's enumerated Phase Breakdown work-items
+       *only* where the draft listed them, and label it as plan items,
+       never tasks.)
+    3. **Open Questions** — reproduce the plan's **Open Questions** list
+       verbatim (not summarized); these are exactly what the user weighs
+       before approving.
+    4. **File pointer** — note the plan is saved at
+       `.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md` as `status: draft`,
+       and **invite the user to open that `.md` in their editor or markdown
+       preview** for the full plan (Scope, Technical Approach, Complexity
+       Tracking, etc.). Frame the terminal view as the decision-relevant
+       skeleton and the on-disk file as the full-fidelity source — keep this
+       a summary-plus-pointer, never a full inline dump of the plan.
+
+    Then **pause and ask which of three the user wants** (use `AskUserQuestion`):
 
     - **Approve** — proceed to step 11: approve the plan and generate its
       tasks file, in this same run.
