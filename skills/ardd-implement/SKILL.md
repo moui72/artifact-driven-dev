@@ -29,6 +29,13 @@ files.
    which to work on. If only one exists, still confirm rather than
    auto-selecting.
 
+   **Fan-out:** when more than one `ready` file exists (and `delegation`
+   is `eager`, or the user says yes to delegation at step 3), the pick may
+   be a multi-select — one delegated worktree run per selected `ready`
+   file, launched in parallel (mechanics in step 3). The unit of
+   parallelism is the tasks file; tasks within one file always run
+   sequentially.
+
    **Before presenting the list, run
    `.claude/skills/ardd-scripts/inflight-worktrees.sh`** — it enumerates
    every *other* worktree of this repo and prints each one's branch and any
@@ -86,10 +93,14 @@ files.
    is true. `on_default` no longer decides *whether* to offer — only *how* to
    prepare (the fold step below).
 
-   First, **check for in-flight work** using the
-   `inflight-worktrees.sh` output from step 1. If another worktree is
-   mid-run against this repo, surface it (branch, tasks file, progress) and
-   ask whether to wait before starting a second delegated run.
+   First, **surface in-flight work** using the `inflight-worktrees.sh`
+   output from step 1 — informational, not a gate: report "N runs in
+   flight" (branch, tasks file, progress per worktree) and proceed.
+   Parallel runs are a supported mode: report-file conflicts are prevented
+   by the merge driver, and a *code* conflict at merge time still
+   aborts-and-asks per `merge_policy`. What stays a hard rule is step 1's
+   same-file claim check — never start a second run against a tasks file
+   a live worktree already claims.
 
    **Consult the `delegation` knob.** Read `delegation` from
    `.project/artifacts/constitution.md` frontmatter (grep the frontmatter
@@ -97,9 +108,8 @@ files.
    `scripts/lint-project.sh`):
    - `eager` — delegate to a background worktree subagent **without
      prompting**: treat this as an accepted "yes" and go straight to the
-     preparation below. (The in-flight check above still asks when it found
-     another run mid-flight — that's a safety question, not the delegation
-     offer.)
+     preparation below. (In-flight runs reported above don't block this —
+     they're informational; only the same-file claim exclusion is hard.)
    - `ask` (or absent) — **offer delegation, suggesting "yes."** Ask the
      user:
      - "Yes, delegate to a background subagent in an isolated worktree"
@@ -138,6 +148,12 @@ files.
    the Reconcile-mode steps below instead — to a subagent via the `Agent`
    tool with `isolation: "worktree"`, handing it this skill's remaining
    steps verbatim, the chosen tasks file, and the current task pointer.
+   **Fan-out:** when step 1 multi-selected several `ready` files, launch
+   one such subagent per selected file, in parallel — each an independent
+   `isolation: "worktree"` Agent with the same align-first preamble below
+   and its own tasks file. The coordinator handles each report-back
+   independently as it arrives (core.bare check, `merge_policy` merge,
+   reap) — merges serialize naturally in the order runs complete.
    `isolation: "worktree"` creates and names its own worktree/branch
    (there's no parameter to point it at a pre-made one) — do not pre-create
    a worktree with any other script, and do not name it; the branch name is
@@ -211,6 +227,20 @@ files.
        On merge, run `/ardd-status`. On decline, note the work stays visible via
        `inflight-worktrees.sh` and `/ardd-status`'s in-flight section until
        merged.
+   - **After any successful merge (either `merge_policy` path), reap the
+     landed worktree** — run `worktree-reap.sh` (the installed copy at
+     `.claude/skills/ardd-scripts/worktree-reap.sh` if it exists, else the
+     coordinator's absolute path — the standard present-or-fallback rule),
+     before the post-merge `/ardd-status`. It deterministically removes
+     every worktree whose branch is fully merged into the default branch
+     and whose tree is clean, deleting the branch with `git branch -d`
+     (never `-D`, never forced) — no manual
+     `git worktree remove`/`git branch -d` sequence, ever. Include its
+     output in the completion report. On any `reaped=false` line, surface
+     the `reason=` verbatim (`unmerged`, `dirty`, `detached`,
+     `default-branch`, `remove-failed`) and **never force** the removal —
+     a kept worktree stays honestly visible via `inflight-worktrees.sh`
+     until it merges or the user deals with it by hand.
 
    Note: a delegated subagent must **never** run `/ardd-status` or write
    `STATUS.md` — either would trap `STATUS.md` inside the worktree branch.

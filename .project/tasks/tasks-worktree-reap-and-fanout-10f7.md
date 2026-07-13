@@ -1,14 +1,14 @@
 ---
 plan: plan-worktree-reap-and-fanout-2026-07-12-c560.md
 generated: 2026-07-12
-status: ready
+status: completed
 ---
 
 # Tasks
 
 ## Phase 1: Reap script (test-first)
 
-- [ ] T001 Create `scripts/worktree-reap.sh` (POSIX sh, target-side —
+- [x] T001 Create `scripts/worktree-reap.sh` (POSIX sh, target-side —
   installed to `ardd-scripts`): enumerate every worktree of the repo except
   the primary and the current one (`git worktree list --porcelain`); for
   each, a reap candidate iff its branch is fully merged into the local
@@ -33,7 +33,7 @@ status: ready
 
 ## Phase 2: Wiring
 
-- [ ] T002 Wire the reap into `skills/ardd-implement/SKILL.md`'s
+- [x] T002 Wire the reap into `skills/ardd-implement/SKILL.md`'s
   post-delegation coordinator steps: after a successful merge (either
   `merge_policy` path), run `worktree-reap.sh` (installed copy at
   `.claude/skills/ardd-scripts/worktree-reap.sh`, coordinator
@@ -46,7 +46,7 @@ status: ready
   In Flight section as "merged, reapable" (visibility only — status never
   mutates worktrees).
 
-- [ ] T003 Dogfood verification: in this repo, create a throwaway branch +
+- [x] T003 Dogfood verification: in this repo, create a throwaway branch +
   worktree, commit a trivial change there, merge it to the default branch,
   then run `worktree-reap.sh` from the primary and confirm it reaps
   exactly that worktree (and nothing else); confirm `--dry-run` had listed
@@ -55,7 +55,7 @@ status: ready
 
 ## Phase 3: Fan-out
 
-- [ ] T004 Update `skills/ardd-implement/SKILL.md`'s pick/delegation flow
+- [x] T004 Update `skills/ardd-implement/SKILL.md`'s pick/delegation flow
   for fan-out: when `tasks-list.sh` shows more than one `ready` file (and
   `delegation` is `eager` or the user answers yes), offer multi-select
   delegation — one `Agent` worktree subagent per selected file, launched
@@ -68,7 +68,7 @@ status: ready
   driver, code conflicts still abort-and-ask per `merge_policy`). The
   same-file claim check stays a hard exclusion from the pick list.
 
-- [ ] T005 [parallel] Docs: CLAUDE.md commands block gains
+- [x] T005 [parallel] Docs: CLAUDE.md commands block gains
   `worktree-reap.sh`/`test-worktree-reap.sh`; its worktree-native-state
   notes gain the reap step and fan-out mode (and drop any "nothing removes
   a merged worktree" phrasing); README/USAGE delegation narratives

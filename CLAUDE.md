@@ -36,6 +36,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-worktree-align.sh       # regression test for worktree-align.sh
 ./scripts/fold-to-main.sh [default]    # ff-fold current feature branch into local default + checkout it; the eager-background gate's prep step (ardd-implement)
 ./scripts/test-fold-to-main.sh         # regression test for fold-to-main.sh
+./scripts/worktree-reap.sh [--dry-run] # remove merged, clean worktrees + delete their branches (branch -d, never forced); ardd-implement's post-merge step, --dry-run = ardd-status visibility
+./scripts/test-worktree-reap.sh        # regression test for worktree-reap.sh (throwaway fixture repos, never this repo's worktrees)
 ./scripts/inflight-worktrees.sh        # enumerate other worktrees + their tasks-file state (solo mode's in-flight visibility channel)
 ./scripts/test-inflight-worktrees.sh   # regression test for inflight-worktrees.sh
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
@@ -262,7 +264,7 @@ happens on, and merge is the single atomic event that lands code and state
 together.** (Why the earlier "state-commit-before-branch" design
 died: `docs/decisions/0001-branch-identity-and-worktree-native-state.md`.)
 The default branch now means *merged truth*; worktrees mean *in-flight
-truth*; and three installed scripts bridge them:
+truth*; and four installed scripts bridge them:
 
 - `scripts/worktree-align.sh` — run as a delegated subagent's mandatory
   first act. `Agent`'s `isolation: "worktree"` branches from
@@ -294,6 +296,21 @@ truth*; and three installed scripts bridge them:
   while on a branch. A fast-forward authors no new commit, so the
   "no state-commit before the branch" invariant holds. (Decision record
   0004; supersedes the old "on a branch → run inline" default.)
+- `scripts/worktree-reap.sh` — the cleanup end of the cycle: after a
+  delegated branch merges, the worktree that carried it is dead weight,
+  and leaving it on disk keeps `inflight-worktrees.sh` (and `/ardd-status`'s
+  In Flight section) reporting work that already landed. The script removes
+  every worktree whose branch is fully merged into the local default branch
+  AND whose tree is clean, deleting the branch with `git branch -d` (never
+  `-D` — its own unmerged refusal is the second net), refusing
+  (`reaped=false reason=unmerged|dirty|detached|default-branch|remove-failed`)
+  rather than forcing. The primary and current worktrees are never
+  candidates. `ardd-implement`'s post-merge coordinator step runs it after
+  any successful merge; `/ardd-status` runs `--dry-run` and lists
+  `candidate=` lines as "merged, reapable" (visibility only, never
+  mutates). An *unmerged* abandoned worktree is deliberately untouched —
+  deleting in-flight truth requires judgment; the reap only ever removes
+  what has already landed.
 - `scripts/inflight-worktrees.sh` — enumerates every *other* worktree of
   the repo and its tasks-file state (branch, status, checkbox progress).
   This is solo mode's coarse-state visibility channel: `ardd-implement` runs it before the pick list (so a second run can start
@@ -311,8 +328,21 @@ not touch the register" rule anymore: the subagent *does* flip it
 at completion, in its worktree, precisely because the flip cannot escape to
 the default branch before the code does. After a delegated run reports
 back, the coordinator checks the primary checkout for the `core.bare = true`
-side effect (decision record 0001) and offers an eager merge into the default
-branch — eager merge is what keeps solo mode's in-flight window short.
+side effect (decision record 0001), offers an eager merge into the default
+branch — eager merge is what keeps solo mode's in-flight window short —
+and, after a successful merge, runs `worktree-reap.sh` to remove the
+landed worktree (surfacing any `reaped=false` reason verbatim, never
+forcing).
+
+Delegation also **fans out**: when more than one `ready` tasks file
+exists, `ardd-implement` offers multi-select delegation — one worktree
+subagent per selected file, launched in parallel; the coordinator handles
+each report-back as it arrives (core.bare check, `merge_policy` merge,
+reap), so merges serialize naturally. In-flight runs are informational
+("N runs in flight"), not a reason to wait — report-file conflicts are
+prevented by the merge driver and code conflicts still abort-and-ask per
+`merge_policy`; only the same-file claim check is a hard exclusion. The
+unit of parallelism is the tasks file, never phases within one file.
 
 **Two operating modes**, declared as `workflow_mode: solo | collaborative`
 in `constitution.md` frontmatter (absent = `solo`; enum enforced by

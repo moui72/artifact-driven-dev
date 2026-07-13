@@ -256,7 +256,10 @@ adjust before running `/ardd-implement`.
 
 Before anything else it checks for sibling worktrees already working a
 tasks file, so a second `/ardd-implement` can start safely while another is
-still in flight. It then offers to delegate execution to a background
+still in flight — parallel runs are a supported mode, and in-flight work
+is reported as information, not a reason to wait (only a tasks file a live
+worktree already claims is excluded from the pick). It then offers to
+delegate execution to a background
 subagent in an isolated worktree — **regardless of which branch you're on**;
 being on a feature branch isolates state but shouldn't tie up your focused
 session. The `delegation` field in `constitution.md`'s frontmatter tunes
@@ -266,6 +269,9 @@ feature branch (a recovery case now that solo `/ardd-plan` doesn't create
 one), Claude folds that
 branch into your default branch and returns you to it first (so the delegated
 worktree can see the work), then runs the subagent in the background.
+When more than one tasks file is `ready`, the offer can fan out: pick
+several and Claude launches one parallel worktree run per file, merging
+each as it completes.
 Executing tasks is exactly the long-running, code-producing work isolation is
 for. Claude asks
 which tasks file to work on, then executes tasks sequentially: loads the
@@ -289,6 +295,10 @@ delegated run's completion, Claude offers to merge the worktree branch
 right away — or, with `merge_policy: auto` in `constitution.md`'s
 frontmatter, merges it without asking when the merge is fast-forward or
 conflict-free (any conflict stops and asks; nothing is ever auto-resolved).
+After a successful merge Claude reaps the landed worktree —
+`worktree-reap.sh` removes any worktree whose branch has fully merged and
+whose tree is clean, deleting the branch too; anything unmerged or dirty
+is reported and left alone, never forced.
 (In `workflow_mode: collaborative`, merging goes through a
 pushed draft PR instead — nothing is committed to your local default
 branch, and `merge_policy` is never consulted.)

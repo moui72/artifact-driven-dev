@@ -104,7 +104,11 @@ frontmatter (one of `solo` | `collaborative`; absent means `solo`) governs
 where in-progress work lives. In **solo** mode — single developer, one
 machine — committing directly to your local default branch is fine for
 inline runs, and delegated runs use an isolated git worktree that merges
-back eagerly on completion; the in-flight view is `inflight-worktrees.sh`.
+back eagerly on completion and is then reaped (`worktree-reap.sh` removes
+the merged, clean worktree and its branch — never anything unmerged or
+dirty); the in-flight view is `inflight-worktrees.sh`. With several
+independent `ready` tasks files, delegation can fan out — one parallel
+worktree run per file, each merging and reaped as it completes.
 In **collaborative** mode nothing is ever committed to the *local* default
 branch: work always moves to a branch, and after the first commit the skill
 offers to push and open a *draft PR* titled with the feature slug — that

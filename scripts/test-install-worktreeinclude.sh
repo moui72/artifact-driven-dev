@@ -165,6 +165,12 @@ if [ -x "$sr" ]; then
 else
   bad "case1b3: source-resolve.sh installed and executable"
 fi
+wr="$target/.claude/skills/ardd-scripts/worktree-reap.sh"
+if [ -x "$wr" ]; then
+  ok "case1b4: worktree-reap.sh installed and executable"
+else
+  bad "case1b4: worktree-reap.sh installed and executable"
+fi
 
 # --- Case 2: existing .worktreeinclude, unrelated content, NO trailing newline ---
 target="$WORK/case2"
