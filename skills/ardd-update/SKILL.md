@@ -16,16 +16,26 @@ Usage: `/ardd-update` — no arguments.
 
 ## Steps
 
-1. **Resolve the source.** Run
-   `.claude/skills/ardd-scripts/source-resolve.sh` (installed copy; if
-   it's missing — an install that predates it — fall back to the source
-   repo's own `scripts/source-resolve.sh` by absolute path, same rule as
-   other ardd-scripts calls). It reads `Source-Path:` from
-   `.project/ardd-version.md` and, for the tooling-owned checkout
-   (`~/.ardd/source`), fetches tags and moves it to the latest release —
-   that *is* this skill's "update the source" act, delegated to the
-   script: the skill decides what to do with the outcome, the script
-   does all the writing. Act on the printed line:
+1. **Resolve the source, on the recorded channel.** Read the `Channel:`
+   line from `.project/ardd-version.md` (absent = `stable` — files from
+   older installs have no line and need none). Then run
+   `.claude/skills/ardd-scripts/source-resolve.sh --channel <recorded>`
+   (installed copy; if it's missing — an install that predates it — fall
+   back to the source repo's own `scripts/source-resolve.sh` by absolute
+   path, same rule as other ardd-scripts calls). It reads `Source-Path:`
+   from `.project/ardd-version.md` and, for the tooling-owned checkout
+   (`~/.ardd/source`), fetches tags and moves it to the latest release
+   *on that channel* (`stable` = tagged full releases; `beta` = the
+   latest tag including `vX.Y.Z-beta.N` prereleases, where a newer
+   stable still beats an older beta) — that *is* this skill's "update
+   the source" act, delegated to the script: the skill decides what to
+   do with the outcome, the script does all the writing. Report which
+   channel the project tracks alongside the resolved tag. **Offer a
+   channel switch only when the user raises it** — never as a routine
+   prompt; to switch, re-run `source-resolve.sh --channel <new>` and run
+   step 4's reinstall with `ARDD_CHANNEL=<new>` set, which makes
+   install.sh record the new channel in `ardd-version.md`. Act on the
+   printed line:
    - `channel=release`: proceed, and report the resolved tag (relay
      `warning=offline` — resolution used on-disk state — or
      `warning=no-tags` — no releases exist yet — if present).
@@ -42,8 +52,9 @@ Usage: `/ardd-update` — no arguments.
 2. **Report standing.** Run
    `.claude/skills/ardd-scripts/ardd-update-check.sh` (installed copy;
    it compares the installed commit against the source's latest release
-   tag — `note=no-releases` means it fell back to a tip comparison).
-   Tell the user where they stand — `up-to-date` is still worth
+   tag *within the recorded channel* — a `channel=beta` token means it
+   counted prereleases; `note=no-releases` means it fell back to a tip
+   comparison). Tell the user where they stand — `up-to-date` is still worth
    continuing when the user wants a reinstall (e.g. to see suggestions
    or repair skill files); confirm rather than exiting.
 
