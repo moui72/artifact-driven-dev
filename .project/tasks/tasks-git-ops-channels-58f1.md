@@ -1,7 +1,7 @@
 ---
 plan: plan-git-ops-channels-2026-07-12-e77e.md
 generated: 2026-07-12
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -13,7 +13,7 @@ confirm with the user at T003._
 
 ## Phase 1: Constitution amendment
 
-- [ ] T001 [artifacts: constitution] Amend the constitution (v1.7.0 →
+- [x] T001 [artifacts: constitution] Amend the constitution (v1.7.0 →
   v1.8.0, MINOR, new SIR citing the research doc and naming the three
   reversals): rewrite the release-channel standing decision for two
   channels — push to `main` = the beta-publish act (CI workflow, gated on
@@ -28,7 +28,7 @@ confirm with the user at T003._
 
 ## Phase 2: Version authority (test-first)
 
-- [ ] T002 Create `scripts/next-version.sh` (POSIX sh, source-side — NOT
+- [x] T002 Create `scripts/next-version.sh` (POSIX sh, source-side — NOT
   shipped by install.sh): reads the repo's tags; `next-version.sh beta`
   prints the next beta for the upcoming patch version (`v0.9.1-beta.1`,
   then `-beta.2`, …; after a stable `v0.9.1` exists, betas target
@@ -42,7 +42,7 @@ confirm with the user at T003._
 
 ## Phase 3: Workflows
 
-- [ ] T003 Create `.github/workflows/beta-release.yml` (on push to `main`:
+- [x] T003 Create `.github/workflows/beta-release.yml` (on push to `main`:
   path-filter per plan Open Question 2 — proposed: skip pushes touching
   only `.project/**` and top-level `*.md`/`docs/**`, NEVER skipping
   `skills/**` or `templates/**`; require the lint/test workflow green for
@@ -63,7 +63,7 @@ confirm with the user at T003._
 
 ## Phase 4: Channel plumbing (test-first)
 
-- [ ] T004 `scripts/source-resolve.sh` gains `--channel stable|beta`
+- [x] T004 `scripts/source-resolve.sh` gains `--channel stable|beta`
   (default stable): stable keeps the strict `^v[0-9]+\.[0-9]+\.[0-9]+$`
   filter; beta selects the latest tag among stable+prerelease under
   `versionsort.suffix=-beta.` (a newer stable beats an older beta — the
@@ -73,7 +73,7 @@ confirm with the user at T003._
   a compatibility test case). All key=value outputs stay additive.
   Test-first across all three scripts' regression suites.
 
-- [ ] T005 [artifacts: constitution] Skill + acquisition plumbing:
+- [x] T005 [artifacts: constitution] Skill + acquisition plumbing:
   `skills/ardd-update/SKILL.md` reads and reports the recorded channel,
   resolves via `source-resolve.sh --channel <recorded>`, and offers a
   channel switch only when the user raises it (no new routine prompt);
@@ -85,7 +85,7 @@ confirm with the user at T003._
 
 ## Phase 5: Docs + cutover
 
-- [ ] T006 [parallel] README/USAGE channel documentation (update guidance,
+- [x] T006 [parallel] README/USAGE channel documentation (update guidance,
   curl bases, what beta means), CLAUDE.md commands block
   (`next-version.sh`, workflows, release.sh removal if confirmed);
   `docs/decisions/0007-two-channel-git-ops.md` recording the reversal arc
