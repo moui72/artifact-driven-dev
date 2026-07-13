@@ -12,7 +12,7 @@ This is the guide for questions like *"how do I add a feature to a stable
 project?"* (log it, then plan it), *"how do I fix a bug I just found?"*
 (capture it as feedback; the next plan turns it into a fix), or *"how do I
 pick work back up after an interruption?"* — each has a section below, and
-[USAGE.md](../../USAGE.md)'s "How do I…?" table routes these questions
+[USAGE.md](https://github.com/moui72/artifact-driven-dev/blob/main/USAGE.md)'s "How do I…?" table routes these questions
 directly.
 
 ---

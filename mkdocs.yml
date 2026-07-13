@@ -1,0 +1,91 @@
+# Source-side only (Constitution Principle IV): builds the GitHub Pages
+# rendering of docs/. Never installed into target projects.
+site_name: artifact-driven-dev (ARDD)
+site_description: A Claude Code skill pack for artifact-driven development.
+site_url: https://moui72.github.io/artifact-driven-dev/
+repo_url: https://github.com/moui72/artifact-driven-dev
+repo_name: moui72/artifact-driven-dev
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# Any dead internal link fails the CI build via `mkdocs build --strict`.
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home: index.md
+  - Concepts: concepts.md
+  - Example: example.md
+  - Install: install.md
+  - Guides:
+      - Greenfield project: guides/greenfield.md
+      - Existing project: guides/existing-project.md
+      - The core loop: guides/core-loop.md
+      - Coming from Spec Kit: guides/from-spec-kit.md
+      - Parallel work: guides/parallel-work.md
+      - Checking skills: guides/checking.md
+      - Tracker sync: guides/tracker-sync.md
+      - Diagrams: guides/diagrams.md
+  - Reference:
+      - Skills:
+          - Overview: reference/skills/README.md
+          - /ardd-init: reference/skills/ardd-init.md
+          - /ardd-refine: reference/skills/ardd-refine.md
+          - /ardd-backlog: reference/skills/ardd-backlog.md
+          - /ardd-feedback: reference/skills/ardd-feedback.md
+          - /ardd-research: reference/skills/ardd-research.md
+          - /ardd-plan: reference/skills/ardd-plan.md
+          - /ardd-implement: reference/skills/ardd-implement.md
+          - /ardd-status: reference/skills/ardd-status.md
+          - /ardd-defects: reference/skills/ardd-defects.md
+          - /ardd-audit: reference/skills/ardd-audit.md
+          - /ardd-lint: reference/skills/ardd-lint.md
+          - /ardd-diagram: reference/skills/ardd-diagram.md
+          - /ardd-tracker: reference/skills/ardd-tracker.md
+          - /ardd-update: reference/skills/ardd-update.md
+      - Project files: reference/project-files.md
+      - Configuration: reference/configuration.md
+      - Scripts: reference/scripts.md
+  - Decisions:
+      - Overview: decisions/README.md
+      - 0001 Branch identity and worktree-native state: decisions/0001-branch-identity-and-worktree-native-state.md
+      - 0002 The gitignore ceiling: decisions/0002-gitignore-ceiling.md
+      - 0003 Rewritten-main recovery: decisions/0003-rewritten-main-recovery.md
+      - 0004 Eager background fold-to-main: decisions/0004-eager-background-fold-to-main.md
+      - 0005 Background by default: decisions/0005-background-by-default.md
+      - 0006 Release channel: decisions/0006-release-channel.md
+      - 0007 Two-channel git ops: decisions/0007-two-channel-git-ops.md
+  - Release notes: release-notes-v1.md
