@@ -1,12 +1,19 @@
 # Working an established project with ARDD
 
 Use this guide once a project is past setup — artifacts exist, some work
-has shipped, and you're living in the recurring delivery loop. (Starting
-fresh? See [greenfield.md](greenfield.md). Adopting ARDD in an existing
-codebase? See [existing-project.md](existing-project.md).)
+has shipped, and you're living in the recurring delivery loop — ARDD's
+steady state. (Starting fresh? See [greenfield.md](greenfield.md).
+Adopting ARDD in an existing codebase? See
+[existing-project.md](existing-project.md).)
 
 The steady state is simple: **ideas and observations flow in
 continuously; each plan run turns a batch of them into shipped code.**
+This is the guide for questions like *"how do I add a feature to a stable
+project?"* (log it, then plan it), *"how do I fix a bug I just found?"*
+(capture it as feedback; the next plan turns it into a fix), or *"how do I
+pick work back up after an interruption?"* — each has a section below, and
+[USAGE.md](../../USAGE.md)'s "How do I…?" table routes these questions
+directly.
 
 ---
 
@@ -64,7 +71,7 @@ untouched for a later plan. Unsurfaced `DEFECTS.md` entries (from
 
 ```
 /ardd-plan         # ...pauses at the approve/revise/stop checkpoint; approving generates the tasks file
-/ardd-implement    # executes; offers worktree delegation from the default branch
+/ardd-implement    # executes; offers worktree delegation (on any branch)
 ```
 
 Approving the plan at `/ardd-plan`'s checkpoint is what generates the tasks
@@ -75,7 +82,8 @@ All run state — checkboxes, status flips, the feature register's
 `tasked → implemented` flip — rides the work branch and lands on merge,
 atomically with the code. Merge eagerly when a run completes; in-flight
 work stays visible to other sessions via the sibling-worktree check
-either way.
+either way. (The full delegation/worktree model — fan-out, merge
+policies, conflict handling — is [parallel-work.md](parallel-work.md).)
 
 ## When things get interrupted
 
@@ -86,21 +94,25 @@ either way.
 Reconcile mode compares the codebase against the tasks file — marks work
 that's actually done, notes partial work, appends gaps — then the same
 run (or the next `/ardd-implement`) continues. `/ardd-implement` also
-offers this itself when you pick an interrupted (`in-progress`, unclaimed)
-file. Reach for the explicit flag after a crashed run, a manual detour, or
+offers this itself when you pick an interrupted file — one that says
+`in-progress` but that no live worktree is working, the fingerprint of a
+crashed run. Reach for the explicit flag after a crashed run, a manual detour, or
 any "I did some of this by hand" situation.
 
 ## Periodic hygiene
+
+(Not sure which checking skill you want? [checking.md](checking.md)
+compares all four.)
 
 - `/ardd-defects` — occasionally, or before major planning: checks
   artifacts against the *code* and records drift in `DEFECTS.md`; each
   defect is offered as a fix task by the next plan run, exactly once.
 - `/ardd-audit` — when a design decision deserves pressure-testing
   rather than just consistency-checking.
-- `/ardd-lint` — anytime, free: structural validation of `.project/`
-  (also runs automatically if the write-time hook is configured).
+- `/ardd-lint` — anytime, free: structural validation of `.project/`.
 - `/ardd-update` — when `/ardd-status` reports an update available (or
-  anytime): finds the recorded source checkout, offers a pull, re-runs
+  anytime): resolves the recorded source to the latest release on your
+  channel (a dev-mode checkout gets a pull *offer* instead), re-runs
   install.sh, and relays its output — migrations and suggestions reach
   your session.
 

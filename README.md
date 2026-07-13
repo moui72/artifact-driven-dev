@@ -1,165 +1,36 @@
 # artifact-driven-dev (ARDD)
 
-A spec-driven workflow system for Claude Code, in the same lineage as
-[Spec Kit](https://github.com/github/spec-kit) — but built around capturing
-decisions you've already made, rather than discovering them through
-structured elicitation. It's disciplined, not lightweight — a declared set of
-living documents, over a dozen skills, several status state machines — so
-it's worth knowing where that overhead pays for itself; see
-[When artifacts earn their keep](#when-artifacts-earn-their-keep) below.
+A workflow system for Claude Code built around a small set of living
+documents — **artifacts** — that record what you've decided about your
+system: your principles, your data model, your infrastructure, whatever
+your project's concerns are. Slash-command skills capture new decisions
+and ideas into those documents, cross-check them for consistency, turn
+them into phased plans and ordered task lists, and execute the tasks —
+with all workflow state riding files on disk, so any session can pick up
+exactly where another left off.
 
-## Philosophy
+It's in the same family as [Spec Kit](https://github.com/github/spec-kit),
+but built for the opposite starting point: you arrive already knowing what
+you're building, and need a system that captures and executes those
+decisions — not one that discovers requirements for you. (There are no
+per-feature spec documents here; [docs/example.md](docs/example.md) shows
+what the files actually look like.)
 
-ARDD assumes you arrive with clarity about what you're building and need a
-system to capture, cross-check, and execute against those decisions — not
-one that generates the decisions for you through structured discovery. The
-workflow is:
+The loop:
 
-1. **Capture** decisions in living artifacts (`/ardd-refine`, `/ardd-backlog`,
+1. **Capture** decisions and ideas (`/ardd-refine`, `/ardd-backlog`,
    `/ardd-feedback`)
-2. **Check** artifacts for consistency before planning (`/ardd-status`)
+2. **Check** consistency (`/ardd-status`)
 3. **Plan** once artifacts are stable (`/ardd-plan`)
-4. **Execute** against an ordered task list (`/ardd-implement` — which also
-   reconciles the list with reality after an interruption)
+4. **Execute** the task list (`/ardd-implement`)
 
-## When artifacts earn their keep
-
-An agent working in an existing codebase normally infers conventions by
-pattern-matching nearby code — that's usually enough, and a good `CLAUDE.md`
-plus direct conversation covers the rest. Artifacts pay for their overhead
-specifically when the codebase *can't* serve as that implicit spec:
-
-- **Greenfield** — there's no code yet to pattern-match against. Artifacts
-  are the only explicit source of truth until enough code exists to become
-  one itself.
-- **A major pivot** — the codebase exists, but reflects patterns you're
-  actively moving away from. An agent copying it faithfully reproduces
-  exactly what you're trying to escape. Artifacts let you declare the target
-  state independent of what the code currently does — though ARDD doesn't
-  detect the pivot for you: `/ardd-init`'s existing-codebase path captures the codebase's *current*
-  patterns as a starting draft, and you still have to refine artifacts
-  toward where you actually want to end up.
-
-Where the codebase already *is* a trustworthy source of truth — mature,
-consistent, already following the conventions you want — an agent
-pattern-matches off it directly, and ARDD's overhead buys you less than a
-solid `CLAUDE.md`. Artifacts still have a minor secondary benefit there (the
-code shows *how* something works, not *why* it was decided that way), but
-that's not enough on its own to justify the process for a codebase that's
-already a good implicit spec.
-
-## Artifacts
-
-A declared set of living documents that evolve throughout the project —
-typically a constitution plus whichever concerns your project actually
-has. There is no fixed set: `/ardd-init` proposes artifacts based on
-what your project needs (this repo's own dogfooded `.project/` carries
-only a constitution), and `/ardd-refine <name>` creates non-standard ones
-anytime. The common defaults:
-
-| Artifact | Suggested when |
-|---|---|
-| `constitution.md` | Nearly always — principles, quality standards, governance |
-| `infrastructure.md` | External integrations, sync, or non-trivial storage |
-| `datamodel.md` | A canonical schema or normalization rules |
-| `ui.md` | A user-facing interface |
-| `api.md`, `adapters.md`, ... | A public API surface, external data sources, or any distinct concern |
-
-All artifacts live in `.project/artifacts/`. All are refined with `/ardd-refine`.
-
-## Getting started
-
-Run once (or rarely) to bring a project under ARDD. (This table is
-generated from each skill's frontmatter by `scripts/gen-skill-docs.sh` —
-edit the `description:` there, then re-run it.)
-
-| Command | What it does |
-|---|---|
-| `/ardd-init` | One-time initialization of .project/ — detects greenfield vs existing code, then seeds artifacts from the design conversation (interviewing first if needed) or reverse-engineers them from the codebase; seeds .project/ artifacts, not CLAUDE.md (for CLAUDE.md use the built-in /init). |
-
-## The core loop
-
-The recurring delivery cycle — ideas and observations come in, plans and
-shipped code come out. This is the loop a project lives in after setup;
-everything else is opt-in. (Generated — see note under Getting started.)
-
-| Command | What it does |
-|---|---|
-| `/ardd-backlog` | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature). |
-| `/ardd-feedback` | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume — new-capability ideas belong in /ardd-backlog instead. |
-| `/ardd-refine` | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning; given a name that doesn't exist yet, it creates the artifact from a template (absorbs ardd-add-artifact). |
-| `/ardd-plan` | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |
-| `/ardd-implement` | Execute tasks sequentially — offers worktree delegation; all state rides the work branch and lands on merge. --reconcile <file> re-syncs an interrupted tasks file with the codebase first (absorbs ardd-converge). |
-| `/ardd-status` | Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze). |
-| `/ardd-lint` | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
-
-`/ardd-status` (cross-artifact consistency) and `/ardd-lint` (`.project/`
-schema validation) are core infrastructure, not opt-in extensions: analyze
-runs automatically as the final step of most state-changing skills, and lint
-runs behind the write-time hook on every `.project/` write. Neither is a step
-you have to remember — run either by hand anytime for a fresh check.
-
-**Solo vs. collaborative mode.** `workflow_mode` in `constitution.md`'s
-frontmatter (one of `solo` | `collaborative`; absent means `solo`) governs
-where in-progress work lives. In **solo** mode — single developer, one
-machine — committing directly to your local default branch is fine for
-inline runs, and delegated runs use an isolated git worktree that merges
-back eagerly on completion and is then reaped (`worktree-reap.sh` removes
-the merged, clean worktree and its branch — never anything unmerged or
-dirty); the in-flight view is `inflight-worktrees.sh`. With several
-independent `ready` tasks files, delegation can fan out — one parallel
-worktree run per file, each merging and reaped as it completes.
-In **collaborative** mode nothing is ever committed to the *local* default
-branch: work always moves to a branch, and after the first commit the skill
-offers to push and open a *draft PR* titled with the feature slug — that
-pushed draft PR is the mode's shared in-flight signal, and the register flip
-rides the branch to land when the PR merges. `/ardd-init` asks which
-mode once at setup and suggests one from what it detects.
-
-**Opt-in next-step prompt.** With `next_step_prompt: true` in
-`constitution.md`'s frontmatter, `/ardd-status` and `/ardd-plan` end by
-offering their recommended next step as a
-one-keypress prompt (yes runs it; no/Esc stops) — only when that
-recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
-absent field keeps recommendations as plain text, so delegated and
-scripted runs are unaffected. `/ardd-init` asks the question once at
-setup; `/ardd-update` asks it once for existing installs whose
-constitution lacks the field. Like `workflow_mode` above, it's a frontmatter
-workflow field — setting it never bumps the constitution version.
-
-## Extensions
-
-Opt-in skills for concerns the core loop doesn't force on you.
-(Generated — see note under Getting started.)
-
-| Command | What it does |
-|---|---|
-| `/ardd-defects` | Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead (formerly ardd-verify). |
-| `/ardd-audit` | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead (formerly ardd-critique). |
-| `/ardd-research` | Targeted investigation or proposal vetting, written to .project/plans/ — one-off output with no lifecycle; substantial or decision-reversing ideas get vetted here before they reach the backlog or a plan. |
-| `/ardd-diagram` | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render). |
-| `/ardd-tracker` | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync). |
-| `/ardd-update` | Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
-
-## Renamed in v0.9.0
-
-The skill surface was finalized for v0.9.0: six renames and four skills
-folded into surviving ones. Old commands are gone (install.sh prunes them
-and points at the replacement); files they owned are migrated
-automatically.
-
-| Before v0.9.0 | Now |
-|---|---|
-| `ardd-analyze` | `/ardd-status` |
-| `ardd-critique` | `/ardd-audit` (legacy owned file `critique.md` → `audit.md`) |
-| `ardd-verify` | `/ardd-defects` (DEFECTS.md keeps its name) |
-| `ardd-sync` | `/ardd-tracker` (legacy owned file `SYNC.md` → `TRACKER.md`) |
-| `ardd-feature` | `/ardd-backlog` (`.project/features/` keeps its name) |
-| `ardd-render` | `/ardd-diagram` |
-| `ardd-converge` | folded into `/ardd-implement` (reconcile mode — offered on pick, or `--reconcile <file>`) |
-| `ardd-add-artifact` | folded into `/ardd-refine` (naming a new artifact enters its create path) |
-| `ardd-bootstrap` | merged into `/ardd-init` (greenfield path) |
-| `ardd-codify` | merged into `/ardd-init` (existing-codebase path) |
+ARDD is disciplined, not lightweight — living documents, over a dozen
+skills, several status state machines — so it's worth knowing where the
+overhead pays for itself: **greenfield projects** (no code to
+pattern-match against yet) and **major pivots** (the code reflects
+patterns you're escaping). Where a mature, consistent codebase is already
+a good implicit spec, a solid `CLAUDE.md` buys you more for less. The
+full reasoning: [docs/concepts.md](docs/concepts.md).
 
 ## Quickstart
 
@@ -170,285 +41,86 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/
   | sh -s -- my-project
 ```
 
-That creates `my-project/`, `git init`s it, clones this repo to
-`~/.ardd/source` (or refreshes it if it's already there), pins that checkout
-to the **latest stable release** — you never install from the moving tip of
-a checkout — runs `install.sh` from it, and offers to open Claude Code on
-`/ardd-init` — which, on a cold start, first interviews you about the
-design (its step 0) and then writes your artifacts. (No releases tagged
-yet? It says so and installs from the default branch. Offline? It warns and
-uses the checkout as it stands.)
+That creates and `git init`s `my-project/`, installs ARDD from the latest
+stable release, and offers to open Claude Code on `/ardd-init` — which
+interviews you about the design and writes your first artifacts.
 
-Add `--beta` to track the **beta channel** instead: every push to this
-repo's `main` publishes a `vX.Y.Z-beta.N` prerelease (suite-gated in CI),
-so beta gets you fresh work without waiting for a stable release — at the
-cost that betas make no compatibility promises. The choice is recorded in
-your project (`Channel:` in `.project/ardd-version.md`) and `/ardd-update`
-follows it from then on. The `release` branch in the URL above is the
-stable raw-URL base; `…/main/new.sh` serves the beta/dev edge of this
-script itself — either base works, and neither sets your channel (only
-`--beta` does).
-
-The handoff is a question, not a foregone conclusion. Answer it in advance
-with `--kickoff` (launch, don't ask) or `--no-kickoff` (install, print the
-command to start the session yourself).
-
-With no flag and no terminal to ask on — a scripted or CI run — it declines
-rather than hangs, printing the command instead. `--kickoff` launches
-regardless: you already answered, so there's no question left to fail to
-ask.
-
-`--source <path>` (or `$ARDD_SOURCE`) points at an ARDD checkout you already
-have — this is **dev-mode**, the escape hatch for working on ARDD itself:
-the checkout is used exactly as it stands (live tip, not a release), and is
-only ever read, never pulled, moved, or modified. Only the `~/.ardd/source`
-clone, which `new.sh` creates and owns, is kept at the latest release for
-you.
-
-Where `new.sh` *doesn't* ask is anywhere it would be writing into a directory
-it doesn't own: a target that already holds files, or a `--source` that isn't
-an ARDD checkout, is an error rather than a question. Nothing is overwritten.
-It's also not a separate installer — it resolves a source checkout and then
-invokes that checkout's `install.sh`, which remains the only real
-install/upgrade entry point.
-
-For an existing project — one that already has a checkout — skip `new.sh` and
-install ARDD directly, as described next.
-
-## Install
-
-Two release channels exist, and each project records which one it tracks
-(`Channel:` in `.project/ardd-version.md`; absent means stable):
-
-- **stable** (default) — tagged full releases (`vX.Y.Z`), cut by an
-  explicitly dispatched workflow that also fast-forwards `main` into the
-  `release` branch (the stable raw-URL base below). What you get today
-  without asking for anything.
-- **beta** (opt-in, per project) — every push to `main` publishes a
-  `vX.Y.Z-beta.N` prerelease, gated on the full test suite passing for
-  that commit. Fresh work without waiting for a stable cut; no
-  compatibility promises between betas. Opt in with `new.sh --beta`, or
-  ask `/ardd-update` to switch an existing install.
-
-Both channels resolve through the `~/.ardd/source` checkout the tooling
-owns: the curl bootstrap below (and `/ardd-update` afterwards) fetches tags
-and installs from the latest release on the recorded channel, never from
-the tip of a live checkout.
+Existing project — run from inside it:
 
 ```sh
-# a brand-new project
-curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- my-project
-
-# an existing project — run from inside it
-cd /path/to/your/project
 curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- --existing
 ```
 
-Installing from your own clone of this repo is **dev-mode** — the loop for
-hacking on ARDD itself. It installs whatever state the clone holds, and
-`/ardd-update` will warn about it on every later update:
+Then `/ardd-init` reverse-engineers draft artifacts from the codebase.
+Channels (stable/beta), dev-mode, flags, updating, and what actually gets
+installed: [docs/install.md](docs/install.md).
 
-```sh
-./install.sh /path/to/your/project
-```
+## Skills
 
-Either route converges on `install.sh` — the only real install/upgrade entry
-point — so once it has run, `/ardd-update` handles all updates: it resolves
-the recorded source, moves the owned checkout to the latest release on the
-recorded channel (a dev-mode checkout gets a warning and a confirmation
-instead), and re-runs `install.sh` from it. Release versions are semver
-with skill-pack semantics — MAJOR for a removed/renamed slash command or a
-breaking script/schema change, MINOR for additive skills or knobs, PATCH
-for prose and fixes — so a MAJOR bump is the cue to read the release notes
-first. Prerelease tags carry the version the next stable will claim but
-bind none of those promises themselves.
+Every command at a glance — each links to its full reference page under
+[docs/reference/skills/](docs/reference/skills/). (This table is generated
+from each skill's frontmatter by `scripts/gen-skill-docs.sh` — edit the
+`description:` there, then re-run it.)
 
-> **Note:** `npx skills add` is no longer a supported install channel. If you
-> have skill files without a completed install (e.g. from a prior `npx`
-> acquisition), finish or repair it by running the `--existing` curl bootstrap
-> above from inside the project.
+| Command | What it does |
+|---|---|
+| [`/ardd-init`](docs/reference/skills/ardd-init.md) | One-time initialization of .project/ — detects greenfield vs existing code, then seeds artifacts from the design conversation (interviewing first if needed) or reverse-engineers them from the codebase; seeds .project/ artifacts, not CLAUDE.md (for CLAUDE.md use the built-in /init). |
+| [`/ardd-backlog`](docs/reference/skills/ardd-backlog.md) | Log a feature idea to the per-feature register (.project/features/) — no artifact edits yet; bugs and UX problems with existing behavior belong in /ardd-feedback instead (formerly ardd-feature). |
+| [`/ardd-feedback`](docs/reference/skills/ardd-feedback.md) | Capture bugs/UX/reconsidered decisions from inspecting the implementation, for the next plan to consume — new-capability ideas belong in /ardd-backlog instead. |
+| [`/ardd-refine`](docs/reference/skills/ardd-refine.md) | Update a named artifact — apply new decisions, resolve open questions, handle constitution versioning; given a name that doesn't exist yet, it creates the artifact from a template (absorbs ardd-add-artifact). |
+| [`/ardd-plan`](docs/reference/skills/ardd-plan.md) | Draft a phased plan from artifacts, feedback, and backlogged features, pause at an approval checkpoint, then generate its ordered task list; --from <plan> re-tasks an approved plan without re-planning. |
+| [`/ardd-implement`](docs/reference/skills/ardd-implement.md) | Execute tasks sequentially — offers worktree delegation; all state rides the work branch and lands on merge. --reconcile <file> re-syncs an interrupted tasks file with the codebase first (absorbs ardd-converge). |
+| [`/ardd-status`](docs/reference/skills/ardd-status.md) | Full cross-artifact consistency check — reads every artifact, plan, tasks file, and the register — and writes STATUS.md (its single writer); auto-runs after most state-changing skills (formerly ardd-analyze). |
+| [`/ardd-lint`](docs/reference/skills/ardd-lint.md) | Fast, deterministic check of .project/ frontmatter schemas and [artifacts: ...] references — no LLM judgment. |
+| [`/ardd-defects`](docs/reference/skills/ardd-defects.md) | Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead (formerly ardd-verify). |
+| [`/ardd-audit`](docs/reference/skills/ardd-audit.md) | Challenge artifact decisions — simplicity, failure modes, robustness, semantics — and write the findings checklist to .project/audit.md. Takes no proposal input — vet new ideas with /ardd-research instead (formerly ardd-critique). |
+| [`/ardd-research`](docs/reference/skills/ardd-research.md) | Targeted investigation or proposal vetting, written to .project/plans/ — one-off output with no lifecycle; substantial or decision-reversing ideas get vetted here before they reach the backlog or a plan. |
+| [`/ardd-diagram`](docs/reference/skills/ardd-diagram.md) | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default (formerly ardd-render). |
+| [`/ardd-tracker`](docs/reference/skills/ardd-tracker.md) | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md (formerly ardd-sync). |
+| [`/ardd-update`](docs/reference/skills/ardd-update.md) | Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
 
-**New project** — open Claude Code and run `/ardd-init`: it seeds
-artifacts from the conversation, and on a cold start (an empty directory, no
-design discussion yet) first walks you through the design conversation itself
-as step 0. If you'd rather talk the design through in your own words first,
-just do that, then run `/ardd-init` — same destination. See
-[guides/greenfield.md](guides/greenfield.md).
+## Documentation
 
-**Existing project** — open Claude Code and run `/ardd-init` to
-reverse-engineer artifacts from the codebase. Review the generated drafts with
-`/ardd-refine`, then run `/ardd-status` before planning new work. See
-[guides/existing-project.md](guides/existing-project.md).
+- **[Concepts](docs/concepts.md)** — the mental model: artifacts, the
+  feature register, file-based handoffs, state-rides-the-branch,
+  single-writer reports, and when ARDD earns its keep
+- **[Example](docs/example.md)** — what the files actually look like:
+  a real artifact, feature entry, feedback file, plan, and tasks file
+- **[Install & updates](docs/install.md)** — every route, both release
+  channels, dev-mode, gitignore guidance
+- **Guides** — flows and use cases:
+  - [Greenfield project](docs/guides/greenfield.md)
+  - [Adopting ARDD in an existing project](docs/guides/existing-project.md)
+  - [The core loop](docs/guides/core-loop.md) — the steady-state delivery cycle
+  - [Which checking skill?](docs/guides/checking.md)
+  - [Parallel work](docs/guides/parallel-work.md) — delegation, worktrees, merging
+  - [Tracker sync](docs/guides/tracker-sync.md) — GitHub Issues mirroring
+  - [Diagrams](docs/guides/diagrams.md) — rendering artifacts as Mermaid
+  - [Coming from Spec Kit](docs/guides/from-spec-kit.md) — command mapping
+    and vocabulary translation
+- **Reference** — the details:
+  - [Per-skill pages](docs/reference/skills/) — one page per command
+  - [`.project/` file formats](docs/reference/project-files.md)
+  - [Configuration knobs](docs/reference/configuration.md)
+  - [Installed helper scripts](docs/reference/scripts.md)
+- **[Decision records](docs/decisions/)** — the development history
+  behind the rules (source-repo internal)
 
-**Established project** — already set up and shipping? The steady-state
-loop (features, feedback, targeted plans) is
-[guides/continuing.md](guides/continuing.md).
+[USAGE.md](USAGE.md) is the one-page index of all of the above — including
+a "How do I…?" table that routes everyday questions ("add a feature to a
+stable project", "document a bug I found") straight to the right command.
 
-**Updating** — from inside a consuming repo, run `/ardd-update`: it finds
-the source checkout recorded at install time, re-runs `install.sh`, and
-relays migrations and suggestions. `/ardd-status` tells you when an
-update is available.
+## Contributing
 
-**Gitignore the skill files** in the target project. They're regenerated
-output — re-running `install.sh` overwrites them from whatever commit of
-this repo you point it at, so committing them just means merge conflicts
-with no real content. `install.sh` writes `.project/ardd-version.md` on
-every run recording the source commit and date — commit *that* instead, so
-the project's own history shows which ARDD version was active at any point
-without vendoring the skill files themselves.
-
-If `git` sees the skills as untracked or already committed, `install.sh`
-suggests adding `.claude/skills/ardd-*/` to `.gitignore` — never anything
-broader (`.claude/`, or even `.claude/skills/`), since both can also hold
-real, team-shared content ARDD doesn't own: `.claude/settings.json`,
-`agents/`, `commands/`, hooks, or a hand-written custom skill living
-alongside ARDD's own under `.claude/skills/`. A broader pattern silently
-blocks tracking any of that later — git refuses to `add` an ignored path
-without `-f`.
-
-If the `ardd-*` skills were already committed, it also prints the
-`git rm -r --cached` command to untrack them. If `.claude/skills/ardd-*/`
-is *already* gitignored but the actual pattern is broader than that (a
-blanket `.claude/` or `.claude/skills/`), it warns about the specific real
-content that pattern would also block, since that check would otherwise go
-silent forever once anything is already ignored.
-
-## Project structure created
-
-```
-.project/
-  artifacts/           # living decision documents
-  features/            # per-feature register — one file per idea, status backlogged→implemented
-  feedback/            # captured bugs/UX/reconsidered notes, consumed by the next plan
-  plans/               # generated plans and research
-  tasks/               # tasks-<slug>-<hex>.md — the execution queue, one per plan run
-  STATUS.md            # re-entry point after any interruption (written only by /ardd-status)
-  DEFECTS.md           # code-vs-artifact drift (written only by /ardd-defects)
-  WORKFLOW.md          # generated tour of the installed skills
-  ardd-version.md      # commit this — records which ARDD source commit is installed
-.claude/
-  skills/
-    ardd-*/            # ARDD skill files — regenerated by install.sh, gitignore this
-    ardd-scripts/      # deterministic helper scripts the skills shell out to (also regenerated)
-```
-
-## If worktree delegation misbehaves
-
-`/ardd-implement` offers to delegate execution (and reconcile runs) to a
-subagent in an isolated git worktree. That path depends on harness
-worktree behavior (`worktree.baseRef`) that has regressed in both
-directions across versions — `worktree-align.sh` compensates, and a
-subagent that can't align refuses to work rather than working on the
-wrong base. If delegation ever misbehaves anyway, the blessed fallback
-is simply **a plain branch, inline**: decline the delegation offer, run
-`git checkout -b <name>`, and let the same skill execute inline — all
-state rides that branch identically and lands on merge. A harness
-regression degrades the workflow to ordinary branching; it never blocks
-it.
-
-## Concurrency and `.project/` merge conflicts
-
-ARDD's concurrency guard (`project-lock.sh`, used by the state-writing skills)
-is a warn-only marker with **no visibility across `git worktree` checkouts** —
-its lock file lives inside each worktree's own `.project/`, so two worktrees
-of the same repo won't see each other's runs. Treat it as insurance against
-two sessions sharing one checkout, not as cross-worktree locking.
-
-The take-either-side rule for the four generated report files is git
-mechanism now, not just convention: `install.sh` ships
-`.project/.gitattributes` marking `STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
-and `audit.md` `merge=ours`. Git deliberately won't honor repo-committed
-merge-driver *definitions*, so the driver is a per-clone opt-in (same
-posture as `core.hooksPath`):
-
-```sh
-git config merge.ours.driver true
-```
-
-With that set, parallel branches never conflict on the report files — the
-merge keeps the current branch's version, and the owning skill regenerates
-from disk. Without it, git falls back to a normal text merge and the rules
-below apply.
-
-When `.project/` files conflict on merge:
-
-- **Single-writer report files** (`STATUS.md`, `DEFECTS.md`, `TRACKER.md`,
-  `audit.md`) — disposable: take either side without deliberation
-  (never hand-reconcile or re-apply changes across a rebase) and re-run
-  the owning skill (`/ardd-status`, `/ardd-defects`, `/ardd-tracker`,
-  `/ardd-audit` respectively); it regenerates the file from current
-  state, so which side you kept doesn't matter. Conflict markers in a
-  generated report are noise, not data loss. (Configuring the merge
-  driver above makes this case disappear entirely.)
-- **`.project/features/`** — per-feature files, so two independently-added
-  features can't conflict at all; a conflict inside one file means the same
-  feature was advanced on two branches — take the further-along status,
-  then run `/ardd-lint` to confirm the frontmatter and cross-references
-  still validate.
-
-## Task format
-
-Tasks in a `tasks-*.md` file declare which artifacts they require:
-
-```markdown
-- [ ] T001 [artifacts: datamodel, infrastructure] Create Patient table in SQLite
-- [ ] T002 [artifacts: datamodel] [parallel] Create Appointment table in SQLite
-```
-
-The `/ardd-implement` skill loads only the declared artifacts before executing each
-task, keeping context focused.
-
-## Contributing to this repo
-
-This is separate from `## Install` above, which is about installing ARDD
-*into a target project* — this is about working on ARDD's own source. Run
-once per clone:
-
-```sh
-git config core.hooksPath hooks
-```
-
-This enables `hooks/pre-commit`, which runs this repository's own lint/test
-scripts before a commit is accepted. Git won't enable a tracked hooks
-directory automatically, so this is a one-time, per-clone opt-in, not
-something `install.sh` or any hook can do for you.
-
-A note on the behavioral smoke tier (`.github/workflows/smoke.yml`): its
-scenarios run real headless skill flows against throwaway targets, but the
-`ANTHROPIC_API_KEY` secret is **deliberately unprovisioned**, so every
-smoke job currently skips fast and is advisory (`continue-on-error`).
-Provisioning that secret in the repo's Actions settings is the single
-manual step that turns the scenarios live; until then they are validated
-structurally only. If you change a skill's state-mutating path, keep the
-scenarios current in the same change — details in the workflow's header
-comment.
-
-(One-time history note: `main` was rewritten once on 2026-07-04 to add
-commit signatures — recovery steps preserved in
-`docs/decisions/0003-rewritten-main-recovery.md`.)
+Working on ARDD's own source (as opposed to installing it into a
+project)? See [CONTRIBUTING.md](CONTRIBUTING.md) — per-clone setup, the
+lint/test suite, and the source/target split that decides where new code
+belongs.
 
 ## Credits
 
-ARDD was inspired by [Spec Kit](https://github.com/github/spec-kit). If you
-need structured requirement discovery, user story generation, or a full
-spec-to-implementation pipeline, Spec Kit is the right tool. ARDD is
-narrower in scope — for when you arrive with architectural clarity and just
-need a system to capture, cross-check, and execute against it.
-
-## Future directions
-
-`/ardd-status` now runs automatically as the final step of most skills that
-change state it reports on — see the list in `/ardd-status`'s own SKILL.md,
-which is canonical. Each skill's own prose tells the agent to invoke it,
-since Claude Code lets a skill's instructions trigger another skill
-directly. That doesn't need a hooks
-system; it only reaches the skills that already end with "now run
-`/ardd-status`" written into them.
-
-A real hooks system (pre/post skill execution, similar to spec-kit's
-extension model) is still the more general next step — it would enable
-triggering *arbitrary* validation around *any* skill, including ones this
-repo hasn't anticipated, without editing that skill's prose. The right hook
-points will become clearer after a few more projects use ARDD. Designing them
-now would be speculative.
-
+ARDD was inspired by [Spec Kit](https://github.com/github/spec-kit). If
+you need structured requirement discovery, user story generation, or an
+agent-agnostic pipeline, Spec Kit is the right tool. ARDD is narrower —
+for when you arrive with architectural clarity and need a system to
+capture, cross-check, and execute against it.

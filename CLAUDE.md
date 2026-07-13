@@ -11,8 +11,11 @@ application code, build step, or test suite in the conventional sense; the
 "code" is prose instructions an LLM executes, plus a handful of POSIX shell
 scripts for the parts that must be deterministic.
 
-Read `README.md` for the philosophy and artifact/skill overview, and
-`USAGE.md` for the end-to-end workflow. Both are user-facing docs, not
+Read `README.md` for the philosophy and quickstart, `docs/concepts.md` for
+the mental model, and `USAGE.md` for the documentation map (`docs/guides/`
+holds the flow guides, `docs/reference/` the per-skill/API-style pages —
+each reference page's header is generated from skill frontmatter, its body
+hand-written below the `generated:end` marker). All user-facing docs, not
 internal notes — keep them in sync with the skills themselves.
 
 ## Commands
@@ -25,7 +28,7 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-next-version.sh         # regression test for next-version.sh (fixture repos; pins the versionsort.suffix=-beta. ordering trap)
 ./scripts/source-resolve.sh [path]     # resolve a Source-Path to the release channel: fetch ~/.ardd/source, checkout latest semver tag; other paths = channel=dev, never mutated
 ./scripts/test-source-resolve.sh       # regression test for source-resolve.sh (local fixture remotes; pins v:refname ordering)
-./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
+./scripts/lint-docs.sh                 # verify README/USAGE/CONTRIBUTING/docs only reference real skill names (docs/decisions exempt)
 ./scripts/lint-project.sh [target-dir] # validate a target's .project/ frontmatter + [artifacts: ...] refs (defaults to .)
 ./scripts/test-lint-project.sh         # regression test for lint-project.sh against tests/fixtures/{good,bad}-project
 ./scripts/branch-info.sh               # print current/default branch + on_default (used by ardd-plan/implement)

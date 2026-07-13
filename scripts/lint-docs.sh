@@ -11,7 +11,11 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"
 SKILLS_DIR="$REPO_DIR/skills"
 
 DOCS="$REPO_DIR/README.md $REPO_DIR/USAGE.md"
-for g in "$REPO_DIR"/guides/*.md; do
+[ -f "$REPO_DIR/CONTRIBUTING.md" ] && DOCS="$DOCS $REPO_DIR/CONTRIBUTING.md"
+# docs/ is scanned except docs/decisions/ — decision records are historical
+# narratives that legitimately name commands that no longer exist.
+for g in "$REPO_DIR"/docs/*.md "$REPO_DIR"/docs/guides/*.md \
+         "$REPO_DIR"/docs/reference/*.md "$REPO_DIR"/docs/reference/skills/*.md; do
   [ -f "$g" ] && DOCS="$DOCS $g"
 done
 # Skill bodies and templates are scanned for command tokens too (markdown
@@ -123,6 +127,9 @@ gate_scan() { # gate_scan <escaped-literal> <display-name>
   for f in "$SKILLS_DIR"/*/SKILL.md "$REPO_DIR"/scripts/*.sh \
            "$REPO_DIR/install.sh" "$REPO_DIR/new.sh" \
            "$REPO_DIR/README.md" "$REPO_DIR/USAGE.md" \
+           "$REPO_DIR/CONTRIBUTING.md" \
+           "$REPO_DIR"/docs/*.md "$REPO_DIR"/docs/guides/*.md \
+           "$REPO_DIR"/docs/reference/*.md "$REPO_DIR"/docs/reference/skills/*.md \
            "$REPO_DIR"/templates/*.md "$REPO_DIR"/templates/artifacts/*.md; do
     [ -f "$f" ] || continue
     case "$f" in
@@ -145,5 +152,5 @@ if ! sh "$(dirname "$SCRIPT_DIR")/scripts/gen-skill-docs.sh" --check 2>&1; then
   exit 1
 fi
 
-echo "lint-docs: clean — every /ardd-* reference in README.md, USAGE.md, guides/*.md matches a skill."
+echo "lint-docs: clean — every /ardd-* reference in README.md, USAGE.md, CONTRIBUTING.md, and docs/ matches a skill."
 exit 0

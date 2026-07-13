@@ -2,11 +2,16 @@
 # gen-skill-docs.sh — single-source skill documentation (source-side).
 # Reads each skills/*/SKILL.md's frontmatter (name/tier/description) and
 # regenerates:
-#   - README.md's "## The core loop" and "## Extensions" section bodies
-#     (via scripts/upsert-section.sh — those two sections are OWNED by
-#     this generator; edit a skill's frontmatter, not the README table)
+#   - README.md's "## Skills" section body (via scripts/upsert-section.sh —
+#     that section is OWNED by this generator; edit a skill's frontmatter,
+#     not the README table)
+#   - docs/reference/skills/<name>.md's generated header — everything up to
+#     and including the "generated:end" marker line; the hand-written body
+#     below the marker is preserved verbatim (a missing page is scaffolded
+#     with an empty body)
+#   - docs/reference/skills/README.md — the reference index (full overwrite)
 #   - templates/WORKFLOW.md — the static per-target workflow reference
-#     install.sh ships (bootstrap/codify cp it; they no longer embed it)
+#     install.sh ships
 #
 # --check regenerates into a temp area and diffs, exiting 1 on drift —
 # wired into lint-docs.sh so a description edit that skips regeneration
@@ -17,6 +22,9 @@
 set -e
 
 MODE="${1:-generate}"
+
+REF_DIR="docs/reference/skills"
+MARKER_TAG="generated:end"
 
 fm() { # fm <file> <field> — strips optional surrounding double quotes
   # (descriptions containing colons must be quoted for strict-YAML parsers)
@@ -31,13 +39,18 @@ ORDER_setup="ardd-init"
 ORDER_core="ardd-backlog ardd-feedback ardd-refine ardd-plan ardd-implement ardd-status ardd-lint"
 ORDER_extension="ardd-defects ardd-audit ardd-research ardd-diagram ardd-tracker ardd-update"
 
-row_for() { # row_for <skill-name>
+row_for() { # row_for <skill-name> <link-prefix — "" for plain, path for linked>
   f="skills/$1/SKILL.md"
   [ -f "$f" ] || return 0
-  printf '| `/%s` | %s |\n' "$(fm "$f" name)" "$(fm "$f" description)"
+  n="$(fm "$f" name)"
+  if [ -n "$2" ]; then
+    printf '| [`/%s`](%s%s.md) | %s |\n' "$n" "$2" "$n" "$(fm "$f" description)"
+  else
+    printf '| `/%s` | %s |\n' "$n" "$(fm "$f" description)"
+  fi
 }
 
-table_rows() { # table_rows <tier>
+table_rows() { # table_rows <tier> <link-prefix>
   case "$1" in
     setup)     ordered="$ORDER_setup" ;;
     core)      ordered="$ORDER_core" ;;
@@ -49,86 +62,67 @@ table_rows() { # table_rows <tier>
     f="skills/$name/SKILL.md"
     [ -f "$f" ] || continue
     [ "$(fm "$f" tier)" = "$1" ] || continue
-    row_for "$name"
+    row_for "$name" "$2"
     emitted="$emitted$name "
   done
   for f in skills/*/SKILL.md; do
     name="$(fm "$f" name)"
     case "$emitted" in *" $name "*) continue ;; esac
     [ "$(fm "$f" tier)" = "$1" ] || continue
-    row_for "$name"
+    row_for "$name" "$2"
   done
 }
 
-setup_body() {
-  cat <<'EOF'
-Run once (or rarely) to bring a project under ARDD. (This table is
-generated from each skill's frontmatter by `scripts/gen-skill-docs.sh` —
-edit the `description:` there, then re-run it.)
-
-| Command | What it does |
-|---|---|
-EOF
-  table_rows setup
+all_rows() { # all_rows <link-prefix> — every skill, tier order
+  table_rows setup "$1"
+  table_rows core "$1"
+  table_rows extension "$1"
 }
 
-core_body() {
+skills_body() { # README's "## Skills" section body
   cat <<'EOF'
-The recurring delivery cycle — ideas and observations come in, plans and
-shipped code come out. This is the loop a project lives in after setup;
-everything else is opt-in. (Generated — see note under Getting started.)
+Every command at a glance — each links to its full reference page under
+[docs/reference/skills/](docs/reference/skills/). (This table is generated
+from each skill's frontmatter by `scripts/gen-skill-docs.sh` — edit the
+`description:` there, then re-run it.)
 
 | Command | What it does |
 |---|---|
 EOF
-  table_rows core
-  cat <<'EOF'
-
-`/ardd-status` (cross-artifact consistency) and `/ardd-lint` (`.project/`
-schema validation) are core infrastructure, not opt-in extensions: analyze
-runs automatically as the final step of most state-changing skills, and lint
-runs behind the write-time hook on every `.project/` write. Neither is a step
-you have to remember — run either by hand anytime for a fresh check.
-
-**Solo vs. collaborative mode.** `workflow_mode` in `constitution.md`'s
-frontmatter (one of `solo` | `collaborative`; absent means `solo`) governs
-where in-progress work lives. In **solo** mode — single developer, one
-machine — committing directly to your local default branch is fine for
-inline runs, and delegated runs use an isolated git worktree that merges
-back eagerly on completion and is then reaped (`worktree-reap.sh` removes
-the merged, clean worktree and its branch — never anything unmerged or
-dirty); the in-flight view is `inflight-worktrees.sh`. With several
-independent `ready` tasks files, delegation can fan out — one parallel
-worktree run per file, each merging and reaped as it completes.
-In **collaborative** mode nothing is ever committed to the *local* default
-branch: work always moves to a branch, and after the first commit the skill
-offers to push and open a *draft PR* titled with the feature slug — that
-pushed draft PR is the mode's shared in-flight signal, and the register flip
-rides the branch to land when the PR merges. `/ardd-init` asks which
-mode once at setup and suggests one from what it detects.
-
-**Opt-in next-step prompt.** With `next_step_prompt: true` in
-`constitution.md`'s frontmatter, `/ardd-status` and `/ardd-plan` end by
-offering their recommended next step as a
-one-keypress prompt (yes runs it; no/Esc stops) — only when that
-recommendation is a concrete runnable `/ardd-*` invocation. `false` or an
-absent field keeps recommendations as plain text, so delegated and
-scripted runs are unaffected. `/ardd-init` asks the question once at
-setup; `/ardd-update` asks it once for existing installs whose
-constitution lacks the field. Like `workflow_mode` above, it's a frontmatter
-workflow field — setting it never bumps the constitution version.
-EOF
+  all_rows "docs/reference/skills/"
 }
 
-ext_body() {
+index_body() { # docs/reference/skills/README.md — full file
   cat <<'EOF'
-Opt-in skills for concerns the core loop doesn't force on you.
-(Generated — see note under Getting started.)
+# Skill reference
+
+One page per installed skill: usage, what it reads and writes, behavior
+notes, and routing to neighboring skills. Each page's header block is
+generated from the skill's frontmatter by `scripts/gen-skill-docs.sh`;
+the table below is generated too — edit a skill's `description:` there,
+then re-run it.
 
 | Command | What it does |
 |---|---|
 EOF
-  table_rows extension
+  all_rows ""
+}
+
+page_header() { # page_header <skill-name> — the generated block incl. marker
+  f="skills/$1/SKILL.md"
+  printf '# /%s\n\n_Tier: %s_\n\n> %s\n\n' \
+    "$(fm "$f" name)" "$(fm "$f" tier)" "$(fm "$f" description)"
+  printf '<!-- %s — the header above is generated from skills/%s/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->\n' \
+    "$MARKER_TAG" "$1"
+}
+
+page_for() { # page_for <skill-name> <existing-page-or-empty> — full page to stdout
+  page_header "$1"
+  if [ -n "$2" ] && [ -f "$2" ] && grep -q "$MARKER_TAG" "$2"; then
+    awk -v tag="$MARKER_TAG" 'found{print} index($0, tag){found=1}' "$2"
+  else
+    printf '\n_(Hand-written body not yet added.)_\n'
+  fi
 }
 
 workflow_body() {
@@ -144,9 +138,7 @@ regenerate by re-running install.sh after an ARDD upgrade.
 | Command | What it does |
 |---|---|
 EOF
-  table_rows setup
-  table_rows core
-  table_rows extension
+  all_rows ""
   cat <<'EOF'
 
 ## Operating mode
@@ -164,10 +156,14 @@ feature register in `.project/features/`.
 EOF
 }
 
+skill_names() { # every skill name, in tier order
+  for tier in setup core extension; do
+    table_rows "$tier" "" | sed -E 's/^\| \[?`\/([a-z0-9-]+)`.*/\1/'
+  done
+}
+
 gen_readme() { # gen_readme <file>
-  setup_body | sh scripts/upsert-section.sh "$1" "Getting started" 2>/dev/null
-  core_body  | sh scripts/upsert-section.sh "$1" "The core loop" 2>/dev/null
-  ext_body   | sh scripts/upsert-section.sh "$1" "Extensions" 2>/dev/null
+  skills_body | sh scripts/upsert-section.sh "$1" "Skills" 2>/dev/null
 }
 
 if [ "$MODE" = "--check" ]; then
@@ -182,9 +178,21 @@ if [ "$MODE" = "--check" ]; then
   cp README.md "$TMP/README.md"
   gen_readme "$TMP/README.md"
   if ! diff -q "$TMP/README.md" README.md >/dev/null 2>&1; then
-    echo "gen-skill-docs: README.md skill tables drifted from SKILL.md frontmatter — run scripts/gen-skill-docs.sh" >&2
+    echo "gen-skill-docs: README.md Skills table drifted from SKILL.md frontmatter — run scripts/gen-skill-docs.sh" >&2
     rc=1
   fi
+  index_body > "$TMP/index.md"
+  if ! diff -q "$TMP/index.md" "$REF_DIR/README.md" >/dev/null 2>&1; then
+    echo "gen-skill-docs: $REF_DIR/README.md drifted from SKILL.md frontmatter — run scripts/gen-skill-docs.sh" >&2
+    rc=1
+  fi
+  for name in $(skill_names); do
+    page_for "$name" "$REF_DIR/$name.md" > "$TMP/page.md"
+    if ! diff -q "$TMP/page.md" "$REF_DIR/$name.md" >/dev/null 2>&1; then
+      echo "gen-skill-docs: $REF_DIR/$name.md header drifted from SKILL.md frontmatter (or the page is missing) — run scripts/gen-skill-docs.sh" >&2
+      rc=1
+    fi
+  done
   exit "$rc"
 fi
 
@@ -194,6 +202,11 @@ fi
 # always replaces) diffs cleanly against the committed file.
 gen_readme README.md
 gen_readme README.md
-mkdir -p templates
+mkdir -p templates "$REF_DIR"
 workflow_body > templates/WORKFLOW.md
-echo "gen-skill-docs: README.md sections + templates/WORKFLOW.md regenerated"
+index_body > "$REF_DIR/README.md"
+for name in $(skill_names); do
+  page_for "$name" "$REF_DIR/$name.md" > "$REF_DIR/.$name.md.tmp"
+  mv "$REF_DIR/.$name.md.tmp" "$REF_DIR/$name.md"
+done
+echo "gen-skill-docs: README.md Skills table, $REF_DIR/, and templates/WORKFLOW.md regenerated"

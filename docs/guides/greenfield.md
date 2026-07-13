@@ -34,11 +34,13 @@ workflow.
 
 ## Prerequisites
 
-Install ARDD into your new project directory:
+If you skipped the quickstart: install ARDD into your new project
+directory (all the routes, channels, and flags are in
+[install.md](../install.md)):
 
 ```sh
-cd /path/to/artifact-driven-dev
-./install.sh /path/to/your/project
+cd /path/to/your/project
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- --existing
 ```
 
 Then open Claude Code in your project.
@@ -139,7 +141,7 @@ algorithmic approaches:
 /ardd-research rate limiting strategy for external EHR API
 ```
 
-Research outputs land in `.project/plans/research-<topic>-<date>.md` —
+Research outputs land in `.project/plans/research-<topic>-<date>-<hex>.md` —
 one-off documents nothing reads back automatically. Fold standing
 decisions into the relevant artifact with `/ardd-refine` so planning
 sees them; log new backlog-worthy scope with `/ardd-backlog`.
@@ -176,7 +178,7 @@ blockers rather than working around them.
 ## After initial implementation
 
 You're now in the recurring delivery loop — logging features, capturing
-feedback, planning batches. See [continuing.md](continuing.md).
+feedback, planning batches. See [core-loop.md](core-loop.md).
 
 ---
 
@@ -206,6 +208,7 @@ At any point, generate Mermaid diagrams into `README.md`:
 ```
 
 GitHub renders Mermaid code fences natively — no extra tooling needed.
+Full details (render targets, hints, staleness): [diagrams.md](diagrams.md).
 
 ---
 

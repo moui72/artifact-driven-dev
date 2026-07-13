@@ -12,11 +12,12 @@ ARDD to plan new work.
 
 ## Prerequisites
 
-Install ARDD into your project:
+Install ARDD into your project — run from inside it (all the routes,
+channels, and flags are in [install.md](../install.md)):
 
 ```sh
-cd /path/to/artifact-driven-dev
-./install.sh /path/to/your/project
+cd /path/to/your/project
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- --existing
 ```
 
 Then open Claude Code in your project.
@@ -117,7 +118,8 @@ issues that do appear are usually:
 - Principles in `constitution.md` that the existing code already violates
   (useful to know even if you don't change anything)
 - Fields used in the UI that aren't defined in the data model
-- Production shortcuts that lack `[PRODUCTION]` annotations
+- Production shortcuts missing from the artifact's
+  `## Production Annotations` section
 
 ---
 
@@ -161,7 +163,7 @@ articulated. Either way, it's a useful mirror.
 ## After init
 
 From here you're in the recurring delivery loop — logging features,
-capturing feedback, planning batches. See [continuing.md](continuing.md).
+capturing feedback, planning batches. See [core-loop.md](core-loop.md).
 
 ---
 

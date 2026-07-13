@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
-# Regression test for gen-skill-docs.sh: generates the README core-loop/
-# extensions tables and templates/WORKFLOW.md from SKILL.md frontmatter,
-# and --check fails when either drifts from the frontmatter.
+# Regression test for gen-skill-docs.sh: generates the README Skills table,
+# the docs/reference/skills/ pages (generated header + preserved hand-written
+# body) and index, and templates/WORKFLOW.md from SKILL.md frontmatter, and
+# --check fails when any of them drifts from the frontmatter.
 
 set -e
 
@@ -55,6 +56,16 @@ grep -q 'Does the gamma setup thing.' "$F/README.md" && ok "setup tier in README
 grep -q '/ardd-gamma' "$F/templates/WORKFLOW.md" && ok "setup tier in WORKFLOW.md" || bad "setup tier in WORKFLOW.md"
 grep -q '/ardd-alpha' "$F/templates/WORKFLOW.md" && ok "WORKFLOW.md generated" || bad "WORKFLOW.md generated"
 grep -q 'Does the alpha thing.' "$F/templates/WORKFLOW.md" && ok "WORKFLOW.md carries description" || bad "WORKFLOW.md carries description"
+
+# --- reference pages: scaffolded with header + marker; index generated ---
+grep -q '_Tier: core_' "$F/docs/reference/skills/ardd-alpha.md" && ok "ref page carries tier" || bad "ref page carries tier"
+grep -q 'generated:end' "$F/docs/reference/skills/ardd-alpha.md" && ok "ref page carries marker" || bad "ref page carries marker"
+grep -q '`/ardd-beta`' "$F/docs/reference/skills/README.md" && ok "ref index lists skills" || bad "ref index lists skills"
+
+# --- hand-written body below the marker survives regeneration ---
+printf '\n## Hand-written section\n\nKeep me.\n' >> "$F/docs/reference/skills/ardd-alpha.md"
+( cd "$F" && sh "$GEN" ) >/dev/null
+grep -q 'Keep me.' "$F/docs/reference/skills/ardd-alpha.md" && ok "hand-written body preserved" || bad "hand-written body preserved"
 
 # --- check passes when in sync ---
 ( cd "$F" && sh "$GEN" --check ) >/dev/null 2>&1 && ok "--check passes in sync" || bad "--check passes in sync"
