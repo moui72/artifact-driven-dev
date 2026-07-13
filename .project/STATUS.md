@@ -1,8 +1,7 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (merge driver LIVE — report files merge conflict-free
-with the driver set; smoke tier expanded to reconcile/init; v0.9.0 out,
-mandate retired at v1.7.0). Keep this current as artifacts are refined and open
+_Updated: 2026-07-12 (reap+fanout MERGED — parallel-agent flow complete;
+two-channel git-ops planned+tasked, delegated run in flight). Keep this current as artifacts are refined and open
 questions are resolved._
 
 ## Artifact Status
@@ -28,12 +27,9 @@ scenarios for Reconcile mode and both `/ardd-init` modes now exist
 
 ## Feedback
 
-1 open — `feedback-git-ops-channels-9f03.md` (3 Reconsidered items, all
-[artifacts: constitution]): two-channel release model — push-to-main
-auto-publishes betas via CI, stable releases via an explicitly dispatched
-workflow that ff-merges main→release branch, and channel targeting
-(stable/beta/dev-tip) in update/resolve scripts. Decision-reversing →
-vet with /ardd-research before /ardd-plan consumes it.
+None open — `feedback-git-ops-channels-9f03.md` vetted by
+`research-two-channel-git-ops-2026-07-12-450d.md` (proceed verdict) and
+consumed by `plan-git-ops-channels-2026-07-12-e77e.md`.
 
 ## Released: v0.9.0 (2026-07-12)
 
@@ -59,12 +55,9 @@ vet with /ardd-research before /ardd-plan consumes it.
 
 ## Feature Backlog
 
-0 backlogged · 1 tasked · 9 implemented · 1 retired — see `.project/features/`.
+0 backlogged · 10 implemented · 1 retired — see `.project/features/`.
 
-- `worktree-reap-and-fanout` — **tasked** (the last backlog item):
-  `plan-worktree-reap-and-fanout-2026-07-12-c560.md` (approved) →
-  `tasks-worktree-reap-and-fanout-10f7.md` (ready, 0/5): reap script
-  test-first, post-merge wiring, status visibility, multi-select fan-out.
+- (register fully worked: 10 implemented · 1 retired · 0 backlogged)
 
 ## Audit
 
@@ -75,7 +68,10 @@ it) and 1 risk (smoke key unprovisioned). The register-enum [Q] is resolved.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` on `tasks-worktree-reap-and-fanout-10f7.md` — the
-backlog's final item. `main` has unpushed commits — push when ready. Also
-open: audit checklist (one item moot post-retirement); smoke key
-provisioning when desired.
+In flight: delegated run on `tasks-git-ops-channels-58f1.md` (0/6 —
+constitution v1.8.0, next-version.sh, beta+stable workflows, channel
+plumbing; release.sh retires). On its merge: the user cutover checklist
+(push main = first live beta; dispatch first stable; optionally protect
+the release branch). `main` has many unpushed commits — the first
+post-merge push doubles as the beta workflow's maiden run. Also open:
+audit checklist; smoke key provisioning.
