@@ -21,8 +21,6 @@ internal notes — keep them in sync with the skills themselves.
 ./install.sh /path/to/target/project   # install/upgrade skills into a project
 ./new.sh [--kickoff|--no-kickoff] [--source <path>] <target-dir>  # quickstart: create a new project, install, offer /ardd-init
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
-./scripts/release.sh [--dry-run] <vX.Y.Z> # cut a release: validate (clean/on-default/suite green), SSH-signed tag, push, gh release
-./scripts/test-release.sh              # regression test for release.sh's refusal logic (fixture repos; network steps untested by design)
 ./scripts/next-version.sh <beta|stable [major|minor|patch]> # print the next tag (source-side; called by the release workflows, never installed)
 ./scripts/test-next-version.sh         # regression test for next-version.sh (fixture repos; pins the versionsort.suffix=-beta. ordering trap)
 ./scripts/source-resolve.sh [path]     # resolve a Source-Path to the release channel: fetch ~/.ardd/source, checkout latest semver tag; other paths = channel=dev, never mutated
@@ -118,27 +116,42 @@ that check: the TUI paints and then silently ignores every keystroke (`<>
 correctly — `launch()` must leave stdin alone. No tty exists in CI to catch
 this, so `test-new.sh` case 14 guards the source line statically.
 
-**GitHub releases are the stable install channel; a live checkout is
-explicit dev-mode** (constitution standing decision, 2026-07-12). Consumers
-install from the latest semver tag, resolved through `~/.ardd/source` — the
-one checkout the tooling owns and may mutate. The pieces: `scripts/release.sh`
-cuts a release (validate → SSH-signed annotated tag → push → `gh release`;
-refusals fixture-tested, the network block thin and untested by design);
-`scripts/source-resolve.sh` (installed to `ardd-scripts`) resolves a recorded
-`Source-Path` — owned checkout: fetch tags offline-tolerantly and check out
-the latest strict-`vX.Y.Z` tag via `git tag --sort=v:refname` (ordering
-pinned by fixture tests, incl. v1.10.0 > v1.9.0 — no hand-rolled compare
-needed); any other existing checkout: `channel=dev`, read and never mutated.
-`new.sh` duplicates that selection rule minimally (it runs with no checkout
-to source scripts from); `ardd-update-check.sh`'s `behind` means "not the
-latest release's commit" (no tags yet → tip comparison, `note=no-releases`);
-`install.sh` records `Source-Ref: <tag>` when the source HEAD sits exactly at
-a release tag. Dev-mode (`--source`/`$ARDD_SOURCE`, or a `Source-Path`
-naming a live checkout) is the deliberate escape hatch for the
-edit-a-skill, test-it-in-a-consumer loop — `/ardd-update` warns and asks
-before proceeding on it. There is no tip-of-main channel (Principle VI).
-Cutting a release is the act that publishes skill changes to consumers;
-merging to `main` alone no longer does.
+**Two release channels: beta on push, stable by dispatch; a live checkout
+is explicit dev-mode** (constitution v1.8.0 standing decision, 2026-07-12;
+reversal arc in `docs/decisions/0007-two-channel-git-ops.md`). Pushing
+`main` is the beta-publish act: `.github/workflows/beta-release.yml`
+(suite-gated on lint.yml green for the same SHA; skips a push only when it
+touches nothing but `.project/**`, `docs/**`, and top-level `*.md`) tags
+`vX.Y.Z-beta.N` and publishes a prerelease. Stable stays deliberate:
+`.github/workflows/stable-release.yml` (`workflow_dispatch`, bump input)
+verifies CI green, fast-forwards `main` into the `release` branch — the
+stable pointer AND the stable raw-URL base for `new.sh` acquisition —
+and publishes a full release. Both tags are created server-side by
+`gh release create` (web-flow Verified; no CI signing keys), and both
+workflows compute versions via `scripts/next-version.sh` — the single
+version authority, whose fixture tests pin the `versionsort.suffix=-beta.`
+ordering trap (default version sort puts `v0.9.1-beta.2` *after*
+`v0.9.1`; every beta-aware sort site needs the suffix).
+`scripts/source-resolve.sh` (installed to `ardd-scripts`) resolves a
+recorded `Source-Path` per channel — owned checkout: fetch tags
+offline-tolerantly and check out the latest strict-`vX.Y.Z` tag (stable,
+the default) or the latest tag including prereleases under the suffix
+ordering (`--channel beta`, where a newer stable beats an older beta —
+the pinned trap); any other existing checkout: `channel=dev`, read and
+never mutated. `new.sh` duplicates that selection rule minimally (it runs
+with no checkout to source scripts from) and takes `--beta`;
+`ardd-update-check.sh`'s `behind` means "not the latest release's commit",
+compared within the recorded channel (no tags yet → tip comparison,
+`note=no-releases`); `install.sh` records `Source-Ref: <tag>` when the
+source HEAD sits exactly at a release tag, and `Channel: <stable|beta>`
+(absent = stable — old files keep parsing). Dev-mode
+(`--source`/`$ARDD_SOURCE`, or a `Source-Path` naming a live checkout) is
+the deliberate escape hatch for the edit-a-skill, test-it-in-a-consumer
+loop — `/ardd-update` warns and asks before proceeding on it.
+Dispatching the stable workflow is the act that publishes skill changes
+to stable consumers; pushing `main` publishes only to the opt-in beta
+channel. `scripts/release.sh` (the local publish path) is retired —
+its validation lives in the CI gate, its tag/publish in the workflows.
 
 **`install.sh` is the only entry point into a target project.** It copies
 `skills/*/SKILL.md` into `.claude/skills/<name>/`, copies

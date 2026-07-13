@@ -1,0 +1,89 @@
+# beta-release — pushing main IS the beta-publish act (constitution
+# v1.8.0, two-channel standing decision). Every push that touches
+# publishable content gets a vX.Y.Z-beta.N prerelease, gated on the full
+# lint/test workflow passing for the same commit.
+#
+# Skip predicate (confirmed at plan Open Question 2): a push is skipped
+# only when it touches nothing but .project/**, docs/**, and top-level
+# *.md. skills/**, templates/**, scripts, install.sh, new.sh always
+# publish — a skill's .md IS the product. `*.md` here is top-level only
+# (GitHub path globs don't cross `/` without `**`).
+#
+# All version logic lives in scripts/next-version.sh (fixture-tested;
+# this YAML is thin glue, per the plan's Complexity Tracking). The tag is
+# created server-side by `gh release create` (GitHub API -> web-flow
+# Verified; no CI signing keys to manage).
+
+name: beta-release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.project/**'
+      - 'docs/**'
+      - '*.md'
+
+# Serialize beta publishes so two rapid pushes can't compute the same
+# beta N; never cancel — each qualifying push gets its beta.
+concurrency:
+  group: beta-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish-beta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      # The lint workflow runs on the same push, in parallel with this
+      # one — poll until it completes for this exact SHA and require
+      # success. A red suite must never ship to beta consumers.
+      - name: Require the lint/test suite green for this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 60); do
+            run_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/lint.yml/runs?head_sha=$GITHUB_SHA&per_page=1" \
+              --jq '.workflow_runs[0] | {status: .status, conclusion: .conclusion}' 2>/dev/null || echo '')"
+            status="$(printf '%s' "$run_json" | jq -r '.status // empty' 2>/dev/null || true)"
+            conclusion="$(printf '%s' "$run_json" | jq -r '.conclusion // empty' 2>/dev/null || true)"
+            if [ "$status" = "completed" ]; then
+              if [ "$conclusion" = "success" ]; then
+                echo "lint suite green for $GITHUB_SHA"
+                exit 0
+              fi
+              echo "lint suite concluded '$conclusion' for $GITHUB_SHA — refusing to publish a beta" >&2
+              exit 1
+            fi
+            echo "lint suite not complete yet (status='${status:-not started}') — waiting ..."
+            sleep 30
+          done
+          echo "timed out waiting for the lint suite on $GITHUB_SHA — refusing to publish a beta" >&2
+          exit 1
+
+      - name: Compute the next beta tag
+        id: version
+        run: |
+          # Re-fetch tags: a beta published while this run sat in the
+          # concurrency queue must be visible to the computation.
+          git fetch --tags origin
+          tag="$(sh scripts/next-version.sh beta)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "next beta: $tag"
+
+      - name: Publish the prerelease (API-created tag)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --prerelease \
+            --generate-notes \
+            --target "$GITHUB_SHA" \
+            --title "${{ steps.version.outputs.tag }}"
