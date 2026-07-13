@@ -154,6 +154,47 @@ out="$(ARDD_HOME="$FBHOME" sh "$CHECK" "$T9")"
 out="$(sh "$CHECK" "$T9")"
 [ "$out" = "source-missing path=$WORK/nowhere" ] && ok "moved Source-Path, no owned -> source-missing" || bad "moved, no owned — got '$out'"
 
+# --- Channel: beta — the check compares within the recorded channel ---
+# (two-channel decision, v1.8.0). Absent Channel: = stable, so every case
+# above doubles as the old-file compatibility guarantee; the explicit
+# stable/absent cases below re-pin it once beta tags exist in the fixture.
+mkver3() { # mkver3 <target> <commit> <source-path> <channel>
+  mkdir -p "$1/.project"
+  printf '# ARDD Version\n\n_Source: artifact-driven-dev @ 0000000 · Installed/updated 2026-07-12_\n\nSource-Path: %s\nSource-Commit: %s\nChannel: %s\n' "$3" "$2" "$4" > "$1/.project/ardd-version.md"
+}
+
+( cd "$SRC" && printf 'b\n' >> install.sh && git add -A && git commit -q -m five )
+git -C "$SRC" tag v1.10.1-beta.1
+FULL5="$(git -C "$SRC" rev-parse HEAD)"
+
+# beta channel: the prerelease counts as the latest release
+T10="$WORK/t10"; mkver3 "$T10" "$FULL4" "$SRC" beta
+out="$(sh "$CHECK" "$T10")"
+[ "$out" = "behind installed=$FULL4 latest-release=v1.10.1-beta.1 channel=beta" ] \
+  && ok "beta channel: behind the newest beta" || bad "beta behind — got '$out'"
+T11="$WORK/t11"; mkver3 "$T11" "$FULL5" "$SRC" beta
+out="$(sh "$CHECK" "$T11")"
+[ "$out" = "up-to-date commit=$FULL5 channel=beta" ] \
+  && ok "beta channel: up-to-date at the beta commit" || bad "beta up-to-date — got '$out'"
+
+# stable channel ignores the beta tag entirely (v1.10.0 still latest);
+# rc decoys stay excluded on both channels (v1.10.1-rc1 never surfaces)
+T12="$WORK/t12"; mkver3 "$T12" "$FULL4" "$SRC" stable
+out="$(sh "$CHECK" "$T12")"
+[ "$out" = "up-to-date commit=$FULL4" ] \
+  && ok "stable channel: beta tags invisible, no channel token" || bad "stable ignores beta — got '$out'"
+T12A="$WORK/t12a"; mkver2 "$T12A" "$FULL4" "$SRC"
+out="$(sh "$CHECK" "$T12A")"
+[ "$out" = "up-to-date commit=$FULL4" ] \
+  && ok "absent Channel: parses as stable (old files keep working)" || bad "absent channel — got '$out'"
+
+# the ordering trap: a newer stable beats the older beta on the beta channel
+( cd "$SRC" && printf 's\n' >> install.sh && git add -A && git commit -q -m six )
+git -C "$SRC" tag v1.10.1
+out="$(sh "$CHECK" "$T11")"
+[ "$out" = "behind installed=$FULL5 latest-release=v1.10.1 channel=beta" ] \
+  && ok "beta channel: newer stable beats older beta (ordering trap)" || bad "beta trap — got '$out'"
+
 # --- producer contract: install.sh writes Source-Commit as the full sha ---
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 TP="$WORK/producer"; mkdir -p "$TP"
@@ -161,5 +202,30 @@ TP="$WORK/producer"; mkdir -p "$TP"
 want="$(command git -C "$REPO_ROOT" rev-parse HEAD)"
 got="$(sed -n 's/^Source-Commit: //p' "$TP/.project/ardd-version.md" | head -1)"
 [ "$got" = "$want" ] && ok "install.sh writes Source-Commit (full sha)" || bad "install.sh Source-Commit — got '$got', want '$want'"
+
+# --- producer contract: install.sh records Channel (absent = stable) ---
+got="$(sed -n 's/^Channel: //p' "$TP/.project/ardd-version.md" | head -1)"
+[ "$got" = "stable" ] && ok "install.sh records Channel: stable by default" || bad "default Channel — got '$got'"
+
+TPB="$WORK/producer-beta"; mkdir -p "$TPB"
+( cd "$REPO_ROOT" && ARDD_CHANNEL=beta sh ./install.sh "$TPB" ) >/dev/null 2>&1
+got="$(sed -n 's/^Channel: //p' "$TPB/.project/ardd-version.md" | head -1)"
+[ "$got" = "beta" ] && ok "ARDD_CHANNEL=beta records Channel: beta" || bad "beta Channel — got '$got'"
+
+# a re-install without ARDD_CHANNEL preserves the recorded channel
+( cd "$REPO_ROOT" && sh ./install.sh "$TPB" ) >/dev/null 2>&1
+got="$(sed -n 's/^Channel: //p' "$TPB/.project/ardd-version.md" | head -1)"
+[ "$got" = "beta" ] && ok "re-install preserves the recorded channel" || bad "channel preservation — got '$got'"
+
+# an unknown ARDD_CHANNEL is refused before anything is written
+TPX="$WORK/producer-bad"; mkdir -p "$TPX"
+set +e
+( cd "$REPO_ROOT" && ARDD_CHANNEL=nightly sh ./install.sh "$TPX" ) >/dev/null 2>&1
+rc=$?
+set -e
+[ "$rc" -ne 0 ] && ok "unknown ARDD_CHANNEL refused (exit $rc)" || bad "unknown ARDD_CHANNEL accepted"
+[ -f "$TPX/.project/ardd-version.md" ] \
+  && bad "unknown ARDD_CHANNEL still wrote a version file" \
+  || ok "unknown ARDD_CHANNEL wrote nothing"
 
 exit "$fail"

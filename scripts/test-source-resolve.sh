@@ -201,6 +201,73 @@ case "$out" in
   *) bad "case11: got '$out'" ;;
 esac
 
+# --- Cases 12–16: --channel stable|beta (two-channel decision, v1.8.0) ---
+# stable (the default) keeps the strict ^vX.Y.Z$ filter; beta selects the
+# latest tag among stable+prerelease under versionsort.suffix=-beta. —
+# where a NEWER STABLE BEATS AN OLDER BETA (the empirically-pinned
+# ordering trap: default version sort puts v1.11.1-beta.2 after v1.11.1).
+
+# --- Case 12: --channel beta resolves the latest prerelease ---
+( cd "$ORIGIN" && printf 'b1\n' >> install.sh && git add -A && git commit -q -m five )
+git -C "$ORIGIN" tag v1.11.1-beta.1
+( cd "$ORIGIN" && printf 'b2\n' >> install.sh && git add -A && git commit -q -m six )
+git -C "$ORIGIN" tag v1.11.1-beta.2
+run_resolve --channel beta "$OWNED"
+[ "$status" -eq 0 ] && [ "$out" = "resolved=$OWNED ref=v1.11.1-beta.2 channel=release" ] \
+  && ok "case12: --channel beta picks the newest prerelease" \
+  || bad "case12: got '$out' (rc=$status)"
+[ "$(git -C "$OWNED" rev-parse HEAD)" = "$(git -C "$OWNED" rev-parse 'v1.11.1-beta.2^{commit}')" ] \
+  && ok "case12: owned checkout moved to the beta tag" \
+  || bad "case12: owned checkout not at v1.11.1-beta.2"
+
+# --- Case 13: stable stays the default; betas are invisible to it ---
+run_resolve "$OWNED"
+[ "$out" = "resolved=$OWNED ref=v1.11.0 channel=release" ] \
+  && ok "case13: bare invocation stays stable (betas invisible)" \
+  || bad "case13: got '$out'"
+run_resolve --channel stable "$OWNED"
+[ "$out" = "resolved=$OWNED ref=v1.11.0 channel=release" ] \
+  && ok "case13: explicit --channel stable identical" \
+  || bad "case13: explicit stable got '$out'"
+
+# --- Case 14: the ordering trap — a newer stable beats an older beta ---
+( cd "$ORIGIN" && printf 's\n' >> install.sh && git add -A && git commit -q -m seven )
+git -C "$ORIGIN" tag v1.11.1
+run_resolve --channel beta "$OWNED"
+[ "$out" = "resolved=$OWNED ref=v1.11.1 channel=release" ] \
+  && ok "case14: beta channel resolves the newer stable v1.11.1" \
+  || bad "case14: got '$out'"
+# Pin the trap itself: without the suffix, the stale beta would have won.
+default_last="$(git -C "$OWNED" tag --list 'v1.11.1*' --sort=v:refname | tail -1)"
+[ "$default_last" = "v1.11.1-beta.2" ] \
+  && ok "case14: trap pinned — default sort prefers the stale beta" \
+  || bad "case14: default-sort trap changed? last='$default_last'"
+
+# --- Case 15: --channel beta on a dev checkout — still dev, never mutated ---
+dev_head="$(git -C "$DEV" rev-parse HEAD)"
+run_resolve --channel beta "$DEV"
+[ "$status" -eq 0 ] && [ "$out" = "resolved=$DEV channel=dev" ] \
+  && ok "case15: dev checkout stays channel=dev under --channel beta" \
+  || bad "case15: got '$out' (rc=$status)"
+[ "$(git -C "$DEV" rev-parse HEAD)" = "$dev_head" ] \
+  && ok "case15: dev checkout not mutated" \
+  || bad "case15: dev checkout HEAD moved"
+
+# --- Case 16: an unknown --channel is a usage refusal, exit 2 ---
+run_resolve --channel nightly "$OWNED"
+[ "$status" -eq 2 ] \
+  && ok "case16: unknown channel exits 2" \
+  || bad "case16: expected exit 2, got $status"
+case "$out" in
+  "resolved=false reason=usage"*) ok "case16: resolved=false reason=usage" ;;
+  *) bad "case16: got '$out'" ;;
+esac
+# --channel=<value> form works too
+run_resolve --channel=beta "$OWNED"
+[ "$out" = "resolved=$OWNED ref=v1.11.1 channel=release" ] \
+  && ok "case16: --channel=beta form accepted" \
+  || bad "case16: --channel= form got '$out'"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-source-resolve: all cases pass"
 else

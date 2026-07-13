@@ -6,9 +6,17 @@
 # function of disk/remote state (Principle II); the judgment — whether to
 # accept a dev-mode source — stays in skill prose.
 #
-# Usage: source-resolve.sh [source-path]
-#   With no argument, reads the Source-Path: line from
+# Usage: source-resolve.sh [--channel stable|beta] [source-path]
+#   With no source-path argument, reads the Source-Path: line from
 #   ./.project/ardd-version.md (the file install.sh writes).
+#   --channel (default stable) picks which tags count for the owned
+#   checkout (two-channel decision, v1.8.0): stable = strict vX.Y.Z only
+#   (today's behavior, unchanged); beta = the latest tag among
+#   stable+prerelease under versionsort.suffix=-beta. ordering, where a
+#   newer stable beats an older beta — the empirically-pinned trap: git's
+#   DEFAULT version sort puts vX.Y.Z-beta.N *after* vX.Y.Z, so without
+#   the suffix a stale beta would shadow a newer stable. Dev-mode paths
+#   ignore the flag entirely (used exactly as given, never mutated).
 #
 # Outcomes (one machine-readable line; warnings appended as tokens):
 #   resolved=<path> ref=<tag> channel=release            owned checkout, at latest release
@@ -33,7 +41,23 @@
 
 set -e
 
-SRC="${1:-}"
+CHANNEL="stable"
+SRC=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --channel)   [ $# -ge 2 ] || { echo "resolved=false reason=usage detail=--channel-needs-a-value"; exit 2; }
+                 CHANNEL="$2"; shift 2 ;;
+    --channel=*) CHANNEL="${1#--channel=}"; shift ;;
+    -*)          echo "resolved=false reason=usage detail=unknown-option:$1"; exit 2 ;;
+    *)           [ -z "$SRC" ] || { echo "resolved=false reason=usage detail=unexpected-argument:$1"; exit 2; }
+                 SRC="$1"; shift ;;
+  esac
+done
+case "$CHANNEL" in
+  stable|beta) ;;
+  *) echo "resolved=false reason=usage detail=unknown-channel:$CHANNEL"; exit 2 ;;
+esac
+
 FROM_VF=""
 
 if [ -z "$SRC" ]; then
@@ -87,10 +111,17 @@ if ! git -C "$SRC" fetch --tags --quiet origin >/dev/null 2>&1; then
   warn=" warning=offline"
 fi
 
-# Strict semver only: the v[0-9]* pattern narrows, the grep pins the exact
-# vX.Y.Z shape (excludes pre-releases and decoys like v1.10.0-rc2).
-tag="$(git -C "$SRC" tag --list 'v[0-9]*' --sort=v:refname \
-  | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+# Channel filter. stable: strict vX.Y.Z only — the grep pins the exact
+# shape (excludes pre-releases and decoys like v1.10.0-rc2). beta: also
+# admits vX.Y.Z-beta.N, ordered under versionsort.suffix=-beta. so a
+# newer stable still beats an older beta (the pinned trap).
+if [ "$CHANNEL" = "beta" ]; then
+  tag="$(git -C "$SRC" -c versionsort.suffix=-beta. tag --list 'v[0-9]*' --sort=v:refname \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-beta\.[0-9]+)?$' | tail -n 1 || true)"
+else
+  tag="$(git -C "$SRC" tag --list 'v[0-9]*' --sort=v:refname \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1 || true)"
+fi
 
 if [ -n "$tag" ]; then
   git -C "$SRC" checkout --quiet "$tag"
