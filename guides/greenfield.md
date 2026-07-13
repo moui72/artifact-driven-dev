@@ -13,7 +13,7 @@ If you have nothing installed yet, one command does everything below through
 Step 2:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh \
   | sh -s -- my-project
 ```
 

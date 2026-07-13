@@ -27,19 +27,27 @@ left off.
 ## Setup
 
 Brand-new project, nothing installed? One command creates it, installs
-ARDD from the **latest tagged release** (releases are the stable install
-channel — the tooling keeps its own `~/.ardd/source` checkout pinned to
-one), and offers to open the first session (`--kickoff` / `--no-kickoff`
-answer that offer in advance):
+ARDD from the **latest stable release** (the tooling keeps its own
+`~/.ardd/source` checkout pinned to one), and offers to open the first
+session (`--kickoff` / `--no-kickoff` answer that offer in advance):
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh \
   | sh -s -- my-project
 ```
 
 Already have a project? Run the same bootstrap from inside it with
-`--existing` — `curl -fsSL <repo>/raw/main/new.sh | sh -s -- --existing` —
-and it installs the latest release there instead.
+`--existing` — `curl -fsSL <repo>/raw/release/new.sh | sh -s -- --existing`
+— and it installs the latest release there instead.
+
+Two channels exist: **stable** (the default — tagged full releases, cut
+deliberately) and **beta** (opt in with `--beta` — a `vX.Y.Z-beta.N`
+prerelease publishes on every suite-green push to `main`; fresh work, no
+compatibility promises). Your project records its channel in
+`.project/ardd-version.md`, and `/ardd-update` follows it. The `release`
+branch in the URLs above is the stable base for fetching `new.sh` itself;
+`main` serves its beta/dev edge — the base you fetch from doesn't set
+your channel, only `--beta` does.
 
 Installing from your own clone is dev-mode — for hacking on ARDD itself; it
 installs whatever state the clone holds, and `/ardd-update` warns about it:
@@ -54,9 +62,10 @@ Then open Claude Code in your project.
 README's Install and Quickstart sections have the details. All routes
 converge on `install.sh`; it is the only real install/upgrade entry point.
 Once it has run, `/ardd-update` handles updates — resolving the recorded
-source to the latest release before reinstalling. Releases are semver with
-skill-pack semantics: MAJOR removes or renames a slash command (or breaks a
-script/schema contract), MINOR is additive, PATCH is prose and fixes.
+source to the latest release on the recorded channel before reinstalling.
+Releases are semver with skill-pack semantics: MAJOR removes or renames a
+slash command (or breaks a script/schema contract), MINOR is additive,
+PATCH is prose and fixes; `-beta.N` prereleases make no such promises.
 
 ## Getting started (once per project)
 

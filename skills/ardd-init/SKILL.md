@@ -34,7 +34,7 @@ with `/ardd-refine` before planning new work.
      (e.g. copied by hand). Stop and tell the user to complete the install:
      run `install.sh` from an ARDD checkout against this project, or, from
      inside the project directory, the one-command bootstrap
-     `curl -fsSL <ardd-repo>/raw/main/new.sh | sh -s -- --existing`. Every
+     `curl -fsSL <ardd-repo>/raw/release/new.sh | sh -s -- --existing`. Every
      later step here shells out to `ardd-scripts`, so continuing would fail
      on the first script call.
 

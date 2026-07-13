@@ -166,18 +166,28 @@ automatically.
 Brand-new project, nothing installed:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh \
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh \
   | sh -s -- my-project
 ```
 
 That creates `my-project/`, `git init`s it, clones this repo to
 `~/.ardd/source` (or refreshes it if it's already there), pins that checkout
-to the **latest tagged release** — releases are the stable install channel;
-you never install from the moving tip of a checkout — runs `install.sh` from
-it, and offers to open Claude Code on `/ardd-init` — which, on a cold
-start, first interviews you about the design (its step 0) and then writes
-your artifacts. (No releases tagged yet? It says so and installs from the
-default branch. Offline? It warns and uses the checkout as it stands.)
+to the **latest stable release** — you never install from the moving tip of
+a checkout — runs `install.sh` from it, and offers to open Claude Code on
+`/ardd-init` — which, on a cold start, first interviews you about the
+design (its step 0) and then writes your artifacts. (No releases tagged
+yet? It says so and installs from the default branch. Offline? It warns and
+uses the checkout as it stands.)
+
+Add `--beta` to track the **beta channel** instead: every push to this
+repo's `main` publishes a `vX.Y.Z-beta.N` prerelease (suite-gated in CI),
+so beta gets you fresh work without waiting for a stable release — at the
+cost that betas make no compatibility promises. The choice is recorded in
+your project (`Channel:` in `.project/ardd-version.md`) and `/ardd-update`
+follows it from then on. The `release` branch in the URL above is the
+stable raw-URL base; `…/main/new.sh` serves the beta/dev edge of this
+script itself — either base works, and neither sets your channel (only
+`--beta` does).
 
 The handoff is a question, not a foregone conclusion. Answer it in advance
 with `--kickoff` (launch, don't ask) or `--no-kickoff` (install, print the
@@ -207,18 +217,31 @@ install ARDD directly, as described next.
 
 ## Install
 
-The stable channel is **tagged GitHub releases**, resolved through the
-`~/.ardd/source` checkout the tooling owns: the curl bootstrap below (and
-`/ardd-update` afterwards) fetches tags and installs from the latest
-release, never from the tip of a live checkout.
+Two release channels exist, and each project records which one it tracks
+(`Channel:` in `.project/ardd-version.md`; absent means stable):
+
+- **stable** (default) — tagged full releases (`vX.Y.Z`), cut by an
+  explicitly dispatched workflow that also fast-forwards `main` into the
+  `release` branch (the stable raw-URL base below). What you get today
+  without asking for anything.
+- **beta** (opt-in, per project) — every push to `main` publishes a
+  `vX.Y.Z-beta.N` prerelease, gated on the full test suite passing for
+  that commit. Fresh work without waiting for a stable cut; no
+  compatibility promises between betas. Opt in with `new.sh --beta`, or
+  ask `/ardd-update` to switch an existing install.
+
+Both channels resolve through the `~/.ardd/source` checkout the tooling
+owns: the curl bootstrap below (and `/ardd-update` afterwards) fetches tags
+and installs from the latest release on the recorded channel, never from
+the tip of a live checkout.
 
 ```sh
 # a brand-new project
-curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh | sh -s -- my-project
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- my-project
 
 # an existing project — run from inside it
 cd /path/to/your/project
-curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/new.sh | sh -s -- --existing
+curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/new.sh | sh -s -- --existing
 ```
 
 Installing from your own clone of this repo is **dev-mode** — the loop for
@@ -231,12 +254,14 @@ hacking on ARDD itself. It installs whatever state the clone holds, and
 
 Either route converges on `install.sh` — the only real install/upgrade entry
 point — so once it has run, `/ardd-update` handles all updates: it resolves
-the recorded source, moves the owned checkout to the latest release (a
-dev-mode checkout gets a warning and a confirmation instead), and re-runs
-`install.sh` from it. Release versions are semver with skill-pack
-semantics — MAJOR for a removed/renamed slash command or a breaking
-script/schema change, MINOR for additive skills or knobs, PATCH for prose
-and fixes — so a MAJOR bump is the cue to read the release notes first.
+the recorded source, moves the owned checkout to the latest release on the
+recorded channel (a dev-mode checkout gets a warning and a confirmation
+instead), and re-runs `install.sh` from it. Release versions are semver
+with skill-pack semantics — MAJOR for a removed/renamed slash command or a
+breaking script/schema change, MINOR for additive skills or knobs, PATCH
+for prose and fixes — so a MAJOR bump is the cue to read the release notes
+first. Prerelease tags carry the version the next stable will claim but
+bind none of those promises themselves.
 
 > **Note:** `npx skills add` is no longer a supported install channel. If you
 > have skill files without a completed install (e.g. from a prior `npx`
