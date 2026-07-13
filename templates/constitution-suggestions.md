@@ -63,6 +63,12 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** A caught error is either recovered from meaningfully — the operation can genuinely continue — or re-raised/propagated. Catch-and-continue with only a log line, or with nothing, is a documented, per-site exception, never a default pattern.
 **Rationale:** Swallowed errors turn failures into silent corruption discovered far from their cause.
 
+### No Backwards-Compatibility Shims in Greenfield
+**Section:** Core Principle
+**Signal:** Always
+**Suggested text:** Code with no external consumers carries no compatibility indirection — no wrapper functions preserving an old signature, no `_v2`-style parallel names, no re-export layers "for compatibility". When a signature or module changes, every call site is updated in the same change.
+**Rationale:** Compatibility shims in never-shipped code are pure debt — they accumulate immediately and protect no one.
+
 ---
 
 ## Signal: a backend/service or stateful runtime exists (`infrastructure.md`, `datamodel.md`, and/or `ui.md` present)
