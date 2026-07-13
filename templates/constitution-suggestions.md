@@ -33,6 +33,12 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** Every code change is preceded by a test that exercises the behavior being added or changed, written and confirmed to fail before any implementation code is written. A test must fail if the behavior it covers breaks — a test that merely mirrors the implementation or only asserts that its own mocks were called does not satisfy this requirement. A task without a test requirement is the exception (a pure research/decision task, or a documentation-only change), not the default.
 **Rationale:** Writing the test first documents intent before implementation bias sets in, and catches regressions immediately rather than after the fact. Without an explicit principle, skills and contributors tend to assume a testing discipline informally until a gap in coverage surfaces the hard way. Vacuous tests are worse than no tests — they report coverage the suite doesn't actually provide.
 
+### Never Weaken a Failing Test
+**Section:** Core Principle
+**Signal:** Always
+**Suggested text:** When a test fails, the fix is to the code or — with stated justification — a deliberately changed expectation. Deleting, skipping, or loosening an assertion to reach a passing state is prohibited unless explicitly called out and justified in the change.
+**Rationale:** Quietly weakened tests convert a failing suite into false confidence; the suite only means anything if red can't be resolved by lowering the bar.
+
 ### Simplicity / YAGNI
 **Section:** Core Principle
 **Signal:** Always
