@@ -1,12 +1,15 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-13 (constitution-suggestions catalog review planned and
-tasked: 14 feedback findings negotiated — 13 incorporated, F013 secrets
-entry declined —
-`plan-constitution-suggestions-quality-2026-07-13-4de0.md` approved,
-`tasks-constitution-suggestions-quality-e071.md` ready, 12 tasks / 4
-phases, net 21→20 catalog entries). Keep this current as artifacts are
-refined and open questions are resolved._
+_Updated: 2026-07-13 (constitution-suggestions catalog revision
+delivered: `tasks-constitution-suggestions-quality-e071.md` completed
+12/12 via delegated worktree, merged fast-forward to `main`, worktree
+reaped. Catalog now 23 entries — header curation criterion; 3 weak
+entries removed; Production Annotations moved to portfolio/demo;
+Pre-commit+CI merged into Deterministic Gates; Single Source of State
+stack-neutral; Test-First gains the vacuous-test rule; 5 new
+agent-failure-mode entries incl. add-time dependency version
+resolution). Keep this current as artifacts are refined and open
+questions are resolved._
 
 ## Artifact Status
 
@@ -32,9 +35,13 @@ surfaces DEFECTS.md was verified against — worth a re-run after it lands.
 None open —
 `feedback-constitution-suggestions-quality-review-123a.md` (14 items:
 13 incorporated, F013 secrets-hygiene entry declined) was consumed by
-`plan-constitution-suggestions-quality-2026-07-13-4de0.md` (approved
-2026-07-13); its tasks file
-`tasks-constitution-suggestions-quality-e071.md` is **ready**, 0/12.
+`plan-constitution-suggestions-quality-2026-07-13-4de0.md` and
+delivered: `tasks-constitution-suggestions-quality-e071.md`
+**completed 12/12** (2026-07-13, delegated worktree run, merged
+fast-forward to `main`, worktree reaped). Note for the record: the
+tasks file predicted 20 final catalog entries; the true count is 23
+(pre-edit catalog had 22, not 21; Phase 3 added 5, not 4) — content
+delivered exactly as specified, only the count prediction was wrong.
 
 ## Recent Releases
 
@@ -68,9 +75,6 @@ was reaped.
 
 ## Recommended Next Step
 
-`/ardd-implement` — execute
-`tasks-constitution-suggestions-quality-e071.md` (12 tasks: catalog
-header criterion, 3 removals, Production Annotations move, Deterministic
-Gates merge, Single Source of State reword, Test-First fold-in, 4 new
-agent-failure-mode entries, verification pass). (Push of `main` for the
-stale-update-network-check beta remains available whenever wanted.)
+Push `main` — publishes the catalog revision *and* the earlier
+stale-update-network-check feature as the next beta. Cut the next
+stable whenever you want consumers to have both.
