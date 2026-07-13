@@ -1,7 +1,9 @@
 ---
 slug: worktree-reap-and-fanout
-status: backlogged
+status: tasked
 logged: 2026-07-11
+plan: plan-worktree-reap-and-fanout-2026-07-12-c560.md
+tasks: tasks-worktree-reap-and-fanout-10f7.md
 ---
 
 A worktree-reap script removes delegated worktrees whose branch has merged into the default branch (clean tree only, refuse-never-resolve), wired into the post-merge step, and the delegation gate can fan out one worktree per independent ready tasks file instead of cautioning against a second in-flight run.
