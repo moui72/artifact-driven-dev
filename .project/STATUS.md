@@ -47,10 +47,11 @@ consumers repointed. Full history: GitHub Releases and
 
 ## Feature Backlog
 
-1 backlogged · 10 implemented · 1 retired — see `.project/features/`.
-Backlogged: `stale-update-network-check` (opt-in age-gated network fetch
-for /ardd-status's update check). Target it with
-`/ardd-plan stale-update-network-check`.
+0 backlogged · 1 tasked · 10 implemented · 1 retired — see
+`.project/features/`. Tasked: `stale-update-network-check` →
+`plan-stale-update-network-check-2026-07-13-cc79.md` (approved) →
+`tasks-stale-update-network-check-2dc8.md` (**ready**, 5 tasks /
+3 phases, test-first per Principle V).
 
 ## Audit
 
@@ -66,7 +67,7 @@ was reaped.
 
 ## Recommended Next Step
 
-Push `main` (publishes a beta with the docs rewrite + review fixes), then
-dispatch the stable-release workflow when ready so stable consumers pick
-it all up. Backlog when you want it: `/ardd-plan
-stale-update-network-check`.
+Run `/ardd-implement` to execute
+`tasks-stale-update-network-check-2dc8.md` (5 tasks: stamp/lint plumbing,
+test-first fetch in ardd-update-check.sh, docs). v0.9.2 stable shipped
+earlier today; this lands in the next cycle.
