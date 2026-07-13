@@ -1,7 +1,7 @@
 ---
 plan: plan-worktree-reap-and-fanout-2026-07-12-c560.md
 generated: 2026-07-12
-status: ready
+status: in-progress
 ---
 
 # Tasks
