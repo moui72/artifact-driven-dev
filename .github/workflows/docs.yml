@@ -1,0 +1,68 @@
+# docs — build and deploy the MkDocs rendering of docs/ to GitHub Pages.
+# Source-side only (Constitution Principle IV): governs this repo's docs
+# site; nothing here is installed into target projects.
+#
+# The PR-triggered build (no deploy) is the docs link-check step:
+# mkdocs.yml's `validation:` settings turn any dead internal link into a
+# warning, and --strict turns warnings into a failed build (Principle
+# VIII: the tool's built-in idiom, no custom link-check script).
+#
+# mkdocs-material is pinned to major 9: the Material team has announced
+# MkDocs 2.0 as backward-incompatible, so an unpinned install would break
+# this build without any change to this repo.
+
+name: docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'README.md'
+      - 'USAGE.md'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'README.md'
+      - 'USAGE.md'
+      - '.github/workflows/docs.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One Pages deployment at a time; don't cancel an in-flight deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install MkDocs Material
+        run: pip install 'mkdocs-material>=9,<10'
+      - name: Build (strict — dead links fail here)
+        run: mkdocs build --strict
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
