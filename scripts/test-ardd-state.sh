@@ -368,4 +368,26 @@ sh "$STATE" stamp "$CF" merge_policy yolo >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: bad merge_policy refused" 2 "$rc"
 
+# stamp update_check_max_age_days — positive-integer-validated, add + replace
+sh "$STATE" stamp "$CF" update_check_max_age_days 7 >/dev/null
+assert_file_grep "stamp: update_check_max_age_days set 7" "^update_check_max_age_days: 7" "$CF"
+fmend="$(grep -n '^---$' "$CF" | sed -n 2p | cut -d: -f1)"
+uline="$(grep -n '^update_check_max_age_days:' "$CF" | cut -d: -f1)"
+[ "$uline" -lt "$fmend" ] && ok "stamp: update_check_max_age_days inside frontmatter" || bad "stamp: update_check_max_age_days inside frontmatter — line $uline vs closing --- at $fmend"
+sh "$STATE" stamp "$CF" update_check_max_age_days 30 >/dev/null
+assert_file_grep "stamp: update_check_max_age_days replaced with 30" "^update_check_max_age_days: 30" "$CF"
+[ "$(grep -c '^update_check_max_age_days:' "$CF")" = "1" ] && ok "stamp: update_check_max_age_days no duplicate keys" || bad "stamp: update_check_max_age_days no duplicate keys"
+set +e
+sh "$STATE" stamp "$CF" update_check_max_age_days 0 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: update_check_max_age_days zero refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$CF" update_check_max_age_days -3 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: update_check_max_age_days negative refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$CF" update_check_max_age_days weekly >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: update_check_max_age_days non-numeric refused" 2 "$rc"
+
 exit "$fail"
