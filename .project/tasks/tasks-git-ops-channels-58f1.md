@@ -1,7 +1,7 @@
 ---
 plan: plan-git-ops-channels-2026-07-12-e77e.md
 generated: 2026-07-12
-status: ready
+status: in-progress
 ---
 
 # Tasks
