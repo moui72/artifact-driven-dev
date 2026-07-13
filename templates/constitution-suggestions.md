@@ -157,7 +157,7 @@ treat it as met — bias toward offering, not toward filtering out.
 
 ---
 
-## Signal: pre-commit tooling is plausible (npm/node, or any stack with linters + type-checkers)
+## Signal: deterministic check tooling is plausible (any stack with linters, type-checkers, or a test runner)
 
 ### Deterministic Gates
 **Section:** Quality Standard subsection
