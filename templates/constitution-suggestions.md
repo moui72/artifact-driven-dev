@@ -51,12 +51,6 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** Before implementing a custom mechanism to solve a problem in a concern already owned by a depended-on library, check whether that library already has a built-in, idiomatic way to solve it. Reaching for a hand-built solution without checking first is surfaced as a question before being built, not discovered as duplicated work later.
 **Rationale:** Hand-built mechanisms that duplicate a library's own built-in behavior create a maintenance burden and a recurring class of bugs where the custom logic and the library's internal assumptions drift out of sync.
 
-### Production Annotations
-**Section:** Core Principle
-**Signal:** Always
-**Suggested text:** Any implementation decision that would be unsafe, impractical, or architecturally wrong in a real production system is annotated at the point of use, under a `## Production Annotations` heading in the relevant artifact — never as inline prose elsewhere — describing what the shortcut does and what the correct production approach would be.
-**Rationale:** Reviewers and future contributors should see that a shortcut was a deliberate, understood tradeoff — not an oversight — and know where to look to find every one of them.
-
 ---
 
 ## Signal: a backend/service exists (`infrastructure.md` and/or `datamodel.md` present)
@@ -130,6 +124,12 @@ treat it as met — bias toward offering, not toward filtering out.
 **Signal:** Project Scope & Intent frames this as a portfolio, demo, or internal-only project
 **Suggested text:** This project's scope licenses specific, named leniencies (state exactly which: e.g. authentication, authorization, production hardening) that would be unacceptable in a deployed system. These leniencies do not lower the bar on code quality, architecture, testing, or engineering judgment elsewhere.
 **Rationale:** Naming the leniency explicitly prevents it from silently expanding to cover corners it was never meant to excuse.
+
+### Production Annotations
+**Section:** Core Principle
+**Signal:** Project Scope & Intent frames this as a portfolio, demo, or internal-only project
+**Suggested text:** Any implementation decision that would be unsafe, impractical, or architecturally wrong in a real production system is annotated at the point of use, under a `## Production Annotations` heading in the relevant artifact — never as inline prose elsewhere — describing what the shortcut does and what the correct production approach would be.
+**Rationale:** Reviewers and future contributors should see that a shortcut was a deliberate, understood tradeoff — not an oversight — and know where to look to find every one of them.
 
 ---
 

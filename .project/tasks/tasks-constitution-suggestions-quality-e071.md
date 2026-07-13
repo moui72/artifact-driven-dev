@@ -17,7 +17,7 @@ verification gate.
 
 - [x] T001 Add the curation criterion to the catalog's header prose (after the self-containment paragraph, before the Signals paragraph): an entry earns a slot only if it (a) targets a failure mode agents/contributors actually exhibit, and (b) states a bright-line rule checkable at the moment code is written — aspirational statements with no checkable moment don't qualify. (F014)
 - [x] T002 [parallel] Delete three entries wholesale: "Performance Budgets for User-Observable Operations" (UI section), "Component/Handler Reference Cleanup Across Framework Lifecycle Hooks" (UI section), and "No Vendored Dependency With a Nested `.git`" (Lower-priority hygiene section). Remove each entry's full block (heading through Rationale); leave section headings in place if other entries remain under them. (F002, F003, F004)
-- [ ] T003 Move the "Production Annotations" entry out of "Always suggest" into the "Signal: project frames itself as portfolio/demo/internal" section, after Explicit Leniency Scoping, keeping both as separate entries. Change its Signal line from "Always" to match that section's signal (Project Scope & Intent frames this as a portfolio, demo, or internal-only project). Suggested text and Rationale stay as they are. (F005)
+- [x] T003 Move the "Production Annotations" entry out of "Always suggest" into the "Signal: project frames itself as portfolio/demo/internal" section, after Explicit Leniency Scoping, keeping both as separate entries. Change its Signal line from "Always" to match that section's signal (Project Scope & Intent frames this as a portfolio, demo, or internal-only project). Suggested text and Rationale stay as they are. (F005)
 
 ## Phase 2: Merges and rewording
 
