@@ -1,5 +1,8 @@
 # Using artifact-driven-dev — start here
 
+> 📖 Browse these docs as a website:
+> **<https://moui72.github.io/artifact-driven-dev/>**
+
 ARDD is a workflow, not a generator: it gives you a place to put decisions
 you've already made, checks them for consistency, and turns them into an
 executable task list. This page is the map of the documentation; the

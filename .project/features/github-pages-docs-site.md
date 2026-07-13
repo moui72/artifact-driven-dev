@@ -1,6 +1,6 @@
 ---
 slug: github-pages-docs-site
-status: tasked
+status: implemented
 logged: 2026-07-13
 plan: plan-github-pages-docs-site-2026-07-13-3fb8.md
 tasks: tasks-github-pages-docs-site-d8e2.md

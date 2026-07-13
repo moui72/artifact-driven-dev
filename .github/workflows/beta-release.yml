@@ -23,6 +23,12 @@ on:
       - '.project/**'
       - 'docs/**'
       - '*.md'
+      # Docs-site config (mkdocs.yml + its deploy workflow) is rendering
+      # machinery for docs/**, which is already skipped — a docs-config-only
+      # push publishes nothing consumers install. Other workflow files stay
+      # publish-triggering deliberately; only the docs pipeline is exempt.
+      - 'mkdocs.yml'
+      - '.github/workflows/docs.yml'
 
 # Serialize beta publishes so two rapid pushes can't compute the same
 # beta N; never cancel — each qualifying push gets its beta.
