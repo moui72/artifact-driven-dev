@@ -211,6 +211,20 @@ files.
        On merge, run `/ardd-status`. On decline, note the work stays visible via
        `inflight-worktrees.sh` and `/ardd-status`'s in-flight section until
        merged.
+   - **After any successful merge (either `merge_policy` path), reap the
+     landed worktree** — run `worktree-reap.sh` (the installed copy at
+     `.claude/skills/ardd-scripts/worktree-reap.sh` if it exists, else the
+     coordinator's absolute path — the standard present-or-fallback rule),
+     before the post-merge `/ardd-status`. It deterministically removes
+     every worktree whose branch is fully merged into the default branch
+     and whose tree is clean, deleting the branch with `git branch -d`
+     (never `-D`, never forced) — no manual
+     `git worktree remove`/`git branch -d` sequence, ever. Include its
+     output in the completion report. On any `reaped=false` line, surface
+     the `reason=` verbatim (`unmerged`, `dirty`, `detached`,
+     `default-branch`, `remove-failed`) and **never force** the removal —
+     a kept worktree stays honestly visible via `inflight-worktrees.sh`
+     until it merges or the user deals with it by hand.
 
    Note: a delegated subagent must **never** run `/ardd-status` or write
    `STATUS.md` — either would trap `STATUS.md` inside the worktree branch.

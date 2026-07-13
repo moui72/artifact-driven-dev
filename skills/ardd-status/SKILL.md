@@ -48,6 +48,14 @@ the coordinator or the inline path.
    collaborative mode's in-flight channel. Collect both for the In-flight
    report section and STATUS.md line below (omit when nothing is in flight).
 
+   Additionally run `.claude/skills/ardd-scripts/worktree-reap.sh --dry-run`
+   (installed copy; absolute-path fallback, same present-or-fallback rule).
+   Any `candidate=` line is a worktree whose branch has fully merged into
+   the default branch with a clean tree — list each in the In Flight
+   section as "merged, reapable". **Visibility only: `/ardd-status` never
+   mutates worktrees** — the reap itself belongs to `/ardd-implement`'s
+   post-merge coordinator step (or the user).
+
    Also check for `.project/DEFECTS.md`. If present, read its last-verified
    date and defect count — this is read-only: `/ardd-status` never
    regenerates, edits, or appends to `DEFECTS.md` (that file belongs solely to
@@ -154,6 +162,8 @@ the coordinator or the inline path.
 
    ## In Flight
    - Worktree `<path>` (branch `<branch>`) — `<tasks-file>` <status>, <x/y>.
+   - Worktree `<path>` (branch `<branch>`) — merged, reapable (from
+     `worktree-reap.sh --dry-run`'s `candidate=` lines).
    - Draft PR #<n> `<title>` (collaborative mode only).
      (State that lives on a branch/worktree or an open draft PR, not yet
      merged to the default branch. Omit this section if step 1 found none.)
@@ -174,7 +184,8 @@ the coordinator or the inline path.
    - A line surfacing any orphaned completion flips found in step 1 (omit
      if none)
    - An "In flight" line/section surfacing the `inflight-worktrees.sh`
-     output from step 1 (and the draft-PR list, in collaborative mode) —
+     output from step 1 (any `worktree-reap.sh --dry-run` candidates as
+     "merged, reapable", and the draft-PR list, in collaborative mode) —
      per-worktree branch + tasks file + progress; omit if nothing is in
      flight. This is how a re-entering session sees work that lives on a
      sibling worktree or open PR and hasn't merged yet.

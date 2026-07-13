@@ -33,7 +33,7 @@ status: in-progress
 
 ## Phase 2: Wiring
 
-- [ ] T002 Wire the reap into `skills/ardd-implement/SKILL.md`'s
+- [x] T002 Wire the reap into `skills/ardd-implement/SKILL.md`'s
   post-delegation coordinator steps: after a successful merge (either
   `merge_policy` path), run `worktree-reap.sh` (installed copy at
   `.claude/skills/ardd-scripts/worktree-reap.sh`, coordinator
