@@ -55,7 +55,7 @@ status: in-progress
 
 ## Phase 3: Fan-out
 
-- [ ] T004 Update `skills/ardd-implement/SKILL.md`'s pick/delegation flow
+- [x] T004 Update `skills/ardd-implement/SKILL.md`'s pick/delegation flow
   for fan-out: when `tasks-list.sh` shows more than one `ready` file (and
   `delegation` is `eager` or the user answers yes), offer multi-select
   delegation — one `Agent` worktree subagent per selected file, launched
