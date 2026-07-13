@@ -1,7 +1,7 @@
 ---
 plan: plan-plan-approval-presentation-2026-07-13-14cf.md
 generated: 2026-07-13
-status: ready
+status: in-progress
 ---
 
 # Tasks
