@@ -54,11 +54,12 @@ None open — all feedback files consumed and `planned`.
 
 ## Feature Backlog
 
-1 backlogged · 9 implemented · 1 retired — see `.project/features/`.
+0 backlogged · 1 tasked · 9 implemented · 1 retired — see `.project/features/`.
 
-- `worktree-reap-and-fanout` — backlogged, now UNBLOCKED: deterministic
-  reap of merged delegated worktrees + delegation-gate fan-out (its merge-
-  driver dependency landed).
+- `worktree-reap-and-fanout` — **tasked** (the last backlog item):
+  `plan-worktree-reap-and-fanout-2026-07-12-c560.md` (approved) →
+  `tasks-worktree-reap-and-fanout-10f7.md` (ready, 0/5): reap script
+  test-first, post-merge wiring, status visibility, multi-select fan-out.
 
 ## Audit
 
@@ -69,8 +70,7 @@ it) and 1 risk (smoke key unprovisioned). The register-enum [Q] is resolved.
 
 ## Recommended Next Step
 
-`/ardd-plan worktree-reap-and-fanout` — the last backlogged feature, now
-unblocked (parallel background runs with conflict-free merges + automatic
-worktree hygiene). `main` has unpushed commits — push when ready. Also
-open: audit checklist (one item moot post-retirement); provisioning the
-smoke key when desired.
+Run `/ardd-implement` on `tasks-worktree-reap-and-fanout-10f7.md` — the
+backlog's final item. `main` has unpushed commits — push when ready. Also
+open: audit checklist (one item moot post-retirement); smoke key
+provisioning when desired.
