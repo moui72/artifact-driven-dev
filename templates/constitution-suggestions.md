@@ -135,17 +135,11 @@ treat it as met — bias toward offering, not toward filtering out.
 
 ## Signal: pre-commit tooling is plausible (npm/node, or any stack with linters + type-checkers)
 
-### Pre-commit Enforcement
+### Deterministic Gates
 **Section:** Quality Standard subsection
 **Signal:** The project uses a language/stack with linting and/or type-checking tools available
-**Suggested text:** A pre-commit hook runs lint, type-check, and the test suite, in that order, before a commit is accepted. Bypassing the hook is prohibited except in a documented emergency, and any bypass is followed immediately by a commit that re-establishes the passing state.
-**Rationale:** Automated pre-commit gates catch regressions at the cheapest possible point — before they reach the branch — rather than relying on discipline alone.
-
-### CI Enforcement
-**Section:** Quality Standard subsection
-**Signal:** The project uses a language/stack with linting and/or type-checking tools available
-**Suggested text:** The same lint, type-check, and test suite required by the pre-commit hook also run in CI on every push and pull request, and a failing run blocks merge. CI is the actual gate of record; the pre-commit hook is a local convenience that catches the same issues earlier and does not substitute for it, since a hook can be skipped, uninstalled, or never configured on a given clone.
-**Rationale:** A pre-commit hook only enforces discipline on machines where it's installed and not bypassed; CI is what actually guarantees nothing failing reaches the merged branch.
+**Suggested text:** Lint, type-check, and the test suite run in CI on every push and pull request, and a failing run blocks merge — CI is the gate of record. The same checks also run in a local pre-commit hook as an earlier, cheaper catch, but the hook never substitutes for CI, since a hook can be skipped, uninstalled, or never configured on a given clone. Bypassing the hook is prohibited except in a documented emergency, and any bypass is followed immediately by a commit that re-establishes the passing state.
+**Rationale:** Automated gates catch regressions at the cheapest possible point rather than relying on discipline alone, and a hook only enforces discipline on machines where it's installed and not bypassed; CI is what actually guarantees nothing failing reaches the merged branch.
 
 ---
 
