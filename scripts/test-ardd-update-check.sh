@@ -228,4 +228,103 @@ set -e
   && bad "unknown ARDD_CHANNEL still wrote a version file" \
   || ok "unknown ARDD_CHANNEL wrote nothing"
 
+# --- update_check_max_age_days: opt-in, age-gated fetch (stale-update-network-check) ---
+# The check fetches (`git fetch --tags`) only when the constitution sets the
+# knob, the source is the release-channel owned checkout, and FETCH_HEAD is
+# older than N days (missing = stale). Everything above this line ran without
+# a constitution — the absent-field default (never fetch) is already pinned.
+
+mkconst() { # mkconst <target> <days>  (empty days = field absent)
+  mkdir -p "$1/.project/artifacts"
+  if [ -n "$2" ]; then
+    printf -- '---\nstatus: stable\nlast_updated: 2026-07-13\nupdate_check_max_age_days: %s\n---\n# Constitution\n' "$2" > "$1/.project/artifacts/constitution.md"
+  else
+    printf -- '---\nstatus: stable\nlast_updated: 2026-07-13\n---\n# Constitution\n' > "$1/.project/artifacts/constitution.md"
+  fi
+}
+
+# fixture remote (never the real network) + an "owned" clone under a fake ARDD_HOME
+ORIGIN="$WORK/fetch-origin"
+mkdir -p "$ORIGIN/skills"
+printf '#!/usr/bin/env sh\n' > "$ORIGIN/install.sh"
+( cd "$ORIGIN" && git init -q -b main && git add -A && git commit -q -m one )
+git -C "$ORIGIN" tag v2.0.0
+OTIP="$(git -C "$ORIGIN" rev-parse --short HEAD)"
+FHOME="$WORK/fetch-home"
+git clone -q "$ORIGIN" "$FHOME/source"
+mkdir -p "$FHOME/source/skills"   # ORIGIN's skills/ is empty; clones drop empty dirs
+
+# a new release appears on the remote only — invisible without a fetch
+( cd "$ORIGIN" && printf 'a\n' >> install.sh && git add -A && git commit -q -m two )
+git -C "$ORIGIN" tag v2.1.0
+
+# (a) field set + FETCH_HEAD absent (= stale) -> fetch, behind the new tag
+T20="$WORK/t20"; mkver2 "$T20" "$OTIP" "$FHOME/source"; mkconst "$T20" 1
+[ -f "$FHOME/source/.git/FETCH_HEAD" ] && bad "precondition: fresh clone has no FETCH_HEAD"
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T20")"
+[ "$out" = "behind installed=$OTIP latest-release=v2.1.0" ] \
+  && ok "opt-in fetch: missing FETCH_HEAD is stale, new remote tag seen" || bad "opt-in fetch (absent FETCH_HEAD) — got '$out'"
+
+# (b) field set + fresh FETCH_HEAD (the fetch above just wrote it) -> no
+# fetch: a newer remote tag stays invisible
+( cd "$ORIGIN" && printf 'b\n' >> install.sh && git add -A && git commit -q -m three )
+git -C "$ORIGIN" tag v2.2.0
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T20")"
+[ "$out" = "behind installed=$OTIP latest-release=v2.1.0" ] \
+  && ok "opt-in fetch: fresh FETCH_HEAD -> no fetch, new remote tag invisible" || bad "fresh FETCH_HEAD — got '$out'"
+
+# (a2) field set + FETCH_HEAD older than N days -> fetch again
+touch -mt 202601010000 "$FHOME/source/.git/FETCH_HEAD"
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T20")"
+[ "$out" = "behind installed=$OTIP latest-release=v2.2.0" ] \
+  && ok "opt-in fetch: stale FETCH_HEAD -> fetch, new remote tag seen" || bad "stale FETCH_HEAD — got '$out'"
+
+# (c) field absent -> no fetch ever (default unchanged); invalid value -> same skip
+( cd "$ORIGIN" && printf 'c\n' >> install.sh && git add -A && git commit -q -m four )
+git -C "$ORIGIN" tag v2.3.0
+touch -mt 202601010000 "$FHOME/source/.git/FETCH_HEAD"
+mkconst "$T20" ""
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T20")"
+[ "$out" = "behind installed=$OTIP latest-release=v2.2.0" ] \
+  && ok "field absent: no fetch, default unchanged" || bad "field absent — got '$out'"
+mkconst "$T20" 0
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T20")"
+[ "$out" = "behind installed=$OTIP latest-release=v2.2.0" ] \
+  && ok "invalid field value (0): fetch skipped" || bad "invalid field value — got '$out'"
+
+# (d) field set + unreachable remote -> note=fetch-failed, local comparison, exit 0
+mkconst "$T20" 1
+git -C "$FHOME/source" remote set-url origin "$WORK/gone-origin"
+touch -mt 202601010000 "$FHOME/source/.git/FETCH_HEAD"
+set +e
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T20")"; rc=$?
+set -e
+[ "$out" = "behind installed=$OTIP latest-release=v2.2.0 note=fetch-failed" ] && [ "$rc" -eq 0 ] \
+  && ok "unreachable remote: note=fetch-failed, local comparison, exit 0" || bad "fetch-failed — got '$out' rc=$rc"
+git -C "$FHOME/source" remote set-url origin "$ORIGIN"
+
+# (e) dev-mode source never fetches, regardless of the field
+DEVSRC="$WORK/dev-src"
+git clone -q "$ORIGIN" "$DEVSRC"
+mkdir -p "$DEVSRC/skills"
+rm -f "$DEVSRC/.git/FETCH_HEAD"
+( cd "$ORIGIN" && printf 'd\n' >> install.sh && git add -A && git commit -q -m five )
+git -C "$ORIGIN" tag v2.4.0
+T21="$WORK/t21"; mkver2 "$T21" "$OTIP" "$DEVSRC"; mkconst "$T21" 1
+out="$(ARDD_HOME="$FHOME" sh "$CHECK" "$T21")"
+[ "$out" = "behind installed=$OTIP latest-release=v2.3.0" ] \
+  && ok "dev-mode source: no fetch despite the field" || bad "dev-mode no-fetch — got '$out'"
+[ -f "$DEVSRC/.git/FETCH_HEAD" ] \
+  && bad "dev-mode source was fetched (FETCH_HEAD written)" \
+  || ok "dev-mode source untouched (no FETCH_HEAD)"
+
+# (e2) self-hosted never fetches, regardless of the field
+mkconst "$SH" 1
+out="$(sh "$CHECK" "$SH")"
+[ "$out" = "self-hosted commit=$SHTIP" ] \
+  && ok "self-hosted: output unchanged despite the field" || bad "self-hosted with field — got '$out'"
+[ -f "$SH/.git/FETCH_HEAD" ] \
+  && bad "self-hosted source was fetched (FETCH_HEAD written)" \
+  || ok "self-hosted untouched (no FETCH_HEAD)"
+
 exit "$fail"

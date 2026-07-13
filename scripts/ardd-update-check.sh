@@ -6,10 +6,17 @@
 # standing decision, 2026-07-12): "behind" means "the installed commit is
 # not the latest release's commit" — the tip of the source no longer
 # matters when releases exist. A source with no release tags yet falls
-# back to the original tip comparison, noted. LOCAL git only — no fetch,
-# no network (v1 scope decision, plan-self-update-from-consumer;
-# source-resolve.sh owns fetching). Prints exactly one machine-readable
-# line; always exits 0 unless inputs are unreadable.
+# back to the original tip comparison, noted. LOCAL git only by default —
+# no fetch, no network (v1 scope decision, plan-self-update-from-consumer;
+# source-resolve.sh owns fetching). One opt-in exception
+# (stale-update-network-check): when the target's constitution sets
+# `update_check_max_age_days: <positive integer>` AND the source is the
+# release-channel owned checkout (never dev-mode, never self-hosted) AND
+# the source's .git/FETCH_HEAD is older than that many days (missing =
+# stale), the check runs `git fetch --tags` first so the comparison sees
+# new releases; a failed fetch appends `note=fetch-failed` and the
+# comparison proceeds against local tags. Prints exactly one
+# machine-readable line; always exits 0 unless inputs are unreadable.
 #
 #   no-version-file                      never installed / file absent
 #   no-source-path                       pre-Source-Path install; re-run install.sh
@@ -100,6 +107,37 @@ if [ -z "$tip" ]; then
   exit 0
 fi
 
+# Opt-in, age-gated fetch (stale-update-network-check). Guarded three ways:
+# the constitution must set update_check_max_age_days to a positive integer
+# (absent/invalid = skip, the always-local default); the source must be the
+# release-channel owned checkout at ${ARDD_HOME:-$HOME/.ardd}/source — a
+# dev-mode checkout is read, never mutated, and the self-hosted case exited
+# above; and FETCH_HEAD must be older than N days (missing = stale). File
+# age via `find -mtime +N` (prints the path when strictly older) — stat
+# flags differ between BSD/macOS and GNU. A failed fetch appends
+# note=fetch-failed and the comparison proceeds against local tags.
+fetchnote=""
+max_age="$(sed -n 's/^update_check_max_age_days:[[:space:]]*//p' "$TARGET/.project/artifacts/constitution.md" 2>/dev/null | head -1)"
+case "$max_age" in
+  ''|0*|*[!0-9]*) max_age="" ;;
+esac
+if [ -n "$max_age" ]; then
+  owned="${ARDD_HOME:-$HOME/.ardd}/source"
+  src_phys="$(cd "$src" 2>/dev/null && pwd -P || echo "$src")"
+  owned_phys="$( [ -d "$owned" ] && cd "$owned" && pwd -P || echo "$owned" )"
+  if [ "$src_phys" = "$owned_phys" ]; then
+    gitdir="$(git -C "$src" rev-parse --absolute-git-dir 2>/dev/null || true)"
+    stale=1
+    if [ -n "$gitdir" ] && [ -f "$gitdir/FETCH_HEAD" ] \
+      && [ -z "$(find "$gitdir/FETCH_HEAD" -mtime +"$max_age" 2>/dev/null)" ]; then
+      stale=0
+    fi
+    if [ "$stale" -eq 1 ] && ! git -C "$src" fetch --tags --quiet >/dev/null 2>&1; then
+      fetchnote=" note=fetch-failed"
+    fi
+  fi
+fi
+
 # Compare within the recorded channel (absent or unrecognized = stable —
 # old files keep parsing). Latest release = highest tag admitted by the
 # channel's filter, same selection rules as source-resolve.sh --channel:
@@ -119,12 +157,12 @@ fi
 if [ -n "$latest" ]; then
   release_commit="$(git -C "$src" rev-parse --short "$latest^{commit}" 2>/dev/null || true)"
   if same_commit "$installed" "$release_commit"; then
-    echo "up-to-date commit=$installed$fallback$chtoken"
+    echo "up-to-date commit=$installed$fallback$chtoken$fetchnote"
   else
-    echo "behind installed=$installed latest-release=$latest$fallback$chtoken"
+    echo "behind installed=$installed latest-release=$latest$fallback$chtoken$fetchnote"
   fi
 elif same_commit "$installed" "$tip"; then
-  echo "up-to-date commit=$installed note=no-releases$fallback$chtoken"
+  echo "up-to-date commit=$installed note=no-releases$fallback$chtoken$fetchnote"
 else
-  echo "behind installed=$installed source-tip=$tip note=no-releases$fallback$chtoken"
+  echo "behind installed=$installed source-tip=$tip note=no-releases$fallback$chtoken$fetchnote"
 fi
