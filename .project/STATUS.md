@@ -1,7 +1,8 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (two-channel git-ops MERGED — constitution v1.8.0;
-awaiting cutover: the next push of main mints the first beta). Keep this current as artifacts are refined and open
+_Updated: 2026-07-13 (CUTOVER COMPLETE — v0.9.1-beta.1 minted by the maiden
+beta run, v0.9.1 stable cut by dispatch, release branch created and
+protected; the two-channel system is fully live). Keep this current as artifacts are refined and open
 questions are resolved._
 
 ## Artifact Status
@@ -68,12 +69,10 @@ it) and 1 risk (smoke key unprovisioned). The register-enum [Q] is resolved.
 
 ## Recommended Next Step
 
-**Cutover checklist (user acts):** (1) push `main` — the beta workflow's
-maiden run mints `v0.9.1-beta.1` once lint goes green (this is its
-acceptance test); (2) dispatch stable-release (Actions → Run workflow,
-bump=patch) when ready — creates the `release` branch and cuts `v0.9.1`
-(until then the documented `…/release/new.sh` URL 404s; `main`'s copy
-serves beta/dev); (3) optionally protect `release` in GitHub settings.
-Also open: audit checklist; smoke key provisioning. Note: workflows need
-default Actions token write permissions (`permissions: contents: write`
-declared — verify if org-restricted).
+**Cutover done (2026-07-13):** v0.9.1-beta.1 published by the maiden
+beta run (push → lint 23s → beta-release 40s); v0.9.1 stable cut by
+dispatch (14s — release branch created, ff-merged, tagged Latest);
+release branch protected (no force-push/deletion, linear history,
+enforce_admins). The loop is fully automatic now. Still open: audit
+checklist (3 suggestions + smoke-key risk); consumers pick up v0.9.1 on
+their next /ardd-update.
