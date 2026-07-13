@@ -12,6 +12,11 @@ principles by number, and no reference to other catalog entries by name.
 Any entry can be accepted while its neighbors are rejected — wording must
 not depend on a sibling being present.
 
+An entry earns a slot in this catalog only if it (a) targets a failure mode
+agents or contributors actually exhibit, and (b) states a bright-line rule
+checkable at the moment code is written. Aspirational statements with no
+checkable moment don't qualify.
+
 Signals are read from what the invoking skill already knows: which
 artifacts are being created (`/ardd-init` step 3 / its codebase survey, step
 3), and stack/framework facts already established (the conversation on the
