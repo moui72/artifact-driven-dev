@@ -108,10 +108,16 @@ ordinary code-change tasks.
 Each item's checkbox uses the same 3-state resolution convention as
 `audit.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
 plan, `[-]` declined (an override the user chose not to take). `/ardd-plan`
-step 5 already writes these marks as it processes each item — feedback shares
+step 4 already writes these marks as it processes each item — feedback shares
 the convention rather than inventing its own.
 
-Once the plan is approved, `/ardd-plan` flips
-each consumed feedback file to `status: planned` and stamps `plan:` with its
-own filename. Planned feedback files are not edited further — they're the
-historical record of what prompted the plan.
+Feedback bookkeeping finishes at `/ardd-plan`'s step-4 negotiation —
+before the approval checkpoint, not once the plan is approved: as each
+item's accept/decline decision lands, `/ardd-plan` marks it
+(`ardd-state.sh feedback-mark`), and once every item in a file is
+resolved it flips the file to `status: planned` and stamps `plan:` with
+the minted plan filename in one validated step
+(`ardd-state.sh feedback-planned`). A file with unresolved items stays
+`open` — `feedback-planned` refuses it — and a later `/ardd-plan` run
+picks up the remainder. Planned feedback files are not edited further —
+they're the historical record of what prompted the plan.

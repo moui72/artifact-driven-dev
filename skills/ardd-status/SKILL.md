@@ -10,9 +10,10 @@ Non-destructive cross-artifact consistency and quality check. Discovers and
 reads all artifacts present in `.project/artifacts/`, then reports gaps,
 contradictions, and implied-but-undefined decisions.
 
-`/ardd-backlog`, `/ardd-plan`, `/ardd-refine`,
+`/ardd-backlog`, `/ardd-plan`,
+`/ardd-refine` (including its create path, when relevant),
 `/ardd-feedback`, `/ardd-implement` (on tasks-file completion, in both
-execution and reconcile mode), `/ardd-refine`'s create path (when relevant), and
+execution and reconcile mode), and
 `/ardd-defects` invoke this skill automatically as their final step, since
 each of those changes state `STATUS.md` should reflect. This is the
 canonical list — other docs referencing which skills auto-trigger analyze
@@ -27,7 +28,7 @@ anytime you want a fresh check outside those flows.
 **Run only from the primary checkout, never inside a delegated worktree.**
 `/ardd-status` is the sole writer of `STATUS.md`; running it inside a
 worktree would trap that write on the worktree's branch instead of the
-default branch. Delegated Delegated `/ardd-implement` subagents are
+default branch. Delegated `/ardd-implement` subagents are
 told explicitly not to invoke it — the terminal analyze handoff belongs to
 the coordinator or the inline path.
 

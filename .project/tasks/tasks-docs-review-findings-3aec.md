@@ -8,14 +8,14 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: skill-prose fixes (F001–F003)
 
-- [ ] T001 [parallel] (F001) In `skills/ardd-feedback/SKILL.md`, rewrite the
+- [x] T001 [parallel] (F001) In `skills/ardd-feedback/SKILL.md`, rewrite the
   "Consumption by /ardd-plan" section's final paragraph: consumed feedback
   files are marked (`feedback-mark`) and flipped to `status: planned` with
   the `plan:` stamp (`feedback-planned`) at /ardd-plan's step-4 negotiation
   time — before the approval checkpoint — not "once the plan is approved."
   Keep the surrounding 3-state checkbox prose intact; note that a file with
   unresolved items stays `open` for a later run (matching /ardd-plan step 4).
-- [ ] T002 [parallel] (F002, F003) In `skills/ardd-status/SKILL.md`: fix the
+- [x] T002 [parallel] (F002, F003) In `skills/ardd-status/SKILL.md`: fix the
   doubled word "Delegated Delegated" in the run-only-from-primary paragraph,
   and collapse the auto-run list's duplicated `/ardd-refine` mention
   ("/ardd-refine, ... /ardd-refine's create path (when relevant)") into a
