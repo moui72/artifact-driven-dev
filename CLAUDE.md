@@ -23,6 +23,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-new.sh                  # regression test for new.sh (hermetic — pins $ARDD_SOURCE, never clones)
 ./scripts/release.sh [--dry-run] <vX.Y.Z> # cut a release: validate (clean/on-default/suite green), SSH-signed tag, push, gh release
 ./scripts/test-release.sh              # regression test for release.sh's refusal logic (fixture repos; network steps untested by design)
+./scripts/next-version.sh <beta|stable [major|minor|patch]> # print the next tag (source-side; called by the release workflows, never installed)
+./scripts/test-next-version.sh         # regression test for next-version.sh (fixture repos; pins the versionsort.suffix=-beta. ordering trap)
 ./scripts/source-resolve.sh [path]     # resolve a Source-Path to the release channel: fetch ~/.ardd/source, checkout latest semver tag; other paths = channel=dev, never mutated
 ./scripts/test-source-resolve.sh       # regression test for source-resolve.sh (local fixture remotes; pins v:refname ordering)
 ./scripts/lint-docs.sh                 # verify README/USAGE/guides only reference real skill names
