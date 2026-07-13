@@ -24,7 +24,8 @@ Subcommands include: `slug` (deterministic kebab sanitization), `mint
 `plan-flip`, `tasks-flip`, `task-check`, `next-task` (tasks files),
 `feedback-mark` / `feedback-planned` (feedback bookkeeping), and `stamp
 <file> <field> <value>` (exactly these frontmatter fields: `last_updated`,
-`diagram_status`, `next_step_prompt`, `delegation`, `merge_policy`).
+`diagram_status`, `next_step_prompt`, `delegation`, `merge_policy`,
+`update_check_max_age_days`).
 
 ### `upsert-section.sh <file> "<Header>"`
 

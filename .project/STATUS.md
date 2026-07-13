@@ -47,11 +47,13 @@ consumers repointed. Full history: GitHub Releases and
 
 ## Feature Backlog
 
-0 backlogged · 1 tasked · 10 implemented · 1 retired — see
-`.project/features/`. Tasked: `stale-update-network-check` →
-`plan-stale-update-network-check-2026-07-13-cc79.md` (approved) →
-`tasks-stale-update-network-check-2dc8.md` (**ready**, 5 tasks /
-3 phases, test-first per Principle V).
+0 backlogged · 11 implemented · 1 retired — see `.project/features/`.
+Newest implemented: `stale-update-network-check` (2026-07-13) — opt-in
+`update_check_max_age_days` workflow knob; `ardd-update-check.sh` now
+fetches tags on the owned checkout when opted in and `FETCH_HEAD` is
+older than N days (`note=fetch-failed` fallback; dev-mode/self-hosted
+exempt). Delivered test-first: +19 regression cases across three test
+files.
 
 ## Audit
 
@@ -67,7 +69,6 @@ was reaped.
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute
-`tasks-stale-update-network-check-2dc8.md` (5 tasks: stamp/lint plumbing,
-test-first fetch in ardd-update-check.sh, docs). v0.9.2 stable shipped
-earlier today; this lands in the next cycle.
+Push `main` — publishes the stale-update-network-check feature as the
+next beta (v0.9.3-beta.1; MINOR-worthy content: additive knob + script
+behavior). Cut the next stable whenever you want consumers to have it.
