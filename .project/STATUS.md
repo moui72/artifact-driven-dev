@@ -4,8 +4,8 @@ _Updated: 2026-07-13 (documentation rewritten ground-up: minimal README,
 USAGE as index + How-do-I routing + picker ergonomics notes,
 docs/{concepts,install,example}.md, 9 guides incl. from-spec-kit, full
 reference set with generator-backed skill pages; validated by a
-four-agent review — doc findings fixed, system findings captured as open
-feedback). Keep this current as artifacts are refined and open questions
+four-agent review — doc findings fixed, system findings planned and
+tasked). Keep this current as artifacts are refined and open questions
 are resolved._
 
 ## Artifact Status
@@ -29,12 +29,12 @@ surfaces DEFECTS.md was verified against — worth a re-run after it lands.
 
 ## Feedback
 
-1 open feedback file — `feedback-docs-review-findings-f868.md` (from the
-2026-07-13 four-agent documentation review): 3 bugs (skill-prose
-inconsistencies/typos in ardd-feedback and ardd-status SKILL.md), 1 UX
-(`retired` register status undocumented), 1 reconsidered (the
-"(formerly ardd-X)" description suffixes are past their planned removal
-window). Picked up by the next `/ardd-plan`.
+None open — `feedback-docs-review-findings-f868.md` (all 5 items
+incorporated) consumed by `plan-docs-review-findings-2026-07-13-1cf4.md`
+(approved 2026-07-13), which produced
+`tasks-docs-review-findings-3aec.md` (**ready**, 6 tasks / 4 phases:
+skill-prose fixes, document `retired`, drop the "(formerly ardd-X)"
+suffixes + regenerate, CLAUDE.md convention note).
 
 ## Recent Releases
 
@@ -59,12 +59,11 @@ and 1 risk (smoke key unprovisioned).
 
 ## In Flight
 
-Nothing — no sibling worktrees, no reap candidates. (The documentation
-rewrite — 22 changed/new paths — sits uncommitted in the primary
-checkout's working tree.)
+Nothing — no sibling worktrees, no reap candidates. (The docs rewrite is
+committed and pushed — `694431d`, published as v0.9.2-beta.1; the new
+plan/tasks/feedback state sits uncommitted in the working tree.)
 
 ## Recommended Next Step
 
-Commit the documentation rewrite (touches `scripts/`, so the push will
-cut a beta), then run `/ardd-plan feedback-docs-review-findings-f868.md`
-to turn the review's system-level findings into tasks.
+Run `/ardd-implement` to execute `tasks-docs-review-findings-3aec.md`
+(6 prose/frontmatter tasks, PATCH-level).
