@@ -68,7 +68,7 @@ status: in-progress
   driver, code conflicts still abort-and-ask per `merge_policy`). The
   same-file claim check stays a hard exclusion from the pick list.
 
-- [ ] T005 [parallel] Docs: CLAUDE.md commands block gains
+- [x] T005 [parallel] Docs: CLAUDE.md commands block gains
   `worktree-reap.sh`/`test-worktree-reap.sh`; its worktree-native-state
   notes gain the reap step and fan-out mode (and drop any "nothing removes
   a merged worktree" phrasing); README/USAGE delegation narratives
