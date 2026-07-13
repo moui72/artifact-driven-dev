@@ -1,14 +1,14 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-12 (reap+fanout MERGED — parallel-agent flow complete;
-two-channel git-ops planned+tasked, delegated run in flight). Keep this current as artifacts are refined and open
+_Updated: 2026-07-12 (two-channel git-ops MERGED — constitution v1.8.0;
+awaiting cutover: the next push of main mints the first beta). Keep this current as artifacts are refined and open
 questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.7.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.8.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -68,10 +68,12 @@ it) and 1 risk (smoke key unprovisioned). The register-enum [Q] is resolved.
 
 ## Recommended Next Step
 
-In flight: delegated run on `tasks-git-ops-channels-58f1.md` (0/6 —
-constitution v1.8.0, next-version.sh, beta+stable workflows, channel
-plumbing; release.sh retires). On its merge: the user cutover checklist
-(push main = first live beta; dispatch first stable; optionally protect
-the release branch). `main` has many unpushed commits — the first
-post-merge push doubles as the beta workflow's maiden run. Also open:
-audit checklist; smoke key provisioning.
+**Cutover checklist (user acts):** (1) push `main` — the beta workflow's
+maiden run mints `v0.9.1-beta.1` once lint goes green (this is its
+acceptance test); (2) dispatch stable-release (Actions → Run workflow,
+bump=patch) when ready — creates the `release` branch and cuts `v0.9.1`
+(until then the documented `…/release/new.sh` URL 404s; `main`'s copy
+serves beta/dev); (3) optionally protect `release` in GitHub settings.
+Also open: audit checklist; smoke key provisioning. Note: workflows need
+default Actions token write permissions (`permissions: contents: write`
+declared — verify if org-restricted).
