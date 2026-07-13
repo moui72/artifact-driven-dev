@@ -51,7 +51,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: wrap-up
 
-- [ ] T006 Update CLAUDE.md's naming-convention bullet (the "Renamed skills
+- [x] T006 Update CLAUDE.md's naming-convention bullet (the "Renamed skills
   carry '(formerly ardd-X)' for one release cycle..." sentence) to record
   that the suffixes were dropped in this change, so the convention text
   stops prescribing an already-completed action.

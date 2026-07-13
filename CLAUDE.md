@@ -518,8 +518,10 @@ reconcile mode's gap identification).
     when a plausibly-confusable neighbor exists — one clause routing the
     wrong input to the right skill ("bugs … belong in /ardd-feedback
     instead"; "takes no proposal input — vet with /ardd-research").
-    Renamed skills carry "(formerly ardd-X)" for one release cycle after
-    v1.0.0 — drop those suffixes in the release after next, not sooner.
+    The v1.0.0 renames carried "(formerly ardd-X)" suffixes for one
+    release cycle; those suffixes were dropped 2026-07-13. A future
+    rename should follow the same pattern: carry the suffix for one
+    release cycle, then drop it.
 - **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `refactor:`,
   `chore:`, `docs:`, etc.) — matches existing repo history.
 - **Skill files are the product.** A `SKILL.md` edit is a behavior change to
