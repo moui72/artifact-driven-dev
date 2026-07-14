@@ -19,7 +19,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   rewrite to "the user('s) ..." if ambiguous in context, otherwise leave
   as-is. No test requirement — documentation-only change (Principle V
   exception).
-- [ ] T002 [parallel] Review `skills/ardd-plan/SKILL.md` for ambiguous
+- [x] T002 [parallel] Review `skills/ardd-plan/SKILL.md` for ambiguous
   pronouns (flagged lines ~77, 136, 213, 286, 297, 304, 350). Pay
   particular attention to line 350's "the plan you just wrote" — the agent
   wrote it, the human is re-reading it at the approval checkpoint — resolve

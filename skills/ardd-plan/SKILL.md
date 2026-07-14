@@ -74,8 +74,8 @@ for the named plan; steps 2–10 do not run.
    truth, already accepted there (decision record 0005). Set `<slug>` to the
    first feature-slug argument if any were passed, else a freshly generated
    short arbitrary slug (4 hex chars, e.g. `openssl rand -hex 2` → `f2ed`).
-   A worktree still works if you want isolation — set one up yourself and
-   re-run from there; this skill never delegates to a worktree subagent:
+   A worktree still works if the user wants isolation — set one up manually
+   and re-run from there; this skill never delegates to a worktree subagent:
    the draft plan and tasks file this run produces are themselves the state
    the next steps need to see, and isolating them in a worktree would trap
    them there until a manual merge.
@@ -133,7 +133,7 @@ for the named plan; steps 2–10 do not run.
 
 3. **If feature slugs were passed as arguments**, design and apply their
    artifact changes now — this absorbs what `/ardd-backlog` used to do
-   eagerly, deferred to the moment you actually choose to work an idea:
+   eagerly, deferred to the moment the user actually chooses to work an idea:
 
    a. **Look up each slug** in the feature register — read
       `.project/features/<slug>.md` and its frontmatter `status`. If the
@@ -210,7 +210,7 @@ for the named plan; steps 2–10 do not run.
       violations, report new `[OPEN: ...]` items. This keeps the artifact set
       internally consistent before the plan itself is drafted against it.
 
-   Remember which feature slugs were targeted here — you'll record them in
+   Remember which feature slugs were targeted here — the agent records them in
    the plan's frontmatter (step 9). Their `Status` flips from `backlogged`
    to `planned` at the tasking half (step 11), when this plan is approved —
    not here.
@@ -283,7 +283,7 @@ for the named plan; steps 2–10 do not run.
 
    For each printed defect: present it
    to the user and ask whether to include a fix task for it in this plan. Whether accepted or declined, record its
-   identifier in the `surfaced-defects:` list of the plan you're drafting
+   identifier in the `surfaced-defects:` list of the plan being drafted
    (written in step 9) — declining still counts as "surfaced," which is what
    stops it from being re-prompted on every future run. If accepted, the fix
    task is added to the Phase Breakdown in step 8, tagged `[defect:
@@ -294,14 +294,14 @@ for the named plan; steps 2–10 do not run.
    planned pattern that violates, or needs justification under, one of those
    declared principles. In particular, only if the constitution declares a
    simplicity / complexity-justification principle (e.g. Simplicity/YAGNI with a
-   Complexity Tracking requirement) do you flag patterns that would need a
+   Complexity Tracking requirement) does the agent flag patterns that would need a
    Complexity Tracking entry; if it declares no such principle, there is nothing
    to flag at that site. Mirror `/ardd-status`'s "act only on the principles
    present" shape rather than presuming a particular principle exists.
 
 7. **Check for existing approved plans.** List `.project/plans/plan-*.md` and
    read frontmatter. If any have `status: approved`, ask the user whether the
-   plan you're about to draft supersedes one of them. On confirmation, flip
+   plan about to be drafted supersedes one of them. On confirmation, flip
    that plan's status to `superseded` immediately via `.claude/skills/ardd-scripts/ardd-state.sh plan-flip <file> superseded`. A
    superseded-by-a-draft-that's-never-approved plan is an acceptable outcome,
    not a bug: `/ardd-status`/`STATUS.md` surface open draft counts either
@@ -347,7 +347,7 @@ for the named plan; steps 2–10 do not run.
    ```
 
 10. **Approval checkpoint.** Present a bounded, faithful skeleton of the
-    plan drawn **verbatim from the plan you just wrote** — not a freehand
+    plan drawn **verbatim from the plan the agent just wrote** — not a freehand
     re-summary. Show exactly these four elements, in order:
 
     1. **Goal** — reproduce the plan's **Goal** sentence verbatim and
