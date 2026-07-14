@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Per-skill actor-language pass
 
-- [ ] T001 [parallel] Review `skills/ardd-init/SKILL.md` for ambiguous
+- [x] T001 [parallel] Review `skills/ardd-init/SKILL.md` for ambiguous
   `you`/`your`/`I`/`we` usage (flagged lines ~69, 74, 102, 104, 209, 274,
   307: "in your own words", "what you're trying to surface", "summarize
   what you...", "a principle you're about to synthesize", "merge into your

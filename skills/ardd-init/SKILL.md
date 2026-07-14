@@ -66,12 +66,12 @@ with `/ardd-refine` before planning new work.
    **Design interview** (thin-context greenfield only). Cover the seven
    topics below, roughly in order — data before infrastructure, since
    storage and sync strategy should follow the schema rather than constrain
-   it. Ask about one topic at a time, in your own words, following up where
+   it. Ask about one topic at a time, in the agent's own words, following up where
    an answer opens a real question. This is a conversation, not a form:
    skip what plainly doesn't apply (a CLI tool has no UI topic), and go
    deeper where the user has clearly already made decisions.
 
-   | Topic | What you're trying to surface |
+   | Topic | What the agent is trying to surface |
    |---|---|
    | What it does | The problem it solves, in a sentence or two |
    | Who uses it | Role, technical level, how often |
@@ -99,9 +99,9 @@ with `/ardd-refine` before planning new work.
    moment. Duplicating that from memory produces worse suggestions and a
    confusing double-ask.
 
-   **Reflect the design back** before synthesizing. Summarize what you
+   **Reflect the design back** before synthesizing. Summarize what the agent
    heard, grouped roughly the way artifacts will be (principles, data,
-   infrastructure, interface), and list every `[OPEN: ...]` item you're
+   infrastructure, interface), and list every `[OPEN: ...]` item it's
    carrying. Ask the user to confirm or correct it. This is the last cheap
    moment to fix a misunderstanding — after the artifacts are written it
    takes an `/ardd-refine` pass.
@@ -206,7 +206,7 @@ with `/ardd-refine` before planning new work.
      entry — bias toward offering it and having it rejected over not
      offering it at all.
    - **Dedupe**: drop any entry whose concern is already substantively
-     covered by a principle you're about to synthesize or infer — don't
+     covered by a principle the agent is about to synthesize or infer — don't
      offer a generic duplicate of something the user already stated (or the
      code already shows) in its own words.
    - **Present** the remaining entries via `AskUserQuestion`, multiSelect
@@ -304,7 +304,7 @@ with `/ardd-refine` before planning new work.
    - **Survey the codebase for capability signals**, in this priority
      order — earlier sources give the clearest feature names and dates,
      later ones fill gaps. This complements the step-2 structural survey,
-     which you can reuse: (1) **git log** (`git log --format="%ad %s"
+     which the agent can reuse: (1) **git log** (`git log --format="%ad %s"
      --date=short` — `feat:` commits and PR merge titles are most
      reliable); (2) **changelog** (`CHANGELOG.md`, a `## Changelog`/`##
      What's New` README section, or `gh release list` / `glab release list`
