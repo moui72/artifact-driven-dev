@@ -74,7 +74,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Consistency pass
 
-- [ ] T011 After T001–T010 are complete, grep all `skills/*/SKILL.md` for
+- [x] T011 After T001–T010 are complete, grep all `skills/*/SKILL.md` for
   residual `\byou\b|\byour\b|\bI\b|\bwe\b|\bour\b` matches and confirm
   every remaining hit corresponds to a deliberate leave-as-is call made in
   one of T001–T010 (not a miss). Run `./scripts/lint-docs.sh` and
