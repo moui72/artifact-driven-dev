@@ -101,8 +101,8 @@ not silently ignore the argument and run a full pass anyway.
 
    Classify each finding as:
    - **[S] Suggestion** — a concrete change with a clear resolution. Must
-     include a command (see step 5). If you cannot write a tight command,
-     reclassify as a Question.
+     include a command (see step 5). If the agent cannot write a tight
+     command, reclassify as a Question.
    - **[Q] Question** — a decision that needs the user's input before a
      recommendation is possible; state the trade-off clearly. No command.
    - **[R] Risk** — a failure mode or fragility worth acknowledging even if

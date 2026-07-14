@@ -54,7 +54,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   the frontmatter string, check `scripts/lint-project.sh` for any
   length/format constraint on `description:` that the rewrite must
   respect. No test requirement.
-- [ ] T007 [parallel] Review `skills/ardd-audit/SKILL.md` for ambiguous
+- [x] T007 [parallel] Review `skills/ardd-audit/SKILL.md` for ambiguous
   pronouns (flagged line ~104: "if you cannot write a tight command" —
   addresses the agent performing the audit step, plus any other
   occurrence found on a full read of the file). Rewrite to name "the
