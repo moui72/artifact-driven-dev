@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/lockup-dark.svg">
+    <img src="docs/assets/lockup.svg" alt="artifact-driven-dev" width="320">
+  </picture>
+</p>
+
 # Using artifact-driven-dev — start here
 
 > 📖 Browse these docs as a website:
