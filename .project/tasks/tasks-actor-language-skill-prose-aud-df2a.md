@@ -1,7 +1,7 @@
 ---
 plan: plan-actor-language-skill-prose-aud-2026-07-14-d4b6.md
 generated: 2026-07-14
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
