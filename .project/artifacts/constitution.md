@@ -1,6 +1,70 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.8.2 → 1.9.0 (MINOR — new principle added.)
+
+Rationale: /ardd-feedback item `feedback-next-step-prompt-terminology-6ce3.md`
+(UX, 2026-07-14): next-step-prompt and other agent-facing prose can leave
+"you"/"I" ambiguous between the human operator and the agent executing the
+skill. Added Core Principle IX requiring explicit actor language ("the
+user"/"the human"/"the controller" vs. "the agent"/"Claude"/"the system")
+in new and edited agent-facing prose going forward — not a mandate to
+sweep existing skill files in one pass.
+
+Modified sections: Core Principles (new Principle IX, after VIII). Footer
+version updated.
+
+Previous SIR (1.8.1 → 1.8.2) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
+Version change: 1.8.1 → 1.8.2 (PATCH — clarifies an exemption that was
+already true in practice (CLAUDE.md already documented it); no principle,
+standing decision, or rule changes meaning.)
+
+Rationale: ardd-audit finding, 2026-07-14. Governance stated amendments
+always require a Sync Impact Report and version bump, with no exception,
+while CLAUDE.md separately documented that `workflow_mode` and
+`next_step_prompt` are stamped via `ardd-state.sh` and exempt from that
+process. Since this constitution states its own supremacy ("supersedes
+all other practices"), someone amending from this file alone would have
+concluded a `next_step_prompt` flip needs a SIR. Added the exemption
+directly to Governance.
+
+Modified sections: Governance (new Exception paragraph after the
+numbered amendment requirements). Footer version updated.
+
+Previous SIR (1.8.0 → 1.8.1) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT (1.8.0 → 1.8.1)
+==================
+Version change: 1.8.0 → 1.8.1 (PATCH — wording only: no principle,
+standing decision, or rule changes meaning.)
+
+Rationale: ardd-audit finding, 2026-07-14. The new.sh /dev/tty
+interactivity narrative in Project Scope & Intent (the v1.2.3 unsound-
+inference story, the v1.2.4 regression, the safe-default vs --kickoff
+case analysis) had grown to four paragraphs and was duplicated in full in
+CLAUDE.md, risking drift between the two on the next revision. Extracted
+to a new decision record, docs/decisions/0008-new-sh-tty-interactivity.md
+(source-repo history only, never installed), leaving only the two
+bounding rules (refuses-rather-than-asks;
+never-blocks-on-a-question-it-cannot-ask) and a pointer here.
+
+Modified sections: Project Scope & Intent (new.sh interactivity
+paragraphs condensed from four to one, pointing to the new decision
+record). Footer version updated.
+
+Previous SIR (1.7.0 → 1.8.0) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT (1.7.0 → 1.8.0)
+==================
 Version change: 1.7.0 → 1.8.0 (MINOR — materially expands the
 release-channel standing decision to two channels and extends the
 pack-semver policy with prerelease semantics; no principle is removed or
@@ -44,7 +108,8 @@ revision.
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-12
+last_updated: 2026-07-14
+
 next_step_prompt: true
 delegation: eager
 merge_policy: auto
@@ -168,30 +233,17 @@ execution shape, not a third install target: the source/target split
 classifies a file by *where it runs and what it governs*, and `new.sh`
 governs acquisition of the source.
 
-Two rules bound `new.sh`'s interactivity, and neither is "never prompt."
-An earlier phrasing (v1.2.3) inferred that absolute from `curl | sh`
-handing the script a pipe on stdin, but the inference was unsound: a
-script that can reopen `/dev/tty` to hand off to Claude Code can reopen
-it to `read` an answer. The rules that actually hold are that `new.sh`
-**refuses rather than asks** wherever writing into a directory it
-doesn't own is at stake — a non-empty target, or a `--source` that isn't
-an ArDD checkout — because those are not decisions worth offering; and
-that it **never blocks on a question it cannot ask**. Between those
-bounds it may ask, and the Claude Code handoff does: it is offered, not
-imposed, with `--kickoff` and `--no-kickoff` to answer in advance.
-
-That second rule is about *pending questions*, not about the terminal,
-and the difference is load-bearing. With no flag and no readable
-`/dev/tty` there is a question and no way to put it, so `new.sh` takes
-the safe default: it declines the launch, prints the command to start
-the session by hand, and exits 0 — the install succeeded, and saying
-otherwise would misreport it. With an explicit `--kickoff` and no
-readable `/dev/tty` there is no pending question at all: the user
-answered it on the command line, so `new.sh` launches anyway, on
-inherited stdin. Declining a flag someone named by hand would be worse
-than an odd session. An earlier revision (v1.2.4) compressed both cases
-into "when `/dev/tty` isn't readable it takes the safe default," which
-is true only of the first — don't restore that phrasing.
+Two rules bound `new.sh`'s interactivity, and neither is "never prompt":
+it **refuses rather than asks** wherever writing into a directory it
+doesn't own is at stake (a non-empty target, or a `--source` that isn't
+an ArDD checkout), and it **never blocks on a question it cannot ask**
+(the Claude Code handoff is offered on `/dev/tty`, with `--kickoff` and
+`--no-kickoff` to answer in advance; with no flag and no readable
+`/dev/tty` it takes the safe default — declines the launch, prints the
+command to start the session by hand, exits 0 — rather than misreporting
+a successful install as failed). Full narrative — the unsound v1.2.3
+"never prompt" inference, the v1.2.4 regression, and the implementation
+traps — in `docs/decisions/0008-new-sh-tty-interactivity.md`.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -280,6 +332,17 @@ already has a built-in, idiomatic way to solve it. Reaching for a
 hand-built solution without checking first is surfaced as a question
 before being built, not discovered as duplicated work later.
 
+### IX. Unambiguous Actor Language in Agent-Facing Prose
+
+Skill prose that addresses "you" or "I" is ambiguous about which actor is
+meant: the human running the session, or the agent executing the skill.
+Where a `SKILL.md` (or other agent-facing prose this repository controls,
+e.g. `next_step_prompt` option text) names an actor, prefer explicit terms
+— "the user"/"the human"/"the controller" for the person, "the agent"/
+"Claude"/"the system" for the automated actor — over ambiguous first- or
+second-person pronouns. This applies going forward to new and edited
+prose; it is not a mandate to sweep every existing skill file in one pass.
+
 ## Quality Standards
 
 - **Testing paradigm**: fixture-based regression tests (`tests/fixtures/
@@ -366,4 +429,11 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Version**: 1.8.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-12
+**Exception**: the workflow frontmatter fields `workflow_mode` and
+`next_step_prompt` are not amendments to this constitution's principles or
+standing decisions — they are per-project operational settings, written by
+`ardd-state.sh stamp` on the user's answer to a one-time `/ardd-init` (or
+`/ardd-update`) question. Changing either does not require a Sync Impact
+Report or a version increment, and does not itself update `last_updated`.
+
+**Version**: 1.9.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-14

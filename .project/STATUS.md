@@ -1,19 +1,24 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-13 (`plan-approval-presentation` planned+tasked —
-`plan-plan-approval-presentation-2026-07-13-14cf.md` approved,
-`tasks-plan-approval-presentation-99dd.md` ready (3 tasks), feature →
-`tasked`. Refines `/ardd-plan`'s approval checkpoint to present the plan's
-real structure instead of a freehand re-summary; browser/Artifact rendering
-vetted and dropped (`research-plan-approval-rendering-termin-2026-07-13-3758.md`).
-Not yet committed. Prior: `github-pages-docs-site` delivered and pushed.)
+_Updated: 2026-07-14 (`/ardd-plan` — drafted and approved
+`plan-actor-language-skill-prose-aud-2026-07-14-d4b6.md`, a full audit of
+`skills/*/SKILL.md` for constitution Principle IX ("Unambiguous Actor
+Language in Agent-Facing Prose," added earlier this session via
+`/ardd-refine constitution`, v1.9.0). 11 tasks generated
+(`tasks-actor-language-skill-prose-aud-df2a.md`, `status: ready`) — 10
+parallel per-file review tasks plus a consistency/lint pass. Feedback item
+`feedback-next-step-prompt-terminology-6ce3.md` (F001) marked incorporated
+and flipped to `status: planned`, bound to this plan — 0 open feedback
+files remain. Not yet committed, alongside the still-uncommitted v1.8.0 →
+v1.8.2 audit resolutions and the new `docs/decisions/0008` decision
+record from earlier this session.)
 Keep this current as artifacts are refined and open questions are resolved._
 
 ## Artifact Status
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.8.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.9.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -32,9 +37,9 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 ## Feedback
 
 None open. Most recently consumed:
-`feedback-constitution-suggestions-quality-review-123a.md` → delivered
-via `tasks-constitution-suggestions-quality-e071.md` (completed 12/12,
-2026-07-13, merged to `main`).
+`feedback-next-step-prompt-terminology-6ce3.md` → delivered via
+`tasks-actor-language-skill-prose-aud-df2a.md` (11 tasks, `ready`, not yet
+run).
 
 ## Recent Releases
 
@@ -47,21 +52,19 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-0 backlogged · 1 tasked · 12 implemented · 1 retired — see
-`.project/features/`. Tasked: `plan-approval-presentation` —
-`tasks-plan-approval-presentation-99dd.md` ready (3 tasks); run
-`/ardd-implement` to execute.
-Newest implemented: `github-pages-docs-site` (2026-07-13) — docs/ rendered
-at https://moui72.github.io/artifact-driven-dev/ (MkDocs Material; PR
-builds are the link check via `mkdocs build --strict`; docs-config-only
-pushes exempted from beta-release; README/USAGE link the site).
+0 backlogged · 0 tasked · 13 implemented · 1 retired — see
+`.project/features/`.
+Newest implemented: `plan-approval-presentation` — `/ardd-plan`'s approval
+checkpoint now presents the plan's real structure instead of a freehand
+re-summary (`tasks-plan-approval-presentation-99dd.md`, completed 3/3).
 
 ## Audit
 
-`.project/audit.md`: 4 open items — 3 suggestions (new.sh tty narrative →
-decision record; Governance workflow-field exemption; primary-on-main
-deterministic guard, MOOT after the v1.7.0 retirement — reject/close it)
-and 1 risk (smoke key unprovisioned).
+`.project/audit.md`: 1 open suggestion (two-channel release paragraph →
+decision-record pointer) + 1 open risk (smoke key unprovisioned, now
+documented as a deliberate standing state). 2 suggestions resolved this
+pass (new.sh tty narrative → decision record, v1.8.1; Governance
+workflow-field exemption, v1.8.2).
 
 ## In Flight
 
@@ -70,8 +73,10 @@ Nothing — no sibling worktrees, no reap candidates; `main` is even with
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-plan-approval-presentation-99dd.md`
-(3 tasks, the approval-checkpoint refinement). Also standing: dispatch the
-stable release workflow when you want consumers on the accumulated work;
-optionally `/ardd-defects` to re-verify against the docs-site surfaces.
-Everything else is clean.
+`tasks-actor-language-skill-prose-aud-df2a.md` is `ready` — run
+`/ardd-implement` to execute the 11-task actor-language pass. Other
+standing options once that's done: dispatch the stable release workflow
+when you want consumers on the accumulated work; resolve the one
+remaining `.project/audit.md` suggestion via `/ardd-refine constitution
+trim the two-channel release-publishing paragraph...`; or `/ardd-defects`
+to re-verify against the docs-site surfaces (unchanged since 2026-07-12).
