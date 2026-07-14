@@ -1,7 +1,7 @@
 ---
 name: ardd-defects
 tier: extension
-description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead."
+description: "Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what the user saw with /ardd-feedback instead."
 ---
 
 # /ardd-defects
@@ -24,7 +24,7 @@ log.
 0. **Reject freeform arguments** (mirrors `/ardd-plan`'s argument
 disambiguation, as an explicit early step). This skill takes no
 observation or scope input: it always runs its own full artifact-vs-code
-pass. If the invocation carries any argument (e.g. a bug you noticed, a
+pass. If the invocation carries any argument (e.g. a bug the user noticed, a
 file path, a description of drift), stop and redirect: an observation
 about the implementation belongs in `/ardd-feedback <observation>`, which
 captures it for the next plan — this skill would either duplicate it or

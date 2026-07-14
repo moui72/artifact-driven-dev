@@ -47,7 +47,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   the user throughout a paragraph may already be unambiguous style rather
   than a referent problem. Use judgment; leaving text unchanged with a
   documented reason is an acceptable outcome. No test requirement.
-- [ ] T006 [parallel] Review `skills/ardd-defects/SKILL.md` for ambiguous
+- [x] T006 [parallel] Review `skills/ardd-defects/SKILL.md` for ambiguous
   pronouns (flagged frontmatter `description:` line ~4, and line ~27:
   "report what you saw", "a bug you noticed"). Both refer to the user;
   rewrite, including the frontmatter description string. Before editing

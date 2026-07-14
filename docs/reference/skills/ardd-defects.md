@@ -2,7 +2,7 @@
 
 _Tier: extension_
 
-> Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what you saw with /ardd-feedback instead.
+> Check artifacts against the actual codebase and record drift in .project/DEFECTS.md (its single writer); the next plan run offers each recorded defect as a fix task. Takes no observation input — report what the user saw with /ardd-feedback instead.
 
 <!-- generated:end — the header above is generated from skills/ardd-defects/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 
