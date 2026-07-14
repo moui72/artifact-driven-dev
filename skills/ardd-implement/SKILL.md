@@ -131,8 +131,8 @@ files.
      `/ardd-plan` no longer creates a branch (a resumed older run, or a
      branch made by hand) — **fold that
      branch into local `<default>` and return the focused session to it**:
-     run `.claude/skills/ardd-scripts/fold-to-main.sh`. On `folded=true` you
-     are now on `<default>` with the branch's state fast-forwarded in — a
+     run `.claude/skills/ardd-scripts/fold-to-main.sh`. On `folded=true` the
+     agent is now on `<default>` with the branch's state fast-forwarded in — a
      fast-forward authors no new commit, so the "nothing is committed in this
      step" note above still holds — proceed to delegate. On `folded=false`,
      **stop and surface the `reason=` verbatim; never resolve** (a `dirty`,

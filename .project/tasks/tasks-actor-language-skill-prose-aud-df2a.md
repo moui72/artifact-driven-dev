@@ -67,7 +67,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   pronouns (flagged line ~105: "if you find one written inline" —
   addresses the agent performing the refine). Rewrite to "the agent". No
   test requirement.
-- [ ] T010 [parallel] Review `skills/ardd-implement/SKILL.md` for
+- [x] T010 [parallel] Review `skills/ardd-implement/SKILL.md` for
   ambiguous pronouns (flagged line ~134: "On `folded=true` you..." —
   addresses the agent executing the fold step). Rewrite to "the agent".
   No test requirement.
