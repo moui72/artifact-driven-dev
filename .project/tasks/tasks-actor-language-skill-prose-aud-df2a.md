@@ -63,7 +63,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 - [x] T008 [parallel] Review `skills/ardd-status/SKILL.md` for ambiguous
   pronouns (flagged line ~26: "anytime you want a fresh check" — the
   user). Rewrite to "the user". No test requirement.
-- [ ] T009 [parallel] Review `skills/ardd-refine/SKILL.md` for ambiguous
+- [x] T009 [parallel] Review `skills/ardd-refine/SKILL.md` for ambiguous
   pronouns (flagged line ~105: "if you find one written inline" —
   addresses the agent performing the refine). Rewrite to "the agent". No
   test requirement.
