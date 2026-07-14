@@ -40,7 +40,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   Questions flags it as undecided) and apply consistently; record the
   decision in this task's completion note so T011 can check consistency
   against it. No test requirement.
-- [ ] T005 [parallel] Review `skills/ardd-backlog/SKILL.md` for ambiguous
+- [x] T005 [parallel] Review `skills/ardd-backlog/SKILL.md` for ambiguous
   pronouns (flagged lines ~14, 15: "you accumulate a backlog", "you think
   of one"). Both refer to the user; rewrite for explicitness only if doing
   so doesn't produce an awkward sentence — direct second-person address of
