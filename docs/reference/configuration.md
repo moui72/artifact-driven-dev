@@ -1,6 +1,6 @@
 # Configuration — the constitution workflow knobs
 
-ARDD's behavior knobs live in `constitution.md`'s **frontmatter** — they
+ArDD's behavior knobs live in `constitution.md`'s **frontmatter** — they
 are workflow settings, not constitution content: setting or changing one
 never bumps the constitution version and never touches the Sync Impact
 Report. `next_step_prompt`, `delegation`, `merge_policy`, and

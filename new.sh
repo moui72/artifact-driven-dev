@@ -16,7 +16,7 @@
 # Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
 #        new.sh --existing [--kickoff|--no-kickoff] [--beta] [--source <path>] [<project-dir>]
 #
-# This is an *acquisition* channel, nothing more. It resolves an ARDD source
+# This is an *acquisition* channel, nothing more. It resolves an ArDD source
 # checkout, prepares the target (creating a new one, or accepting an existing
 # populated project under --existing), and then hands off to that checkout's
 # install.sh — the only real install/upgrade entry point (constitution,
@@ -25,7 +25,7 @@
 #
 # Two rules bound its interactivity (constitution v1.2.4). It *refuses* rather
 # than asks wherever writing into a directory it doesn't own is at stake — a
-# non-empty target, or a --source that isn't an ARDD checkout — because those
+# non-empty target, or a --source that isn't an ArDD checkout — because those
 # aren't decisions worth offering. And it *never blocks on a question it
 # cannot ask*: with no readable /dev/tty it takes the safe default instead of
 # hanging a pipeline forever.
@@ -72,7 +72,7 @@ usage() {
 Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
        new.sh --existing [--kickoff|--no-kickoff] [--beta] [--source <path>] [<project-dir>]
 
-  --existing       Install ARDD into an existing, already-populated project
+  --existing       Install ArDD into an existing, already-populated project
                    (<project-dir> defaults to the current directory). Without
                    it, new.sh creates a *new* project and refuses a non-empty
                    target.
@@ -86,7 +86,7 @@ Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
                    *including* vX.Y.Z-beta.N prereleases (published on every
                    push to main), and record the channel for /ardd-update.
                    Default is stable — tagged full releases only.
-  --source <path>  Use an existing ARDD checkout (also settable as \$ARDD_SOURCE).
+  --source <path>  Use an existing ArDD checkout (also settable as \$ARDD_SOURCE).
                    Read, never modified. Without it, ~/.ardd/source is cloned
                    and kept up to date.
 
@@ -151,7 +151,7 @@ elif [ -e "$target" ]; then
   if [ -n "$leftovers" ]; then
     echo "Error: '$target' already exists and is not empty." >&2
     echo "" >&2
-    echo "This command creates a *new* project. To add ARDD to an existing one," >&2
+    echo "This command creates a *new* project. To add ArDD to an existing one," >&2
     echo "rerun with --existing from inside it:" >&2
     echo "  cd $target && curl … | sh -s -- --existing" >&2
     exit 1
@@ -182,7 +182,7 @@ pin_release() {
   fi
   if [ -n "$release_tag" ]; then
     git -C "$SRC" checkout --quiet "$release_tag"
-    echo "Using ARDD release $release_tag ($channel channel)."
+    echo "Using ArDD release $release_tag ($channel channel)."
   else
     echo "  ! no releases tagged yet — installing from the default branch as it stands."
   fi
@@ -206,7 +206,7 @@ if [ -e "$SRC" ]; then
     exit 1
   fi
   if [ "$owned" -eq 1 ]; then
-    echo "Updating ARDD source at $SRC ..."
+    echo "Updating ArDD source at $SRC ..."
     # Fetch tags first (the owned checkout may sit detached at a release,
     # where a pull has nothing to merge onto); offline is a warning, never
     # a failure — install from the checkout as it stands on disk.
@@ -224,7 +224,7 @@ else
     echo "Error: source checkout '$SRC' does not exist." >&2
     exit 1
   fi
-  echo "Cloning ARDD source into $SRC ..."
+  echo "Cloning ArDD source into $SRC ..."
   mkdir -p "$(dirname "$SRC")"
   git clone --quiet "$REPO_URL" "$SRC"
   pin_release
@@ -254,7 +254,7 @@ ARDD_CHANNEL="$channel" "$SRC/install.sh" "$TARGET"
 # --- Hand off to the first session -------------------------------------
 # Both new and existing projects initialize with /ardd-init — the skill
 # itself detects greenfield vs existing-code and confirms with the user.
-# A project that already carries ARDD artifacts just gets checked
+# A project that already carries ArDD artifacts just gets checked
 # (/ardd-status). install.sh only ever creates .project/ardd-version.md,
 # never .project/artifacts/, so that dir's presence reliably distinguishes
 # an already-set-up project from a first install.

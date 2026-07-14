@@ -1,6 +1,6 @@
 # `.project/` file formats
 
-Every file ARDD writes into a target project, its schema, and who owns it.
+Every file ArDD writes into a target project, its schema, and who owns it.
 The **schema-of-record for status enums and required fields is the
 installed `lint-project.sh`** (run via `/ardd-lint`) — this page describes;
 that script enforces. If they ever disagree, the script wins and this page
@@ -20,7 +20,7 @@ has a bug.
   TRACKER.md           # written only by /ardd-tracker
   audit.md             # written only by /ardd-audit
   WORKFLOW.md          # static skill reference, installed by /ardd-init from the shipped template
-  ardd-version.md      # commit this — records the installed ARDD source
+  ardd-version.md      # commit this — records the installed ArDD source
   .gitattributes       # shipped by install.sh: report files merge=ours
 ```
 
@@ -148,6 +148,6 @@ they're prose for humans, not machine-checkable state.
 Written by install.sh on every run: the source commit, date,
 `Source-Path:` (where the checkout lives), `Source-Ref: <tag>` when the
 source sat exactly at a release tag, and `Channel: <stable|beta>` (absent
-= stable). Commit this file — it's the project's record of which ARDD
+= stable). Commit this file — it's the project's record of which ArDD
 version was active — while gitignoring the regenerated
 `.claude/skills/ardd-*/` files themselves.

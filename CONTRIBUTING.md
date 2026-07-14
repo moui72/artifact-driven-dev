@@ -1,6 +1,6 @@
 # Contributing to artifact-driven-dev
 
-This is about working on ARDD's own source — installing ARDD *into* a
+This is about working on ArDD's own source — installing ArDD *into* a
 project is [docs/install.md](docs/install.md).
 
 ## What you're editing

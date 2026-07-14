@@ -1,9 +1,9 @@
-# Working an established project with ARDD
+# Working an established project with ArDD
 
 Use this guide once a project is past setup — artifacts exist, some work
-has shipped, and you're living in the recurring delivery loop — ARDD's
+has shipped, and you're living in the recurring delivery loop — ArDD's
 steady state. (Starting fresh? See [greenfield.md](greenfield.md).
-Adopting ARDD in an existing codebase? See
+Adopting ArDD in an existing codebase? See
 [existing-project.md](existing-project.md).)
 
 The steady state is simple: **ideas and observations flow in

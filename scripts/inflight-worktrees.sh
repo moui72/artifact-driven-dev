@@ -5,14 +5,14 @@
 # state, a delegated run's coarse state rides entirely in its own worktree
 # branch and never lands on the default branch until merge — so visibility
 # instead comes from enumerating worktrees on disk and reading whatever
-# ARDD tasks-file state happens to live in each one.
+# ArDD tasks-file state happens to live in each one.
 #
 # Usage: ./scripts/inflight-worktrees.sh
 # Works from the primary checkout or from inside any worktree — the
 # worktree containing the current directory is always skipped, since it's
 # "this" work, not "other" in-flight work.
 #
-# For every OTHER worktree of this repo, prints one line per ARDD tasks
+# For every OTHER worktree of this repo, prints one line per ArDD tasks
 # file (.project/tasks/tasks-*.md) whose frontmatter `status` is
 # `in-progress` or `completed`:
 #   worktree=<path>	branch=<name|detached>	tasks=<relative-path>	status=<status>	progress=<x/y>

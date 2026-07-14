@@ -1,6 +1,6 @@
-# Concepts — the ARDD mental model
+# Concepts — the ArDD mental model
 
-Everything ARDD does follows from a handful of ideas. This page is the
+Everything ArDD does follows from a handful of ideas. This page is the
 one place they're all laid out; the guides and reference pages assume
 them.
 
@@ -8,7 +8,7 @@ them.
 
 Artifacts (`.project/artifacts/*.md`) are the system's actual state — the
 decisions you've made, written down and kept current. They are **captured,
-not generated**: ARDD assumes you arrive with clarity and need a system to
+not generated**: ArDD assumes you arrive with clarity and need a system to
 record, cross-check, and execute against it, not one that discovers
 requirements for you.
 
@@ -38,7 +38,7 @@ what `/ardd-tracker` mirrors to an issue tracker.
 
 ## Three intake streams, one consumer
 
-Work enters ARDD three ways, and all three converge on the next
+Work enters ArDD three ways, and all three converge on the next
 `/ardd-plan` run:
 
 | Stream | Skill | What it is |
@@ -128,16 +128,16 @@ covering the rest. Artifacts pay for their overhead when the codebase
   the *current* patterns as a starting draft).
 
 Where the codebase is already a trustworthy implicit spec — mature,
-consistent, following the conventions you want — ARDD's overhead buys you
+consistent, following the conventions you want — ArDD's overhead buys you
 less than a solid `CLAUDE.md`. The secondary benefit that remains (code
 shows *how*, artifacts record *why*) rarely justifies the process alone.
 
 ## vs. Spec Kit
 
-ARDD is in the same lineage as
+ArDD is in the same lineage as
 [Spec Kit](https://github.com/github/spec-kit), which aims at
 *discovering* requirements — structured elicitation, user stories, a full
-spec-to-implementation pipeline, agent-agnostic. ARDD assumes the
+spec-to-implementation pipeline, agent-agnostic. ArDD assumes the
 decisions already exist and need capturing and executing — narrower in
 scope, not lighter in absolute terms, and currently Claude Code-specific.
 If you're working from a vague brief, Spec Kit is the right tool.

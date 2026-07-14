@@ -1,5 +1,5 @@
 # Behavioral smoke tests (constitution Quality Standards, behavioral-test
-# tier): install ARDD into throwaway target projects, run state-mutating
+# tier): install ArDD into throwaway target projects, run state-mutating
 # skill flows headlessly, and assert on the file outcomes via
 # scripts/smoke-assert.sh.
 #

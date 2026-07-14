@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# source-resolve.sh — resolve an ARDD source checkout to the release
+# source-resolve.sh — resolve an ArDD source checkout to the release
 # channel (constitution, release-channel standing decision, 2026-07-12).
 # Target-side: installed to .claude/skills/ardd-scripts/ and shelled out to
 # by /ardd-update's source-standing step. The decision tree here is a pure
@@ -23,7 +23,7 @@
 #   resolved=<path> ref=<branch> channel=release warning=no-tags
 #                                                        owned, no releases yet -> default branch
 #   ... warning=offline                                  fetch failed; resolved from existing state
-#   resolved=<path> channel=dev                          any other existing ARDD checkout (never mutated)
+#   resolved=<path> channel=dev                          any other existing ArDD checkout (never mutated)
 #   ... fallback=owned                                   recorded Source-Path was invalid; resolved the
 #                                                        owned checkout instead (additive token; only a
 #                                                        version-file path falls back, never an explicit
@@ -88,7 +88,7 @@ if [ ! -d "$SRC" ]; then
   exit 1
 fi
 
-# Must be an ARDD checkout at all — same shape check as ardd-update-check.sh.
+# Must be an ArDD checkout at all — same shape check as ardd-update-check.sh.
 if [ ! -f "$SRC/install.sh" ] || [ ! -d "$SRC/skills" ]; then
   echo "resolved=false reason=not-ardd path=$SRC"
   exit 1

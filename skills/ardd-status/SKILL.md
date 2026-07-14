@@ -66,11 +66,11 @@ the coordinator or the inline path.
    installed copy; coordinator's absolute path as fallback, same
    present-or-fallback rule as other ardd-scripts calls). On
    `behind installed=<x> source-tip=<y>`, the report and STATUS.md each
-   gain one line: "ARDD update available: installed <x>, source at <y> —
-   run /ardd-update." On `source-missing`, a gentler line: "ARDD source
+   gain one line: "ArDD update available: installed <x>, source at <y> —
+   run /ardd-update." On `source-missing`, a gentler line: "ArDD source
    checkout not found at its recorded path — run /ardd-update to
    re-record it." `no-version-file`, `no-source-path`, `up-to-date`, and
-   `self-hosted` (this repo is its own ARDD source — the tip comparison
+   `self-hosted` (this repo is its own ArDD source — the tip comparison
    is meaningless there) stay silent.
 
    Also glob `.project/feedback/feedback-*.md` and read frontmatter. Count

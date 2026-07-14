@@ -6,7 +6,7 @@ description: "One-time initialization of .project/ — detects greenfield vs exi
 
 # /ardd-init
 
-One-time initialization. Brings a project under ARDD by creating
+One-time initialization. Brings a project under ArDD by creating
 `.project/artifacts/` and the workflow files around it, by whichever of two
 paths fits the project — detected, then confirmed with one question:
 
@@ -32,7 +32,7 @@ with `/ardd-refine` before planning new work.
    - **Guard: is the install complete?** If `.claude/skills/ardd-scripts/`
      doesn't exist, the skill files are present but `install.sh` never ran
      (e.g. copied by hand). Stop and tell the user to complete the install:
-     run `install.sh` from an ARDD checkout against this project, or, from
+     run `install.sh` from an ArDD checkout against this project, or, from
      inside the project directory, the one-command bootstrap
      `curl -fsSL <ardd-repo>/raw/release/new.sh | sh -s -- --existing`. Every
      later step here shells out to `ardd-scripts`, so continuing would fail
@@ -347,7 +347,7 @@ with `/ardd-refine` before planning new work.
      of any uncertain entry.
 
 8. **Install `.project/WORKFLOW.md` and seed `.project/STATUS.md`.**
-   WORKFLOW.md is a static skill reference shipped with ARDD, not
+   WORKFLOW.md is a static skill reference shipped with ArDD, not
    transcribed by hand:
    `cp .claude/skills/ardd-artifact-templates/WORKFLOW.md .project/WORKFLOW.md`.
    If the template is missing (older install), note it in the final report

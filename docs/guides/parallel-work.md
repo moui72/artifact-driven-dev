@@ -1,6 +1,6 @@
 # Parallel work: delegation, worktrees, and merging
 
-How ARDD runs implementation in the background, several runs at once, and
+How ArDD runs implementation in the background, several runs at once, and
 what happens when branches meet. This is the deepest part of the system;
 the mental model comes first, the mechanics after.
 

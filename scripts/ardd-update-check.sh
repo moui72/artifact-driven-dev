@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# ardd-update-check.sh — is this target's ARDD install behind its source's
+# ardd-update-check.sh — is this target's ArDD install behind its source's
 # latest release? Reads .project/ardd-version.md (installed commit +
 # Source-Path recorded by install.sh) and compares against the source
 # checkout's latest semver release tag (constitution, release-channel
@@ -57,7 +57,7 @@ VF="$TARGET/.project/ardd-version.md"
 src="$(sed -n 's/^Source-Path: //p' "$VF" | head -1)"
 [ -n "$src" ] || { echo "no-source-path"; exit 0; }
 
-# The recorded path must still be an ARDD source checkout. When it isn't
+# The recorded path must still be an ArDD source checkout. When it isn't
 # (moved machine, re-cloned source), fall back to the tooling-owned checkout
 # at ${ARDD_HOME:-$HOME/.ardd}/source if that one qualifies — flagged with
 # an additive fallback=owned token; only with no usable fallback is the

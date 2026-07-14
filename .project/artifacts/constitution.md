@@ -54,24 +54,24 @@ merge_policy: auto
 
 ## Project Scope & Intent
 
-artifact-driven-dev (ARDD) is a Claude Code skill pack: markdown-defined
+artifact-driven-dev (ArDD) is a Claude Code skill pack: markdown-defined
 slash commands (`skills/*/SKILL.md`) installed into other projects via
 `install.sh`, plus a small number of POSIX shell scripts for the parts of
 the system that must be deterministic rather than left to LLM judgment.
 There is no runtime application, database, or user interface belonging to
-ARDD itself — the product is prose instructions an LLM executes in a target
+ArDD itself — the product is prose instructions an LLM executes in a target
 project, plus the install/lint tooling that supports them. `datamodel.md`,
 `infrastructure.md`, and `ui.md` accordingly do not exist for this project
 and are not expected to: none of the concerns they own apply here.
 
-ARDD is narrower in scope than Spec Kit, not lighter in absolute terms: it
+ArDD is narrower in scope than Spec Kit, not lighter in absolute terms: it
 assumes the user arrives with architectural clarity and needs a system to
 capture, cross-check, and execute against decisions already made, rather
 than a framework that discovers those decisions through structured
 elicitation. See `README.md`'s "When artifacts earn their keep" for when
 that overhead is actually worth it — for this repository specifically, it's
 worth it because there is no external target codebase to serve as an
-implicit spec for what ARDD itself should do next; the skills, scripts, and
+implicit spec for what ArDD itself should do next; the skills, scripts, and
 docs *are* the product, and this constitution is the explicit source of
 truth for the principles they follow.
 
@@ -175,7 +175,7 @@ script that can reopen `/dev/tty` to hand off to Claude Code can reopen
 it to `read` an answer. The rules that actually hold are that `new.sh`
 **refuses rather than asks** wherever writing into a directory it
 doesn't own is at stake — a non-empty target, or a `--source` that isn't
-an ARDD checkout — because those are not decisions worth offering; and
+an ArDD checkout — because those are not decisions worth offering; and
 that it **never blocks on a question it cannot ask**. Between those
 bounds it may ask, and the Claude Code handoff does: it is offered, not
 imposed, with `--kickoff` and `--no-kickoff` to answer in advance.
@@ -235,7 +235,7 @@ unexplained soft convention.
 
 Any `.gitignore` guidance this project gives — its own, or what
 `install.sh` suggests to a target project — names the narrowest directory
-that is guaranteed to be ARDD-regenerated output, never a broader parent. A
+that is guaranteed to be ArDD-regenerated output, never a broader parent. A
 broader pattern silently blocks tracking real content (`settings.json`, a
 hand-written custom skill, hooks) without `-f`, and git gives no warning
 when that happens. This was learned the hard way twice in the same
@@ -338,7 +338,7 @@ before being built, not discovered as duplicated work later.
 - **No vendored dependency carries a nested `.git`**. If a dependency must
   ever be vendored, its provenance is recorded in a README note and it is
   committed as plain files, or added as a real git submodule. (Currently
-  N/A — ARDD vendors nothing — kept as a standing floor.)
+  N/A — ArDD vendors nothing — kept as a standing floor.)
 
 ## Development Workflow
 

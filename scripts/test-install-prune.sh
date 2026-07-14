@@ -8,7 +8,7 @@
 #   - the non-skill reference dirs (ardd-scripts, ardd-artifact-templates,
 #     ardd-constitution-data), which have no source skills/ counterpart but
 #     are install.sh's own output;
-#   - a hand-written non-ardd skill (my-custom/), which ARDD doesn't own;
+#   - a hand-written non-ardd skill (my-custom/), which ArDD doesn't own;
 #   - real ardd-* skills that DO exist in source.
 # The prune must be idempotent.
 
@@ -56,7 +56,7 @@ printf -- '---\nname: ardd-analyze\n---\n' > "$skills_dir/ardd-analyze/SKILL.md"
 mkdir -p "$skills_dir/ardd-converge"
 printf -- '---\nname: ardd-converge\n---\n' > "$skills_dir/ardd-converge/SKILL.md"
 
-# A hand-written, non-ardd skill ARDD must never touch.
+# A hand-written, non-ardd skill ArDD must never touch.
 mkdir -p "$skills_dir/my-custom"
 printf -- '---\nname: my-custom\n---\n# mine\n' > "$skills_dir/my-custom/SKILL.md"
 
@@ -88,7 +88,7 @@ printf '%s' "$prune_out" | grep -q 'ardd-analyze (renamed — now /ardd-status)'
 printf '%s' "$prune_out" | grep -q 'ardd-converge (folded into /ardd-implement)' \
   && ok "folded-dir message names /ardd-implement" \
   || bad "folded-dir message names /ardd-implement"
-printf '%s' "$prune_out" | grep -q 'ardd-ghost (removed — no longer in ARDD source)' \
+printf '%s' "$prune_out" | grep -q 'ardd-ghost (removed — no longer in ArDD source)' \
   && ok "unknown stale dir keeps the generic message" \
   || bad "unknown stale dir keeps the generic message"
 

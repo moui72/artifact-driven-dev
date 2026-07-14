@@ -46,11 +46,11 @@ It does **not** judge whether decisions are consistent or good — that's
 ## Behavior notes
 
 - No write-time hook ships with a target install — run `/ardd-lint` (or
-  the installed script directly) when you want the check. (The ARDD
+  the installed script directly) when you want the check. (The ArDD
   source repo dogfoods a write-time hook of its own, but it isn't
   installable as-is.)
 - An unrecognized enum value may mean a typo *or* a file written by a
-  newer ARDD than this install's validator — the finding says so and
+  newer ArDD than this install's validator — the finding says so and
   suggests `/ardd-update`.
 
 ## Related

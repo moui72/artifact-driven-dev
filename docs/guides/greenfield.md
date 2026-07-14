@@ -1,4 +1,4 @@
-# Starting a greenfield project with ARDD
+# Starting a greenfield project with ArDD
 
 Use this guide when you're starting from scratch — no code yet, just an idea.
 
@@ -17,7 +17,7 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/
   | sh -s -- my-project
 ```
 
-It creates and `git init`s `my-project/`, installs ARDD into it via
+It creates and `git init`s `my-project/`, installs ArDD into it via
 `install.sh`, and offers to open Claude Code on `/ardd-init` — which, on
 a cold start, conducts the Step 1 design conversation as an interview (its
 greenfield interview) and then writes your artifacts. Pick the guide back up at
@@ -34,7 +34,7 @@ workflow.
 
 ## Prerequisites
 
-If you skipped the quickstart: install ARDD into your new project
+If you skipped the quickstart: install ArDD into your new project
 directory (all the routes, channels, and flags are in
 [install.md](../install.md)):
 

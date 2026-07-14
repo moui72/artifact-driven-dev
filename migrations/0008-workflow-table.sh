@@ -5,7 +5,7 @@
 # a table of dead commands. Strict no-op when the target has no
 # WORKFLOW.md (it never creates one — /ardd-init owns that). Idempotent:
 # the body comes from the template, so re-runs rewrite the same text.
-# Runs from the ARDD source checkout (like every migration), so the
+# Runs from the ArDD source checkout (like every migration), so the
 # template and upsert-section.sh are addressed relative to this script.
 
 TARGET="${1:-.}"

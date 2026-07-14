@@ -30,7 +30,7 @@ diagram_status: unrendered            # required once diagram_type is present
 
 `diagram_type` is the **literal Mermaid diagram-type declaration**, used
 verbatim as the first line of the fence (`erDiagram`, `sequenceDiagram`,
-`graph TD`, `classDiagram`, …). ARDD keeps no list of valid values —
+`graph TD`, `classDiagram`, …). ArDD keeps no list of valid values —
 [mermaid.js.org](https://mermaid.js.org) is the canonical source; a typo'd
 value surfaces at render time, not at lint. `render_target` keeps
 `README.md` clean of raw Mermaid where it must stay so (e.g. an npm

@@ -3,12 +3,12 @@
 > 📖 Browse these docs as a website:
 > **<https://moui72.github.io/artifact-driven-dev/>**
 
-ARDD is a workflow, not a generator: it gives you a place to put decisions
+ArDD is a workflow, not a generator: it gives you a place to put decisions
 you've already made, checks them for consistency, and turns them into an
 executable task list. This page is the map of the documentation; the
 [README](README.md) has the pitch and quickstart.
 
-## New to ARDD?
+## New to ArDD?
 
 1. [Concepts](docs/concepts.md) — the mental model in one page
 2. [Example](docs/example.md) — what the files actually look like
@@ -18,7 +18,7 @@ executable task list. This page is the map of the documentation; the
 | Your situation | Guide |
 |---|---|
 | Starting from scratch — no code, just an idea | [greenfield.md](docs/guides/greenfield.md) |
-| Code exists; bringing it under ARDD | [existing-project.md](docs/guides/existing-project.md) |
+| Code exists; bringing it under ArDD | [existing-project.md](docs/guides/existing-project.md) |
 | Set up and shipping — the day-to-day loop | [core-loop.md](docs/guides/core-loop.md) |
 | Coming from Spec Kit | [from-spec-kit.md](docs/guides/from-spec-kit.md) |
 
@@ -37,13 +37,13 @@ the full story.
 | Resume work that got interrupted | `/ardd-implement` — pick the file; it offers to reconcile first | [When things get interrupted](docs/guides/core-loop.md#when-things-get-interrupted) |
 | Deal with a dead background run (abandoned worktree) | `/ardd-status` shows it In Flight; merge its branch to keep the work, or delete the worktree to discard it | [parallel-work.md](docs/guides/parallel-work.md#visibility-how-you-see-in-flight-work) |
 | Fix conflict markers in `STATUS.md` (or another `.project/` report) | Take either side — it's regenerated; re-run the owning skill (e.g. `/ardd-status`) | [When files conflict](docs/guides/parallel-work.md#when-project-files-conflict-on-merge) |
-| See what changed before updating ARDD | Check the release notes on GitHub Releases against the `Source-Ref:` in `.project/ardd-version.md` | [install.md](docs/install.md#updating) |
+| See what changed before updating ArDD | Check the release notes on GitHub Releases against the `Source-Ref:` in `.project/ardd-version.md` | [install.md](docs/install.md#updating) |
 | See where everything stands | `/ardd-status` — or just read `.project/STATUS.md` | [ardd-status](docs/reference/skills/ardd-status.md) |
 | Run implementation in the background, or several at once | Say yes at `/ardd-implement`'s delegation offer | [parallel-work.md](docs/guides/parallel-work.md) |
 | Record a new decision in the docs | `/ardd-refine <artifact> <the decision>` | [ardd-refine](docs/reference/skills/ardd-refine.md) |
 | Vet a big idea before committing to it | `/ardd-research proposal: <idea>` — for reversals you're *not yet sure about* (sure ones go straight to `/ardd-feedback`) | [ardd-research](docs/reference/skills/ardd-research.md) |
 | Check the docs still match the code | `/ardd-defects` | [checking.md](docs/guides/checking.md) |
-| Update ARDD itself | `/ardd-update` | [install.md](docs/install.md) |
+| Update ArDD itself | `/ardd-update` | [install.md](docs/install.md) |
 
 ## Going deeper
 

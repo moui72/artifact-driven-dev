@@ -34,7 +34,7 @@ that would trap the `STATUS.md` write on the worktree's branch.
   mode
 - `completion-flip-check.sh` per completed tasks file — orphaned
   completion flips
-- `ardd-update-check.sh` — whether the ARDD install is behind its source
+- `ardd-update-check.sh` — whether the ArDD install is behind its source
   (local git by default; fetches first only when the constitution's
   `update_check_max_age_days` opt-in says the owned checkout's tags have
   gone stale)

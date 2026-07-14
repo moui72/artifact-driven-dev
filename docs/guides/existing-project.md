@@ -1,18 +1,18 @@
-# Adopting ARDD in an existing project
+# Adopting ArDD in an existing project
 
 Use this guide when code already exists — a partial implementation, an MVP,
-or a mature codebase you want to start managing with ARDD.
+or a mature codebase you want to start managing with ArDD.
 
 The process is the same regardless of how complete the project is:
 `/ardd-init` (existing-codebase path) reads the codebase and generates draft artifacts that capture
 what the code actually does. You then review, fill gaps, and optionally use
-ARDD to plan new work.
+ArDD to plan new work.
 
 ---
 
 ## Prerequisites
 
-Install ARDD into your project — run from inside it (all the routes,
+Install ArDD into your project — run from inside it (all the routes,
 channels, and flags are in [install.md](../install.md)):
 
 ```sh
@@ -127,7 +127,7 @@ issues that do appear are usually:
 
 Once artifacts are stable, you have two options:
 
-### Use ARDD to plan new work
+### Use ArDD to plan new work
 
 If you're adding significant new functionality:
 

@@ -1,4 +1,4 @@
-# ARDD v0.9.0 release notes
+# ArDD v0.9.0 release notes
 
 The first tagged release finalizes the public skill surface.
 

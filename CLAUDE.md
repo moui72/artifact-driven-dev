@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-artifact-driven-dev (ARDD) is a Claude Code skill pack, not an application.
+artifact-driven-dev (ArDD) is a Claude Code skill pack, not an application.
 The deliverable is the content of `skills/*/SKILL.md` — markdown files that
 become slash commands in a *target* project once installed there. There is no
 application code, build step, or test suite in the conventional sense; the
@@ -91,7 +91,7 @@ acquisition routes now, both converging directly on `install.sh`.)
 Three rules to preserve when editing it (constitution). It **refuses
 rather than asks** wherever writing into a directory it doesn't own is at
 stake — a non-empty target in new-project mode, a `--source` that isn't an
-ARDD checkout. (Its `--existing` mode deliberately *accepts* a populated
+ArDD checkout. (Its `--existing` mode deliberately *accepts* a populated
 target: the explicit flag is the consent new-project mode withholds by
 default, so that guard is inverted, not removed.) It
 **never blocks on a question it cannot ask** — no usable `/dev/tty` means
@@ -172,11 +172,11 @@ the ardd scripts its steps call. The gitignore check's ceiling rule applies
 here too: never a pattern broader than `.claude/skills/ardd-*/`. It also inspects the target's git-tracked files under
 `.claude/` to print the right `.gitignore` suggestion — `.claude/skills/` is
 regenerated output and should never be committed in a target project;
-`.project/ardd-version.md` is the intentional, committed record of which ARDD
+`.project/ardd-version.md` is the intentional, committed record of which ArDD
 version produced it. Adding a new non-skill directory under
 `.claude/skills/`? Add its name to the `case` allowlist in install.sh's
 gitignore-check section too, or it'll be misreported as a tracked
-non-ARDD skill.
+non-ArDD skill.
 
 **Never suggest anything broader than `.claude/skills/ardd-*/` in the
 gitignore check — that pattern is the permanent ceiling (Constitution

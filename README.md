@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-# artifact-driven-dev (ARDD)
+# artifact-driven-dev (ArDD)
 
 > 📖 Browse these docs as a website:
 > **<https://moui72.github.io/artifact-driven-dev/>**
@@ -34,7 +34,7 @@ The loop:
 3. **Plan** once artifacts are stable (`/ardd-plan`)
 4. **Execute** the task list (`/ardd-implement`)
 
-ARDD is disciplined, not lightweight — living documents, over a dozen
+ArDD is disciplined, not lightweight — living documents, over a dozen
 skills, several status state machines — so it's worth knowing where the
 overhead pays for itself: **greenfield projects** (no code to
 pattern-match against yet) and **major pivots** (the code reflects
@@ -51,7 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/
   | sh -s -- my-project
 ```
 
-That creates and `git init`s `my-project/`, installs ARDD from the latest
+That creates and `git init`s `my-project/`, installs ArDD from the latest
 stable release, and offers to open Claude Code on `/ardd-init` — which
 interviews you about the design and writes your first artifacts.
 
@@ -87,20 +87,20 @@ from each skill's frontmatter by `scripts/gen-skill-docs.sh` — edit the
 | [`/ardd-research`](docs/reference/skills/ardd-research.md) | Targeted investigation or proposal vetting, written to .project/plans/ — one-off output with no lifecycle; substantial or decision-reversing ideas get vetted here before they reach the backlog or a plan. |
 | [`/ardd-diagram`](docs/reference/skills/ardd-diagram.md) | Generate a Mermaid diagram from any artifact that declares a diagram_type and upsert it into a configurable destination — README.md by default. |
 | [`/ardd-tracker`](docs/reference/skills/ardd-tracker.md) | Mirror the feature register (.project/features/) to and from an external issue tracker — GitHub Issues today — and report divergence in .project/TRACKER.md. |
-| [`/ardd-update`](docs/reference/skills/ardd-update.md) | Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
+| [`/ardd-update`](docs/reference/skills/ardd-update.md) | Update this project's ArDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output. |
 
 ## Documentation
 
 - **[Concepts](docs/concepts.md)** — the mental model: artifacts, the
   feature register, file-based handoffs, state-rides-the-branch,
-  single-writer reports, and when ARDD earns its keep
+  single-writer reports, and when ArDD earns its keep
 - **[Example](docs/example.md)** — what the files actually look like:
   a real artifact, feature entry, feedback file, plan, and tasks file
 - **[Install & updates](docs/install.md)** — every route, both release
   channels, dev-mode, gitignore guidance
 - **Guides** — flows and use cases:
   - [Greenfield project](docs/guides/greenfield.md)
-  - [Adopting ARDD in an existing project](docs/guides/existing-project.md)
+  - [Adopting ArDD in an existing project](docs/guides/existing-project.md)
   - [The core loop](docs/guides/core-loop.md) — the steady-state delivery cycle
   - [Which checking skill?](docs/guides/checking.md)
   - [Parallel work](docs/guides/parallel-work.md) — delegation, worktrees, merging
@@ -122,15 +122,15 @@ stable project", "document a bug I found") straight to the right command.
 
 ## Contributing
 
-Working on ARDD's own source (as opposed to installing it into a
+Working on ArDD's own source (as opposed to installing it into a
 project)? See [CONTRIBUTING.md](CONTRIBUTING.md) — per-clone setup, the
 lint/test suite, and the source/target split that decides where new code
 belongs.
 
 ## Credits
 
-ARDD was inspired by [Spec Kit](https://github.com/github/spec-kit). If
+ArDD was inspired by [Spec Kit](https://github.com/github/spec-kit). If
 you need structured requirement discovery, user story generation, or an
-agent-agnostic pipeline, Spec Kit is the right tool. ARDD is narrower —
+agent-agnostic pipeline, Spec Kit is the right tool. ArDD is narrower —
 for when you arrive with architectural clarity and need a system to
 capture, cross-check, and execute against it.

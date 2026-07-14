@@ -2,7 +2,7 @@
 
 _Tier: extension_
 
-> Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output.
+> Update this project's ArDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output.
 
 <!-- generated:end — the header above is generated from skills/ardd-update/SKILL.md frontmatter by scripts/gen-skill-docs.sh; edit the body below by hand -->
 

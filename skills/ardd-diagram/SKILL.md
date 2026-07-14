@@ -40,7 +40,7 @@ diagram_status: unrendered            # required once diagram_type is present
   `flowchart LR`, `gantt`, `pie`, `journey`, `mindmap`, `timeline`, …). It is
   used **verbatim as the first line** of the ```` ```mermaid ```` fence, so a
   flowchart value carries its own direction (`graph TD`) and needs no
-  orientation guesswork. ARDD keeps no enumerated list of valid values and
+  orientation guesswork. ArDD keeps no enumerated list of valid values and
   does not lint against one; the value must nonetheless be a real Mermaid type
   (not an English label like `entity-relationship`). A typo'd or unsupported
   value surfaces here, at render time, not at lint. See

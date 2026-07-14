@@ -129,9 +129,9 @@ workflow_body() {
   cat <<'EOF'
 # Project Workflow Guide
 
-This project uses [artifact-driven-dev (ARDD)](https://github.com/moui72/artifact-driven-dev).
+This project uses [artifact-driven-dev (ArDD)](https://github.com/moui72/artifact-driven-dev).
 This file is a static reference generated from the installed skill set —
-regenerate by re-running install.sh after an ARDD upgrade.
+regenerate by re-running install.sh after an ArDD upgrade.
 
 ## Skills
 

@@ -11,7 +11,7 @@ curl -fsSL https://raw.githubusercontent.com/moui72/artifact-driven-dev/release/
   | sh -s -- my-project
 ```
 
-This creates `my-project/`, `git init`s it, clones the ARDD repo to
+This creates `my-project/`, `git init`s it, clones the ArDD repo to
 `~/.ardd/source` (or refreshes an existing clone), pins that checkout to
 the **latest stable release** — you never install from the moving tip —
 runs `install.sh` from it, and offers to open Claude Code on `/ardd-init`
@@ -22,7 +22,7 @@ runs `install.sh` from it, and offers to open Claude Code on `/ardd-init`
   declines rather than hangs, printing the command instead.
 - `new.sh` refuses rather than asks anywhere it would write into a
   directory it doesn't own: a non-empty target, or a `--source` that
-  isn't an ARDD checkout, is an error. Nothing is overwritten.
+  isn't an ArDD checkout, is an error. Nothing is overwritten.
 
 ## An existing project
 
@@ -68,7 +68,7 @@ compare against the `Source-Ref:` tag recorded in your project's
 carry the version the next stable will claim but bind none of those
 promises.
 
-## Dev-mode: hacking on ARDD itself
+## Dev-mode: hacking on ArDD itself
 
 Installing from your own clone — `./install.sh /path/to/your/project`, or
 pointing `new.sh` at it with `--source <path>` / `$ARDD_SOURCE` — is
@@ -105,13 +105,13 @@ release for you.
 The installed skill files are regenerated output — re-running `install.sh`
 overwrites them, so committing them means merge conflicts with no
 content. Commit `.project/ardd-version.md` instead: it's the intentional
-record of which ARDD version produced them.
+record of which ArDD version produced them.
 
 The suggested pattern is exactly `.claude/skills/ardd-*/` — **never
 anything broader** (`.claude/`, or even `.claude/skills/`). Broader
-patterns silently block tracking real, team-shared content ARDD doesn't
+patterns silently block tracking real, team-shared content ArDD doesn't
 own: `.claude/settings.json`, agents, commands, hooks, or a hand-written
-custom skill living alongside ARDD's. install.sh also prints the
+custom skill living alongside ArDD's. install.sh also prints the
 `git rm -r --cached` command if the skills were already committed, and
 warns when an existing ignore pattern is already broader than the
 ceiling.

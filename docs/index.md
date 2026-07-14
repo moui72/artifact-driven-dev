@@ -6,16 +6,16 @@
 
 <hr class="ardd-spectrum">
 
-# artifact-driven-dev (ARDD)
+# artifact-driven-dev (ArDD)
 
-ARDD is a Claude Code skill pack for artifact-driven development: a small
+ArDD is a Claude Code skill pack for artifact-driven development: a small
 set of living documents (`.project/artifacts/`) holds the decisions you've
 actually made, and slash commands check them for consistency and turn them
 into plans, task lists, and code. It's a workflow, not a generator — you
 refine the artifacts iteratively, and everything downstream is derived
 from them.
 
-## New to ARDD?
+## New to ArDD?
 
 1. [Concepts](concepts.md) — the mental model in one page
 2. [Example](example.md) — what the files actually look like
@@ -25,7 +25,7 @@ from them.
 | Your situation | Guide |
 |---|---|
 | Starting from scratch — no code, just an idea | [Greenfield project](guides/greenfield.md) |
-| Code exists; bringing it under ARDD | [Existing project](guides/existing-project.md) |
+| Code exists; bringing it under ArDD | [Existing project](guides/existing-project.md) |
 | Set up and shipping — the day-to-day loop | [The core loop](guides/core-loop.md) |
 | Coming from Spec Kit | [Coming from Spec Kit](guides/from-spec-kit.md) |
 

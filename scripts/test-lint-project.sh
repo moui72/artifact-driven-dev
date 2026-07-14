@@ -145,9 +145,9 @@ else
 fi
 
 # --- unknown-enum messages carry the version-skew hint ---
-# An unrecognized status may be a typo, or a file written by a newer ARDD
+# An unrecognized status may be a typo, or a file written by a newer ArDD
 # than this install — the message must say so and point at /ardd-update.
-if grep -q "status 'shipped' not in {.*} (or written by a newer ARDD than this install — run /ardd-update)" /tmp/lint-bad.out; then
+if grep -q "status 'shipped' not in {.*} (or written by a newer ArDD than this install — run /ardd-update)" /tmp/lint-bad.out; then
   echo "ok: unknown-enum message carries version-skew hint"
 else
   echo "FAIL: unknown-enum message carries version-skew hint"

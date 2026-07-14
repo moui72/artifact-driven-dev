@@ -1,6 +1,6 @@
 # Source-side only (Constitution Principle IV): builds the GitHub Pages
 # rendering of docs/. Never installed into target projects.
-site_name: artifact-driven-dev (ARDD)
+site_name: artifact-driven-dev (ArDD)
 site_description: A Claude Code skill pack for artifact-driven development.
 site_url: https://moui72.github.io/artifact-driven-dev/
 repo_url: https://github.com/moui72/artifact-driven-dev

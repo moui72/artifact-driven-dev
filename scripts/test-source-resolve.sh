@@ -29,7 +29,7 @@ fail=0
 ok()  { echo "ok: $1"; }
 bad() { echo "FAIL: $1"; fail=1; }
 
-# Fixture "origin": looks like an ARDD checkout, carries semver tags whose
+# Fixture "origin": looks like an ArDD checkout, carries semver tags whose
 # correct ordering is non-lexical, plus decoys a strict filter must ignore.
 ORIGIN="$WORK/origin"
 mkdir -p "$ORIGIN/skills/ardd-x"
@@ -137,7 +137,7 @@ case "$out" in
   *) bad "case6: got '$out'" ;;
 esac
 
-# --- Case 7: existing path that isn't an ARDD checkout -> resolved=false ---
+# --- Case 7: existing path that isn't an ArDD checkout -> resolved=false ---
 NOTARDD="$WORK/not-ardd"; mkdir -p "$NOTARDD"
 run_resolve "$NOTARDD"
 [ "$status" -eq 1 ] \
@@ -150,7 +150,7 @@ esac
 
 # --- Case 8: no argument -> Source-Path read from .project/ardd-version.md ---
 TGT="$WORK/target"; mkdir -p "$TGT/.project"
-printf '# ARDD Version\n\n_Source: artifact-driven-dev @ abc1234 · Installed/updated 2026-07-12_\n\nSource-Path: %s\n' "$DEV" \
+printf '# ArDD Version\n\n_Source: artifact-driven-dev @ abc1234 · Installed/updated 2026-07-12_\n\nSource-Path: %s\n' "$DEV" \
   > "$TGT/.project/ardd-version.md"
 set +e
 out="$( (cd "$TGT" && sh "$RESOLVE") 2>&1 )"
@@ -178,7 +178,7 @@ esac
 # Only a version-file path falls back (a moved machine); an explicit
 # argument never does (case 6 is the guard). ---
 TGT2="$WORK/target-moved"; mkdir -p "$TGT2/.project"
-printf '# ARDD Version\n\n_Source: artifact-driven-dev @ abc1234 · Installed/updated 2026-07-12_\n\nSource-Path: %s\n' "$WORK/vanished" \
+printf '# ArDD Version\n\n_Source: artifact-driven-dev @ abc1234 · Installed/updated 2026-07-12_\n\nSource-Path: %s\n' "$WORK/vanished" \
   > "$TGT2/.project/ardd-version.md"
 set +e
 out="$( (cd "$TGT2" && sh "$RESOLVE") 2>&1 )"

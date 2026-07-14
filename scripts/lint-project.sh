@@ -58,10 +58,10 @@ report() {
 }
 
 # Appended to every unknown-enum finding: an unrecognized status may be a
-# typo, or a file written by a newer ARDD whose widened enum this install's
+# typo, or a file written by a newer ArDD whose widened enum this install's
 # validator predates (the 1.0-compatible version-skew mechanism — a real
 # Schema-Version marker is explicitly deferred post-1.0).
-SKEW_HINT=" (or written by a newer ARDD than this install — run /ardd-update)"
+SKEW_HINT=" (or written by a newer ArDD than this install — run /ardd-update)"
 
 # --- Schema of record -------------------------------------------------
 ARTIFACT_STATUS_ENUM="draft stable"

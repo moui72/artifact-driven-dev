@@ -77,7 +77,7 @@ esac
 cat "$REPO_ROOT/templates/badge.md" >> "$target/README.md"
 out="$(cd "$REPO_ROOT" && sh "$INSTALL_SH" "$target")"
 case "$out" in
-  *"built with-ARDD-blue"*|*"suggestion"*|*ardd-badge-start*)
+  *"built with-ArDD-blue"*|*"suggestion"*|*ardd-badge-start*)
     # tolerate the word suggestion elsewhere; assert the badge block is not re-suggested
     case "$out" in
       *"img.shields.io/badge/built"*) bad "badge: silent when marker present" ;;

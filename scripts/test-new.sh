@@ -5,7 +5,7 @@
 #   - it is an *acquisition* channel that converges onto install.sh by
 #     invoking it, never reimplementing any part of it;
 #   - it REFUSES rather than asks wherever writing into a directory it doesn't
-#     own is at stake (a non-empty target; a --source that isn't an ARDD
+#     own is at stake (a non-empty target; a --source that isn't an ArDD
 #     checkout) — those aren't decisions worth offering;
 #   - it NEVER BLOCKS on a question it cannot ask: no readable /dev/tty means
 #     take the safe default (decline the launch), never hang;
@@ -125,7 +125,7 @@ run_new 1 "case2: non-empty target refused" --no-kickoff "$target"
   && ok "case2: pre-existing content untouched" \
   || bad "case2: pre-existing content clobbered"
 
-# --- Case 3: a source path that isn't an ARDD checkout is refused ---
+# --- Case 3: a source path that isn't an ArDD checkout is refused ---
 notardd="$WORK/case3/notardd"
 mkdir -p "$notardd"
 : > "$notardd/some-file"
@@ -136,7 +136,7 @@ out="$(ARDD_SOURCE="$notardd" sh "$NEW_SH" --no-kickoff "$target" </dev/null 2>&
 status=$?
 set -e
 [ "$status" -eq 1 ] \
-  && ok "case3: non-ARDD source refused (exit 1)" \
+  && ok "case3: non-ArDD source refused (exit 1)" \
   || bad "case3: expected exit 1, got $status"
 [ -d "$target/.claude" ] \
   && bad "case3: refused but still installed" \
@@ -321,7 +321,7 @@ echo "my real project" > "$target/README.md"
 echo "code" > "$target/src/main.py"
 run_new 0 "case15: --existing accepts a populated project" --no-kickoff --existing "$target"
 [ -f "$target/.project/ardd-version.md" ] \
-  && ok "case15: ARDD installed into existing project" \
+  && ok "case15: ArDD installed into existing project" \
   || bad "case15: nothing installed"
 { [ -f "$target/src/main.py" ] && grep -q "code" "$target/src/main.py"; } \
   && ok "case15: pre-existing content untouched" \
@@ -386,7 +386,7 @@ set -e
 # always pre-seeded from a local fixture origin — no case may reach the
 # clone-from-GitHub path.
 
-# A fixture origin that is a fully installable ARDD checkout, tagged so
+# A fixture origin that is a fully installable ArDD checkout, tagged so
 # that lexical ordering would pick the wrong release (v1.10.0 > v1.9.0).
 FIXORIGIN="$WORK/fix-origin"
 mkdir -p "$FIXORIGIN"

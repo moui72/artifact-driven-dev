@@ -1,12 +1,12 @@
 ---
 name: ardd-update
 tier: extension
-description: Update this project's ARDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output.
+description: Update this project's ArDD install from its recorded source — resolve the release channel (dev-mode checkouts warned), check standing, re-run install.sh, and relay its output.
 ---
 
 # /ardd-update
 
-Update this project's installed ARDD skills from the source checkout,
+Update this project's installed ArDD skills from the source checkout,
 without you having to remember where that checkout lives. Also the way
 to *see* install-time output (migrations applied, badge/gitignore
 suggestions) in your own session — suggestions only print to whoever
@@ -43,7 +43,7 @@ Usage: `/ardd-update` — no arguments.
      live checkout, and its current state may hold unreleased,
      possibly-broken skills — and ask the user before proceeding.
    - `resolved=false`: relay the reason (`missing`/`not-ardd` — the
-     recorded path is gone or isn't an ARDD checkout; `no-source-path` —
+     recorded path is gone or isn't an ArDD checkout; `no-source-path` —
      the install predates Source-Path recording) and ask the user for
      the checkout's path — don't guess or search the filesystem. Re-run
      `source-resolve.sh <path>` with the answer. The reinstall in step 4

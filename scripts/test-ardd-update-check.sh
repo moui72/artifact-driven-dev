@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Regression test for ardd-update-check.sh: compares a target's installed
-# ARDD commit (from .project/ardd-version.md) against the recorded source
+# ArDD commit (from .project/ardd-version.md) against the recorded source
 # checkout's tip. Local git only. Four outcomes, one line each.
 
 set -e
@@ -24,7 +24,7 @@ fail=0
 ok()  { echo "ok: $1"; }
 bad() { echo "FAIL: $1"; fail=1; }
 
-# Fake source checkout: a git repo that looks like ARDD (install.sh + skills/)
+# Fake source checkout: a git repo that looks like ArDD (install.sh + skills/)
 SRC="$WORK/ardd-src"
 mkdir -p "$SRC/skills"
 printf '#!/usr/bin/env sh\n' > "$SRC/install.sh"
@@ -33,7 +33,7 @@ TIP1="$(git -C "$SRC" rev-parse --short HEAD)"
 
 mkver() { # mkver <target> <commit> <source-path>
   mkdir -p "$1/.project"
-  printf '# ARDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated 2026-07-07_\n\nSource-Path: %s\n' "$2" "$3" > "$1/.project/ardd-version.md"
+  printf '# ArDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated 2026-07-07_\n\nSource-Path: %s\n' "$2" "$3" > "$1/.project/ardd-version.md"
 }
 
 # --- up-to-date (source has no releases yet -> tip comparison, noted) ---
@@ -82,7 +82,7 @@ T2="$WORK/t2"; mkver "$T2" "$TIP1" "$WORK/nowhere"
 out="$(sh "$CHECK" "$T2")"
 [ "$out" = "source-missing path=$WORK/nowhere" ] && ok "source-missing (gone)" || bad "source-missing (gone) — got '$out'"
 
-# --- source-missing: path exists but is not an ARDD checkout ---
+# --- source-missing: path exists but is not an ArDD checkout ---
 NOTSRC="$WORK/not-ardd"; mkdir -p "$NOTSRC"
 T3="$WORK/t3"; mkver "$T3" "$TIP1" "$NOTSRC"
 out="$(sh "$CHECK" "$T3")"
@@ -95,7 +95,7 @@ out="$(sh "$CHECK" "$T4")"; rc=$?
 
 # --- version file predates Source-Path (pre-T001 install) -> no-source-path ---
 T5="$WORK/t5"; mkdir -p "$T5/.project"
-printf '# ARDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated 2026-07-06_\n' "$TIP1" > "$T5/.project/ardd-version.md"
+printf '# ArDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated 2026-07-06_\n' "$TIP1" > "$T5/.project/ardd-version.md"
 out="$(sh "$CHECK" "$T5")"
 [ "$out" = "no-source-path" ] && ok "pre-T001 file -> no-source-path" || bad "no-source-path — got '$out'"
 
@@ -122,7 +122,7 @@ out="$(sh "$CHECK" "$SH")"
 # --- prose line carries a deliberate decoy commit to prove preference.
 mkver2() { # mkver2 <target> <commit> <source-path>
   mkdir -p "$1/.project"
-  printf '# ARDD Version\n\n_Source: artifact-driven-dev @ 0000000 · Installed/updated 2026-07-12_\n\nSource-Path: %s\nSource-Commit: %s\n' "$3" "$2" > "$1/.project/ardd-version.md"
+  printf '# ArDD Version\n\n_Source: artifact-driven-dev @ 0000000 · Installed/updated 2026-07-12_\n\nSource-Path: %s\nSource-Commit: %s\n' "$3" "$2" > "$1/.project/ardd-version.md"
 }
 FULL4="$(git -C "$SRC" rev-parse HEAD)"          # commit of v1.10.0
 FULL3="$(git -C "$SRC" rev-parse "$TIP3")"       # commit of v1.9.0
@@ -160,7 +160,7 @@ out="$(sh "$CHECK" "$T9")"
 # stable/absent cases below re-pin it once beta tags exist in the fixture.
 mkver3() { # mkver3 <target> <commit> <source-path> <channel>
   mkdir -p "$1/.project"
-  printf '# ARDD Version\n\n_Source: artifact-driven-dev @ 0000000 · Installed/updated 2026-07-12_\n\nSource-Path: %s\nSource-Commit: %s\nChannel: %s\n' "$3" "$2" "$4" > "$1/.project/ardd-version.md"
+  printf '# ArDD Version\n\n_Source: artifact-driven-dev @ 0000000 · Installed/updated 2026-07-12_\n\nSource-Path: %s\nSource-Commit: %s\nChannel: %s\n' "$3" "$2" "$4" > "$1/.project/ardd-version.md"
 }
 
 ( cd "$SRC" && printf 'b\n' >> install.sh && git add -A && git commit -q -m five )

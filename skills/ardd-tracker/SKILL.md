@@ -179,7 +179,7 @@ eventually carry links into more than one tracker.
    This is the one deliberate asymmetry in "vice-versa": pull's only
    write-back into the register is importing new entries (step 1). A
    tracker-side status change is always reported, never applied — `Status`
-   transitions belong to the ARDD lifecycle skills
+   transitions belong to the ArDD lifecycle skills
    (`/ardd-plan`/`/ardd-implement`), not to this skill. The
    user reconciles manually or via `/ardd-feedback`.
 

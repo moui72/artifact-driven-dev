@@ -9,7 +9,7 @@ silently blocked `.claude/settings.json` — real, team-shared config for
 the PostToolUse lint hook added later — from ever being tracked without
 `git add -f`. Narrowed to `.claude/skills/`. Then this repo's own
 `.gitignore` hit the identical problem one level down: `.claude/skills/`
-isn't entirely ARDD-owned either — only the `ardd-*` subdirectories are;
+isn't entirely ArDD-owned either — only the `ardd-*` subdirectories are;
 a hand-written custom skill can live alongside them. Narrowed again to
 `.claude/skills/ardd-*/`, now the permanent ceiling (Constitution
 Principle III).
