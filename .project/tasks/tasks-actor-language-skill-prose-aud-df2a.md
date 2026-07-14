@@ -31,7 +31,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   distinguishing human observation from agent-side critique
   (`/ardd-audit`), so the pronoun should not be ambiguous here. No test
   requirement.
-- [ ] T004 [parallel] Review `skills/ardd-update/SKILL.md` for ambiguous
+- [x] T004 [parallel] Review `skills/ardd-update/SKILL.md` for ambiguous
   pronouns (flagged lines ~10, 12, 100: "without you having to remember",
   "in your own session", "merge into your default branch" — the last
   inside an AskUserQuestion prompt string). Rewrite the prose occurrences

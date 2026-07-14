@@ -7,9 +7,9 @@ description: Update this project's ArDD install from its recorded source — res
 # /ardd-update
 
 Update this project's installed ArDD skills from the source checkout,
-without you having to remember where that checkout lives. Also the way
+without the user having to remember where that checkout lives. Also the way
 to *see* install-time output (migrations applied, badge/gitignore
-suggestions) in your own session — suggestions only print to whoever
+suggestions) in the user's own session — suggestions only print to whoever
 runs install.sh, which is exactly why this skill exists.
 
 Usage: `/ardd-update` — no arguments.
