@@ -60,7 +60,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   occurrence found on a full read of the file). Rewrite to name "the
   agent" explicitly, or restructure the conditional to avoid the pronoun
   entirely. No test requirement.
-- [ ] T008 [parallel] Review `skills/ardd-status/SKILL.md` for ambiguous
+- [x] T008 [parallel] Review `skills/ardd-status/SKILL.md` for ambiguous
   pronouns (flagged line ~26: "anytime you want a fresh check" — the
   user). Rewrite to "the user". No test requirement.
 - [ ] T009 [parallel] Review `skills/ardd-refine/SKILL.md` for ambiguous

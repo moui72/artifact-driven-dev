@@ -23,7 +23,7 @@ when that set changes.
 Manual invocation is still the right call after `/ardd-init`
 (deliberately deferred until after a `/ardd-refine` pass — running it
 immediately would just report a wall of expected draft-state noise) or
-anytime you want a fresh check outside those flows.
+anytime the user wants a fresh check outside those flows.
 
 **Run only from the primary checkout, never inside a delegated worktree.**
 `/ardd-status` is the sole writer of `STATUS.md`; running it inside a
