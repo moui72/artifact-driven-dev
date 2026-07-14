@@ -143,6 +143,16 @@ opt-in `git config merge.ours.driver true` they merge clean automatically.
 These four are deliberately *not* schema-validated by `lint-project.sh` —
 they're prose for humans, not machine-checkable state.
 
+## `WORKFLOW.md`
+
+A static, generated tour of the installed skill set — the same command
+table you see in the [skills reference](skills/README.md), seeded into
+`.project/WORKFLOW.md` by `/ardd-init` (copied from the shipped template,
+not hand-written) and refreshed by re-running `install.sh` after an
+upgrade. It's a convenience pointer for humans opening the project, not
+machine-checkable state, so `lint-project.sh` doesn't validate it. Commit
+it or not as you like — re-running install.sh reproduces it.
+
 ## `ardd-version.md`
 
 Written by install.sh on every run: the source commit, date,
