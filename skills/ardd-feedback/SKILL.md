@@ -7,10 +7,10 @@ description: "Capture bugs/UX/reconsidered decisions from inspecting the impleme
 # /ardd-feedback
 
 Capture feedback from manually inspecting the running implementation — bugs,
-UX issues, or decisions you've reconsidered. Unlike `/ardd-audit` (Claude
-challenging artifact decisions on paper), this is you reporting what you
-found by actually looking at the thing. Feedback is organized into a
-per-invocation file that `/ardd-plan` later consumes.
+UX issues, or decisions the user has reconsidered. Unlike `/ardd-audit`
+(Claude challenging artifact decisions on paper), this is the user reporting
+what they found by actually looking at the thing. Feedback is organized into
+a per-invocation file that `/ardd-plan` later consumes.
 
 Usage: `/ardd-feedback <freeform notes>`, or run bare and paste/describe your
 notes in the next message.
@@ -24,8 +24,8 @@ notes in the next message.
 2. **Classify each item** into one of:
    - **Bug** — implementation doesn't do what was intended
    - **UX** — works as intended but the experience should change
-   - **Reconsidered** — a prior decision (yours or an artifact's) no longer
-     holds
+   - **Reconsidered** — a prior decision (the user's or an artifact's) no
+     longer holds
    - **New capability** — not a problem with existing behavior at all, but
      something the system doesn't do yet. These belong in the feature
      register (`/ardd-backlog`'s territory), not a feedback file — see the

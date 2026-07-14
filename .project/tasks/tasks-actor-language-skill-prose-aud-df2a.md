@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   particular attention to line 350's "the plan you just wrote" — the agent
   wrote it, the human is re-reading it at the approval checkpoint — resolve
   to name the correct actor explicitly at each site. No test requirement.
-- [ ] T003 [parallel] Review `skills/ardd-feedback/SKILL.md` for ambiguous
+- [x] T003 [parallel] Review `skills/ardd-feedback/SKILL.md` for ambiguous
   pronouns (flagged lines ~10, 11, 15, 27: "decisions you've
   reconsidered", "this is you reporting what you found", "your notes").
   Rewrite to "the user" explicitly — the skill's stated purpose is
