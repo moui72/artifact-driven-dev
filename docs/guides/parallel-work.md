@@ -25,7 +25,7 @@ Consequences worth internalizing:
 
 (The design history — why the earlier "commit state before branching"
 approach died — is in decision record
-[0001](../decisions/0001-branch-identity-and-worktree-native-state.md).)
+[0001](https://github.com/moui72/artifact-driven-dev/blob/main/docs/decisions/0001-branch-identity-and-worktree-native-state.md).)
 
 ## Solo mode: the delegation cycle
 

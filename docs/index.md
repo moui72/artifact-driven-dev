@@ -15,6 +15,12 @@ into plans, task lists, and code. It's a workflow, not a generator — you
 refine the artifacts iteratively, and everything downstream is derived
 from them.
 
+**Is it for you?** ArDD earns its overhead where the codebase can't serve
+as an implicit spec — greenfield work, or a major pivot away from the
+patterns the code currently shows. On a mature, consistent codebase a solid
+`CLAUDE.md` often buys more for less. The honest version:
+[When artifacts earn their keep](concepts.md#when-artifacts-earn-their-keep).
+
 ## New to ArDD?
 
 1. [Concepts](concepts.md) — the mental model in one page
@@ -46,7 +52,12 @@ from them.
 | `.project/` file formats, frontmatter schemas, status enums | [Project files](reference/project-files.md) |
 | The constitution workflow knobs (`workflow_mode`, `delegation`, …) | [Configuration](reference/configuration.md) |
 | The installed helper scripts skills shell out to | [Scripts](reference/scripts.md) |
-| Why things are the way they are — the decision records | [Decisions](decisions/README.md) |
+
+Why things are the way they are — the decision records — live in the
+repository under
+[`docs/decisions/`](https://github.com/moui72/artifact-driven-dev/tree/main/docs/decisions).
+They're source-repo development history rather than user documentation, so
+they're kept out of this site.
 
 ## The short version of the workflow
 
