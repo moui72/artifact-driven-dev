@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 100 100" fill="none">
+  <title>ArDD favicon</title>
+  <rect x="34" y="30" width="32" height="40" rx="5" fill="#ffffff" stroke="#2f4858" stroke-width="6"></rect>
+  <line x1="42" y1="42" x2="58" y2="42" stroke="#2f4858" stroke-width="5"></line>
+  <line x1="42" y1="50" x2="58" y2="50" stroke="#2f4858" stroke-width="5"></line>
+  <polygon points="11,0 -8,-10 -8,10" fill="#f26419" transform="translate(32 14) rotate(-30)"></polygon>
+  <polygon points="11,0 -8,-10 -8,10" fill="#f6ae2d" transform="translate(14 32) rotate(-60)"></polygon>
+  <polygon points="11,0 -8,-10 -8,10" fill="#86bbd8" transform="translate(88 68) rotate(120)"></polygon>
+  <polygon points="11,0 -8,-10 -8,10" fill="#33658a" transform="translate(68 88) rotate(150)"></polygon>
+</svg>

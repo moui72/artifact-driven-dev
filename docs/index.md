@@ -1,3 +1,11 @@
+<div class="ardd-hero" markdown="0">
+  <img class="ardd-lockup-light" src="assets/lockup.svg" alt="artifact-driven-dev">
+  <img class="ardd-lockup-dark" src="assets/lockup-dark.svg" alt="artifact-driven-dev">
+  <p class="ardd-tagline">Hold the decisions you've made. Check them. Turn them into code.</p>
+</div>
+
+<hr class="ardd-spectrum">
+
 # artifact-driven-dev (ARDD)
 
 ARDD is a Claude Code skill pack for artifact-driven development: a small

@@ -1,0 +1,109 @@
+/* ARDD brand layer over MkDocs Material.
+   Palette: charcoal-blue #2f4858 (ink) · baltic-blue #33658a (primary) ·
+   sky-reflection #86bbd8 (tint) · honey-bronze #f6ae2d · blaze-orange #f26419.
+   The four warm/cool accents are the mark's four orbiting arrowheads — the
+   refine → plan → implement → check cycle. Kept as one signature flourish;
+   everything else stays quiet. */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  --ardd-charcoal: #2f4858;
+  --ardd-baltic:   #33658a;
+  --ardd-sky:      #86bbd8;
+  --ardd-honey:    #f6ae2d;
+  --ardd-blaze:    #f26419;
+  --ardd-display: 'Space Grotesk', var(--md-text-font-family, sans-serif);
+}
+
+/* ---- Light scheme --------------------------------------------------- */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:        var(--ardd-baltic);
+  --md-primary-fg-color--light: var(--ardd-sky);
+  --md-primary-fg-color--dark:  var(--ardd-charcoal);
+  --md-accent-fg-color:         var(--ardd-blaze);
+  --md-typeset-a-color:         var(--ardd-baltic);
+}
+
+/* ---- Dark scheme ---------------------------------------------------- */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:        var(--ardd-charcoal);
+  --md-primary-fg-color--light: var(--ardd-sky);
+  --md-primary-fg-color--dark:  #22333f;
+  --md-accent-fg-color:         var(--ardd-honey);
+  --md-typeset-a-color:         var(--ardd-sky);
+}
+
+/* ---- Display type: the lockup's face on every heading --------------- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-header__title,
+.md-nav__title {
+  font-family: var(--ardd-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--md-primary-fg-color--dark);
+}
+[data-md-color-scheme="slate"] .md-typeset h1 { color: var(--ardd-sky); }
+
+/* ---- The signature: the four-arrowhead spectrum as a hairline rule --- */
+.ardd-spectrum {
+  height: 3px;
+  border: 0;
+  margin: 0 0 2.2rem;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--ardd-blaze)   0%,
+    var(--ardd-honey)  33%,
+    var(--ardd-sky)    66%,
+    var(--ardd-baltic) 100%
+  );
+}
+
+/* A thin spectrum seam under the header, so the palette reads sitewide. */
+.md-header {
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    var(--ardd-blaze),
+    var(--ardd-honey),
+    var(--ardd-sky),
+    var(--ardd-baltic)
+  ) 1;
+}
+
+/* ---- Homepage hero -------------------------------------------------- */
+.ardd-hero {
+  text-align: center;
+  padding: 1.4rem 0 0.4rem;
+}
+.ardd-hero img {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+.ardd-hero .ardd-lockup-dark  { display: none; }
+[data-md-color-scheme="slate"] .ardd-hero .ardd-lockup-light { display: none; }
+[data-md-color-scheme="slate"] .ardd-hero .ardd-lockup-dark  { display: inline; }
+.ardd-tagline {
+  font-family: var(--ardd-display);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--md-default-fg-color--light);
+  margin: 0.5rem auto 0;
+  max-width: 30rem;
+}
+
+/* Restraint: hide the redundant page H1 on the homepage — the lockup is it. */
+.md-typeset .ardd-hero + h1 { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ardd-hero img { transition: transform 0.4s ease; }
+}

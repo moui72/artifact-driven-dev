@@ -9,8 +9,16 @@ edit_uri: edit/main/docs/
 
 docs_dir: docs
 
+extra_css:
+  - stylesheets/ardd.css
+
 theme:
   name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  font:
+    text: Inter
+    code: JetBrains Mono
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default

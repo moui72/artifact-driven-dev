@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="140" viewBox="0 0 250 100" fill="none">
+  <title>ArDD lockup — dark</title>
+  <g transform="translate(2 8) scale(0.84)">
+    <circle cx="50" cy="50" r="34" fill="none" stroke="#6f8a9a" stroke-width="2.5"></circle>
+    <rect x="37" y="34" width="26" height="32" rx="4" fill="#2f4858" stroke="#dfe8ed" stroke-width="3.5"></rect>
+    <line x1="43" y1="44" x2="57" y2="44" stroke="#dfe8ed" stroke-width="3"></line>
+    <line x1="43" y1="50" x2="57" y2="50" stroke="#dfe8ed" stroke-width="3"></line>
+    <line x1="43" y1="56" x2="52" y2="56" stroke="#dfe8ed" stroke-width="3"></line>
+    <polygon points="7,0 -5,-6 -5,6" fill="#f26419" transform="translate(41 17) rotate(-15)"></polygon>
+    <polygon points="7,0 -5,-6 -5,6" fill="#f6ae2d" transform="translate(17 41) rotate(-75)"></polygon>
+    <polygon points="7,0 -5,-6 -5,6" fill="#86bbd8" transform="translate(83 59) rotate(105)"></polygon>
+    <polygon points="7,0 -5,-6 -5,6" fill="#5b93b8" transform="translate(59 83) rotate(165)"></polygon>
+  </g>
+  <text x="98" y="68" font-family="'Space Grotesk', 'Helvetica Neue', Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="-2" fill="#eaf1f5">ArDD</text>
+</svg>

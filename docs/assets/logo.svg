@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 100 100" fill="none">
+  <title>ArDD mark — header</title>
+  <circle cx="50" cy="50" r="34" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="2.5"></circle>
+  <rect x="37" y="34" width="26" height="32" rx="4" fill="none" stroke="#ffffff" stroke-width="3.5"></rect>
+  <line x1="43" y1="44" x2="57" y2="44" stroke="#ffffff" stroke-width="3"></line>
+  <line x1="43" y1="50" x2="57" y2="50" stroke="#ffffff" stroke-width="3"></line>
+  <line x1="43" y1="56" x2="52" y2="56" stroke="#ffffff" stroke-width="3"></line>
+  <polygon points="7,0 -5,-6 -5,6" fill="#f26419" transform="translate(41 17) rotate(-15)"></polygon>
+  <polygon points="7,0 -5,-6 -5,6" fill="#f6ae2d" transform="translate(17 41) rotate(-75)"></polygon>
+  <polygon points="7,0 -5,-6 -5,6" fill="#86bbd8" transform="translate(83 59) rotate(105)"></polygon>
+  <polygon points="7,0 -5,-6 -5,6" fill="#ffffff" transform="translate(59 83) rotate(165)"></polygon>
+</svg>
