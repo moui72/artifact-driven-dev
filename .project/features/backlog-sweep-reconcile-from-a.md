@@ -1,6 +1,6 @@
 ---
 slug: backlog-sweep-reconcile-from-a
-status: tasked
+status: implemented
 logged: 2026-07-15
 plan: plan-discovery-to-work-eager-captur-2026-07-15-156b.md
 tasks: tasks-discovery-to-work-eager-captur-2b57.md
