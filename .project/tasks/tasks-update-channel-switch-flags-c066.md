@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: `/ardd-update` channel flags [feature: update-channel-switch-flags]
 
-- [ ] T001 Rewrite `skills/ardd-update/SKILL.md`'s Usage
+- [x] T001 Rewrite `skills/ardd-update/SKILL.md`'s Usage
   section to add `--local`, `--beta`, `--stable` alongside the existing
   bare form and `--reconfigure`. Rewrite step 1 to branch on the flag
   before doing the existing recorded-channel read:

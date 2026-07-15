@@ -12,32 +12,58 @@ to *see* install-time output (migrations applied, badge/gitignore
 suggestions) in the user's own session — suggestions only print to whoever
 runs install.sh, which is exactly why this skill exists.
 
-Usage: `/ardd-update` (backfill absent workflow fields only) or
-`/ardd-update --reconfigure` (re-ask all four workflow fields,
-regardless of whether they're already set).
+Usage: `/ardd-update` (backfill absent workflow fields only, resolve on
+the recorded channel), `/ardd-update --reconfigure` (re-ask all four
+workflow fields, regardless of whether they're already set),
+`/ardd-update --stable` (switch to, or stay on, the latest full release),
+`/ardd-update --beta` (switch to, or stay on, the latest release
+including prereleases), or `/ardd-update --local` (switch to a dev-mode
+checkout). `--stable`, `--beta`, and `--local` are mutually exclusive —
+passing more than one at once is a usage error, reported before step 1
+proceeds.
 
 ## Steps
 
-1. **Resolve the source, on the recorded channel.** Read the `Channel:`
-   line from `.project/ardd-version.md` (absent = `stable` — files from
-   older installs have no line and need none). Then run
-   `.claude/skills/ardd-scripts/source-resolve.sh --channel <recorded>`
-   (installed copy; if it's missing — an install that predates it — fall
-   back to the source repo's own `scripts/source-resolve.sh` by absolute
-   path, same rule as other ardd-scripts calls). It reads `Source-Path:`
-   from `.project/ardd-version.md` and, for the tooling-owned checkout
-   (`~/.ardd/source`), fetches tags and moves it to the latest release
-   *on that channel* (`stable` = tagged full releases; `beta` = the
-   latest tag including `vX.Y.Z-beta.N` prereleases, where a newer
-   stable still beats an older beta) — that *is* this skill's "update
-   the source" act, delegated to the script: the skill decides what to
-   do with the outcome, the script does all the writing. Report which
-   channel the project tracks alongside the resolved tag. **Offer a
-   channel switch only when the user raises it** — never as a routine
-   prompt; to switch, re-run `source-resolve.sh --channel <new>` and run
-   step 4's reinstall with `ARDD_CHANNEL=<new>` set, which makes
-   install.sh record the new channel in `ardd-version.md`. Act on the
-   printed line:
+1. **Resolve the source.** Behavior branches on which flag, if any, was
+   passed:
+
+   - **`--stable` / `--beta` (deliberate channel switch):** skip reading
+     the recorded `Channel:` line entirely. Run
+     `.claude/skills/ardd-scripts/source-resolve.sh --channel stable` (or
+     `--channel beta`) directly against the owned checkout (installed
+     copy; if it's missing — an install that predates it — fall back to
+     the source repo's own `scripts/source-resolve.sh` by absolute path,
+     same rule as other ardd-scripts calls). Set `ARDD_CHANNEL=stable` (or
+     `beta`) for step 4's reinstall, so `install.sh` re-records the new
+     channel in `ardd-version.md` regardless of what was previously
+     recorded there. This is the same act the old "offer a channel switch
+     only when raised" path described by hand — the flag itself is now
+     the raising.
+   - **`--local` (deliberate dev-mode switch):** resolve a live checkout
+     to reinstall from. If the recorded `Source-Path` (from
+     `.project/ardd-version.md`) already resolves `channel=dev` via
+     `source-resolve.sh`, use it as-is. Otherwise ask the user for a live
+     checkout's path — don't guess or search the filesystem, same
+     discipline as the `resolved=false` handling below. In step 4,
+     reinstall from that checkout's own `install.sh` and do **not** set
+     `ARDD_CHANNEL` — dev-mode ignores it (`source-resolve.sh`'s existing
+     doc comment).
+   - **Bare form (no flag):** unchanged — read the `Channel:` line from
+     `.project/ardd-version.md` (absent = `stable` — files from older
+     installs have no line and need none), then run
+     `.claude/skills/ardd-scripts/source-resolve.sh --channel <recorded>`
+     (installed copy; same fallback rule as above). It reads
+     `Source-Path:` from `.project/ardd-version.md` and, for the
+     tooling-owned checkout (`~/.ardd/source`), fetches tags and moves it
+     to the latest release *on that channel* (`stable` = tagged full
+     releases; `beta` = the latest tag including `vX.Y.Z-beta.N`
+     prereleases, where a newer stable still beats an older beta) — that
+     *is* this skill's "update the source" act, delegated to the script:
+     the skill decides what to do with the outcome, the script does all
+     the writing. Report which channel the project tracks alongside the
+     resolved tag.
+
+   Whichever path ran, act on the printed line:
    - `channel=release`: proceed, and report the resolved tag (relay
      `warning=offline` — resolution used on-disk state — or
      `warning=no-tags` — no releases exist yet — or `note=fetch-skipped-
@@ -47,7 +73,9 @@ regardless of whether they're already set).
      from `warning=offline`'s "asked and failed" — if present).
    - `channel=dev`: surface an explicit dev-mode warning — this is a
      live checkout, and its current state may hold unreleased,
-     possibly-broken skills — and ask the user before proceeding.
+     possibly-broken skills — and ask the user before proceeding (skip
+     this confirmation when the user just asked for `--local`
+     explicitly — the flag itself is the confirmation).
    - `resolved=false`: relay the reason (`missing`/`not-ardd` — the
      recorded path is gone or isn't an ArDD checkout; `no-source-path` —
      the install predates Source-Path recording) and ask the user for
