@@ -22,12 +22,12 @@ that has open questions instead of a single one:
 2. Build the list of artifacts with at least one open question, sorted by
    open-question count descending (most open issues first). Skip any artifact
    with zero open questions.
-3. Run the normal refine steps below (steps 1–7) on each artifact in that
+3. Run the normal refine steps below (steps 1–8) on each artifact in that
    order, using its open questions as the guidance/clarifying-question input
    for step 2 instead of asking from scratch.
 4. After the pass, run `/ardd-status` once automatically to refresh
    `STATUS.md` for all refined artifacts, rather than after each one — skip
-   the per-artifact trigger in step 7 below while running in this mode.
+   the per-artifact trigger in step 8 below while running in this mode.
 
 ## Steps
 
@@ -52,7 +52,8 @@ that has open questions instead of a single one:
      list in `CLAUDE.md`.
    - Then continue with the steps below on the freshly created file (steps
      2–3 typically have little to change on a just-seeded artifact; if
-     nothing further is needed, skip to step 7's report — and since other
+     nothing further is needed, skip to step 7's capture — where the whole
+     new artifact is the delta — then step 8's report; and since other
      artifacts may reference the new one, run `/ardd-status` rather than
      just suggesting it).
 
@@ -88,7 +89,39 @@ that has open questions instead of a single one:
 
 6. **Write** the updated artifact back to `.project/artifacts/<name>.md`.
 
-7. **Report** what changed in 2–3 sentences. Note any open questions deferred
+7. **Capture newly documented capabilities — delta-scoped.** A refine can
+   introduce scope the system doesn't have yet — a pivot recorded in the
+   artifact but tracked nowhere. The candidates are ONLY capabilities
+   newly introduced or materially changed by the edit just applied in
+   steps 3–6 — never the artifact's long-standing documented scope; the
+   user must not be re-prompted about unchanged content on every refine.
+   On the create path (step 1), the whole new artifact is the delta.
+
+   - **Enumerate candidates from the delta.** The agent lists each
+     capability the edit newly describes or materially changes that has
+     (a) no entry in `.project/features/` — checked against every
+     status, including `implemented` and `retired` — and (b) no existing
+     implementation. What counts as a capability versus a design note is
+     the agent's judgment; when unsure, offer it and let the user
+     decline.
+   - **Confirm in one batched prompt.** If any candidates exist, present
+     them in ONE grouped prompt (AskUserQuestion, multiSelect on) with
+     per-item accept/decline — never N sequential prompts (the same
+     pattern as `/ardd-feedback`'s re-file step). If there are no
+     candidates, skip silently.
+   - **Create accepted entries.** For each accepted item: derive a slug
+     (`.claude/skills/ardd-scripts/ardd-state.sh slug "<item>"`), then
+     create the register entry:
+
+     ```
+     printf '%s\n' "<one-sentence description>" \
+       | .claude/skills/ardd-scripts/ardd-state.sh feature-create <slug>
+     ```
+
+     Declined items are simply not created; the user's judgment is
+     final for this run.
+
+8. **Report** what changed in 2–3 sentences. Note any open questions deferred
    for a future `/ardd-refine` pass. If invoked for a single artifact (not
    via no-argument mode), run `/ardd-status` now to refresh `STATUS.md` with
    the updated artifact status and open questions — in no-argument mode this

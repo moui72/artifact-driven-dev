@@ -253,7 +253,7 @@ with `/ardd-refine` before planning new work.
      If so, append `[VIOLATED: <one-line evidence from the survey>]` to the
      inserted text, the same way other inferred content is marked for the
      user to see and correct. Never write to `DEFECTS.md` or the feature
-     register here — report the violated count in step 9 instead,
+     register here — report the violated count in step 10 instead,
      recommending `/ardd-defects` (to log each gap in `DEFECTS.md`)
      followed by `/ardd-backlog` to backlog closing it. This preserves
      those files' existing single-writer ownership.
@@ -387,7 +387,46 @@ with `/ardd-refine` before planning new work.
    using the structure below. STATUS.md changes frequently; WORKFLOW.md
    does not.
 
-9. **Report:**
+9. **Capture newly documented capabilities — both paths.** The
+   just-written artifacts may describe capabilities that don't exist yet
+   and aren't tracked anywhere — documented scope that would otherwise
+   sit in limbo, in no register and no plan. This step is distinct from
+   step 7's register extraction: that step reads the *code* to backfill
+   already-shipped history; this one reads the *artifacts* just written
+   to catch described-but-unbuilt scope. On the greenfield path (where
+   step 7 never runs) this is the only register seeding `/ardd-init`
+   does.
+
+   - **Enumerate candidates.** The agent re-reads the artifacts written
+     in step 6 and lists each capability they describe that has (a) no
+     entry in `.project/features/` — checked against every status,
+     including `implemented` and `retired`, not just `backlogged` — and
+     (b) no existing implementation (on the greenfield path there is
+     none, so every described capability qualifies; on the
+     existing-codebase path, reuse the step-2 survey to exclude what the
+     code already does). Name candidates at the capability level, as in
+     step 7 — what a capability *is* versus a design note or constraint
+     is the agent's judgment call; when unsure, offer it and let the
+     user decline.
+   - **Confirm in one batched prompt.** If any candidates exist, present
+     them in ONE grouped prompt (AskUserQuestion, multiSelect on) with
+     per-item accept/decline — never N sequential prompts (the same
+     pattern as `/ardd-feedback`'s re-file step). If there are no
+     candidates, skip silently.
+   - **Create accepted entries.** For each accepted item: derive a slug
+     (`.claude/skills/ardd-scripts/ardd-state.sh slug "<item>"`), then
+     create the register entry:
+
+     ```
+     printf '%s\n' "<one-sentence description>" \
+       | .claude/skills/ardd-scripts/ardd-state.sh feature-create <slug>
+     ```
+
+     These stay `backlogged` — unlike step 7's extracted history, they
+     are genuinely unbuilt work. Declined items are simply not created;
+     the user's judgment is final for this run.
+
+10. **Report:**
    - Which path ran (greenfield or existing codebase) and what was created
    - How many open questions exist per artifact (`[OPEN: ...]` count)
    - Which constitution suggestions (if any) were accepted — and, on the
@@ -397,6 +436,8 @@ with `/ardd-refine` before planning new work.
    - If the register was extracted: how many features, which sources were
      most useful, and the count of `[REVIEW: ...]` entries with a brief
      note on each
+   - How many documented-but-unbuilt capabilities step 9 offered, and how
+     many the user accepted into the register
    - Existing-codebase path: one sentence on what the survey found that was
      most surprising or ambiguous
    - Recommended next step (usually `/ardd-refine` on whichever draft

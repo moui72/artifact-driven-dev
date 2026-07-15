@@ -50,6 +50,11 @@ that would trap the `STATUS.md` write on the worktree's branch.
   language, `draft` artifacts that would block planning
 - **Diagram staleness** — each renderable artifact's `diagram_status`
 - **In-flight work** — sibling worktrees, reapable worktrees, draft PRs
+- **Documented but untracked** — capabilities a `stable` artifact
+  describes that have no register entry (any status) and no
+  implementation, each pointing at `/ardd-backlog --from-artifacts`.
+  Advisory only — it never creates register entries (drafts are skipped;
+  the section is omitted when nothing is untracked)
 
 ## Writes
 
