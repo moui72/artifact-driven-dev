@@ -70,6 +70,14 @@ All status mutations are script-performed via `ardd-state.sh`
 ## Behavior notes
 
 - **Run `/ardd-status` first** — don't plan over unresolved conflicts.
+- **Browser preview at the approval checkpoint**: before the approve /
+  revise / stop question, a one-time preliminary question offers to view
+  the plan in the browser — on yes, the plan file is published via the
+  `Artifact` tool and its URL is shown, then the checkpoint proceeds as
+  normal; on no, straight to the checkpoint. This re-fires every time a
+  Revise loop returns to the checkpoint, and a later redeploy of the same
+  plan file (same path) targets the same artifact URL, so the preview
+  always reflects the latest draft.
 - **Reconsidered feedback items are confirmed, never assumed**: each one
   tagged with an artifact gets an explicit confirm-the-reversal prompt,
   showing what the artifact says vs. what the feedback says.

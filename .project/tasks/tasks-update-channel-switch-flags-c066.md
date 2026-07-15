@@ -51,6 +51,6 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   redeploy of the same plan file targets the same artifact URL. No test
   task — prose-only change (Principle V documentation-only exception).
 
-- [ ] T004 [parallel] Update
+- [x] T004 [parallel] Update
   `docs/reference/skills/ardd-plan.md` to document the browser-preview
   offer at the approval checkpoint, matching T003.
