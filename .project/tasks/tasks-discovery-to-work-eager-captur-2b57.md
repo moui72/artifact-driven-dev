@@ -1,7 +1,7 @@
 ---
 plan: plan-discovery-to-work-eager-captur-2026-07-15-156b.md
 generated: 2026-07-15
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
