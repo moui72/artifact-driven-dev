@@ -11,6 +11,9 @@ _Tier: extension_
 ```
 /ardd-update
 /ardd-update --reconfigure
+/ardd-update --stable
+/ardd-update --beta
+/ardd-update --local
 ```
 
 Bare form: no arguments. Updates the installed skills from the source
@@ -25,19 +28,45 @@ and — solo mode only — `merge_policy`) regardless of whether they're
 already set, showing each field's current value before asking whether to
 keep it or change it.
 
+`--stable` / `--beta`: a deliberate channel switch. Skips the recorded
+`Channel:` line entirely and resolves directly on the named channel
+against the owned checkout, then reinstalls with `ARDD_CHANNEL` set so
+`install.sh` re-records the new channel — regardless of what was
+previously recorded. This takes precedence over the recorded channel
+every time it's passed, not just on the first switch.
+
+`--local`: a deliberate dev-mode switch. Resolves to a live checkout —
+the recorded `Source-Path` if it already resolves `channel=dev`, otherwise
+you're asked for a live checkout's path (never guessed, never searched for)
+— and reinstalls from that checkout's own `install.sh` without setting
+`ARDD_CHANNEL` (dev-mode ignores it). Because the flag itself is the
+deliberate request, the usual dev-mode confirmation prompt (see step 1
+below) is skipped.
+
+`--stable`, `--beta`, and `--local` are mutually exclusive; passing more
+than one at once is a usage error, reported before anything else runs.
+
 ## What a run does
 
-1. **Resolve the source on the recorded channel.** Reads `Channel:` from
-   `.project/ardd-version.md` (absent = `stable`) and runs
-   `source-resolve.sh --channel <recorded>`. For the tooling-owned
-   checkout (`~/.ardd/source`) that fetches tags and moves it to the
-   latest release on that channel — stable means strict `vX.Y.Z` tags;
-   beta counts `vX.Y.Z-beta.N` prereleases, where a newer stable still
-   beats an older beta. A **dev-mode** source (any other live checkout)
-   gets an explicit warning — its current state may hold unreleased,
-   possibly-broken skills — and a confirmation before proceeding.
-   Channel switches are offered only when you raise them, never as a
-   routine prompt.
+1. **Resolve the source.** With `--stable`/`--beta`: skips the recorded
+   `Channel:` line and runs `source-resolve.sh --channel stable` (or
+   `beta`) directly against the owned checkout (`~/.ardd/source`), then
+   sets `ARDD_CHANNEL` for step 4's reinstall so the new channel gets
+   re-recorded. With `--local`: resolves a live checkout (recorded
+   `Source-Path` if already dev-mode, else a prompted path) and reinstalls
+   from it in step 4 without setting `ARDD_CHANNEL`. Bare form (no flag,
+   unchanged): reads `Channel:` from `.project/ardd-version.md` (absent =
+   `stable`) and runs `source-resolve.sh --channel <recorded>`. For the
+   tooling-owned checkout that fetches tags and moves it to the latest
+   release on that channel — stable means strict `vX.Y.Z` tags; beta
+   counts `vX.Y.Z-beta.N` prereleases, where a newer stable still beats an
+   older beta. A **dev-mode** source (any other live checkout) gets an
+   explicit warning — its current state may hold unreleased,
+   possibly-broken skills — and a confirmation before proceeding, unless
+   `--local` was the explicit request that led there. Outside of
+   `--stable`/`--beta`, a channel switch is offered only when you raise
+   it, never as a routine prompt — those two flags are that raising, made
+   explicit.
 2. **Report standing** via `ardd-update-check.sh` — behind, up-to-date
    (a reinstall is still offered; it repairs files and re-surfaces
    suggestions), or the source can't be found (you're asked for the

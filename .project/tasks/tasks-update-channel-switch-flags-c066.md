@@ -31,7 +31,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   No test task — prose-only change (constitution Principle V's
   documentation-only exception).
 
-- [ ] T002 [parallel] Update
+- [x] T002 [parallel] Update
   `docs/reference/skills/ardd-update.md`'s Usage and "What a run does"
   sections to match T001: document the three new flags, their
   precedence over the recorded channel, and the dev-mode prompt
