@@ -1,6 +1,28 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-plan update-channel-switch-flags
+_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+and merged all 6 tasks of `tasks-discovery-to-work-eager-captur-2b57.md`
+(now `completed`): the artifact→register bridge shipped. T001/T002 added
+terminal "capture newly documented capabilities" steps to `/ardd-init`
+(both paths) and `/ardd-refine` (delta-scoped — the pivot case); T003
+gave `/ardd-status` a detection-only "Documented but Untracked"
+report/STATUS.md section; T004 added `/ardd-backlog --from-artifacts`
+(stable-artifact walk, passage-grounded candidates, one batched
+confirmation, existing `feature-create` path); T005 added `/ardd-defects`'
+routing note (never-built documented scope → backlog, not DEFECTS.md);
+T006 updated the five reference pages (USAGE/guides deliberately
+untouched — no existing sentence became inaccurate). Merged to `main`
+(true merge `da84e79`→signed `2d792da`, `merge_policy: auto`, no
+conflicts — main had advanced with the parallel plan run) and the
+worktree reaped. Features `discovery-to-work-eager-captur` and
+`backlog-sweep-reconcile-from-a` flipped `tasked` → `implemented` (the
+flips rode the branch). Separately, a `/ardd-research` pass vetted Codex
+CLI as a second harness
+(`research-codex-cli-second-harness-2026-07-15-2d3d.md`, uncommitted):
+verdict M-effort single-source port (Codex now reads the same SKILL.md
+format from `.agents/skills/`), inline-only v1, de-risking spike first,
+MINOR constitution amendment required — awaiting user review before any
+backlog entry. Prior update, same day, `/ardd-plan update-channel-switch-flags
 plan-approval-browser-preview` — drafted, approved, and tasked
 `plan-update-channel-switch-flags-2026-07-15-f22c.md` (solo mode, no
 branch gate, on `main`, while a sibling worktree independently worked
@@ -318,7 +340,7 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 None open. Newest consumed: `feedback-artifact-register-bridge-116a.md`
 (3 UX items, all incorporated) →
 `plan-discovery-to-work-eager-captur-2026-07-15-156b.md` /
-`tasks-discovery-to-work-eager-captur-2b57.md` (0/6, `ready`). Prior
+`tasks-discovery-to-work-eager-captur-2b57.md` (completed 6/6). Prior
 batches all delivered (`findings-0344`, `redrive-695b` via
 `tasks-v1-0-0-pre-cut-testing-finding-bf61.md`, completed 13/13).
 
@@ -333,14 +355,10 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-3 backlogged · 4 tasked · 14 implemented · 1 retired — see
+3 backlogged · 2 tasked · 16 implemented · 1 retired — see
 `.project/features/`.
-Tasked:
-- `discovery-to-work-eager-captur` + `backlog-sweep-reconcile-from-a` →
-  `tasks-discovery-to-work-eager-captur-2b57.md` (3/6, `in-progress` —
-  running in sibling worktree `agent-a3bc501596d897d66`).
-- `update-channel-switch-flags` + `plan-approval-browser-preview` →
-  `tasks-update-channel-switch-flags-c066.md` (0/4, `ready`).
+Tasked: `update-channel-switch-flags` + `plan-approval-browser-preview` →
+`tasks-update-channel-switch-flags-c066.md` (0/4, `ready`).
 Backlogged:
 - `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
   analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
@@ -352,10 +370,12 @@ Backlogged:
   `/ardd-implement` to print eligible slugs/tasks files without the
   interactive pick flow.
 Target a slug with `/ardd-plan <slug>`.
-Newest implemented: `redrive-configuration-choices` — `/ardd-update
---reconfigure` re-asks `workflow_mode`, `next_step_prompt`, `delegation`,
-and `merge_policy` regardless of whether they're already set
-(`tasks-redrive-configuration-choices-29ae.md`, completed 4/4).
+Newest implemented: `discovery-to-work-eager-captur` +
+`backlog-sweep-reconcile-from-a` — the artifact→register bridge: eager
+capture steps in `/ardd-init`/`/ardd-refine`, `/ardd-status`'s
+detection-only "Documented but Untracked" section, `/ardd-backlog
+--from-artifacts`, and `/ardd-defects`' greenfield-scope routing note
+(`tasks-discovery-to-work-eager-captur-2b57.md`, completed 6/6).
 
 ## Audit
 
@@ -367,23 +387,20 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-- Worktree `.claude/worktrees/agent-a3bc501596d897d66` (branch
-  `worktree-agent-a3bc501596d897d66`) —
-  `tasks-discovery-to-work-eager-captur-2b57.md`, `in-progress`, 3/6.
-
-`main` is ahead of `origin/main` (multiple local commits not yet pushed).
+Nothing — the `tasks-discovery-to-work-eager-captur-2b57.md` worktree
+merged (signed merge `2d792da`) and was reaped; no sibling worktrees
+remain. `main` is ahead of `origin/main` (multiple local commits not yet
+pushed).
 
 ## Recommended Next Step
 
-Let the in-flight worktree finish `tasks-discovery-to-work-eager-captur-2b57.md`
-(3/6, eager capture in init/refine, the status/backlog/defects sweep
-surface, docs) before starting `/ardd-implement` on
-`tasks-update-channel-switch-flags-c066.md` (4 tasks, 2 phases: `--local`/
-`--beta`/`--stable` flags on `/ardd-update`, then `/ardd-plan`'s
-browser-preview offer) — both touch `/ardd-update`-adjacent surfaces, so
-running them concurrently risks overlapping edits. Landing the
-eager-capture sweep also unblocks the defrag item's suggested next
-research pass (atelier's backfilled backlog as the large-N testbed). Standing
+`/ardd-implement` — `tasks-update-channel-switch-flags-c066.md` is
+`ready` (4 tasks, 2 phases: `--local`/`--beta`/`--stable` flags on
+`/ardd-update`, then `/ardd-plan`'s browser-preview offer); the bridge
+worktree it was waiting behind has merged. The now-shipped sweep also
+unblocks the defrag item's suggested next research pass (atelier's
+backfilled backlog as the large-N testbed), and the Codex-harness
+research report awaits user review before a backlog decision. Standing
 options unchanged: the pre-1.0 regression pass of the 7 dry-run scenarios
 (`dev-notes/prerelease-testing-context.md`); dispatch the stable release
 workflow when consumers should get the accumulated `main` work; resolve
