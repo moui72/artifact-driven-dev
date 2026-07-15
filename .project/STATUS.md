@@ -1,6 +1,48 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-14 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-15 (`/ardd-plan` — drafted, approved, and tasked
+`plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md`, consuming all 6
+items from `feedback-v1-0-0-pre-cut-testing-findings-0344.md` (now
+`planned`). Notably declined the literal ask in F003 (auto-editing a
+target's `.gitignore` the way `.worktreeinclude` self-applies) as
+conflicting with a standing, deliberate ceiling decision — scoped the fix
+to visibility instead (a distinct, hard-to-miss suggestion block, still
+suggestion-only). No artifact changes: all 6 fixes are skill-prose or
+script behavior. 6 tasks generated across 3 phases in
+`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (`ready`): T001 (test-first)
+adds a positive distinct-worktree check to `worktree-align.sh` so it fails
+loud instead of silently collapsing onto the primary checkout (F001, the
+highest-value fix — a real pre-1.0 gap in the delegation machinery);
+T002–T004 (parallel) strengthen `/ardd-init`'s existing-codebase entity
+survey, add scale-sensitivity to its constitution-suggestion catalog, and
+nudge `/ardd-defects` as a same-session follow-up on the brownfield path
+(F002/F004/F005); T005–T006 (parallel) improve `install.sh`'s gitignore
+suggestion visibility and add resolution diagnostics to
+`source-resolve.sh`/`/ardd-update` (F003/F006). No feature slugs bound.
+Prior update, same day, `/ardd-feedback` — logged
+`feedback-v1-0-0-pre-cut-testing-findings-0344.md`, 6 items (2 bugs, 4 UX)
+from a pre-v1.0.0 dry-run testing pass: 7 parallel sandboxed scenarios
+covering new.sh acquisition, brownfield reverse-engineer init, consumer
+upgrade + the new `--reconfigure` flag, collaborative-mode lifecycle,
+solo inline core loop, delegated-worktree execution, and a
+peripheral-skills sweep. An account-wide API spend-limit outage killed 3
+of the 7 subagents mid-run and wiped their scratchpad before reports were
+captured (collaborative mode, solo inline core loop, peripheral-skills
+sweep — all reportedly completed execution cleanly but left no usable
+detail); the other 4 produced real findings. Highlights: `worktree-align.sh`
+has no positive check that it's actually in a distinct worktree — a
+nested-delegation test silently collapsed onto the primary checkout
+instead of failing loud (F001); `/ardd-init`'s existing-codebase survey
+missed an entity lacking a colocated schema during reverse-engineering,
+only caught via an explicit spot-check demand (F002); `install.sh`'s
+`.gitignore` guidance is print-only, unlike `.worktreeinclude`'s
+self-applying handling (F003); the constitution-suggestion catalog can
+feel over-built for trivial projects (F004); `/ardd-defects` right after
+a brownfield init caught real drift `/ardd-init` had just introduced,
+suggesting the docs should nudge that pairing (F005); and
+`/ardd-update`'s real tag-resolution path had unclear same-day-publish
+lag when testing the brand-new `--reconfigure` flag (F006). Not yet
+consumed by a plan. Prior update, same day, `/ardd-implement` — delegated worktree run completed
 and merged all 4 tasks of `tasks-redrive-configuration-choices-29ae.md`
 (now `completed`). **First delegation attempt failed live** — the same
 bug the delegation pre-flight check exists for was reproduced anyway: the
@@ -119,10 +161,9 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. Both consumed by `plan-203c-2026-07-14-bf43.md`:
-`feedback-uncommitted-plan-tasks-delegat-a3ff.md` and
-`feedback-tdd-xfail-precommit-contradiction-a639.md` → delivered via
-`tasks-203c-6b16.md` (4/4 complete, merged to `main`).
+None open. `feedback-v1-0-0-pre-cut-testing-findings-0344.md` consumed by
+`plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md` → delivered via
+`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (0/6, `ready`).
 
 ## Recent Releases
 
@@ -156,17 +197,22 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-redrive-configuration-choices-29ae.md` worktree
-merged and was reaped; no sibling worktrees remain. `main` is ahead of
-`origin/main` (multiple local commits not yet pushed).
+Nothing — no sibling worktrees remain. `main` is up to date with
+`origin/main` (pushed through `ba6b5a0`; v0.10.1-beta.5 published from
+that commit).
 
 ## Recommended Next Step
 
-No `ready` tasks file pending. Standing options: dispatch the stable
+Run `/ardd-implement` to execute
+`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (6 tasks, ready, 0/6 — T001's
+`worktree-align.sh` distinct-worktree check is the highest-value fix, a
+real pre-1.0 correctness gap in the delegation machinery). Also worth
+re-running the 3 scenarios that never produced a real report
+(collaborative-mode lifecycle, solo inline core loop, peripheral-skills
+sweep) once spend headroom allows, since they're currently untested for
+UX beyond "didn't crash." Other standing options: dispatch the stable
 release workflow when consumers should get this session's accumulated
-work (constitution v1.9.0, the actor-language rewrites, the delegation
-pre-flight check, the TDD/xfail catalog resolution, the new
+work (constitution v1.9.0, the delegation pre-flight check, the
 `/ardd-update --reconfigure` flag); resolve the one remaining
 `.project/audit.md` suggestion; or `/ardd-defects` to re-verify against
-the docs-site and skill-prose surfaces (this run's `ardd-update`/docs
-edits are a good re-verify trigger).
+the docs-site and skill-prose surfaces.
