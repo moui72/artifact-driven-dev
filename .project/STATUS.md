@@ -1,6 +1,33 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-15 (`/ardd-feedback` — logged
+`feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md`, 7 items (2
+bugs, 5 UX) from a redrive of the 3 v1.0.0 pre-cut scenarios that lost
+their reports to the earlier spend-limit outage (collaborative-mode
+lifecycle, solo inline core loop, peripheral-skills sweep) — this time
+briefed to write reports progressively, and all 3 survived intact. All 7
+scenarios from the original test plan now have genuine, complete
+findings. Highlights: `lint-project.sh`'s Sync Impact Report check
+silently mis-parses an ASCII `->` where it expects the literal Unicode
+`→`, with a misleading error pointing the user elsewhere (F001);
+`/ardd-defects`' `DEFECTS.md` can go stale within the same day with
+nothing in the report signaling it (a claim about `Entity` lacking
+`long_form_keys` was true when checked but false an hour later — F002);
+`/ardd-implement`'s collaborative-mode step has no documented behavior
+for a failed `gh pr create` (F003); `/ardd-plan`'s task phrasing assumes
+existing code even for a project's very first feature (F004); a
+`ardd-update-check.sh`/SKILL.md field-name mismatch (`latest-release=` vs
+documented `source-tip=`, F005); `/ardd-diagram` silently creates a new
+README when none exists (F006); and SKILL.md phrasing doesn't make clear
+that `workflow_mode` is written inline (not `stamp`-ed like the other
+three workflow fields) (F007). On the positive side: S4 confirmed the
+collaborative branch gate and `merge_policy` exclusion work exactly as
+documented; S5's full backlog→plan→implement→status loop built and ran
+real working code cleanly end to end; S7's `/ardd-audit` produced
+genuinely incisive findings (not boilerplate), and `/ardd-lint`,
+`/ardd-refine`, `/ardd-diagram`, and `/ardd-tracker`'s graceful
+`gh`-unavailable degradation all worked as documented. Not yet consumed
+by a plan. Prior update, same day, `/ardd-plan` — drafted, approved, and tasked
 `plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md`, consuming all 6
 items from `feedback-v1-0-0-pre-cut-testing-findings-0344.md` (now
 `planned`). Notably declined the literal ask in F003 (auto-editing a
@@ -161,9 +188,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. `feedback-v1-0-0-pre-cut-testing-findings-0344.md` consumed by
-`plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md` → delivered via
-`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (0/6, `ready`).
+1 open feedback file — `feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md`
+(7 items: 2 bugs, 5 UX, from the redrive of S4/S5/S7 — see `_Updated` note
+above). Will be picked up by the next `/ardd-plan`. (The earlier
+`feedback-v1-0-0-pre-cut-testing-findings-0344.md` batch is already
+consumed — see Feature Backlog / tasks below.)
 
 ## Recent Releases
 
@@ -203,14 +232,19 @@ that commit).
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute
-`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (6 tasks, ready, 0/6 — T001's
+Two options in this order of value: (1) `/ardd-plan` to design and task
+the newly-logged `feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md`
+items — likely worth folding into the same
+`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` effort rather than a
+separate plan, since several touch the same surfaces (both batches touch
+`/ardd-init`/`/ardd-update` docs, for instance); or (2) run
+`/ardd-implement` now on the already-ready
+`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (6 tasks, 0/6 — T001's
 `worktree-align.sh` distinct-worktree check is the highest-value fix, a
-real pre-1.0 correctness gap in the delegation machinery). Also worth
-re-running the 3 scenarios that never produced a real report
-(collaborative-mode lifecycle, solo inline core loop, peripheral-skills
-sweep) once spend headroom allows, since they're currently untested for
-UX beyond "didn't crash." Other standing options: dispatch the stable
+real pre-1.0 correctness gap in the delegation machinery) and handle the
+new redrive feedback in a follow-up plan. All 7 pre-cut test scenarios are
+now complete with genuine findings — no more untested scenarios remain.
+Other standing options: dispatch the stable
 release workflow when consumers should get this session's accumulated
 work (constitution v1.9.0, the delegation pre-flight check, the
 `/ardd-update --reconfigure` flag); resolve the one remaining
