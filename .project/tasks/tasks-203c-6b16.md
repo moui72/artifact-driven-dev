@@ -1,7 +1,7 @@
 ---
 plan: plan-203c-2026-07-14-bf43.md
 generated: 2026-07-14
-status: ready
+status: in-progress
 ---
 
 # Tasks
