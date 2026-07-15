@@ -64,12 +64,15 @@ the coordinator or the inline path.
 
    Also run `.claude/skills/ardd-scripts/ardd-update-check.sh` (the
    installed copy; coordinator's absolute path as fallback, same
-   present-or-fallback rule as other ardd-scripts calls). On
-   `behind installed=<x> source-tip=<y>`, the report and STATUS.md each
-   gain one line: "ArDD update available: installed <x>, source at <y> —
-   run /ardd-update." On `source-missing`, a gentler line: "ArDD source
-   checkout not found at its recorded path — run /ardd-update to
-   re-record it." `no-version-file`, `no-source-path`, `up-to-date`, and
+   present-or-fallback rule as other ardd-scripts calls). On the common
+   `behind installed=<x> latest-release=<y>` (a tagged release exists), or
+   the no-releases fallback `behind installed=<x> source-tip=<y>
+   note=no-releases` (the source has no tags yet, so the comparison falls
+   back to its tip) — either shape means "behind" — the report and
+   STATUS.md each gain one line: "ArDD update available: installed <x>,
+   source at <y> — run /ardd-update." On `source-missing`, a gentler line:
+   "ArDD source checkout not found at its recorded path — run /ardd-update
+   to re-record it." `no-version-file`, `no-source-path`, `up-to-date`, and
    `self-hosted` (this repo is its own ArDD source — the tip comparison
    is meaningless there) stay silent.
 

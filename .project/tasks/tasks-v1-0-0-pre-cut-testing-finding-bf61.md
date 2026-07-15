@@ -99,7 +99,7 @@ status: in-progress
 
 ## Phase 4: deterministic-script fixes — redrive-695b F001, F002, F005
 
-- [ ] T007 Fix `scripts/lint-project.sh`'s Sync Impact
+- [x] T007 Fix `scripts/lint-project.sh`'s Sync Impact
   Report version-arrow parsing (around line 199, the
   `sed -E 's/.*→[[:space:]]*([0-9.]+).*/\1/'` extraction of `sir_ver` from
   a `Version change:` line). It currently matches only the literal Unicode
@@ -112,7 +112,7 @@ status: in-progress
   `Version change:` line and assert it's accepted identically to the `→`
   case — confirm the fixture fails before the fix, passes after.
   [feedback: redrive-695b/F001]
-- [ ] T008 [parallel] In `skills/ardd-defects/SKILL.md`,
+- [x] T008 [parallel] In `skills/ardd-defects/SKILL.md`,
   add a one-line caveat near the `_Last verified: YYYY-MM-DD_` footer
   template (both occurrences) noting that `DEFECTS.md` is a point-in-time
   snapshot against the codebase as of that date/commit — any claim in it
@@ -120,7 +120,7 @@ status: in-progress
   expected, not a bug, until the next `/ardd-defects` run. Documentation-only
   change — no test task. (Full per-claim staleness tracking is explicitly
   out of scope for this plan.) [feedback: redrive-695b/F002]
-- [ ] T009 [parallel] Align the field-name mismatch
+- [x] T009 [parallel] Align the field-name mismatch
   between `scripts/ardd-update-check.sh`'s actual output (`latest-release=<tag>`
   in the common "behind" case; `source-tip=<y> note=no-releases` only in
   the no-releases fallback — see the script's own header comment, lines

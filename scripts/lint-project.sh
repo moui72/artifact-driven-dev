@@ -196,7 +196,7 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
         if [ -n "$footer_amended" ] && [ -n "$fm_updated" ] && [ "$footer_amended" != "$fm_updated" ]; then
           report "$f: footer Last Amended '$footer_amended' != frontmatter last_updated '$fm_updated' — governance bookkeeping drift"
         fi
-        sir_ver="$(grep -E '^Version change:' "$f" | head -1 | sed -E 's/.*→[[:space:]]*([0-9.]+).*/\1/' || true)"
+        sir_ver="$(grep -E '^Version change:' "$f" | head -1 | sed -E 's/.*(→|->|-->)[[:space:]]*([0-9.]+).*/\2/' || true)"
         if [ -n "$sir_ver" ] && [ "$sir_ver" != "$footer_ver" ]; then
           report "$f: Sync Impact Report targets version '$sir_ver' but footer says '$footer_ver' — governance bookkeeping drift"
         fi

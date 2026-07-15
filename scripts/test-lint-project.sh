@@ -185,5 +185,23 @@ else
 fi
 rm -rf "$STALEWORK" /tmp/lint-stale.out
 
+# --- Sync Impact Report version-arrow parsing accepts ASCII "->" the same
+# as the Unicode "→" (redrive-695b/F001): an ASCII arrow must not silently
+# fail to extract sir_ver and produce a misleading "targets version ''"
+# report when the footer version genuinely matches. ---
+ARROWWORK="$(mktemp -d)"
+cp -R "$FIXTURES/good-project/." "$ARROWWORK/"
+sed -i.bak 's/Version change: 1.0.0 → 1.1.0 (MINOR)/Version change: 1.0.0 -> 1.1.0 (MINOR)/' \
+  "$ARROWWORK/.project/artifacts/constitution.md"
+rm -f "$ARROWWORK/.project/artifacts/constitution.md.bak"
+if "$LINT" "$ARROWWORK" > /tmp/lint-arrow.out 2>&1; then
+  echo "ok: ASCII '->' arrow accepted identically to '→'"
+else
+  echo "FAIL: ASCII '->' arrow accepted identically to '→':"
+  cat /tmp/lint-arrow.out
+  fail=1
+fi
+rm -rf "$ARROWWORK" /tmp/lint-arrow.out
+
 rm -f /tmp/lint-good.out /tmp/lint-bad.out
 exit "$fail"

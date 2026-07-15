@@ -69,7 +69,9 @@ lose it. Do not silently ignore the argument and run anyway.
    ```markdown
    # Defects
 
-   _Last verified: YYYY-MM-DD_
+   _Last verified: YYYY-MM-DD_ — a point-in-time snapshot; any claim below
+   can be invalidated by a subsequent commit, and a stale-looking report is
+   expected, not a bug, until the next `/ardd-defects` run.
 
    ## <artifact>.md
    - **Claim:** <what the artifact says>
@@ -85,7 +87,9 @@ lose it. Do not silently ignore the argument and run anyway.
    ```markdown
    # Defects
 
-   _Last verified: YYYY-MM-DD_
+   _Last verified: YYYY-MM-DD_ — a point-in-time snapshot; any claim below
+   can be invalidated by a subsequent commit, and a stale-looking report is
+   expected, not a bug, until the next `/ardd-defects` run.
 
    No defects found — artifacts match the codebase as of this run.
    ```
