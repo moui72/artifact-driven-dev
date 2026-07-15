@@ -10,13 +10,20 @@ _Tier: extension_
 
 ```
 /ardd-update
+/ardd-update --reconfigure
 ```
 
-No arguments. Updates the installed skills from the source checkout
-recorded at install time — you don't have to remember where it lives.
-It's also how install-time output (migrations applied, gitignore/badge
-suggestions) reaches *your* session: install.sh only prints to whoever
-runs it, which is exactly why this skill exists.
+Bare form: no arguments. Updates the installed skills from the source
+checkout recorded at install time — you don't have to remember where it
+lives. It's also how install-time output (migrations applied,
+gitignore/badge suggestions) reaches *your* session: install.sh only
+prints to whoever runs it, which is exactly why this skill exists.
+
+`--reconfigure`: does everything the bare form does, but also re-asks all
+four workflow fields (`workflow_mode`, `next_step_prompt`, `delegation`,
+and — solo mode only — `merge_policy`) regardless of whether they're
+already set, showing each field's current value before asking whether to
+keep it or change it.
 
 ## What a run does
 
@@ -44,11 +51,18 @@ runs it, which is exactly why this skill exists.
 4. **Reinstall**: runs `<source>/install.sh` against the project and
    relays its full output verbatim. Suggestions are yours to accept;
    none is applied unprompted.
-5. **Backfill workflow questions, once**: for constitutions that lack
+5. **Ask the workflow-field questions.** Without `--reconfigure`
+   (default): backfills only, once — for constitutions that lack
    `next_step_prompt`, `delegation`, or (solo mode only) `merge_policy`
    entirely, it asks the same questions `/ardd-init` asks and stamps the
    answers. Field presence — either value — suppresses re-asking forever;
-   headless paths simply keep the safe defaults.
+   headless paths simply keep the safe defaults. With `--reconfigure`: it
+   re-asks all four fields — `workflow_mode`, `next_step_prompt`,
+   `delegation`, and (solo mode only) `merge_policy` — regardless of
+   whether they're already set, showing each field's current value (or
+   "not yet set") first and stamping only the fields you actually choose
+   to change. This is the only way to change `workflow_mode` outside of
+   `/ardd-init`.
 6. **Report** old → new commit, migrations applied, and suggestions;
    reminds you to commit `.project/ardd-version.md` (and `.ardd-applied`
    if migrations ran). Ends by running `/ardd-status`.

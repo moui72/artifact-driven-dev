@@ -364,7 +364,8 @@ unit of parallelism is the tasks file, never phases within one file.
 
 **Two operating modes**, declared as `workflow_mode: solo | collaborative`
 in `constitution.md` frontmatter (absent = `solo`; enum enforced by
-`lint-project.sh`; asked once by `/ardd-init`, detection-suggested):
+`lint-project.sh`; asked once by `/ardd-init`, detection-suggested; can be
+re-asked afterward via `/ardd-update --reconfigure`):
 - **solo** — single developer, same machine. Direct commits to the local
   default branch are fine for inline runs; `/ardd-plan` doesn't even ask —
   no branch gate in solo mode, plan+tasks commit straight to the current
@@ -395,7 +396,8 @@ hand-built one was tried and removed (Principle VIII; decision record
 **A second constitution frontmatter workflow field, `next_step_prompt:
 true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
 asked once by `/ardd-init`, and once by `/ardd-update` for installs
-whose constitution lacks the field). When `true`, exactly two skills —
+whose constitution lacks the field; `/ardd-update --reconfigure` can
+re-ask it afterward too). When `true`, exactly two skills —
 `/ardd-status` and `/ardd-plan` — end by offering their
 recommended next step via AskUserQuestion, and only when that
 recommendation is a concrete runnable `/ardd-*` invocation; plan

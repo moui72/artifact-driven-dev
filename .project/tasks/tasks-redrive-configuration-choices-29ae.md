@@ -31,14 +31,14 @@ status: in-progress
 
 Depends on Phase 1 (describes its behavior).
 
-- [ ] T002 [parallel] Update
+- [x] T002 [parallel] Update
   `docs/reference/skills/ardd-update.md`: add `--reconfigure` to the
   `## Usage` code block and its prose, and rewrite item 5 in "What a run
   does" to describe both the default backfill-only behavior and the
   `--reconfigure` re-ask-everything behavior (mirroring T001's SKILL.md
   wording, not just restating "once"). [feature:
   redrive-configuration-choices]
-- [ ] T003 [parallel] Update
+- [x] T003 [parallel] Update
   `docs/reference/configuration.md`: the intro paragraph currently states
   "`/ardd-update` backfills ... once for installs whose constitution
   lacks the field entirely — `workflow_mode` is never asked again and
@@ -46,7 +46,7 @@ Depends on Phase 1 (describes its behavior).
   both the default backfill (unchanged) and the `--reconfigure` path
   (all four fields, including `workflow_mode`, can be re-asked on
   demand). [feature: redrive-configuration-choices]
-- [ ] T004 [parallel] Update `CLAUDE.md`'s two
+- [x] T004 [parallel] Update `CLAUDE.md`'s two
   "workflow field" passages (the `workflow_mode` paragraph, currently
   "...asked once by `/ardd-init`, detection-suggested)"; and the
   `next_step_prompt` paragraph, currently "...asked once by `/ardd-init`,

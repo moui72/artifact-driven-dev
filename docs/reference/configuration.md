@@ -10,11 +10,16 @@ frontmatter by `/ardd-init` directly.
 Every one has a safe default when absent — projects initialized before a
 field existed need no migration.
 
-`/ardd-init` asks each question once at setup; `/ardd-update` backfills
-`next_step_prompt`, `delegation`, and (solo mode) `merge_policy` once for
-installs whose constitution lacks the field entirely — `workflow_mode` is
-never asked again and simply defaults to `solo` when absent. Enum
-enforcement: the installed `lint-project.sh`.
+`/ardd-init` asks each question once at setup. By default, `/ardd-update`
+only backfills: it asks `next_step_prompt`, `delegation`, and (solo mode)
+`merge_policy` once for installs whose constitution lacks the field
+entirely — `workflow_mode` is never asked by the default path and simply
+defaults to `solo` when absent. Run `/ardd-update --reconfigure` to
+re-ask all four fields, including `workflow_mode`, on demand — regardless
+of whether they're already set — showing each field's current value
+before asking whether to keep it or change it; this is the only way to
+change `workflow_mode` outside of `/ardd-init`. Enum enforcement: the
+installed `lint-project.sh`.
 
 ## `workflow_mode` — where in-progress work lives
 
