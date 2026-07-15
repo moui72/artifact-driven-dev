@@ -1,7 +1,7 @@
 ---
-status: open
+status: planned
 created: 2026-07-15
-plan: null
+plan: plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md
 ---
 
 # Feedback
@@ -17,7 +17,7 @@ genuinely complete findings.
 
 ## Bugs
 
-- [ ] F001 `lint-project.sh`'s constitution Sync Impact Report check
+- [x] F001 `lint-project.sh`'s constitution Sync Impact Report check
   requires the literal Unicode arrow `→` and silently fails to parse the
   version bump when a user (or an agent) writes the more natural ASCII
   `->` instead. Worse, the resulting error message is misleading — it
@@ -26,7 +26,7 @@ genuinely complete findings.
   wrong place. Worth either accepting both `->` and `→` as equivalent, or
   making the error message explicitly name the exact character it
   expected.
-- [ ] F002 `/ardd-defects`'s generated `DEFECTS.md` can go stale within
+- [x] F002 `/ardd-defects`'s generated `DEFECTS.md` can go stale within
   the same day with no way to tell from the report itself. A redrive
   scenario hit this directly: `DEFECTS.md` asserted an `Entity` had no
   `long_form_keys` field — true at the moment `/ardd-defects` ran, but a
@@ -41,7 +41,7 @@ genuinely complete findings.
 
 ## UX
 
-- [ ] F003 `skills/ardd-implement/SKILL.md`'s collaborative-mode paragraph
+- [x] F003 `skills/ardd-implement/SKILL.md`'s collaborative-mode paragraph
   describes offering to push a branch and open a draft PR, but doesn't
   specify what to report or do if the `gh pr create` step itself fails
   (no GitHub remote, no auth, etc.) — only the push half is
@@ -50,7 +50,7 @@ genuinely complete findings.
   sentence covering the failure path: report the `gh` error verbatim, the
   push already succeeded so the branch is safe, and let the user open the
   PR by hand or retry once `gh` is configured.
-- [ ] F004 `/ardd-plan`'s generated task phrasing assumes existing code to
+- [x] F004 `/ardd-plan`'s generated task phrasing assumes existing code to
   modify even for a greenfield project's very first feature — e.g. a task
   said "extend the counting function" when no code existed yet to extend,
   on a project's first-ever backlogged feature. Not a real blocker (any
@@ -58,18 +58,18 @@ genuinely complete findings.
   yet), but worth having the task-generation step distinguish "this is
   the first task touching this file/function" (create) from later ones
   (extend) for clarity.
-- [ ] F005 `scripts/ardd-update-check.sh`'s actual output field name
+- [x] F005 `scripts/ardd-update-check.sh`'s actual output field name
   (`latest-release=`) doesn't match the field name `skills/ardd-status/SKILL.md`
   documents it as printing (`source-tip=`) — cosmetic doc/implementation
   drift, easy to fix by aligning one to the other.
-- [ ] F006 `/ardd-diagram` silently creates a brand-new `README.md` when
+- [x] F006 `/ardd-diagram` silently creates a brand-new `README.md` when
   none exists in the target, rather than calling this out explicitly.
   Technically correct per its own spec (it upserts into a configurable
   destination, default `README.md`), but a first-time user running it
   against a project with no README yet would likely be surprised to find
   one now exists. Worth a one-line "creating README.md (none existed)"
   note in its output when this happens.
-- [ ] F007 Documentation clarity gap: `skills/ardd-init/SKILL.md` and
+- [x] F007 Documentation clarity gap: `skills/ardd-init/SKILL.md` and
   `skills/ardd-update/SKILL.md` describe `workflow_mode`, `next_step_prompt`,
   `delegation`, and `merge_policy` in similar enough phrasing that a
   reader can reasonably expect all four to be "stamped" identically —

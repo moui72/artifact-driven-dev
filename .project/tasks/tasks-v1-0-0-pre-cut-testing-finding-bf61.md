@@ -1,12 +1,12 @@
 ---
 plan: plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md
 generated: 2026-07-15
-status: abandoned
+status: ready
 ---
 
 # Tasks
 
-## Phase 1: delegation machinery — F001
+## Phase 1: delegation machinery — findings-0344 F001
 
 - [ ] T001 Fix `scripts/worktree-align.sh` to positively
   verify it's running in a genuine linked worktree, not the primary
@@ -22,9 +22,10 @@ status: abandoned
   add a case to `scripts/test-worktree-align.sh` that runs the script
   from the **primary checkout itself** (not a linked worktree) against a
   fixture repo and asserts `aligned=false reason=not-a-worktree` exit 1 —
-  confirm this fixture fails before the fix, passes after. [feedback: F001]
+  confirm this fixture fails before the fix, passes after. [feedback:
+  findings-0344/F001]
 
-## Phase 2: `/ardd-init` — F002, F004, F005
+## Phase 2: `/ardd-init` — findings-0344 F002, F004, F005
 
 - [ ] T002 In `skills/ardd-init/SKILL.md`'s
   existing-codebase reverse-engineering steps: strengthen the entity/schema
@@ -37,7 +38,8 @@ status: abandoned
   flag in the generated artifact's `[OPEN: ...]` items any entity the
   survey found via only one signal, as a lower-confidence claim worth a
   human second look. Documentation-only change — no test task (Constitution
-  Principle V's documentation-only exception). [feedback: F002]
+  Principle V's documentation-only exception). [feedback:
+  findings-0344/F002]
 - [ ] T003 [parallel] In `skills/ardd-init/SKILL.md`:
   add project-scale sensitivity to the constitution-suggestion catalog
   step. Alongside the existing stack-signal detection, detect a
@@ -47,7 +49,7 @@ status: abandoned
   than the full stack-matched set — with a note the user can ask to see
   the full catalog if they want it. Keep the existing full-catalog
   behavior unchanged for anything not detected as trivial.
-  Documentation-only change — no test task. [feedback: F004]
+  Documentation-only change — no test task. [feedback: findings-0344/F004]
 - [ ] T004 [parallel] In `skills/ardd-init/SKILL.md`:
   at the end of the existing-codebase (brownfield reverse-engineering)
   path's final report step, add an explicit recommendation to run
@@ -63,9 +65,9 @@ status: abandoned
   recommendation is sufficient here (don't widen the two-skill
   next-step-prompt scope as a side effect of this task — CLAUDE.md notes
   that scope is deliberately narrow). Documentation-only change — no test
-  task. [feedback: F005]
+  task. [feedback: findings-0344/F005]
 
-## Phase 3: install/update reporting — F003, F006
+## Phase 3: install/update reporting — findings-0344 F003, F006
 
 - [ ] T005 In `install.sh`'s `.gitignore` suggestion
   block (near the `.claude/skills/ardd-*/` guidance): make the suggestion
@@ -78,7 +80,7 @@ status: abandoned
   the standing ceiling decision. Add/update a case in
   `scripts/test-install.sh` asserting the suggestion block's distinct
   marker text appears in output when `.gitignore` doesn't cover
-  `.claude/skills/ardd-*/`. [feedback: F003]
+  `.claude/skills/ardd-*/`. [feedback: findings-0344/F003]
 - [ ] T006 [parallel] In `scripts/source-resolve.sh`:
   when resolution completes but the resulting ref is NOT the newest tag
   the remote actually has (i.e. a fetch happened, tags were seen, but an
@@ -93,4 +95,74 @@ status: abandoned
   `warning=no-tags` the same way — extend that existing relay list, don't
   invent a new mechanism). Add a case to
   `scripts/test-source-resolve.sh` covering the fresh-cache-skip note.
-  [feedback: F006]
+  [feedback: findings-0344/F006]
+
+## Phase 4: deterministic-script fixes — redrive-695b F001, F002, F005
+
+- [ ] T007 Fix `scripts/lint-project.sh`'s Sync Impact
+  Report version-arrow parsing (around line 199, the
+  `sed -E 's/.*→[[:space:]]*([0-9.]+).*/\1/'` extraction of `sir_ver` from
+  a `Version change:` line). It currently matches only the literal Unicode
+  arrow `→`; an ASCII `->` (or `-->`) silently fails to extract anything,
+  leaving `sir_ver` empty and producing the misleading "Sync Impact Report
+  targets version '' but footer says 'X'" error instead of a message that
+  actually names the problem. Extend the pattern to match `→`, `->`, and
+  `-->` equivalently. Test-first (Constitution Principle V): add a case to
+  `scripts/test-lint-project.sh`'s fixtures using an ASCII `->` arrow in a
+  `Version change:` line and assert it's accepted identically to the `→`
+  case — confirm the fixture fails before the fix, passes after.
+  [feedback: redrive-695b/F001]
+- [ ] T008 [parallel] In `skills/ardd-defects/SKILL.md`,
+  add a one-line caveat near the `_Last verified: YYYY-MM-DD_` footer
+  template (both occurrences) noting that `DEFECTS.md` is a point-in-time
+  snapshot against the codebase as of that date/commit — any claim in it
+  can be invalidated by a subsequent commit, and a stale-looking report is
+  expected, not a bug, until the next `/ardd-defects` run. Documentation-only
+  change — no test task. (Full per-claim staleness tracking is explicitly
+  out of scope for this plan.) [feedback: redrive-695b/F002]
+- [ ] T009 [parallel] Align the field-name mismatch
+  between `scripts/ardd-update-check.sh`'s actual output (`latest-release=<tag>`
+  in the common "behind" case; `source-tip=<y> note=no-releases` only in
+  the no-releases fallback — see the script's own header comment, lines
+  26–28) and `skills/ardd-status/SKILL.md`'s doc example (which shows only
+  `behind installed=<x> source-tip=<y>`, implying that's always the field
+  name). Update the SKILL.md line to show both cases distinctly: the
+  common `behind installed=<x> latest-release=<y>` and the no-releases
+  fallback `behind installed=<x> source-tip=<y> note=no-releases`,
+  matching what the script actually emits. Documentation-only change — no
+  test task (the script's own behavior is correct and already covered by
+  its existing tests; only the doc was wrong). [feedback:
+  redrive-695b/F005]
+
+## Phase 5: skill-prose fixes — redrive-695b F003, F004, F006, F007
+
+- [ ] T010 [parallel] In `skills/ardd-implement/SKILL.md`'s
+  collaborative-mode paragraph (the one describing offering to push and
+  open a draft PR after the first commit): add one sentence covering what
+  to do when `gh pr create` fails (no GitHub remote, no `gh` auth, etc.) —
+  report the `gh` error verbatim, note the push already succeeded so the
+  branch and its state are safe, and let the user open the PR by hand or
+  retry once `gh` is usable. Documentation-only change — no test task.
+  [feedback: redrive-695b/F003]
+- [ ] T011 [parallel] In `skills/ardd-plan/SKILL.md`'s
+  task-generation step (step 12, the task-quality bullet list): add
+  guidance that a task touching a file/function for the first time in a
+  project (nothing to modify yet) should be phrased as creating it, not
+  extending/modifying it — greenfield's very first feature is the common
+  case this bites. Documentation-only change — no test task. [feedback:
+  redrive-695b/F004]
+- [ ] T012 [parallel] In `skills/ardd-diagram/SKILL.md`'s
+  upsert step: when the configured destination file (default `README.md`)
+  doesn't exist yet, add an explicit one-line note to the skill's own
+  report output — e.g. "creating README.md (none existed)" — instead of
+  silently originating it via the existing upsert-section.sh append path.
+  Documentation-only change — no test task. [feedback: redrive-695b/F006]
+- [ ] T013 [parallel] In `skills/ardd-init/SKILL.md`
+  and `skills/ardd-update/SKILL.md`, wherever `workflow_mode`,
+  `next_step_prompt`, `delegation`, and `merge_policy` are introduced
+  together: add a short clarifying clause that `workflow_mode` alone is
+  written inline during artifact authoring (by `/ardd-init` directly),
+  while the other three are written via `ardd-state.sh stamp` — mirroring
+  the distinction `docs/reference/configuration.md`'s intro paragraph
+  already states. Documentation-only change — no test task. [feedback:
+  redrive-695b/F007]

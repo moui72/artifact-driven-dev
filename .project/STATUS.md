@@ -1,6 +1,22 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-feedback` — logged
+_Updated: 2026-07-15 (`/ardd-plan --from` — folded the redrive batch's 7
+items into the existing `plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md`
+(added Phase 4: deterministic-script fixes — `lint-project.sh`'s Sync
+Impact Report arrow parsing rejecting ASCII `->`, a `DEFECTS.md`
+staleness caveat, and the `ardd-update-check.sh`/SKILL.md field-name
+mismatch; Phase 5: skill-prose fixes — `/ardd-implement`'s undocumented
+`gh pr create` failure path, `/ardd-plan`'s create-vs-extend task
+phrasing, `/ardd-diagram`'s silent README creation, and the
+workflow-field stamped-vs-inline documentation gap) rather than drafting
+a second plan, since both feedback batches came from the same testing
+effort and touch overlapping files. The old 6-task
+`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (untouched, 0/6) was
+abandoned and replaced with a fresh combined 13-task
+`tasks-v1-0-0-pre-cut-testing-finding-bf61.md` (`ready`) spanning all 5
+phases — worktree-align.sh's distinct-worktree check (T001) remains the
+highest-value fix. Both feedback files now `planned`. Prior update, same
+day, `/ardd-feedback` — logged
 `feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md`, 7 items (2
 bugs, 5 UX) from a redrive of the 3 v1.0.0 pre-cut scenarios that lost
 their reports to the earlier spend-limit outage (collaborative-mode
@@ -188,11 +204,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open feedback file — `feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md`
-(7 items: 2 bugs, 5 UX, from the redrive of S4/S5/S7 — see `_Updated` note
-above). Will be picked up by the next `/ardd-plan`. (The earlier
-`feedback-v1-0-0-pre-cut-testing-findings-0344.md` batch is already
-consumed — see Feature Backlog / tasks below.)
+None open. Both batches consumed by
+`plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md`:
+`feedback-v1-0-0-pre-cut-testing-findings-0344.md` and
+`feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md` → delivered
+via `tasks-v1-0-0-pre-cut-testing-finding-bf61.md` (0/13, `ready`).
 
 ## Recent Releases
 
@@ -232,19 +248,15 @@ that commit).
 
 ## Recommended Next Step
 
-Two options in this order of value: (1) `/ardd-plan` to design and task
-the newly-logged `feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md`
-items — likely worth folding into the same
-`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` effort rather than a
-separate plan, since several touch the same surfaces (both batches touch
-`/ardd-init`/`/ardd-update` docs, for instance); or (2) run
-`/ardd-implement` now on the already-ready
-`tasks-v1-0-0-pre-cut-testing-finding-32c3.md` (6 tasks, 0/6 — T001's
-`worktree-align.sh` distinct-worktree check is the highest-value fix, a
-real pre-1.0 correctness gap in the delegation machinery) and handle the
-new redrive feedback in a follow-up plan. All 7 pre-cut test scenarios are
-now complete with genuine findings — no more untested scenarios remain.
-Other standing options: dispatch the stable
+Run `/ardd-implement` to execute
+`tasks-v1-0-0-pre-cut-testing-finding-bf61.md` (13 tasks, ready, 0/13,
+across 5 phases — T001's `worktree-align.sh` distinct-worktree check is
+the highest-value fix, a real pre-1.0 correctness gap in the delegation
+machinery; T007's `lint-project.sh` arrow-parsing fix is the other
+genuine bug). All 7 pre-cut test scenarios are now complete with genuine
+findings and both feedback batches are folded into this one plan — no
+more untested scenarios or unplanned feedback remain. Other standing
+options: dispatch the stable
 release workflow when consumers should get this session's accumulated
 work (constitution v1.9.0, the delegation pre-flight check, the
 `/ardd-update --reconfigure` flag); resolve the one remaining
