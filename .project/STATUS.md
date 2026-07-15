@@ -1,6 +1,20 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-15 (`/ardd-backlog` — logged
+`codex-second-harness-support`: single-source Codex CLI support via
+`install.sh --harness codex` installing the same `SKILL.md` files to
+`.agents/skills/` with the ~4 Claude-specific clauses substituted at
+install time (`AskUserQuestion`, `Agent` worktree delegation,
+`.worktreeinclude`, `next_step_prompt`); Codex v1 deliberately
+degraded to inline-only implementation, plain-text prompts, no lint
+hook; no parallel prose tree, no adapter build system. Spec = the
+accepted `/ardd-research` recommendation
+(`research-codex-cli-second-harness-2026-07-15-2d3d.md`). First step is
+a de-risking spike on the go/no-go gates (exact-name skill invocation,
+reliable skill-to-skill chaining) before any install work; requires a
+MINOR constitution amendment (named scope reversal); fallback if the
+spike fails is don't-do-it.). Prior update, same day, `/ardd-implement`
+— delegated worktree run completed
 and merged all 6 tasks of `tasks-discovery-to-work-eager-captur-2b57.md`
 (now `completed`): the artifact→register bridge shipped. T001/T002 added
 terminal "capture newly documented capabilities" steps to `/ardd-init`
@@ -355,11 +369,14 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-3 backlogged · 2 tasked · 16 implemented · 1 retired — see
+4 backlogged · 2 tasked · 16 implemented · 1 retired — see
 `.project/features/`.
 Tasked: `update-channel-switch-flags` + `plan-approval-browser-preview` →
 `tasks-update-channel-switch-flags-c066.md` (0/4, `ready`).
 Backlogged:
+- `codex-second-harness-support` — single-source Codex CLI support via
+  `install.sh --harness codex`; spec = the accepted Codex-harness research
+  report; first step is a de-risking spike before any install work.
 - `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
   analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
   research report; first step: a second research pass on a large backlog
@@ -405,4 +422,7 @@ options unchanged: the pre-1.0 regression pass of the 7 dry-run scenarios
 (`dev-notes/prerelease-testing-context.md`); dispatch the stable release
 workflow when consumers should get the accumulated `main` work; resolve
 the remaining `.project/audit.md` suggestion; or `/ardd-defects` to
-re-verify against the docs-site and skill-prose surfaces.
+re-verify against the docs-site and skill-prose surfaces. The newly
+backlogged `codex-second-harness-support`'s first step is the de-risking
+spike on Codex's skill-invocation and skill-chaining gates, before any
+`/ardd-plan` work targets it.
