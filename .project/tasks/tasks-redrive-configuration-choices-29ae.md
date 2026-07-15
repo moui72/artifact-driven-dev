@@ -1,7 +1,7 @@
 ---
 plan: plan-redrive-configuration-choices-2026-07-14-1e00.md
 generated: 2026-07-14
-status: ready
+status: in-progress
 ---
 
 # Tasks
