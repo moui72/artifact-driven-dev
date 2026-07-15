@@ -44,11 +44,17 @@ margins:
   transcribed from memory
 - `.project/STATUS.md` — seeded once with the standard structure
   (thereafter owned by `/ardd-status`)
-- `.project/features/*.md` — only on the existing-codebase path, only if
-  the offered feature-register extraction is accepted: capabilities mined
-  from git log, changelog, tests, CLI help, routes, and docs, created
-  `backlogged` and immediately advanced to `implemented` (they already
-  shipped). Uncertain entries carry `[REVIEW: ...]` markers.
+- `.project/features/*.md` — two distinct ways:
+  - Only on the existing-codebase path, only if the offered
+    feature-register extraction is accepted: capabilities mined from git
+    log, changelog, tests, CLI help, routes, and docs, created
+    `backlogged` and immediately advanced to `implemented` (they already
+    shipped). Uncertain entries carry `[REVIEW: ...]` markers.
+  - On both paths, a terminal capture step: capabilities the just-written
+    artifacts describe that have no register entry (any status) and no
+    implementation are offered in one batched multi-select confirmation;
+    accepted ones are created `backlogged` (genuinely unbuilt work, unlike
+    the extraction above). Declined items are simply not created.
 
 ## Constitution workflow knobs
 

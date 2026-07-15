@@ -50,6 +50,10 @@ declined entries back in.
 
 ## Behavior notes
 
+- **Never-built scope isn't drift**: a capability an artifact describes
+  that was never implemented at all is routed to
+  `/ardd-backlog --from-artifacts`, not recorded in `DEFECTS.md` — that
+  file is reserved for code-vs-artifact divergence in *built* behavior.
 - Ends by running `/ardd-status` so the defect summary line in
   `STATUS.md` isn't left stale.
 

@@ -10,12 +10,23 @@ _Tier: core_
 
 ```
 /ardd-backlog <plain-language description of the capability>
+/ardd-backlog --from-artifacts    # retroactive sweep of stable artifacts
 ```
 
 Logging is deliberately cheap: one register file, no artifact edits, no
 design work. The design happens later, when you target the slug with
 `/ardd-plan <slug>` — in any order, whenever you choose. Substantial or
 decision-reversing ideas should be vetted with `/ardd-research` first.
+
+`--from-artifacts` is the retroactive sweep: it walks every
+`status: stable` artifact, proposes candidate entries for
+documented-but-untracked capabilities (grounded in specific artifact
+passages, deduplicated against the whole register including
+`implemented`/`retired` slugs), confirms them in one batched
+multi-select prompt, and creates the approved ones through the normal
+`feature-create` path. It's a proposal list — the human decides;
+declined candidates are dropped, not recorded. `/ardd-status`'s
+"Documented but untracked" section points here.
 
 ## Reads
 

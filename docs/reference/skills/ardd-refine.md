@@ -51,6 +51,12 @@ counts and refines every artifact that has any, most-open first.
   `/ardd-audit` scan for. Refine moves stray inline ones there.
 - With no inline guidance it asks up to 3 targeted clarifying questions —
   never questions answerable by reading other artifacts.
+- **Delta-scoped capture**: capabilities newly introduced or materially
+  changed by this refine that have no register entry (any status) and no
+  implementation are offered in one batched confirmation and, if
+  accepted, created `backlogged` in `.project/features/` — never a
+  re-prompt about the artifact's long-standing scope. On the create path
+  the whole new artifact is the delta.
 - Ends by running `/ardd-status` (once per single-artifact run; once after
   the whole pass in no-argument mode).
 
