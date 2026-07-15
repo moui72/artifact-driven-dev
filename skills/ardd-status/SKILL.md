@@ -87,6 +87,19 @@ the coordinator or the inline path.
    `/ardd-status` never writes to the register except the one narrow,
    explicit exception in step 5a below.
 
+   Also compare each `status: stable` artifact's described capabilities
+   against the feature register and the codebase: the agent lists any
+   capability a stable artifact describes that has no register entry
+   (checked against every status, including `implemented` and `retired`)
+   and no existing implementation. Skip `status: draft` artifacts — draft
+   scope isn't settled enough to nag about. Collect the unmatched
+   capabilities for the "Documented but untracked" report section and
+   STATUS.md line below (omit both when nothing is untracked). This is
+   detection and visibility ONLY: `/ardd-status` never writes the register
+   here — creating entries belongs to `/ardd-backlog --from-artifacts`,
+   which the section points at (the step-7 orphaned-flip confirmation
+   remains this skill's sole register-write exception).
+
    Also glob `.project/tasks/tasks-*.md` for files at `status: completed`.
    For each, run `.claude/skills/ardd-scripts/completion-flip-check.sh
    <file>` — detects the orphaned-completion-flip failure mode: a plan
@@ -159,6 +172,12 @@ the coordinator or the inline path.
      `.project/features/`. Target a backlogged slug with
      `/ardd-plan <slug>`. (Omit this section if the register doesn't exist.)
 
+   ## Documented but Untracked
+   - `<artifact>.md` describes <capability> — no register entry, no
+     implementation. Backlog it with `/ardd-backlog --from-artifacts`.
+   (Advisory only — `/ardd-status` never creates register entries. Stable
+   artifacts only; omit this section entirely if step 1 found none.)
+
    ## Orphaned Completion Flips
    - Slug `<slug>` — tasks file `<file>`'s plan branch `<branch>` is merged
      into the default branch, but the register still says `status: tasked`.
@@ -185,6 +204,9 @@ the coordinator or the inline path.
    - A line surfacing the open feedback count from step 1 (omit if zero)
    - A line surfacing the feature backlog counts from step 1 (omit if
      the register doesn't exist)
+   - A "Documented but untracked" line surfacing the count of
+     documented-but-untracked capabilities from step 1, pointing at
+     `/ardd-backlog --from-artifacts` (omit if none)
    - A line surfacing any orphaned completion flips found in step 1 (omit
      if none)
    - An "In flight" line/section surfacing the `inflight-worktrees.sh`
