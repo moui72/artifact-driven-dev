@@ -23,6 +23,13 @@
 #   resolved=<path> ref=<branch> channel=release warning=no-tags
 #                                                        owned, no releases yet -> default branch
 #   ... warning=offline                                  fetch failed; resolved from existing state
+#   ... note=fetch-skipped-fresh-cache                    the target's update_check_max_age_days gate (see
+#                                                        ardd-update-check.sh) applied and FETCH_HEAD was
+#                                                        still fresh, so no fetch ran this time — the
+#                                                        resolved tag may lag a just-published release
+#                                                        (distinguishes that from warning=offline: this
+#                                                        checkout deliberately didn't ask the remote at all,
+#                                                        vs. asked and failed)
 #   resolved=<path> channel=dev                          any other existing ArDD checkout (never mutated)
 #   ... fallback=owned                                   recorded Source-Path was invalid; resolved the
 #                                                        owned checkout instead (additive token; only a
@@ -106,9 +113,32 @@ if [ "$src_phys" != "$owned_phys" ]; then
 fi
 
 # --- Owned checkout: fetch tags (offline-tolerant), move to latest release ---
+# Same opt-in, age-gated skip as ardd-update-check.sh's stale-update-network-
+# check: only applies when the target's constitution sets
+# update_check_max_age_days to a positive integer AND FETCH_HEAD is still
+# younger than that many days (missing FETCH_HEAD = stale, always fetch).
+# Absent/invalid field = unconditional fetch, today's default behavior,
+# never a note. This is the "something prevented seeing a newer one" case
+# findings-0344/F006 asked to distinguish from a fetch that genuinely ran.
 warn=""
-if ! git -C "$SRC" fetch --tags --quiet origin >/dev/null 2>&1; then
-  warn=" warning=offline"
+note=""
+skip_fetch=0
+max_age="$(sed -n 's/^update_check_max_age_days:[[:space:]]*//p' ./.project/artifacts/constitution.md 2>/dev/null | head -1)"
+case "$max_age" in
+  ''|0*|*[!0-9]*) max_age="" ;;
+esac
+if [ -n "$max_age" ]; then
+  gitdir="$(git -C "$SRC" rev-parse --absolute-git-dir 2>/dev/null || true)"
+  if [ -n "$gitdir" ] && [ -f "$gitdir/FETCH_HEAD" ] \
+    && [ -z "$(find "$gitdir/FETCH_HEAD" -mtime +"$max_age" 2>/dev/null)" ]; then
+    skip_fetch=1
+    note=" note=fetch-skipped-fresh-cache"
+  fi
+fi
+if [ "$skip_fetch" -eq 0 ]; then
+  if ! git -C "$SRC" fetch --tags --quiet origin >/dev/null 2>&1; then
+    warn=" warning=offline"
+  fi
 fi
 
 # Channel filter. stable: strict vX.Y.Z only — the grep pins the exact
@@ -125,7 +155,7 @@ fi
 
 if [ -n "$tag" ]; then
   git -C "$SRC" checkout --quiet "$tag"
-  echo "resolved=$SRC ref=$tag channel=release$warn$FALLBACK"
+  echo "resolved=$SRC ref=$tag channel=release$warn$note$FALLBACK"
   exit 0
 fi
 
@@ -139,4 +169,4 @@ if [ -z "$default" ]; then
   fi
 fi
 git -C "$SRC" checkout --quiet "$default"
-echo "resolved=$SRC ref=$default channel=release warning=no-tags$warn$FALLBACK"
+echo "resolved=$SRC ref=$default channel=release warning=no-tags$warn$note$FALLBACK"

@@ -69,7 +69,7 @@ status: in-progress
 
 ## Phase 3: install/update reporting — findings-0344 F003, F006
 
-- [ ] T005 In `install.sh`'s `.gitignore` suggestion
+- [x] T005 In `install.sh`'s `.gitignore` suggestion
   block (near the `.claude/skills/ardd-*/` guidance): make the suggestion
   visually distinct from the surrounding output — a clearly bounded
   block (e.g. a `---` separator or an all-caps `ACTION NEEDED` marker,
@@ -81,7 +81,7 @@ status: in-progress
   `scripts/test-install.sh` asserting the suggestion block's distinct
   marker text appears in output when `.gitignore` doesn't cover
   `.claude/skills/ardd-*/`. [feedback: findings-0344/F003]
-- [ ] T006 [parallel] In `scripts/source-resolve.sh`:
+- [x] T006 [parallel] In `scripts/source-resolve.sh`:
   when resolution completes but the resulting ref is NOT the newest tag
   the remote actually has (i.e. a fetch happened, tags were seen, but an
   older tag was selected than what's technically available — the

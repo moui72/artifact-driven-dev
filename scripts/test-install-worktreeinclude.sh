@@ -57,6 +57,17 @@ else
   bad "case1: pattern present exactly once (got count=$count)"
 fi
 
+# --- Case 1a1: gitignore suggestion — target has no .gitignore covering
+# .claude/skills/ardd-*/, so install.sh must print the bounded, visually
+# distinct ACTION NEEDED block (not just one line lost in general output) ---
+gi_out="$(cd "$REPO_ROOT" && sh "$INSTALL_SH" "$target")"
+case "$gi_out" in
+  *"ACTION NEEDED: .claude/skills/ardd-*/ isn't gitignored"*)
+    ok "gitignore: ACTION NEEDED marker printed when uncovered" ;;
+  *)
+    bad "gitignore: ACTION NEEDED marker printed when uncovered" ;;
+esac
+
 # --- Case 1a2: badge suggestion — README without marker gets a printed
 # suggestion and is NEVER edited by install.sh itself ---
 printf '# Case1 Project\n' > "$target/README.md"

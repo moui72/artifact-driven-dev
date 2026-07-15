@@ -40,7 +40,11 @@ regardless of whether they're already set).
    printed line:
    - `channel=release`: proceed, and report the resolved tag (relay
      `warning=offline` — resolution used on-disk state — or
-     `warning=no-tags` — no releases exist yet — if present).
+     `warning=no-tags` — no releases exist yet — or `note=fetch-skipped-
+     fresh-cache` — the `update_check_max_age_days` gate applied and
+     FETCH_HEAD was still fresh, so this run didn't ask the remote at
+     all and the resolved tag may lag a just-published release, distinct
+     from `warning=offline`'s "asked and failed" — if present).
    - `channel=dev`: surface an explicit dev-mode warning — this is a
      live checkout, and its current state may hold unreleased,
      possibly-broken skills — and ask the user before proceeding.

@@ -268,6 +268,30 @@ run_resolve --channel=beta "$OWNED"
   && ok "case16: --channel=beta form accepted" \
   || bad "case16: --channel= form got '$out'"
 
+# --- Case 17: note=fetch-skipped-fresh-cache — the target's
+# update_check_max_age_days gate applies and FETCH_HEAD is fresh, so no
+# fetch runs (a newly-published tag on origin stays invisible this time,
+# distinct from warning=offline where a fetch was attempted and failed) ---
+FRESHTARGET="$WORK/fresh-target"
+mkdir -p "$FRESHTARGET/.project/artifacts"
+printf 'update_check_max_age_days: 7\n' > "$FRESHTARGET/.project/artifacts/constitution.md"
+# Prime FETCH_HEAD by fetching once now (fresh as of "now").
+git -C "$OWNED" fetch -q --tags origin
+# Publish a newer tag on origin that a real fetch would pick up.
+( cd "$ORIGIN" && printf 'w\n' >> install.sh && git add -A && git commit -q -m five && git tag v1.12.0 )
+set +e
+out="$(cd "$FRESHTARGET" && sh "$RESOLVE" "$OWNED" 2>&1)"
+status=$?
+set -e
+case "$out" in
+  "resolved=$OWNED ref=v1.11.1 channel=release note=fetch-skipped-fresh-cache")
+    ok "case17: note=fetch-skipped-fresh-cache when FETCH_HEAD is fresh" ;;
+  *) bad "case17: got '$out' (rc=$status)" ;;
+esac
+[ "$(git -C "$OWNED" rev-parse HEAD)" != "$(git -C "$OWNED" rev-parse 'v1.12.0^{commit}' 2>/dev/null || echo none)" ] \
+  && ok "case17: newly-published tag stays unseen (no fetch ran)" \
+  || bad "case17: fetch ran despite fresh FETCH_HEAD"
+
 if [ "$fail" -eq 0 ]; then
   echo "test-source-resolve: all cases pass"
 else
