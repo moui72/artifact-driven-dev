@@ -1,6 +1,6 @@
 ---
 slug: redrive-configuration-choices
-status: tasked
+status: implemented
 logged: 2026-07-14
 plan: plan-redrive-configuration-choices-2026-07-14-1e00.md
 tasks: tasks-redrive-configuration-choices-29ae.md
