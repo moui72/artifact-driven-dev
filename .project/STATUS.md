@@ -1,6 +1,69 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-15 (`/ardd-backlog` — logged
+`update-channel-switch-flags`: `/ardd-update` gains `--local`, `--beta`,
+and `--stable` flags to switch the install to the named channel's latest,
+overriding the recorded `Channel:` for the run and re-recording it going
+forward (today the channel is fixed at install-record time; switching
+means hand-editing `ardd-version.md` or reinstalling; `--local` =
+dev-mode against a live checkout, interacting with `source-resolve.sh`'s
+per-channel selection and the dev-mode warn-and-ask path). Prior update,
+same day, `/ardd-plan discovery-to-work-eager-captur
+backlog-sweep-reconcile-from-a` — drafted, approved, and tasked
+`plan-discovery-to-work-eager-captur-2026-07-15-156b.md` (solo mode, no
+branch gate, on `main`): the artifact→register bridge. Consumed all 3
+items of `feedback-artifact-register-bridge-116a.md` (now `planned`). No
+artifact changes — all skill-prose/docs work; no new scripts (the
+capability-vs-design-note judgment stays LLM work per the mechanization
+non-goals) and no schema changes. 6 tasks across 3 phases in
+`tasks-discovery-to-work-eager-captur-2b57.md` (`ready`): Phase 1 —
+terminal capture steps in `/ardd-init` (T001) and `/ardd-refine`
+(T002, delta-scoped for the pivot case); Phase 2 — `/ardd-status`
+advisory "Documented but untracked" section (T003, detection only),
+`/ardd-backlog --from-artifacts` proposal/write mode (T004), and an
+`/ardd-defects` routing note for greenfield unbuilt scope (T005); Phase
+3 — reference docs + lint-docs (T006). Both features flipped
+`backlogged` → `planned` → `tasked`. Open questions: detection noise
+control (tune from atelier, the first intended consumer) and whether
+init's code-based extraction and the new artifact-based capture stay
+distinct prose. Prior update, same day, `/ardd-backlog` — logged
+`plan-time-defrag-slate-analysi`: advisory, recomputed-at-plan-time
+footprint analysis over open backlog items proposing session-optimized
+slates (overlap bundles implemented serially in one plan; pairwise-disjoint
+sets as separate tasks files for worktree fan-out). Its spec is the
+now-completed sync-tab-scroll prototype research report
+(`research-backlog-defrag-slate-analysis-2026-07-15-627c.md` in that
+repo, uncommitted): the cross-item premise degenerated there (N=1 open
+backlog) but the method worked one level down inside
+`phase-2-in-app-authoring`, surfacing the key requirements — dependency
+ordering as a third axis beyond file overlap, graded footprint confidence
+(speculative items never in parallel sets), register-direct status reads,
+and sensible N=0/N=1 handling. Suggested first step recorded in the
+entry: a second research pass against a genuinely large backlog (e.g.
+atelier after `backlog-sweep-reconcile-from-a` backfills its limbo scope)
+before codifying a `/ardd-plan` slate mode. Prior update, same day,
+`/ardd-backlog` — logged
+`plan-approval-browser-preview`, a request for `/ardd-plan`'s plan-approval
+checkpoint to offer rendering `plan.md` as an artifact and opening it in the
+browser (plus displaying the URL), as an alternative to reading raw
+markdown in the terminal. Prior update, same day, `/ardd-feedback` — logged
+`feedback-artifact-register-bridge-116a.md`, 3 UX items documenting the
+missing artifact→register bridge observed across consumer projects:
+discovery limbo (atelier — post-`/ardd-init` foundational scope stranded
+in artifacts with no register entry), pivot limbo (sync-tab-scroll — an
+`/ardd-refine` pivot's new-capability delta had to be hand-backlogged),
+and `/ardd-defects`' drift framing being wrong for greenfield unbuilt
+scope. Three new-capability items were re-filed to the register in the
+same pass (user pre-approved the batch): `discovery-to-work-eager-captur`
+(init/refine terminal step offering to backlog newly-documented
+capabilities), `backlog-sweep-reconcile-from-a` (status advisory
+detection + `/ardd-backlog --from-artifacts` for retroactive limbo), and
+`epics-grouping-in-feature-regi` (optional `epic:` frontmatter grouping
+for release-cadence bundling). A related fourth idea — computed "defrag"
+footprint analysis for plan-time bundling/parallelization — is
+deliberately NOT backlogged yet: a prototype `/ardd-research` run is in
+flight in the sync-tab-scroll consumer repo, and its report will become
+that item's spec. Prior update, same day, `/ardd-implement` — delegated worktree run completed
 and merged all 13 tasks of `tasks-v1-0-0-pre-cut-testing-finding-bf61.md`
 (now `completed`). T001 (test-first): `worktree-align.sh` now refuses
 `aligned=false reason=not-a-worktree` when run from the primary checkout
@@ -227,11 +290,12 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. Both batches consumed by
-`plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md`:
-`feedback-v1-0-0-pre-cut-testing-findings-0344.md` and
-`feedback-v1-0-0-pre-cut-testing-redrive-findings-695b.md` → delivered
-via `tasks-v1-0-0-pre-cut-testing-finding-bf61.md` (0/13, `ready`).
+None open. Newest consumed: `feedback-artifact-register-bridge-116a.md`
+(3 UX items, all incorporated) →
+`plan-discovery-to-work-eager-captur-2026-07-15-156b.md` /
+`tasks-discovery-to-work-eager-captur-2b57.md` (0/6, `ready`). Prior
+batches all delivered (`findings-0344`, `redrive-695b` via
+`tasks-v1-0-0-pre-cut-testing-finding-bf61.md`, completed 13/13).
 
 ## Recent Releases
 
@@ -244,12 +308,27 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-1 backlogged · 0 tasked · 14 implemented · 1 retired — see
+5 backlogged · 2 tasked · 14 implemented · 1 retired — see
 `.project/features/`.
-Backlogged: `list-mode-for-plan-and-impleme` — a `--list` mode for
-`/ardd-plan` and `/ardd-implement` to print eligible slugs/tasks files
-with basic info without entering the interactive pick flow. Target with
-`/ardd-plan list-mode-for-plan-and-impleme`.
+Tasked: `discovery-to-work-eager-captur` + `backlog-sweep-reconcile-from-a`
+→ `tasks-discovery-to-work-eager-captur-2b57.md` (0/6, `ready`).
+Backlogged:
+- `update-channel-switch-flags` — `/ardd-update --local|--beta|--stable`
+  switches the install to the named channel's latest, overriding and
+  re-recording the recorded `Channel:`.
+- `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
+  analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
+  research report; first step: a second research pass on a large backlog
+  (atelier, post-sweep).
+- `plan-approval-browser-preview` — `/ardd-plan`'s approval checkpoint
+  offers to render `plan.md` as an artifact, open it in the browser, and
+  display the URL.
+- `epics-grouping-in-feature-regi` — optional `epic:` frontmatter slug on
+  feature files; plan/status/tracker grouping touchpoints.
+- `list-mode-for-plan-and-impleme` — a `--list` mode for `/ardd-plan` and
+  `/ardd-implement` to print eligible slugs/tasks files without the
+  interactive pick flow.
+Target a slug with `/ardd-plan <slug>`.
 Newest implemented: `redrive-configuration-choices` — `/ardd-update
 --reconfigure` re-asks `workflow_mode`, `next_step_prompt`, `delegation`,
 and `merge_policy` regardless of whether they're already set
@@ -271,17 +350,13 @@ merged and was reaped; no sibling worktrees remain. `main` is ahead of
 
 ## Recommended Next Step
 
-No `ready` tasks file pending. All 13 items from the v1.0.0 pre-cut
-testing pass are fixed and merged — the `worktree-align.sh` and
-`lint-project.sh` bugs are resolved, and all skill-prose polish landed.
-Worth a regression pass: re-run (a subset of) the original 7 dry-run
-scenarios to confirm the fixes hold and nothing regressed, before cutting
-1.0 — see `dev-notes/prerelease-testing-context.md` (local, gitignored)
-for the scenario design and a request already handed to a future agent
-to turn this into a repeatable exercise. Other standing options: dispatch
-the stable
-release workflow when consumers should get this session's accumulated
-work (constitution v1.9.0, the delegation pre-flight check, the
-`/ardd-update --reconfigure` flag); resolve the one remaining
-`.project/audit.md` suggestion; or `/ardd-defects` to re-verify against
-the docs-site and skill-prose surfaces.
+`/ardd-implement` — `tasks-discovery-to-work-eager-captur-2b57.md` is
+`ready` (6 tasks, 3 phases: eager capture in init/refine, the
+status/backlog/defects sweep surface, docs). Landing the sweep also
+unblocks the defrag item's suggested next research pass (atelier's
+backfilled backlog as the large-N testbed). Standing
+options unchanged: the pre-1.0 regression pass of the 7 dry-run scenarios
+(`dev-notes/prerelease-testing-context.md`); dispatch the stable release
+workflow when consumers should get the accumulated `main` work; resolve
+the remaining `.project/audit.md` suggestion; or `/ardd-defects` to
+re-verify against the docs-site and skill-prose surfaces.
