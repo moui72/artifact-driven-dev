@@ -1,6 +1,45 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-15 (`/ardd-update` — self-hosted (this repo is its own
+ArDD source), so `/ardd-update`'s reinstall step was run directly against
+this checkout to refresh `.claude/skills/` from the current tree (includes
+the v1.10.0 constitution amendment and the codex-second-harness plan from
+the prior step) rather than pulling from elsewhere. All 15 skills, 3
+reference dirs, and all scripts reinstalled clean; all 8 migrations
+already applied (none pending); `.worktreeinclude` and
+`.project/.gitattributes` already correct. `.project/ardd-version.md`
+re-stamped to commit `a656512`. `next_step_prompt`/`delegation`/
+`merge_policy` frontmatter fields already present — no backfill asked.
+Nothing pulled or pushed; no dev-mode source involved (self-hosted, not
+a separate checkout). Prior update, same day, `/ardd-plan
+codex-second-harness-support` — drafted
+`plan-codex-second-harness-support-2026-07-15-f837.md` (solo mode, no branch
+gate, on `main`), then **stopped at the approval checkpoint** on user
+request — the plan stays `status: draft`, not yet tasked. Before drafting,
+applied the feature's own required constitution amendment: `constitution.md`
+bumped 1.9.0 → 1.10.0 (MINOR, SIR written) with a new "Multi-harness
+install" subsection under Project Scope & Intent, documenting
+`install.sh --harness codex`'s five install-time substitutions
+(`AskUserQuestion` → plain-text prompts; `Agent` worktree
+delegation/fan-out → dropped, inline-only; `.worktreeinclude` → not carried
+over; `next_step_prompt` → plain-text offer; and a newly-identified fifth
+substitution the original backlog entry missed, `/ardd-X` → `$ardd-X`
+invocation-sigil rewrite) — this both folds in the de-risking spike's
+findings and formally executes the named scope reversal ("a Claude Code
+skill pack" → primarily Claude Code, also Codex) the feature record flagged
+as required. The plan's 5 phases: Phase 1 is a blocking live
+skill-to-skill-chaining smoke test (the one gate the spike's docs-only
+research couldn't close — a hostile result there aborts Phases 2–5 in favor
+of don't-do-it); Phase 2 adds the `--harness` flag and one substitution
+transformer to `install.sh`; Phase 3 implements and tests each of the five
+substitutions; Phase 4 updates docs (`docs/concepts.md`'s now-stale
+"currently Claude Code-specific" line, README, USAGE.md); Phase 5 is a full
+regression pass. No feedback consumed (none open) and no unsurfaced
+defects. Feature `codex-second-harness-support` stays `backlogged` — the
+`backlogged` → `planned` flip only happens at plan approval (step 11),
+which this run didn't reach. Resume tasking later with `/ardd-plan --from
+plan-codex-second-harness-support-2026-07-15-f837.md`. Prior update, same
+day, `/ardd-implement` — delegated worktree run completed
 and merged all 4 tasks of `tasks-update-channel-switch-flags-c066.md` (now
 `completed`): T001 added `--local`/`--beta`/`--stable` flags to
 `/ardd-update` — `--stable`/`--beta` call `source-resolve.sh --channel`
@@ -353,7 +392,7 @@ Keep this current as artifacts are refined and open questions are resolved._
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.9.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.10.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -394,7 +433,10 @@ Releases and `docs/decisions/0006`/`0007`.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
-  report; first step is a de-risking spike before any install work.
+  report plus the de-risking spike (both GO). Still `backlogged`: a plan
+  was drafted (`plan-codex-second-harness-support-2026-07-15-f837.md`,
+  `status: draft`) but stopped at the approval checkpoint, un-tasked —
+  resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
 - `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
   analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
   research report; first step: a second research pass on a large backlog
@@ -429,12 +471,17 @@ is ahead of `origin/main` (multiple local commits not yet pushed).
 
 ## Recommended Next Step
 
-Both recently-tasked feature pairs are now implemented and merged. Standing
-options unchanged: the pre-1.0 regression pass of the 7 dry-run scenarios
-(`dev-notes/prerelease-testing-context.md`); dispatch the stable release
-workflow when consumers should get the accumulated `main` work; resolve
-the remaining `.project/audit.md` suggestion; or `/ardd-defects` to
-re-verify against the docs-site and skill-prose surfaces. The newly
-backlogged `codex-second-harness-support`'s first step is the de-risking
-spike on Codex's skill-invocation and skill-chaining gates, before any
-`/ardd-plan` work targets it.
+`.project/ardd-version.md` was re-stamped by the `/ardd-update` reinstall
+(commit `a656512`) and is uncommitted, along with the v1.10.0 constitution
+amendment and the draft plan — worth a commit before anything else lands
+on top. A drafted-but-untasked plan is waiting: `/ardd-plan --from
+plan-codex-second-harness-support-2026-07-15-f837.md` to approve and
+generate its tasks file (Phase 1 of that plan is a blocking live
+skill-to-skill-chaining smoke test on a real Codex CLI — the true final
+go/no-go — before Phases 2–5's install-time substitution work proceeds).
+Standing options otherwise unchanged: the pre-1.0 regression pass of the 7
+dry-run scenarios (`dev-notes/prerelease-testing-context.md`); dispatch the
+stable release workflow when consumers should get the accumulated `main`
+work (now includes the v1.10.0 constitution amendment); resolve the
+remaining `.project/audit.md` suggestion; or `/ardd-defects` to re-verify
+against the docs-site and skill-prose surfaces.

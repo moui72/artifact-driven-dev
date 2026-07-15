@@ -1,6 +1,32 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.9.0 → 1.10.0 (MINOR — named scope reversal.)
+
+Rationale: `/ardd-plan codex-second-harness-support` (2026-07-15), following
+the accepted recommendation in
+`research-codex-cli-second-harness-2026-07-15-2d3d.md` and the de-risking
+spike `research-codex-spike-exact-name-invocat-2026-07-15-2423.md` (both
+GO). Project Scope & Intent previously defined ArDD as "a Claude Code skill
+pack" — a second harness (OpenAI Codex CLI) materially expands that scope,
+so this is a named reversal per that section's own text, not a silent
+drift. Codex's adoption of the identical `SKILL.md` format means the port
+is single-source (Principle I intact): install-time substitution of five
+localized Claude-specific clauses, no forked prose tree. Codex v1 is
+deliberately degraded: inline-only implementation (no worktree
+delegation/fan-out), plain-text prompts instead of `AskUserQuestion`, no
+lint-on-write hook. A live skill-to-skill-chaining smoke test is the
+mandatory first implementation task and remains the true final go/no-go.
+
+Modified sections: Project Scope & Intent (new "Multi-harness install"
+subsection). Footer version updated.
+
+Previous SIR (1.8.2 → 1.9.0) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 1.8.2 → 1.9.0 (MINOR — new principle added.)
 
 Rationale: /ardd-feedback item `feedback-next-step-prompt-terminology-6ce3.md`
@@ -108,7 +134,7 @@ revision.
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-14
+last_updated: 2026-07-15
 
 next_step_prompt: true
 delegation: eager
@@ -119,10 +145,12 @@ merge_policy: auto
 
 ## Project Scope & Intent
 
-artifact-driven-dev (ArDD) is a Claude Code skill pack: markdown-defined
-slash commands (`skills/*/SKILL.md`) installed into other projects via
-`install.sh`, plus a small number of POSIX shell scripts for the parts of
-the system that must be deterministic rather than left to LLM judgment.
+artifact-driven-dev (ArDD) is a skill pack — primarily for Claude Code, and,
+as of 2026-07-15, also installable in a degraded v1 form to OpenAI Codex CLI
+(see "Multi-harness install" below): markdown-defined slash commands
+(`skills/*/SKILL.md`) installed into other projects via `install.sh`, plus a
+small number of POSIX shell scripts for the parts of the system that must be
+deterministic rather than left to LLM judgment.
 There is no runtime application, database, or user interface belonging to
 ArDD itself — the product is prose instructions an LLM executes in a target
 project, plus the install/lint tooling that supports them. `datamodel.md`,
@@ -244,6 +272,49 @@ command to start the session by hand, exits 0 — rather than misreporting
 a successful install as failed). Full narrative — the unsound v1.2.3
 "never prompt" inference, the v1.2.4 regression, and the implementation
 traps — in `docs/decisions/0008-new-sh-tty-interactivity.md`.
+
+**Multi-harness install (`install.sh --harness codex`).** ArDD's primary
+target remains Claude Code, but as of 2026-07-15 (feature
+`codex-second-harness-support`) the pack also installs, in a deliberately
+degraded v1 form, to **OpenAI Codex CLI** — the first second-harness port,
+made viable because Codex adopted the identical `SKILL.md` format Claude
+Code uses. This is a single-source port, never a forked prose tree
+(Principle I): the same `skills/*/SKILL.md` files serve both harnesses,
+with a fixed, small set of install-time substitutions applied by one
+transformer step in `install.sh`, not scattered harness conditionals
+through skill prose:
+
+1. `AskUserQuestion` structured prompts → plain-text numbered questions.
+2. `Agent` `isolation:"worktree"` delegation/fan-out → dropped; Codex v1 is
+   **inline-only** (no background delegation, no multi-select fan-out) —
+   Codex exposes worktrees and subagents but no structured
+   launch-and-report-back primitive equivalent to Claude Code's `Agent`
+   tool.
+3. `.worktreeinclude` gitignored-file copy → not carried over pending
+   verification of Codex's own worktree file-copy behavior.
+4. `next_step_prompt`'s one-keypress offer → a plain-text next-step
+   suggestion.
+5. The `/ardd-X` invocation sigil → rewritten to `$ardd-X` (Codex's
+   exact-name invocation channel; its `/`-commands are a fixed built-in
+   set that cannot be extended, confirmed against Codex issue #11817).
+   This substitution applies to every user-facing invocation hint and
+   every terminal-handoff line ("run `/ardd-status`" → "run
+   `$ardd-status`").
+
+Claude-only tool references (1–2 above) must be **stripped or degraded**
+for the Codex install, never emitted-and-ignored — a Codex agent handed a
+Claude tool call it can't honor is a broken behavior, not graceful
+degradation. Skill-to-skill chaining (a skill's prose invoking another
+skill by name — the mechanism every terminal handoff in this pack depends
+on) is present on Codex and same-class as Claude Code's, but its
+reliability is unproven by documentation alone; a live throwaway-install
+smoke test of chaining is the mandatory first implementation task for this
+feature and remains the final go/no-go independent of this scope change.
+If a third harness ever materializes, *that* concrete case — not this
+one — is what would justify generalizing the five-substitution list into
+a real per-harness adapter system (Principle VI, YAGNI); building one now,
+at two harnesses, would be the premature abstraction that principle
+forbids.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -436,4 +507,4 @@ standing decisions — they are per-project operational settings, written by
 `/ardd-update`) question. Changing either does not require a Sync Impact
 Report or a version increment, and does not itself update `last_updated`.
 
-**Version**: 1.9.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-14
+**Version**: 1.10.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-15
