@@ -144,6 +144,19 @@ files.
      in-progress state onto `<default>` until the subagent's branch merges.)
    - If `on_default` is `true`, delegate directly — no fold needed.
 
+   **Pre-flight: verify the chosen tasks file and its bound plan are
+   committed before launching.** A worktree subagent only sees state that
+   has reached local `<default>` (via `worktree-align.sh`'s fast-forward);
+   an uncommitted plan or tasks file on this branch is invisible to it, and
+   the gap otherwise surfaces only after the subagent is already running.
+   Read the tasks file's `plan:` frontmatter to resolve its bound plan's
+   filename, then run `git status --short <plan-file> <tasks-file>` for
+   both paths. If either is untracked or shows modifications relative to
+   HEAD, surface this to the user before delegating: offer to commit them
+   now, or block delegation with an explicit message naming the
+   uncommitted file(s) — never launch a worktree subagent while the gap
+   exists.
+
    Then delegate step 4 onward — or, when this run is in Reconcile mode,
    the Reconcile-mode steps below instead — to a subagent via the `Agent`
    tool with `isolation: "worktree"`, handing it this skill's remaining
