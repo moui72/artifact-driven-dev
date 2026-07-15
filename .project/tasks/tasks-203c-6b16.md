@@ -1,0 +1,15 @@
+---
+plan: plan-203c-2026-07-14-bf43.md
+generated: 2026-07-14
+status: ready
+---
+
+# Tasks
+
+## Phase 1: Delegation pre-flight check
+- [ ] T001 In `.claude/skills/ardd-implement/SKILL.md`'s delegation gate step (the preamble where it runs `inflight-worktrees.sh` and decides whether to delegate), add a pre-flight check: before launching a worktree subagent, run `git status --short <plan-file> <tasks-file>` for the chosen tasks file and its bound plan (read the tasks file's `plan:` frontmatter to resolve the plan filename). If either path is untracked or shows modifications relative to HEAD, surface this to the user before delegating — offer to commit them now, or block delegation with an explicit message naming the uncommitted file(s) — rather than launching a worktree subagent that discovers the gap itself after `worktree-align.sh` reports `aligned=true`. Addresses feedback `feedback-uncommitted-plan-tasks-delegat-a3ff.md` F001.
+
+## Phase 2: TDD/pre-commit xfail resolution
+- [ ] T002 [parallel] In `templates/constitution-suggestions.md`'s **Test-First Development** entry (Always-suggest section), add a "committing the red state" note to the Suggested text or Rationale: when the red test is committed before its implementation and a full-suite pre-commit hook is in effect (the Deterministic Gates entry adopted), mark it with the test framework's expected-failure modifier (Vitest `test.fails`/`it.fails`, pytest `@pytest.mark.xfail(strict=True)`, Jest `test.failing`, RSpec `pending`) so the commit passes the hook as an "expected fail," and the paired implementation commit removes the marker — a stale marker left after the feature lands fails the suite loudly, self-enforcing removal. Include the framework-mapping table (Vitest/pytest/Jest 28+/RSpec have a native marker; JUnit 5/Go `testing` don't — name the fallback: squash test+impl into one commit, or a sanctioned red-commit bypass). Addresses feedback `feedback-tdd-xfail-precommit-contradiction-a639.md` F001.
+- [ ] T003 [parallel] In `templates/constitution-suggestions.md`'s **Deterministic Gates** entry (the catalog's actual pre-commit-hook entry), add a note stating explicitly that TDD red states are handled by the expected-failure marker (per T002's Test-First note), not the "documented emergency" bypass clause — so that clause isn't quietly eroded by routine test-first work. Addresses feedback `feedback-tdd-xfail-precommit-contradiction-a639.md` F001.
+- [ ] T004 In `.claude/skills/ardd-implement/SKILL.md` step 6's TDD bullet ("For test tasks under a TDD paradigm: write the test first, confirm it fails, then stop at the red state, mark the test task complete"), add: when `constitution.md`'s Quality Standards declare a full-suite pre-commit hook (Deterministic Gates or equivalent), apply the test framework's expected-failure marker on the red commit and remove it on the paired implementation task's commit — mirroring T002/T003's catalog note at the execution level. Do this after T002/T003 land so the wording stays consistent. Addresses feedback `feedback-tdd-xfail-precommit-contradiction-a639.md` F002.
