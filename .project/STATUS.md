@@ -1,6 +1,29 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-plan --from` — folded the redrive batch's 7
+_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+and merged all 13 tasks of `tasks-v1-0-0-pre-cut-testing-finding-bf61.md`
+(now `completed`). T001 (test-first): `worktree-align.sh` now refuses
+`aligned=false reason=not-a-worktree` when run from the primary checkout
+rather than a real linked worktree — the fix for the nested-delegation
+collapse S6 found. T007 (test-first): `lint-project.sh`'s Sync Impact
+Report parser now accepts `→`, `->`, and `-->` equivalently, fixing the
+misleading-error bug. T002–T004 strengthened `/ardd-init`'s
+existing-codebase entity cross-checking, added scale-sensitive
+constitution suggestions, and nudged `/ardd-defects` after brownfield
+init. T005–T006 made `install.sh`'s gitignore suggestion a bounded
+`ACTION NEEDED` block and gave `source-resolve.sh` an opt-in, age-gated
+fetch-skip diagnostic (`note=fetch-skipped-fresh-cache`), reusing the
+existing `update_check_max_age_days` field rather than inventing a new
+one. T008–T009 added a `DEFECTS.md` staleness caveat and fixed the
+`ardd-update-check.sh`/`ardd-status` field-name doc mismatch. T010–T013
+were skill-prose polish (`gh pr create` failure path, create-vs-extend
+task phrasing, `/ardd-diagram`'s silent-README note, and the
+`workflow_mode` inline-vs-stamp documentation clarity). Merged to `main`
+(fast-forward, `merge_policy: auto`, `9f111a9..7b65228`) and the worktree
+reaped. No features bound to this plan, so no feature flip. Both feedback
+files (`findings-0344` and `redrive-695b`) fully delivered — all 13 items
+from the v1.0.0 pre-cut testing pass are now fixed. Prior update, same
+day, `/ardd-plan --from` — folded the redrive batch's 7
 items into the existing `plan-v1-0-0-pre-cut-testing-finding-2026-07-15-b89e.md`
 (added Phase 4: deterministic-script fixes — `lint-project.sh`'s Sync
 Impact Report arrow parsing rejecting ASCII `->`, a `DEFECTS.md`
@@ -242,21 +265,21 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no sibling worktrees remain. `main` is up to date with
-`origin/main` (pushed through `ba6b5a0`; v0.10.1-beta.5 published from
-that commit).
+Nothing — the `tasks-v1-0-0-pre-cut-testing-finding-bf61.md` worktree
+merged and was reaped; no sibling worktrees remain. `main` is ahead of
+`origin/main` (multiple local commits not yet pushed, through `7b65228`).
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute
-`tasks-v1-0-0-pre-cut-testing-finding-bf61.md` (13 tasks, ready, 0/13,
-across 5 phases — T001's `worktree-align.sh` distinct-worktree check is
-the highest-value fix, a real pre-1.0 correctness gap in the delegation
-machinery; T007's `lint-project.sh` arrow-parsing fix is the other
-genuine bug). All 7 pre-cut test scenarios are now complete with genuine
-findings and both feedback batches are folded into this one plan — no
-more untested scenarios or unplanned feedback remain. Other standing
-options: dispatch the stable
+No `ready` tasks file pending. All 13 items from the v1.0.0 pre-cut
+testing pass are fixed and merged — the `worktree-align.sh` and
+`lint-project.sh` bugs are resolved, and all skill-prose polish landed.
+Worth a regression pass: re-run (a subset of) the original 7 dry-run
+scenarios to confirm the fixes hold and nothing regressed, before cutting
+1.0 — see `dev-notes/prerelease-testing-context.md` (local, gitignored)
+for the scenario design and a request already handed to a future agent
+to turn this into a repeatable exercise. Other standing options: dispatch
+the stable
 release workflow when consumers should get this session's accumulated
 work (constitution v1.9.0, the delegation pre-flight check, the
 `/ardd-update --reconfigure` flag); resolve the one remaining
