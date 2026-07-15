@@ -18,6 +18,7 @@
 # Prints, one per line, then exits:
 #   aligned=true  head=<full sha of HEAD>                     (exit 0)
 #   aligned=false reason=not-a-repo                            (exit 1)
+#   aligned=false reason=not-a-worktree                         (exit 1)
 #   aligned=false reason=dirty                                 (exit 1)
 #   aligned=false reason=no-such-ref                            (exit 1)
 #   aligned=false reason=diverged head=<sha before attempt>     (exit 1)
@@ -30,6 +31,13 @@ set -e
 if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   echo "aligned=false"
   echo "reason=not-a-repo"
+  exit 1
+fi
+
+GIT_ROOT="$(git rev-parse --show-toplevel)"
+if [ ! -f "$GIT_ROOT/.git" ]; then
+  echo "aligned=false"
+  echo "reason=not-a-worktree"
   exit 1
 fi
 

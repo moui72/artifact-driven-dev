@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: delegation machinery — findings-0344 F001
 
-- [ ] T001 Fix `scripts/worktree-align.sh` to positively
+- [x] T001 Fix `scripts/worktree-align.sh` to positively
   verify it's running in a genuine linked worktree, not the primary
   checkout. A linked worktree's `.git` is a regular *file* (pointing at
   the real gitdir); the primary checkout's `.git` is a *directory*. Add a

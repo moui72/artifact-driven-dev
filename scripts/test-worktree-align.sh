@@ -120,4 +120,11 @@ assert_contains "case7: not-a-repo -> aligned=false" "aligned=false" "$out"
 assert_contains "case7: not-a-repo reason" "reason=not-a-repo" "$out"
 assert_exit "case7: exit 1" "1" "$rc"
 
+# --- Case 8: primary checkout itself (not a linked worktree) -> failure ---
+cd "$repo"
+run sh "$ALIGN" main
+assert_contains "case8: not-a-worktree -> aligned=false" "aligned=false" "$out"
+assert_contains "case8: not-a-worktree reason" "reason=not-a-worktree" "$out"
+assert_exit "case8: exit 1" "1" "$rc"
+
 exit "$fail"
