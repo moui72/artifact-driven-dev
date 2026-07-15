@@ -176,6 +176,8 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** Lint, type-check, and the test suite run in CI on every push and pull request, and a failing run blocks merge — CI is the gate of record. The same checks also run in a local pre-commit hook as an earlier, cheaper catch, but the hook never substitutes for CI, since a hook can be skipped, uninstalled, or never configured on a given clone. Bypassing the hook is prohibited except in a documented emergency, and any bypass is followed immediately by a commit that re-establishes the passing state.
 **Rationale:** Automated gates catch regressions at the cheapest possible point rather than relying on discipline alone, and a hook only enforces discipline on machines where it's installed and not bypassed; CI is what actually guarantees nothing failing reaches the merged branch.
 
+A TDD red state under this hook is not itself a bypass case: it's handled by the test framework's expected-failure marker (see Test-First Development's "committing the red state" note), not by the "documented emergency" bypass clause above. Routing routine red-commit work through the emergency clause would quietly erode what that clause is for.
+
 ---
 
 ## Lower-priority hygiene (still ask — cheap, rarely rejected)
