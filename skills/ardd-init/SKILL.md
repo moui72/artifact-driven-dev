@@ -258,6 +258,13 @@ with `/ardd-refine` before planning new work.
      followed by `/ardd-backlog` to backlog closing it. This preserves
      those files' existing single-writer ownership.
 
+   The next four questions set workflow fields in the constitution's
+   frontmatter, not constitution content: `workflow_mode` is written
+   inline into the frontmatter here, directly, at this creation; the
+   other three (`next_step_prompt`, `delegation`, `merge_policy`) are
+   written via `ardd-state.sh stamp` after the file exists (see each
+   below) — never hand-edited.
+
    **Set `workflow_mode` in the constitution's frontmatter.** Ask the user
    once which mode this project runs in — `solo` (state rides local
    worktree branches and merges locally) or `collaborative` (nothing lands

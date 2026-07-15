@@ -446,6 +446,12 @@ for the named plan; steps 2–10 do not run.
     Mark parallelism with `[parallel]` on tasks that touch different files and
     have no shared dependencies.
 
+    Phrase a task as *creating* a file/function, not extending or modifying
+    it, whenever the target doesn't exist yet — there's nothing to modify.
+    This is the common case for a project's very first feature: don't write
+    "update `src/index.ts` to add the entry point" when `src/index.ts`
+    doesn't exist yet.
+
 13. **Write the tasks file.** Mint its filename from the chosen plan's
     slug — `.claude/skills/ardd-scripts/ardd-state.sh mint tasks <slug>` —
     minted at write time so the name is always unique even when

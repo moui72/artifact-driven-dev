@@ -274,7 +274,10 @@ files.
    unsigned when 1Password is locked and must not be pushed silently). There
    is no eager local merge in collaborative mode — merging happens through
    the PR, and the register flip rides the branch and lands when the PR
-   merges, atomically.
+   merges, atomically. If `gh pr create` fails (no GitHub remote, no `gh`
+   auth, etc.), report the `gh` error verbatim — the push already
+   succeeded, so the branch and its state are safe — and let the user open
+   the PR by hand or retry once `gh` is usable.
 
 4. **Flip to `in-progress` (if needed), then find the next uncompleted
    task.** If the file's status is still `ready` (a first-task run on the

@@ -136,7 +136,7 @@ status: in-progress
 
 ## Phase 5: skill-prose fixes — redrive-695b F003, F004, F006, F007
 
-- [ ] T010 [parallel] In `skills/ardd-implement/SKILL.md`'s
+- [x] T010 [parallel] In `skills/ardd-implement/SKILL.md`'s
   collaborative-mode paragraph (the one describing offering to push and
   open a draft PR after the first commit): add one sentence covering what
   to do when `gh pr create` fails (no GitHub remote, no `gh` auth, etc.) —
@@ -144,20 +144,20 @@ status: in-progress
   branch and its state are safe, and let the user open the PR by hand or
   retry once `gh` is usable. Documentation-only change — no test task.
   [feedback: redrive-695b/F003]
-- [ ] T011 [parallel] In `skills/ardd-plan/SKILL.md`'s
+- [x] T011 [parallel] In `skills/ardd-plan/SKILL.md`'s
   task-generation step (step 12, the task-quality bullet list): add
   guidance that a task touching a file/function for the first time in a
   project (nothing to modify yet) should be phrased as creating it, not
   extending/modifying it — greenfield's very first feature is the common
   case this bites. Documentation-only change — no test task. [feedback:
   redrive-695b/F004]
-- [ ] T012 [parallel] In `skills/ardd-diagram/SKILL.md`'s
+- [x] T012 [parallel] In `skills/ardd-diagram/SKILL.md`'s
   upsert step: when the configured destination file (default `README.md`)
   doesn't exist yet, add an explicit one-line note to the skill's own
   report output — e.g. "creating README.md (none existed)" — instead of
   silently originating it via the existing upsert-section.sh append path.
   Documentation-only change — no test task. [feedback: redrive-695b/F006]
-- [ ] T013 [parallel] In `skills/ardd-init/SKILL.md`
+- [x] T013 [parallel] In `skills/ardd-init/SKILL.md`
   and `skills/ardd-update/SKILL.md`, wherever `workflow_mode`,
   `next_step_prompt`, `delegation`, and `merge_policy` are introduced
   together: add a short clarifying clause that `workflow_mode` alone is

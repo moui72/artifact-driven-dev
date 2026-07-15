@@ -83,7 +83,12 @@ regardless of whether they're already set).
 
 5. **Ask the workflow-field questions.** After the reinstall, check
    `.project/artifacts/constitution.md` frontmatter (if the file exists).
-   Behavior branches on whether this run passed `--reconfigure`:
+   These four fields are workflow settings, not constitution content:
+   `workflow_mode` is written inline into the frontmatter by `/ardd-init`
+   directly, at initial creation; `next_step_prompt`, `delegation`, and
+   `merge_policy` are always written via `ardd-state.sh stamp`, here and
+   in `/ardd-init` alike — never hand-edited. Behavior branches on whether
+   this run passed `--reconfigure`:
 
    **Without `--reconfigure` (default): backfill absent fields only, once.**
    If the frontmatter lacks a `next_step_prompt` field *entirely*, ask the
