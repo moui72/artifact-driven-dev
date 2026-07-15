@@ -1,6 +1,27 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-14 (`/ardd-plan redrive-configuration-choices` —
+_Updated: 2026-07-14 (`/ardd-implement` — delegated worktree run completed
+and merged all 4 tasks of `tasks-redrive-configuration-choices-29ae.md`
+(now `completed`). **First delegation attempt failed live** — the same
+bug the delegation pre-flight check exists for was reproduced anyway: the
+plan/feature/tasks files this run's `/ardd-plan` wrote were never
+committed before delegating, so the fresh worktree aligned cleanly
+(`aligned=true`) but couldn't find `tasks-redrive-configuration-choices-29ae.md`
+and stopped correctly rather than fabricating work. Recovered by removing
+the empty worktree, committing the session's feature/plan/tasks files to
+`main` (`3aa4dfa`), and relaunching. The second run completed: T001
+rewrote `skills/ardd-update/SKILL.md`'s Usage section and step 5 to add a
+`--reconfigure` flag — without it, behavior is unchanged (backfill only
+absent fields); with it, all four workflow fields (`workflow_mode`,
+`next_step_prompt`, `delegation`, and — solo mode only — `merge_policy`)
+are re-asked regardless of presence, showing current values, stamping
+only what changes. T002–T004 updated
+`docs/reference/skills/ardd-update.md`, `docs/reference/configuration.md`,
+and `CLAUDE.md`'s two "asked once" passages to match. Merged to `main`
+(fast-forward, `merge_policy: auto`, `3aa4dfa..95796aa`) and the worktree
+reaped. Feature `redrive-configuration-choices` flipped `tasked` →
+`implemented`. Everything from this session is now on `main`. Prior
+update, same day, `/ardd-plan redrive-configuration-choices` —
 drafted, approved, and tasked `plan-redrive-configuration-choices-2026-07-14-1e00.md`
 (solo mode, no branch gate, on `main`). No artifact changes: constitution.md's
 Governance section already exempts workflow frontmatter fields
@@ -114,20 +135,16 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 13 implemented · 1 retired — see
+1 backlogged · 0 tasked · 14 implemented · 1 retired — see
 `.project/features/`.
-Newest tasked: `redrive-configuration-choices` — `/ardd-update
---reconfigure` to re-answer `workflow_mode`, `next_step_prompt`,
-`delegation`, `merge_policy` on demand
-(`tasks-redrive-configuration-choices-29ae.md`, `ready`, 0/4). Run
-`/ardd-implement` to execute it.
 Backlogged: `list-mode-for-plan-and-impleme` — a `--list` mode for
 `/ardd-plan` and `/ardd-implement` to print eligible slugs/tasks files
 with basic info without entering the interactive pick flow. Target with
 `/ardd-plan list-mode-for-plan-and-impleme`.
-Newest implemented: `plan-approval-presentation` — `/ardd-plan`'s approval
-checkpoint now presents the plan's real structure instead of a freehand
-re-summary (`tasks-plan-approval-presentation-99dd.md`, completed 3/3).
+Newest implemented: `redrive-configuration-choices` — `/ardd-update
+--reconfigure` re-asks `workflow_mode`, `next_step_prompt`, `delegation`,
+and `merge_policy` regardless of whether they're already set
+(`tasks-redrive-configuration-choices-29ae.md`, completed 4/4).
 
 ## Audit
 
@@ -139,16 +156,17 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-203c-6b16.md` worktree merged and was reaped; no
-sibling worktrees remain. `main` is ahead of `origin/main` (multiple
-local commits not yet pushed).
+Nothing — the `tasks-redrive-configuration-choices-29ae.md` worktree
+merged and was reaped; no sibling worktrees remain. `main` is ahead of
+`origin/main` (multiple local commits not yet pushed).
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-redrive-configuration-choices-29ae.md`
-(4 tasks, ready, 0/4). Other standing options: dispatch the stable release
-workflow when consumers should get this session's accumulated work
-(constitution v1.9.0, the actor-language rewrites, the delegation
-pre-flight check, the TDD/xfail catalog resolution); resolve the one
-remaining `.project/audit.md` suggestion; or `/ardd-defects` to re-verify
-against the docs-site and skill-prose surfaces.
+No `ready` tasks file pending. Standing options: dispatch the stable
+release workflow when consumers should get this session's accumulated
+work (constitution v1.9.0, the actor-language rewrites, the delegation
+pre-flight check, the TDD/xfail catalog resolution, the new
+`/ardd-update --reconfigure` flag); resolve the one remaining
+`.project/audit.md` suggestion; or `/ardd-defects` to re-verify against
+the docs-site and skill-prose surfaces (this run's `ardd-update`/docs
+edits are a good re-verify trigger).
