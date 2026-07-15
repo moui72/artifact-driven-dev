@@ -1,6 +1,31 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-backlog` — logged
+_Updated: 2026-07-15 (`/ardd-plan update-channel-switch-flags
+plan-approval-browser-preview` — drafted, approved, and tasked
+`plan-update-channel-switch-flags-2026-07-15-f22c.md` (solo mode, no
+branch gate, on `main`, while a sibling worktree independently worked
+`tasks-discovery-to-work-eager-captur-2b57.md`). No open feedback or
+unsurfaced defects to consume this run. No artifact changes — both
+targeted features are skill-prose-only: neither introduces a new
+principle, data-model concept, or production shortcut, and
+`source-resolve.sh --channel stable|beta` and its dev-mode detection
+already existed, so no script changes either. 4 tasks across 2 phases in
+`tasks-update-channel-switch-flags-c066.md` (`ready`): Phase 1 (T001,
+T002) rewrites `/ardd-update`'s Usage/step 1 to add `--local`, `--beta`,
+`--stable` flags — `--stable`/`--beta` call `source-resolve.sh --channel`
+directly and set `ARDD_CHANNEL` for reinstall; `--local` resolves the
+recorded-or-prompted dev-mode checkout and reinstalls from it without
+setting `ARDD_CHANNEL` — plus the matching reference doc. Phase 2 (T003,
+T004) adds a one-time preliminary browser-preview offer to `/ardd-plan`
+step 10, ahead of the existing Approve/Revise/Stop question: publish
+`plan.md` via the `Artifact` tool, open it, display the URL, then
+proceed to the unchanged three-way choice — re-fires on each Revise loop
+back to step 10 — plus its reference doc. No test tasks (Principle V's
+documentation-only exception). Both features flipped `backlogged` →
+`planned` → `tasked`. Open questions: whether `--local`'s dev-checkout
+path should be remembered across runs, and whether the plan-preview
+artifact needs a stable favicon/title scheme — both left to
+implementation. Prior update, same day, `/ardd-backlog` — logged
 `update-channel-switch-flags`: `/ardd-update` gains `--local`, `--beta`,
 and `--stable` flags to switch the install to the named channel's latest,
 overriding the recorded `Channel:` for the run and re-recording it going
@@ -308,21 +333,19 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-5 backlogged · 2 tasked · 14 implemented · 1 retired — see
+3 backlogged · 4 tasked · 14 implemented · 1 retired — see
 `.project/features/`.
-Tasked: `discovery-to-work-eager-captur` + `backlog-sweep-reconcile-from-a`
-→ `tasks-discovery-to-work-eager-captur-2b57.md` (0/6, `ready`).
+Tasked:
+- `discovery-to-work-eager-captur` + `backlog-sweep-reconcile-from-a` →
+  `tasks-discovery-to-work-eager-captur-2b57.md` (3/6, `in-progress` —
+  running in sibling worktree `agent-a3bc501596d897d66`).
+- `update-channel-switch-flags` + `plan-approval-browser-preview` →
+  `tasks-update-channel-switch-flags-c066.md` (0/4, `ready`).
 Backlogged:
-- `update-channel-switch-flags` — `/ardd-update --local|--beta|--stable`
-  switches the install to the named channel's latest, overriding and
-  re-recording the recorded `Channel:`.
 - `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
   analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
   research report; first step: a second research pass on a large backlog
   (atelier, post-sweep).
-- `plan-approval-browser-preview` — `/ardd-plan`'s approval checkpoint
-  offers to render `plan.md` as an artifact, open it in the browser, and
-  display the URL.
 - `epics-grouping-in-feature-regi` — optional `epic:` frontmatter slug on
   feature files; plan/status/tracker grouping touchpoints.
 - `list-mode-for-plan-and-impleme` — a `--list` mode for `/ardd-plan` and
@@ -344,17 +367,23 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-v1-0-0-pre-cut-testing-finding-bf61.md` worktree
-merged and was reaped; no sibling worktrees remain. `main` is ahead of
-`origin/main` (multiple local commits not yet pushed, through `7b65228`).
+- Worktree `.claude/worktrees/agent-a3bc501596d897d66` (branch
+  `worktree-agent-a3bc501596d897d66`) —
+  `tasks-discovery-to-work-eager-captur-2b57.md`, `in-progress`, 3/6.
+
+`main` is ahead of `origin/main` (multiple local commits not yet pushed).
 
 ## Recommended Next Step
 
-`/ardd-implement` — `tasks-discovery-to-work-eager-captur-2b57.md` is
-`ready` (6 tasks, 3 phases: eager capture in init/refine, the
-status/backlog/defects sweep surface, docs). Landing the sweep also
-unblocks the defrag item's suggested next research pass (atelier's
-backfilled backlog as the large-N testbed). Standing
+Let the in-flight worktree finish `tasks-discovery-to-work-eager-captur-2b57.md`
+(3/6, eager capture in init/refine, the status/backlog/defects sweep
+surface, docs) before starting `/ardd-implement` on
+`tasks-update-channel-switch-flags-c066.md` (4 tasks, 2 phases: `--local`/
+`--beta`/`--stable` flags on `/ardd-update`, then `/ardd-plan`'s
+browser-preview offer) — both touch `/ardd-update`-adjacent surfaces, so
+running them concurrently risks overlapping edits. Landing the
+eager-capture sweep also unblocks the defrag item's suggested next
+research pass (atelier's backfilled backlog as the large-N testbed). Standing
 options unchanged: the pre-1.0 regression pass of the 7 dry-run scenarios
 (`dev-notes/prerelease-testing-context.md`); dispatch the stable release
 workflow when consumers should get the accumulated `main` work; resolve
