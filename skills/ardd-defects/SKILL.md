@@ -56,6 +56,14 @@ lose it. Do not silently ignore the argument and run anyway.
    severity/confidence note if useful (e.g., cosmetic drift vs. a broken
    contract).
 
+   **Routing note — documented-but-never-built scope is not drift.** A
+   capability an artifact describes that was never implemented at all is
+   backlog territory, not a defect: the agent should route it to
+   `/ardd-backlog --from-artifacts` (mention it in the step 6 report)
+   rather than recording it in `DEFECTS.md`. Reserve `DEFECTS.md` for
+   genuine code-vs-artifact divergence in *built* behavior — code that
+   exists but does something other than what the artifact claims.
+
 4. **Never write findings into artifact bodies.** This is the core rule —
    defects are recorded only in `.project/DEFECTS.md`, never as edits,
    annotations, or `[OPEN: ...]` items inside `.project/artifacts/*.md`.
