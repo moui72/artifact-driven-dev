@@ -33,6 +33,17 @@ treat it as met — bias toward offering, not toward filtering out.
 **Suggested text:** Every code change is preceded by a test that exercises the behavior being added or changed, written and confirmed to fail before any implementation code is written. A test must fail if the behavior it covers breaks — a test that merely mirrors the implementation or only asserts that its own mocks were called does not satisfy this requirement. A task without a test requirement is the exception (a pure research/decision task, or a documentation-only change), not the default.
 **Rationale:** Writing the test first documents intent before implementation bias sets in, and catches regressions immediately rather than after the fact. Without an explicit principle, skills and contributors tend to assume a testing discipline informally until a gap in coverage surfaces the hard way. Vacuous tests are worse than no tests — they report coverage the suite doesn't actually provide.
 
+**Committing the red state:** when a full-suite pre-commit hook is in effect (the Deterministic Gates entry adopted) and the red test is committed before its implementation, mark it with the test framework's expected-failure modifier so the commit passes the hook as an "expected fail," rather than the hook rejecting the red commit outright — the paired implementation commit then removes the marker. A stale marker left in place after the feature lands fails the suite loudly, which self-enforces its own removal.
+
+| Framework | Expected-failure marker |
+| --- | --- |
+| Vitest | `test.fails` / `it.fails` |
+| pytest | `@pytest.mark.xfail(strict=True)` |
+| Jest 28+ | `test.failing` |
+| RSpec | `pending` |
+| JUnit 5 | no native marker — fallback: squash the test+implementation into one commit, or use a sanctioned red-commit bypass |
+| Go `testing` | no native marker — same fallback: squash the commit, or a sanctioned red-commit bypass |
+
 ### Never Weaken a Failing Test
 **Section:** Core Principle
 **Signal:** Always
