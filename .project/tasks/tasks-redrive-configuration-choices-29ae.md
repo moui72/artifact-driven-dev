@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: `/ardd-update --reconfigure`
 
-- [ ] T001 In `skills/ardd-update/SKILL.md`: update the
+- [x] T001 In `skills/ardd-update/SKILL.md`: update the
   Usage section to document `/ardd-update --reconfigure` alongside the
   bare form. Rewrite step 5 ("Ask the next-step-prompt question, once, if
   never asked" + the `delegation`/`merge_policy` backfill paragraph) so

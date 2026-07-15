@@ -12,7 +12,9 @@ to *see* install-time output (migrations applied, badge/gitignore
 suggestions) in the user's own session — suggestions only print to whoever
 runs install.sh, which is exactly why this skill exists.
 
-Usage: `/ardd-update` — no arguments.
+Usage: `/ardd-update` (backfill absent workflow fields only) or
+`/ardd-update --reconfigure` (re-ask all four workflow fields,
+regardless of whether they're already set).
 
 ## Steps
 
@@ -75,9 +77,12 @@ Usage: `/ardd-update` — no arguments.
    any they want (e.g. paste the badge into README) but never apply one
    unprompted.
 
-5. **Ask the next-step-prompt question, once, if never asked.** After the
-   reinstall, check `.project/artifacts/constitution.md` frontmatter (if the
-   file exists): if it lacks a `next_step_prompt` field *entirely*, ask the
+5. **Ask the workflow-field questions.** After the reinstall, check
+   `.project/artifacts/constitution.md` frontmatter (if the file exists).
+   Behavior branches on whether this run passed `--reconfigure`:
+
+   **Without `--reconfigure` (default): backfill absent fields only, once.**
+   If the frontmatter lacks a `next_step_prompt` field *entirely*, ask the
    same question `/ardd-init` asks — "Should skills end by offering
    their recommended next step as a one-keypress prompt?" — and write the
    answer via `.claude/skills/ardd-scripts/ardd-state.sh stamp
@@ -89,21 +94,44 @@ Usage: `/ardd-update` — no arguments.
    field, not constitution content: no Sync Impact Report entry and no
    constitution version bump applies.
 
-   **Backfill `delegation` and `merge_policy` the same way.** In the same
-   check: if the constitution frontmatter lacks a `delegation` field
-   *entirely*, ask the same question `/ardd-init` asks — "When
-   `/ardd-implement` could run in the background, what
-   should they do?" (`eager` | `ask` | `inline`) — and stamp the answer via
-   `ardd-state.sh stamp .project/artifacts/constitution.md delegation
-   <value>`. If `workflow_mode` is `solo` (or absent) and the frontmatter
-   lacks `merge_policy`, also ask "When a delegated background run
-   completes, merge its branch into your default branch automatically?"
-   (`auto` | `ask`) and stamp it likewise. Never ask `merge_policy` in
-   collaborative mode — it isn't consulted there. Field presence (either
-   value) suppresses re-asking forever; on paths that skip the ask (bare
+   Backfill `delegation` and `merge_policy` the same way. If the
+   constitution frontmatter lacks a `delegation` field *entirely*, ask the
+   same question `/ardd-init` asks — "When `/ardd-implement` could run in
+   the background, what should it do?" (`eager` | `ask` | `inline`) — and
+   stamp the answer via `ardd-state.sh stamp
+   .project/artifacts/constitution.md delegation <value>`. If
+   `workflow_mode` is `solo` (or absent) and the frontmatter lacks
+   `merge_policy`, also ask "When a delegated background run completes,
+   merge its branch into your default branch automatically?" (`auto` |
+   `ask`) and stamp it likewise. Never ask `merge_policy` in collaborative
+   mode — it isn't consulted there. Field presence (either value)
+   suppresses re-asking forever; on paths that skip the ask (bare
    `./install.sh`, headless/scripted contexts) absent simply stays `ask` —
    never block, never default to `eager`/`auto`. Same workflow-field rules
-   as above: no Sync Impact Report entry, no version bump.
+   as above: no Sync Impact Report entry, no version bump. `workflow_mode`
+   itself is never asked here — its absence just defaults to `solo`.
+
+   **With `--reconfigure`: re-ask all four fields, regardless of
+   presence.** For each of `workflow_mode`, `next_step_prompt`,
+   `delegation`, and — only when the (possibly just-reconfigured)
+   `workflow_mode` is `solo` — `merge_policy`, show the field's current
+   value (or "not yet set" if absent) and ask whether to keep it or choose
+   a new one, using the exact question wording `/ardd-init` uses for each
+   field (`workflow_mode`: "solo" (state rides local worktree branches and
+   merges locally) or "collaborative" (nothing lands on the local default
+   branch; work moves through pushed branches / draft PRs and merges via
+   PR); `next_step_prompt`: "Should skills end by offering their
+   recommended next step as a one-keypress prompt?"; `delegation`: "When
+   `/ardd-implement` could run in the background, what should it do?"
+   (`eager` | `ask` | `inline`); `merge_policy`: "When a delegated
+   background run completes, merge its branch into your default branch
+   automatically?" (`auto` | `ask`)). Ask `workflow_mode` first, since its
+   answer determines whether `merge_policy` is asked at all; never ask
+   `merge_policy` in collaborative mode, same as the default path. Stamp
+   only the fields the user actually chooses to change, via
+   `ardd-state.sh stamp <file> <field> <value>` — leave untouched fields
+   as they are. Same workflow-field rules apply: no Sync Impact Report
+   entry, no constitution version bump for any of the four.
 
 6. **Report** old commit → new commit (from the check in step 2 vs. the
    rewritten `.project/ardd-version.md`), migrations applied, and
