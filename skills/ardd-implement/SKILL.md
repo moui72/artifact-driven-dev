@@ -296,7 +296,14 @@ files.
      state.
    - For test tasks under a TDD paradigm: write the test first, confirm it
      fails, then stop at the red state. Mark the test task complete. The
-     paired implementation task follows.
+     paired implementation task follows. When `constitution.md`'s Quality
+     Standards declare a full-suite pre-commit hook (the Deterministic
+     Gates suggestion or equivalent), apply the test framework's
+     expected-failure marker (e.g. pytest `@pytest.mark.xfail(strict=True)`,
+     Vitest `test.fails`) on the red commit so it passes the hook, and
+     remove the marker on the paired implementation task's commit —
+     mirroring the Test-First Development catalog note at the execution
+     level.
    - For test tasks under a test-after paradigm (or no paradigm stated):
      implement first, then write the test and confirm it passes.
    - For implementation tasks: implement the minimum code to satisfy the task
