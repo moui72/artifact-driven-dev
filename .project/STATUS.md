@@ -1,6 +1,26 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-backlog` — logged
+_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+and merged all 4 tasks of `tasks-update-channel-switch-flags-c066.md` (now
+`completed`): T001 added `--local`/`--beta`/`--stable` flags to
+`/ardd-update` — `--stable`/`--beta` call `source-resolve.sh --channel`
+directly on the owned checkout and set `ARDD_CHANNEL` for reinstall;
+`--local` resolves a dev-mode checkout (recorded `Source-Path` if already
+`channel=dev`, else prompts for one) and reinstalls from it without
+`ARDD_CHANNEL`; combining flags is a usage error. T002 updated
+`docs/reference/skills/ardd-update.md` to match. T003 added a one-time
+preliminary browser-preview offer to `/ardd-plan` step 10, ahead of the
+existing Approve/Revise/Stop question — publishes `plan.md` via the
+`Artifact` tool and displays the URL, re-firing on each Revise loop back
+to step 10. T004 updated `docs/reference/skills/ardd-plan.md` to match.
+No test tasks (Principle V documentation-only exception, confirmed
+present before relying on it). Merged with a real merge commit (`main`
+had independently advanced with the codex-second-harness research/backlog
+work while this ran — `2749ce1..<merge>`, signed with the on-disk Claude
+key since 1Password was unavailable) and the worktree reaped. Features
+`update-channel-switch-flags` and `plan-approval-browser-preview` flipped
+`tasked` → `implemented` (rode the branch). Prior update, same day,
+`/ardd-backlog` — logged
 `codex-second-harness-support`: single-source Codex CLI support via
 `install.sh --harness codex` installing the same `SKILL.md` files to
 `.agents/skills/` with the ~4 Claude-specific clauses substituted at
@@ -369,10 +389,8 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-4 backlogged · 2 tasked · 16 implemented · 1 retired — see
+4 backlogged · 0 tasked · 18 implemented · 1 retired — see
 `.project/features/`.
-Tasked: `update-channel-switch-flags` + `plan-approval-browser-preview` →
-`tasks-update-channel-switch-flags-c066.md` (0/4, `ready`).
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -387,12 +405,11 @@ Backlogged:
   `/ardd-implement` to print eligible slugs/tasks files without the
   interactive pick flow.
 Target a slug with `/ardd-plan <slug>`.
-Newest implemented: `discovery-to-work-eager-captur` +
-`backlog-sweep-reconcile-from-a` — the artifact→register bridge: eager
-capture steps in `/ardd-init`/`/ardd-refine`, `/ardd-status`'s
-detection-only "Documented but Untracked" section, `/ardd-backlog
---from-artifacts`, and `/ardd-defects`' greenfield-scope routing note
-(`tasks-discovery-to-work-eager-captur-2b57.md`, completed 6/6).
+Newest implemented: `update-channel-switch-flags` +
+`plan-approval-browser-preview` — `/ardd-update` gains `--local`/`--beta`/
+`--stable` channel-switch flags; `/ardd-plan`'s approval checkpoint gains
+a browser-preview offer via the `Artifact` tool
+(`tasks-update-channel-switch-flags-c066.md`, completed 4/4).
 
 ## Audit
 
@@ -404,20 +421,15 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-discovery-to-work-eager-captur-2b57.md` worktree
-merged (signed merge `2d792da`) and was reaped; no sibling worktrees
-remain. `main` is ahead of `origin/main` (multiple local commits not yet
-pushed).
+Nothing — the `tasks-update-channel-switch-flags-c066.md` worktree merged
+(signed merge commit, on-disk Claude key — `main` had independently
+advanced with the codex-second-harness research/backlog work while the
+run was in progress) and was reaped; no sibling worktrees remain. `main`
+is ahead of `origin/main` (multiple local commits not yet pushed).
 
 ## Recommended Next Step
 
-`/ardd-implement` — `tasks-update-channel-switch-flags-c066.md` is
-`ready` (4 tasks, 2 phases: `--local`/`--beta`/`--stable` flags on
-`/ardd-update`, then `/ardd-plan`'s browser-preview offer); the bridge
-worktree it was waiting behind has merged. The now-shipped sweep also
-unblocks the defrag item's suggested next research pass (atelier's
-backfilled backlog as the large-N testbed), and the Codex-harness
-research report awaits user review before a backlog decision. Standing
+Both recently-tasked feature pairs are now implemented and merged. Standing
 options unchanged: the pre-1.0 regression pass of the 7 dry-run scenarios
 (`dev-notes/prerelease-testing-context.md`); dispatch the stable release
 workflow when consumers should get the accumulated `main` work; resolve
