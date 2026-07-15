@@ -25,6 +25,43 @@ existing GitLab REST fallback"). Substantial or decision-reversing ideas:
 vet with `/ardd-research` first — its proposal-vetting mode pressure-tests
 the idea against the current artifacts before it earns a backlog entry.
 
+`/ardd-backlog --from-artifacts` runs the retroactive sweep mode instead:
+rather than logging one described idea, it walks the stable artifacts for
+documented-but-untracked capabilities and proposes register entries in
+bulk (see "--from-artifacts mode" below). `/ardd-status`'s "Documented but
+untracked" section points here.
+
+## --from-artifacts mode
+
+When invoked as `/ardd-backlog --from-artifacts`, skip steps 1–2 below and
+run this sweep instead:
+
+1. **Walk every `status: stable` artifact** in `.project/artifacts/`
+   (skip drafts — their scope isn't settled). For each, the agent
+   enumerates candidate register entries: capabilities the artifact
+   describes that have no entry in `.project/features/` — deduplicated
+   against every status, including `implemented` and `retired` slugs —
+   and no existing implementation. Each candidate is a short
+   capability-level noun phrase (the same wording judgment as step 2
+   below), grounded in a specific artifact passage the agent can point
+   to — never a vibe. What counts as a capability versus a design note
+   is the agent's classification judgment; this is a proposal list, and
+   the human decides — when unsure, propose it and let the user decline.
+
+2. **Confirm in one batched prompt.** Present all candidates in ONE
+   grouped prompt (AskUserQuestion, multiSelect on) with per-item
+   accept/decline — never N sequential prompts. Cite the source artifact
+   per candidate. If there are no candidates, report that and stop.
+
+3. **Create each approved entry** via the normal path: derive the slug as
+   in step 2 below, then run step 3 below unchanged (including its
+   `project-lock.sh check`/`touch` calls) with a one-sentence description
+   drawn from the artifact passage. Declined candidates are dropped, not
+   recorded — the user's judgment is final for this run.
+
+4. **Report** the created slugs and declined count, then continue with
+   step 6 below — its `/ardd-status` handoff covers the refresh.
+
 ## Steps
 
 1. **Understand the feature.** Parse the user's description. If the intent is
