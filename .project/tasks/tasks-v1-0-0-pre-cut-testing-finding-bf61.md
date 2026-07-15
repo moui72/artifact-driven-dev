@@ -27,7 +27,7 @@ status: in-progress
 
 ## Phase 2: `/ardd-init` — findings-0344 F002, F004, F005
 
-- [ ] T002 In `skills/ardd-init/SKILL.md`'s
+- [x] T002 In `skills/ardd-init/SKILL.md`'s
   existing-codebase reverse-engineering steps: strengthen the entity/schema
   discovery instruction so it doesn't rely on a single structural
   convention (e.g. "every entity has a colocated Zod schema") to enumerate
@@ -40,7 +40,7 @@ status: in-progress
   human second look. Documentation-only change — no test task (Constitution
   Principle V's documentation-only exception). [feedback:
   findings-0344/F002]
-- [ ] T003 [parallel] In `skills/ardd-init/SKILL.md`:
+- [x] T003 [parallel] In `skills/ardd-init/SKILL.md`:
   add project-scale sensitivity to the constitution-suggestion catalog
   step. Alongside the existing stack-signal detection, detect a
   "trivial project" signal (e.g. fewer than some small file-count
@@ -50,7 +50,7 @@ status: in-progress
   the full catalog if they want it. Keep the existing full-catalog
   behavior unchanged for anything not detected as trivial.
   Documentation-only change — no test task. [feedback: findings-0344/F004]
-- [ ] T004 [parallel] In `skills/ardd-init/SKILL.md`:
+- [x] T004 [parallel] In `skills/ardd-init/SKILL.md`:
   at the end of the existing-codebase (brownfield reverse-engineering)
   path's final report step, add an explicit recommendation to run
   `/ardd-defects` next, in the same session, before treating the

@@ -123,6 +123,17 @@ with `/ardd-refine` before planning new work.
    not exhaustion. When a directory is clearly implementation detail (e.g.
    `dist/`, `node_modules/`, `__pycache__/`), skip it.
 
+   **Cross-check entity completeness with at least two independent
+   signals**, where the codebase offers them — don't rely on a single
+   structural convention (e.g. "every entity has a colocated Zod schema")
+   to enumerate entities, since that misses anything that doesn't follow
+   the convention. Cross-reference whichever of these the detected stack
+   actually has: ORM/schema files, database migration files, route
+   handlers, and type definitions. An entity found via only one signal is
+   a lower-confidence claim — flag it explicitly (see step 4) rather than
+   presenting it with the same certainty as an entity confirmed by two or
+   more.
+
 3. **Determine which artifacts to create.** There is no required set — an
    artifact exists only if the project has the concern it owns (a project
    may legitimately end up with just a constitution).
@@ -168,6 +179,11 @@ with `/ardd-refine` before planning new work.
    - Where the code is clear, write definitive statements.
    - Where intent is ambiguous (e.g. a field exists but its purpose isn't
      obvious), use `[OPEN: <question>]` rather than guessing.
+   - For `datamodel.md`: any entity the step-2 survey found via only one
+     independent signal (see step 2) gets an `[OPEN: <entity> was found
+     via <signal> only — confirm it's complete/accurate]` note, so the
+     user's second look is targeted at exactly the lower-confidence
+     claims, not the whole artifact.
    - Do not invent decisions not evident in the code.
    - For `constitution.md`: infer principles from observed patterns (e.g.
      "REST over RPC" if only REST routes exist; "SQLite for storage" if
@@ -205,6 +221,14 @@ with `/ardd-refine` before planning new work.
      for the Test-First signal). When a signal is ambiguous, keep the
      entry — bias toward offering it and having it rejected over not
      offering it at all.
+   - **Scale check first**: before applying the filter above, check for a
+     "trivial project" signal — fewer than roughly a dozen source files, no
+     dependency manifest, or a single source file. When present, default to
+     offering only the catalog's "Always" tier rather than the full
+     stack-matched set, and say so ("this looks like a small project, so
+     I'm only offering the always-relevant suggestions — ask if you'd like
+     to see the full catalog"). Leave the full-catalog behavior above
+     unchanged for anything not detected as trivial.
    - **Dedupe**: drop any entry whose concern is already substantively
      covered by a principle the agent is about to synthesize or infer — don't
      offer a generic duplicate of something the user already stated (or the
@@ -371,6 +395,15 @@ with `/ardd-refine` before planning new work.
    - Recommended next step (usually `/ardd-refine` on whichever draft
      artifact has the most open questions, then `/ardd-status` when all are
      resolved)
+   - **Existing-codebase path only:** explicitly recommend running
+     `/ardd-defects` next, in this same session, before treating the
+     reverse-engineered artifacts as ready to plan against — freshly
+     reverse-engineered artifacts are exactly the case where a
+     code-vs-artifact drift check is most likely to catch a survey
+     mistake. This is a plain-text recommendation, not a next-step prompt:
+     `/ardd-init` doesn't participate in the `next_step_prompt`
+     AskUserQuestion mechanism (only `/ardd-status` and `/ardd-plan` do —
+     see CLAUDE.md), and this task doesn't widen that scope.
 
 ## STATUS.md structure
 
