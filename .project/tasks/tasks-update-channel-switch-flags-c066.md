@@ -1,14 +1,14 @@
 ---
 plan: plan-update-channel-switch-flags-2026-07-15-f22c.md
 generated: 2026-07-15
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
 
 ## Phase 1: `/ardd-update` channel flags [feature: update-channel-switch-flags]
 
-- [ ] T001 Rewrite `skills/ardd-update/SKILL.md`'s Usage
+- [x] T001 Rewrite `skills/ardd-update/SKILL.md`'s Usage
   section to add `--local`, `--beta`, `--stable` alongside the existing
   bare form and `--reconfigure`. Rewrite step 1 to branch on the flag
   before doing the existing recorded-channel read:
@@ -31,7 +31,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   No test task — prose-only change (constitution Principle V's
   documentation-only exception).
 
-- [ ] T002 [parallel] Update
+- [x] T002 [parallel] Update
   `docs/reference/skills/ardd-update.md`'s Usage and "What a run does"
   sections to match T001: document the three new flags, their
   precedence over the recorded channel, and the dev-mode prompt
@@ -39,7 +39,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
 
 ## Phase 2: `/ardd-plan` browser-preview offer [feature: plan-approval-browser-preview]
 
-- [ ] T003 Add a browser-preview offer to
+- [x] T003 Add a browser-preview offer to
   `skills/ardd-plan/SKILL.md` step 10, immediately before the existing
   Approve/Revise/Stop `AskUserQuestion`: a one-time preliminary
   question asking whether to view the plan in the browser first. On
@@ -51,6 +51,6 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   redeploy of the same plan file targets the same artifact URL. No test
   task — prose-only change (Principle V documentation-only exception).
 
-- [ ] T004 [parallel] Update
+- [x] T004 [parallel] Update
   `docs/reference/skills/ardd-plan.md` to document the browser-preview
   offer at the approval checkpoint, matching T003.
