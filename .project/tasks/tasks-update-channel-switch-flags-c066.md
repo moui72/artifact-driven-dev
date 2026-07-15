@@ -1,7 +1,7 @@
 ---
 plan: plan-update-channel-switch-flags-2026-07-15-f22c.md
 generated: 2026-07-15
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
