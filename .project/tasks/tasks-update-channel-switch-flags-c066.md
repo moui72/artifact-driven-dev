@@ -39,7 +39,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: `/ardd-plan` browser-preview offer [feature: plan-approval-browser-preview]
 
-- [ ] T003 Add a browser-preview offer to
+- [x] T003 Add a browser-preview offer to
   `skills/ardd-plan/SKILL.md` step 10, immediately before the existing
   Approve/Revise/Stop `AskUserQuestion`: a one-time preliminary
   question asking whether to view the plan in the browser first. On
