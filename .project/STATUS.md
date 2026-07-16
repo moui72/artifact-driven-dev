@@ -1,6 +1,31 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-15 (`/ardd-plan epics-grouping-in-feature-regi` —
+drafted, approved, and tasked
+`plan-epics-grouping-in-feature-regi-2026-07-15-d215.md` (solo mode, no
+branch gate, on `main`). No open feedback or unsurfaced defects to
+consume this run. Artifact change: `constitution.md` amended to add
+`epic` to the feature register's documented optional fields (MINOR,
+v1.10.0 → v1.11.0, SIR written) — applied ahead of drafting, on
+confirmation, since the feature's own scope requires it (a documented
+schema change per this repo's semver policy). 6 tasks across 4 phases in
+`tasks-epics-grouping-in-feature-regi-42f2.md` (`ready`): Phase 1
+(T001–T002, test-first) adds `epic` emptiness validation to
+`lint-project.sh` plus fixtures. Phase 2 (T003–T004, test-first) extends
+`feature-list.sh` with an `epic` output column and `--epic <slug>`
+filter. Phase 3 (T005) adds an optional "by epic" breakdown to
+`/ardd-status`'s Feature Backlog section, omitted when no feature has
+`epic` set. Phase 4 (T006) adds one-directional GitHub-milestone mapping
+to `/ardd-tracker`'s push phase — register owns `epic`, pull never reads
+a milestone back. T005/T006 have no test tasks (Principle V
+documentation-only exception; T006 also matches the standing
+mechanization non-goal that `ardd-tracker`'s `gh` glue stays
+judgment-heavy skill prose). Feature `epics-grouping-in-feature-regi`
+flipped `backlogged` → `planned` → `tasked`. Deliberately out of scope:
+no `epic` files with their own lifecycle, no `/ardd-plan` interactive
+epic picker (multi-slug `/ardd-plan <slug> <slug> ...` already covers
+it), no milestone-clearing on `epic` removal (open question). Prior
+update, same day, `/ardd-implement` — delegated worktree run completed
 and merged all 6 tasks of `tasks-list-mode-for-plan-and-impleme-2bf9.md`
 (now `completed`): T001/T002 (test-first) added `scripts/feature-list.sh`
 + `scripts/test-feature-list.sh` — mirrors `tasks-list.sh`'s glob/
@@ -436,7 +461,7 @@ Keep this current as artifacts are refined and open questions are resolved._
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.10.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.11.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -472,8 +497,10 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-3 backlogged · 0 tasked · 19 implemented · 1 retired — see
+2 backlogged · 1 tasked · 19 implemented · 1 retired — see
 `.project/features/`.
+Tasked: `epics-grouping-in-feature-regi` →
+`tasks-epics-grouping-in-feature-regi-42f2.md` (0/6, `ready`).
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -485,8 +512,6 @@ Backlogged:
   analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
   research report; first step: a second research pass on a large backlog
   (atelier, post-sweep).
-- `epics-grouping-in-feature-regi` — optional `epic:` frontmatter slug on
-  feature files; plan/status/tracker grouping touchpoints.
 Target a slug with `/ardd-plan <slug>`.
 Newest implemented: `list-mode-for-plan-and-impleme` — `scripts/feature-list.sh`
 (new, test-first) plus `--list` usage forms for `/ardd-plan` and
@@ -510,7 +535,11 @@ pushed).
 
 ## Recommended Next Step
 
-A drafted-but-untasked plan is waiting: `/ardd-plan --from
+`/ardd-implement` on `tasks-epics-grouping-in-feature-regi-42f2.md` is
+`ready` (6 tasks, 4 phases: lint-project.sh schema validation,
+feature-list.sh epic column/filter, /ardd-status epic breakdown,
+/ardd-tracker milestone mapping). A drafted-but-untasked plan is also
+still waiting: `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
 the true final go/no-go — before Phases 2–5's install-time substitution

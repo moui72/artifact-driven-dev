@@ -1,6 +1,29 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.10.0 → 1.11.0 (MINOR — schema-widening: new optional
+feature-register field.)
+
+Rationale: `/ardd-plan epics-grouping-in-feature-regi` (2026-07-15). The
+feature register's per-file schema (Quality Standards, "Feature register
+format") gains an optional `epic` field — a free-text slug grouping
+related features for release-cadence-sized bundling. Purely additive
+(a new optional field, matching this repo's own semver policy's MINOR
+case for schema-widening changes); no existing field, enum, or required
+key changes meaning. Distinct from the separate, ephemeral "defrag"
+plan-time footprint-analysis idea still in the backlog — `epic` is
+declared and durable register state, defrag is computed and never
+stored.
+
+Modified sections: Quality Standards ("Feature register format" entry —
+`epic` added to the optional-fields list). Footer version updated.
+
+Previous SIR (1.9.0 → 1.10.0) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 1.9.0 → 1.10.0 (MINOR — named scope reversal.)
 
 Rationale: `/ardd-plan codex-second-harness-support` (2026-07-15), following
@@ -460,7 +483,10 @@ prose; it is not a mandate to sweep every existing skill file in one pass.
   required: `slug`, `status`
   (`backlogged|planned|tasked|implemented|retired`), `logged`
   (YYYY-MM-DD); optional: `plan` and `tasks` (filenames of the binding
-  plan/tasks files), `gh_issue` (issue number). A feature's `status`
+  plan/tasks files), `gh_issue` (issue number), `epic` (a free-text slug
+  grouping related features for release-cadence-sized bundling — declared
+  and durable, distinct from the computed/ephemeral plan-time "defrag"
+  footprint analysis, a separate, unrelated backlog idea). A feature's `status`
   asserts what is true of the system NOW, not what was once reached:
   `retired` is the terminal state for a feature that shipped and was then
   deliberately removed — it never flips back out. Body: a
@@ -507,4 +533,4 @@ standing decisions — they are per-project operational settings, written by
 `/ardd-update`) question. Changing either does not require a Sync Impact
 Report or a version increment, and does not itself update `last_updated`.
 
-**Version**: 1.10.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-15
+**Version**: 1.11.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-15
