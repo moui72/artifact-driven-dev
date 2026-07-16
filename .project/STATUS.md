@@ -1,6 +1,22 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-plan list-mode-for-plan-and-impleme` —
+_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+and merged all 6 tasks of `tasks-list-mode-for-plan-and-impleme-2bf9.md`
+(now `completed`): T001/T002 (test-first) added `scripts/feature-list.sh`
++ `scripts/test-feature-list.sh` — mirrors `tasks-list.sh`'s glob/
+frontmatter-parse pattern, filters the feature register by status
+(default `backlogged`; `--status <list>`; `--all`), confirmed red state
+before implementing (the pre-commit hook's `scripts/test-*.sh` glob meant
+T001+T002 landed in one commit — noted in the message rather than forcing
+an artificial split). T003 added a matching CI job to `lint.yml`. T004/T005
+added `--list` usage forms to `/ardd-plan` (shells to `feature-list.sh`)
+and `/ardd-implement` (shells to `tasks-list.sh`, filtered to
+`ready`/`in-progress`) — both stop before their skill's first step, no
+writes. T006 documented both in their reference pages. Merged
+fast-forward (`8ae0449..f51eff8`, no signing needed) and the worktree
+reaped. Feature `list-mode-for-plan-and-impleme` flipped `tasked` →
+`implemented` (rode the branch). Prior update, same day, `/ardd-plan
+list-mode-for-plan-and-impleme` —
 drafted, approved, and tasked
 `plan-list-mode-for-plan-and-impleme-2026-07-15-a2c2.md` (solo mode, no
 branch gate, on `main`). No open feedback or unsurfaced defects to
@@ -456,10 +472,8 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-3 backlogged · 1 tasked · 18 implemented · 1 retired — see
+3 backlogged · 0 tasked · 19 implemented · 1 retired — see
 `.project/features/`.
-Tasked: `list-mode-for-plan-and-impleme` →
-`tasks-list-mode-for-plan-and-impleme-2bf9.md` (0/6, `ready`).
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -474,11 +488,10 @@ Backlogged:
 - `epics-grouping-in-feature-regi` — optional `epic:` frontmatter slug on
   feature files; plan/status/tracker grouping touchpoints.
 Target a slug with `/ardd-plan <slug>`.
-Newest implemented: `update-channel-switch-flags` +
-`plan-approval-browser-preview` — `/ardd-update` gains `--local`/`--beta`/
-`--stable` channel-switch flags; `/ardd-plan`'s approval checkpoint gains
-a browser-preview offer via the `Artifact` tool
-(`tasks-update-channel-switch-flags-c066.md`, completed 4/4).
+Newest implemented: `list-mode-for-plan-and-impleme` — `scripts/feature-list.sh`
+(new, test-first) plus `--list` usage forms for `/ardd-plan` and
+`/ardd-implement` (`tasks-list-mode-for-plan-and-impleme-2bf9.md`,
+completed 6/6).
 
 ## Audit
 
@@ -490,24 +503,14 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-update-channel-switch-flags-c066.md` worktree merged
-(signed merge commit, on-disk Claude key — `main` had independently
-advanced with the codex-second-harness research/backlog work while the
-run was in progress) and was reaped; no sibling worktrees remain. `main`
-is ahead of `origin/main` (multiple local commits not yet pushed).
+Nothing — the `tasks-list-mode-for-plan-and-impleme-2bf9.md` worktree
+merged (fast-forward, `8ae0449..f51eff8`) and was reaped; no sibling
+worktrees remain. `main` is ahead of `origin/main` (local commits not yet
+pushed).
 
 ## Recommended Next Step
 
-Uncommitted work is piling up on `main` — worth a commit pass before
-anything else lands: `tasks-list-mode-for-plan-and-impleme-2bf9.md`
-(`ready`, 6 tasks) plus its plan and the flipped feature file; the
-untracked `tests/prerelease/` exercise and `.claude/skills/prerelease-sweep/`
-skill from the background design pass; and (from the prior update)
-`.project/ardd-version.md`'s re-stamp and the v1.10.0 constitution
-amendment. Once committed: `/ardd-implement` on
-`tasks-list-mode-for-plan-and-impleme-2bf9.md` is the natural next run
-(test-first `feature-list.sh`, then the two skills' `--list` forms). A
-drafted-but-untasked plan is also waiting: `/ardd-plan --from
+A drafted-but-untasked plan is waiting: `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
 the true final go/no-go — before Phases 2–5's install-time substitution
