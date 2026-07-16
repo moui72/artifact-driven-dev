@@ -1,7 +1,7 @@
 ---
 plan: plan-epics-grouping-in-feature-regi-2026-07-15-d215.md
 generated: 2026-07-15
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks

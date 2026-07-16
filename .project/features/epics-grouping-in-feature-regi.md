@@ -1,6 +1,6 @@
 ---
 slug: epics-grouping-in-feature-regi
-status: tasked
+status: implemented
 logged: 2026-07-15
 plan: plan-epics-grouping-in-feature-regi-2026-07-15-d215.md
 tasks: tasks-epics-grouping-in-feature-regi-42f2.md
