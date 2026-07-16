@@ -1,6 +1,25 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-16 (`/ardd-implement` — delegated worktree run completed
+and merged all 5 tasks of `tasks-install-manifest-gap-fix-6cfb.md` (now
+`completed`): T001/T002 (test-first, one commit — T001's assertion is
+expected-red and the pre-commit hook runs the full `test-*.sh` suite)
+added a `feature-list.sh` executable check to
+`test-install-worktreeinclude.sh`'s Case 1b block, confirmed it failed
+against the real bug, then added the missing `cp`/`chmod +x`/`echo`
+lines to `install.sh` (the script was absent from all three, not just
+the `cp` list as first suspected). T003/T004 added
+`scripts/test-install-manifest-complete.sh` — diffs scripts referenced
+by `skills/*/SKILL.md` and `install.sh`'s own `chmod +x` list against
+its actual `cp` manifest; the subagent caught and fixed a real bug in
+its own new script during development (a newline- vs space-separated
+matching mismatch that made every script falsely report missing) before
+committing. T005 added the matching CI job. Merged fast-forward
+(`83a0da2..209b339`, no signing needed) and the worktree reaped. No
+feature flip — this plan consumed feedback only (`features: []`), a
+documented no-op case. Both feedback items
+(`feedback-install-manifest-gap-b773.md` F001/F002) now fully delivered.
+Prior update, same day, `/ardd-plan` — drafted, approved, and tasked
 `plan-install-manifest-gap-fix-2026-07-15-20fb.md` (solo mode, no branch
 gate, on `main`). Consumed both open items of
 `feedback-install-manifest-gap-b773.md` (F001 bug, F002 UX — both
@@ -531,11 +550,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. `feedback-install-manifest-gap-b773.md` (1 bug, 1 UX) now
-`planned` → `plan-install-manifest-gap-fix-2026-07-15-20fb.md` /
-`tasks-install-manifest-gap-fix-6cfb.md` (`ready`, 0/5). Prior batches
-all delivered (`artifact-register-bridge-116a`, `findings-0344`,
-`redrive-695b`).
+None open. `feedback-install-manifest-gap-b773.md` (1 bug, 1 UX) fully
+delivered via `tasks-install-manifest-gap-fix-6cfb.md` (completed 5/5).
+Prior batches all delivered (`artifact-register-bridge-116a`,
+`findings-0344`, `redrive-695b`).
 
 ## Recent Releases
 
@@ -584,17 +602,13 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-epics-grouping-in-feature-regi-42f2.md` worktree
-merged (fast-forward, `6b269e3..1750e8c`) and was reaped; no sibling
-worktrees remain. `main` matches `origin/main`.
+Nothing — the `tasks-install-manifest-gap-fix-6cfb.md` worktree merged
+(fast-forward, `83a0da2..209b339`) and was reaped; no sibling worktrees
+remain. `main` is ahead of `origin/main` (local commits not yet pushed).
 
 ## Recommended Next Step
 
-`/ardd-implement` on `tasks-install-manifest-gap-fix-6cfb.md` is
-`ready` (5 tasks, 2 phases: the missing `cp`/`chmod +x` line for
-`feature-list.sh`, then a new packaging-manifest regression test +
-CI job so this class of gap fails loud in future). Both remaining
-backlogged features are also plan-ready: `plan-time-defrag-slate-analysi`
+Both remaining backlogged features are plan-ready: `plan-time-defrag-slate-analysi`
 (both prototype research passes complete) and the drafted-but-untasked
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
