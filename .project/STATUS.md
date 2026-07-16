@@ -1,6 +1,27 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-16 (`/ardd-feedback` — logged
+_Updated: 2026-07-16 (`/ardd-plan` — drafted, approved, and tasked
+`plan-delegation-preflight-autocommit-2026-07-16-0ca8.md` (solo mode, no
+branch gate, on `main`). Consumed the sole open feedback item
+(`feedback-delegation-preflight-autocommit-06b1.md` F001 — user chose to
+accept it, over declining, after the plan surfaced that the root cause
+was unconfirmed; file now `planned`). No unsurfaced defects, no feature
+slugs targeted, no artifact changes (pure skill-prose fix). 4 tasks
+across 3 phases in `tasks-delegation-preflight-autocommit-a977.md`
+(`ready`): Phase 1 (T001) manually audits the existing
+`skills/ardd-implement/SKILL.md` step 3 pre-flight check's frontmatter
+resolution and `git status --short` scoping against three scenarios,
+since the feedback's root cause couldn't be confirmed and the check may
+have a latent scope-miss independent of the UX question. Phase 2 (T002;
+T003, parallel) changes the check to auto-commit the plan/tasks file(s)
+in solo mode instead of asking, and reorders it ahead of the
+`on_default: false` → `fold-to-main.sh` dirty-tree check so an
+uncommitted file doesn't cause a spurious fold refusal. Phase 3 (T004)
+is conditional — fixes any mechanics gap Phase 1 finds, or is skipped
+with a recorded no-defect outcome. Open question: whether the
+auto-commit message should embed the tasks file's slug for
+traceability (leaning yes). Prior update, same day, `/ardd-feedback` —
+logged
 `feedback-delegation-preflight-autocommit-06b1.md`, 1 Reconsidered item:
 the delegation pre-flight check added for
 `feedback-uncommitted-plan-tasks-delegat-a3ff.md` (`skills/ardd-implement/SKILL.md`
@@ -560,11 +581,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open: `feedback-delegation-preflight-autocommit-06b1.md` (1
-Reconsidered — see the `_Updated` note above). Will be picked up by the
-next `/ardd-plan`. Prior batches all delivered
-(`install-manifest-gap-b773`, `artifact-register-bridge-116a`,
-`findings-0344`, `redrive-695b`).
+0 open — all batches delivered, including
+`feedback-delegation-preflight-autocommit-06b1.md` (now `planned`, see
+the `_Updated` note above; `install-manifest-gap-b773`,
+`artifact-register-bridge-116a`, `findings-0344`, `redrive-695b`).
 
 ## Recent Releases
 
@@ -619,7 +639,9 @@ remain. `main` is ahead of `origin/main` (local commits not yet pushed).
 
 ## Recommended Next Step
 
-Both remaining backlogged features are plan-ready: `plan-time-defrag-slate-analysi`
+`/ardd-implement` to work `tasks-delegation-preflight-autocommit-a977.md`
+(`ready`, 4 tasks/3 phases). Otherwise, both remaining backlogged
+features are plan-ready: `plan-time-defrag-slate-analysi`
 (both prototype research passes complete) and the drafted-but-untasked
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a

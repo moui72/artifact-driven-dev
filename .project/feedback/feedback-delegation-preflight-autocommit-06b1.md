@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-16
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-delegation-preflight-autocommit-2026-07-16-0ca8.md
 ---
 
 # Feedback
 
 ## Reconsidered
-- [ ] F001 `skills/ardd-implement/SKILL.md`'s delegation pre-flight check
+- [x] F001 `skills/ardd-implement/SKILL.md`'s delegation pre-flight check
   (step 3, "Pre-flight: verify the chosen tasks file and its bound plan
   are committed before launching") currently reads: on an uncommitted
   plan/tasks file, "offer to commit them now, or block delegation." User
@@ -24,6 +24,31 @@ plan: null        # set to the consuming plan's filename once planned
   "never push without confirming" rule is a different, separately-owned
   decision and is not in scope here — this is specifically about
   committing locally before delegating, not about pushing.
+
+  **Root cause unconfirmed (added on review, before planning):** the
+  existing pre-flight check ("offer to commit them now, or block
+  delegation") was only added 2026-07-14, in the fix for
+  `feedback-uncommitted-plan-tasks-delegat-a3ff.md` — two days before
+  this report. The original report doesn't say whether that check ran
+  and was declined/ignored, or never triggered at all (e.g. an install
+  predating that check, or a scope miss in its `git status --short
+  <plan-file> <tasks-file>` resolution). Which repo/session this
+  happened in, and whether that install's `skills/ardd-implement`
+  already contained the "Pre-flight: verify..." paragraph, is not
+  known and can't be reconstructed after the fact. Since the actual
+  trigger can't be confirmed, `/ardd-plan` should treat this as two
+  candidate fixes to evaluate together, not assume the ask-vs-auto-commit
+  framing is the whole story:
+  (a) the ask-to-auto-commit UX change as proposed, scoped to solo mode
+      only, `git add`-ing only the plan/tasks file(s) (never `-A`), and
+      announcing what was committed rather than silent; consider running
+      this commit before the `fold-to-main.sh` dirty-tree check, since an
+      uncommitted plan/tasks file is exactly what would make that fold
+      refuse; and
+  (b) an audit of the existing check's mechanics (frontmatter-driven
+      plan-file resolution, `git status --short` path scope) to rule out
+      a silent miss as the real cause, independent of the ask-vs-auto
+      question.
 
   **Root cause unconfirmed, flagged before planning (fable review,
   2026-07-16):** the pre-flight check this item wants changed was only
