@@ -1,21 +1,21 @@
 ---
 plan: plan-epics-grouping-in-feature-regi-2026-07-15-d215.md
 generated: 2026-07-15
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
 
 ## Phase 1: schema validation [feature: epics-grouping-in-feature-regi]
 
-- [ ] T001 (test-first) Add an `epic` case to
+- [x] T001 (test-first) Add an `epic` case to
   `tests/fixtures/bad-project/.project/features/` (a new or amended
   fixture file with `epic:` present but empty) and a corresponding
   assertion in `scripts/test-lint-project.sh` expecting
   `lint-project.sh` to report it. Confirm the assertion fails against
   the current `lint-project.sh` (no `epic` handling exists yet).
 
-- [ ] T002 Add `epic` emptiness validation to `scripts/lint-project.sh`'s
+- [x] T002 Add `epic` emptiness validation to `scripts/lint-project.sh`'s
   feature-register loop — mirroring the existing `rfield` free-text
   emptiness pattern used for `diagram_type`/`render_target`/etc., not
   the `gh_issue` numeric check (an `epic` slug is arbitrary text, not a
