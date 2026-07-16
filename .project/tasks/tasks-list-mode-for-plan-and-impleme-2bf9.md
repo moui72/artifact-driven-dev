@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: `feature-list.sh` [feature: list-mode-for-plan-and-impleme]
 
-- [ ] T001 (test-first) Write `scripts/test-feature-list.sh` — a
+- [x] T001 (test-first) Write `scripts/test-feature-list.sh` — a
   fixture-based regression test (throwaway temp dir, mirroring
   `scripts/test-tasks-list.sh`'s structure) covering: default filter
   returns only `backlogged` entries; `--status planned,tasked` widens
@@ -19,7 +19,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   (`.project/features/` absent or empty) exits 0 with no output. Run it
   against the not-yet-written script and confirm it fails.
 
-- [ ] T002 Write `scripts/feature-list.sh` implementing the behavior
+- [x] T002 Write `scripts/feature-list.sh` implementing the behavior
   T001 tests: glob `.project/features/*.md`, parse frontmatter (`slug`,
   `status`, `logged`) using the same `awk`-between-`---`-markers pattern
   `tasks-list.sh` uses, take the body's first non-blank line as
