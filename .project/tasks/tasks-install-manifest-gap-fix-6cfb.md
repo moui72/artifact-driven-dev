@@ -25,7 +25,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: prevent recurrence [feedback: F002]
 
-- [ ] T003 (test-first) Write `scripts/test-install-manifest-complete.sh`:
+- [x] T003 (test-first) Write `scripts/test-install-manifest-complete.sh`:
   fixture-based (a throwaway temp dir with a couple of fabricated
   `.claude/skills/*/SKILL.md` files referencing `ardd-scripts/*.sh`
   paths, plus a minimal fabricated `install.sh` with a deliberately
@@ -37,7 +37,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   fixture-based failure case fails as expected against the
   not-yet-written script.
 
-- [ ] T004 Write `scripts/test-install-manifest-complete.sh` itself
+- [x] T004 Write `scripts/test-install-manifest-complete.sh` itself
   (despite the "test-" prefix per this repo's existing naming
   convention for glob-discovered pre-commit/CI scripts — note in a
   comment at the top of the file that it is itself a check script, not
