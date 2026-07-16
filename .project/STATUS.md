@@ -1,6 +1,24 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-16 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-16 (`/ardd-implement` — delegated worktree run completed
+and merged all 4 tasks of `tasks-delegation-preflight-autocommit-a977.md`
+(now `completed`): T001 (audit) built a throwaway scratch repo and tested
+`skills/ardd-implement/SKILL.md` step 3's pre-flight check against 3
+scenarios — untracked plan file and modified tasks file both correctly
+surfaced, but a `plan:` frontmatter naming a nonexistent plan file was a
+real scope-miss (`git status --short` on a missing path prints nothing
+and exits 0, indistinguishable from clean). T002-T003 changed the
+pre-flight to auto-commit the plan/tasks file(s) in solo mode (scoped
+`git add`, signed commit per this repo's `CLAUDE.md` convention,
+announcing paths + short hash) and moved it ahead of the `on_default:
+false` → `fold-to-main.sh` step so an uncommitted file no longer causes
+a spurious fold refusal. T004 fixed the scope-miss found in T001: the
+check now verifies the resolved plan file exists on disk before running
+`git status`, stopping and surfacing a message (both modes) if it's
+missing. No feature flip — this plan consumed feedback only
+(`features: []`), a documented no-op case. Merged fast-forward
+(`f3f81db..55571a3`) and the worktree reaped. Prior update, same day,
+`/ardd-plan` — drafted, approved, and tasked
 `plan-delegation-preflight-autocommit-2026-07-16-0ca8.md` (solo mode, no
 branch gate, on `main`). Consumed the sole open feedback item
 (`feedback-delegation-preflight-autocommit-06b1.md` F001 — user chose to
@@ -639,9 +657,7 @@ remain. `main` is ahead of `origin/main` (local commits not yet pushed).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-delegation-preflight-autocommit-a977.md`
-(`ready`, 4 tasks/3 phases). Otherwise, both remaining backlogged
-features are plan-ready: `plan-time-defrag-slate-analysi`
+Both remaining backlogged features are plan-ready: `plan-time-defrag-slate-analysi`
 (both prototype research passes complete) and the drafted-but-untasked
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
