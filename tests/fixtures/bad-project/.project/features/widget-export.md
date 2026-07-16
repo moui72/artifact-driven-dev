@@ -5,6 +5,7 @@ logged: 2026-01-01
 plan: plan-ghost-2026-01-01.md
 tasks: tasks-ghost-9999.md
 gh_issue: abc
+epic:
 ---
 
-Bad enum, ghost plan/tasks refs, non-numeric gh_issue.
+Bad enum, ghost plan/tasks refs, non-numeric gh_issue, empty epic.

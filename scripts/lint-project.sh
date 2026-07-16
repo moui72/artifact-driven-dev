@@ -286,6 +286,14 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
           ''|*[!0-9]*) report "$f: gh_issue '$val' is not a number" ;;
         esac
       fi
+      # epic is a free-text slug (no enum) — only checked for the same
+      # non-empty-when-present shape as the artifact render fields above.
+      if frontmatter_has "$f" epic; then
+        val="$(frontmatter_field "$f" epic)"
+        if [ -z "$val" ]; then
+          report "$f: epic is present but empty — give it a value or remove the field"
+        fi
+      fi
     done
   elif [ -f "$FEATURES_FILE" ]; then
     # Legacy pre-0003 single-file register.

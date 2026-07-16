@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=35
+EXPECTED_BAD_FINDINGS=36
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -117,6 +117,14 @@ else
     echo "ok: empty diagram_type reported"
   else
     echo "FAIL: empty diagram_type reported"
+    fail=1
+  fi
+  # epic is an optional free-text feature-register field; when present it
+  # must be non-empty. bad-project's widget-export.md feature has it empty.
+  if grep -q "epic is present but empty" /tmp/lint-bad.out; then
+    echo "ok: empty epic reported"
+  else
+    echo "FAIL: empty epic reported"
     fail=1
   fi
   # diagram_status is required once diagram_type is present. bad-project's
