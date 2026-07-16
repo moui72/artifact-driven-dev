@@ -28,7 +28,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `<slug>\t<status>\t<logged>\t<description>` per matching file. Confirm
   T001 now passes.
 
-- [ ] T003 [parallel] Add a CI job for `test-feature-list.sh` to
+- [x] T003 [parallel] Add a CI job for `test-feature-list.sh` to
   `.github/workflows/lint.yml`, following the existing per-script job
   pattern (this repo's CI enumerates jobs explicitly, unlike the
   pre-commit hook's glob).
