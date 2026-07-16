@@ -1,6 +1,20 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-15 (`/ardd-feedback` — logged
+`feedback-install-manifest-gap-b773.md`, 2 items (1 bug, 1 UX) discovered
+by manual inspection of an installed project: `scripts/feature-list.sh`
+(added for `list-mode-for-plan-and-impleme`/beta.8 and extended for
+`epics-grouping-in-feature-regi`/beta.9) has no `cp` line in
+`install.sh`'s explicit per-file `ardd-scripts` manifest — confirmed via
+`grep` and direct inspection of `install.sh:169-184` — so it never
+reaches an installed target. Impact: `/ardd-plan --list`, `--epic`
+filtering, and any other `feature-list.sh` consumer are dead outside
+this self-hosted repo; the rest of epic grouping (the `epic:` field,
+`lint-project.sh` validation, `/ardd-status`'s by-epic breakdown,
+`/ardd-tracker`'s milestone assignment) is unaffected since those live
+in already-installed files. F002 flags the missing packaging-manifest
+test that would catch this class of gap mechanically. Not yet consumed
+by a plan. Prior update, same day, `/ardd-implement` — delegated worktree run completed
 and merged all 6 tasks of `tasks-epics-grouping-in-feature-regi-42f2.md`
 (now `completed`): T001/T002 (test-first) added `epic` emptiness
 validation to `lint-project.sh`'s feature-register loop (free-text
@@ -498,12 +512,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. Newest consumed: `feedback-artifact-register-bridge-116a.md`
-(3 UX items, all incorporated) →
-`plan-discovery-to-work-eager-captur-2026-07-15-156b.md` /
-`tasks-discovery-to-work-eager-captur-2b57.md` (completed 6/6). Prior
-batches all delivered (`findings-0344`, `redrive-695b` via
-`tasks-v1-0-0-pre-cut-testing-finding-bf61.md`, completed 13/13).
+1 open: `feedback-install-manifest-gap-b773.md` (1 bug, 1 UX — see the
+`_Updated` note above). Will be picked up by the next `/ardd-plan`.
+Prior batches all delivered (`artifact-register-bridge-116a`,
+`findings-0344`, `redrive-695b`).
 
 ## Recent Releases
 
@@ -527,9 +539,14 @@ Backlogged:
   `status: draft`) but stopped at the approval checkpoint, un-tasked —
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
 - `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
-  analysis (bundles + parallel sets); spec = the sync-tab-scroll defrag
-  research report; first step: a second research pass on a large backlog
-  (atelier, post-sweep).
+  analysis (bundles + parallel sets). Both prototype `/ardd-research`
+  passes now complete and cited (sync-tab-scroll N=1, atelier N=12 —
+  the atelier pass validated the cross-item method: overlap-vs-dependency
+  split caught a same-seam-label false bundle, register-direct-read
+  discipline confirmed unconditional, and a new requirement surfaced —
+  a real two-axis graph structure + pre-filter needed past ~a dozen
+  items). Ready to move past backlog: `/ardd-plan
+  plan-time-defrag-slate-analysi`.
 Target a slug with `/ardd-plan <slug>`.
 Newest implemented: `epics-grouping-in-feature-regi` — optional `epic:`
 feature-register field, `feature-list.sh`'s epic column/`--epic` filter,
@@ -549,14 +566,17 @@ workflow-field exemption, v1.8.2).
 
 Nothing — the `tasks-epics-grouping-in-feature-regi-42f2.md` worktree
 merged (fast-forward, `6b269e3..1750e8c`) and was reaped; no sibling
-worktrees remain. `main` is ahead of `origin/main` (local commits not yet
-pushed).
+worktrees remain. `main` matches `origin/main`.
 
 ## Recommended Next Step
 
-Only two backlogged features remain, and one (`plan-time-defrag-slate-analysi`)
-isn't plan-ready yet per its own note (wants a second `/ardd-research`
-pass first). A drafted-but-untasked plan is waiting: `/ardd-plan --from
+`feedback-install-manifest-gap-b773.md` is a real, confirmed bug — the
+next `/ardd-plan` run (with no arguments) will pick it up automatically;
+it's a small, well-scoped fix (one missing `cp` line plus a
+packaging-manifest regression test for the UX item). Both remaining
+backlogged features are now plan-ready: `plan-time-defrag-slate-analysi`
+(both prototype research passes complete) and the drafted-but-untasked
+`/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
 the true final go/no-go — before Phases 2–5's install-time substitution
