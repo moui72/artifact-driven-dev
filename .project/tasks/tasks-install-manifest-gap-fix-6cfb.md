@@ -1,7 +1,7 @@
 ---
 plan: plan-install-manifest-gap-fix-2026-07-15-20fb.md
 generated: 2026-07-15
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
