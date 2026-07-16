@@ -137,6 +137,43 @@ entering the normal flow.
    branches from `<default>` and is fast-forwarded onto local `<default>` by
    `worktree-align.sh`, so it can only see run state that has reached local
    `<default>`:
+
+   **Pre-flight: verify the chosen tasks file and its bound plan are
+   committed before launching — runs before the fold step below, so an
+   uncommitted file gets committed before the fold's dirty-tree check runs
+   against it.** A worktree subagent only sees state that
+   has reached local `<default>` (via `worktree-align.sh`'s fast-forward);
+   an uncommitted plan or tasks file on this branch is invisible to it, and
+   the gap otherwise surfaces only after the subagent is already running.
+   Read the tasks file's `plan:` frontmatter to resolve its bound plan's
+   filename, and **first confirm that resolved plan file actually exists on
+   disk** — `git status --short` on a nonexistent path prints nothing and
+   exits 0, indistinguishable from "clean," so skipping this existence
+   check would silently miss a stale or typo'd `plan:` reference. If the
+   plan file is missing, stop and surface this to the user (in both
+   modes) rather than proceeding into the `git status` check below. Once
+   existence is confirmed, run `git status --short <plan-file>
+   <tasks-file>` for both paths. If either is untracked or shows
+   modifications relative to HEAD:
+   - **solo mode** (`workflow_mode` absent or `solo`, read from
+     `.project/artifacts/constitution.md` frontmatter) — auto-commit them
+     directly, no prompt: `git add <plan-file> <tasks-file>` (the exact
+     paths only, never a sweep), then a signed commit per this repo's
+     `CLAUDE.md` signing convention (the on-disk `~/.ssh/id_claude_signing`
+     key):
+     ```
+     git -c gpg.format=ssh -c gpg.ssh.program=ssh-keygen \
+         -c user.signingkey="$HOME/.ssh/id_claude_signing.pub" \
+         commit -S -m "chore(delegation): auto-commit <slug> plan/tasks before delegating"
+     ```
+     using the tasks file's slug in the message. After committing, print
+     the committed paths and the resulting `git rev-parse --short HEAD` so
+     the action is visible, not silent.
+   - **collaborative mode** — unchanged: surface this to the user before
+     delegating, offer to commit them now, or block delegation with an
+     explicit message naming the uncommitted file(s) — never launch a
+     worktree subagent while the gap exists.
+
    - If `on_default` is `false` — a recovery path now that solo
      `/ardd-plan` no longer creates a branch (a resumed older run, or a
      branch made by hand) — **fold that
@@ -144,7 +181,10 @@ entering the normal flow.
      run `.claude/skills/ardd-scripts/fold-to-main.sh`. On `folded=true` the
      agent is now on `<default>` with the branch's state fast-forwarded in — a
      fast-forward authors no new commit, so the "nothing is committed in this
-     step" note above still holds — proceed to delegate. On `folded=false`,
+     step" note above still holds (the pre-flight auto-commit just above is
+     the one deliberate exception, and it runs before this fold precisely so
+     the fold's dirty-tree check sees a clean tree) — proceed to delegate. On
+     `folded=false`,
      **stop and surface the `reason=` verbatim; never resolve** (a `dirty`,
      `detached`, or `diverged` tree is the user's to sort out). At this gate
      the tasks file is still `ready` (step 4 does the `ready→in-progress`
@@ -153,19 +193,6 @@ entering the normal flow.
      partially-done run on a branch folds the same way, but briefly carries
      in-progress state onto `<default>` until the subagent's branch merges.)
    - If `on_default` is `true`, delegate directly — no fold needed.
-
-   **Pre-flight: verify the chosen tasks file and its bound plan are
-   committed before launching.** A worktree subagent only sees state that
-   has reached local `<default>` (via `worktree-align.sh`'s fast-forward);
-   an uncommitted plan or tasks file on this branch is invisible to it, and
-   the gap otherwise surfaces only after the subagent is already running.
-   Read the tasks file's `plan:` frontmatter to resolve its bound plan's
-   filename, then run `git status --short <plan-file> <tasks-file>` for
-   both paths. If either is untracked or shows modifications relative to
-   HEAD, surface this to the user before delegating: offer to commit them
-   now, or block delegation with an explicit message naming the
-   uncommitted file(s) — never launch a worktree subagent while the gap
-   exists.
 
    Then delegate step 4 onward — or, when this run is in Reconcile mode,
    the Reconcile-mode steps below instead — to a subagent via the `Agent`

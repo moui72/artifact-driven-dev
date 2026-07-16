@@ -32,7 +32,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   T004.
 
 ## Phase 2: Auto-commit in solo mode
-- [ ] T002 [artifacts: constitution] Edit `skills/ardd-implement/SKILL.md`
+- [x] T002 [artifacts: constitution] Edit `skills/ardd-implement/SKILL.md`
   step 3's pre-flight paragraph: when `workflow_mode` (grepped from
   `.project/artifacts/constitution.md` frontmatter, same as elsewhere in
   this skill) is absent or `solo`, and `git status --short <plan-file>
@@ -47,7 +47,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   action is visible, not silent. Collaborative mode's existing
   ask-or-block behavior is unchanged — this branch of the check only
   applies in solo mode. [feedback: F001]
-- [ ] T003 [artifacts: constitution] [parallel] In the same file, move the
+- [x] T003 [artifacts: constitution] [parallel] In the same file, move the
   (now auto-committing) pre-flight paragraph so it runs *before* the
   `on_default: false` → `fold-to-main.sh` step (SKILL.md, the block
   around "If `on_default` is `false`... run
@@ -57,9 +57,17 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   [feedback: F001]
 
 ## Phase 3: Fix any mechanics gap found in Phase 1 (conditional)
-- [ ] T004 [artifacts: constitution] If T001 found a real scope-miss in
+- [x] T004 [artifacts: constitution] If T001 found a real scope-miss in
   the pre-flight check's frontmatter resolution or `git status --short`
   path scope, fix the prose in `skills/ardd-implement/SKILL.md` step 3 to
   close it. If T001 found no defect, skip this task and record that
   outcome in its completion note instead of leaving it half-done.
   [feedback: F001]
+
+  **Outcome:** T001 found a real defect (see its note above). Fixed as
+  part of the same `skills/ardd-implement/SKILL.md` edit made for
+  T002/T003: the pre-flight paragraph now explicitly confirms the
+  resolved plan file exists on disk before running `git status --short`
+  against it, and stops with a surfaced message (both modes) if it
+  doesn't — closing the silent-pass gap where a nonexistent path produced
+  no `git status` output and was indistinguishable from "clean."
