@@ -1,6 +1,25 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-plan epics-grouping-in-feature-regi` —
+_Updated: 2026-07-15 (`/ardd-implement` — delegated worktree run completed
+and merged all 6 tasks of `tasks-epics-grouping-in-feature-regi-42f2.md`
+(now `completed`): T001/T002 (test-first) added `epic` emptiness
+validation to `lint-project.sh`'s feature-register loop (free-text
+pattern, not the numeric `gh_issue` check), plus fixtures on both sides
+(bad-project empty-`epic` case, good-project non-empty `epic:
+platform-widgets`). T003/T004 (test-first) extended `feature-list.sh`:
+rewrote its arg parsing into a loop to support `--epic <slug>` alongside
+`--status`/`--all`, and added `epic` as a fifth tab-separated output
+column. T005 added an optional "by epic" breakdown to `/ardd-status`'s
+Feature Backlog section (omitted when no feature has `epic` set — the
+case right now, so it stays invisible in this very report). T006 added
+one-directional GitHub-milestone push/assignment to `/ardd-tracker`
+(idempotent creation, register → tracker only, pull never reads a
+milestone back). T005/T006 had no test tasks (Principle V
+documentation-only exception, confirmed before relying on it). Merged
+fast-forward (`6b269e3..1750e8c`, no signing needed) and the worktree
+reaped. Feature `epics-grouping-in-feature-regi` flipped `tasked` →
+`implemented` (rode the branch). Prior update, same day, `/ardd-plan
+epics-grouping-in-feature-regi` —
 drafted, approved, and tasked
 `plan-epics-grouping-in-feature-regi-2026-07-15-d215.md` (solo mode, no
 branch gate, on `main`). No open feedback or unsurfaced defects to
@@ -497,10 +516,9 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-2 backlogged · 1 tasked · 19 implemented · 1 retired — see
-`.project/features/`.
-Tasked: `epics-grouping-in-feature-regi` →
-`tasks-epics-grouping-in-feature-regi-42f2.md` (0/6, `ready`).
+2 backlogged · 0 tasked · 20 implemented · 1 retired — see
+`.project/features/`. No feature currently carries an `epic` value, so
+no "by epic" breakdown to show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -513,10 +531,11 @@ Backlogged:
   research report; first step: a second research pass on a large backlog
   (atelier, post-sweep).
 Target a slug with `/ardd-plan <slug>`.
-Newest implemented: `list-mode-for-plan-and-impleme` — `scripts/feature-list.sh`
-(new, test-first) plus `--list` usage forms for `/ardd-plan` and
-`/ardd-implement` (`tasks-list-mode-for-plan-and-impleme-2bf9.md`,
-completed 6/6).
+Newest implemented: `epics-grouping-in-feature-regi` — optional `epic:`
+feature-register field, `feature-list.sh`'s epic column/`--epic` filter,
+`/ardd-status`'s epic breakdown, and `/ardd-tracker`'s one-directional
+GitHub-milestone push
+(`tasks-epics-grouping-in-feature-regi-42f2.md`, completed 6/6).
 
 ## Audit
 
@@ -528,18 +547,16 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-list-mode-for-plan-and-impleme-2bf9.md` worktree
-merged (fast-forward, `8ae0449..f51eff8`) and was reaped; no sibling
+Nothing — the `tasks-epics-grouping-in-feature-regi-42f2.md` worktree
+merged (fast-forward, `6b269e3..1750e8c`) and was reaped; no sibling
 worktrees remain. `main` is ahead of `origin/main` (local commits not yet
 pushed).
 
 ## Recommended Next Step
 
-`/ardd-implement` on `tasks-epics-grouping-in-feature-regi-42f2.md` is
-`ready` (6 tasks, 4 phases: lint-project.sh schema validation,
-feature-list.sh epic column/filter, /ardd-status epic breakdown,
-/ardd-tracker milestone mapping). A drafted-but-untasked plan is also
-still waiting: `/ardd-plan --from
+Only two backlogged features remain, and one (`plan-time-defrag-slate-analysi`)
+isn't plan-ready yet per its own note (wants a second `/ardd-research`
+pass first). A drafted-but-untasked plan is waiting: `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
 the true final go/no-go — before Phases 2–5's install-time substitution
