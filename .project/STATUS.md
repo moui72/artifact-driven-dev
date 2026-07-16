@@ -1,6 +1,34 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-update` — self-hosted (this repo is its own
+_Updated: 2026-07-15 (`/ardd-plan list-mode-for-plan-and-impleme` —
+drafted, approved, and tasked
+`plan-list-mode-for-plan-and-impleme-2026-07-15-a2c2.md` (solo mode, no
+branch gate, on `main`). No open feedback or unsurfaced defects to
+consume this run. No artifact changes — skill-prose plus one new
+deterministic script; no new principle, data-model concept, or
+production shortcut. Used the new plan-approval browser-preview offer
+(published as an Artifact) for the first time since it shipped. 6 tasks
+across 2 phases in `tasks-list-mode-for-plan-and-impleme-2bf9.md`
+(`ready`): Phase 1 (T001–T003) adds `scripts/feature-list.sh` —
+test-first, mirroring `tasks-list.sh`'s glob/frontmatter-parse pattern,
+enumerating the feature register with a `--status`/`--all` filter
+(default `backlogged`) — plus a CI job. Phase 2 (T004–T006) adds
+`--list` usage forms to `/ardd-plan` (shells to `feature-list.sh`) and
+`/ardd-implement` (shells to the existing `tasks-list.sh`, filtered to
+`ready`/`in-progress` in prose), plus matching reference-doc updates.
+No test tasks for Phase 2 (Principle V documentation-only exception).
+Feature `list-mode-for-plan-and-impleme` flipped `backlogged` →
+`planned` → `tasked`. Open questions: whether `feature-list.sh`'s
+description column needs truncation, and whether `--list`'s
+ready/in-progress filter should cross-reference in-flight worktrees —
+both left to implementation. Separately, a background `fable` subagent
+(dispatched outside this skill's flow, on user request) designed a
+repeatable prerelease-testing exercise from `dev-notes/prerelease-testing-context.md`:
+new `tests/prerelease/` (README runbook, `GUARDRAILS.md`, 7 scenario
+briefs `S1`–`S7`) and a new source-side-only skill,
+`.claude/skills/prerelease-sweep/SKILL.md` (`/prerelease-sweep smoke |
+full | S<n> ...`) — none of this committed yet, sitting untracked for
+review. Prior update, same day, `/ardd-update` — self-hosted (this repo is its own
 ArDD source), so `/ardd-update`'s reinstall step was run directly against
 this checkout to refresh `.claude/skills/` from the current tree (includes
 the v1.10.0 constitution amendment and the codex-second-harness plan from
@@ -428,8 +456,10 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-4 backlogged · 0 tasked · 18 implemented · 1 retired — see
+3 backlogged · 1 tasked · 18 implemented · 1 retired — see
 `.project/features/`.
+Tasked: `list-mode-for-plan-and-impleme` →
+`tasks-list-mode-for-plan-and-impleme-2bf9.md` (0/6, `ready`).
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -443,9 +473,6 @@ Backlogged:
   (atelier, post-sweep).
 - `epics-grouping-in-feature-regi` — optional `epic:` frontmatter slug on
   feature files; plan/status/tracker grouping touchpoints.
-- `list-mode-for-plan-and-impleme` — a `--list` mode for `/ardd-plan` and
-  `/ardd-implement` to print eligible slugs/tasks files without the
-  interactive pick flow.
 Target a slug with `/ardd-plan <slug>`.
 Newest implemented: `update-channel-switch-flags` +
 `plan-approval-browser-preview` — `/ardd-update` gains `--local`/`--beta`/
@@ -471,17 +498,23 @@ is ahead of `origin/main` (multiple local commits not yet pushed).
 
 ## Recommended Next Step
 
-`.project/ardd-version.md` was re-stamped by the `/ardd-update` reinstall
-(commit `a656512`) and is uncommitted, along with the v1.10.0 constitution
-amendment and the draft plan — worth a commit before anything else lands
-on top. A drafted-but-untasked plan is waiting: `/ardd-plan --from
-plan-codex-second-harness-support-2026-07-15-f837.md` to approve and
-generate its tasks file (Phase 1 of that plan is a blocking live
-skill-to-skill-chaining smoke test on a real Codex CLI — the true final
-go/no-go — before Phases 2–5's install-time substitution work proceeds).
-Standing options otherwise unchanged: the pre-1.0 regression pass of the 7
-dry-run scenarios (`dev-notes/prerelease-testing-context.md`); dispatch the
-stable release workflow when consumers should get the accumulated `main`
-work (now includes the v1.10.0 constitution amendment); resolve the
-remaining `.project/audit.md` suggestion; or `/ardd-defects` to re-verify
-against the docs-site and skill-prose surfaces.
+Uncommitted work is piling up on `main` — worth a commit pass before
+anything else lands: `tasks-list-mode-for-plan-and-impleme-2bf9.md`
+(`ready`, 6 tasks) plus its plan and the flipped feature file; the
+untracked `tests/prerelease/` exercise and `.claude/skills/prerelease-sweep/`
+skill from the background design pass; and (from the prior update)
+`.project/ardd-version.md`'s re-stamp and the v1.10.0 constitution
+amendment. Once committed: `/ardd-implement` on
+`tasks-list-mode-for-plan-and-impleme-2bf9.md` is the natural next run
+(test-first `feature-list.sh`, then the two skills' `--list` forms). A
+drafted-but-untasked plan is also waiting: `/ardd-plan --from
+plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
+blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
+the true final go/no-go — before Phases 2–5's install-time substitution
+work proceeds). Standing options otherwise unchanged: the new
+`/prerelease-sweep smoke|full|S<n>` exercise (once reviewed and
+committed); dispatch the stable release workflow when consumers should
+get the accumulated `main` work (now includes the v1.10.0 constitution
+amendment); resolve the remaining `.project/audit.md` suggestion; or
+`/ardd-defects` to re-verify against the docs-site and skill-prose
+surfaces.
