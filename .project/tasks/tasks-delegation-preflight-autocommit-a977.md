@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: Audit existing pre-flight mechanics
-- [ ] T001 [artifacts: constitution] Manually verify `skills/ardd-implement/SKILL.md`
+- [x] T001 [artifacts: constitution] Manually verify `skills/ardd-implement/SKILL.md`
   step 3's pre-flight check (currently: read the chosen tasks file's
   `plan:` frontmatter to resolve its bound plan filename, then run
   `git status --short <plan-file> <tasks-file>`) against three scenarios:
@@ -17,6 +17,19 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   surfaces the gap or silently misses it. Record the findings as a short
   note in this task's completion (which of the three scenarios pass/fail,
   and why) — no separate artifact file is needed. [defect: n/a] [feedback: F001]
+
+  **Findings (scratch-repo audit):** (1) untracked plan file — `git status
+  --short` correctly reports `?? <path>`, check passes. (2)
+  tracked-but-modified tasks file — correctly reports ` M <path>`, check
+  passes. (3) `plan:` frontmatter naming a plan file that doesn't exist on
+  disk — `git status --short <nonexistent-path>` prints **nothing** (exit
+  0, silent) because git status only reports paths that exist as
+  untracked/modified; a genuinely missing file is indistinguishable from
+  "clean." This is a real scope-miss: the pre-flight check never verifies
+  the resolved plan filename actually exists before running `git status`
+  against it, so a stale/typo'd `plan:` reference silently passes and
+  delegation proceeds referencing a plan the subagent can't read. Fixed in
+  T004.
 
 ## Phase 2: Auto-commit in solo mode
 - [ ] T002 [artifacts: constitution] Edit `skills/ardd-implement/SKILL.md`
