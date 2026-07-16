@@ -182,6 +182,12 @@ if [ -x "$wr" ]; then
 else
   bad "case1b4: worktree-reap.sh installed and executable"
 fi
+fl="$target/.claude/skills/ardd-scripts/feature-list.sh"
+if [ -x "$fl" ]; then
+  ok "case1b5: feature-list.sh installed and executable"
+else
+  bad "case1b5: feature-list.sh installed and executable"
+fi
 
 # --- Case 2: existing .worktreeinclude, unrelated content, NO trailing newline ---
 target="$WORK/case2"

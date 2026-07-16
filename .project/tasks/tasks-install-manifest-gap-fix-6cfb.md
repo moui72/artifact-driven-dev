@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: fix the reported gap [feedback: F001]
 
-- [ ] T001 (test-first) Add a `feature-list.sh` case to
+- [x] T001 (test-first) Add a `feature-list.sh` case to
   `scripts/test-install-worktreeinclude.sh`'s "Case 1b" block (after
   the existing `worktree-reap.sh` check, ~line 183): assert
   `$target/.claude/skills/ardd-scripts/feature-list.sh` is executable,
@@ -16,7 +16,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   it and confirm it fails against the current `install.sh` (the file is
   genuinely absent post-install).
 
-- [ ] T002 Add the missing line to `install.sh`:
+- [x] T002 Add the missing line to `install.sh`:
   `cp "$SCRIPT_DIR/scripts/feature-list.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh"`
   next to the other `ardd-scripts` copies (`install.sh:169-184`), and
   add `"$ARDD_SCRIPTS_DIR/feature-list.sh"` to the immediately-following

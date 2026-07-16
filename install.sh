@@ -184,6 +184,7 @@ cp "$SCRIPT_DIR/scripts/tasks-list.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh"
 cp "$SCRIPT_DIR/scripts/upsert-section.sh" "$ARDD_SCRIPTS_DIR/upsert-section.sh"
 cp "$SCRIPT_DIR/scripts/ardd-update-check.sh" "$ARDD_SCRIPTS_DIR/ardd-update-check.sh"
 cp "$SCRIPT_DIR/scripts/source-resolve.sh" "$ARDD_SCRIPTS_DIR/source-resolve.sh"
+cp "$SCRIPT_DIR/scripts/feature-list.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh"
 cp "$SCRIPT_DIR/templates/WORKFLOW.md" "$ARTIFACT_TEMPLATES_DIR/WORKFLOW.md"
 echo "  ✓ ardd-artifact-templates/WORKFLOW.md"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
@@ -195,7 +196,7 @@ chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" 
   "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh" \
   "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh" \
   "$ARDD_SCRIPTS_DIR/upsert-section.sh" "$ARDD_SCRIPTS_DIR/ardd-update-check.sh" \
-  "$ARDD_SCRIPTS_DIR/source-resolve.sh"
+  "$ARDD_SCRIPTS_DIR/source-resolve.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
 echo "  ✓ ardd-scripts/completion-flip-check.sh"
@@ -214,6 +215,7 @@ echo "  ✓ ardd-scripts/tasks-list.sh"
 echo "  ✓ ardd-scripts/upsert-section.sh"
 echo "  ✓ ardd-scripts/ardd-update-check.sh"
 echo "  ✓ ardd-scripts/source-resolve.sh"
+echo "  ✓ ardd-scripts/feature-list.sh"
 
 # --- Worktree include ---
 # Claude Code copies gitignored files into a freshly created worktree
