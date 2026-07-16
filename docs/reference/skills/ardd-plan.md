@@ -14,7 +14,13 @@ _Tier: core_
 /ardd-plan feedback-<slug>-<hex>.md     # scope to named feedback file(s) only
 /ardd-plan defect:<id> [...] | defects  # scope the defect check; re-offers declined entries
 /ardd-plan --from <plan-file>           # re-task mode: skip planning, regenerate tasks for an existing plan
+/ardd-plan --list                       # print backlogged features and stop (read-only, no pick flow)
 ```
+
+`--list` is a pure side door: it runs `feature-list.sh` (default filter —
+`backlogged`), prints its output, and stops before step 1 — no branch
+check, no artifact discovery, no feedback load, no interactive pick, and
+no writes of any kind.
 
 Argument disambiguation: a plain kebab-case argument is always a feature
 slug; `feedback-*.md` is always a feedback scope; `defect:<id>` (the 8-char

@@ -52,6 +52,6 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   1's `inflight-worktrees.sh` call and pick-list presentation. No test
   task — prose-only change.
 
-- [ ] T006 [parallel] Update `docs/reference/skills/ardd-plan.md` and
+- [x] T006 [parallel] Update `docs/reference/skills/ardd-plan.md` and
   `docs/reference/skills/ardd-implement.md` to document the new
   `--list` usage forms, matching T004/T005.

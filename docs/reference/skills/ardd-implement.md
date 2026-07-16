@@ -11,7 +11,13 @@ _Tier: core_
 ```
 /ardd-implement                       # pick a tasks file and execute it
 /ardd-implement --reconcile <file>    # reconcile mode: sync the file with the codebase instead
+/ardd-implement --list                # print ready/in-progress tasks files and stop (read-only, no pick flow)
 ```
+
+`--list` is a pure side door: it runs `tasks-list.sh`, filters its output
+to `ready`/`in-progress` rows only, prints the result, and stops before
+step 1 — no `inflight-worktrees.sh` cross-reference, no interactive pick,
+and no writes of any kind.
 
 Tasks run sequentially; each is self-contained and loads only the
 artifacts its `[artifacts: ...]` tag declares. The skill stops and
