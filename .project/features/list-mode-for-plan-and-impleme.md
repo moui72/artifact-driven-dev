@@ -1,6 +1,6 @@
 ---
 slug: list-mode-for-plan-and-impleme
-status: tasked
+status: implemented
 logged: 2026-07-14
 plan: plan-list-mode-for-plan-and-impleme-2026-07-15-a2c2.md
 tasks: tasks-list-mode-for-plan-and-impleme-2bf9.md
