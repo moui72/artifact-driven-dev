@@ -87,6 +87,16 @@ the coordinator or the inline path.
    `/ardd-status` never writes to the register except the one narrow,
    explicit exception in step 5a below.
 
+   Also check whether any feature carries a non-empty `epic`: run
+   `.claude/skills/ardd-scripts/feature-list.sh --all` (installed copy; if
+   absent, fall back to the source repo path `scripts/feature-list.sh`) and
+   inspect the fifth tab-separated column. If at least one entry has a
+   non-empty `epic`, group the backlogged/planned/tasked counts by that
+   `epic` value for the "by epic" breakdown below (omit `implemented`/
+   `retired` entries from the grouping — same "actionable at a glance"
+   framing as the plain status counts). If no feature carries `epic`, skip
+   this grouping entirely — nothing to collect.
+
    Also compare each `status: stable` artifact's described capabilities
    against the feature register and the codebase: the agent lists any
    capability a stable artifact describes that has no register entry
@@ -171,6 +181,10 @@ the coordinator or the inline path.
    - <N> backlogged · <N> planned · <N> tasked · <N> implemented — see
      `.project/features/`. Target a backlogged slug with
      `/ardd-plan <slug>`. (Omit this section if the register doesn't exist.)
+   - By epic: `<epic-slug>` — <N> backlogged · <N> planned · <N> tasked
+     (one line per epic value seen). (Omit this "by epic" breakdown entirely
+     if no feature carries a non-empty `epic` — same "omit if none"
+     convention as every other optional section here.)
 
    ## Documented but Untracked
    - `<artifact>.md` describes <capability> — no register entry, no

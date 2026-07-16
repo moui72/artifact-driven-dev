@@ -42,7 +42,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: `/ardd-status` epic breakdown [feature: epics-grouping-in-feature-regi]
 
-- [ ] T005 Add an optional "by epic" line/section to
+- [x] T005 Add an optional "by epic" line/section to
   `skills/ardd-status/SKILL.md`'s step 1 (feature register enumeration)
   and step 6/report template's Feature Backlog section: when any
   feature carries a non-empty `epic`, group backlogged/planned/tasked
