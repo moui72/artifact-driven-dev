@@ -20,6 +20,15 @@ idea's artifact design work actually happens (`/ardd-backlog` only logs the
 idea; it doesn't touch artifacts). Substantial or decision-reversing ideas:
 vet with `/ardd-research` first, before planning them.
 
+`/ardd-plan --list` is a **read-only side door**: run
+`.claude/skills/ardd-scripts/feature-list.sh` (installed copy; if absent,
+fall back to the source repo path `scripts/feature-list.sh`) with no
+arguments (its default filter — `backlogged`), print its output verbatim,
+and stop. This runs before step 1's branch check and before every other
+step — no artifact discovery, no feedback load, no interactive pick, and
+no writes of any kind. Use it for a quick "what's actionable to plan
+right now" glance without entering the normal flow.
+
 `/ardd-plan --from <plan-file>` is the **re-task mode**: it skips planning
 entirely and re-enters at the tasking half (step 11) for the named,
 already-written plan — regenerating a fresh tasks file without re-drafting the

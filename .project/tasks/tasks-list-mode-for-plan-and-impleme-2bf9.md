@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: skill `--list` modes [feature: list-mode-for-plan-and-impleme]
 
-- [ ] T004 Add a `--list` usage form to `skills/ardd-plan/SKILL.md`: run
+- [x] T004 Add a `--list` usage form to `skills/ardd-plan/SKILL.md`: run
   `.claude/skills/ardd-scripts/feature-list.sh` (installed copy; source
   repo path as fallback per the standard present-or-fallback rule used
   elsewhere in this skill), print its output, and stop — before step
@@ -44,7 +44,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   No test task — prose-only skill-file change (Principle V's
   documentation-only exception).
 
-- [ ] T005 [parallel] Add a `--list` usage form to
+- [x] T005 [parallel] Add a `--list` usage form to
   `skills/ardd-implement/SKILL.md`: run
   `.claude/skills/ardd-scripts/tasks-list.sh` (same present-or-fallback
   rule), filter its tab-separated output to rows whose status column is
