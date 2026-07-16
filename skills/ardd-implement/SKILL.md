@@ -18,6 +18,16 @@ hotfix work that landed without ever being tasked, overlapping the file's
 tasks); the offered reconcile in step 1 only triggers for `in-progress`
 files.
 
+`/ardd-implement --list` is a **read-only side door**: run
+`.claude/skills/ardd-scripts/tasks-list.sh` (installed copy; if absent,
+fall back to the source repo path `scripts/tasks-list.sh`), filter its
+tab-separated output to rows whose status column (column 2) is `ready` or
+`in-progress`, print the filtered result, and stop. This runs before step
+1's `inflight-worktrees.sh` call and pick-list presentation — no
+in-flight cross-reference, no interactive pick, and no writes of any
+kind. Use it for a quick "what's executable right now" glance without
+entering the normal flow.
+
 ## Steps
 
 1. **Pick a tasks file.** Run
