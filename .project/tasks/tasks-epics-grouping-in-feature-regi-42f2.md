@@ -53,7 +53,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: `/ardd-tracker` milestone mapping [feature: epics-grouping-in-feature-regi]
 
-- [ ] T006 Add a milestone-assignment sub-step to
+- [x] T006 Add a milestone-assignment sub-step to
   `skills/ardd-tracker/SKILL.md`'s push phase: when a feature being
   pushed has `epic` set, ensure a GitHub milestone named for that epic
   slug exists (create via `gh api repos/{owner}/{repo}/milestones -f

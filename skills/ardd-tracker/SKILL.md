@@ -120,6 +120,22 @@ eventually carry links into more than one tracker.
      gap: re-syncing content would blur the field-ownership rule this skill
      depends on.
 
+4. **Milestone assignment, for any entry (new or existing) with `epic`
+   set.** When a feature being pushed carries a non-empty frontmatter
+   `epic`, ensure a GitHub milestone named for that epic slug exists —
+   `gh api repos/{owner}/{repo}/milestones -f title=<epic>`, ignoring
+   "already exists" errors, the same idempotent pattern step 2 of
+   Prerequisites already uses for labels — then assign the pushed/updated
+   issue to it: `gh issue edit <n> --milestone <epic>`. This is
+   one-directional, register → tracker, matching the field-ownership rule
+   stated at the top of this skill (name/slug/description flow the same
+   way): pull must never read a milestone back into the register's `epic`
+   field, even if a milestone is renamed or reassigned on the GitHub side.
+   If `epic` is later removed from a feature, its issue's milestone is
+   left as-is — this minimal version only handles the push-forward case
+   (see the plan's Open Questions for the removal-sync gap, deliberately
+   unresolved).
+
 ### Pull (GitHub → register) — run unless invoked as `push`
 
 1. **Import new feature requests.** Before this phase's register writes,
