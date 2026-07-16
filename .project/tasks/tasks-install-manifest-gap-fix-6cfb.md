@@ -49,7 +49,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `scripts/<name>\.sh ` source paths as the "actual" set; report any
   name in expected-but-not-actual. Confirm T003's assertions now pass.
 
-- [ ] T005 [parallel] Add a CI job for
+- [x] T005 [parallel] Add a CI job for
   `test-install-manifest-complete.sh` to `.github/workflows/lint.yml`,
   following the existing per-script job pattern (this repo's CI
   enumerates jobs explicitly, unlike the pre-commit hook's glob).

@@ -73,6 +73,12 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-worktreeinclude.sh
 
+  install-manifest-complete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-install-manifest-complete.sh
+
   merge-driver:
     runs-on: ubuntu-latest
     steps:
