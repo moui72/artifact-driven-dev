@@ -2,33 +2,46 @@
 # feature-list.sh — deterministic feature-register pick list. One line per
 # .project/features/*.md:
 #
-#   <slug>\t<status>\t<logged>\t<description>
+#   <slug>\t<status>\t<logged>\t<description>\t<epic>
 #
 # <description> is the body's first non-blank line (a "Why:" line, if
 # present, is never the first non-blank line by convention and is never
-# included). Default filter is status=backlogged (what's actionable for
+# included). <epic> is the frontmatter `epic` value, empty string when
+# unset. Default filter is status=backlogged (what's actionable for
 # planning at a glance); --status <s1,s2,...> widens the filter to exactly
-# those statuses; --all includes every status. Mirrors tasks-list.sh's
-# structure (constitution Principle II — register-wide views come from
-# enumeration, never a second hand-maintained index).
+# those statuses; --all includes every status. --epic <slug> further
+# restricts output to features whose `epic` exactly matches, and composes
+# with --status/--all (which control the status filter only). Mirrors
+# tasks-list.sh's structure (constitution Principle II — register-wide
+# views come from enumeration, never a second hand-maintained index).
 #
-# Usage: feature-list.sh [--status <s1,s2,...> | --all] [target-dir]  (default: .)
+# Usage: feature-list.sh [--status <s1,s2,...> | --all] [--epic <slug>] [target-dir]  (default: .)
 
 set -e
 
 STATUSES="backlogged"
 ALL=0
+EPIC=""
 
-case "${1:-}" in
-  --all)
-    ALL=1
-    shift
-    ;;
-  --status)
-    STATUSES="$2"
-    shift 2
-    ;;
-esac
+while :; do
+  case "${1:-}" in
+    --all)
+      ALL=1
+      shift
+      ;;
+    --status)
+      STATUSES="$2"
+      shift 2
+      ;;
+    --epic)
+      EPIC="$2"
+      shift 2
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
 
 TARGET="${1:-.}"
 FEATURES_DIR="$TARGET/.project/features"
@@ -58,8 +71,12 @@ for f in "$FEATURES_DIR"/*.md; do
   [ -f "$f" ] || continue
   status="$(fm_field "$f" status)"
   status_matches "$status" || continue
+  epic="$(fm_field "$f" epic)"
+  if [ -n "$EPIC" ] && [ "$epic" != "$EPIC" ]; then
+    continue
+  fi
   slug="$(fm_field "$f" slug)"
   logged="$(fm_field "$f" logged)"
   description="$(first_body_line "$f")"
-  printf '%s\t%s\t%s\t%s\n' "$slug" "$status" "$logged" "$description"
+  printf '%s\t%s\t%s\t%s\t%s\n' "$slug" "$status" "$logged" "$description" "$epic"
 done

@@ -27,7 +27,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: `feature-list.sh` epic column + filter [feature: epics-grouping-in-feature-regi]
 
-- [ ] T003 (test-first) Extend `scripts/test-feature-list.sh` with
+- [x] T003 (test-first) Extend `scripts/test-feature-list.sh` with
   assertions for: the fifth output column carries `epic` (empty string
   when unset, matching the tab-separated shape the other optional
   fields already use); `--epic <slug>` filters to only features with
@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `--all --epic foo` widens status but still filters by epic). Confirm
   these fail against the current two-flag `feature-list.sh`.
 
-- [ ] T004 Extend `scripts/feature-list.sh`: parse `epic` from
+- [x] T004 Extend `scripts/feature-list.sh`: parse `epic` from
   frontmatter the same way `slug`/`status`/`logged` are parsed, append
   it as a fifth tab-separated column, and add the `--epic <slug>`
   filter. Confirm T003 now passes.
