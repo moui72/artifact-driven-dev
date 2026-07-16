@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-16 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-16 (`/ardd-feedback` — logged
+`feedback-delegation-preflight-autocommit-06b1.md`, 1 Reconsidered item:
+the delegation pre-flight check added for
+`feedback-uncommitted-plan-tasks-delegat-a3ff.md` (`skills/ardd-implement/SKILL.md`
+step 3) currently offers to commit an uncommitted plan/tasks file or
+blocks delegation — user reports this recurs often enough ("this
+happens often") that the ask-first behavior should be reconsidered to
+an automatic commit in solo mode, since it's almost always the obvious
+right move (the files are what the immediately-prior `/ardd-plan` run
+just wrote). Not yet consumed by a plan. Prior update, same day,
+`/ardd-implement` — delegated worktree run completed
 and merged all 5 tasks of `tasks-install-manifest-gap-fix-6cfb.md` (now
 `completed`): T001/T002 (test-first, one commit — T001's assertion is
 expected-red and the pre-commit hook runs the full `test-*.sh` suite)
@@ -550,9 +560,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. `feedback-install-manifest-gap-b773.md` (1 bug, 1 UX) fully
-delivered via `tasks-install-manifest-gap-fix-6cfb.md` (completed 5/5).
-Prior batches all delivered (`artifact-register-bridge-116a`,
+1 open: `feedback-delegation-preflight-autocommit-06b1.md` (1
+Reconsidered — see the `_Updated` note above). Will be picked up by the
+next `/ardd-plan`. Prior batches all delivered
+(`install-manifest-gap-b773`, `artifact-register-bridge-116a`,
 `findings-0344`, `redrive-695b`).
 
 ## Recent Releases
