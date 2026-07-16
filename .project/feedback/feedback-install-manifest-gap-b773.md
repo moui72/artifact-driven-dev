@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-15
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-install-manifest-gap-fix-2026-07-15-20fb.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `scripts/feature-list.sh` ships in the repo but `install.sh`
+- [x] F001 `scripts/feature-list.sh` ships in the repo but `install.sh`
   never copies it into a target's `.claude/skills/ardd-scripts/` —
   confirmed via `grep -n feature-list install.sh` (no matches) and by
   inspecting the explicit per-file `cp` manifest around
@@ -25,7 +25,7 @@ plan: null        # set to the consuming plan's filename once planned
   live in already-installed skill/script files.
 
 ## UX
-- [ ] F002 No packaging-manifest test currently asserts that every
+- [x] F002 No packaging-manifest test currently asserts that every
   `scripts/*.sh` referenced by a skill (or by CI) is also copied by
   `install.sh` — this exact class of gap (a new script added to a
   feature's implementation, but the explicit `cp` manifest not

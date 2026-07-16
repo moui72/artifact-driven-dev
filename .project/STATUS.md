@@ -1,6 +1,25 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-15 (`/ardd-feedback` — logged
+_Updated: 2026-07-15 (`/ardd-plan` — drafted, approved, and tasked
+`plan-install-manifest-gap-fix-2026-07-15-20fb.md` (solo mode, no branch
+gate, on `main`). Consumed both open items of
+`feedback-install-manifest-gap-b773.md` (F001 bug, F002 UX — both
+incorporated; file now `planned`). No unsurfaced defects, no feature
+slugs targeted, no artifact changes (pure packaging-script fix). 5 tasks
+across 2 phases in `tasks-install-manifest-gap-fix-6cfb.md` (`ready`):
+Phase 1 (T001, test-first; T002) adds the missing `cp`/`chmod +x` line
+for `scripts/feature-list.sh` to `install.sh`, proven by extending
+`test-install-worktreeinclude.sh`'s existing Case 1b
+installed-and-executable pattern. Phase 2 (T003, test-first; T004;
+T005) adds `scripts/test-install-manifest-complete.sh` — a new
+packaging-manifest regression check diffing skill-referenced/
+`chmod`-listed scripts against `install.sh`'s `cp` manifest, so this
+class of gap fails CI mechanically going forward — plus its CI job.
+Open question: whether the same manifest-completeness check should
+extend to `templates/*.md`/artifact-template copies too; left out of
+scope for now (the `<name>.sh` grep pattern doesn't generalize cleanly
+to those paths without more design). Prior update, same day,
+`/ardd-feedback` — logged
 `feedback-install-manifest-gap-b773.md`, 2 items (1 bug, 1 UX) discovered
 by manual inspection of an installed project: `scripts/feature-list.sh`
 (added for `list-mode-for-plan-and-impleme`/beta.8 and extended for
@@ -512,10 +531,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open: `feedback-install-manifest-gap-b773.md` (1 bug, 1 UX — see the
-`_Updated` note above). Will be picked up by the next `/ardd-plan`.
-Prior batches all delivered (`artifact-register-bridge-116a`,
-`findings-0344`, `redrive-695b`).
+None open. `feedback-install-manifest-gap-b773.md` (1 bug, 1 UX) now
+`planned` → `plan-install-manifest-gap-fix-2026-07-15-20fb.md` /
+`tasks-install-manifest-gap-fix-6cfb.md` (`ready`, 0/5). Prior batches
+all delivered (`artifact-register-bridge-116a`, `findings-0344`,
+`redrive-695b`).
 
 ## Recent Releases
 
@@ -570,11 +590,11 @@ worktrees remain. `main` matches `origin/main`.
 
 ## Recommended Next Step
 
-`feedback-install-manifest-gap-b773.md` is a real, confirmed bug — the
-next `/ardd-plan` run (with no arguments) will pick it up automatically;
-it's a small, well-scoped fix (one missing `cp` line plus a
-packaging-manifest regression test for the UX item). Both remaining
-backlogged features are now plan-ready: `plan-time-defrag-slate-analysi`
+`/ardd-implement` on `tasks-install-manifest-gap-fix-6cfb.md` is
+`ready` (5 tasks, 2 phases: the missing `cp`/`chmod +x` line for
+`feature-list.sh`, then a new packaging-manifest regression test +
+CI job so this class of gap fails loud in future). Both remaining
+backlogged features are also plan-ready: `plan-time-defrag-slate-analysi`
 (both prototype research passes complete) and the drafted-but-untasked
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
