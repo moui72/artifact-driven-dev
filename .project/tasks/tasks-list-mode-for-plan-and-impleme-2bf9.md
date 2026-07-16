@@ -1,7 +1,7 @@
 ---
 plan: plan-list-mode-for-plan-and-impleme-2026-07-15-a2c2.md
 generated: 2026-07-15
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
