@@ -1,6 +1,15 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-feedback` — a `/prerelease-sweep full` run
+_Updated: 2026-07-17 (`/ardd-backlog` — logged
+`constitution-trim-review-relev`: an agent-driven review mode (e.g.
+`/ardd-refine constitution --review`) that audits a project's existing
+constitution principle-by-principle and proposes trimming any that
+aren't relevant or load-bearing for guiding agents toward better code
+quality on that project, batched for confirmation. Why: constitutions
+only ever grow via `/ardd-init`'s suggestion catalog and later
+`/ardd-refine` passes — nothing currently looks back and asks whether an
+accumulated principle still earns its place. Prior update, same day,
+`/ardd-feedback` — a `/prerelease-sweep full` run
 (2026-07-17-fab5, S1-S7) completed, and its S6 result triggered a
 redesign: S6 (delegated worktree execution) was replaced with a
 script-layer-only scenario (`tests/prerelease/scenarios/S6.md`) that
@@ -718,7 +727,7 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-3 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
+4 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
 feature currently carries an `epic` value, so no "by epic" breakdown to
 show yet.
 Backlogged:
@@ -733,7 +742,9 @@ Backlogged:
   the 2026-07-17 prerelease smoke sweep (S7-F002), see `_Updated` note.
 - `backlog-assign-epics-automated` — automated `/ardd-backlog
   --assign-epics` pass proposing `epic:` groupings for the feature
-  register/feedback/`DEFECTS.md`; see `_Updated` note.
+  register/feedback/`DEFECTS.md`.
+- `constitution-trim-review-relev` — agent-driven constitution-trimming
+  review mode; see `_Updated` note.
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `plan-time-defrag-slate-analysi` — `/ardd-plan
 --slate` mode (bundle/parallel-set/solo-deferred backlog grouping); see
