@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-17
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-feedback-batch-2026-07-17-e977.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `install.sh` only *mentions* gitignoring `.project/.lock`
+- [x] F001 `install.sh` only *mentions* gitignoring `.project/.lock`
   (`project-lock.sh`'s transient concurrency marker) in its printed
   ACTION NEEDED text — it never adds the pattern to `.gitignore` itself,
   and never proactively checks whether `.lock` already exists. A user
@@ -23,7 +23,7 @@ plan: null        # set to the consuming plan's filename once planned
   full` (S4-F001, run 2026-07-17-fab5).
 
 ## UX
-- [ ] F002 `/ardd-init`'s existing-codebase path (step 7, feature
+- [x] F002 `/ardd-init`'s existing-codebase path (step 7, feature
   register extraction) calls git-log `feat:` commits and PR merge
   titles the "most reliable" signal for extracting shipped features,
   but never instructs verifying the commit's actual diff before trusting

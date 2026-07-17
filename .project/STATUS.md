@@ -1,6 +1,39 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-feedback` — logged
+_Updated: 2026-07-17 (`/ardd-plan` — drafted, approved, and tasked
+`plan-feedback-batch-2026-07-17-e977.md` (solo mode, no branch gate, on
+`main`). Consumed all 3 open feedback files (5 items — all accepted):
+`feedback-plan-preview-setting-63b3.md` F001 (Reconsidered — the
+`/ardd-plan` browser-preview prompt becomes a configurable
+`plan_preview` workflow field), `feedback-prerelease-full-sweep-62ae.md`
+F001/F002 (`.project/.lock` gitignore gap; `ardd-init`'s unverified
+git-log trust gap), `feedback-prerelease-smoke-sweep-849d.md` F001/F002
+(`new.sh` git-init isolation bug + its `install.sh` downstream symptom;
+misleading dev-mode "behind" wording) — all now `planned`. During the
+Reconsidered-item negotiation, also surfaced and confirmed a related fix:
+the constitution's Governance "Exception" clause named only
+`workflow_mode`/`next_step_prompt` as SIR-exempt workflow fields, though
+`delegation`/`merge_policy`/`update_check_max_age_days` were already
+exempt in practice — generalizing that clause to cover the enum by
+reference is now T011, rather than applied ad hoc during planning (an
+earlier direct edit was made and then correctly reverted, since a
+Reconsidered item's artifact fix belongs in the plan as a task, not
+applied during `/ardd-plan` itself). No unsurfaced defects, no feature
+slugs targeted (`features: []`). 12 tasks across 3 phases in
+`tasks-feedback-batch-ec6e.md` (`ready`): Phase 1 (T001, test-first;
+T002; T003, T004 parallel) fixes `new.sh`'s git-init guard and its two
+downstream `install.sh` symptoms (gitignore misattribution, `.lock` not
+gitignored). Phase 2 (T005, T006; T007 parallel) fixes
+`ardd-update-check.sh`'s misleading "behind" wording for ahead-of-tag
+dev-mode installs and adds diff-verification guidance to `ardd-init`
+step 7. Phase 3 (T008, test-first; T009; T010 parallel; T011
+`[artifacts: constitution]`; T012) adds the `plan_preview` workflow
+field end-to-end (enum, `ardd-state.sh stamp`, `ardd-plan` step 10
+consumption, the Governance clause fix, and docs). Open questions: exact
+naming for `ardd-update-check.sh`'s new ahead-of-tag outcome token; and
+whether `plan_preview: always-console` should stay silent across a
+Revise loop within the same run (leaning yes). Prior update, same day,
+`/ardd-feedback` — logged
 `feedback-plan-preview-setting-63b3.md`, 1 Reconsidered item: the
 `/ardd-plan` approval checkpoint's "view in browser?" prompt (added
 `62052ae`) always asks on every run; reconsidered to a configurable
@@ -715,13 +748,12 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-3 open: `feedback-prerelease-smoke-sweep-849d.md` (2 items — F001 bug,
-F002 ux, both reconfirmed by today's full sweep),
-`feedback-prerelease-full-sweep-62ae.md` (2 new items — F001 bug, F002
-ux), and `feedback-plan-preview-setting-63b3.md` (1 Reconsidered item —
-see the `_Updated` note above). All will be picked up by the next
-`/ardd-plan`. Prior batches all delivered
-(`delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
+0 open — all batches delivered, including
+`feedback-prerelease-smoke-sweep-849d.md`,
+`feedback-prerelease-full-sweep-62ae.md`, and
+`feedback-plan-preview-setting-63b3.md` (all now `planned`, consumed by
+`plan-feedback-batch-2026-07-17-e977.md` — see the `_Updated` note
+above; `delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
 `artifact-register-bridge-116a`, `findings-0344`, `redrive-695b`).
 
 ## Recent Releases
@@ -775,13 +807,10 @@ beta `v0.10.1-beta.11`).
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume all three open feedback files
-(`feedback-prerelease-smoke-sweep-849d.md`,
-`feedback-prerelease-full-sweep-62ae.md`,
-`feedback-plan-preview-setting-63b3.md` — 5 items total, including the
-likely release-blocking `new.sh` git-init bug, now reconfirmed twice —
-see `_Updated` note) and fix before any wider beta promotion or stable
-cut. Otherwise,
+`/ardd-implement` to work `tasks-feedback-batch-ec6e.md` (`ready`, 12
+tasks/3 phases) — includes the likely release-blocking `new.sh`
+git-init bug, now reconfirmed twice; fix before any wider beta
+promotion or stable cut. Otherwise,
 `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a

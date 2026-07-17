@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-17
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-feedback-batch-2026-07-17-e977.md
 ---
 
 # Feedback
 
 ## Reconsidered
-- [ ] F001 `/ardd-plan`'s approval checkpoint (step 10) always asks "view
+- [x] F001 `/ardd-plan`'s approval checkpoint (step 10) always asks "view
   the plan in the browser first?" via `AskUserQuestion` (yes/no) on
   every single run — added in `62052ae feat(T003): offer a browser
   preview at /ardd-plan's approval checkpoint`. Reconsidered: this

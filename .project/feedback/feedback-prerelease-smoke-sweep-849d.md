@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-17
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-feedback-batch-2026-07-17-e977.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `new.sh`'s git-init guard (`new.sh:240`,
+- [x] F001 `new.sh`'s git-init guard (`new.sh:240`,
   `git -C "$TARGET" rev-parse --is-inside-work-tree`) walks UP the
   directory tree for any enclosing `.git` rather than checking whether
   `$TARGET` itself is a repo root. When the target is nested under an
@@ -33,7 +33,7 @@ plan: null        # set to the consuming plan's filename once planned
   `check-ignore` results.
 
 ## UX
-- [ ] F002 `ardd-update-check.sh` reports `behind installed=<x>
+- [x] F002 `ardd-update-check.sh` reports `behind installed=<x>
   latest-release=<y>` purely from tag-equality — no ancestry check. For
   a dev-mode source checkout (`Source-Path` naming a live,
   unreleased-ahead checkout) that is actually *ahead* of the latest
