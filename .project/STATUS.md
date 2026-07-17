@@ -1,6 +1,13 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-backlog` — logged
+_Updated: 2026-07-17 (`/ardd-feedback` — logged
+`feedback-plan-preview-setting-63b3.md`, 1 Reconsidered item: the
+`/ardd-plan` approval checkpoint's "view in browser?" prompt (added
+`62052ae`) always asks on every run; reconsidered to a configurable
+workflow field (`always-browser` / `always-console` / `ask`, default
+`ask` = current behavior), analogous to `delegation`/`merge_policy`/
+`next_step_prompt`. Not yet consumed by a plan. Prior update, same day,
+`/ardd-backlog` — logged
 `constitution-trim-review-relev`: an agent-driven review mode (e.g.
 `/ardd-refine constitution --review`) that audits a project's existing
 constitution principle-by-principle and proposes trimming any that
@@ -708,10 +715,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open: `feedback-prerelease-smoke-sweep-849d.md` (2 items — F001 bug,
-F002 ux, both reconfirmed by today's full sweep) and
+3 open: `feedback-prerelease-smoke-sweep-849d.md` (2 items — F001 bug,
+F002 ux, both reconfirmed by today's full sweep),
 `feedback-prerelease-full-sweep-62ae.md` (2 new items — F001 bug, F002
-ux — see the `_Updated` note above). Both will be picked up by the next
+ux), and `feedback-plan-preview-setting-63b3.md` (1 Reconsidered item —
+see the `_Updated` note above). All will be picked up by the next
 `/ardd-plan`. Prior batches all delivered
 (`delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
 `artifact-register-bridge-116a`, `findings-0344`, `redrive-695b`).
@@ -767,9 +775,10 @@ beta `v0.10.1-beta.11`).
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume both open feedback files
+`/ardd-plan` to consume all three open feedback files
 (`feedback-prerelease-smoke-sweep-849d.md`,
-`feedback-prerelease-full-sweep-62ae.md` — 4 items total, including the
+`feedback-prerelease-full-sweep-62ae.md`,
+`feedback-plan-preview-setting-63b3.md` — 5 items total, including the
 likely release-blocking `new.sh` git-init bug, now reconfirmed twice —
 see `_Updated` note) and fix before any wider beta promotion or stable
 cut. Otherwise,
