@@ -395,6 +395,27 @@ EOF
 echo ""
 echo "  ✓ .project/ardd-version.md ($COMMIT)"
 
+# --- .project/.lock gitignore entry ---
+# project-lock.sh's transient concurrency marker — never project history.
+# Written unconditionally (like .worktreeinclude above), not left to a
+# conditional printed reminder inside the gitignore-diagnostic block below,
+# which only fires when the ardd-*/ skills pattern itself is missing.
+TARGET_GITIGNORE="$TARGET/.gitignore"
+LOCK_PATTERN=".project/.lock"
+
+if [ ! -f "$TARGET_GITIGNORE" ]; then
+  printf '%s\n' "$LOCK_PATTERN" > "$TARGET_GITIGNORE"
+  echo "  ✓ .gitignore created ($LOCK_PATTERN)"
+elif grep -qxF "$LOCK_PATTERN" "$TARGET_GITIGNORE"; then
+  : # already present, nothing to do
+else
+  if [ -s "$TARGET_GITIGNORE" ] && [ -n "$(tail -c1 "$TARGET_GITIGNORE")" ]; then
+    printf '\n' >> "$TARGET_GITIGNORE"
+  fi
+  printf '%s\n' "$LOCK_PATTERN" >> "$TARGET_GITIGNORE"
+  echo "  ✓ .gitignore appended ($LOCK_PATTERN)"
+fi
+
 # --- Gitignore check ---
 # Ask git itself whether the skills would show up in `git status` (untracked
 # or previously committed) rather than parsing .gitignore text — this is
@@ -409,7 +430,15 @@ echo "  ✓ .project/ardd-version.md ($COMMIT)"
 # ".claude/", or blanket ".claude/skills/") silently blocks tracking that
 # content forever, since git refuses to `add` an ignored path without -f —
 # easy to not notice until you actually need to commit something there.
-if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+# `--is-inside-work-tree` is true for any directory nested under an
+# enclosing .git, not just $TARGET being a repo root itself (same trap
+# new.sh:242 had) — so confirm $TARGET is its own repo top-level before
+# trusting `check-ignore` results below, or a residually-broken install
+# (e.g. one that predates new.sh's own fix) could misattribute an outer
+# repo's unrelated ignore rule to ArDD's own pattern.
+target_abs="$(cd "$TARGET" && pwd -P)"
+target_toplevel="$(git -C "$TARGET" rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -n "$target_toplevel" ] && [ "$target_toplevel" = "$target_abs" ]; then
   skills_ignored=0
   git -C "$TARGET" check-ignore -q ".claude/skills/ardd-plan/SKILL.md" 2>/dev/null && skills_ignored=1
 
@@ -458,9 +487,6 @@ if git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     echo ""
     echo "  Commit .ardd-applied too — it records which migrations have run;"
     echo "  left uncommitted, every teammate re-runs every migration."
-    echo ""
-    echo "  Also gitignore .project/.lock if it appears — it's project-"
-    echo "  lock.sh's transient concurrency marker, not project history."
     echo "======================================================================"
   else
     if git -C "$TARGET" check-ignore -q ".claude/settings.json" 2>/dev/null; then

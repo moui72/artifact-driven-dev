@@ -169,4 +169,57 @@ case "$out" in
     ok "case6: no driver suggestion outside a git repo" ;;
 esac
 
+# --- Case 7: target nested under an existing git-controlled directory (not
+# its own repo top-level) -> the gitignore-diagnostic block must not
+# misattribute the outer repo's unrelated ignore rules to $TARGET, since
+# `rev-parse --is-inside-work-tree` is true for any nested directory, not
+# just a target that is itself a repo root. [feedback: F002]
+outer="$WORK/case7/outer"
+mkdir -p "$outer"
+git init -q "$outer"
+echo ".claude/" > "$outer/.gitignore"
+git -C "$outer" add .gitignore
+git -C "$outer" commit -q -m "outer ignores .claude broadly"
+target="$outer/nested/proj"
+mkdir -p "$target"
+
+out="$(run_install "$target")"
+case "$out" in
+  *"ACTION NEEDED"*|*"Warning:"*)
+    bad "case7: no gitignore diagnostic misattributed from the outer repo"
+    printf '%s\n' "$out" | sed 's/^/    /'
+    ;;
+  *)
+    ok "case7: no gitignore diagnostic misattributed from the outer repo"
+    ;;
+esac
+ga="$target/.project/.gitattributes"
+all_entries_once "$ga" "case7"
+
+# --- Case 8: a fresh install's .gitignore unconditionally contains
+# .project/.lock, without requiring the user to add it by hand ---
+# [feedback: F001]
+target="$WORK/case8"
+mkdir -p "$target"
+git init -q "$target"
+git -C "$target" commit -q --allow-empty -m init
+
+run_install "$target" >/dev/null
+
+gi="$target/.gitignore"
+if [ -f "$gi" ] && grep -qxF ".project/.lock" "$gi"; then
+  ok "case8: .gitignore contains .project/.lock unconditionally"
+else
+  bad "case8: .gitignore missing .project/.lock"
+fi
+
+# Idempotent re-run: no duplicate entry.
+run_install "$target" >/dev/null
+count="$(grep -cxF ".project/.lock" "$gi")"
+if [ "$count" = "1" ]; then
+  ok "case8: .project/.lock present exactly once after re-install"
+else
+  bad "case8: .project/.lock present exactly once after re-install (got count=$count)"
+fi
+
 exit "$fail"

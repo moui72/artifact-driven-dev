@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `git -C "$TARGET" rev-parse --show-toplevel` against `$TARGET`'s
   realpath, or `[ -e "$TARGET/.git" ]`). Remove T001's expected-failure
   marker — its case should now pass (green). [feedback: F001]
-- [ ] T003 [parallel] Fix `install.sh:400-482`'s gitignore-diagnostic
+- [x] T003 [parallel] Fix `install.sh:400-482`'s gitignore-diagnostic
   block: before trusting `git -C "$TARGET" check-ignore` results,
   confirm `$TARGET` is its own repo top-level (same check-style as
   T002). This covers the residual case where `$TARGET` still isn't its
@@ -36,7 +36,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   nested under an existing git-controlled directory, confirming the
   gitignore-diagnostic warning either doesn't fire or names the correct
   cause rather than a misattributed one. [feedback: F002]
-- [ ] T004 [parallel] `install.sh`: add `.project/.lock` to the
+- [x] T004 [parallel] `install.sh`: add `.project/.lock` to the
   generated/suggested `.gitignore` block unconditionally, alongside the
   existing `.claude/skills/ardd-*/` pattern — do not rely solely on the
   conditional printed ACTION NEEDED reminder. Add a regression case to

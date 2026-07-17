@@ -235,7 +235,7 @@ SRC="$(cd "$SRC" && pwd)"
 # --- Create the target -------------------------------------------------
 
 mkdir -p "$target"
-TARGET="$(cd "$target" && pwd)"
+TARGET="$(cd "$target" && pwd -P)"
 
 # install.sh runs its .gitignore guidance through `git -C "$TARGET"`, so the
 # repo must exist before it is called or those suggestions silently never fire.
