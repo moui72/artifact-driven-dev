@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-feedback` — captured the prerelease smoke
+_Updated: 2026-07-17 (`/ardd-backlog` — logged
+`backlog-assign-epics-automated`: an automated `/ardd-backlog
+--assign-epics` pass over the feature register, open feedback, and
+`DEFECTS.md` that proposes `epic:` groupings for related items, batched
+for confirmation. Why: `epics-grouping-in-feature-regi` added the field
+and manual by-epic views, but assignment itself is still entirely
+manual; conceptually the epic-dimension counterpart to `--slate`'s
+footprint-based grouping. A `/prerelease-sweep full` run is in progress
+concurrently (run `2026-07-17-fab5` — S1-S3, S5, S6 completed; S4 still
+running); this entry was logged mid-sweep and doesn't touch any sweep
+state. Prior update, same day, `/ardd-feedback` — captured the prerelease smoke
 sweep's (run `2026-07-17-1d42`) 2 accepted feedback items in
 `feedback-prerelease-smoke-sweep-849d.md`: F001 (bug) `new.sh`'s git-init
 guard walks up the directory tree for any enclosing `.git`, silently
@@ -682,7 +692,7 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-2 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
+3 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
 feature currently carries an `epic` value, so no "by epic" breakdown to
 show yet.
 Backlogged:
@@ -695,6 +705,9 @@ Backlogged:
 - `channel-source-ref-consistency` — validate `ardd-version.md`'s
   `Channel:`/`Source-Ref:` fields are mutually consistent; re-filed from
   the 2026-07-17 prerelease smoke sweep (S7-F002), see `_Updated` note.
+- `backlog-assign-epics-automated` — automated `/ardd-backlog
+  --assign-epics` pass proposing `epic:` groupings for the feature
+  register/feedback/`DEFECTS.md`; see `_Updated` note.
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `plan-time-defrag-slate-analysi` — `/ardd-plan
 --slate` mode (bundle/parallel-set/solo-deferred backlog grouping); see
