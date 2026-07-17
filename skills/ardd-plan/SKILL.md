@@ -55,6 +55,17 @@ disambiguates a defect scope from feature slugs and feedback filenames in
 the same argument list — a plain kebab-case argument is always a feature
 slug, `feedback-*.md` is always a feedback scope.
 
+`/ardd-plan --slate` is a **read-only advisory mode**: like `--list`, it
+runs before step 1's branch check and before every other step — no
+artifact discovery, no feedback load, no interactive pick, and no writes
+of any kind — but instead of a bare backlog printout it computes a
+"defrag" grouping over the open backlog (bundles that should plan
+together, parallel sets safe to fan out, solo-deferred items) and reports
+a recommended `/ardd-plan <slug> [<slug> ...]` invocation. Entering
+`--slate` skips steps 1–15 entirely and runs the separate "Slate mode"
+procedure defined at the end of this file. Never combine `--slate` with
+any other argument form — it takes no scope.
+
 ## Shape of a run
 
 Steps 1–10 draft and write the plan and stop at the **approval checkpoint**
@@ -62,7 +73,10 @@ Steps 1–10 draft and write the plan and stop at the **approval checkpoint**
 generate its tasks file. This restores a real approve/revise/stop gate
 between planning and tasking — selecting a plan is a decision, not a
 keystroke. **Re-task mode (`--from <plan-file>`) skips straight to step 11**
-for the named plan; steps 2–10 do not run.
+for the named plan; steps 2–10 do not run. **Slate mode (`--slate`) skips
+steps 1–15 entirely** and runs the separate procedure in "Slate mode"
+below, ending in a report and, optionally, a next-step prompt — it never
+drafts or writes a plan.
 
 ## Steps
 

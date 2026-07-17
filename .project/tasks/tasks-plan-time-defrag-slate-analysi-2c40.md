@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: `--slate` mode skeleton, N=0/N=1 branch [feature: plan-time-defrag-slate-analysi]
-- [ ] T001 [artifacts: constitution] Edit `skills/ardd-plan/SKILL.md`'s
+- [x] T001 [artifacts: constitution] Edit `skills/ardd-plan/SKILL.md`'s
   Usage section and argument-shape dispatch (where `--from`,
   `feedback-*.md`, and `defect:`/`defects` are already distinguished by
   argument shape) to add a new `--slate` form that, when present, skips
