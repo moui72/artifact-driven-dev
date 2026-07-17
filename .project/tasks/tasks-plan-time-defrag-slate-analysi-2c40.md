@@ -16,7 +16,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   task — prose-only skill-file change, matching the precedent set by
   `list-mode-for-plan-and-impleme`'s `--list` addition (no state
   mutation, no new invariant to regression-test).
-- [ ] T002 [artifacts: constitution] In the new "Slate mode" section,
+- [x] T002 [artifacts: constitution] In the new "Slate mode" section,
   write step 1 (enumerate `backlogged` items via `scripts/feature-list.sh
   --status backlogged`, unmodified — the register-direct-read discipline)
   and step 2 (the N=0/N=1 degenerate branch: N=0 reports "nothing to

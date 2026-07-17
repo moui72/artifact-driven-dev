@@ -565,3 +565,31 @@ drafts or writes a plan.
     first. Only if this run ends the turn itself without handing off to
     analyze does the offer fire here. Recommendations that are not a concrete
     runnable `/ardd-*` invocation always stay plain text.
+
+## Slate mode (`--slate`)
+
+Entered instead of steps 1–15 when the run's sole argument is `--slate`
+(see Usage). This is a **read-only advisory mode**: it computes an
+ephemeral "defrag" grouping over the open feature backlog — grounded in
+real codebase evidence, never free-associated from register prose alone —
+and ends in a report plus a recommended next `/ardd-plan` invocation. It
+never drafts a plan, never writes a plan or tasks file, and never touches
+the feature register. Its own steps:
+
+1. **Enumerate the backlog.** Run
+   `.claude/skills/ardd-scripts/feature-list.sh --status backlogged`
+   (installed copy; if absent, fall back to the source repo path
+   `scripts/feature-list.sh --status backlogged`) and read its tab-separated
+   output verbatim — this is the same register-direct-read discipline
+   `--list` already uses: never trust `STATUS.md`'s assembled counts, even
+   when they happen to already be correct. Let N be the number of lines
+   printed.
+
+2. **N=0/N=1 branch.** These are degenerate cases — a slate is a relation
+   *between* items, and with N≤1 the relation set is empty by
+   construction, so don't manufacture one:
+   - **N=0**: report "nothing to defrag — the backlog is empty" and stop.
+   - **N=1**: report "nothing to defrag — single open item: `<slug>`" and
+     recommend `/ardd-plan <that slug>` directly, then stop.
+
+   Only continue to step 3 when N≥2.
