@@ -1,6 +1,40 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-17 (`/ardd-implement` — delegated worktree run
+completed and merged all 12 tasks of `tasks-feedback-batch-ec6e.md`
+(now `completed`): T001/T002 (test-first) fixed the release-blocking
+`new.sh` git-init isolation bug — `new.sh:242` now compares
+`git rev-parse --show-toplevel` against `$TARGET`'s realpath instead of
+using `--is-inside-work-tree` (true for any nested directory, not just
+a real repo root), so a target nested under an existing git-controlled
+directory finally gets its own isolated repo instead of silently
+inheriting the outer one's identity. T003/T004 fixed the two downstream
+`install.sh` symptoms: gitignore-diagnostic misattribution (now confirms
+`$TARGET` is its own repo top-level before trusting `check-ignore`) and
+`.project/.lock` now gets written to `.gitignore` unconditionally
+instead of only mentioned in printed text. T005 taught
+`ardd-update-check.sh` to distinguish a dev-mode checkout genuinely
+*behind* a release tag from one that's *ahead* with no `Source-Ref`
+(new outcome token: `dev-ahead`); T006 made `/ardd-status`'s banner
+treat that distinctly (never recommends `/ardd-update` when it would
+regress the target). T007 added diff-verification guidance to
+`/ardd-init` step 7's git-log feature-extraction heuristic. T008/T009
+(test-first) added the new `plan_preview` workflow field
+(`always-browser`/`always-console`/`ask`) to `lint-project.sh`'s enum
+and `ardd-state.sh stamp`, mirroring `delegation`/`merge_policy`; T010
+wired `/ardd-plan` step 10's browser-preview question to respect it;
+T011 generalized the constitution's Governance "Exception" clause to
+cover any workflow-field-enum member by reference (closing the
+pre-existing gap where `delegation`/`merge_policy`/
+`update_check_max_age_days` were already exempt in practice but
+unnamed) — constitution PATCH-bumped 1.11.0 → 1.11.1, new SIR entry
+prepended correctly (avoided the bare-`---`-inside-a-comment parsing
+trap this same plan's drafting session hit and reverted earlier
+today). T012 documented `plan_preview` in the `/ardd-plan` reference
+doc. Full test suite confirmed passing before merge. No feature flip —
+this plan consumed feedback only (`features: []`). Merged fast-forward
+(`3980965..4fc55d8`) and the worktree reaped. Prior update, same day,
+`/ardd-plan` — drafted, approved, and tasked
 `plan-feedback-batch-2026-07-17-e977.md` (solo mode, no branch gate, on
 `main`). Consumed all 3 open feedback files (5 items — all accepted):
 `feedback-plan-preview-setting-63b3.md` F001 (Reconsidered — the
@@ -807,11 +841,11 @@ beta `v0.10.1-beta.11`).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-feedback-batch-ec6e.md` (`ready`, 12
-tasks/3 phases) — includes the likely release-blocking `new.sh`
-git-init bug, now reconfirmed twice; fix before any wider beta
-promotion or stable cut. Otherwise,
-`codex-second-harness-support` is drafted-but-untasked:
+The `new.sh` git-init isolation fix (the release-blocking finding
+reconfirmed twice by the prerelease sweeps) is now merged — push `main`
+to publish it as the next beta, then re-run `/prerelease-sweep smoke S1`
+as a regression check before wider promotion. `codex-second-harness-support`
+is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
