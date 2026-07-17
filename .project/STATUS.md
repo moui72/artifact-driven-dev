@@ -1,6 +1,33 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-16 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-17 (`/ardd-plan plan-time-defrag-slate-analysi` —
+drafted, approved, and tasked
+`plan-plan-time-defrag-slate-analysi-2026-07-17-1a95.md` (solo mode, no
+branch gate, on `main`). Designs a codified `/ardd-plan --slate` mode,
+grounded in both prototype `/ardd-research` passes' findings
+(sync-tab-scroll N=1: the N≤1 degenerate branch; atelier N=12: the
+two-axis file-overlap/dependency model, confidence grading, and the
+register-direct-read discipline). No new deterministic script — footprint
+grading is agent judgment (Principle II only mechanizes what's actually a
+pure function of file state); the one mechanical sub-step
+(enumerate `backlogged` items) reuses the existing
+`scripts/feature-list.sh --status backlogged`, unmodified. No artifact
+changes (this repo has only `constitution.md`, and the feature introduces
+no new principle). 9 tasks across 4 phases in
+`tasks-plan-time-defrag-slate-analysi-2c40.md` (`ready`): Phase 1
+(T001–T002) adds the `--slate` argument-shape dispatch and the N=0/N=1
+degenerate branch; Phase 2 (T003–T005) adds per-item confidence grading
+and the two-axis pairwise relation-finding, verified against a scratch
+fixture; Phase 3 (T006–T008) adds classification into bundle/parallel-
+set/solo-deferred plus the `next_step_prompt` handoff, verified
+end-to-end against this repo's own real 2-item backlog; Phase 4 (T009)
+updates the `/ardd-plan` reference doc. No test tasks for the skill-prose
+edits themselves (matches the `--list` precedent — read-only, no state
+mutation to regression-test). `plan-time-defrag-slate-analysi`:
+`backlogged` → `planned` → `tasked`. The plan's own draft initially
+omitted the required Phase Breakdown section — caught and fixed before
+tasking, re-confirmed with the user. Prior update, same day (2026-07-16),
+`/ardd-implement` — delegated worktree run completed
 and merged all 4 tasks of `tasks-delegation-preflight-autocommit-a977.md`
 (now `completed`): T001 (audit) built a throwaway scratch repo and tested
 `skills/ardd-implement/SKILL.md` step 3's pre-flight check against 3
@@ -615,7 +642,7 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-2 backlogged · 0 tasked · 20 implemented · 1 retired — see
+1 backlogged · 1 tasked · 20 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
@@ -625,16 +652,12 @@ Backlogged:
   was drafted (`plan-codex-second-harness-support-2026-07-15-f837.md`,
   `status: draft`) but stopped at the approval checkpoint, un-tasked —
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
-- `plan-time-defrag-slate-analysi` — advisory plan-time footprint/slate
-  analysis (bundles + parallel sets). Both prototype `/ardd-research`
-  passes now complete and cited (sync-tab-scroll N=1, atelier N=12 —
-  the atelier pass validated the cross-item method: overlap-vs-dependency
-  split caught a same-seam-label false bundle, register-direct-read
-  discipline confirmed unconditional, and a new requirement surfaced —
-  a real two-axis graph structure + pre-filter needed past ~a dozen
-  items). Ready to move past backlog: `/ardd-plan
-  plan-time-defrag-slate-analysi`.
-Target a slug with `/ardd-plan <slug>`.
+Tasked:
+- `plan-time-defrag-slate-analysi` — codified `/ardd-plan --slate` mode
+  design; see the `_Updated` note above.
+  `tasks-plan-time-defrag-slate-analysi-2c40.md` (`ready`, 9 tasks/4
+  phases) — next: `/ardd-implement`.
+Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `epics-grouping-in-feature-regi` — optional `epic:`
 feature-register field, `feature-list.sh`'s epic column/`--epic` filter,
 `/ardd-status`'s epic breakdown, and `/ardd-tracker`'s one-directional
@@ -651,14 +674,14 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `tasks-install-manifest-gap-fix-6cfb.md` worktree merged
-(fast-forward, `83a0da2..209b339`) and was reaped; no sibling worktrees
-remain. `main` is ahead of `origin/main` (local commits not yet pushed).
+Nothing — no worktrees, nothing pending reap. `main` is in sync with
+`origin/main` (pushed 2026-07-16; latest beta `v0.10.1-beta.10`).
 
 ## Recommended Next Step
 
-Both remaining backlogged features are plan-ready: `plan-time-defrag-slate-analysi`
-(both prototype research passes complete) and the drafted-but-untasked
+`/ardd-implement` to work `tasks-plan-time-defrag-slate-analysi-2c40.md`
+(`ready`, 9 tasks/4 phases). Otherwise, `codex-second-harness-support`
+is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —

@@ -1,7 +1,9 @@
 ---
 slug: plan-time-defrag-slate-analysi
-status: backlogged
+status: tasked
 logged: 2026-07-15
+plan: plan-plan-time-defrag-slate-analysi-2026-07-17-1a95.md
+tasks: tasks-plan-time-defrag-slate-analysi-2c40.md
 ---
 
 Plan-time 'defrag'/slate analysis: an advisory, recomputed-at-plan-time footprint analysis over open backlog items proposing session-optimized slates — bundles of items with overlapping code footprints (implement together, serially, in one plan) and pairwise-disjoint sets (separate tasks files for worktree fan-out).
