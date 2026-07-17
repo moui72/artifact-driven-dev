@@ -15,12 +15,31 @@ _Tier: core_
 /ardd-plan defect:<id> [...] | defects  # scope the defect check; re-offers declined entries
 /ardd-plan --from <plan-file>           # re-task mode: skip planning, regenerate tasks for an existing plan
 /ardd-plan --list                       # print backlogged features and stop (read-only, no pick flow)
+/ardd-plan --slate                      # advisory defrag grouping over the backlog, then stop (read-only)
 ```
 
 `--list` is a pure side door: it runs `feature-list.sh` (default filter —
 `backlogged`), prints its output, and stops before step 1 — no branch
 check, no artifact discovery, no feedback load, no interactive pick, and
 no writes of any kind.
+
+`--slate` is also read-only and ephemeral — like `--list`, it skips
+straight past the normal flow (steps 1–15) and runs a separate procedure
+instead. Where `--list` prints a bare backlog, `--slate` computes an
+advisory "defrag" grouping over it: for each `backlogged` item it grades
+a footprint confidence (`high`/`medium`/`low`) grounded in real codebase
+greps, then for every pair it determines file-set overlap and ordering
+dependency as two separate axes, and classifies every item into exactly
+one of Bundle (sequential — recommended as one multi-slug `/ardd-plan
+<slug1> <slug2> ...` call), Parallel set (safe to fan out — separate
+`/ardd-plan <slug>` calls), or Solo-deferred (low/speculative confidence
+or gated on a non-code decision — its own single-slug call). N=0 or N=1
+backlogged items is a degenerate case (report "nothing to defrag" and
+stop; N=1 recommends that single slug directly) rather than a fabricated
+slate. The full grading/relation/classification shape is in the plan's
+Technical Approach (`.project/plans/plan-plan-time-defrag-slate-analysi-2026-07-17-1a95.md`)
+and the skill's own "Slate mode" section. It writes nothing — no plan, no
+register mutation — and recomputes fresh on every invocation.
 
 Argument disambiguation: a plain kebab-case argument is always a feature
 slug; `feedback-*.md` is always a feedback scope; `defect:<id>` (the 8-char

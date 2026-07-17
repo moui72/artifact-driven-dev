@@ -89,7 +89,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   analyzes — that's expected, not a bug.
 
 ## Phase 4: Docs (depends on Phase 3) [feature: plan-time-defrag-slate-analysi]
-- [ ] T009 [artifacts: constitution] Update
+- [x] T009 [artifacts: constitution] Update
   `docs/reference/skills/ardd-plan.md` with the `--slate` usage form —
   mirroring how `--list` and `--from` are already documented there (a
   short paragraph: what it does, that it's read-only/ephemeral, and a
