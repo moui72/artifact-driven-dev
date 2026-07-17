@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=36
+EXPECTED_BAD_FINDINGS=37
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -85,6 +85,17 @@ else
     echo "ok: invalid merge_policy value reported with allowed values"
   else
     echo "FAIL: invalid merge_policy value reported with allowed values"
+    fail=1
+  fi
+  # plan_preview is an optional constitution workflow field (absent = ask);
+  # when present it must be in its enum — bad-project's 'sometimes' must be
+  # flagged with the allowed values. good-project sets always-browser and
+  # must still pass (asserted above via the overall good-project pass).
+  # [feedback: F001]
+  if grep -q "plan_preview 'sometimes' not in {always-browser always-console ask}" /tmp/lint-bad.out; then
+    echo "ok: invalid plan_preview value reported with allowed values"
+  else
+    echo "FAIL: invalid plan_preview value reported with allowed values"
     fail=1
   fi
   # update_check_max_age_days is optional (absent = never fetch); when

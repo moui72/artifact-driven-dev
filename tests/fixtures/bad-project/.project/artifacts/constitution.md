@@ -11,6 +11,7 @@ workflow_mode: team
 next_step_prompt: yes
 delegation: sometimes
 merge_policy: yolo
+plan_preview: sometimes
 update_check_max_age_days: 0
 ---
 

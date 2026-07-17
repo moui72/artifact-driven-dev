@@ -11,6 +11,7 @@ workflow_mode: solo
 next_step_prompt: true
 delegation: eager
 merge_policy: auto
+plan_preview: always-browser
 update_check_max_age_days: 7
 ---
 
