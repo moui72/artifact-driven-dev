@@ -56,11 +56,29 @@ scratch subdirectory; no ordering dependency exists.
 
 ## 4. Monitor and collect
 
-As each subagent returns, note completion in RUN.md. If one dies, its
-progressive report is the deliverable — record `died-partial`, don't
-discard. Offer the user a redrive for died scenarios.
+As each subagent returns, note completion in RUN.md, along with its
+reported usage — `subagent_tokens`, `tool_uses`, `duration_ms` from the
+task-completion notification. If one dies, its progressive report is the
+deliverable — record `died-partial`, don't discard (and its usage
+figures, if any were reported, still count toward the cost estimate
+below). Offer the user a redrive for died scenarios.
 
-## 5. Triage (do NOT skip straight to /ardd-feedback)
+## 5. Cost estimate (write to disk, every run)
+
+Once every scenario has returned (or died-partial), append a **Cost**
+section to `RUN.md` — a small table, one row per scenario:
+`scenario | tokens | tool calls | wall clock`, plus a total row. Give a
+rough dollar range from the total tokens using blended Sonnet pricing,
+explicitly caveated: the harness only reports a total token count per
+subagent, not the input/output/cache-read/cache-write split that pricing
+actually depends on, so treat the dollar figure as order-of-magnitude
+only, never precise billing. This is a standing requirement for every
+sweep, not just the first one — the point is a durable, on-disk cost
+history across runs (`dev-notes/prerelease-runs/*/RUN.md`), not a
+one-off. Report the same table + estimate to the user in this turn too,
+not just on disk.
+
+## 6. Triage (do NOT skip straight to /ardd-feedback)
 
 When all are done, read every `S<n>-report.md` and write
 `dev-notes/prerelease-runs/<run_id>/TRIAGE.md`: one table row per
