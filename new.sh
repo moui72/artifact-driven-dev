@@ -239,7 +239,12 @@ TARGET="$(cd "$target" && pwd)"
 
 # install.sh runs its .gitignore guidance through `git -C "$TARGET"`, so the
 # repo must exist before it is called or those suggestions silently never fire.
-if ! git -C "$TARGET" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+# Must confirm $TARGET itself is a repo root, not merely nested under one --
+# `rev-parse --is-inside-work-tree` is true for any directory under an
+# enclosing .git, which would silently skip init and inherit that outer
+# repo's identity instead of giving $TARGET its own.
+target_toplevel="$(git -C "$TARGET" rev-parse --show-toplevel 2>/dev/null || true)"
+if [ "$target_toplevel" != "$TARGET" ]; then
   git init --quiet "$TARGET"
   echo "Initialized empty git repository in $TARGET"
 fi

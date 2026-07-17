@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: `new.sh` / `install.sh` isolation fixes
-- [ ] T001 (test-first) Add a regression case to `scripts/test-new.sh`
+- [x] T001 (test-first) Add a regression case to `scripts/test-new.sh`
   covering a target path nested under an existing git-controlled
   directory: `new.sh <target-nested-under-a-repo>` must still create a
   real, isolated repo at `$TARGET` (own `.git`, no inherited remote or
@@ -18,7 +18,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   framework's expected-failure marker on this red commit per the
   constitution's full-suite pre-commit hook convention.
   [defect: n/a] [feedback: F001]
-- [ ] T002 Fix `new.sh:240`'s git-init guard: replace
+- [x] T002 Fix `new.sh:240`'s git-init guard: replace
   `git -C "$TARGET" rev-parse --is-inside-work-tree` with a real check
   of whether `$TARGET` itself is a repo root (e.g. compare
   `git -C "$TARGET" rev-parse --show-toplevel` against `$TARGET`'s
