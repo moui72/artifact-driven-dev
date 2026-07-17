@@ -1,6 +1,18 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-implement` — delegated worktree run completed
+_Updated: 2026-07-17 (`/ardd-feedback` — captured the prerelease smoke
+sweep's (run `2026-07-17-1d42`) 2 accepted feedback items in
+`feedback-prerelease-smoke-sweep-849d.md`: F001 (bug) `new.sh`'s git-init
+guard walks up the directory tree for any enclosing `.git`, silently
+folding a nested target into the outer repo instead of creating its own
+— a release-blocker candidate, not scratch-harness-specific; F002 (ux)
+`ardd-update-check.sh`/`/ardd-status`'s "behind" wording is misleading
+for a dev-mode checkout that's ahead of the latest release tag. The
+third accepted finding (S7-F002 — nothing validates `ardd-version.md`'s
+`Channel:`/`Source-Ref:` consistency) was re-filed as a new backlog
+feature instead, `channel-source-ref-consistency` — it's a missing
+capability, not a bug in existing behavior. Prior update, same day,
+`/ardd-implement` — delegated worktree run completed
 and merged all 9 tasks of `tasks-plan-time-defrag-slate-analysi-2c40.md`
 (now `completed`): added `/ardd-plan --slate` — a read-only advisory mode
 that computes an ephemeral "defrag" grouping over the open backlog
@@ -653,9 +665,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — all batches delivered, including
-`feedback-delegation-preflight-autocommit-06b1.md` (now `planned`, see
-the `_Updated` note above; `install-manifest-gap-b773`,
+1 open: `feedback-prerelease-smoke-sweep-849d.md` (2 items — F001 bug,
+F002 ux — see the `_Updated` note above). Will be picked up by the next
+`/ardd-plan`. Prior batches all delivered
+(`delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
 `artifact-register-bridge-116a`, `findings-0344`, `redrive-695b`).
 
 ## Recent Releases
@@ -669,7 +682,7 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-1 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
+2 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
 feature currently carries an `epic` value, so no "by epic" breakdown to
 show yet.
 Backlogged:
@@ -679,6 +692,9 @@ Backlogged:
   was drafted (`plan-codex-second-harness-support-2026-07-15-f837.md`,
   `status: draft`) but stopped at the approval checkpoint, un-tasked —
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
+- `channel-source-ref-consistency` — validate `ardd-version.md`'s
+  `Channel:`/`Source-Ref:` fields are mutually consistent; re-filed from
+  the 2026-07-17 prerelease smoke sweep (S7-F002), see `_Updated` note.
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `plan-time-defrag-slate-analysi` — `/ardd-plan
 --slate` mode (bundle/parallel-set/solo-deferred backlog grouping); see
@@ -701,13 +717,11 @@ beta `v0.10.1-beta.11`).
 
 ## Recommended Next Step
 
-A `/prerelease-sweep smoke` run just completed (2026-07-17, run
-`2026-07-17-1d42`) and found one likely release-blocking bug in `new.sh`'s
-git-init guard (see `_Updated` note and
-`dev-notes/prerelease-runs/2026-07-17-1d42/TRIAGE.md`) — awaiting
-go-ahead to fold the 3 accepted findings into `/ardd-feedback`, then
-`/ardd-plan` to fix before any wider beta promotion or stable cut.
-Otherwise, `codex-second-harness-support` is drafted-but-untasked:
+`/ardd-plan` to consume `feedback-prerelease-smoke-sweep-849d.md`
+(2 items, including the likely release-blocking `new.sh` git-init bug
+found by the 2026-07-17 `/prerelease-sweep smoke` run — see `_Updated`
+note) and fix before any wider beta promotion or stable cut. Otherwise,
+`codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
