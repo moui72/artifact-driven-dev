@@ -368,6 +368,20 @@ sh "$STATE" stamp "$CF" merge_policy yolo >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: bad merge_policy refused" 2 "$rc"
 
+# stamp plan_preview — enum-validated, add + replace [feedback: F001]
+sh "$STATE" stamp "$CF" plan_preview always-browser >/dev/null
+assert_file_grep "stamp: plan_preview set always-browser" "^plan_preview: always-browser" "$CF"
+fmend="$(grep -n '^---$' "$CF" | sed -n 2p | cut -d: -f1)"
+pline="$(grep -n '^plan_preview:' "$CF" | cut -d: -f1)"
+[ "$pline" -lt "$fmend" ] && ok "stamp: plan_preview inside frontmatter" || bad "stamp: plan_preview inside frontmatter — line $pline vs closing --- at $fmend"
+sh "$STATE" stamp "$CF" plan_preview ask >/dev/null
+assert_file_grep "stamp: plan_preview replaced with ask" "^plan_preview: ask" "$CF"
+[ "$(grep -c '^plan_preview:' "$CF")" = "1" ] && ok "stamp: plan_preview no duplicate keys" || bad "stamp: plan_preview no duplicate keys"
+set +e
+sh "$STATE" stamp "$CF" plan_preview sometimes >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bad plan_preview refused" 2 "$rc"
+
 # stamp update_check_max_age_days — positive-integer-validated, add + replace
 sh "$STATE" stamp "$CF" update_check_max_age_days 7 >/dev/null
 assert_file_grep "stamp: update_check_max_age_days set 7" "^update_check_max_age_days: 7" "$CF"

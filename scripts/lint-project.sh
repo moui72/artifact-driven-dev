@@ -74,6 +74,7 @@ WORKFLOW_MODE_ENUM="solo collaborative"
 NEXT_STEP_PROMPT_ENUM="true false"
 DELEGATION_ENUM="eager ask inline"
 MERGE_POLICY_ENUM="auto ask"
+PLAN_PREVIEW_ENUM="always-browser always-console ask"
 # -----------------------------------------------------------------------
 
 in_enum() {
@@ -169,6 +170,14 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       val="$(frontmatter_field "$f" merge_policy)"
       if ! in_enum "$val" $MERGE_POLICY_ENUM; then
         report "$f: merge_policy '$val' not in {$MERGE_POLICY_ENUM}$SKEW_HINT"
+      fi
+    fi
+    # plan_preview is an optional workflow field (absent = ask — today's
+    # prompting behavior); when present it must be in its enum.
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" plan_preview; then
+      val="$(frontmatter_field "$f" plan_preview)"
+      if ! in_enum "$val" $PLAN_PREVIEW_ENUM; then
+        report "$f: plan_preview '$val' not in {$PLAN_PREVIEW_ENUM}$SKEW_HINT"
       fi
     fi
 

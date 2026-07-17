@@ -72,7 +72,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   no new invariant to regression-test. [feedback: F002]
 
 ## Phase 3: `plan_preview` workflow field (depends on nothing; independent of Phases 1-2)
-- [ ] T008 (test-first) Add `plan_preview` to `scripts/lint-project.sh`'s
+- [x] T008 (test-first) Add `plan_preview` to `scripts/lint-project.sh`'s
   workflow-field enum (`always-browser` | `always-console` | `ask`).
   Add a regression case to `scripts/test-lint-project.sh` covering: a
   valid value passes, an invalid value is rejected with a message
@@ -82,7 +82,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   exist in the enum yet, so an invalid value wouldn't currently be
   rejected as *this* field). Apply the expected-failure marker on this
   red commit. [feedback: F001]
-- [ ] T009 Add `plan_preview` to `ardd-state.sh stamp`'s supported keys,
+- [x] T009 Add `plan_preview` to `ardd-state.sh stamp`'s supported keys,
   mirroring the existing `delegation`/`merge_policy` stamp support
   (set/replace/no-duplicate-keys, bad-value refused with the allowed
   set named). Add a matching regression case to
