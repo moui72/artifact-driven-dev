@@ -645,3 +645,70 @@ the feature register. Its own steps:
 
    Compute both axes for every pair before classifying anything in
    step 5.
+
+5. **Classify and present.** Using the confidence grade (step 3) and the
+   two relations (step 4), bucket every backlogged item into exactly one
+   of:
+   - **Bundle** — items connected by a dependency edge, or sharing files
+     with no safe reordering. Sequenced; recommended as one multi-slug
+     `/ardd-plan <slug1> <slug2> ...` call, in dependency order.
+   - **Parallel set** — items that are pairwise file-disjoint, have no
+     dependency edge between them, and are *not* `low` confidence.
+     Recommended as separate `/ardd-plan <slug>` calls, one per item,
+     safe to fan out to worktrees. A `low`-confidence item is never
+     placed in a parallel set even when no overlap was found — a wrong
+     "disjoint" call is the expensive failure (it green-lights a fan-out
+     that then merge-conflicts), so low confidence always routes to
+     solo-deferred instead.
+   - **Solo-deferred** — `low`/speculative confidence, or explicitly
+     gated on a non-code decision per the artifact. Recommended as its
+     own single-slug `/ardd-plan <slug>` call on its own timeline; never
+     bundled or fanned out.
+
+   **Report format**: present the full grouping — every bucket, the
+   items in it, and the rationale (for a bundle, name the specific
+   shared file or the dependency; for a parallel set, note the
+   confidence and disjointness; for solo-deferred, name the confidence
+   grade or the non-code gate) — followed by the recommended next
+   command(s), one per bucket:
+
+   ```
+   Bundle: typography-substitution, docx-export, epub-pdf-export
+     (typography-substitution must land first — both export items read
+     through the same render/export path it transforms)
+     -> /ardd-plan typography-substitution docx-export epub-pdf-export
+
+   Parallel set: spellcheck-backend, personal-dictionary
+     (disjoint footprints — speller.ts vs. dictionary-storage.ts — despite
+     sharing the "spellcheck" label; both high confidence)
+     -> /ardd-plan spellcheck-backend
+     -> /ardd-plan personal-dictionary
+
+   Solo-deferred: llm-assistance
+     (low confidence — infrastructure.md flags this as a later phase with
+     an open question; no seam exists yet to ground a footprint against)
+     -> /ardd-plan llm-assistance (on its own timeline)
+   ```
+
+   If `next_step_prompt: true` (see below), the single top-priority
+   recommendation is then offered via `AskUserQuestion`; otherwise this
+   report is the run's final output and the run stops here.
+
+**Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
+frontmatter has `next_step_prompt: true` (grep the frontmatter block;
+absent or `false` = stay plain text, unchanged), offer the single
+top-priority recommendation from step 5's report via a one-keypress
+`AskUserQuestion` — the same mechanism `/ardd-plan`'s and `/ardd-status`'s
+own next-step prompts already use (see step 15 above). "Top-priority"
+means: a bundle beats a parallel set beats a solo-deferred item (bundles
+resolve an ordering constraint, so they're the most time-sensitive to
+act on), and among same-tier buckets, prefer the first one enumerated.
+Offer as option 1 "Yes — run `<recommendation>` now", option 2 "No — stop
+here" (Esc = option 2); on yes, invoke `/ardd-plan` with the recommended
+slug(s) by name (the existing terminal-handoff mechanism, no value passed
+back). **Exactly one prompt per user-visible turn end** — slate mode never
+hands off to `/ardd-status` (it makes no writes for `/ardd-status` to
+reflect), so this is the only prompt in play, never deferred to another
+skill. This prompt is wired only for step 5's N≥2 report; the N=0/N=1
+degenerate branch (step 2) stops before reaching step 5 and stays
+plain-text there, same as `--list`.

@@ -57,7 +57,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   to be committed (this is prose verification, not a regression test).
 
 ## Phase 3: Classification, presentation, and next-step handoff (depends on Phase 2) [feature: plan-time-defrag-slate-analysi]
-- [ ] T006 [artifacts: constitution] In the Slate mode section, write
+- [x] T006 [artifacts: constitution] In the Slate mode section, write
   step 5 (classify and present): bucket every `backlogged` item into
   exactly one of Bundle / Parallel set / Solo-deferred per the plan's
   Technical Approach rules (bundle = dependency edge or unsafe-to-
@@ -70,7 +70,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   the report format: full grouping with the specific shared file or
   dependency named for each bundle, then the recommended next
   command(s).
-- [ ] T007 [artifacts: constitution] [parallel] Wire the
+- [x] T007 [artifacts: constitution] [parallel] Wire the
   `next_step_prompt: true` `AskUserQuestion` offer for the single
   top-priority recommendation from T006's report, using the same
   mechanism `/ardd-plan`'s and `/ardd-status`'s own next-step prompts
