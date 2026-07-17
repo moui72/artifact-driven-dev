@@ -47,7 +47,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   without full file overlap still forces sequencing. Include both worked
   examples from the plan (the spellcheck-label false-bundle case; the
   typography→export ordering case) as in-prose illustrations.
-- [ ] T005 Verify Phase 2's prose against a throwaway scratch
+- [x] T005 Verify Phase 2's prose against a throwaway scratch
   `.project/features/` fixture (not a real project) seeded with at least
   one known bundle pair (shared file or explicit dependency) and one
   known parallel pair (disjoint files, unrelated), and confirm the
