@@ -1,6 +1,33 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-plan plan-time-defrag-slate-analysi` —
+_Updated: 2026-07-17 (`/ardd-implement` — delegated worktree run completed
+and merged all 9 tasks of `tasks-plan-time-defrag-slate-analysi-2c40.md`
+(now `completed`): added `/ardd-plan --slate` — a read-only advisory mode
+that computes an ephemeral "defrag" grouping over the open backlog
+(bundles / parallel sets / solo-deferred, per the two research
+prototypes' two-axis overlap+dependency model) and ends in a recommended
+`/ardd-plan <slug...>` invocation, never writing a plan/tasks file or
+touching the register itself. T008's end-to-end dry-run against this
+repo's own real backlog (N=1 at the time — only
+`codex-second-harness-support` was `backlogged`) correctly exercised the
+N=1 branch. Merged fast-forward (`320f7c8..a6ca315`) and the worktree
+reaped. Feature `plan-time-defrag-slate-analysi`: `tasked` →
+`implemented`. Prior update, same day, a `/prerelease-sweep smoke` run
+(S1, S5, S7; run `2026-07-17-1d42`, reports in `dev-notes/` — gitignored,
+not committed) found one likely release-blocking bug: `new.sh`'s
+git-init guard (`new.sh:240`, `git rev-parse --is-inside-work-tree`)
+walks *up* the directory tree for any enclosing `.git`, so a target
+nested under an existing git-controlled directory silently skips
+`git init` and gets folded into the outer repo (shares its `.git`,
+branch, history, remote) — not scratch-harness-specific, hits any real
+user whose target sits under a monorepo/dotfiles/versioned home dir.
+Also found: `ardd-update-check.sh` reports "behind" for a dev-mode
+checkout that's actually ahead of the latest tag (misleading — the
+suggested fix would regress it), and a pre-existing atelier-repo
+`Channel`/`Source-Ref` inconsistency nothing currently detects. Triage
+table at `dev-notes/prerelease-runs/2026-07-17-1d42/TRIAGE.md`; not yet
+folded into `/ardd-feedback` — awaiting user go-ahead. Prior update,
+same day, `/ardd-plan plan-time-defrag-slate-analysi` —
 drafted, approved, and tasked
 `plan-plan-time-defrag-slate-analysi-2026-07-17-1a95.md` (solo mode, no
 branch gate, on `main`). Designs a codified `/ardd-plan --slate` mode,
@@ -642,9 +669,9 @@ Releases and `docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 20 implemented · 1 retired — see
-`.project/features/`. No feature currently carries an `epic` value, so
-no "by epic" breakdown to show yet.
+1 backlogged · 21 implemented · 1 retired — see `.project/features/`. No
+feature currently carries an `epic` value, so no "by epic" breakdown to
+show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -652,17 +679,11 @@ Backlogged:
   was drafted (`plan-codex-second-harness-support-2026-07-15-f837.md`,
   `status: draft`) but stopped at the approval checkpoint, un-tasked —
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
-Tasked:
-- `plan-time-defrag-slate-analysi` — codified `/ardd-plan --slate` mode
-  design; see the `_Updated` note above.
-  `tasks-plan-time-defrag-slate-analysi-2c40.md` (`ready`, 9 tasks/4
-  phases) — next: `/ardd-implement`.
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `epics-grouping-in-feature-regi` — optional `epic:`
-feature-register field, `feature-list.sh`'s epic column/`--epic` filter,
-`/ardd-status`'s epic breakdown, and `/ardd-tracker`'s one-directional
-GitHub-milestone push
-(`tasks-epics-grouping-in-feature-regi-42f2.md`, completed 6/6).
+Newest implemented: `plan-time-defrag-slate-analysi` — `/ardd-plan
+--slate` mode (bundle/parallel-set/solo-deferred backlog grouping); see
+the `_Updated` note above
+(`tasks-plan-time-defrag-slate-analysi-2c40.md`, completed 9/9).
 
 ## Audit
 
@@ -674,14 +695,19 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap. `main` is in sync with
-`origin/main` (pushed 2026-07-16; latest beta `v0.10.1-beta.10`).
+Nothing — no worktrees, nothing pending reap. `main` is ahead of
+`origin/main` (unpushed local commits from today's work; latest published
+beta `v0.10.1-beta.11`).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-plan-time-defrag-slate-analysi-2c40.md`
-(`ready`, 9 tasks/4 phases). Otherwise, `codex-second-harness-support`
-is drafted-but-untasked:
+A `/prerelease-sweep smoke` run just completed (2026-07-17, run
+`2026-07-17-1d42`) and found one likely release-blocking bug in `new.sh`'s
+git-init guard (see `_Updated` note and
+`dev-notes/prerelease-runs/2026-07-17-1d42/TRIAGE.md`) — awaiting
+go-ahead to fold the 3 accepted findings into `/ardd-feedback`, then
+`/ardd-plan` to fix before any wider beta promotion or stable cut.
+Otherwise, `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
