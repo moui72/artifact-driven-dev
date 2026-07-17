@@ -78,7 +78,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   "No — stop here", Esc = option 2) — never more than one such prompt
   per user-visible turn end. Absent or `false` `next_step_prompt`: stay
   plain text, unchanged.
-- [ ] T008 Verify end-to-end: run `/ardd-plan --slate` against this
+- [x] T008 Verify end-to-end: run `/ardd-plan --slate` against this
   repo's own real current backlog (`codex-second-harness-support` and
   `plan-time-defrag-slate-analysi` itself — 2 items, N≥2) and confirm it
   produces a grouping, rationale, and recommended `/ardd-plan`
