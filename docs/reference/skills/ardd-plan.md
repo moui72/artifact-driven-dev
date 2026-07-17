@@ -62,6 +62,14 @@ The run has two halves separated by a real gate:
 Stopping at the checkpoint is a legitimate outcome — the draft plan is
 durable, and `/ardd-plan --from <plan>` tasks it later.
 
+Just before that checkpoint, the run normally asks whether to preview the
+plan in the browser first (publishing it via `Artifact`). The
+constitution's `plan_preview` frontmatter field
+(`always-browser`|`always-console`|`ask`, absent = `ask`) controls that:
+`always-browser` skips the question and always publishes+opens the
+preview; `always-console` skips it and never publishes; `ask` (or absent)
+keeps asking each time, as before.
+
 ## Reads
 
 - Every `.project/artifacts/*.md` (warns before planning over `draft` ones)

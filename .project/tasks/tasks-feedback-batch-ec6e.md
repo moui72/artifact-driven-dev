@@ -117,7 +117,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `scripts/lint-project.sh` after to confirm frontmatter/footer
   consistency (it checks footer-vs-frontmatter drift and
   SIR-target-vs-footer-version drift). [feedback: F001]
-- [ ] T012 Update `docs/reference/skills/ardd-plan.md`'s hand-written
+- [x] T012 Update `docs/reference/skills/ardd-plan.md`'s hand-written
   body to mention the `plan_preview` field's effect on the
   approval-checkpoint browser-preview offer, mirroring how `--list` and
   `--from` are already documented there. [feedback: F001]
