@@ -77,6 +77,31 @@ T1T="$WORK/t1t"; mkver "$T1T" "$TIP4" "$SRC"
 out="$(sh "$CHECK" "$T1T")"
 [ "$out" = "up-to-date commit=$TIP4" ] && ok "at latest release v1.10.0" || bad "at latest release — got '$out'"
 
+# --- dev-ahead: installed commit is a descendant of (ahead of) the latest
+# release tag, with no Source-Ref recorded -- must NOT report "behind",
+# since /ardd-update would regress a dev-mode checkout that has moved past
+# the last tagged release. Uses its own isolated fixture source repo so it
+# never disturbs $SRC's history, which later cases depend on relatively.
+# [feedback: F002]
+DEVSRC="$WORK/ardd-devsrc"
+mkdir -p "$DEVSRC/skills"
+printf '#!/usr/bin/env sh\n' > "$DEVSRC/install.sh"
+( cd "$DEVSRC" && git init -q -b main && git add -A && git commit -q -m one )
+git -C "$DEVSRC" tag v2.0.0
+( cd "$DEVSRC" && printf 'dev\n' >> install.sh && git add -A && git commit -q -m "dev-ahead of v2.0.0" )
+DEVTIP="$(git -C "$DEVSRC" rev-parse --short HEAD)"
+T1U="$WORK/t1u"; mkver "$T1U" "$DEVTIP" "$DEVSRC"
+out="$(sh "$CHECK" "$T1U")"
+[ "$out" = "dev-ahead installed=$DEVTIP latest-release=v2.0.0" ] && ok "dev-ahead (no Source-Ref)" || bad "dev-ahead — got '$out'"
+
+# --- dev-ahead does not fire when a Source-Ref IS recorded (an ahead-but-
+# pinned case must be reported as behind rather than silently
+# misclassified) ---
+mkdir -p "$T1U/.project"
+printf '# ArDD Version\n\n_Source: artifact-driven-dev @ %s · Installed/updated 2026-07-07_\n\nSource-Path: %s\nSource-Ref: v2.0.0\n' "$DEVTIP" "$DEVSRC" > "$T1U/.project/ardd-version.md"
+out="$(sh "$CHECK" "$T1U")"
+[ "$out" = "behind installed=$DEVTIP latest-release=v2.0.0" ] && ok "ahead-but-Source-Ref-recorded stays behind, not dev-ahead" || bad "ahead-with-Source-Ref — got '$out'"
+
 # --- source-missing: recorded path gone ---
 T2="$WORK/t2"; mkver "$T2" "$TIP1" "$WORK/nowhere"
 out="$(sh "$CHECK" "$T2")"

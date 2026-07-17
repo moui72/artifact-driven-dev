@@ -45,7 +45,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   to add it by hand. [feedback: F001]
 
 ## Phase 2: dev-mode "behind" wording + ardd-init trust gap (depends on nothing; independent of Phase 1)
-- [ ] T005 [parallel] Fix `ardd-update-check.sh`: when the installed
+- [x] T005 [parallel] Fix `ardd-update-check.sh`: when the installed
   commit is a strict git ancestor of (behind) the compared release tag,
   keep reporting `behind` as today. When it is instead a descendant
   (ahead) of the latest release tag with no `Source-Ref` recorded at

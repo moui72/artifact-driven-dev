@@ -24,6 +24,14 @@
 #   self-hosted commit=<x>              source IS the target repo (dogfood); comparison meaningless
 #   up-to-date commit=<x>                installed at the latest release's commit
 #   behind installed=<x> latest-release=<tag>
+#   dev-ahead installed=<x> latest-release=<tag>  installed is a descendant
+#                                                  (ahead) of the latest
+#                                                  release tag with no
+#                                                  Source-Ref recorded at
+#                                                  HEAD (dev-mode moved past
+#                                                  the last tagged release);
+#                                                  recommending /ardd-update
+#                                                  here would regress it
 #   up-to-date commit=<x> note=no-releases        no tags yet: tip comparison
 #   behind installed=<x> source-tip=<y> note=no-releases
 #
@@ -159,7 +167,23 @@ if [ -n "$latest" ]; then
   if same_commit "$installed" "$release_commit"; then
     echo "up-to-date commit=$installed$fallback$chtoken$fetchnote"
   else
-    echo "behind installed=$installed latest-release=$latest$fallback$chtoken$fetchnote"
+    # Ancestry-aware: an installed commit that is a strict git ancestor of
+    # the latest release tag stays "behind" (unchanged). An installed
+    # commit that is instead a DESCENDANT of the latest release tag (a
+    # dev-mode checkout that has moved ahead of the last tagged release),
+    # with no Source-Ref recorded at HEAD, is a distinct case — reporting
+    # "behind" there would recommend /ardd-update and regress the target.
+    installed_full="$(sed -n 's/^Source-Commit: //p' "$VF" | head -1)"
+    ancestry_commit="${installed_full:-$installed}"
+    source_ref="$(sed -n 's/^Source-Ref: //p' "$VF" | head -1)"
+    if [ -z "$source_ref" ] \
+      && git -C "$src" cat-file -e "${ancestry_commit}^{commit}" 2>/dev/null \
+      && git -C "$src" merge-base --is-ancestor "$release_commit" "$ancestry_commit" 2>/dev/null \
+      && ! git -C "$src" merge-base --is-ancestor "$ancestry_commit" "$release_commit" 2>/dev/null; then
+      echo "dev-ahead installed=$installed latest-release=$latest$fallback$chtoken$fetchnote"
+    else
+      echo "behind installed=$installed latest-release=$latest$fallback$chtoken$fetchnote"
+    fi
   fi
 elif same_commit "$installed" "$tip"; then
   echo "up-to-date commit=$installed note=no-releases$fallback$chtoken$fetchnote"
