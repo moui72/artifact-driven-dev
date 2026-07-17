@@ -600,6 +600,36 @@ grep -qi 'beta' "$NEW_SH" \
   && ok "case28: new.sh documents the beta channel" \
   || bad "case28: new.sh never mentions the beta channel"
 
+# --- Case 29: a target nested under an existing git-controlled directory
+# still gets its own isolated repo, not the enclosing repo's identity ---
+# new.sh:240's guard used `git -C "$TARGET" rev-parse --is-inside-work-tree`,
+# which is true for ANY directory nested under an existing .git, not just
+# $TARGET being a repo root itself — so a target under an already-git-
+# controlled directory (e.g. a scratch dir inside the user's dotfiles repo)
+# silently skipped `git init` and the target ended up sharing the outer
+# repo's history/remote instead of getting its own. [feedback: F001]
+outer="$WORK/case29/outer"
+mkdir -p "$outer"
+git -C "$outer" init --quiet
+git -C "$outer" commit --quiet --allow-empty -m "outer repo root commit"
+target="$outer/nested/proj"
+
+run_new 0 "case29: nested target installs" --no-kickoff "$target"
+
+if [ -e "$target/.git" ]; then
+  ok "case29: nested target has its own .git"
+else
+  bad "case29: nested target has no own .git — inherited the outer repo"
+fi
+
+outer_toplevel="$(git -C "$outer" rev-parse --show-toplevel 2>/dev/null || true)"
+target_toplevel="$(git -C "$target" rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -n "$target_toplevel" ] && [ "$target_toplevel" != "$outer_toplevel" ]; then
+  ok "case29: nested target is its own repo top-level"
+else
+  bad "case29: nested target's repo top-level is the outer repo ($target_toplevel vs $outer_toplevel)"
+fi
+
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"
 else
