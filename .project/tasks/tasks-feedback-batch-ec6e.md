@@ -55,14 +55,14 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   (`scripts/test-ardd-update-check.sh` or wherever its cases live)
   covering an ahead-of-tag dev-mode checkout, confirming it does NOT
   report `behind`. [feedback: F002]
-- [ ] T006 Update `skills/ardd-status/SKILL.md` step 1's banner-line
+- [x] T006 Update `skills/ardd-status/SKILL.md` step 1's banner-line
   template to handle `ardd-update-check.sh`'s new `dev-ahead` outcome
   from T005 distinctly from `behind`: do not recommend `/ardd-update`
   when doing so would regress the target. Either treat it as a silent
   case (matching the existing `self-hosted`/`up-to-date` silent
   outcomes) or print a clearly different, non-misleading note. No test
   task — prose-only skill-file change. [feedback: F002]
-- [ ] T007 [parallel] Edit `skills/ardd-init/SKILL.md` step 7's git-log
+- [x] T007 [parallel] Edit `skills/ardd-init/SKILL.md` step 7's git-log
   feature-extraction guidance: add an explicit instruction that a
   `feat:`-titled commit's message is not proof of its diff, and
   instruct verifying the commit's actual diff (or cross-referencing
