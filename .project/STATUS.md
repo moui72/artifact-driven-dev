@@ -1,6 +1,26 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-implement` — delegated worktree run
+_Updated: 2026-07-17 (release ops — pushed `main` (`a978ab7..a802dbc`,
+publishing the `new.sh` fix as a beta), then ran a `/prerelease-sweep S1`
+regression check (run `2026-07-17-cc3b`) against the real quickstart
+URL. It confirmed the fix is correct on `main` but caught something more
+important: `new.sh`'s public curl URL always resolves through the
+`release` branch regardless of `--beta`/`--stable`, and `release` was
+several commits behind — so the fix hadn't reached real users yet.
+Dispatching `stable-release.yml` then failed
+(`GH006: Protected branch update failed — must not contain merge
+commits`): `main`'s history holds two legitimate non-fast-forward merge
+commits from 2026-07-15 (sanctioned by `merge_policy: auto`), colliding
+with `release`'s `required_linear_history` GitHub branch-protection rule
+— a latent conflict between two of this repo's own standing decisions,
+not a new bug, but one that would have silently blocked every future
+stable dispatch. With explicit user permission, disabled just that one
+protection flag via `gh api` (nothing else touched — force-pushes and
+deletions on `release` are still blocked) and re-dispatched successfully.
+**`v0.10.1` is now the published stable release**; `release` is
+fast-forwarded to `main`'s tip; confirmed via a direct `curl` that the
+fixed `new.sh` guard logic is live at the real public URL. Prior update,
+same day, `/ardd-implement` — delegated worktree run
 completed and merged all 12 tasks of `tasks-feedback-batch-ec6e.md`
 (now `completed`): T001/T002 (test-first) fixed the release-blocking
 `new.sh` git-init isolation bug — `new.sh:242` now compares
@@ -792,12 +812,15 @@ above; `delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
 
 ## Recent Releases
 
-The Phase 2 docs-site push published the accumulated `main` commits
-(catalog revision, stale-update-network-check, docs site) as the next
-beta; cut a stable via the dispatch workflow whenever consumers should
-get them. v0.9.1 (2026-07-13) — first fully-automatic two-channel
-cycle. v0.9.0 (2026-07-12) — first GitHub release. Full history: GitHub
-Releases and `docs/decisions/0006`/`0007`.
+**v0.10.1 (2026-07-17)** — stable cut carrying the `new.sh` git-init
+isolation fix and the rest of today's feedback-batch (`plan_preview`
+field, `ardd-update-check.sh` dev-ahead distinction, `ardd-init` diff-
+verification guidance). First dispatch after `release`'s
+`required_linear_history` protection was relaxed (see `_Updated` note) —
+future dispatches no longer need that workaround, the flag is off. v0.9.1
+(2026-07-13) — first fully-automatic two-channel cycle. v0.9.0
+(2026-07-12) — first GitHub release. Full history: GitHub Releases and
+`docs/decisions/0006`/`0007`.
 
 ## Feature Backlog
 
@@ -835,16 +858,15 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap. `main` is ahead of
-`origin/main` (unpushed local commits from today's work; latest published
-beta `v0.10.1-beta.11`).
+Nothing — no worktrees, nothing pending reap. `main` is in sync with
+`origin/main` and `origin/release` (both at `a802dbc`); `v0.10.1` is the
+current published stable release.
 
 ## Recommended Next Step
 
-The `new.sh` git-init isolation fix (the release-blocking finding
-reconfirmed twice by the prerelease sweeps) is now merged — push `main`
-to publish it as the next beta, then re-run `/prerelease-sweep smoke S1`
-as a regression check before wider promotion. `codex-second-harness-support`
+The `new.sh` fix has fully shipped end-to-end (fixed → merged → beta →
+regression-checked → stable-dispatched → confirmed live at the public
+URL) — nothing further needed there. `codex-second-harness-support`
 is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
