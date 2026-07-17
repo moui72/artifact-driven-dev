@@ -1,7 +1,7 @@
 ---
 plan: plan-feedback-batch-2026-07-17-e977.md
 generated: 2026-07-17
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
