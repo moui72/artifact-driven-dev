@@ -1,6 +1,33 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.11.0 → 1.11.1 (PATCH — wording/scope clarification only;
+no principle or standing-decision change.)
+
+Rationale: `/ardd-plan feedback-batch` T011 (2026-07-17), closing a gap
+`/ardd-plan feedback-batch` itself confirmed: the Governance "Exception"
+paragraph named only `workflow_mode` and `next_step_prompt` by name, but
+`delegation`, `merge_policy`, and `update_check_max_age_days` were already
+exempt from the Sync Impact Report requirement in practice (each is stamped
+via `ardd-state.sh stamp`, same as the two named fields) — they were simply
+omitted from the list. The new `plan_preview` field (T009, same batch) would
+have hit the identical gap on day one. Generalized the Exception to cover
+any field in `scripts/lint-project.sh`'s workflow-field enum by reference,
+instead of naming fields individually and drifting again the next time one
+is added.
+
+Modified sections: Governance (Exception paragraph reworded to reference
+`scripts/lint-project.sh`'s enum instead of naming two fields). Footer
+version updated.
+
+==================
+
+Previous SIR (1.10.0 → 1.11.0) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 1.10.0 → 1.11.0 (MINOR — schema-widening: new optional
 feature-register field.)
 
@@ -157,7 +184,7 @@ revision.
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-15
+last_updated: 2026-07-17
 
 next_step_prompt: true
 delegation: eager
@@ -526,11 +553,16 @@ repository. Amendments require:
    clarifications or wording fixes.
 4. `last_updated` date updated in frontmatter.
 
-**Exception**: the workflow frontmatter fields `workflow_mode` and
-`next_step_prompt` are not amendments to this constitution's principles or
-standing decisions — they are per-project operational settings, written by
+**Exception**: any workflow frontmatter field enumerated in
+`scripts/lint-project.sh`'s workflow-field enum block (as of this writing:
+`workflow_mode`, `next_step_prompt`, `delegation`, `merge_policy`,
+`plan_preview`, and `update_check_max_age_days` — that script is the
+schema-of-record; consult it directly rather than trusting this list to
+stay exhaustive) is not an amendment to this constitution's principles or
+standing decisions — each is a per-project operational setting, written by
 `ardd-state.sh stamp` on the user's answer to a one-time `/ardd-init` (or
-`/ardd-update`) question. Changing either does not require a Sync Impact
-Report or a version increment, and does not itself update `last_updated`.
+`/ardd-update`) question, or set directly by the user. Changing any of them
+does not require a Sync Impact Report or a version increment, and does not
+itself update `last_updated`.
 
-**Version**: 1.11.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-15
+**Version**: 1.11.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-17

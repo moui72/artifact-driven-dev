@@ -91,7 +91,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `merge_policy` test blocks' structure. Remove T008's expected-failure
   marker — its lint case should now pass (green), since a valid value
   can actually be stamped. [feedback: F001]
-- [ ] T010 [parallel] Edit `skills/ardd-plan/SKILL.md` step 10: before
+- [x] T010 [parallel] Edit `skills/ardd-plan/SKILL.md` step 10: before
   the existing "view the plan in the browser first?" `AskUserQuestion`,
   grep `.project/artifacts/constitution.md` frontmatter for
   `plan_preview` (absent = `ask`, current behavior — keep asking as
@@ -100,7 +100,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   approve/revise/stop question unchanged. On `always-console`: skip the
   question, never publish, go straight to the three-way question. On
   `ask` (or absent): behavior unchanged from today. [feedback: F001]
-- [ ] T011 [artifacts: constitution] Apply the confirmed Governance
+- [x] T011 [artifacts: constitution] Apply the confirmed Governance
   "Exception" clause generalization to
   `.project/artifacts/constitution.md`: rewrite the paragraph currently
   naming only `workflow_mode`/`next_step_prompt` to instead cover any
