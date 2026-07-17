@@ -27,7 +27,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   this repo's own current backlog (N≥2) is covered by Phase 2/3 instead.
 
 ## Phase 2: N≥2 footprint grading and pairwise relations (depends on Phase 1) [feature: plan-time-defrag-slate-analysi]
-- [ ] T003 [artifacts: constitution] In the Slate mode section, write
+- [x] T003 [artifacts: constitution] In the Slate mode section, write
   step 3 (per-item footprint confidence grading): for each `backlogged`
   item, read its register entry and ground a footprint estimate in real
   greps/reads of the codebase (never free-associated from the prose
@@ -39,7 +39,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   plan (`wasm-hunspell-backend` = high, `llm-assistance` = low) as
   in-prose illustrations so the grading is legible to whoever runs this
   mode.
-- [ ] T004 [artifacts: constitution] [parallel] In the same section,
+- [x] T004 [artifacts: constitution] [parallel] In the same section,
   write step 4 (pairwise relations, two axes computed separately): for
   every pair of `backlogged` items, determine file-set overlap and
   ordering dependency as two independent judgments — overlap without

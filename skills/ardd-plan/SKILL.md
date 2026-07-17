@@ -593,3 +593,55 @@ the feature register. Its own steps:
      recommend `/ardd-plan <that slug>` directly, then stop.
 
    Only continue to step 3 when N≥2.
+
+3. **Per-item footprint confidence grading (N≥2).** For each backlogged
+   item, read its register entry (the description and any `Why:` line)
+   and ground a footprint estimate in real greps/reads of the codebase —
+   never free-associated from the register's prose alone. Grade a
+   confidence:
+   - **`high`** — a concrete existing seam was found (a file, interface,
+     or abstraction the feature would extend or plug into). Example:
+     `wasm-hunspell-backend` grades `high` because a grep turns up a
+     37-line, already-abstracted spellcheck-backend interface the new
+     backend would implement — the seam already exists in code.
+   - **`medium`** — a seam exists but a real unknown remains (e.g. the
+     work is gated on a non-code decision, or the seam only partially
+     covers the described scope).
+   - **`low`** — greenfield (no seam exists yet), or the item's own
+     artifact language explicitly flags it as speculative or a later
+     phase. Example: `llm-assistance` grades `low` because
+     `infrastructure.md` itself calls it a later phase with an open
+     question — there is nothing in the codebase yet to ground a
+     footprint against.
+
+   Grading is agent judgment, not a rigid rubric — these two worked
+   examples anchor what "grounded in real greps" means in practice; don't
+   grade purely from how confident the register's own prose sounds.
+
+4. **Pairwise relations (N≥2), two axes, computed separately.** For every
+   pair of backlogged items, determine two independent judgments — never
+   collapse them into one:
+   - **File-set overlap** — do the two items' footprints share any file?
+   - **Ordering dependency** — does one item need to land before the
+     other regardless of file overlap (e.g. an interface one item would
+     consume that the other edits, or a shared code path one transforms
+     and the other reads)?
+
+   Overlap without dependency is a **safe parallel pair**, even when the
+   items are topically related. Example: a `project-scoped-personal-
+   dictionary` item and a `spellcheck-backend` item might both carry the
+   "spellcheck" label, but if their footprints are actually disjoint
+   (one touches a dictionary-storage file, the other `speller.ts`), the
+   shared label is a false signal — they're safe to plan and implement in
+   parallel.
+
+   Dependency without full file overlap still forces sequencing. Example:
+   a `smart-typography-substitution` item feeding into `{docx-export,
+   epub-pdf-export}` items — they don't necessarily share a file, but
+   typography substitution has to land first because both export paths
+   read through the same render/export path it transforms. Ordered
+   through a shared code *path*, not a shared file set — still a
+   dependency edge, not a safe parallel pair.
+
+   Compute both axes for every pair before classifying anything in
+   step 5.
