@@ -20,10 +20,12 @@ briefs are the product; never improvise scenario content from memory.
   the fixed finding IDs and include them in each relevant dispatch
   prompt with "explicitly re-verify each of these".
 
-If the set includes S6, tell the user about its known-uncertain status
-(see the brief) and offer to run S6 steps from THIS top-level session
-instead of a background subagent (one less nesting level); background it
-only if they say so.
+S6 is dispatched as a normal background subagent like every other
+scenario — it tests the delegation script layer against a
+manually-created worktree and never makes an `isolation: "worktree"`
+`Agent` call itself (see the brief's scope note; the harness-level
+nesting question is out of sweep scope, per the README coverage
+backlog).
 
 ## 2. Prepare the run
 
@@ -84,8 +86,8 @@ When all are done, read every `S<n>-report.md` and write
 `dev-notes/prerelease-runs/<run_id>/TRIAGE.md`: one table row per
 finding — id, scenario, kind, one-liner, disposition ∈ accept /
 duplicate / harness-artifact / taste-defer. Harness artifacts (missing
-AskUserQuestion, scratchpad/spend-limit incidents, S6 nesting ambiguity)
-never leave the triage table. Present the table to the user and get
+AskUserQuestion, scratchpad/spend-limit incidents) never leave the
+triage table. Present the table to the user and get
 dispositions confirmed.
 
 Then, on the user's go-ahead only: run `/ardd-feedback` once with the

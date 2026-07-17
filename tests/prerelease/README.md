@@ -44,10 +44,10 @@ into a background `Agent` call, one per scenario.
   (acquisition), S5 (core solo loop), S7 (peripheral sweep). One from
   each axis; cheap enough to run routinely.
 - **full** (before any stable dispatch, or after a large skill-prose
-  batch): all seven. S6 is flagged **known-uncertain** — the nested
-  worktree-in-worktree question (see S6.md) is unresolved; a `collapsed
-  onto primary checkout` result there is a harness-ambiguity note, not
-  automatically an ArDD bug.
+  batch): all seven. S6 tests the delegation **script layer** against a
+  manually-created second worktree; the `Agent`-tool
+  `isolation: "worktree"` nesting question is explicitly out of sweep
+  scope (see Coverage backlog).
 - **regression rerun**: after a fix batch lands, rerun exactly the
   scenarios that produced the fixed findings, with the fixed finding IDs
   listed in the dispatch prompt so the subagent explicitly re-checks each.
@@ -73,9 +73,23 @@ into a background `Agent` call, one per scenario.
 - `defects-unsurfaced.sh` re-offer/decline bookkeeping across repeated
   `/ardd-plan` runs
 - `workflow_mode` switching mid-project via `/ardd-update --reconfigure`
-- the nested-worktree question (S6 lesson) as its own narrow,
-  top-level-interactive investigation — keep it OUT of routine sweeps
-  until resolved
+- the `Agent`-tool nested-worktree question — **structurally untestable
+  from any sweep dispatch** (established over two runs: a background
+  subagent's worktree call is 2 levels deep, where a silent collapse
+  onto the primary checkout was observed on 2026-07-15; a top-level
+  dispatch's `isolation: "worktree"` binds to the ArDD repo itself,
+  not the scratch project — no parameter targets a foreign repo).
+  S6 was rewritten 2026-07-17 to cover only the script layer.
+  Resolving the harness question requires a **manual, separate
+  top-level session**: open a second terminal, `cd` into a scratch
+  target project (ArDD installed, one `ready` tasks file), run
+  `claude`, run `/ardd-implement`, choose delegate at the gate, and
+  verify via `git worktree list` from the primary that a real second
+  worktree carried the work — that is 1-deep nesting, the actual
+  consumer path. The 2-deep case matters only to this sweep harness,
+  not to consumers, and stays unresolved-by-design; the defensive
+  positive-worktree check in `worktree-align.sh` makes any repeat
+  collapse loud.
 
 ## Maintenance rules
 
