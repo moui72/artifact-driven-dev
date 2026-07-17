@@ -1,6 +1,30 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-backlog` — logged
+_Updated: 2026-07-17 (`/ardd-feedback` — a `/prerelease-sweep full` run
+(2026-07-17-fab5, S1-S7) completed, and its S6 result triggered a
+redesign: S6 (delegated worktree execution) was replaced with a
+script-layer-only scenario (`tests/prerelease/scenarios/S6.md`) that
+verifies `worktree-align.sh`/merge/`worktree-reap.sh` against a
+manually-created second worktree, dropping the untestable-from-sweeps
+`Agent`-tool nested-worktree question — that question now has an
+actionable manual recipe in the README's Coverage backlog instead
+(second terminal, scratch project, real `/ardd-implement` delegate).
+Feedback captured: `feedback-prerelease-full-sweep-62ae.md` (2 new
+items — F001 bug, `install.sh` never actually gitignores
+`.project/.lock`, only mentions it in printed text; F002 ux,
+`/ardd-init` step 7 trusts `feat:` commit titles without diff
+verification, risking a false "implemented" register entry on repos
+with misleadingly-labeled commits). `feedback-prerelease-smoke-sweep-849d.md`
+(still open) got two reconfirmation notes appended, not new items: its
+F001 (`new.sh` git-init nesting bug) reproduced again plus a new
+downstream symptom (`install.sh`'s gitignore-diagnostic misattribution);
+its F002 (misleading "behind" wording) reproduced again on a different
+dev-mode install. Full sweep found zero net-new bugs beyond those two —
+S3 (`--slate` against atelier's real 12-item backlog) and S5 (solo
+inline core loop) both passed clean. Cost: ~615K tokens / ~$3-9 across
+the 6 background subagents (S6 ran inline in the dispatching session);
+full breakdown in `dev-notes/prerelease-runs/2026-07-17-fab5/RUN.md`
+(gitignored). Prior update, same day, `/ardd-backlog` — logged
 `backlog-assign-epics-automated`: an automated `/ardd-backlog
 --assign-epics` pass over the feature register, open feedback, and
 `DEFECTS.md` that proposes `epic:` groupings for related items, batched
@@ -675,8 +699,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open: `feedback-prerelease-smoke-sweep-849d.md` (2 items — F001 bug,
-F002 ux — see the `_Updated` note above). Will be picked up by the next
+2 open: `feedback-prerelease-smoke-sweep-849d.md` (2 items — F001 bug,
+F002 ux, both reconfirmed by today's full sweep) and
+`feedback-prerelease-full-sweep-62ae.md` (2 new items — F001 bug, F002
+ux — see the `_Updated` note above). Both will be picked up by the next
 `/ardd-plan`. Prior batches all delivered
 (`delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
 `artifact-register-bridge-116a`, `findings-0344`, `redrive-695b`).
@@ -730,10 +756,12 @@ beta `v0.10.1-beta.11`).
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume `feedback-prerelease-smoke-sweep-849d.md`
-(2 items, including the likely release-blocking `new.sh` git-init bug
-found by the 2026-07-17 `/prerelease-sweep smoke` run — see `_Updated`
-note) and fix before any wider beta promotion or stable cut. Otherwise,
+`/ardd-plan` to consume both open feedback files
+(`feedback-prerelease-smoke-sweep-849d.md`,
+`feedback-prerelease-full-sweep-62ae.md` — 4 items total, including the
+likely release-blocking `new.sh` git-init bug, now reconfirmed twice —
+see `_Updated` note) and fix before any wider beta promotion or stable
+cut. Otherwise,
 `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
