@@ -1,6 +1,21 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-feedback` — re-filed a new-capability item to
+_Updated: 2026-07-18 (`/ardd-plan docs-sweep dynamic-version-badge-sync`
+— drafted, approved, and tasked as two separate plans (file-disjoint, no
+dependency between them, per an explicit plan-grouping check): `docs-sweep`
+(`plan-docs-sweep-2026-07-18-b6ef.md`, 7 tasks/3 phases in
+`tasks-docs-sweep-e6c1.md`) adds a local-only `.claude/skills/docs-sweep/SKILL.md`
+judging human-facing docs (README/USAGE.md/docs/concepts.md/reference-page
+bodies) against actual SKILL.md behavior, ending in a triage table →
+`/ardd-feedback`, same placement/pattern as `prerelease-sweep`; and
+`dynamic-version-badge-sync` (`plan-dynamic-version-badge-sync-2026-07-18-35aa.md`,
+6 tasks/3 phases in `tasks-dynamic-version-badge-sync-4553.md`) adds an
+`ARDD_VERSION_BADGE=1` env-var opt-in to `install.sh` (mirrors the
+existing `ARDD_CHANNEL` pattern, deliberately not a new CLI flag or
+interactive prompt) writing a shields.io endpoint-badge JSON + sync
+workflow into a target, replacing the current static-only badge
+suggestion with a two-badge pair when opted in. Both features:
+`backlogged` → `tasked`. Prior update, same day, `/ardd-feedback` — re-filed a new-capability item to
 the register as `dynamic-version-badge-sync` (per the skill's mirror
 check: this described something the system doesn't do yet, not a bug/UX
 fix): install.sh installing a dynamic "ArDD version" README badge —
@@ -1082,9 +1097,9 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-3 backlogged · 25 implemented · 1 retired — see `.project/features/`. No
-feature currently carries an `epic` value, so no "by epic" breakdown to
-show yet.
+1 backlogged · 2 tasked · 25 implemented · 1 retired — see
+`.project/features/`. No feature currently carries an `epic` value, so
+no "by epic" breakdown to show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1094,15 +1109,14 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-- `docs-sweep` — local-only skill judging whether human-facing docs
-  (README, USAGE.md, docs/concepts.md, guides, reference-page bodies)
-  stay current against actual SKILL.md behavior; see the earlier
-  `_Updated` note and `research-docs-freshness-human-facing-2026-07-18.md`.
-- `dynamic-version-badge-sync` — install.sh-installable dynamic version
-  badge (shields.io endpoint JSON + sync workflow), replacing the
-  current static-only badge suggestion; see the `_Updated` note above.
-Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `status-view-mode` — see the earlier `_Updated` note.
+Tasked:
+- `docs-sweep` — see the `_Updated` note above.
+  `tasks-docs-sweep-e6c1.md` (`ready`, 7 tasks/3 phases).
+- `dynamic-version-badge-sync` — see the `_Updated` note above.
+  `tasks-dynamic-version-badge-sync-4553.md` (`ready`, 6 tasks/3 phases).
+Target a backlogged slug with `/ardd-plan <slug>`. Both tasked items are
+file-disjoint — safe to fan out to parallel worktrees via
+`/ardd-implement`'s multi-select.
 Newest implemented: `constitution-trim-review-relev` — see the
 `_Updated` note above.
 
@@ -1123,12 +1137,10 @@ the current published stable release.
 
 ## Recommended Next Step
 
-Two fresh backlog items ready to design: `/ardd-plan docs-sweep` (spec =
-`research-docs-freshness-human-facing-2026-07-18.md`, which cites
-concrete site drift — epics, `/ardd-plan --slate` — to fix as part of its
-first real run) and `/ardd-plan dynamic-version-badge-sync` (install.sh-installable
-version badge, motivated by a consumer already hand-building the same
-plumbing). Note there's also an earlier, off-target research file
+`/ardd-implement` — two `ready` tasks files exist, file-disjoint, safe
+to fan out via multi-select: `tasks-docs-sweep-e6c1.md` (7 tasks/3
+phases) and `tasks-dynamic-version-badge-sync-4553.md` (6 tasks/3
+phases). Note there's also an earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
