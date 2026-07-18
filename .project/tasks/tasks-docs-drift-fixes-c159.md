@@ -1,7 +1,7 @@
 ---
 plan: plan-docs-drift-fixes-2026-07-18-2fbb.md
 generated: 2026-07-18
-status: in-progress
+status: completed
 ---
 
 # Tasks
