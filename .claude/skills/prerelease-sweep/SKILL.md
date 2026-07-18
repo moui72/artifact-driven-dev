@@ -104,3 +104,7 @@ regression rerun (`/prerelease-sweep S<the affected ones>`).
 
 Never commit anything during a sweep; `dev-notes/` is gitignored and the
 only writes outside it are the subagents' sandboxed scratch dirs.
+
+`/docs-sweep` is the companion manual check for the human-facing doc
+surface (README/USAGE/docs/) — run it alongside this one before a stable
+release.

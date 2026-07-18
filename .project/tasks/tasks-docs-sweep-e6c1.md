@@ -41,13 +41,13 @@ status: in-progress
   output is whatever `/ardd-feedback` items result from the triage.
 
 ## Phase 2: Cross-references
-- [ ] T005 [parallel] Add a one-line pointer in `CONTRIBUTING.md`'s
+- [x] T005 [parallel] Add a one-line pointer in `CONTRIBUTING.md`'s
   "Releases" section naming `docs-sweep` as a companion manual check to
   run before a stable release. Read that section first — if it's silent
   on `prerelease-sweep` too, add pointers for both in one consistent
   style rather than introducing an asymmetry between the two local-only
   skills.
-- [ ] T006 [parallel] Add a one-line pointer at the end of
+- [x] T006 [parallel] Add a one-line pointer at the end of
   `.claude/skills/prerelease-sweep/SKILL.md`'s triage-ending prose noting
   `docs-sweep` as a companion check for the human-facing doc surface.
 
