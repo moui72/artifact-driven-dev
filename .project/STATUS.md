@@ -1,6 +1,30 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-backlog` — logged `status-view-mode`: a
+_Updated: 2026-07-18 (`/ardd-implement` — the delegated
+`constitution-trim-review-relev` worktree run completed all 6 tasks: added
+a `--review` mode to `/ardd-refine constitution` (enumerate declared
+principles → ground a keep/trim judgment per principle against the
+current project → batch-confirm trim candidates, mirroring `/ardd-plan`
+step 3c's shape → apply confirmed trims via the skill's existing
+constitution special-case handling — version bump, Sync Impact Report →
+report), documented in `docs/reference/skills/ardd-refine.md` and
+`USAGE.md`, and dogfood-verified live against this repo's own real
+`constitution.md` (T006): all nine current principles graded **keep**,
+zero trim-candidates — expected, since this constitution was recently
+pruned. No write was made to the real constitution.md by the dry run.
+Feature `constitution-trim-review-relev`: `tasked` → `implemented`.
+Merged clean (`ort` strategy, no conflicts) and the worktree reaped. Also,
+`/ardd-plan status-view-mode` drafted `plan-status-view-mode-2026-07-18-ce1f.md`
+consuming both feedback batches from earlier today (`feedback-ci-migration-tests-unwired-37ee.md`,
+`feedback-prerelease-sweep-scenario-gaps-95f6.md`, both now `planned`) plus
+the `status-view-mode` backlog item — awaiting approval at the
+checkpoint. Separately, an `/ardd-research`-shaped agent dispatch wrote
+`research-docs-freshness-skill-2026-07-18.md`: recommends a new
+deterministic `scripts/lint-coverage.sh` (CI-wired, catches
+tests-not-wired-into-CI drift, complementary sibling to `lint-docs.sh`)
+plus a new source-side `coverage-sweep` skill (judgment half, modeled on
+`prerelease-sweep`) — not yet actioned into a plan. Prior update, same
+day, `/ardd-backlog` — logged `status-view-mode`: a
 `/ardd-status --view` read-only mode that reports a summary,
 incomplete/in-flight snapshot, and recommended next step without
 regenerating `STATUS.md` (mirrors `/ardd-plan --list` /
@@ -1004,13 +1028,10 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged · 1 tasked · 23 implemented · 1 retired — see
-`.project/features/`. No feature currently carries an `epic` value, so
-no "by epic" breakdown to show yet.
+2 backlogged · 24 implemented · 1 retired — see `.project/features/`. No
+feature currently carries an `epic` value, so no "by epic" breakdown to
+show yet.
 Backlogged:
-- `status-view-mode` — `/ardd-status --view`: read-only summary +
-  in-flight snapshot + recommended next step, no `STATUS.md` write; see
-  `_Updated` note above.
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
   report plus the de-risking spike (both GO). Still `backlogged`: a plan
@@ -1019,17 +1040,13 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-Tasked:
-- `constitution-trim-review-relev` — `--review` mode for
-  `/ardd-refine constitution`; see the `_Updated` note above — design
-  reconsideration resolved, plan unchanged. `tasks-constitution-trim-review-relev-3a39.md`
-  (`ready`, 6 tasks/3 phases) — next: `/ardd-implement`.
-- `backlog-assign-epics-automated` — automated `/ardd-backlog
-  --assign-epics` pass proposing `epic:` groupings for the feature
-  register; see the `_Updated` note above
-  (`tasks-backlog-assign-epics-automated-e23f.md`, completed 6/6).
+- `status-view-mode` — `/ardd-status --view` + CI wiring fix + prerelease
+  sweep scenario additions (S8 new, S3/S7 extended); see the `_Updated`
+  note above. `plan-status-view-mode-2026-07-18-ce1f.md` (`draft`) is
+  written but not yet approved — the feature flips to `planned` on
+  approval, not before.
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `backlog-assign-epics-automated` — see the
+Newest implemented: `constitution-trim-review-relev` — see the
 `_Updated` note above.
 
 ## Audit
@@ -1043,23 +1060,26 @@ workflow-field exemption, v1.8.2).
 ## In Flight
 
 Nothing — no worktrees, nothing pending reap (the
-`backlog-assign-epics-automated` worktree merged and was reaped this
+`constitution-trim-review-relev` worktree merged and was reaped this
 update). `main` is ahead of `origin/main` (unpushed local commits from
 today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-Resolve the constitution-trim-review-relev reconsideration first (does
-this belong under `/ardd-audit` instead of `/ardd-refine --review`?) —
-a review is in progress — before running `/ardd-implement` on
-`tasks-constitution-trim-review-relev-3a39.md`, since the answer may
-change the plan/tasks file. `codex-second-harness-support` is
-drafted-but-untasked: `/ardd-plan --from
-plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
-blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
-the true final go/no-go — before Phases 2–5's install-time substitution
-work proceeds). Standing options otherwise unchanged: the new
-`/prerelease-sweep smoke|full|S<n>` exercise (once reviewed and
+Decide `plan-status-view-mode-2026-07-18-ce1f.md`'s approval checkpoint
+(Approve/Revise/Stop) — it's drafted and awaiting a decision, bundling
+`/ardd-status --view`, the CI-wiring fix, and the prerelease-sweep
+scenario additions. Separately, decide on the docs-freshness research
+report's recommendation
+(`.project/plans/research-docs-freshness-skill-2026-07-18.md`): a new
+deterministic `scripts/lint-coverage.sh` plus a source-side
+`coverage-sweep` skill — no plan drafted yet, this needs a decision
+first. `codex-second-harness-support` is drafted-but-untasked:
+`/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`
+(Phase 1 is a blocking live skill-to-skill-chaining smoke test on a real
+Codex CLI — the true final go/no-go — before Phases 2–5's install-time
+substitution work proceeds). Standing options otherwise unchanged: the
+new `/prerelease-sweep smoke|full|S<n>` exercise (once reviewed and
 committed); dispatch the stable release workflow when consumers should
 get the accumulated `main` work; resolve the remaining
 `.project/audit.md` suggestion; or `/ardd-defects` to re-verify against
