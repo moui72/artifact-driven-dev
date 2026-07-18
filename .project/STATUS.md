@@ -1,7 +1,18 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` — the delegated
-`constitution-trim-review-relev` worktree run completed all 6 tasks: added
+_Updated: 2026-07-18 (`/ardd-plan status-view-mode` — approved and tasked
+`plan-status-view-mode-2026-07-18-ce1f.md`: 9 tasks/3 phases in
+`tasks-status-view-mode-6377.md` (`ready`) covering a read-only
+`/ardd-status --view` mode (Phase 1), the CI-wiring fix for the three
+unwired migration tests (Phase 2), and prerelease-sweep scenario
+additions — new S8 (Agent-tool fan-out delegation), extended S3 (channel
+switching), extended S7 (`epic:` labels) (Phase 3). Consumed both
+feedback batches from earlier today
+(`feedback-ci-migration-tests-unwired-37ee.md`,
+`feedback-prerelease-sweep-scenario-gaps-95f6.md`, both now `planned`).
+Feature `status-view-mode`: `backlogged` → `tasked`. Prior update, same
+day, `/ardd-implement` — the delegated `constitution-trim-review-relev`
+worktree run completed all 6 tasks: added
 a `--review` mode to `/ardd-refine constitution` (enumerate declared
 principles → ground a keep/trim judgment per principle against the
 current project → batch-confirm trim candidates, mirroring `/ardd-plan`
@@ -1000,6 +1011,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 ## Feedback
 
 0 open — all batches delivered, including
+`feedback-ci-migration-tests-unwired-37ee.md` and
+`feedback-prerelease-sweep-scenario-gaps-95f6.md` (both now `planned`,
+consumed by `plan-status-view-mode-2026-07-18-ce1f.md` — see the
+`_Updated` note above); earlier ones include
 `feedback-prerelease-full-sweep-v0-10-1-e5d8.md` (now `planned`,
 consumed by `plan-v0-10-2-fixes-2026-07-17-4465.md` — see the
 `_Updated` note above; `feedback-prerelease-smoke-sweep-849d.md`,
@@ -1028,9 +1043,9 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged · 24 implemented · 1 retired — see `.project/features/`. No
-feature currently carries an `epic` value, so no "by epic" breakdown to
-show yet.
+1 backlogged · 1 tasked · 24 implemented · 1 retired — see
+`.project/features/`. No feature currently carries an `epic` value, so
+no "by epic" breakdown to show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1040,11 +1055,11 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
+Tasked:
 - `status-view-mode` — `/ardd-status --view` + CI wiring fix + prerelease
-  sweep scenario additions (S8 new, S3/S7 extended); see the `_Updated`
-  note above. `plan-status-view-mode-2026-07-18-ce1f.md` (`draft`) is
-  written but not yet approved — the feature flips to `planned` on
-  approval, not before.
+  sweep scenario additions; see the `_Updated` note above.
+  `tasks-status-view-mode-6377.md` (`ready`, 9 tasks/3 phases) — next:
+  `/ardd-implement`.
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `constitution-trim-review-relev` — see the
 `_Updated` note above.
@@ -1066,10 +1081,9 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-Decide `plan-status-view-mode-2026-07-18-ce1f.md`'s approval checkpoint
-(Approve/Revise/Stop) — it's drafted and awaiting a decision, bundling
-`/ardd-status --view`, the CI-wiring fix, and the prerelease-sweep
-scenario additions. Separately, decide on the docs-freshness research
+`/ardd-implement` to work `tasks-status-view-mode-6377.md` (`ready`, 9
+tasks/3 phases — `/ardd-status --view`, the CI-wiring fix, and the
+prerelease-sweep scenario additions). Separately, decide on the docs-freshness research
 report's recommendation
 (`.project/plans/research-docs-freshness-skill-2026-07-18.md`): a new
 deterministic `scripts/lint-coverage.sh` plus a source-side
