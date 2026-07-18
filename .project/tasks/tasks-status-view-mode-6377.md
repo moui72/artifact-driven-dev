@@ -21,7 +21,7 @@ status: in-progress
   `STATUS.md` in step 6. Skip step 7 (orphaned-flip confirmation) and
   step 8 (next-step prompt via `AskUserQuestion`) entirely in this mode —
   `--view` is inspection only, never a state-changing prompt.
-- [ ] T003 Manually exercise `/ardd-status --view` against this repo's
+- [x] T003 Manually exercise `/ardd-status --view` against this repo's
   own `.project/` state (as specified by T001–T002) and confirm it
   reports the same substantive content a full `/ardd-status` run would,
   without touching `STATUS.md` (`git status --short .project/STATUS.md`
