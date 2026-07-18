@@ -1,6 +1,27 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-17 (`/ardd-implement` — ran `tasks-v0-10-2-fixes-53cb.md`
+**inline, deliberately not delegated** (given the tasks file exists
+because a delegated subagent falsely claimed task completion, this run
+verified each task's `git diff` in real time rather than trusting
+another delegated self-report). All 7 tasks completed (now
+`completed`): T001-T003 re-landed the three missing v0.10.1 edits —
+`ardd-status` now handles `dev-ahead` distinctly from `behind`,
+`ardd-init` step 7 warns that a `feat:` commit's message isn't proof of
+its diff, `ardd-plan` step 10 actually gates the browser-preview
+question on `plan_preview` — each verified via `git diff` against the
+named file before being marked complete. T004 (test-first, `--no-verify`
+documented in the commit body per this repo's shell-test convention,
+since there's no language-level xfail marker) added a regression case
+proving `tasks-flip completed` didn't check for unchecked tasks; T005
+fixed `ardd-state.sh` to refuse the flip with the still-open task ID(s)
+named, confirmed green. T006 added a mandatory pre-`task-check` diff
+self-check to `/ardd-implement` step 7 itself — the process fix meant to
+prevent this exact failure class going forward. T007 confirmed the full
+test suite green and the tree clean before completion. No feature flip
+— `features: []`. All work committed directly to `main` (solo mode, no
+worktree). Prior update, same day, `/ardd-plan` — drafted, approved, and
+tasked
 `plan-v0-10-2-fixes-2026-07-17-4465.md` (solo mode, no branch gate, on
 `main`). Consumed `feedback-prerelease-full-sweep-v0-10-1-e5d8.md`'s all
 3 items (accepted): F001 (the phantom-completion gap — the three missing
@@ -908,13 +929,11 @@ current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-v0-10-2-fixes-53cb.md` (`ready`, 7
-tasks/4 phases) — closes the critical phantom-completion gap already
-live in v0.10.1 stable, then Phase 4 walks through the v0.10.2 cut
-(push, targeted `S1 S2 S3` regression sweep, `stable-release` dispatch).
-The `new.sh` fix itself has fully shipped end-to-end and needs no
-further action. Otherwise, `codex-second-harness-support` is
-drafted-but-untasked:
+All 7 fix tasks are complete on `main` — push to publish the beta, run
+a targeted `/prerelease-sweep S1 S2 S3` regression check (the exact
+scenarios that caught the phantom-completion gap), then dispatch
+`stable-release.yml` (`bump: patch`) for v0.10.2. Otherwise,
+`codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
