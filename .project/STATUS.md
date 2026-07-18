@@ -1,6 +1,34 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-plan status-view-mode` — approved and tasked
+_Updated: 2026-07-18 (`/ardd-implement` — the delegated `status-view-mode`
+worktree run completed all 9 tasks: added `/ardd-status --view` (a
+read-only side door running discovery steps 1–5 unchanged, then printing
+the report and stopping — no `STATUS.md` write, no orphaned-flip
+confirmation, no next-step prompt), manually verified against this
+repo's own `.project/` state (T003); wired the three previously-unwired
+migration regression tests (`migration-critique-to-audit`,
+`migration-sync-to-tracker`, `migration-workflow-table`) into
+`.github/workflows/lint.yml`, all three confirmed passing locally first;
+wrote a new `tests/prerelease/scenarios/S8.md` (full tier — Agent-tool
+worktree fan-out delegation, folding in the `fold-to-main.sh`
+eager-background path as setup), extended `S3.md` (channel-switch flow)
+and `S7.md` (`epic:` labels), and registered S8 in
+`.claude/skills/prerelease-sweep/SKILL.md`'s hardcoded `full` tier list
+(`docs/reference/skills/prerelease-sweep.md` doesn't exist, so no doc
+edit needed there). Feature `status-view-mode`: `tasked` → `implemented`.
+Merged clean and the worktree reaped. Also, after a user correction that
+the prior docs-freshness research had drifted off-target (it reframed
+the ask as CI/test-wiring coverage rather than human-facing docs
+staying current), a fresh agent dispatch wrote a corrected report —
+`research-docs-freshness-human-facing-2026-07-18.md` — recommending a
+new local-only `docs-sweep` skill (mirrors `prerelease-sweep`'s
+placement/pattern) judging README/USAGE.md/docs/concepts.md/guides/
+reference-page bodies against actual current SKILL.md behavior, run
+manually before dispatching the stable-release workflow. Cites concrete
+drift already found: epics (`/ardd-status`'s by-epic breakdown,
+`/ardd-tracker`'s milestone mapping) and `/ardd-plan --slate` are
+currently undocumented on the site. Logged as backlog item `docs-sweep`.
+Prior update, same day, `/ardd-plan status-view-mode` — approved and tasked
 `plan-status-view-mode-2026-07-18-ce1f.md`: 9 tasks/3 phases in
 `tasks-status-view-mode-6377.md` (`ready`) covering a read-only
 `/ardd-status --view` mode (Phase 1), the CI-wiring fix for the three
@@ -1043,9 +1071,9 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 24 implemented · 1 retired — see
-`.project/features/`. No feature currently carries an `epic` value, so
-no "by epic" breakdown to show yet.
+2 backlogged · 25 implemented · 1 retired — see `.project/features/`. No
+feature currently carries an `epic` value, so no "by epic" breakdown to
+show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1055,12 +1083,12 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-Tasked:
-- `status-view-mode` — `/ardd-status --view` + CI wiring fix + prerelease
-  sweep scenario additions; see the `_Updated` note above.
-  `tasks-status-view-mode-6377.md` (`ready`, 9 tasks/3 phases) — next:
-  `/ardd-implement`.
+- `docs-sweep` — local-only skill judging whether human-facing docs
+  (README, USAGE.md, docs/concepts.md, guides, reference-page bodies)
+  stay current against actual SKILL.md behavior; see the `_Updated` note
+  above and `research-docs-freshness-human-facing-2026-07-18.md`.
 Target a backlogged slug with `/ardd-plan <slug>`.
+Newest implemented: `status-view-mode` — see the `_Updated` note above.
 Newest implemented: `constitution-trim-review-relev` — see the
 `_Updated` note above.
 
@@ -1074,21 +1102,20 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap (the
-`constitution-trim-review-relev` worktree merged and was reaped this
-update). `main` is ahead of `origin/main` (unpushed local commits from
-today's work); `v0.10.2` is the current published stable release.
+Nothing — no worktrees, nothing pending reap (the `status-view-mode`
+worktree merged and was reaped this update). `main` is ahead of
+`origin/main` (unpushed local commits from today's work); `v0.10.2` is
+the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-status-view-mode-6377.md` (`ready`, 9
-tasks/3 phases — `/ardd-status --view`, the CI-wiring fix, and the
-prerelease-sweep scenario additions). Separately, decide on the docs-freshness research
-report's recommendation
-(`.project/plans/research-docs-freshness-skill-2026-07-18.md`): a new
-deterministic `scripts/lint-coverage.sh` plus a source-side
-`coverage-sweep` skill — no plan drafted yet, this needs a decision
-first. `codex-second-harness-support` is drafted-but-untasked:
+`docs-sweep` is backlogged and ready to design: `/ardd-plan docs-sweep`
+(spec = `research-docs-freshness-human-facing-2026-07-18.md`, which cites
+concrete site drift — epics, `/ardd-plan --slate` — to fix as part of its
+first real run). Note there's also an earlier, off-target research file
+(`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
+framing) that's superseded in spirit but left on disk — not consumed by
+any plan. `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`
 (Phase 1 is a blocking live skill-to-skill-chaining smoke test on a real
 Codex CLI — the true final go/no-go — before Phases 2–5's install-time
