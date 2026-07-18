@@ -43,7 +43,7 @@ status: in-progress
   in the workflow.
 
 ## Phase 3: Prerelease sweep scenario additions (feedback F001–F003, feedback-prerelease-sweep-scenario-gaps-95f6.md)
-- [ ] T006 [parallel] Write `tests/prerelease/scenarios/S8.md` (full
+- [x] T006 [parallel] Write `tests/prerelease/scenarios/S8.md` (full
   tier) — Agent-tool worktree fan-out delegation scenario: solo
   greenfield consumer, two `ready` tasks files, background both via
   `/ardd-implement`'s multi-select fan-out, verify both merges land
@@ -54,7 +54,7 @@ status: in-progress
   branch rather than the default branch, so backgrounding it exercises
   the fold path too) — no separate scenario for this. Follow `S6.md`'s
   existing structure (Axes / Purpose / Setup / Steps) as the template.
-- [ ] T007 [parallel] Extend `tests/prerelease/scenarios/S3.md` (full
+- [x] T007 [parallel] Extend `tests/prerelease/scenarios/S3.md` (full
   tier) with a channel-switch flow: after S3's existing upgrade-path
   steps, run `/ardd-update --beta` then `/ardd-update --stable` on the
   same consumer, asserting `Channel:`/`Source-Ref:` in
@@ -64,14 +64,14 @@ status: in-progress
   (from `channel-source-ref-consistency`) fires only when it should
   (i.e. not immediately after the `--beta` switch, but correctly if a
   stale beta ref were left under a stable channel).
-- [ ] T008 [parallel] Extend `tests/prerelease/scenarios/S7.md` (smoke
+- [x] T008 [parallel] Extend `tests/prerelease/scenarios/S7.md` (smoke
   tier) with `epic:` register-label coverage: seed a couple of `epic:`
   fields into the consumer's feature register and confirm `/ardd-status`
   groups its Feature Backlog counts "by epic" correctly and
   `/ardd-backlog --assign-epics` behaves sanely against already-labeled
   entries (proposes nothing for already-`epic`'d slugs, or handles them
   per its own documented behavior).
-- [ ] T009 First check whether `skills/prerelease-sweep/SKILL.md` (and,
+- [x] T009 First check whether `skills/prerelease-sweep/SKILL.md` (and,
   if it exists, `docs/reference/skills/prerelease-sweep.md`) hardcodes a
   scenario name/tier list, or dynamically discovers
   `tests/prerelease/scenarios/*.md` at dispatch time. If hardcoded,

@@ -13,7 +13,7 @@ briefs are the product; never improvise scenario content from memory.
 ## 1. Resolve the tier
 
 - `smoke` → S1, S5, S7
-- `full` → S1–S7
+- `full` → S1–S8
 - explicit `S<n>` list → exactly those
 - no argument → ask the user (smoke / full / subset). If the user
   mentions this is a regression rerun after a fix batch, also ask for
@@ -25,7 +25,14 @@ scenario — it tests the delegation script layer against a
 manually-created worktree and never makes an `isolation: "worktree"`
 `Agent` call itself (see the brief's scope note; the harness-level
 nesting question is out of sweep scope, per the README coverage
-backlog).
+backlog). S8, by contrast, IS the scenario that makes real
+`isolation: "worktree"` `Agent` calls — it dispatches its own two
+worktree subagents from within its (already background) sweep
+subagent, exercising the fan-out/merge/reap chain end to end. S3 and
+S7 also carry additional steps (channel-switch flow; epic-label
+coverage, respectively) beyond what their scenario briefs originally
+covered — no separate scenario numbers were minted for those, the
+briefs themselves grew.
 
 ## 2. Prepare the run
 
