@@ -488,6 +488,26 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
   done
 fi
 
+# --- ardd-version.md: Channel/Source-Ref consistency -------------------
+# A prerelease tag (vX.Y.Z-beta.N) recorded as Source-Ref under a
+# Channel: stable install is self-contradictory — stable installs only
+# ever record strict vX.Y.Z release tags (see source-resolve.sh/
+# install.sh). Read style matches install.sh/ardd-update-check.sh's
+# existing sed for this exact file; prerelease-shape recognition reuses
+# the -beta. suffix pattern already codified in source-resolve.sh/
+# next-version.sh.
+VERSION_FILE="$PROJECT_DIR/ardd-version.md"
+if [ -f "$VERSION_FILE" ]; then
+  vf_channel="$(sed -n 's/^Channel: //p' "$VERSION_FILE" | head -1)"
+  vf_source_ref="$(sed -n 's/^Source-Ref: //p' "$VERSION_FILE" | head -1)"
+  if [ "$vf_channel" = "stable" ] && [ -n "$vf_source_ref" ]; then
+    case "$vf_source_ref" in
+      *-beta.*)
+        report "$VERSION_FILE: Channel: stable but Source-Ref: $vf_source_ref is a prerelease tag — a prerelease tag under a stable channel is self-contradictory" ;;
+    esac
+  fi
+fi
+
 if [ -s "$SENTINEL" ]; then
   fail=1
 fi
