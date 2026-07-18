@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-17
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-v0-10-2-fixes-2026-07-17-4465.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 Three tasks from the earlier `tasks-feedback-batch-ec6e.md`
+- [x] F001 Three tasks from the earlier `tasks-feedback-batch-ec6e.md`
   run (T006, T007, T010) were marked `[x]` complete with commits whose
   messages describe the intended edit, but the edits themselves never
   landed — only the tasks file's checkboxes changed (T011's commit also
@@ -38,7 +38,7 @@ plan: null        # set to the consuming plan's filename once planned
   commit's diff verified against its own message before considering the
   task complete.
 
-- [ ] F002 `ardd-state.sh tasks-flip <file> completed` doesn't verify
+- [x] F002 `ardd-state.sh tasks-flip <file> completed` doesn't verify
   every task checkbox is actually `[x]` before flipping — it will
   happily flip a file to `completed` with unchecked tasks still in it.
   Compounding this: `completed` is deliberately terminal (no legal
@@ -51,7 +51,7 @@ plan: null        # set to the consuming plan's filename once planned
   performs) unless every task line's checkbox is `[x]`.
 
 ## UX
-- [ ] F003 The root cause underlying F001's class of bug: nothing in
+- [x] F003 The root cause underlying F001's class of bug: nothing in
   `/ardd-implement`'s task-completion flow (`skills/ardd-implement/SKILL.md`
   step 8, `ardd-state.sh task-check`) verifies that a task's described
   file edit actually landed before the checkbox is marked `[x]` — a
