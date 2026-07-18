@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: Land the three missing v0.10.1 edits
-- [ ] T001 Update `skills/ardd-status/SKILL.md` step 1's banner-line
+- [x] T001 Update `skills/ardd-status/SKILL.md` step 1's banner-line
   template to handle `ardd-update-check.sh`'s `dev-ahead` outcome
   distinctly from `behind`: do not recommend `/ardd-update` when doing
   so would regress the target. Either treat it as a silent case

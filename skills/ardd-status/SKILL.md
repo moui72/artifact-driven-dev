@@ -72,7 +72,12 @@ the coordinator or the inline path.
    STATUS.md each gain one line: "ArDD update available: installed <x>,
    source at <y> — run /ardd-update." On `source-missing`, a gentler line:
    "ArDD source checkout not found at its recorded path — run /ardd-update
-   to re-record it." `no-version-file`, `no-source-path`, `up-to-date`, and
+   to re-record it." On `dev-ahead installed=<x> latest-release=<y>` (a
+   dev-mode checkout that's actually ahead of the latest release tag, not
+   behind it) — **never recommend `/ardd-update`**, since running it would
+   regress the target; instead a distinct, non-misleading line: "ArDD
+   dev-mode checkout is ahead of the latest release (<y>) — no update
+   needed." `no-version-file`, `no-source-path`, `up-to-date`, and
    `self-hosted` (this repo is its own ArDD source — the tip comparison
    is meaningless there) stay silent.
 
