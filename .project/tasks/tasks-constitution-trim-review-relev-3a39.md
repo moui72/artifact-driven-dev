@@ -1,7 +1,7 @@
 ---
 plan: plan-constitution-trim-review-relev-2026-07-18-8c82.md
 generated: 2026-07-18
-status: ready
+status: in-progress
 ---
 
 # Tasks
