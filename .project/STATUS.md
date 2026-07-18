@@ -1,6 +1,17 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` — the delegated `status-view-mode`
+_Updated: 2026-07-18 (`/ardd-feedback` — re-filed a new-capability item to
+the register as `dynamic-version-badge-sync` (per the skill's mirror
+check: this described something the system doesn't do yet, not a bug/UX
+fix): install.sh installing a dynamic "ArDD version" README badge —
+shields.io endpoint JSON + a GitHub Action watching
+`.project/ardd-version.md` (or firing off `/ardd-update`'s own commit)
+— replacing the current static-only badge suggestion
+(`templates/badge.md`), which structurally can't carry a version since
+it's copied verbatim to every target. Motivated by a consumer
+(assisted-review) already hand-building this exact plumbing from
+scratch. Prior update, same day, `/ardd-implement` — the delegated
+`status-view-mode`
 worktree run completed all 9 tasks: added `/ardd-status --view` (a
 read-only side door running discovery steps 1–5 unchanged, then printing
 the report and stopping — no `STATUS.md` write, no orphaned-flip
@@ -1071,7 +1082,7 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged · 25 implemented · 1 retired — see `.project/features/`. No
+3 backlogged · 25 implemented · 1 retired — see `.project/features/`. No
 feature currently carries an `epic` value, so no "by epic" breakdown to
 show yet.
 Backlogged:
@@ -1085,10 +1096,13 @@ Backlogged:
   gated on its own Phase 1 go/no-go.
 - `docs-sweep` — local-only skill judging whether human-facing docs
   (README, USAGE.md, docs/concepts.md, guides, reference-page bodies)
-  stay current against actual SKILL.md behavior; see the `_Updated` note
-  above and `research-docs-freshness-human-facing-2026-07-18.md`.
+  stay current against actual SKILL.md behavior; see the earlier
+  `_Updated` note and `research-docs-freshness-human-facing-2026-07-18.md`.
+- `dynamic-version-badge-sync` — install.sh-installable dynamic version
+  badge (shields.io endpoint JSON + sync workflow), replacing the
+  current static-only badge suggestion; see the `_Updated` note above.
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `status-view-mode` — see the `_Updated` note above.
+Newest implemented: `status-view-mode` — see the earlier `_Updated` note.
 Newest implemented: `constitution-trim-review-relev` — see the
 `_Updated` note above.
 
@@ -1109,10 +1123,12 @@ the current published stable release.
 
 ## Recommended Next Step
 
-`docs-sweep` is backlogged and ready to design: `/ardd-plan docs-sweep`
-(spec = `research-docs-freshness-human-facing-2026-07-18.md`, which cites
+Two fresh backlog items ready to design: `/ardd-plan docs-sweep` (spec =
+`research-docs-freshness-human-facing-2026-07-18.md`, which cites
 concrete site drift — epics, `/ardd-plan --slate` — to fix as part of its
-first real run). Note there's also an earlier, off-target research file
+first real run) and `/ardd-plan dynamic-version-badge-sync` (install.sh-installable
+version badge, motivated by a consumer already hand-building the same
+plumbing). Note there's also an earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
