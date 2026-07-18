@@ -662,46 +662,56 @@ the feature register. Its own steps:
 5. **Classify and present.** Using the confidence grade (step 3) and the
    two relations (step 4), bucket every backlogged item into exactly one
    of:
-   - **Bundle** — items connected by a dependency edge, or sharing files
-     with no safe reordering. Sequenced; recommended as one multi-slug
+   - **Bundle** (reported under "Plan together") — items connected by a
+     dependency edge, or sharing files with no safe reordering.
+     Sequenced; recommended as one multi-slug
      `/ardd-plan <slug1> <slug2> ...` call, in dependency order.
-   - **Parallel set** — items that are pairwise file-disjoint, have no
-     dependency edge between them, and are *not* `low` confidence.
-     Recommended as separate `/ardd-plan <slug>` calls, one per item,
-     safe to fan out to worktrees. A `low`-confidence item is never
-     placed in a parallel set even when no overlap was found — a wrong
-     "disjoint" call is the expensive failure (it green-lights a fan-out
-     that then merge-conflicts), so low confidence always routes to
-     solo-deferred instead.
-   - **Solo-deferred** — `low`/speculative confidence, or explicitly
-     gated on a non-code decision per the artifact. Recommended as its
-     own single-slug `/ardd-plan <slug>` call on its own timeline; never
-     bundled or fanned out.
+   - **Parallel set** (reported under "Plan separately, safe to fan
+     out") — items that are pairwise file-disjoint, have no dependency
+     edge between them, and are *not* `low` confidence. Recommended as
+     separate `/ardd-plan <slug>` calls, one per item, safe to fan out
+     to worktrees. A `low`-confidence item is never placed in a
+     parallel set even when no overlap was found — a wrong "disjoint"
+     call is the expensive failure (it green-lights a fan-out that then
+     merge-conflicts), so low confidence always routes to solo-deferred
+     instead.
+   - **Solo-deferred** (reported under "Defer") — `low`/speculative
+     confidence, or explicitly gated on a non-code decision per the
+     artifact. Recommended as its own single-slug `/ardd-plan <slug>`
+     call on its own timeline; never bundled or fanned out.
 
-   **Report format**: present the full grouping — every bucket, the
-   items in it, and the rationale (for a bundle, name the specific
-   shared file or the dependency; for a parallel set, note the
-   confidence and disjointness; for solo-deferred, name the confidence
-   grade or the non-code gate) — followed by the recommended next
-   command(s), one per bucket:
+   **Report format**: lead with the actionable grouping, not the
+   rationale — a reader must be able to tell "run together vs.
+   independent vs. deferred" from the section headers alone, without
+   parsing prose. Use three fixed headings, each naming the call count
+   and fan-out safety up front; list every command directly under its
+   heading; demote the file-overlap/dependency/confidence rationale to a
+   one-line note per item, after the command(s), not before:
 
    ```
-   Bundle: typography-substitution, docx-export, epub-pdf-export
-     (typography-substitution must land first — both export items read
-     through the same render/export path it transforms)
+   Plan together (1 call):
      -> /ardd-plan typography-substitution docx-export epub-pdf-export
+        (typography-substitution, docx-export, epub-pdf-export —
+        typography-substitution must land first; both export items read
+        through the same render/export path it transforms)
 
-   Parallel set: spellcheck-backend, personal-dictionary
-     (disjoint footprints — speller.ts vs. dictionary-storage.ts — despite
-     sharing the "spellcheck" label; both high confidence)
+   Plan separately, safe to fan out (2 calls):
      -> /ardd-plan spellcheck-backend
+        (disjoint footprint — speller.ts; high confidence)
      -> /ardd-plan personal-dictionary
+        (disjoint footprint — dictionary-storage.ts; high confidence;
+        despite sharing the "spellcheck" label with spellcheck-backend,
+        no file or dependency overlap)
 
-   Solo-deferred: llm-assistance
-     (low confidence — infrastructure.md flags this as a later phase with
-     an open question; no seam exists yet to ground a footprint against)
-     -> /ardd-plan llm-assistance (on its own timeline)
+   Defer (own timeline):
+     -> /ardd-plan llm-assistance
+        (low confidence — infrastructure.md flags this as a later phase
+        with an open question; no seam exists yet to ground a footprint
+        against)
    ```
+
+   Omit any of the three headings entirely when its bucket is empty —
+   don't print an empty section.
 
    If `next_step_prompt: true` (see below), the single top-priority
    recommendation is then offered via `AskUserQuestion`; otherwise this
