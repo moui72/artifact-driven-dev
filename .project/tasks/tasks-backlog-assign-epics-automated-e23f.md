@@ -1,13 +1,13 @@
 ---
 plan: plan-backlog-assign-epics-automated-2026-07-18-3d8f.md
 generated: 2026-07-18
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
 
 ## Phase 1: `epic` write path (test-first)
-- [ ] T001 (test-first) Add a regression case to
+- [x] T001 (test-first) Add a regression case to
   `scripts/test-ardd-state.sh` covering `feature-field <slug> epic
   <value>`: set on a feature with no `epic` field, replace on one that
   already has a value, and confirm an unrecognized key (e.g. `bogus`) is
@@ -22,7 +22,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   xfail marker for its POSIX-sh test scripts — use `--no-verify` with
   the emergency documented in the commit body, per existing precedent in
   this repo's history). [feature: backlog-assign-epics-automated]
-- [ ] T002 Add `epic` to `scripts/ardd-state.sh`'s `feature-field`
+- [x] T002 Add `epic` to `scripts/ardd-state.sh`'s `feature-field`
   valid-key case statement (`plan|tasks|gh_issue` becomes
   `plan|tasks|gh_issue|epic`), and update its usage/help text (the
   `feature-field <slug> <plan|tasks|gh_issue> <value>` line) to include
@@ -30,7 +30,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   [feature: backlog-assign-epics-automated]
 
 ## Phase 2: `--assign-epics` sweep mode (depends on Phase 1 — calls its write path)
-- [ ] T003 Add `--assign-epics` to `skills/ardd-backlog/SKILL.md`'s
+- [x] T003 Add `--assign-epics` to `skills/ardd-backlog/SKILL.md`'s
   Usage section (alongside the existing `--from-artifacts` mention) and
   write a new `## --assign-epics mode` section, structured exactly like
   the existing `## --from-artifacts mode` section (same
@@ -52,13 +52,13 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   item unbundled rather than forcing it in. If there are no candidates
   (every feature already has `epic` set, or the register is empty),
   report that and stop. [feature: backlog-assign-epics-automated]
-- [ ] T004 [parallel] In the same new section, write the confirmation
+- [x] T004 [parallel] In the same new section, write the confirmation
   step (step 2, mirroring `--from-artifacts`'s step 2 exactly): present
   all proposed groups in ONE grouped `AskUserQuestion` prompt
   (`multiSelect` on) with per-group accept/decline — never N sequential
   prompts. Show each group's member slugs and a one-line rationale for
   the grouping. [feature: backlog-assign-epics-automated]
-- [ ] T005 In the same new section, write the apply step (step 3,
+- [x] T005 In the same new section, write the apply step (step 3,
   mirroring `--from-artifacts`'s step 3's `project-lock.sh check`/
   `touch` discipline): before writing, run
   `.claude/skills/ardd-scripts/project-lock.sh check ardd-backlog`
@@ -75,7 +75,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   exists from `epics-grouping-in-feature-regi`. No test task —
   prose-only skill-file change; the write calls themselves are already
   covered by T001's regression test. [feature: backlog-assign-epics-automated]
-- [ ] T006 Update `docs/reference/skills/ardd-backlog.md`'s hand-written
+- [x] T006 Update `docs/reference/skills/ardd-backlog.md`'s hand-written
   body to document `--assign-epics`, mirroring how `--from-artifacts` is
   already documented there (a short paragraph: what it does, the
   batched-confirmation discipline, a pointer to what `epic:` values are

@@ -313,6 +313,17 @@ set +e
 set -e
 assert_exit "feature-field: unknown key usage error" 2 "$rc"
 
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode epic epic-ui >/dev/null )
+assert_file_grep "feature-field: epic added" "^epic: epic-ui" "$FEAT"
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode epic epic-onboarding >/dev/null )
+assert_file_grep "feature-field: epic replaced" "^epic: epic-onboarding" "$FEAT"
+n="$(grep -c '^epic:' "$FEAT")"
+[ "$n" -eq 1 ] && ok "feature-field: epic no duplicate keys" || bad "feature-field: epic no duplicate keys — found $n epic: lines"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-field dark-mode bogus xyz ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-field: unrecognized key (bogus) still refused" 2 "$rc"
+
 # --- stamp ---
 ART="$WORK/p2/.project/artifacts"; mkdir -p "$ART"
 AF="$ART/datamodel.md"

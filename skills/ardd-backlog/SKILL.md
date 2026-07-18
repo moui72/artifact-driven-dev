@@ -31,6 +31,10 @@ documented-but-untracked capabilities and proposes register entries in
 bulk (see "--from-artifacts mode" below). `/ardd-status`'s "Documented but
 untracked" section points here.
 
+`/ardd-backlog --assign-epics` runs a re-runnable sweep that proposes
+`epic:` groupings across the register instead of logging a new idea (see
+"--assign-epics mode" below).
+
 ## --from-artifacts mode
 
 When invoked as `/ardd-backlog --from-artifacts`, skip steps 1–2 below and
@@ -61,6 +65,45 @@ run this sweep instead:
 
 4. **Report** the created slugs and declined count, then continue with
    step 6 below — its `/ardd-status` handoff covers the refresh.
+
+## --assign-epics mode
+
+When invoked as `/ardd-backlog --assign-epics`, skip steps 1–2 below and
+run this sweep instead:
+
+1. **Enumerate candidates.** Walk every feature register entry via
+   `.claude/skills/ardd-scripts/feature-list.sh --all` (installed copy;
+   fall back to the source repo path `scripts/feature-list.sh --all` if
+   absent), and filter to those whose `epic` column (5th tab-separated
+   field) is empty — regardless of status, so a `planned`/`tasked` item
+   skipped on an earlier run can still be picked up later. For each
+   candidate, read its description and `Why:` line (already present in
+   `feature-list.sh --all`'s output; re-reading the full
+   `.project/features/<slug>.md` file is fine if more context is needed
+   for judgment). Propose thematic groupings by agent judgment, grounded
+   in the actual description/`Why:` text — never invent a grouping the
+   text doesn't support. A feature with no clear fit to any other feature
+   is proposed as its own standalone group, not forced into an unrelated
+   bucket. If there are no candidates (every feature already has `epic`
+   set, or the register is empty), report that and stop.
+
+2. **Confirm in one batched prompt.** Present all proposed groups in ONE
+   grouped prompt (AskUserQuestion, multiSelect on) with per-group
+   accept/decline — never N sequential prompts. Show each group's member
+   slugs and a one-line rationale for the grouping.
+
+3. **Apply accepted groupings.** Before writing, run
+   `.claude/skills/ardd-scripts/project-lock.sh check ardd-backlog` — if
+   it warns, surface the warning but proceed regardless; this is
+   advisory, never a block. For each accepted group, call
+   `.claude/skills/ardd-scripts/ardd-state.sh feature-field <slug> epic
+   <value>` for every member slug. Declined groups are dropped, not
+   recorded — the user's judgment is final for this run. After writing,
+   run `.claude/skills/ardd-scripts/project-lock.sh touch ardd-backlog`.
+
+4. **Report** the applied group names + slugs and the declined count,
+   then continue with step 6 below — its `/ardd-status` handoff already
+   covers the by-epic breakdown refresh; no new handoff logic is needed.
 
 ## Steps
 

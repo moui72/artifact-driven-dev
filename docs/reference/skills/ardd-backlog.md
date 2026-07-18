@@ -11,6 +11,7 @@ _Tier: core_
 ```
 /ardd-backlog <plain-language description of the capability>
 /ardd-backlog --from-artifacts    # retroactive sweep of stable artifacts
+/ardd-backlog --assign-epics      # re-runnable epic-grouping sweep
 ```
 
 Logging is deliberately cheap: one register file, no artifact edits, no
@@ -27,6 +28,16 @@ multi-select prompt, and creates the approved ones through the normal
 `feature-create` path. It's a proposal list — the human decides;
 declined candidates are dropped, not recorded. `/ardd-status`'s
 "Documented but untracked" section points here.
+
+`--assign-epics` is a re-runnable sweep that proposes `epic:` groupings
+across the register: it walks every feature whose `epic` field is
+empty (regardless of status), proposes thematic groupings by judgment
+grounded in each entry's description/`Why:` line (never invented), and
+confirms every proposed group in one batched multi-select prompt —
+same discipline as `--from-artifacts`. Accepted groups are applied via
+`ardd-state.sh feature-field <slug> epic <value>`; declined groups are
+dropped. `epic:` values feed `feature-list.sh --epic` and
+`/ardd-status`'s by-epic breakdown.
 
 ## Reads
 

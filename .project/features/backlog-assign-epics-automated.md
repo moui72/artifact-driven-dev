@@ -1,6 +1,6 @@
 ---
 slug: backlog-assign-epics-automated
-status: tasked
+status: implemented
 logged: 2026-07-17
 plan: plan-backlog-assign-epics-automated-2026-07-18-3d8f.md
 tasks: tasks-backlog-assign-epics-automated-e23f.md
