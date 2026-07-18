@@ -209,6 +209,24 @@ jobs:
       - uses: actions/checkout@v4
       - run: ./scripts/test-migration-diagram-type.sh
 
+  migration-critique-to-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-migration-critique-to-audit.sh
+
+  migration-sync-to-tracker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-migration-sync-to-tracker.sh
+
+  migration-workflow-table:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/test-migration-workflow-table.sh
+
   ardd-update-check:
     runs-on: ubuntu-latest
     steps:

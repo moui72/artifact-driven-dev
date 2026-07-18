@@ -29,13 +29,13 @@ status: in-progress
   completion note.
 
 ## Phase 2: CI wiring fix (feedback F001, feedback-ci-migration-tests-unwired-37ee.md)
-- [ ] T004 [parallel] Add three CI jobs to `.github/workflows/lint.yml` —
+- [x] T004 [parallel] Add three CI jobs to `.github/workflows/lint.yml` —
   `migration-critique-to-audit`, `migration-sync-to-tracker`,
   `migration-workflow-table` — each running its corresponding
   `scripts/test-migration-*.sh`, matching the existing
   `migration-retag`/`migration-diagram-type` job shape exactly (same
   `runs-on`, same `actions/checkout@v4` step, one `run:` line).
-- [ ] T005 [parallel] Verify locally that all three scripts referenced in
+- [x] T005 [parallel] Verify locally that all three scripts referenced in
   T004 actually pass (`./scripts/test-migration-critique-to-audit.sh`,
   `./scripts/test-migration-sync-to-tracker.sh`,
   `./scripts/test-migration-workflow-table.sh`) — confirming there's no
