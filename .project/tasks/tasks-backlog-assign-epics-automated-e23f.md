@@ -1,7 +1,7 @@
 ---
 plan: plan-backlog-assign-epics-automated-2026-07-18-3d8f.md
 generated: 2026-07-18
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -75,7 +75,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   exists from `epics-grouping-in-feature-regi`. No test task —
   prose-only skill-file change; the write calls themselves are already
   covered by T001's regression test. [feature: backlog-assign-epics-automated]
-- [ ] T006 Update `docs/reference/skills/ardd-backlog.md`'s hand-written
+- [x] T006 Update `docs/reference/skills/ardd-backlog.md`'s hand-written
   body to document `--assign-epics`, mirroring how `--from-artifacts` is
   already documented there (a short paragraph: what it does, the
   batched-confirmation discipline, a pointer to what `epic:` values are
