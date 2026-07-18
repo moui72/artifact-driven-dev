@@ -30,7 +30,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   [feature: backlog-assign-epics-automated]
 
 ## Phase 2: `--assign-epics` sweep mode (depends on Phase 1 — calls its write path)
-- [ ] T003 Add `--assign-epics` to `skills/ardd-backlog/SKILL.md`'s
+- [x] T003 Add `--assign-epics` to `skills/ardd-backlog/SKILL.md`'s
   Usage section (alongside the existing `--from-artifacts` mention) and
   write a new `## --assign-epics mode` section, structured exactly like
   the existing `## --from-artifacts mode` section (same
@@ -52,13 +52,13 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   item unbundled rather than forcing it in. If there are no candidates
   (every feature already has `epic` set, or the register is empty),
   report that and stop. [feature: backlog-assign-epics-automated]
-- [ ] T004 [parallel] In the same new section, write the confirmation
+- [x] T004 [parallel] In the same new section, write the confirmation
   step (step 2, mirroring `--from-artifacts`'s step 2 exactly): present
   all proposed groups in ONE grouped `AskUserQuestion` prompt
   (`multiSelect` on) with per-group accept/decline — never N sequential
   prompts. Show each group's member slugs and a one-line rationale for
   the grouping. [feature: backlog-assign-epics-automated]
-- [ ] T005 In the same new section, write the apply step (step 3,
+- [x] T005 In the same new section, write the apply step (step 3,
   mirroring `--from-artifacts`'s step 3's `project-lock.sh check`/
   `touch` discipline): before writing, run
   `.claude/skills/ardd-scripts/project-lock.sh check ardd-backlog`
