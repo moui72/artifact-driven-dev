@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (release ops — pushed `main` (`a802dbc..db95bae`,
+_Updated: 2026-07-18 (`/ardd-update` — this repo's own installed
+`.claude/skills/ardd-scripts/` copy had gone stale (last self-installed
+at commit `a656512`, predating the `feature-list.sh` manifest-gap fix
+and several other recent scripts), discovered when `/ardd-backlog
+--list` (not a real mode — corrected to a direct `feature-list.sh` call)
+hit a missing-file error. Re-ran `install.sh` against this repo
+(self-hosted, `channel=dev`); refreshed to commit `66bd323`
+(today's docs-audit commit). No migrations pending, no workflow-field
+backfill needed (all four already set), `.worktreeinclude`/
+`.gitattributes` already correct. Prior update, same day, release ops —
+pushed `main` (`a802dbc..db95bae`,
 publishing the v0.10.2 fix batch as `v0.10.2-beta.1`), then ran a
 targeted `/prerelease-sweep S1 S2 S3` regression check (run
 `2026-07-17-db69`) specifically re-verifying S2-F001 (`ardd-init` diff
