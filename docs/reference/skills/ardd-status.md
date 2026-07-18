@@ -10,6 +10,7 @@ _Tier: core_
 
 ```
 /ardd-status
+/ardd-status --view    # read-only side door: print the report and stop
 ```
 
 No arguments. Non-destructive: it reads everything and writes exactly one
@@ -18,6 +19,13 @@ file. Most state-changing skills run it automatically as their final step
 `/ardd-implement` on completion, `/ardd-defects` — the canonical list
 lives in this skill's own SKILL.md). Manual runs are the right call after
 `/ardd-init` + a refine pass, or anytime you want a fresh check.
+
+`--view` is a pure side door: it runs the same discovery and report
+assembly (steps 1–5), prints the report straight to the terminal, and
+stops — no `STATUS.md` write, no orphaned-flip confirmation, and no
+next-step prompt. Same "no writes of any kind" shape as `/ardd-plan
+--list` and `/ardd-implement --list`. Use it for a quick full consistency
+check without touching `STATUS.md` or being asked anything.
 
 **Run only from the primary checkout, never inside a delegated worktree** —
 that would trap the `STATUS.md` write on the worktree's branch.
@@ -52,6 +60,10 @@ that would trap the `STATUS.md` write on the worktree's branch.
   language, `draft` artifacts that would block planning
 - **Diagram staleness** — each renderable artifact's `diagram_status`
 - **In-flight work** — sibling worktrees, reapable worktrees, draft PRs
+- **By-epic breakdown** — when any register feature carries a non-empty
+  `epic` field, the Feature Backlog counts (backlogged/planned/tasked)
+  are additionally grouped and reported per `epic` value; omitted
+  entirely when no feature carries one
 - **Documented but untracked** — capabilities a `stable` artifact
   describes that have no register entry (any status) and no
   implementation, each pointing at `/ardd-backlog --from-artifacts`.
