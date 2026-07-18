@@ -19,7 +19,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   claimed-but-not-applied once already; this explicit self-check is the
   new discipline this plan's Phase 3 formalizes). No test task —
   prose-only skill-file change. [feedback: F001]
-- [ ] T002 [parallel] Edit `skills/ardd-init/SKILL.md` step 7's git-log
+- [x] T002 [parallel] Edit `skills/ardd-init/SKILL.md` step 7's git-log
   feature-extraction guidance: add an explicit instruction that a
   `feat:`-titled commit's message is not proof of its diff, and
   instruct verifying the commit's actual diff (or cross-referencing

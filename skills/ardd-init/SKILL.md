@@ -337,7 +337,14 @@ with `/ardd-refine` before planning new work.
      later ones fill gaps. This complements the step-2 structural survey,
      which the agent can reuse: (1) **git log** (`git log --format="%ad %s"
      --date=short` — `feat:` commits and PR merge titles are most
-     reliable); (2) **changelog** (`CHANGELOG.md`, a `## Changelog`/`##
+     reliable, but a commit's message is not proof of its diff: before
+     treating a `feat:`-titled commit as evidence a capability is
+     actually implemented and shipped, verify the commit's actual diff
+     (`git show <sha>`) or cross-reference against the step-2 code
+     survey — a misleadingly-titled commit (e.g. one that only touches
+     `.env.example` or `README.md` despite an implementation-sounding
+     message) would otherwise produce a false "implemented" register
+     entry); (2) **changelog** (`CHANGELOG.md`, a `## Changelog`/`##
      What's New` README section, or `gh release list` / `glab release list`
      if available); (3) **test descriptions** (`describe`/`it`/`test` names
      are often the clearest capability documentation); (4) **CLI help text
