@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-18
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-status-view-mode-2026-07-18-ce1f.md
 ---
 
 # Feedback
 
 ## UX
-- [ ] F001 `tests/prerelease/` scenarios S1–S7 (written ~2026-07-15) have
+- [x] F001 `tests/prerelease/` scenarios S1–S7 (written ~2026-07-15) have
   no scenario exercising `Agent`-tool worktree **fan-out** delegation
   (`worktree-reap-and-fanout`, implemented 2026-07-12) — S6 only tests
   the script layer against a manually-created worktree, never the real
@@ -21,7 +21,7 @@ plan: null        # set to the consuming plan's filename once planned
   path (`background-by-default-flow`, 2026-07-12) as S8's setup step
   (start the second run from a feature branch) rather than a separate
   scenario.
-- [ ] F002 No scenario exercises *switching* release channels — S3
+- [x] F002 No scenario exercises *switching* release channels — S3
   checks that version/channel get recorded correctly but never runs
   `/ardd-update --beta` then `--stable` on the same consumer to confirm
   `Channel:`/`Source-Ref:` in `ardd-version.md` stay consistent both
@@ -31,7 +31,7 @@ plan: null        # set to the consuming plan's filename once planned
   when it should. Both `update-channel-switch-flags` (2026-07-15) and
   `channel-source-ref-consistency` (2026-07-18) postdate S3's authoring.
   Recommend extending **S3 (full tier)** with this channel-switch flow.
-- [ ] F003 No scenario touches `epic:` register labels at all
+- [x] F003 No scenario touches `epic:` register labels at all
   (`epics-grouping-in-feature-regi` + `backlog-assign-epics-automated`,
   2026-07-15/18) — S7's peripheral sweep predates them. Recommend
   extending **S7 (smoke tier — cheap)**: seed a couple of `epic:` fields

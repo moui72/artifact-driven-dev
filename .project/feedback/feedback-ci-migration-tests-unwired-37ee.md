@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-18
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-status-view-mode-2026-07-18-ce1f.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 Three regression test scripts exist on disk but are not wired
+- [x] F001 Three regression test scripts exist on disk but are not wired
   into `.github/workflows/lint.yml`: `scripts/test-migration-critique-to-audit.sh`
   (migration 0006), `scripts/test-migration-sync-to-tracker.sh` (migration
   0007), and `scripts/test-migration-workflow-table.sh` (migration 0008).

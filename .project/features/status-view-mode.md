@@ -1,7 +1,9 @@
 ---
 slug: status-view-mode
-status: backlogged
+status: tasked
 logged: 2026-07-18
+plan: plan-status-view-mode-2026-07-18-ce1f.md
+tasks: tasks-status-view-mode-6377.md
 ---
 
 A /ardd-status --view mode that reports a summary of current status, a snapshot of incomplete/in-flight work, and a recommended next step, without regenerating or writing STATUS.md.
