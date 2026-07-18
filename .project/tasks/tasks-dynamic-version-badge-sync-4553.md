@@ -1,13 +1,13 @@
 ---
 plan: plan-dynamic-version-badge-sync-2026-07-18-35aa.md
 generated: 2026-07-18
-status: ready
+status: completed
 ---
 
 # Tasks
 
 ## Phase 1: Workflow + seed JSON templates
-- [ ] T001 Create `templates/ardd-badge-workflow.yml` — a GitHub Actions
+- [x] T001 Create `templates/ardd-badge-workflow.yml` — a GitHub Actions
   workflow: triggers on push, `paths: ['.project/ardd-version.md']`;
   parses `Source-Ref:` (preferred) falling back to a short
   `Source-Commit:` prefix when no tag is recorded, and `Channel:`, from
@@ -17,11 +17,11 @@ status: ready
   endpoint-badge JSON schema (`schemaVersion`, `label`, `message`,
   optionally `color`); commits the change only if the JSON actually
   differs from what's on disk (never an empty commit).
-- [ ] T002 Create `templates/ardd-badge.json` — the seed JSON template
+- [x] T002 Create `templates/ardd-badge.json` — the seed JSON template
   with a placeholder shape (schemaVersion/label/message fields)
   `install.sh` fills in with the current install's actual
   `Source-Ref`/`Source-Commit` and `Channel` at write time (per T004).
-- [ ] T003 [parallel] Update `templates/badge.md` — add a two-badge
+- [x] T003 [parallel] Update `templates/badge.md` — add a two-badge
   variant (static "built with ArDD" badge + dynamic version badge
   reading `.github/badges/ardd-version.json` via a shields.io
   `dynamic/json` badge URL) as an alternate snippet alongside the
@@ -29,7 +29,7 @@ status: ready
   accompanies the `ARDD_VERSION_BADGE=1` opt-in.
 
 ## Phase 2: `install.sh` wiring
-- [ ] T004 Add `ARDD_VERSION_BADGE` env-var validation to `install.sh`
+- [x] T004 Add `ARDD_VERSION_BADGE` env-var validation to `install.sh`
   (valid values: unset, `0`, `1` — any other value is a refusal with a
   clear error message, mirroring the existing `ARDD_CHANNEL` validation
   block near the top of the script). Extend the existing "built with
@@ -41,7 +41,7 @@ status: ready
   print the two-badge snippet (T003) instead of the single static one.
   When `ARDD_VERSION_BADGE` is unset (the default), behavior must be
   byte-for-byte unchanged from before this task.
-- [ ] T005 Manually verify: an `ARDD_VERSION_BADGE=1 ./install.sh
+- [x] T005 Manually verify: an `ARDD_VERSION_BADGE=1 ./install.sh
   <fixture-target>` run writes both new files with content matching that
   fixture's actual recorded version; a plain `./install.sh
   <fixture-target>` (unset) writes neither file and prints the unchanged
@@ -49,7 +49,7 @@ status: ready
   note.
 
 ## Phase 3: Regression test
-- [ ] T006 Create `scripts/test-install-version-badge.sh` — a new
+- [x] T006 Create `scripts/test-install-version-badge.sh` — a new
   narrow fixture-based regression test mirroring this repo's existing
   per-concern install test pattern (`test-install-gitattributes.sh`,
   `test-install-manifest-complete.sh`, `test-install-prune.sh`,

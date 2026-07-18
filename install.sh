@@ -33,6 +33,18 @@ case "${ARDD_CHANNEL:-}" in
      exit 1 ;;
 esac
 
+# Opt-in dynamic version badge (plan: dynamic-version-badge-sync). Mirrors
+# the ARDD_CHANNEL validation above: unset/0/1 only — an unrecognized value
+# is a refusal, not a silent guess. When "1", install.sh writes the badge
+# workflow + seed JSON into the target and prints the two-badge snippet
+# instead of the single static one; unset (the default) leaves behavior
+# byte-for-byte unchanged.
+case "${ARDD_VERSION_BADGE:-}" in
+  ""|0|1) ;;
+  *) echo "Error: ARDD_VERSION_BADGE must be '0' or '1' (got '$ARDD_VERSION_BADGE')." >&2
+     exit 1 ;;
+esac
+
 # --- Skills ---
 echo "Installing artifact-driven-dev skills into $TARGET ..."
 
@@ -316,18 +328,7 @@ fi
 # --- Migrations ---
 if [ -d "$MIGRATIONS_DIR" ]; then
   echo ""
-  # --- "built with ArDD" badge: suggestion only, never an edit -----------
-# Mirrors the gitignore-suggestion posture: install.sh never modifies a
-# target's README. Offered only when a README exists and lacks the marker.
-if [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
-  echo ""
-  echo "Optional: add a \"built with ArDD\" badge to your README — paste this snippet:"
-  echo ""
-  cat "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
-  echo ""
-fi
-
-echo "Applying migrations ..."
+  echo "Applying migrations ..."
 
   touch "$APPLIED_FILE"
   any_new=0
@@ -394,6 +395,65 @@ committed.
 EOF
 echo ""
 echo "  ✓ .project/ardd-version.md ($COMMIT)"
+
+# --- "built with ArDD" badge: suggestion only, never a README edit --------
+# Mirrors the gitignore-suggestion posture: install.sh never modifies a
+# target's README. Offered only when a README exists and lacks the marker.
+# ARDD_VERSION_BADGE=1 additionally writes the supporting files (workflow +
+# seed JSON) — never overwriting a target's hand-customized version on a
+# re-run — and prints the two-badge snippet instead of the single static
+# one. Unset (the default): behavior is byte-for-byte unchanged from before
+# this opt-in existed.
+if [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
+  echo ""
+  if [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
+    BADGE_WORKFLOW="$TARGET/.github/workflows/ardd-badge.yml"
+    BADGE_JSON="$TARGET/.github/badges/ardd-version.json"
+
+    if [ ! -f "$BADGE_WORKFLOW" ]; then
+      mkdir -p "$(dirname "$BADGE_WORKFLOW")"
+      cp "$SCRIPT_DIR/templates/ardd-badge-workflow.yml" "$BADGE_WORKFLOW"
+      echo "  ✓ .github/workflows/ardd-badge.yml"
+    else
+      echo "  – .github/workflows/ardd-badge.yml (already exists, left untouched)"
+    fi
+
+    if [ ! -f "$BADGE_JSON" ]; then
+      # Fill the seed JSON with this run's actual version, same
+      # Source-Ref-preferred/Source-Commit-fallback precedence and
+      # channel->color mapping as the sync workflow (T001) uses.
+      if [ -n "$SOURCE_REF" ]; then
+        BADGE_MESSAGE="$SOURCE_REF"
+      elif [ -n "$FULL_COMMIT" ]; then
+        BADGE_MESSAGE="$(printf '%s' "$FULL_COMMIT" | cut -c1-7)"
+      else
+        BADGE_MESSAGE="dev"
+      fi
+      case "$CHANNEL" in
+        beta) BADGE_COLOR="yellow" ;;
+        *) BADGE_COLOR="blue" ;;
+      esac
+      mkdir -p "$(dirname "$BADGE_JSON")"
+      sed -e "s/__ARDD_BADGE_MESSAGE__/$BADGE_MESSAGE/" \
+          -e "s/__ARDD_BADGE_COLOR__/$BADGE_COLOR/" \
+          "$SCRIPT_DIR/templates/ardd-badge.json" > "$BADGE_JSON"
+      echo "  ✓ .github/badges/ardd-version.json ($BADGE_MESSAGE)"
+    else
+      echo "  – .github/badges/ardd-version.json (already exists, left untouched)"
+    fi
+
+    echo ""
+    echo "Optional: add a two-badge \"built with ArDD\" pair to your README — paste this snippet:"
+    echo ""
+    sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+    echo ""
+  else
+    echo "Optional: add a \"built with ArDD\" badge to your README — paste this snippet:"
+    echo ""
+    sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+    echo ""
+  fi
+fi
 
 # --- .project/.lock gitignore entry ---
 # project-lock.sh's transient concurrency marker — never project history.

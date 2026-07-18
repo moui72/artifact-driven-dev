@@ -1,6 +1,6 @@
 ---
 slug: dynamic-version-badge-sync
-status: tasked
+status: implemented
 logged: 2026-07-18
 plan: plan-dynamic-version-badge-sync-2026-07-18-35aa.md
 tasks: tasks-dynamic-version-badge-sync-4553.md
