@@ -41,6 +41,7 @@ the full story.
 | Fix bad UX | `/ardd-feedback <what's wrong>`, then `/ardd-plan` to plan the change | [Capture what you notice](docs/guides/core-loop.md#capture-what-you-notice--constantly) |
 | Revisit a decision that no longer holds | `/ardd-feedback <the decision and why it no longer holds>` — planning confirms the reversal explicitly | [Capture what you notice](docs/guides/core-loop.md#capture-what-you-notice--constantly) |
 | Execute on my backlog | `/ardd-plan <slug> [...]` (approve at the checkpoint) → `/ardd-implement` | [Plan a batch](docs/guides/core-loop.md#plan-a-batch) |
+| Figure out what to plan next, or how to group my backlog | `/ardd-plan --slate` — advisory defrag grouping, read-only | [Plan a batch](docs/guides/core-loop.md#plan-a-batch) |
 | Resume work that got interrupted | `/ardd-implement` — pick the file; it offers to reconcile first | [When things get interrupted](docs/guides/core-loop.md#when-things-get-interrupted) |
 | Deal with a dead background run (abandoned worktree) | `/ardd-status` shows it In Flight; merge its branch to keep the work, or delete the worktree to discard it | [parallel-work.md](docs/guides/parallel-work.md#visibility-how-you-see-in-flight-work) |
 | Fix conflict markers in `STATUS.md` (or another `.project/` report) | Take either side — it's regenerated; re-run the owning skill (e.g. `/ardd-status`) | [When files conflict](docs/guides/parallel-work.md#when-project-files-conflict-on-merge) |

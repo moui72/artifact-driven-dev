@@ -67,6 +67,13 @@ run consumes them all into one plan; a scoped run leaves the others
 untouched for a later plan. Unsurfaced `DEFECTS.md` entries (from
 `/ardd-defects`) are offered once per defect here too.
 
+Not sure what to target, or your backlog has grown into a pile? `/ardd-plan
+--slate` is a read-only, advisory pass: it grades a footprint confidence
+for each backlogged item and groups them into Bundles (plan together,
+sequentially), Parallel sets (safe to fan out as separate runs), and
+Solo-deferred items, then stops — no plan, no writes. Use its output to
+decide which `/ardd-plan <slug> [...]` call to make next.
+
 ## Approve, task, implement, merge
 
 ```

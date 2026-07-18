@@ -22,11 +22,11 @@ status: in-progress
   makes the more natural fit; read the page first to decide.
 
 ## Phase 2: Routing for `/ardd-plan --slate`
-- [ ] T003 [parallel] Add a row to `USAGE.md`'s "How do I…?" routing
+- [x] T003 [parallel] Add a row to `USAGE.md`'s "How do I…?" routing
   table for a backlog-organizing/defragging intent (e.g. "Figure out
   what to plan next, or how to group my backlog" → `/ardd-plan --slate`),
   matching the table's existing terse two-column-plus-guide-link style.
-- [ ] T004 [parallel] Add a corresponding mention of `/ardd-plan
+- [x] T004 [parallel] Add a corresponding mention of `/ardd-plan
   --slate` to `docs/guides/core-loop.md`'s narrative, at whatever point
   in the existing flow ("Plan a batch" or similar) makes sense for
   introducing the defrag/grouping advisory mode.
