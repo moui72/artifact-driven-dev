@@ -7,14 +7,14 @@ status: in-progress
 # Tasks
 
 ## Phase 1: Spec and implement `--review` mode in `skills/ardd-refine/SKILL.md`
-- [ ] T001 [artifacts: constitution] Add a `--review` usage line and mode
+- [x] T001 [artifacts: constitution] Add a `--review` usage line and mode
   description to `skills/ardd-refine/SKILL.md`'s top usage block, alongside
   the existing "No-argument mode" section — new heading (e.g. "Review mode
   (`--review`)"), same doc location, parallel structure/tone to the
   existing no-argument mode section. State plainly that `--review` only
   applies to `constitution` (`/ardd-refine constitution --review`) and is
   rejected (or ignored with a note) for any other artifact name.
-- [ ] T002 [artifacts: constitution] Write the `--review` step sequence in
+- [x] T002 [artifacts: constitution] Write the `--review` step sequence in
   `skills/ardd-refine/SKILL.md`: (1) load `constitution.md` (reuse step
   1's load), (2) enumerate every principle under whatever heading
   structure the project's constitution actually declares (never assume a
@@ -33,7 +33,7 @@ status: in-progress
   what was trimmed (if anything), the new version, and recommend
   `/ardd-status`. Declined candidates get no persistent suppression
   bookkeeping — a later `--review` run re-derives judgment fresh.
-- [ ] T003 [artifacts: constitution] In the same `--review` section, add an
+- [x] T003 [artifacts: constitution] In the same `--review` section, add an
   explicit cross-reference note that its batched-confirmation step follows
   the same shape as `/ardd-plan` step 3c (list every candidate with
   rationale, single confirmation step, never applied one at a time) — so
