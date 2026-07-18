@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: Workflow + seed JSON templates
-- [ ] T001 Create `templates/ardd-badge-workflow.yml` — a GitHub Actions
+- [x] T001 Create `templates/ardd-badge-workflow.yml` — a GitHub Actions
   workflow: triggers on push, `paths: ['.project/ardd-version.md']`;
   parses `Source-Ref:` (preferred) falling back to a short
   `Source-Commit:` prefix when no tag is recorded, and `Channel:`, from
@@ -17,11 +17,11 @@ status: in-progress
   endpoint-badge JSON schema (`schemaVersion`, `label`, `message`,
   optionally `color`); commits the change only if the JSON actually
   differs from what's on disk (never an empty commit).
-- [ ] T002 Create `templates/ardd-badge.json` — the seed JSON template
+- [x] T002 Create `templates/ardd-badge.json` — the seed JSON template
   with a placeholder shape (schemaVersion/label/message fields)
   `install.sh` fills in with the current install's actual
   `Source-Ref`/`Source-Commit` and `Channel` at write time (per T004).
-- [ ] T003 [parallel] Update `templates/badge.md` — add a two-badge
+- [x] T003 [parallel] Update `templates/badge.md` — add a two-badge
   variant (static "built with ArDD" badge + dynamic version badge
   reading `.github/badges/ardd-version.json` via a shields.io
   `dynamic/json` badge URL) as an alternate snippet alongside the
