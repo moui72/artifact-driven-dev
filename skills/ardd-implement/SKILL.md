@@ -354,6 +354,16 @@ entering the normal flow.
 7. **Verify** the task is complete: tests pass, the feature works as described,
    no regressions in previously completed tasks.
 
+   **Before proceeding to step 8, confirm the change actually landed —
+   don't trust a written commit message as proof.** State which file(s)
+   the task named, then run `git diff` (or `git diff --stat`) against
+   those files and confirm the change described in the task's own text
+   is genuinely present. This is a mandatory, always-required step, not
+   optional diligence: a task whose description was written but never
+   applied — a missed `git add`, a no-op edit, a wrong target file —
+   must fail this check and stay unmarked, rather than reach `[x]` on
+   the strength of an accurate-sounding commit message alone.
+
 8. **Mark the task complete**: `.claude/skills/ardd-scripts/ardd-state.sh
    task-check <file> <task-id>`. If this was the last incomplete task
    (`ardd-state.sh next-task <file>` exits 1), run `.claude/skills/

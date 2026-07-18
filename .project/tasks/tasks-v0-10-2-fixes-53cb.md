@@ -63,7 +63,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   should now pass (green). [feedback: F002]
 
 ## Phase 3: `/ardd-implement` process tightening (depends on nothing; independent of Phases 1-2)
-- [ ] T006 Edit `skills/ardd-implement/SKILL.md` step 8: immediately
+- [x] T006 Edit `skills/ardd-implement/SKILL.md` step 8: immediately
   before the existing instruction to run `ardd-state.sh task-check
   <file> <task-id>`, add a mandatory self-check — state which file(s)
   the task named, run `git diff` (or `git diff --stat`) against those
