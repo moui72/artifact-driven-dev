@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: `/ardd-status --view` mode
-- [ ] T001 Add a `--view` usage line and mode description to
+- [x] T001 Add a `--view` usage line and mode description to
   `skills/ardd-status/SKILL.md`'s top usage block, alongside the existing
   Usage section — same doc location as `/ardd-plan --list`/
   `/ardd-implement --list`'s own usage lines, parallel structure. State
@@ -15,7 +15,7 @@ status: in-progress
   assembled report and stops — no `STATUS.md` write, no step 7's
   orphaned-flip confirmation (visibility only, matching `--list`'s "no
   writes of any kind" framing).
-- [ ] T002 Write the `--view` step in `skills/ardd-status/SKILL.md`: run
+- [x] T002 Write the `--view` step in `skills/ardd-status/SKILL.md`: run
   the existing discovery steps (1–5) as-is, then print the Report format
   from step 5 directly to the terminal instead of writing it to
   `STATUS.md` in step 6. Skip step 7 (orphaned-flip confirmation) and

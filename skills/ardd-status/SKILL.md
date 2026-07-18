@@ -32,6 +32,14 @@ default branch. Delegated `/ardd-implement` subagents are
 told explicitly not to invoke it — the terminal analyze handoff belongs to
 the coordinator or the inline path.
 
+`/ardd-status --view` is a **read-only side door**: it runs steps 1–5
+(discovery and the assembled report) unchanged, then prints that report
+directly to the terminal and stops — no `STATUS.md` write (step 6), no
+step 7's orphaned-flip confirmation, and no step 8 next-step prompt. Same
+"no writes of any kind" shape as `/ardd-plan --list` and
+`/ardd-implement --list`. Use it for a quick full consistency check
+without regenerating `STATUS.md` or being asked anything.
+
 ## Steps
 
 1. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
@@ -213,6 +221,13 @@ the coordinator or the inline path.
    ## Summary
    <N> issues found. Safe to /plan: yes/no. Recommended next step: ...
    ```
+
+   **`--view` mode stops here.** If invoked as `/ardd-status --view`, print
+   the Report format assembled above directly to the terminal (instead of
+   proceeding to step 6's `STATUS.md` write) and stop — skip step 7's
+   orphaned-flip confirmation and step 8's next-step prompt entirely.
+   `--view` is inspection only, never a state-changing prompt. A normal
+   `/ardd-status` invocation continues to step 6 as before.
 
 6. **Write `.project/STATUS.md`** from the analysis results. Use the same
    structure defined in `/ardd-init`:
