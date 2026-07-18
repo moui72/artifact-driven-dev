@@ -1,7 +1,7 @@
 ---
 plan: plan-status-view-mode-2026-07-18-ce1f.md
 generated: 2026-07-18
-status: in-progress
+status: completed
 ---
 
 # Tasks

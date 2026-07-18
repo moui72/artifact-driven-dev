@@ -1,6 +1,6 @@
 ---
 slug: status-view-mode
-status: tasked
+status: implemented
 logged: 2026-07-18
 plan: plan-status-view-mode-2026-07-18-ce1f.md
 tasks: tasks-status-view-mode-6377.md
