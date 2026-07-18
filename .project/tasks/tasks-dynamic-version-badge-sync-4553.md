@@ -41,7 +41,7 @@ status: in-progress
   print the two-badge snippet (T003) instead of the single static one.
   When `ARDD_VERSION_BADGE` is unset (the default), behavior must be
   byte-for-byte unchanged from before this task.
-- [ ] T005 Manually verify: an `ARDD_VERSION_BADGE=1 ./install.sh
+- [x] T005 Manually verify: an `ARDD_VERSION_BADGE=1 ./install.sh
   <fixture-target>` run writes both new files with content matching that
   fixture's actual recorded version; a plain `./install.sh
   <fixture-target>` (unset) writes neither file and prints the unchanged
