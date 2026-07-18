@@ -1,7 +1,7 @@
 ---
 plan: plan-docs-sweep-2026-07-18-b6ef.md
 generated: 2026-07-18
-status: ready
+status: in-progress
 ---
 
 # Tasks
