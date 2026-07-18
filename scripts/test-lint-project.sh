@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=37
+EXPECTED_BAD_FINDINGS=38
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -161,7 +161,45 @@ else
     echo "FAIL: item-line bracket-tag violation still reported"
     fail=1
   fi
+  # Channel/Source-Ref consistency: a prerelease tag (-beta.N) under a
+  # stable channel is self-contradictory (the atelier-shaped mismatch).
+  # bad-project's ardd-version.md pairs Channel: stable with
+  # Source-Ref: v1.2.3-beta.2.
+  if grep -q "ardd-version.md.*Channel: stable.*Source-Ref: v1.2.3-beta.2.*prerelease" /tmp/lint-bad.out; then
+    echo "ok: Channel/Source-Ref prerelease mismatch reported"
+  else
+    echo "FAIL: Channel/Source-Ref prerelease mismatch reported"
+    fail=1
+  fi
 fi
+
+# --- standalone case: Channel/Source-Ref mismatch message names the file,
+# both field values, and the nature of the mismatch ---
+CHVERWORK="$(mktemp -d)"
+mkdir -p "$CHVERWORK/.project"
+cat > "$CHVERWORK/.project/ardd-version.md" <<'EOF'
+# ArDD Version
+
+Source-Path: /home/example/.ardd/source
+Source-Ref: v1.2.3-beta.2
+Channel: stable
+EOF
+if "$LINT" "$CHVERWORK" > /tmp/lint-chver.out 2>&1; then
+  echo "FAIL: Channel/Source-Ref mismatch should fail but passed"
+  fail=1
+else
+  if grep -q "$CHVERWORK/.project/ardd-version.md" /tmp/lint-chver.out \
+    && grep -q "Channel: stable" /tmp/lint-chver.out \
+    && grep -q "Source-Ref: v1.2.3-beta.2" /tmp/lint-chver.out \
+    && grep -qi "prerelease" /tmp/lint-chver.out; then
+    echo "ok: Channel/Source-Ref mismatch message names the file, both values, and the mismatch nature"
+  else
+    echo "FAIL: Channel/Source-Ref mismatch message names the file, both values, and the mismatch nature:"
+    cat /tmp/lint-chver.out
+    fail=1
+  fi
+fi
+rm -rf "$CHVERWORK" /tmp/lint-chver.out
 
 # --- unknown-enum messages carry the version-skew hint ---
 # An unrecognized status may be a typo, or a file written by a newer ArDD
