@@ -1,20 +1,20 @@
 ---
 plan: plan-constitution-trim-review-relev-2026-07-18-8c82.md
 generated: 2026-07-18
-status: ready
+status: completed
 ---
 
 # Tasks
 
 ## Phase 1: Spec and implement `--review` mode in `skills/ardd-refine/SKILL.md`
-- [ ] T001 [artifacts: constitution] Add a `--review` usage line and mode
+- [x] T001 [artifacts: constitution] Add a `--review` usage line and mode
   description to `skills/ardd-refine/SKILL.md`'s top usage block, alongside
   the existing "No-argument mode" section — new heading (e.g. "Review mode
   (`--review`)"), same doc location, parallel structure/tone to the
   existing no-argument mode section. State plainly that `--review` only
   applies to `constitution` (`/ardd-refine constitution --review`) and is
   rejected (or ignored with a note) for any other artifact name.
-- [ ] T002 [artifacts: constitution] Write the `--review` step sequence in
+- [x] T002 [artifacts: constitution] Write the `--review` step sequence in
   `skills/ardd-refine/SKILL.md`: (1) load `constitution.md` (reuse step
   1's load), (2) enumerate every principle under whatever heading
   structure the project's constitution actually declares (never assume a
@@ -33,7 +33,7 @@ status: ready
   what was trimmed (if anything), the new version, and recommend
   `/ardd-status`. Declined candidates get no persistent suppression
   bookkeeping — a later `--review` run re-derives judgment fresh.
-- [ ] T003 [artifacts: constitution] In the same `--review` section, add an
+- [x] T003 [artifacts: constitution] In the same `--review` section, add an
   explicit cross-reference note that its batched-confirmation step follows
   the same shape as `/ardd-plan` step 3c (list every candidate with
   rationale, single confirmation step, never applied one at a time) — so
@@ -41,7 +41,7 @@ status: ready
   pattern to a future editor.
 
 ## Phase 2: Docs
-- [ ] T004 Update `docs/reference/skills/ardd-refine.md`:
+- [x] T004 Update `docs/reference/skills/ardd-refine.md`:
   add a `--review` line to the Usage code block
   (`/ardd-refine constitution --review  # audit + propose trimming non-load-bearing principles`),
   add a bullet under Writes noting `--review` also performs the
@@ -49,7 +49,7 @@ status: ready
   confirmed, and add a Behavior notes bullet describing the batched
   keep/trim confirmation and that declined candidates aren't persistently
   suppressed.
-- [ ] T005 Update `USAGE.md`'s command table (near its
+- [x] T005 Update `USAGE.md`'s command table (near its
   existing `/ardd-refine <artifact> <the decision>` row) with a new row
   for the review mode, matching the table's existing terse two-column
   style, and add a corresponding line to the `/ardd-refine <artifact>`
@@ -57,7 +57,7 @@ status: ready
   77) showing `/ardd-refine constitution --review`.
 
 ## Phase 3: Verification
-- [ ] T006 [artifacts: constitution] Manually exercise `--review` (as
+- [x] T006 [artifacts: constitution] Manually exercise `--review` (as
   specified by T001–T003) against this repo's own
   `.project/artifacts/constitution.md`: enumerate all current principles,
   produce a keep/trim judgment with rationale for each, and confirm the
@@ -71,3 +71,48 @@ status: ready
   verified. Do not apply any trim from this dry run to the real
   constitution.md unless a trim is genuinely warranted and the user
   confirms it live.
+
+  **Outcome:** Dry-run executed against this repo's real
+  `.project/artifacts/constitution.md` (v1.11.1, 9 principles under `##
+  Core Principles`). Enumerated I–IX and grounded each against
+  `CLAUDE.md`/`.project/artifacts/*.md` and the codebase:
+  - I. Skill Files Are the Product — **keep**: this is the repo's core
+    deliverable framing, reflected everywhere (CLAUDE.md's "Skill files
+    are the product" convention).
+  - II. Deterministic Checks and Mutations Over Prose — **keep**: directly
+    load-bearing; `ardd-state.sh` and a dozen sibling scripts exist
+    because of this principle, and the 500+ line test suite just run
+    during this task's own align/commit steps exercises them.
+  - III. Never Suggest Ignoring More Than Is Actually Regenerated —
+    **keep**: still enforced today in `install.sh`'s gitignore-check
+    section and `docs/decisions/0002-gitignore-ceiling.md`.
+  - IV. Two Install Targets, Never Conflated — **keep**: this is the
+    repo's central architectural split (CLAUDE.md's "Two install
+    targets, don't conflate them"), actively guiding where new scripts
+    land.
+  - V. Deterministic Checks Are Test-First — **keep**: every
+    `scripts/*.sh` has a paired `test-*.sh`, actively enforced.
+  - VI. Simplicity / YAGNI — **keep**: general but still load-bearing —
+    plans' "Complexity Tracking" sections invoke it routinely.
+  - VII. No Dead Architecture — **keep**: reflected in retired
+    scripts/migrations removing stale mechanisms rather than archiving
+    them (e.g. `scripts/release.sh` retirement noted in CLAUDE.md).
+  - VIII. Check Library/Tool Idioms Before Building Custom Mechanism —
+    **keep**: the git `merge=ours` driver (vs. a hand-built merge tool)
+    is a direct application of this principle, still in force.
+  - IX. Unambiguous Actor Language in Agent-Facing Prose — **keep**:
+    recently added (2026-07-xx actor-language-skill-prose-aud work) and
+    still being applied to new/edited skill prose.
+
+  **Result: zero trim-candidates** — all nine kept. This matches the
+  task's own expectation ("expect mostly keep — recently pruned"), so
+  per the `--review` step sequence's step 4, the correct behavior is to
+  report this outcome and stop: no write, no version bump, nothing to
+  batch-confirm. No trim was applied to the real `constitution.md`.
+
+  The batched-confirmation UI itself (step 5 of the new mode) was not
+  exercised end-to-end by this dry run since there were no candidates to
+  present — its shape (single AskUserQuestion, multiSelect on,
+  accept/decline per item) was cross-checked by inspection against
+  `/ardd-plan` step 3c's proposed-changes-then-confirm text and reads
+  consistently with it.

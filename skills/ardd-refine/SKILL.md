@@ -29,6 +29,49 @@ that has open questions instead of a single one:
    `STATUS.md` for all refined artifacts, rather than after each one — skip
    the per-artifact trigger in step 8 below while running in this mode.
 
+## Review mode (`--review`)
+
+`/ardd-refine constitution --review` audits the target project's existing
+`constitution.md` principle-by-principle and proposes trimming any
+principle that is no longer relevant to the project or not meaningfully
+load-bearing for guiding agent behavior on it, applying removals only
+after batched user confirmation. This mode applies only to `constitution`
+— `/ardd-refine <other-artifact> --review` is rejected with a note that
+`--review` is constitution-only (no evidence yet that other artifact types
+accumulate principles the same way). Entering `--review` skips the normal
+steps 1–8 below and runs the separate procedure:
+
+1. **Load** `constitution.md` (reuse step 1's load below).
+2. **Enumerate every principle** under whatever heading structure the
+   project's constitution actually declares — never assume a fixed
+   principle set or count; mirror `/ardd-status`'s "act only on the
+   principles the constitution actually declares" discipline.
+3. **Ground a keep/trim-candidate judgment for each principle** in the
+   current project's `.project/artifacts/*.md` and, where useful, a light
+   codebase grep — never from the principle's own prose in isolation.
+   Classify each as **keep** (still load-bearing) or **trim-candidate**
+   (no longer relevant, or not meaningfully guiding agent behavior here),
+   with a one-line rationale for every trim-candidate.
+4. **If zero principles are flagged**, report that and stop — no write, no
+   version bump, nothing to confirm.
+5. **Present the full trim-candidate list with rationale in one batched
+   message** and ask for confirmation via multi-select accept/decline —
+   never one-at-a-time, never all-or-nothing. This follows the same shape
+   as `/ardd-plan` step 3c's proposed-changes-then-confirm pattern (list
+   every candidate with rationale, single confirmation step, never applied
+   one at a time) — the two batched-confirm UIs in this skill family
+   should read as one consistent pattern.
+6. **Apply confirmed removals** to `constitution.md`, then run the
+   existing constitution special-case handling (step 4 below: version
+   bump — a trim is at least MINOR-worthy since it removes governance
+   surface — Sync Impact Report entry naming what was removed and why,
+   `last_updated` stamp). Declined candidates get no persistent
+   suppression bookkeeping — a later `--review` run re-derives judgment
+   fresh each time, unlike `/ardd-plan`'s `surfaced-defects:` list.
+7. **Report** which principles were trimmed (if any) and the new
+   constitution version, and recommend `/ardd-status` (the same
+   terminal-handoff convention the normal steps use below).
+
 ## Steps
 
 1. **Load the artifact** from `.project/artifacts/<name>.md`. If it does not

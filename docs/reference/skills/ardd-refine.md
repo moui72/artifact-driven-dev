@@ -12,6 +12,7 @@ _Tier: core_
 /ardd-refine <name>                    # refine one artifact
 /ardd-refine <name> <guidance>         # refine with inline direction
 /ardd-refine                           # no-argument mode: sweep all artifacts with open questions
+/ardd-refine constitution --review     # audit + propose trimming non-load-bearing principles
 ```
 
 `<name>` matches a file in `.project/artifacts/` (`constitution`,
@@ -37,6 +38,10 @@ counts and refines every artifact that has any, most-open first.
   `status` (`stable` when substantially complete, `draft` when significant
   gaps remain), `last_updated`, and `diagram_status: stale` on renderable
   artifacts (unless still `unrendered` — nothing rendered can't go stale)
+- `--review` mode: when a trim is confirmed, the same constitution
+  version-bump and Sync Impact Report writes as the normal constitution
+  path (no write at all if zero principles are flagged, or if the user
+  declines every candidate)
 
 ## Behavior notes
 
@@ -59,6 +64,14 @@ counts and refines every artifact that has any, most-open first.
   the whole new artifact is the delta.
 - Ends by running `/ardd-status` (once per single-artifact run; once after
   the whole pass in no-argument mode).
+- **Review mode (`--review`, constitution-only)**: audits every declared
+  principle for continued relevance, grounded in the current project's
+  artifacts and codebase rather than the principle's own prose. Flagged
+  trim-candidates are presented in one batched confirmation
+  (accept/decline per item, never all-or-nothing, never one-at-a-time) —
+  the same shape as `/ardd-plan` step 3c's proposed-changes-then-confirm
+  UI. Declined candidates are not persistently suppressed; a later
+  `--review` run re-derives judgment fresh.
 
 ## Related
 
