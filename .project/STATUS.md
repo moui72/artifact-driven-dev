@@ -1,6 +1,14 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` — fanned out both `ready` tasks
+_Updated: 2026-07-18 (`/ardd-plan` — drafted, approved, and tasked
+`plan-docs-drift-fixes-2026-07-18-2fbb.md`: 4 tasks/2 phases in
+`tasks-docs-drift-fixes-c159.md` (`ready`) fixing the three doc gaps
+`docs-sweep`'s first dogfood run found — `/ardd-status --view` +
+epics/by-epic breakdown missing from `docs/reference/skills/ardd-status.md`,
+and `/ardd-plan --slate` unrouted in `USAGE.md`/`docs/guides/core-loop.md`.
+Consumed both feedback files (both now `planned`). No feature slugs
+targeted — pure doc additions. Prior update, same day, `/ardd-implement`
+— fanned out both `ready` tasks
 files to parallel background worktree subagents (file-disjoint, no
 dependency), both completed and merged clean:
 - `docs-sweep`: all 7 tasks done — new
@@ -1098,11 +1106,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open — `feedback-ardd-status-reference-page-mis-7fa5.md` and
-`feedback-ardd-plan-slate-mode-unrouted-c563.md`, both filed by
-`docs-sweep`'s first live dogfood run (see the `_Updated` note above);
-will be picked up by the next `/ardd-plan`. All other batches delivered,
-including
+0 open — `feedback-ardd-status-reference-page-mis-7fa5.md` and
+`feedback-ardd-plan-slate-mode-unrouted-c563.md` (filed by `docs-sweep`'s
+first live dogfood run) are now `planned`, consumed by
+`plan-docs-drift-fixes-2026-07-18-2fbb.md` — see the `_Updated` note
+above. All other batches delivered, including
 `feedback-ci-migration-tests-unwired-37ee.md` and
 `feedback-prerelease-sweep-scenario-gaps-95f6.md` (both now `planned`,
 consumed by `plan-status-view-mode-2026-07-18-ce1f.md` — see the
@@ -1170,9 +1178,9 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume the 2 open feedback items `docs-sweep`'s first
-dogfood run just filed (the `--view`/epics reference-page gaps and the
-`/ardd-plan --slate` routing gap). Note there's also an earlier, off-target research file
+`/ardd-implement` to work `tasks-docs-drift-fixes-c159.md` (`ready`, 4
+tasks/2 phases — pure doc additions, no code). Note there's also an
+earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
