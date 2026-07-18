@@ -45,7 +45,7 @@ Deterministic state mutations for .project/ files. Subcommands:
                            backlogged->planned->tasked->implemented->retired
                            (retired = shipped then deliberately removed;
                            terminal — no arc out of it)
-  feature-field <slug> <plan|tasks|gh_issue> <value>
+  feature-field <slug> <plan|tasks|gh_issue|epic> <value>
                            set an optional frontmatter field (add or replace)
   stamp <file> last_updated <YYYY-MM-DD>
   stamp <file> diagram_status <unrendered|stale|current>
@@ -269,8 +269,8 @@ cmd_feature_field() {
   slug="${1:-}"; key="${2:-}"; val="${3:-}"
   [ -n "$slug" ] && [ -n "$key" ] && [ -n "$val" ] || dieu "feature-field: need <slug> <key> <value>"
   case "$key" in
-    plan|tasks|gh_issue) ;;
-    *) dieu "feature-field: key must be plan|tasks|gh_issue, got '$key'" ;;
+    plan|tasks|gh_issue|epic) ;;
+    *) dieu "feature-field: key must be plan|tasks|gh_issue|epic, got '$key'" ;;
   esac
   f="$(feature_file "$slug")"
   [ -f "$f" ] || die "feature-field: no such feature: $f"

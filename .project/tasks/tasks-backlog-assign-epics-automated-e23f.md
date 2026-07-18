@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: `epic` write path (test-first)
-- [ ] T001 (test-first) Add a regression case to
+- [x] T001 (test-first) Add a regression case to
   `scripts/test-ardd-state.sh` covering `feature-field <slug> epic
   <value>`: set on a feature with no `epic` field, replace on one that
   already has a value, and confirm an unrecognized key (e.g. `bogus`) is
@@ -22,7 +22,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   xfail marker for its POSIX-sh test scripts — use `--no-verify` with
   the emergency documented in the commit body, per existing precedent in
   this repo's history). [feature: backlog-assign-epics-automated]
-- [ ] T002 Add `epic` to `scripts/ardd-state.sh`'s `feature-field`
+- [x] T002 Add `epic` to `scripts/ardd-state.sh`'s `feature-field`
   valid-key case statement (`plan|tasks|gh_issue` becomes
   `plan|tasks|gh_issue|epic`), and update its usage/help text (the
   `feature-field <slug> <plan|tasks|gh_issue> <value>` line) to include
