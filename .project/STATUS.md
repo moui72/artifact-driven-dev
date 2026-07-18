@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` — the delegated
+_Updated: 2026-07-18 (`/ardd-backlog` — logged `status-view-mode`: a
+`/ardd-status --view` read-only mode that reports a summary,
+incomplete/in-flight snapshot, and recommended next step without
+regenerating `STATUS.md` (mirrors `/ardd-plan --list` /
+`/ardd-implement --list`'s read-only side-door pattern). Also, a review
+agent weighed the `constitution-trim-review-relev` design question
+(audit vs. refine) and confirmed the plan's existing choice —
+`/ardd-refine --review` — is correct: single-writer ownership of
+constitution.md edits and the skill-naming system both point there, not
+at `/ardd-audit` (whose job is surface-only, into `audit.md`); no plan
+change needed. Prior update, same day, `/ardd-implement` — the delegated
 `backlog-assign-epics-automated` worktree run reported back with all 6
 tasks complete: T001 (test-first) added a red case to
 `scripts/test-ardd-state.sh` for `feature-field <slug> epic <value>`;
@@ -994,10 +1004,13 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 23 implemented · 1 retired — see
+2 backlogged · 1 tasked · 23 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
+- `status-view-mode` — `/ardd-status --view`: read-only summary +
+  in-flight snapshot + recommended next step, no `STATUS.md` write; see
+  `_Updated` note above.
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
   report plus the de-risking spike (both GO). Still `backlogged`: a plan
@@ -1008,12 +1021,9 @@ Backlogged:
   gated on its own Phase 1 go/no-go.
 Tasked:
 - `constitution-trim-review-relev` — `--review` mode for
-  `/ardd-refine constitution`; see the earlier `_Updated` note. Under
-  reconsideration (2026-07-18): the user asked whether this should
-  instead be `/ardd-audit` behavior rather than a new `/ardd-refine` mode
-  — a review agent is currently weighing that before implementation
-  starts. `tasks-constitution-trim-review-relev-3a39.md` (`ready`, 6
-  tasks/3 phases) — hold on `/ardd-implement` pending that reconsideration.
+  `/ardd-refine constitution`; see the `_Updated` note above — design
+  reconsideration resolved, plan unchanged. `tasks-constitution-trim-review-relev-3a39.md`
+  (`ready`, 6 tasks/3 phases) — next: `/ardd-implement`.
 - `backlog-assign-epics-automated` — automated `/ardd-backlog
   --assign-epics` pass proposing `epic:` groupings for the feature
   register; see the `_Updated` note above
