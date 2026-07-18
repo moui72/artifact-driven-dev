@@ -1,6 +1,40 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-plan docs-sweep dynamic-version-badge-sync`
+_Updated: 2026-07-18 (`/ardd-implement` — fanned out both `ready` tasks
+files to parallel background worktree subagents (file-disjoint, no
+dependency), both completed and merged clean:
+- `docs-sweep`: all 7 tasks done — new
+  `.claude/skills/docs-sweep/SKILL.md` (local-only, never installed,
+  usage `/docs-sweep [--all]`), plus one-line cross-reference pointers in
+  `CONTRIBUTING.md`'s Releases section and
+  `.claude/skills/prerelease-sweep/SKILL.md`. T007's live dogfood run
+  (scoped to skills changed since `v0.10.2`: `ardd-backlog`, `ardd-plan`,
+  `ardd-refine`, `ardd-status`) found 3 genuine gaps, filed as 2 new open
+  feedback files: `feedback-ardd-status-reference-page-mis-7fa5.md`
+  (`/ardd-status --view` and the `epic:`/by-epic breakdown undocumented
+  on that reference page) and `feedback-ardd-plan-slate-mode-unrouted-c563.md`
+  (`/ardd-plan --slate` documented on its own reference page but unrouted
+  in `USAGE.md`/`docs/guides/core-loop.md`) — matching the research
+  report's pre-cited candidates plus one new find (`--view`).
+  `ardd-backlog --assign-epics` and `ardd-refine constitution --review`
+  were both already fully documented — no findings there. Feature
+  `docs-sweep`: `tasked` → `implemented`.
+- `dynamic-version-badge-sync`: all 6 tasks done — `install.sh` gained
+  an `ARDD_VERSION_BADGE=1` opt-in (mirrors the `ARDD_CHANNEL` env-var
+  pattern) writing `templates/ardd-badge-workflow.yml` (GitHub Action,
+  path-filtered on `.project/ardd-version.md`) and
+  `.github/badges/ardd-version.json` (seeded with the real recorded
+  version) into a target, replacing the static-only badge suggestion
+  with a two-badge pair when opted in; default (unset) path confirmed
+  byte-for-byte unchanged. New `scripts/test-install-version-badge.sh` +
+  CI job added together; caught and fixed a real POSIX-`sh` env-var
+  leak bug in the test itself along the way (a var prefixed onto a
+  shell *function* call persists after return, unlike an external
+  command — fixed with an explicit export/unset wrapper). Feature
+  `dynamic-version-badge-sync`: `tasked` → `implemented`.
+
+Both worktrees merged clean and reaped. Prior update, same day,
+`/ardd-plan docs-sweep dynamic-version-badge-sync`
 — drafted, approved, and tasked as two separate plans (file-disjoint, no
 dependency between them, per an explicit plan-grouping check): `docs-sweep`
 (`plan-docs-sweep-2026-07-18-b6ef.md`, 7 tasks/3 phases in
@@ -1064,7 +1098,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — all batches delivered, including
+2 open — `feedback-ardd-status-reference-page-mis-7fa5.md` and
+`feedback-ardd-plan-slate-mode-unrouted-c563.md`, both filed by
+`docs-sweep`'s first live dogfood run (see the `_Updated` note above);
+will be picked up by the next `/ardd-plan`. All other batches delivered,
+including
 `feedback-ci-migration-tests-unwired-37ee.md` and
 `feedback-prerelease-sweep-scenario-gaps-95f6.md` (both now `planned`,
 consumed by `plan-status-view-mode-2026-07-18-ce1f.md` — see the
@@ -1097,9 +1135,9 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 2 tasked · 25 implemented · 1 retired — see
-`.project/features/`. No feature currently carries an `epic` value, so
-no "by epic" breakdown to show yet.
+1 backlogged · 27 implemented · 1 retired — see `.project/features/`. No
+feature currently carries an `epic` value, so no "by epic" breakdown to
+show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1109,14 +1147,9 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-Tasked:
-- `docs-sweep` — see the `_Updated` note above.
-  `tasks-docs-sweep-e6c1.md` (`ready`, 7 tasks/3 phases).
-- `dynamic-version-badge-sync` — see the `_Updated` note above.
-  `tasks-dynamic-version-badge-sync-4553.md` (`ready`, 6 tasks/3 phases).
-Target a backlogged slug with `/ardd-plan <slug>`. Both tasked items are
-file-disjoint — safe to fan out to parallel worktrees via
-`/ardd-implement`'s multi-select.
+Target a backlogged slug with `/ardd-plan <slug>`.
+Newest implemented: `docs-sweep` and `dynamic-version-badge-sync` — see
+the `_Updated` note above.
 Newest implemented: `constitution-trim-review-relev` — see the
 `_Updated` note above.
 
@@ -1130,17 +1163,16 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap (the `status-view-mode`
-worktree merged and was reaped this update). `main` is ahead of
-`origin/main` (unpushed local commits from today's work); `v0.10.2` is
-the current published stable release.
+Nothing — no worktrees, nothing pending reap (both `docs-sweep` and
+`dynamic-version-badge-sync` worktrees merged and were reaped this
+update). `main` is ahead of `origin/main` (unpushed local commits from
+today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` — two `ready` tasks files exist, file-disjoint, safe
-to fan out via multi-select: `tasks-docs-sweep-e6c1.md` (7 tasks/3
-phases) and `tasks-dynamic-version-badge-sync-4553.md` (6 tasks/3
-phases). Note there's also an earlier, off-target research file
+`/ardd-plan` to consume the 2 open feedback items `docs-sweep`'s first
+dogfood run just filed (the `--view`/epics reference-page gaps and the
+`/ardd-plan --slate` routing gap). Note there's also an earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
