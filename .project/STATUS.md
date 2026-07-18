@@ -1,6 +1,13 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-18 (`/ardd-implement` — the delegated `docs-drift-fixes`
+worktree run completed all 4 tasks: documented `/ardd-status --view` and
+the register's `epic:` field / by-epic Feature Backlog breakdown on
+`docs/reference/skills/ardd-status.md`, and routed `/ardd-plan --slate`
+in both `USAGE.md`'s "How do I…?" table and `docs/guides/core-loop.md`'s
+narrative — the three gaps `docs-sweep`'s first dogfood run found. No
+feature slugs targeted, so no register flip. Merged clean (fast-forward)
+and the worktree reaped. Prior update, same day, `/ardd-plan` — drafted, approved, and tasked
 `plan-docs-drift-fixes-2026-07-18-2fbb.md`: 4 tasks/2 phases in
 `tasks-docs-drift-fixes-c159.md` (`ready`) fixing the three doc gaps
 `docs-sweep`'s first dogfood run found — `/ardd-status --view` +
@@ -1178,8 +1185,7 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-docs-drift-fixes-c159.md` (`ready`, 4
-tasks/2 phases — pure doc additions, no code). Note there's also an
+No tasked/ready work outstanding right now. Note there's also an
 earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
