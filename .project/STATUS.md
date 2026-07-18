@@ -1,6 +1,19 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (`/ardd-implement` — ran `tasks-v0-10-2-fixes-53cb.md`
+_Updated: 2026-07-18 (release ops — pushed `main` (`a802dbc..db95bae`,
+publishing the v0.10.2 fix batch as `v0.10.2-beta.1`), then ran a
+targeted `/prerelease-sweep S1 S2 S3` regression check (run
+`2026-07-17-db69`) specifically re-verifying S2-F001 (`ardd-init` diff
+guidance) and S3-F001 (`plan_preview` gating) via live reproduction —
+both confirmed genuinely fixed, no new findings, no branch-protection
+snag this time. Dispatched `stable-release.yml` (`bump: patch`) —
+succeeded on the first try. **`v0.10.2` is now the published stable
+release**; confirmed via direct `curl` that the diff-verification
+guidance is live in the real `release` branch. This closes the
+phantom-completion incident end-to-end: found by the full sweep →
+fixed inline with explicit diff verification per task → regression-
+checked → shipped. Prior update, same day, `/ardd-implement` — ran
+`tasks-v0-10-2-fixes-53cb.md`
 **inline, deliberately not delegated** (given the tasks file exists
 because a delegated subagent falsely claimed task completion, this run
 verified each task's `git diff` in real time rather than trusting
@@ -877,12 +890,17 @@ consumed by `plan-v0-10-2-fixes-2026-07-17-4465.md` — see the
 
 ## Recent Releases
 
-**v0.10.1 (2026-07-17)** — stable cut carrying the `new.sh` git-init
-isolation fix and the rest of today's feedback-batch (`plan_preview`
-field, `ardd-update-check.sh` dev-ahead distinction, `ardd-init` diff-
-verification guidance). First dispatch after `release`'s
-`required_linear_history` protection was relaxed (see `_Updated` note) —
-future dispatches no longer need that workaround, the flag is off. v0.9.1
+**v0.10.2 (2026-07-18)** — stable cut fixing the phantom-completion gap
+`v0.10.1` unknowingly shipped: `ardd-status`'s `dev-ahead` handling,
+`ardd-init`'s diff-verification guidance, and `ardd-plan`'s
+`plan_preview` gating are now genuinely landed (all three were
+previously marked complete without the edits actually applying — see
+`_Updated` note) — plus a real `tasks-flip completed` checkbox
+verification and a process fix to `/ardd-implement` itself to catch
+this failure class going forward. v0.10.1 (2026-07-17) — stable cut
+carrying the `new.sh` git-init isolation fix. First dispatch after
+`release`'s `required_linear_history` protection was relaxed — future
+dispatches no longer need that workaround, the flag is off. v0.9.1
 (2026-07-13) — first fully-automatic two-channel cycle. v0.9.0
 (2026-07-12) — first GitHub release. Full history: GitHub Releases and
 `docs/decisions/0006`/`0007`.
@@ -929,10 +947,8 @@ current published stable release.
 
 ## Recommended Next Step
 
-All 7 fix tasks are complete on `main` — push to publish the beta, run
-a targeted `/prerelease-sweep S1 S2 S3` regression check (the exact
-scenarios that caught the phantom-completion gap), then dispatch
-`stable-release.yml` (`bump: patch`) for v0.10.2. Otherwise,
+v0.10.2 has shipped end-to-end (fixed → regression-checked → stable-
+dispatched → confirmed live) — nothing further needed there.
 `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
