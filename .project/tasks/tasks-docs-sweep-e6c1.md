@@ -7,19 +7,19 @@ status: in-progress
 # Tasks
 
 ## Phase 1: `docs-sweep` skill file
-- [ ] T001 Create `.claude/skills/docs-sweep/SKILL.md` with frontmatter
+- [x] T001 Create `.claude/skills/docs-sweep/SKILL.md` with frontmatter
   (`name: docs-sweep`, `description:` leading with "Source-side only
   (never installed to consumers)." plus a one-line summary of what it
   checks and its triage-to-feedback ending), mirroring
   `.claude/skills/prerelease-sweep/SKILL.md`'s frontmatter shape (read
   that file first).
-- [ ] T002 Write the scope-resolution step in the new SKILL.md: default =
+- [x] T002 Write the scope-resolution step in the new SKILL.md: default =
   skills changed since the last stable release tag
   (`git log --oneline <last-stable-tag>..HEAD -- skills/`), with an
   explicit `--all` argument for a full sweep of every skill regardless of
   recent changes. Handle the no-stable-tag-yet case sensibly (fall back
   to full sweep, noting why) rather than erroring.
-- [ ] T003 Write the per-skill judgment procedure in the new SKILL.md:
+- [x] T003 Write the per-skill judgment procedure in the new SKILL.md:
   for each in-scope skill, read its `SKILL.md` in full; read its
   `docs/reference/skills/<name>.md` hand-written body (below
   `generated:end`) if that file exists (skip for local-only skills, which
@@ -32,7 +32,7 @@ status: in-progress
   absence isn't automatically a gap, it needs a user-visibility judgment
   call. Also spot-check `README.md` for staleness against the current
   skill list/workflow description.
-- [ ] T004 Write the triage/report step in the new SKILL.md: present
+- [x] T004 Write the triage/report step in the new SKILL.md: present
   findings as one table (skill/file, gap, suggested fix), same shape as
   `prerelease-sweep`'s scenario-report triage; accept/decline per item;
   accepted items get filed as `/ardd-feedback` entries. State explicitly
