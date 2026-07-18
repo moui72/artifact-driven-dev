@@ -133,8 +133,30 @@ sh "$STATE" plan-flip "$PLANS/plan-x-2026-07-06.md" bogus >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "plan-flip: unknown target status usage error" 2 "$rc"
 
-# --- tasks-flip / task-check / next-task ---
+# --- tasks-flip: completed refuses unchecked tasks ---
 TASKS="$WORK/p1/.project/tasks"; mkdir -p "$TASKS"
+TF_UNCHECKED="$TASKS/tasks-y-cd34.md"
+cat > "$TF_UNCHECKED" <<'EOF'
+---
+plan: plan-x-2026-07-06.md
+generated: 2026-07-06
+status: in-progress   # generating -> ready -> in-progress -> completed
+---
+# Tasks
+## Phase 1
+- [x] T001 First task
+- [ ] T002 Second task, still open
+EOF
+set +e
+sh "$STATE" tasks-flip "$TF_UNCHECKED" completed >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "tasks-flip: completed refuses with unchecked tasks" 1 "$rc"
+assert_file_grep "tasks-flip: refused, status unchanged" "^status: *in-progress" "$TF_UNCHECKED"
+sh "$STATE" task-check "$TF_UNCHECKED" T002 >/dev/null
+sh "$STATE" tasks-flip "$TF_UNCHECKED" completed >/dev/null
+assert_file_grep "tasks-flip: completed succeeds once all tasks checked" "^status: *completed" "$TF_UNCHECKED"
+
+# --- tasks-flip / task-check / next-task ---
 TF="$TASKS/tasks-x-ab12.md"
 cat > "$TF" <<'EOF'
 ---

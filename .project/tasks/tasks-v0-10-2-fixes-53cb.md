@@ -45,7 +45,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   change. [feedback: F001]
 
 ## Phase 2: `tasks-flip completed` checkbox verification (depends on nothing; independent of Phase 1)
-- [ ] T004 (test-first) Add a regression case to `ardd-state.sh`'s test
+- [x] T004 (test-first) Add a regression case to `ardd-state.sh`'s test
   suite (`scripts/test-ardd-state.sh`) covering: `tasks-flip <file>
   completed` refuses (non-zero exit, message naming the still-open task
   ID(s)) when any task line in the file is still `- [ ]`, and succeeds
