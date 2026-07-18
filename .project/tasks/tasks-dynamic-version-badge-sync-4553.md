@@ -29,7 +29,7 @@ status: in-progress
   accompanies the `ARDD_VERSION_BADGE=1` opt-in.
 
 ## Phase 2: `install.sh` wiring
-- [ ] T004 Add `ARDD_VERSION_BADGE` env-var validation to `install.sh`
+- [x] T004 Add `ARDD_VERSION_BADGE` env-var validation to `install.sh`
   (valid values: unset, `0`, `1` — any other value is a refusal with a
   clear error message, mirroring the existing `ARDD_CHANNEL` validation
   block near the top of the script). Extend the existing "built with
