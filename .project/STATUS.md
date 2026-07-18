@@ -1,6 +1,21 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` + `/ardd-plan` — delegated
+_Updated: 2026-07-18 (`/ardd-plan constitution-trim-review-relev` — drafted,
+approved, and tasked `plan-constitution-trim-review-relev-2026-07-18-8c82.md`
+(solo mode, no branch gate, on `main`): adds a `--review` mode to
+`/ardd-refine constitution` that enumerates the declared principles,
+grounds a keep/trim-candidate judgment for each against the current
+project (never a fixed rubric), batch-confirms proposed trims (mirroring
+`/ardd-plan` step 3c's shape), then reuses the skill's existing
+constitution-special-case handling (version bump, Sync Impact Report) to
+apply confirmed removals. 6 tasks across 3 phases in
+`tasks-constitution-trim-review-relev-3a39.md` (`ready`). No artifact
+changes (this is a new skill capability, not a constitution change).
+Feature `constitution-trim-review-relev`: `backlogged` → `tasked`.
+Meanwhile, `/ardd-implement` delegated
+`tasks-backlog-assign-epics-automated-e23f.md` to a background worktree
+subagent (`delegation: eager`), now at 5/6 tasks — not yet merged. Prior
+update, same day, `/ardd-implement` + `/ardd-plan` — delegated
 worktree run completed and merged both tasks of
 `tasks-channel-source-ref-consistency-824e.md` (now `completed`): T001
 (test-first) added `Channel:`/`Source-Ref:` fixtures to
@@ -921,7 +936,7 @@ Keep this current as artifacts are refined and open questions are resolved._
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.11.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.11.1; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -968,7 +983,7 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged · 1 tasked · 22 implemented · 1 retired — see
+1 backlogged · 2 tasked · 22 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
@@ -980,20 +995,20 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-- `constitution-trim-review-relev` — agent-driven constitution-trimming
-  review mode. Per the `--slate` run: medium confidence,
-  parallel-set-safe — the other parallel-set item,
-  `backlog-assign-epics-automated`, is now tasked (see below).
 Tasked:
+- `constitution-trim-review-relev` — `--review` mode for
+  `/ardd-refine constitution`; see the `_Updated` note above.
+  `tasks-constitution-trim-review-relev-3a39.md` (`ready`, 6 tasks/3
+  phases) — next: `/ardd-implement`.
 - `backlog-assign-epics-automated` — automated `/ardd-backlog
   --assign-epics` pass proposing `epic:` groupings for the feature
-  register; see `_Updated` note.
-  `tasks-backlog-assign-epics-automated-e23f.md` (`ready`, 6 tasks/2
-  phases) — next: `/ardd-implement`.
+  register; 5/6 tasks done in a background worktree
+  (`tasks-backlog-assign-epics-automated-e23f.md`, `in-progress`), not yet
+  merged — see In Flight below.
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `channel-source-ref-consistency` — `lint-project.sh`
 now flags a prerelease `Source-Ref:` under `Channel: stable` in
-`.project/ardd-version.md`; see the `_Updated` note above
+`.project/ardd-version.md`; see the earlier `_Updated` note
 (`tasks-channel-source-ref-consistency-824e.md`, completed 2/2).
 
 ## Audit
@@ -1006,17 +1021,20 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap. `main` is ahead of
-`origin/main` (unpushed local commits from today's work); `v0.10.2` is
-the current published stable release.
+Worktree `.claude/worktrees/agent-a142f33078dc9f4f7` (branch
+`worktree-agent-a142f33078dc9f4f7`) —
+`tasks-backlog-assign-epics-automated-e23f.md`, `in-progress`, 5/6. Not
+yet merged; the coordinator merges (per `merge_policy: auto`, once
+conflict-free) and reaps the worktree when it reports back. `main` is
+otherwise ahead of `origin/main` (unpushed local commits from today's
+work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-backlog-assign-epics-automated-e23f.md`
-(`ready`, 6 tasks/2 phases). Otherwise, `constitution-trim-review-relev`
-is still backlogged and parallel-set-safe per the `--slate` run
-(`/ardd-plan constitution-trim-review-relev`).
-`codex-second-harness-support` is drafted-but-untasked:
+`backlog-assign-epics-automated`'s delegated run is close to done (5/6) —
+let it finish and merge. In the meantime, `/ardd-implement` can start
+`tasks-constitution-trim-review-relev-3a39.md` (`ready`, 6 tasks/3
+phases). `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
@@ -1024,7 +1042,6 @@ the true final go/no-go — before Phases 2–5's install-time substitution
 work proceeds). Standing options otherwise unchanged: the new
 `/prerelease-sweep smoke|full|S<n>` exercise (once reviewed and
 committed); dispatch the stable release workflow when consumers should
-get the accumulated `main` work (now includes the v1.10.0 constitution
-amendment); resolve the remaining `.project/audit.md` suggestion; or
-`/ardd-defects` to re-verify against the docs-site and skill-prose
-surfaces.
+get the accumulated `main` work; resolve the remaining
+`.project/audit.md` suggestion; or `/ardd-defects` to re-verify against
+the docs-site and skill-prose surfaces.
