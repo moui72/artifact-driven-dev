@@ -49,7 +49,7 @@ status: in-progress
   note.
 
 ## Phase 3: Regression test
-- [ ] T006 Create `scripts/test-install-version-badge.sh` — a new
+- [x] T006 Create `scripts/test-install-version-badge.sh` — a new
   narrow fixture-based regression test mirroring this repo's existing
   per-concern install test pattern (`test-install-gitattributes.sh`,
   `test-install-manifest-complete.sh`, `test-install-prune.sh`,
