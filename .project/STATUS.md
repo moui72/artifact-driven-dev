@@ -1,6 +1,28 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` — the delegated `docs-drift-fixes`
+_Updated: 2026-07-18 (`/prerelease-sweep full` + `/ardd-feedback` — ran
+the full 8-scenario (S1–S8) prerelease dry-run in parallel background
+subagents (run `2026-07-18-50ea`, ~$4–7, ~725K tokens, ~12min real
+elapsed) ahead of a potential 1.0 stable cut. 16 raw findings triaged
+(`dev-notes/prerelease-runs/2026-07-18-50ea/TRIAGE.md`) down to 6
+accepted, 2 taste-deferred, 4 duplicates, 4 harness-artifacts (including
+the pre-known, still-unresolved Agent-tool nested-worktree limitation
+from S8 — not consumer-facing). Logged the 6 accepted findings as
+`feedback-prerelease-sweep-2026-07-18-50ea-ad22.md`: **highest priority**
+— `install.sh` defaults `Channel: stable` regardless of the source
+checkout's actual tag shape, so installing from a checkout sitting on a
+beta tag (the normal between-releases state — true right now) produces
+a `Channel:`/`Source-Ref:` pair ArDD's own `channel-source-ref-consistency`
+lint check rejects; reproduced independently in 5 of 8 scenarios. Also:
+`ARDD_VERSION_BADGE=1` silently no-ops when a README already has the
+static badge marker (new-feature gap); `feature-flip ... implemented`
+has no completion cross-check against its bound tasks file; plus 3 minor
+docs/UX findings (`task-check` colon-format error message,
+`plan:` frontmatter path-vs-filename lint error clarity, epic-drained-to-zero
+undocumented in `ardd-status`'s `SKILL.md`). Recommended next: `/ardd-plan`
+these, fix, then regression-rerun `/prerelease-sweep S2 S3 S4 S6 S7`
+before dispatching the stable-release workflow. Prior update, same day,
+`/ardd-implement` — the delegated `docs-drift-fixes`
 worktree run completed all 4 tasks: documented `/ardd-status --view` and
 the register's `epic:` field / by-epic Feature Backlog breakdown on
 `docs/reference/skills/ardd-status.md`, and routed `/ardd-plan --slate`
@@ -1113,11 +1135,13 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — `feedback-ardd-status-reference-page-mis-7fa5.md` and
+1 open — `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (the 6
+accepted prerelease-sweep findings; see the `_Updated` note above), will
+be picked up by the next `/ardd-plan`. All other batches delivered,
+including `feedback-ardd-status-reference-page-mis-7fa5.md` and
 `feedback-ardd-plan-slate-mode-unrouted-c563.md` (filed by `docs-sweep`'s
-first live dogfood run) are now `planned`, consumed by
-`plan-docs-drift-fixes-2026-07-18-2fbb.md` — see the `_Updated` note
-above. All other batches delivered, including
+first live dogfood run, consumed by
+`plan-docs-drift-fixes-2026-07-18-2fbb.md`),
 `feedback-ci-migration-tests-unwired-37ee.md` and
 `feedback-prerelease-sweep-scenario-gaps-95f6.md` (both now `planned`,
 consumed by `plan-status-view-mode-2026-07-18-ce1f.md` — see the
@@ -1185,7 +1209,12 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-No tasked/ready work outstanding right now. Note there's also an
+`/ardd-plan` to consume `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md`'s
+6 accepted findings — top priority is `install.sh`'s Channel-default bug
+(F001), which blocks a clean 1.0 stable cut since it's ArDD's own
+installer tripping ArDD's own lint check in the normal between-releases
+state. After fixing, regression-rerun `/prerelease-sweep S2 S3 S4 S6 S7`
+before dispatching the stable-release workflow. Note there's also an
 earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
