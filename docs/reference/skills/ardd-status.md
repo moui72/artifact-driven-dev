@@ -37,7 +37,9 @@ that would trap the `STATUS.md` write on the worktree's branch.
 - `ardd-update-check.sh` — whether the ArDD install is behind its source
   (local git by default; fetches first only when the constitution's
   `update_check_max_age_days` opt-in says the owned checkout's tags have
-  gone stale)
+  gone stale). A dev-mode checkout that's actually *ahead* of the latest
+  release tag reports distinctly (`dev-ahead`) and is never nudged to
+  "update" — doing so would regress it.
 
 ## What it checks
 

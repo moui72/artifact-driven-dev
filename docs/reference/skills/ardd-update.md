@@ -69,7 +69,9 @@ than one at once is a usage error, reported before anything else runs.
    explicit.
 2. **Report standing** via `ardd-update-check.sh` — behind, up-to-date
    (a reinstall is still offered; it repairs files and re-surfaces
-   suggestions), or the source can't be found (you're asked for the
+   suggestions), dev-ahead (a dev-mode checkout that's actually ahead of
+   the latest release tag — never recommended to "update," since that
+   would regress it), or the source can't be found (you're asked for the
    path; the filesystem is never searched). The check itself is
    local-git-only unless the constitution opts in via
    `update_check_max_age_days` (see

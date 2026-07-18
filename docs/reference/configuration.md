@@ -76,6 +76,22 @@ ask it there).
 - `ask` — offer the merge each time, suggesting yes (eager merging keeps
   the in-flight window short).
 
+## `plan_preview` — the browser-preview question at `/ardd-plan`'s checkpoint
+
+`always-browser` | `always-console` | `ask` — absent = `ask`. Consulted
+by `/ardd-plan`'s approval checkpoint (step 10), before the three-way
+approve/revise/stop question:
+
+- `always-browser` — skip the question; always publish the plan file via
+  the `Artifact` tool and open it, then proceed to the three-way question
+- `always-console` — skip the question; never publish, proceed straight
+  to the three-way question
+- `ask` — offer the "view in browser first?" question each time (the
+  original, still-default behavior)
+
+Not asked by `/ardd-init` or backfilled by default `/ardd-update` —
+opt in deliberately via `ardd-state.sh stamp <file> plan_preview <value>`.
+
 ## `update_check_max_age_days` — opt-in freshness fetch for the update check
 
 A positive integer — absent = never fetch (the default: the update check

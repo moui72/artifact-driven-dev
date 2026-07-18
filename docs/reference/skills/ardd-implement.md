@@ -56,6 +56,16 @@ isolates state; backgrounding frees your session). The constitution's
 `delegation` knob tunes the gate: `eager` delegates without asking, `ask`
 (or absent) offers each time, `inline` never offers.
 
+- **Pre-flight, before the fold below**: the chosen tasks file and its
+  bound plan must be committed, or a delegated worktree simply can't see
+  them. In solo mode, an uncommitted plan/tasks file is auto-committed
+  (scoped `git add` of exactly those two paths, then a signed commit) —
+  no prompt, the committed paths and hash are printed. In collaborative
+  mode this is unchanged: the user is asked to commit or delegation is
+  blocked. Also verifies the plan file resolved from the tasks file's
+  `plan:` frontmatter actually exists on disk first (a nonexistent path
+  makes `git status --short` print nothing, which would otherwise look
+  identical to "already clean").
 - Already on a feature branch when backgrounding? The branch is
   fast-forward-folded into local `<default>` first (`fold-to-main.sh`) so
   the delegated worktree can see its state; any non-trivial condition

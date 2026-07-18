@@ -21,11 +21,12 @@ state first and refuses illegal transitions with a nonzero exit.
 Subcommands include: `slug` (deterministic kebab sanitization), `mint
 <plan|tasks|feedback|research> <slug>` (unique filenames),
 `feature-create` / `feature-flip` / `feature-field` (register),
-`plan-flip`, `tasks-flip`, `task-check`, `next-task` (tasks files),
-`feedback-mark` / `feedback-planned` (feedback bookkeeping), and `stamp
-<file> <field> <value>` (exactly these frontmatter fields: `last_updated`,
-`diagram_status`, `next_step_prompt`, `delegation`, `merge_policy`,
-`update_check_max_age_days`).
+`plan-flip`, `tasks-flip` (the `completed` transition refuses if any
+task checkbox is still unchecked), `task-check`, `next-task` (tasks
+files), `feedback-mark` / `feedback-planned` (feedback bookkeeping), and
+`stamp <file> <field> <value>` (exactly these frontmatter fields:
+`last_updated`, `diagram_status`, `next_step_prompt`, `delegation`,
+`merge_policy`, `plan_preview`, `update_check_max_age_days`).
 
 ### `upsert-section.sh <file> "<Header>"`
 
