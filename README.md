@@ -10,6 +10,8 @@
 > 📖 Browse these docs as a website:
 > **<https://moui72.github.io/artifact-driven-dev/>**
 
+[![sponsor](https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/moui72)
+
 A workflow system for Claude Code built around a small set of living
 documents — **artifacts** — that record what you've decided about your
 system: your principles, your data model, your infrastructure, whatever
