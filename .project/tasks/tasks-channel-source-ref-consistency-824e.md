@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: the lint-project.sh check (test-first)
-- [ ] T001 (test-first) Add fixtures and regression cases to
+- [x] T001 (test-first) Add fixtures and regression cases to
   `scripts/test-lint-project.sh`:
   1. Create `tests/fixtures/good-project/.project/ardd-version.md` with
      a consistent pairing: `Channel: stable` and either no `Source-Ref:`
@@ -36,7 +36,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   the emergency documented in the commit body, per existing precedent
   in this repo's own history).
   [feedback: n/a] [feature: channel-source-ref-consistency]
-- [ ] T002 Add the `Channel:`/`Source-Ref:` consistency check to
+- [x] T002 Add the `Channel:`/`Source-Ref:` consistency check to
   `scripts/lint-project.sh`: for each project's `.project/ardd-version.md`
   (if the file exists), extract the `Channel:` and `Source-Ref:` line
   values via `sed`/`grep` (matching the read style already used in
