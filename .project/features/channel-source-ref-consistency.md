@@ -1,6 +1,6 @@
 ---
 slug: channel-source-ref-consistency
-status: tasked
+status: implemented
 logged: 2026-07-17
 plan: plan-channel-source-ref-consistency-2026-07-18-461b.md
 tasks: tasks-channel-source-ref-consistency-824e.md
