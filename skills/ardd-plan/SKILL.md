@@ -396,16 +396,29 @@ drafts or writes a plan.
        skeleton and the on-disk file as the full-fidelity source — keep this
        a summary-plus-pointer, never a full inline dump of the plan.
 
-    Before that three-way question, ask a one-time preliminary question:
-    **view the plan in the browser first?** (use `AskUserQuestion`, yes/no).
-    On yes: publish the plan file
-    (`.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md`, Markdown — no HTML
-    skeleton needed) via the `Artifact` tool, open it, and display the
-    resulting URL to the user; then proceed to the three-way question below
-    unchanged. On no: proceed straight to the three-way question. This offer
-    re-fires each time a Revise loop brings the run back to this checkpoint —
-    a later redeploy of the same plan file (same path) targets the same
-    artifact URL, so the preview always reflects the latest draft.
+    Before that three-way question, check the constitution's
+    `plan_preview` frontmatter field (grep
+    `.project/artifacts/constitution.md`; absent = `ask`, the behavior
+    below unchanged):
+    - **`always-browser`** — skip the preliminary question; always
+      publish the plan file
+      (`.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md`, Markdown —
+      no HTML skeleton needed) via the `Artifact` tool, open it, and
+      display the resulting URL to the user, then proceed straight to
+      the three-way question below.
+    - **`always-console`** — skip the preliminary question and never
+      publish; proceed straight to the three-way question below.
+    - **`ask`** (or absent) — ask a one-time preliminary question:
+      **view the plan in the browser first?** (use `AskUserQuestion`,
+      yes/no). On yes: publish and open as above, then proceed to the
+      three-way question. On no: proceed straight to the three-way
+      question.
+
+    Either way, this offer (or its `plan_preview`-driven auto-behavior)
+    re-fires each time a Revise loop brings the run back to this
+    checkpoint — a later redeploy of the same plan file (same path)
+    targets the same artifact URL, so the preview always reflects the
+    latest draft.
 
     Then **pause and ask which of three the user wants** (use `AskUserQuestion`):
 

@@ -29,7 +29,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `git diff skills/ardd-init/SKILL.md` and confirm the new guidance is
   actually present in the diff.** No test task — prose-only skill-file
   change. [feedback: F001]
-- [ ] T003 [parallel] Edit `skills/ardd-plan/SKILL.md` step 10: before
+- [x] T003 [parallel] Edit `skills/ardd-plan/SKILL.md` step 10: before
   the existing "view the plan in the browser first?" `AskUserQuestion`,
   grep `.project/artifacts/constitution.md` frontmatter for
   `plan_preview` (absent = `ask`, current behavior — keep asking as
