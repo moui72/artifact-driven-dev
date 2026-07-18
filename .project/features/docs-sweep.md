@@ -1,6 +1,6 @@
 ---
 slug: docs-sweep
-status: tasked
+status: implemented
 logged: 2026-07-18
 plan: plan-docs-sweep-2026-07-18-b6ef.md
 tasks: tasks-docs-sweep-e6c1.md

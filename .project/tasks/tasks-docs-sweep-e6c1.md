@@ -1,7 +1,7 @@
 ---
 plan: plan-docs-sweep-2026-07-18-b6ef.md
 generated: 2026-07-18
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -52,7 +52,7 @@ status: in-progress
   `docs-sweep` as a companion check for the human-facing doc surface.
 
 ## Phase 3: First real dogfood run
-- [ ] T007 Manually invoke `/docs-sweep` (as built by T001–T004) against
+- [x] T007 Manually invoke `/docs-sweep` (as built by T001–T004) against
   this repo's own current state and report its findings. Do not
   auto-apply fixes — confirm the new skill produces a coherent,
   correctly-scoped triage table (sanity-check its own output, don't
