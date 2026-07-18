@@ -1,7 +1,9 @@
 ---
 slug: docs-sweep
-status: backlogged
+status: tasked
 logged: 2026-07-18
+plan: plan-docs-sweep-2026-07-18-b6ef.md
+tasks: tasks-docs-sweep-e6c1.md
 ---
 
 A local-only, source-side-only skill (docs-sweep, never installed to consumers — same placement/pattern as prerelease-sweep) that judges whether human-facing documentation (README.md, USAGE.md, docs/concepts.md, docs/guides/*, docs/reference/skills/*.md hand-written bodies — everything that renders on the MkDocs docs site) is current and complete against each skill's actual current SKILL.md behavior, then triages findings to /ardd-feedback.
