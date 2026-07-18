@@ -41,7 +41,7 @@ status: in-progress
   pattern to a future editor.
 
 ## Phase 2: Docs
-- [ ] T004 Update `docs/reference/skills/ardd-refine.md`:
+- [x] T004 Update `docs/reference/skills/ardd-refine.md`:
   add a `--review` line to the Usage code block
   (`/ardd-refine constitution --review  # audit + propose trimming non-load-bearing principles`),
   add a bullet under Writes noting `--review` also performs the
@@ -49,7 +49,7 @@ status: in-progress
   confirmed, and add a Behavior notes bullet describing the batched
   keep/trim confirmation and that declined candidates aren't persistently
   suppressed.
-- [ ] T005 Update `USAGE.md`'s command table (near its
+- [x] T005 Update `USAGE.md`'s command table (near its
   existing `/ardd-refine <artifact> <the decision>` row) with a new row
   for the review mode, matching the table's existing terse two-column
   style, and add a corresponding line to the `/ardd-refine <artifact>`

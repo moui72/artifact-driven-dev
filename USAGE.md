@@ -48,6 +48,7 @@ the full story.
 | See where everything stands | `/ardd-status` — or just read `.project/STATUS.md` | [ardd-status](docs/reference/skills/ardd-status.md) |
 | Run implementation in the background, or several at once | Say yes at `/ardd-implement`'s delegation offer | [parallel-work.md](docs/guides/parallel-work.md) |
 | Record a new decision in the docs | `/ardd-refine <artifact> <the decision>` | [ardd-refine](docs/reference/skills/ardd-refine.md) |
+| Audit the constitution for principles no longer worth keeping | `/ardd-refine constitution --review` | [ardd-refine](docs/reference/skills/ardd-refine.md) |
 | Vet a big idea before committing to it | `/ardd-research proposal: <idea>` — for reversals you're *not yet sure about* (sure ones go straight to `/ardd-feedback`) | [ardd-research](docs/reference/skills/ardd-research.md) |
 | Check the docs still match the code | `/ardd-defects` | [checking.md](docs/guides/checking.md) |
 | Update ArDD itself | `/ardd-update` | [install.md](docs/install.md) |
@@ -75,6 +76,7 @@ the full story.
 ```
 /ardd-init                  # once: seed artifacts (interview or codebase survey)
 /ardd-refine <artifact>     # capture decisions as you make them
+/ardd-refine constitution --review  # audit + propose trimming non-load-bearing principles
 /ardd-backlog <idea>        # log feature ideas the moment you have them
 /ardd-feedback <notes>      # capture what you notice using the built thing
 /ardd-plan [<slug> ...]     # draft plan → approval checkpoint → tasks file
