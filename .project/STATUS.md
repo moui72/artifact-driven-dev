@@ -1,6 +1,17 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-plan constitution-trim-review-relev` — drafted,
+_Updated: 2026-07-18 (`/ardd-implement` — the delegated
+`backlog-assign-epics-automated` worktree run reported back with all 6
+tasks complete: T001 (test-first) added a red case to
+`scripts/test-ardd-state.sh` for `feature-field <slug> epic <value>`;
+T002 added `epic` to `ardd-state.sh`'s `feature-field` valid-key case
+statement; T003–T005 added the `--assign-epics` mode (enumerate →
+propose thematic groupings → batched confirm → apply via `feature-field
+... epic` → report) to `skills/ardd-backlog/SKILL.md`; T006 documented it
+in `docs/reference/skills/ardd-backlog.md`. Feature
+`backlog-assign-epics-automated`: `tasked` → `implemented`. Merged
+clean (`ort` strategy, no conflicts) and the worktree reaped. Prior
+update, same day, `/ardd-plan constitution-trim-review-relev` — drafted,
 approved, and tasked `plan-constitution-trim-review-relev-2026-07-18-8c82.md`
 (solo mode, no branch gate, on `main`): adds a `--review` mode to
 `/ardd-refine constitution` that enumerates the declared principles,
@@ -983,7 +994,7 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 2 tasked · 22 implemented · 1 retired — see
+1 backlogged · 1 tasked · 23 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
@@ -997,19 +1008,19 @@ Backlogged:
   gated on its own Phase 1 go/no-go.
 Tasked:
 - `constitution-trim-review-relev` — `--review` mode for
-  `/ardd-refine constitution`; see the `_Updated` note above.
-  `tasks-constitution-trim-review-relev-3a39.md` (`ready`, 6 tasks/3
-  phases) — next: `/ardd-implement`.
+  `/ardd-refine constitution`; see the earlier `_Updated` note. Under
+  reconsideration (2026-07-18): the user asked whether this should
+  instead be `/ardd-audit` behavior rather than a new `/ardd-refine` mode
+  — a review agent is currently weighing that before implementation
+  starts. `tasks-constitution-trim-review-relev-3a39.md` (`ready`, 6
+  tasks/3 phases) — hold on `/ardd-implement` pending that reconsideration.
 - `backlog-assign-epics-automated` — automated `/ardd-backlog
   --assign-epics` pass proposing `epic:` groupings for the feature
-  register; 5/6 tasks done in a background worktree
-  (`tasks-backlog-assign-epics-automated-e23f.md`, `in-progress`), not yet
-  merged — see In Flight below.
+  register; see the `_Updated` note above
+  (`tasks-backlog-assign-epics-automated-e23f.md`, completed 6/6).
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `channel-source-ref-consistency` — `lint-project.sh`
-now flags a prerelease `Source-Ref:` under `Channel: stable` in
-`.project/ardd-version.md`; see the earlier `_Updated` note
-(`tasks-channel-source-ref-consistency-824e.md`, completed 2/2).
+Newest implemented: `backlog-assign-epics-automated` — see the
+`_Updated` note above.
 
 ## Audit
 
@@ -1021,21 +1032,19 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Worktree `.claude/worktrees/agent-a142f33078dc9f4f7` (branch
-`worktree-agent-a142f33078dc9f4f7`) —
-`tasks-backlog-assign-epics-automated-e23f.md`, `in-progress`, 5/6. Not
-yet merged; the coordinator merges (per `merge_policy: auto`, once
-conflict-free) and reaps the worktree when it reports back. `main` is
-otherwise ahead of `origin/main` (unpushed local commits from today's
-work); `v0.10.2` is the current published stable release.
+Nothing — no worktrees, nothing pending reap (the
+`backlog-assign-epics-automated` worktree merged and was reaped this
+update). `main` is ahead of `origin/main` (unpushed local commits from
+today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`backlog-assign-epics-automated`'s delegated run is close to done (5/6) —
-let it finish and merge. In the meantime, `/ardd-implement` can start
-`tasks-constitution-trim-review-relev-3a39.md` (`ready`, 6 tasks/3
-phases). `codex-second-harness-support` is drafted-but-untasked:
-`/ardd-plan --from
+Resolve the constitution-trim-review-relev reconsideration first (does
+this belong under `/ardd-audit` instead of `/ardd-refine --review`?) —
+a review is in progress — before running `/ardd-implement` on
+`tasks-constitution-trim-review-relev-3a39.md`, since the answer may
+change the plan/tasks file. `codex-second-harness-support` is
+drafted-but-untasked: `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
 the true final go/no-go — before Phases 2–5's install-time substitution
