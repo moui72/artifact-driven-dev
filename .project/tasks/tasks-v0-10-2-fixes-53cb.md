@@ -1,7 +1,7 @@
 ---
 plan: plan-v0-10-2-fixes-2026-07-17-4465.md
 generated: 2026-07-17
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -77,7 +77,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   function. [feedback: F003]
 
 ## Phase 4: v0.10.2 cut (depends on Phases 1-3)
-- [ ] T007 Run the full test suite (`scripts/lint-docs.sh`,
+- [x] T007 Run the full test suite (`scripts/lint-docs.sh`,
   `scripts/lint-project.sh .`, every `scripts/test-*.sh`) and confirm
   all green; confirm `git status --short` is clean. This is a
   verification task, not a code change — no commit expected unless a
