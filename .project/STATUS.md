@@ -1,6 +1,27 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-17 (release ops — pushed `main` (`a978ab7..a802dbc`,
+_Updated: 2026-07-17 (`/ardd-feedback` — a `/prerelease-sweep full` run
+against **v0.10.1** (run `2026-07-17-b924`, S1-S7, all completed
+cleanly) found a critical issue: three tasks from the earlier
+`tasks-feedback-batch-ec6e.md` run (T006, T007, T010) were marked `[x]`
+complete with commits describing the intended edit, but the edits never
+actually landed — independently reproduced by 4 of 7 scenarios (S2, S3,
+S5, S7). **v0.10.1, already stable, ships this gap**: `ardd-status`
+still doesn't handle the `dev-ahead` update-check outcome, `ardd-init`
+step 7 still has no diff-verification guidance, and `plan_preview` is
+fully wired everywhere except the one place (`ardd-plan` step 10) that's
+supposed to consume it. Logged as
+`feedback-prerelease-full-sweep-v0-10-1-e5d8.md` F001, alongside F002
+(`ardd-state.sh tasks-flip completed` doesn't verify checkboxes, and
+`completed`'s terminal design leaves no scripted recovery from a
+wrongly-flipped file — found by S6) and F003 (the process root cause:
+`/ardd-implement`'s task-completion flow has no verification step
+before `task-check` marks a task done). Not yet consumed by a plan.
+Everything else in the sweep was clean or non-actionable (S1/S4 clean
+passes; S1-F001/S4-F001 working-as-designed/harness-only). Cost: ~649K
+tokens / ~$3-10 across 7 subagents; full breakdown in
+`dev-notes/prerelease-runs/2026-07-17-b924/RUN.md`. Prior update, same
+day, release ops — pushed `main` (`a978ab7..a802dbc`,
 publishing the `new.sh` fix as a beta), then ran a `/prerelease-sweep S1`
 regression check (run `2026-07-17-cc3b`) against the real quickstart
 URL. It confirmed the fix is correct on `main` but caught something more
@@ -802,12 +823,14 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — all batches delivered, including
-`feedback-prerelease-smoke-sweep-849d.md`,
-`feedback-prerelease-full-sweep-62ae.md`, and
-`feedback-plan-preview-setting-63b3.md` (all now `planned`, consumed by
-`plan-feedback-batch-2026-07-17-e977.md` — see the `_Updated` note
-above; `delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
+1 open: `feedback-prerelease-full-sweep-v0-10-1-e5d8.md` (3 items —
+F001 critical bug, F002 bug, F003 ux — see the `_Updated` note above).
+Will be picked up by the next `/ardd-plan`. Prior batches all delivered
+(`feedback-prerelease-smoke-sweep-849d.md`,
+`feedback-prerelease-full-sweep-62ae.md`,
+`feedback-plan-preview-setting-63b3.md` — all `planned`, consumed by
+`plan-feedback-batch-2026-07-17-e977.md`;
+`delegation-preflight-autocommit-06b1`, `install-manifest-gap-b773`,
 `artifact-register-bridge-116a`, `findings-0344`, `redrive-695b`).
 
 ## Recent Releases
@@ -864,10 +887,12 @@ current published stable release.
 
 ## Recommended Next Step
 
-The `new.sh` fix has fully shipped end-to-end (fixed → merged → beta →
-regression-checked → stable-dispatched → confirmed live at the public
-URL) — nothing further needed there. `codex-second-harness-support`
-is drafted-but-untasked:
+`/ardd-plan` to consume `feedback-prerelease-full-sweep-v0-10-1-e5d8.md`
+(3 items — the critical phantom-completion gap already live in v0.10.1
+stable, plus the `tasks-flip` verification gap and its process root
+cause) and fix, then cut v0.10.2. The `new.sh` fix itself has fully
+shipped end-to-end and needs no further action.
+`codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
 blocking live skill-to-skill-chaining smoke test on a real Codex CLI —
