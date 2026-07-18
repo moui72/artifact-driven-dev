@@ -1,7 +1,7 @@
 ---
 plan: plan-dynamic-version-badge-sync-2026-07-18-35aa.md
 generated: 2026-07-18
-status: in-progress
+status: completed
 ---
 
 # Tasks
