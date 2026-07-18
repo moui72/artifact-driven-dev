@@ -1,7 +1,7 @@
 ---
 plan: plan-constitution-trim-review-relev-2026-07-18-8c82.md
 generated: 2026-07-18
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -57,7 +57,7 @@ status: in-progress
   77) showing `/ardd-refine constitution --review`.
 
 ## Phase 3: Verification
-- [ ] T006 [artifacts: constitution] Manually exercise `--review` (as
+- [x] T006 [artifacts: constitution] Manually exercise `--review` (as
   specified by T001–T003) against this repo's own
   `.project/artifacts/constitution.md`: enumerate all current principles,
   produce a keep/trim judgment with rationale for each, and confirm the
@@ -71,3 +71,48 @@ status: in-progress
   verified. Do not apply any trim from this dry run to the real
   constitution.md unless a trim is genuinely warranted and the user
   confirms it live.
+
+  **Outcome:** Dry-run executed against this repo's real
+  `.project/artifacts/constitution.md` (v1.11.1, 9 principles under `##
+  Core Principles`). Enumerated I–IX and grounded each against
+  `CLAUDE.md`/`.project/artifacts/*.md` and the codebase:
+  - I. Skill Files Are the Product — **keep**: this is the repo's core
+    deliverable framing, reflected everywhere (CLAUDE.md's "Skill files
+    are the product" convention).
+  - II. Deterministic Checks and Mutations Over Prose — **keep**: directly
+    load-bearing; `ardd-state.sh` and a dozen sibling scripts exist
+    because of this principle, and the 500+ line test suite just run
+    during this task's own align/commit steps exercises them.
+  - III. Never Suggest Ignoring More Than Is Actually Regenerated —
+    **keep**: still enforced today in `install.sh`'s gitignore-check
+    section and `docs/decisions/0002-gitignore-ceiling.md`.
+  - IV. Two Install Targets, Never Conflated — **keep**: this is the
+    repo's central architectural split (CLAUDE.md's "Two install
+    targets, don't conflate them"), actively guiding where new scripts
+    land.
+  - V. Deterministic Checks Are Test-First — **keep**: every
+    `scripts/*.sh` has a paired `test-*.sh`, actively enforced.
+  - VI. Simplicity / YAGNI — **keep**: general but still load-bearing —
+    plans' "Complexity Tracking" sections invoke it routinely.
+  - VII. No Dead Architecture — **keep**: reflected in retired
+    scripts/migrations removing stale mechanisms rather than archiving
+    them (e.g. `scripts/release.sh` retirement noted in CLAUDE.md).
+  - VIII. Check Library/Tool Idioms Before Building Custom Mechanism —
+    **keep**: the git `merge=ours` driver (vs. a hand-built merge tool)
+    is a direct application of this principle, still in force.
+  - IX. Unambiguous Actor Language in Agent-Facing Prose — **keep**:
+    recently added (2026-07-xx actor-language-skill-prose-aud work) and
+    still being applied to new/edited skill prose.
+
+  **Result: zero trim-candidates** — all nine kept. This matches the
+  task's own expectation ("expect mostly keep — recently pruned"), so
+  per the `--review` step sequence's step 4, the correct behavior is to
+  report this outcome and stop: no write, no version bump, nothing to
+  batch-confirm. No trim was applied to the real `constitution.md`.
+
+  The batched-confirmation UI itself (step 5 of the new mode) was not
+  exercised end-to-end by this dry run since there were no candidates to
+  present — its shape (single AskUserQuestion, multiSelect on,
+  accept/decline per item) was cross-checked by inspection against
+  `/ardd-plan` step 3c's proposed-changes-then-confirm text and reads
+  consistently with it.

@@ -1,6 +1,6 @@
 ---
 slug: constitution-trim-review-relev
-status: tasked
+status: implemented
 logged: 2026-07-17
 plan: plan-constitution-trim-review-relev-2026-07-18-8c82.md
 tasks: tasks-constitution-trim-review-relev-3a39.md
