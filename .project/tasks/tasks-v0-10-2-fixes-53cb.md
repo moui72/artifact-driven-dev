@@ -54,7 +54,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   checkbox state today). Apply the test framework's expected-failure
   marker on this red commit per the constitution's full-suite
   pre-commit hook convention. [feedback: F002]
-- [ ] T005 Fix `scripts/ardd-state.sh`'s `tasks-flip` case statement:
+- [x] T005 Fix `scripts/ardd-state.sh`'s `tasks-flip` case statement:
   before performing the `in-progress -> completed` transition, grep the
   tasks file for any `- [ ]` line (unchecked); if any exist, refuse with
   a message naming the still-open task ID(s), mirroring the script's

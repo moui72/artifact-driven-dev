@@ -165,6 +165,10 @@ cmd_tasks_flip() {
     generating-abandoned|ready-abandoned|in-progress-abandoned) ;;
     *) die "tasks-flip: illegal transition $from -> $to in $file" ;;
   esac
+  if [ "$to" = "completed" ]; then
+    open_ids="$(grep -o '^- \[ \] T[0-9]\{3\}' "$file" | sed 's/^- \[ \] //' | tr '\n' ' ')"
+    [ -z "$open_ids" ] || die "tasks-flip: completed refused — unchecked task(s) remain in $file: $open_ids"
+  fi
   write_status "$file" "$from" "$to"
   echo "tasks-flip: $file $from -> $to"
 }
