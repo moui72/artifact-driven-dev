@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-18
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-docs-drift-fixes-2026-07-18-2fbb.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `/ardd-plan --slate` (the read-only advisory defrag/grouping
+- [x] F001 `/ardd-plan --slate` (the read-only advisory defrag/grouping
   mode, `skills/ardd-plan/SKILL.md:58-76,582+`) is documented on its own
   reference page (`docs/reference/skills/ardd-plan.md:18,26-40`) but
   absent from `USAGE.md`'s "How do I…?" routing table and from
