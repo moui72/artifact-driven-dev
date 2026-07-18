@@ -1,6 +1,34 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-plan channel-source-ref-consistency` —
+_Updated: 2026-07-18 (`/ardd-implement` + `/ardd-plan` — delegated
+worktree run completed and merged both tasks of
+`tasks-channel-source-ref-consistency-824e.md` (now `completed`): T001
+(test-first) added `Channel:`/`Source-Ref:` fixtures to
+`good-project`/`bad-project` (consistent vs. atelier-shaped mismatch,
+`EXPECTED_BAD_FINDINGS` 37→38) plus a targeted message-quality case;
+T002 added the actual check to `lint-project.sh` — reuses
+`install.sh`/`ardd-update-check.sh`'s existing `sed` read style for
+`.project/ardd-version.md` and `source-resolve.sh`/`next-version.sh`'s
+`-beta.` prerelease-suffix recognition, reporting `Channel: stable but
+Source-Ref: <value> is a prerelease tag — a prerelease tag under a
+stable channel is self-contradictory` when triggered. Feature
+`channel-source-ref-consistency`: `tasked` → `implemented`. Merged
+fast-forward (`9ce5b1a..3447331`) and the worktree reaped. Meanwhile,
+also drafted, approved, and tasked
+`plan-backlog-assign-epics-automated-2026-07-18-3d8f.md` (the second
+parallel-set item from today's `--slate` run, solo mode, no branch
+gate, on `main`): adds a new `epic` key to `ardd-state.sh
+feature-field` (Phase 1, test-first) and a new `/ardd-backlog
+--assign-epics` sweep mode (Phase 2) structurally mirroring the
+existing `--from-artifacts` bulk mode — walk the register for
+`epic`-less entries, propose thematic groupings by judgment (never
+forcing a non-clustering item into a bucket), one batched
+`AskUserQuestion` confirmation, apply accepted groups via the new write
+path. 6 tasks across 2 phases in
+`tasks-backlog-assign-epics-automated-e23f.md` (`ready`). No artifact
+changes (no new principle/workflow field — this is a new skill
+capability, not a constitution change). Prior update, same day,
+`/ardd-plan channel-source-ref-consistency` —
 drafted, approved, and tasked
 `plan-channel-source-ref-consistency-2026-07-18-461b.md` (solo mode, no
 branch gate, on `main`). Picked as the top-priority item from an
@@ -940,7 +968,7 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-3 backlogged · 1 tasked · 21 implemented · 1 retired — see
+2 backlogged · 1 tasked · 22 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
@@ -950,25 +978,23 @@ Backlogged:
   was drafted (`plan-codex-second-harness-support-2026-07-15-f837.md`,
   `status: draft`) but stopped at the approval checkpoint, un-tasked —
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
-  Per today's `--slate` run: solo-deferred, not a parallel-set
-  candidate, gated on its own Phase 1 go/no-go.
+  Per the `--slate` run: solo-deferred, not a parallel-set candidate,
+  gated on its own Phase 1 go/no-go.
+- `constitution-trim-review-relev` — agent-driven constitution-trimming
+  review mode. Per the `--slate` run: medium confidence,
+  parallel-set-safe — the other parallel-set item,
+  `backlog-assign-epics-automated`, is now tasked (see below).
+Tasked:
 - `backlog-assign-epics-automated` — automated `/ardd-backlog
   --assign-epics` pass proposing `epic:` groupings for the feature
-  register/feedback/`DEFECTS.md`. Per today's `--slate` run: medium
-  confidence, parallel-set-safe.
-- `constitution-trim-review-relev` — agent-driven constitution-trimming
-  review mode. Per today's `--slate` run: medium confidence,
-  parallel-set-safe.
-Tasked:
-- `channel-source-ref-consistency` — validate `ardd-version.md`'s
-  `Channel:`/`Source-Ref:` fields are mutually consistent; see
-  `_Updated` note. `tasks-channel-source-ref-consistency-824e.md`
-  (`ready`, 2 tasks/1 phase) — next: `/ardd-implement`.
+  register; see `_Updated` note.
+  `tasks-backlog-assign-epics-automated-e23f.md` (`ready`, 6 tasks/2
+  phases) — next: `/ardd-implement`.
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `plan-time-defrag-slate-analysi` — `/ardd-plan
---slate` mode (bundle/parallel-set/solo-deferred backlog grouping); see
-the `_Updated` note above
-(`tasks-plan-time-defrag-slate-analysi-2c40.md`, completed 9/9).
+Newest implemented: `channel-source-ref-consistency` — `lint-project.sh`
+now flags a prerelease `Source-Ref:` under `Channel: stable` in
+`.project/ardd-version.md`; see the `_Updated` note above
+(`tasks-channel-source-ref-consistency-824e.md`, completed 2/2).
 
 ## Audit
 
@@ -980,16 +1006,16 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap. `main` is in sync with
-`origin/main` and `origin/release` (both at `a802dbc`); `v0.10.1` is the
-current published stable release.
+Nothing — no worktrees, nothing pending reap. `main` is ahead of
+`origin/main` (unpushed local commits from today's work); `v0.10.2` is
+the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-channel-source-ref-consistency-824e.md`
-(`ready`, 2 tasks/1 phase). Otherwise, per today's `--slate` run,
-`backlog-assign-epics-automated` and `constitution-trim-review-relev`
-are both parallel-set-safe (`/ardd-plan <slug>` either or both).
+`/ardd-implement` to work `tasks-backlog-assign-epics-automated-e23f.md`
+(`ready`, 6 tasks/2 phases). Otherwise, `constitution-trim-review-relev`
+is still backlogged and parallel-set-safe per the `--slate` run
+(`/ardd-plan constitution-trim-review-relev`).
 `codex-second-harness-support` is drafted-but-untasked:
 `/ardd-plan --from
 plan-codex-second-harness-support-2026-07-15-f837.md` (Phase 1 is a
