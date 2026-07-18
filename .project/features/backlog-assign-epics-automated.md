@@ -1,7 +1,9 @@
 ---
 slug: backlog-assign-epics-automated
-status: backlogged
+status: tasked
 logged: 2026-07-17
+plan: plan-backlog-assign-epics-automated-2026-07-18-3d8f.md
+tasks: tasks-backlog-assign-epics-automated-e23f.md
 ---
 
 An automated /ardd-backlog --assign-epics pass over the current feature register, open feedback, and DEFECTS.md that proposes epic: groupings for related items, batched for confirmation rather than applied silently.
