@@ -1,6 +1,6 @@
 ---
 slug: rejected-feature-status
-status: tasked
+status: implemented
 logged: 2026-07-19
 plan: plan-rejected-feature-status-2026-07-19-9590.md
 tasks: tasks-rejected-feature-status-2fb8.md
