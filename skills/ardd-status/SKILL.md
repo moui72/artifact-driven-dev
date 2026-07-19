@@ -197,7 +197,12 @@ without regenerating `STATUS.md` or being asked anything.
    - By epic: `<epic-slug>` — <N> backlogged · <N> planned · <N> tasked
      (one line per epic value seen). (Omit this "by epic" breakdown entirely
      if no feature carries a non-empty `epic` — same "omit if none"
-     convention as every other optional section here.)
+     convention as every other optional section here. An epic value that
+     previously had entries but now has zero remaining in
+     backlogged/planned/tasked — all moved to implemented/retired — simply
+     drops out of this breakdown on its own, a natural consequence of the
+     existing counting rule; it is not a special case requiring different
+     handling, and no "0/0/0" line should ever appear for it.)
 
    ## Documented but Untracked
    - `<artifact>.md` describes <capability> — no register entry, no

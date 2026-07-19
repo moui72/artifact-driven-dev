@@ -71,18 +71,18 @@ status: in-progress
   more specific error message rather than the old generic one.
 
 ## Phase 3: `lint-project.sh` and docs fixes (F005, F006)
-- [ ] T010 [parallel] Fix F005 in `scripts/lint-project.sh`'s `plan:`
+- [x] T010 [parallel] Fix F005 in `scripts/lint-project.sh`'s `plan:`
   existence check: detect a `/` in the `plan:` frontmatter value before
   constructing the existence-check path, and if found, report a
   distinct, clear message ("expected a bare filename, got a path:
   '$planref'") instead of running (and reporting) the doubled-path
   existence check.
-- [ ] T011 [parallel] Add a fixture case to the test suite covering
+- [x] T011 [parallel] Add a fixture case to the test suite covering
   `lint-project.sh`'s `plan:` existence check (`scripts/test-lint-project.sh`
   or the relevant fixture set) for T010: a tasks file whose `plan:`
   value contains a path (not a bare filename) produces the new clear
   message, not the old doubled-path message.
-- [ ] T012 [parallel] Fix F006: add the epic-drained-to-zero note to
+- [x] T012 [parallel] Fix F006: add the epic-drained-to-zero note to
   `skills/ardd-status/SKILL.md`'s by-epic breakdown section (near the
   existing "omit this... if no feature carries a non-empty epic" note)
   — state explicitly that an epic value with zero entries remaining in

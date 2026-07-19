@@ -428,9 +428,15 @@ if [ -d "$PROJECT_DIR/tasks" ]; then
     # --- plan: must reference an existing plan file ---
     if frontmatter_has "$f" plan; then
       planref="$(frontmatter_field "$f" plan)"
-      if [ -n "$planref" ] && [ ! -f "$PROJECT_DIR/plans/$planref" ]; then
-        report "$f: plan '$planref' — no $PROJECT_DIR/plans/$planref"
-      fi
+      case "$planref" in
+        */*)
+          report "$f: plan '$planref' — expected a bare filename, got a path: '$planref'" ;;
+        *)
+          if [ -n "$planref" ] && [ ! -f "$PROJECT_DIR/plans/$planref" ]; then
+            report "$f: plan '$planref' — no $PROJECT_DIR/plans/$planref"
+          fi
+          ;;
+      esac
     fi
   done
 fi

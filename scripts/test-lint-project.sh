@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=38
+EXPECTED_BAD_FINDINGS=39
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -34,6 +34,14 @@ else
   else
     echo "FAIL: bad-project produced $bad_count findings, expected $EXPECTED_BAD_FINDINGS:"
     cat /tmp/lint-bad.out
+    fail=1
+  fi
+  # plan: with a path (not a bare filename) gets the distinct clear message,
+  # not the old doubled-path existence-check message (F005)
+  if grep -q "expected a bare filename, got a path" /tmp/lint-bad.out; then
+    echo "ok: plan: path value gets the distinct clear message"
+  else
+    echo "FAIL: plan: path value gets the distinct clear message"
     fail=1
   fi
   # placeholder artifact names get the pointed message, not the generic one
