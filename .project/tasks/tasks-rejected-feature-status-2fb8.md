@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: Schema and state mutation
-- [ ] T001 [artifacts: constitution] Add `rejected` and `subsumed` to
+- [x] T001 [artifacts: constitution] Add `rejected` and `subsumed` to
   `scripts/lint-project.sh`'s `FEATURE_STATUS_ENUM` (currently
   `"backlogged planned tasked implemented retired"`), with inline
   comments mirroring the existing `retired` comment's style — one for
