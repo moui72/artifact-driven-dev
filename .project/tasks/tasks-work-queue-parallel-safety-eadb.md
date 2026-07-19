@@ -1,7 +1,7 @@
 ---
 plan: plan-work-queue-parallel-safety-2026-07-19-4c10.md
 generated: 2026-07-19
-status: ready
+status: in-progress
 ---
 
 # Tasks
