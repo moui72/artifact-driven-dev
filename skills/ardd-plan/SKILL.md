@@ -161,11 +161,17 @@ drafts or writes a plan.
    a. **Look up each slug** in the feature register — read
       `.project/features/<slug>.md` and its frontmatter `status`. If the
       file doesn't exist, tell the user and stop. If its status isn't
-      `backlogged` (e.g. already `planned`/`tasked`/`implemented`), tell the
-      user it's already past the backlog stage and stop — this skill only
-      designs features forward from `backlogged`; to revise a feature already
-      in flight, use `/ardd-feedback` (a reconsidered decision) or edit the
-      relevant plan/artifact directly.
+      `backlogged` (e.g. already `planned`/`tasked`/`implemented`/
+      `retired`/`rejected`/`subsumed`), tell the user it's already past
+      the backlog stage and stop — this skill only designs features
+      forward from `backlogged`; to revise a feature already in flight,
+      use `/ardd-feedback` (a reconsidered decision) or edit the relevant
+      plan/artifact directly. `rejected` and `subsumed` are two of the
+      statuses this refusal covers: a `rejected` idea needs a fresh
+      backlog entry if reconsidered (never revived under its own slug),
+      and a `subsumed` entry's scope should be planned under whichever
+      feature actually absorbed it, never revived under its own slug
+      either.
 
       Also run `.claude/skills/ardd-scripts/inflight-worktrees.sh`. For each
       in-flight tasks file it reports in another worktree, read that file's

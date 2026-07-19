@@ -49,7 +49,7 @@ status: in-progress
   explicitly that the by-epic breakdown's exclusion of non-actionable
   statuses covers both new terminal states too (grouped alongside
   `implemented`/`retired` in the "omit from grouping" list).
-- [ ] T007 [parallel] Update `skills/ardd-plan/SKILL.md`'s step 3a
+- [x] T007 [parallel] Update `skills/ardd-plan/SKILL.md`'s step 3a
   guidance (currently: "If its status isn't `backlogged` (e.g. already
   `planned`/`tasked`/`implemented`), tell the user it's already past
   the backlog stage and stop") to also name `rejected` and `subsumed`
