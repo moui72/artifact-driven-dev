@@ -52,11 +52,15 @@ entering the normal flow.
    call below, and annotate each pick-list / fan-out multi-select option
    with its verdicts against the other options and the in-flight claims:
    `independent` (no declared overlap — *not* conflict-free),
-   `shared-artifact (<tags>)`, or `shared-feature (<slugs>)`.
+   `shared-artifact (<tags>)`, `shared-feature (<slugs>)`, or `claimed`
+   (the same tasks file, ready here and claimed by an in-flight worktree).
    `shared-feature` is a **strong warning in the option text** — "shares
    feature <slug> with <other file>; running these in parallel risks
    conflicting edits" — but never a hard exclusion: the same-file claim
-   check below stays the only hard exclusion. One judgment step the script
+   check below stays the only hard exclusion. A `claimed` verdict maps
+   directly to that same-file hard exclusion — the verdict is how the
+   matrix *reports* what the exclusion already enforces; the exclusion
+   rule itself is unchanged. One judgment step the script
    deliberately doesn't do: when two candidate files look related, skim
    both and flag likely code-path contact before fanning out — the matrix
    only sees declared overlap, and `merge_policy` conflict handling still

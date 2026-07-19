@@ -61,13 +61,18 @@ without regenerating `STATUS.md` or being asked anything.
    copy; source-repo absolute-path fallback, same present-or-fallback rule
    as the other ardd-scripts calls). It prints one pairwise line per
    combination of `ready` tasks files and in-flight worktree claims:
-   `pair=<a>:<b>	verdict=independent|shared-feature|shared-artifact	features=...	artifacts=...`.
+   `pair=<a>:<b>	verdict=claimed|shared-feature|shared-artifact|independent	features=...	artifacts=...`.
    Collect the output for the Work Queue report section and STATUS.md item
    below (omit both entirely when no `ready` tasks file exists — the house
-   omit-if-none convention). Note the semantics for the report:
-   `independent` means **no declared overlap only** (no shared feature slug,
-   no shared `[artifacts: ...]` tag) — it is *not* "conflict-free";
-   `merge_policy` conflict handling still governs at merge time. This is
+   omit-if-none convention). The script supplies only the pair verdicts —
+   the Work Queue entries themselves come from `tasks-list.sh` — and it is
+   silent, by design, with fewer than two participants. Note the semantics
+   for the report: `independent` means **no declared overlap only** (no
+   shared feature slug, no shared `[artifacts: ...]` tag) — it is *not*
+   "conflict-free"; `merge_policy` conflict handling still governs at
+   merge time. `claimed` means the pair is the *same* tasks file — ready
+   here and claimed by an in-flight worktree — and reads "claimed by
+   in-flight worktree" in the report. This is
    read-only visibility — the single-writer boundaries above are unchanged.
 
    Additionally run `.claude/skills/ardd-scripts/worktree-reap.sh --dry-run`
@@ -238,10 +243,12 @@ without regenerating `STATUS.md` or being asked anything.
    - `<tasks-file>` — plan `<plan-file>`, features `<slugs>`:
      - vs `<other-ready-file>`: independent / shared-feature (`<slugs>`) /
        shared-artifact (`<tags>`)
-     - vs in-flight `<worktree-tasks-file>`: <verdict>
-   (One entry per `ready` tasks file, from `parallel-matrix.sh` — its
-   filename, bound plan/features, and verdicts against the other ready
-   files and in-flight claims. `independent` means no declared overlap
+     - vs in-flight `<worktree-tasks-file>`: <verdict> (`claimed` reads
+       "claimed by in-flight worktree" — the same tasks file, ready here
+       and in flight there)
+   (One entry per `ready` tasks file — entry data from `tasks-list.sh`;
+   `parallel-matrix.sh` supplies only the pair verdicts against the other
+   ready files and in-flight claims. `independent` means no declared overlap
    only, not conflict-free — merge_policy still governs at merge time.
    Read-only visibility. Omit this section entirely when no `ready` tasks
    file exists.)

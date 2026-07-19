@@ -33,7 +33,7 @@ status: in-progress
 
 ## Phase 2: consuming prose + docs
 
-- [ ] T003 Update the matrix-annotation prose in
+- [x] T003 Update the matrix-annotation prose in
   `skills/ardd-implement/SKILL.md` (step 1) and
   `skills/ardd-status/SKILL.md` (step 1 / Work Queue) to name the new
   `claimed` verdict: in implement it maps to the existing same-file
