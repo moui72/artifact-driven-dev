@@ -37,7 +37,7 @@ status: in-progress
   subsumed` both pass the enum check cleanly.
 
 ## Phase 2: Skill prose and docs
-- [ ] T005 [parallel] Update `docs/reference/project-files.md`'s feature
+- [x] T005 [parallel] Update `docs/reference/project-files.md`'s feature
   register status-arc line (currently `backlogged` → `planned` →
   `tasked` → `implemented` (or → `retired`)) to also show the
   `backlogged`/`planned` → `rejected` branch and the

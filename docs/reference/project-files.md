@@ -39,7 +39,7 @@ judgment call, not a mechanical flip:
 | Plan | `status` | `draft` → `approved` → `superseded` |
 | Tasks | `status` | `generating` → `ready` → `in-progress` → `completed` (or → `abandoned`) |
 | Feedback | `status` | `open` → `planned` |
-| Feature register | `status` | `backlogged` → `planned` → `tasked` → `implemented` (or → `retired`) |
+| Feature register | `status` | `backlogged` → `planned` → `tasked` → `implemented` (or → `retired`); `backlogged`/`planned` → `rejected`; `backlogged`/`planned`/`tasked` → `subsumed` |
 
 Who advances the feature register: `backlogged` entries come from
 `/ardd-backlog` (or `/ardd-tracker` pull); `/ardd-plan` flips
@@ -52,6 +52,14 @@ performing that last flip in the orphaned-completion case).
 from `implemented` and is terminal. No skill automates removal decisions,
 so the flip is performed manually:
 `ardd-state.sh feature-flip <slug> retired`.
+
+`rejected` and `subsumed` are two further terminal states, also entered
+only manually via `feature-flip`. `rejected` means a `backlogged`/`planned`
+idea was decided against and never built — a pre-work decision, so it is
+never entered from `tasked`. `subsumed` means the entry's scope shipped,
+but credited to a *different* feature/plan entry; it is reachable from
+`backlogged`, `planned`, or `tasked` since absorption can be noticed at any
+point before the entry's own implementation lands.
 
 `completed` and `planned` (feedback) are terminal: a completed tasks file
 never reopens (post-completion failures become new feedback), and a
