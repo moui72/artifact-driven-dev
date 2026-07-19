@@ -1,7 +1,7 @@
 ---
 plan: plan-prerelease-sweep-fixes-2026-07-18-d341.md
 generated: 2026-07-18
-status: ready
+status: in-progress
 ---
 
 # Tasks
