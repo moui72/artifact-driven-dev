@@ -1,6 +1,24 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/prerelease-sweep full` + `/ardd-feedback` — ran
+_Updated: 2026-07-18 (`/ardd-plan` — drafted, approved, and tasked
+`plan-prerelease-sweep-fixes-2026-07-18-d341.md`: 12 tasks/3 phases in
+`tasks-prerelease-sweep-fixes-e4d8.md` (`ready`) fixing all 6 findings
+from the full prerelease sweep. Highest priority (F001/T001-T002):
+`install.sh` now infers the default `Channel:` from `Source-Ref:`'s own
+`-beta.` suffix shape instead of hardcoding `stable`, when neither
+`$ARDD_CHANNEL` nor a previously-recorded channel applies — fixes ArDD's
+own installer tripping its own `channel-source-ref-consistency` lint
+check in the normal between-releases state. Also: F002/T003-T005
+(`ARDD_VERSION_BADGE=1` now writes files even if the static badge marker
+already exists), F003/T006-T007 (`feature-flip ... implemented` now
+cross-checks the bound tasks file's actual completion status),
+F004/T008-T009 (`task-check` gives a diagnostic message on a malformed
+colon-suffixed checkbox), F005/T010-T011 (`lint-project.sh`'s `plan:`
+path-vs-filename error no longer garbles the message), F006/T012 (epic-
+drained-to-zero case documented in `ardd-status`'s `SKILL.md`). Consumed
+`feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (now `planned`). No
+feature slugs targeted. Prior update, same day, `/prerelease-sweep full`
++ `/ardd-feedback` — ran
 the full 8-scenario (S1–S8) prerelease dry-run in parallel background
 subagents (run `2026-07-18-50ea`, ~$4–7, ~725K tokens, ~12min real
 elapsed) ahead of a potential 1.0 stable cut. 16 raw findings triaged
@@ -1135,10 +1153,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (the 6
-accepted prerelease-sweep findings; see the `_Updated` note above), will
-be picked up by the next `/ardd-plan`. All other batches delivered,
-including `feedback-ardd-status-reference-page-mis-7fa5.md` and
+0 open — `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (the 6
+accepted prerelease-sweep findings) is now `planned`, consumed by
+`plan-prerelease-sweep-fixes-2026-07-18-d341.md` — see the `_Updated`
+note above. All other batches delivered, including `feedback-ardd-status-reference-page-mis-7fa5.md` and
 `feedback-ardd-plan-slate-mode-unrouted-c563.md` (filed by `docs-sweep`'s
 first live dogfood run, consumed by
 `plan-docs-drift-fixes-2026-07-18-2fbb.md`),
@@ -1209,13 +1227,11 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md`'s
-6 accepted findings — top priority is `install.sh`'s Channel-default bug
-(F001), which blocks a clean 1.0 stable cut since it's ArDD's own
-installer tripping ArDD's own lint check in the normal between-releases
-state. After fixing, regression-rerun `/prerelease-sweep S2 S3 S4 S6 S7`
-before dispatching the stable-release workflow. Note there's also an
-earlier, off-target research file
+`/ardd-implement` to work `tasks-prerelease-sweep-fixes-e4d8.md` (`ready`,
+12 tasks/3 phases — the 6 accepted prerelease-sweep fixes). After it
+merges, regression-rerun `/prerelease-sweep S2 S3 S4 S6 S7` (the
+scenarios that produced these findings) before dispatching the
+stable-release workflow for 1.0. Note there's also an earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
