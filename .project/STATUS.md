@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-plan` (bare) — consumed
+_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+`bare-plan-target-prompt` worktree run completed both tasks and merged
+fast-forward; worktree reaped; dogfooded install refreshed. A bare
+`/ardd-plan` now has step 1a: it enumerates plannable inputs
+(backlogged slugs, open feedback, unsurfaced defects) and offers them
+as one multi-select picker forwarding into the existing scope
+machinery; with truly nothing plannable it ends in prose + next-step
+suggestions instead of a complaint. `lint-docs` green;
+`docs/reference/skills/ardd-plan.md` body updated. No bound features
+(plan `features: []`), so no register flip. Prior update, same day,
+`/ardd-plan` (bare) — consumed
 `feedback-bare-plan-target-prompt-dc5f.md` (both UX items accepted, file
 now `planned`): drafted, approved, and tasked
 `plan-bare-plan-target-prompt-2026-07-19-03ba.md` — 2 tasks/2 phases in
@@ -1340,13 +1350,6 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 (2026-07-12) — first GitHub release. Full history: GitHub Releases and
 `docs/decisions/0006`/`0007`.
 
-## Work Queue
-
-- `tasks-bare-plan-target-prompt-6bcd.md` (`ready`, 0/2) —
-  plan `plan-bare-plan-target-prompt-2026-07-19-03ba.md`, no bound
-  features. Sole ready file, nothing in flight — `parallel-matrix.sh`
-  has no pairs to report.
-
 ## Feature Backlog
 
 1 backlogged · 29 implemented · 1 retired — see
@@ -1375,14 +1378,16 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `work-queue-parallel-safety` and `rejected-feature-status`
-worktrees both merged and were reaped today. `main` is ahead of
-`origin/main` (unpushed local commits).
+Nothing — three delegated worktrees (`rejected-feature-status`,
+`work-queue-parallel-safety`, `bare-plan-target-prompt`) all merged and
+were reaped today. `main` is ahead of `origin/main` (unpushed commits
+since the last push).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-bare-plan-target-prompt-6bcd.md`
-(`ready`, 2 tasks/2 phases). v1.0.0 is out; the remaining backlog
+Push `main` — the bare-plan target-pick work and today's earlier state
+are local-only until pushed (which also publishes a beta). v1.0.0 is
+out; the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
