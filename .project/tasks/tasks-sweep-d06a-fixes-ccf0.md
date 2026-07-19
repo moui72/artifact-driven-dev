@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: parallel-matrix verdict fixes (test-first)
 
-- [ ] T001 Add regression cases (red first) to
+- [x] T001 Add regression cases (red first) to
   `scripts/test-parallel-matrix.sh`: (a) two ready files whose plans
   both exist and carry explicitly empty `features: []` → pair line has
   `features=none` (not `unknown`) and verdict falls through to
@@ -20,7 +20,7 @@ status: in-progress
   comparison columns beyond the standard format. Confirm the new cases
   fail against the current script before T002.
 
-- [ ] T002 Fix `scripts/parallel-matrix.sh`: at the features-resolution
+- [x] T002 Fix `scripts/parallel-matrix.sh`: at the features-resolution
   site (~line 64) distinguish "plan resolves and `features:` present
   but empty" (→ `none`) from "plan/field missing" (→ `unknown`) —
   `shared-feature` stays impossible for both; and add the same-file

@@ -7,14 +7,22 @@
 # inflight-worktrees.sh (each claim read from that worktree's own copy,
 # including its plan file). For every pair, prints one tab-separated line:
 #
-#   pair=<a>:<b>	verdict=independent|shared-feature|shared-artifact	features=<slugs|unknown|none>	artifacts=<tags|none>
+#   pair=<a>:<b>	verdict=claimed|shared-feature|shared-artifact|independent	features=<slugs|unknown|none>	artifacts=<tags|none>
+#
+# Verdict precedence: claimed > shared-feature > shared-artifact >
+# independent. `claimed` means the pair's two sides resolve to the SAME
+# repo-relative tasks filename — ready in the primary checkout and claimed by
+# an in-flight worktree; comparing a file with itself is meaningless, so
+# feature/artifact comparison is skipped (both columns print `none`).
 #
 # Feature overlap comes from the existing binding chain: tasks `plan:`
 # frontmatter -> plan file `features:` list. A broken chain (missing plan
 # file, no features: list) makes that side `features=unknown` — never a
-# guess, and never a `shared-feature` verdict. Artifact overlap is the
-# intersection of `[artifacts: ...]` tags across the two files' task lines.
-# `shared-feature` wins over `shared-artifact` when both hold.
+# guess, and never a `shared-feature` verdict. An intact chain whose plan
+# carries an explicitly empty `features: []` is `none`, not `unknown`.
+# Artifact overlap is the intersection of `[artifacts: ...]` tags across the
+# two files' task lines. `shared-feature` wins over `shared-artifact` when
+# both hold.
 #
 # `verdict=independent` means NO DECLARED OVERLAP ONLY — no shared feature
 # slug and no shared artifact tag. It is not a conflict-free guarantee; two
@@ -48,7 +56,9 @@ frontmatter_field() {
 }
 
 # features_of <tasks-file> <checkout-root> -> writes sorted slugs to stdout,
-# or the word "unknown" alone when the plan chain is broken.
+# or the word "unknown" alone when the plan chain is broken (missing plan
+# file or missing features: field). An intact chain with an explicitly empty
+# features list writes nothing — that side is "none", not "unknown".
 features_of() {
   tf="$1"
   root="$2"
@@ -56,12 +66,14 @@ features_of() {
   if [ -z "$plan" ]; then echo unknown; return 0; fi
   pf="$root/.project/plans/$plan"
   if [ ! -f "$pf" ]; then echo unknown; return 0; fi
-  feats="$(frontmatter_field "$pf" features \
+  raw="$(frontmatter_field "$pf" features)"
+  if [ -z "$raw" ]; then echo unknown; return 0; fi
+  feats="$(printf '%s\n' "$raw" \
     | sed -E 's/^\[//; s/\]$//' \
     | tr ',' '\n' \
     | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//' \
     | grep -v '^$' | sort -u)" || feats=""
-  if [ -z "$feats" ]; then echo unknown; else printf '%s\n' "$feats"; fi
+  if [ -n "$feats" ]; then printf '%s\n' "$feats"; fi
 }
 
 # artifacts_of <tasks-file> -> sorted unique [artifacts: ...] tags.
@@ -74,9 +86,10 @@ artifacts_of() {
 }
 
 n=0
-add_participant() { # <display-id> <file> <checkout-root>
+add_participant() { # <display-id> <file> <checkout-root> <repo-relative-path>
   n=$((n + 1))
   printf '%s' "$1" > "$TMP/id.$n"
+  printf '%s' "$4" > "$TMP/rel.$n"
   features_of "$2" "$3" > "$TMP/feat.$n"
   artifacts_of "$2" > "$TMP/art.$n"
   if [ "$(cat "$TMP/feat.$n")" = "unknown" ]; then
@@ -89,7 +102,7 @@ add_participant() { # <display-id> <file> <checkout-root>
 for tf in "$top"/.project/tasks/tasks-*.md; do
   [ -f "$tf" ] || continue
   [ "$(frontmatter_field "$tf" status)" = "ready" ] || continue
-  add_participant "${tf#"$top"/}" "$tf" "$top"
+  add_participant "${tf#"$top"/}" "$tf" "$top" "${tf#"$top"/}"
 done
 
 # 2. In-flight worktree claims, from the sibling script (branch-info.sh
@@ -106,7 +119,7 @@ for line in $inflight; do
 '; continue; }
   [ -f "$wt/$rel" ] || { IFS='
 '; continue; }
-  add_participant "$wt/$rel" "$wt/$rel" "$wt"
+  add_participant "$wt/$rel" "$wt/$rel" "$wt" "$rel"
   IFS='
 '
 done
@@ -122,6 +135,16 @@ i=1
 while [ "$i" -lt "$n" ]; do
   j=$((i + 1))
   while [ "$j" -le "$n" ]; do
+    # Same repo-relative tasks filename on both sides (ready in primary +
+    # claimed by an in-flight worktree): the pair IS one file. Precedence:
+    # claimed > shared-feature > shared-artifact > independent; comparison
+    # of a file with itself is skipped.
+    if [ "$(cat "$TMP/rel.$i")" = "$(cat "$TMP/rel.$j")" ]; then
+      printf 'pair=%s:%s\tverdict=claimed\tfeatures=none\tartifacts=none\n' \
+        "$(cat "$TMP/id.$i")" "$(cat "$TMP/id.$j")"
+      j=$((j + 1))
+      continue
+    fi
     shared_feat=""
     if [ ! -e "$TMP/unknown.$i" ] && [ ! -e "$TMP/unknown.$j" ]; then
       shared_feat="$(comm -12 "$TMP/feat.$i" "$TMP/feat.$j" | join_lines)"

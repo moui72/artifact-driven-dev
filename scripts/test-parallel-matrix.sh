@@ -133,6 +133,20 @@ out="$(sh "$MATRIX")"
 assert_contains "case-d2: plan without features -> independent, features=unknown" \
   "pair=.project/tasks/tasks-aa.md:.project/tasks/tasks-bb.md	verdict=independent	features=unknown	artifacts=none" "$out"
 
+# --- Case g: both plans exist with explicitly empty features: [] ->
+# features=none (never unknown), verdict falls through to artifact comparison ---
+write_plan "$PLANS/plan-empty.md" ""
+write_tasks "$TASKS/tasks-bb.md" "ready" "plan-empty.md" "datamodel"
+out="$(sh "$MATRIX")"
+assert_contains "case-g1: empty features list -> features=none, independent" \
+  "pair=.project/tasks/tasks-aa.md:.project/tasks/tasks-bb.md	verdict=independent	features=none	artifacts=none" "$out"
+assert_not_contains "case-g1: empty list is not unknown" "features=unknown" "$out"
+# g2: empty list on one side, shared artifact -> shared-artifact, features=none.
+write_tasks "$TASKS/tasks-bb.md" "ready" "plan-empty.md" "constitution"
+out="$(sh "$MATRIX")"
+assert_contains "case-g2: empty features + shared artifact -> shared-artifact, features=none" \
+  "pair=.project/tasks/tasks-aa.md:.project/tasks/tasks-bb.md	verdict=shared-artifact	features=none	artifacts=constitution" "$out"
+
 # --- Case e: ready file vs in-flight worktree claim -> pair line emitted ---
 rm "$TASKS/tasks-bb.md"
 git add -A && git commit -q -m "state"
@@ -143,5 +157,15 @@ write_tasks "$WORK/wt-w/.project/tasks/tasks-ww.md" "in-progress" "plan-w.md" "u
 out="$(sh "$MATRIX")"
 assert_contains "case-e: ready vs in-flight claim pairs, plan read from that worktree" \
   "pair=.project/tasks/tasks-aa.md:$WORK/wt-w/.project/tasks/tasks-ww.md	verdict=shared-feature	features=feat-a	artifacts=none" "$out"
+
+# --- Case h: same tasks file ready-in-primary AND claimed by an in-flight
+# worktree -> verdict=claimed, no feature/artifact comparison ---
+git branch feat-c
+git worktree add -q "$WORK/wt-c" feat-c
+write_plan "$WORK/wt-c/.project/plans/plan-a.md" "feat-a"
+write_tasks "$WORK/wt-c/.project/tasks/tasks-aa.md" "in-progress" "plan-a.md" "constitution"
+out="$(sh "$MATRIX")"
+assert_contains "case-h: same-file primary+worktree pair -> claimed" \
+  "pair=.project/tasks/tasks-aa.md:$WORK/wt-c/.project/tasks/tasks-aa.md	verdict=claimed	features=none	artifacts=none" "$out"
 
 exit "$fail"
