@@ -57,6 +57,19 @@ without regenerating `STATUS.md` or being asked anything.
    collaborative mode's in-flight channel. Collect both for the In-flight
    report section and STATUS.md line below (omit when nothing is in flight).
 
+   Also run `.claude/skills/ardd-scripts/parallel-matrix.sh` (installed
+   copy; source-repo absolute-path fallback, same present-or-fallback rule
+   as the other ardd-scripts calls). It prints one pairwise line per
+   combination of `ready` tasks files and in-flight worktree claims:
+   `pair=<a>:<b>	verdict=independent|shared-feature|shared-artifact	features=...	artifacts=...`.
+   Collect the output for the Work Queue report section and STATUS.md item
+   below (omit both entirely when no `ready` tasks file exists — the house
+   omit-if-none convention). Note the semantics for the report:
+   `independent` means **no declared overlap only** (no shared feature slug,
+   no shared `[artifacts: ...]` tag) — it is *not* "conflict-free";
+   `merge_policy` conflict handling still governs at merge time. This is
+   read-only visibility — the single-writer boundaries above are unchanged.
+
    Additionally run `.claude/skills/ardd-scripts/worktree-reap.sh --dry-run`
    (installed copy; absolute-path fallback, same present-or-fallback rule).
    Any `candidate=` line is a worktree whose branch has fully merged into
@@ -221,6 +234,18 @@ without regenerating `STATUS.md` or being asked anything.
      into the default branch, but the register still says `status: tasked`.
      (Omit this section entirely if step 1 found none.)
 
+   ## Work Queue
+   - `<tasks-file>` — plan `<plan-file>`, features `<slugs>`:
+     - vs `<other-ready-file>`: independent / shared-feature (`<slugs>`) /
+       shared-artifact (`<tags>`)
+     - vs in-flight `<worktree-tasks-file>`: <verdict>
+   (One entry per `ready` tasks file, from `parallel-matrix.sh` — its
+   filename, bound plan/features, and verdicts against the other ready
+   files and in-flight claims. `independent` means no declared overlap
+   only, not conflict-free — merge_policy still governs at merge time.
+   Read-only visibility. Omit this section entirely when no `ready` tasks
+   file exists.)
+
    ## In Flight
    - Worktree `<path>` (branch `<branch>`) — `<tasks-file>` <status>, <x/y>.
    - Worktree `<path>` (branch `<branch>`) — merged, reapable (from
@@ -254,6 +279,11 @@ without regenerating `STATUS.md` or being asked anything.
      `/ardd-backlog --from-artifacts` (omit if none)
    - A line surfacing any orphaned completion flips found in step 1 (omit
      if none)
+   - A "Work Queue" section surfacing step 1's `parallel-matrix.sh` output
+     — one entry per `ready` tasks file (filename, bound plan/features,
+     verdicts against the other ready files and in-flight claims), stating
+     that `independent` means no declared overlap only (omit entirely when
+     no `ready` tasks file exists)
    - An "In flight" line/section surfacing the `inflight-worktrees.sh`
      output from step 1 (any `worktree-reap.sh --dry-run` candidates as
      "merged, reapable", and the draft-PR list, in collaborative mode) —

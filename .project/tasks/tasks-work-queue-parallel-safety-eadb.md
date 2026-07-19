@@ -49,7 +49,7 @@ status: in-progress
 
 ## Phase 2: /ardd-status Work Queue section
 
-- [ ] T004 Update `skills/ardd-status/SKILL.md`: step 1 additionally runs
+- [x] T004 Update `skills/ardd-status/SKILL.md`: step 1 additionally runs
   `.claude/skills/ardd-scripts/parallel-matrix.sh` (installed copy;
   source-repo absolute-path fallback, same present-or-fallback rule as
   the other ardd-scripts calls); add a **Work Queue** section to the
