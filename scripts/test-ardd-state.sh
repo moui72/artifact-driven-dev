@@ -193,6 +193,27 @@ set +e
 sh "$STATE" task-check "$TF" T099 >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "task-check: unknown task ID refused" 1 "$rc"
+
+# --- task-check: colon-suffixed checkbox format gets a diagnostic message
+# (F004), not the generic not-found one ---
+CFILE="$WORK/colon-tasks.md"
+printf -- '- [ ] T001: do the colon-suffixed thing\n' > "$CFILE"
+set +e
+out="$(sh "$STATE" task-check "$CFILE" T001 2>&1)"; rc=$?
+set -e
+assert_exit "task-check: colon-suffixed format refused" 1 "$rc"
+case "$out" in
+  *"found 'T001'"*"not in the expected"*)
+    ok "task-check: colon-suffixed format gets the specific diagnostic message" ;;
+  *)
+    bad "task-check: colon-suffixed format gets the specific diagnostic message — got: $out" ;;
+esac
+case "$out" in
+  *"no unchecked task"*)
+    bad "task-check: colon-suffixed format should not use the old generic message" ;;
+  *) : ;;
+esac
+
 nt="$(sh "$STATE" next-task "$TF")"
 case "$nt" in
   *T002*) ok "next-task: advances to T002" ;;
@@ -299,6 +320,45 @@ set +e
 set -e
 assert_exit "feature-flip: out of retired refused" 1 "$rc"
 assert_file_grep "feature-flip: retired is terminal" "^status: retired" "$RFEAT"
+
+# --- feature-flip tasked->implemented completion cross-check (F003) ---
+# A feature bound to a tasks file via `tasks:` frontmatter must not flip
+# tasked->implemented unless that tasks file is status: completed.
+mkdir -p "$FPROJ/.project/tasks"
+( cd "$FPROJ" && printf 'Adds widgets.\n' | sh "$STATE" feature-create widget-panel >/dev/null )
+WFEAT="$FPROJ/.project/features/widget-panel.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip widget-panel planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip widget-panel tasked >/dev/null )
+WTASKS="$FPROJ/.project/tasks/tasks-widget-panel-aaaa.md"
+cat > "$WTASKS" <<'EOF'
+---
+plan: plan-widget-panel-2026-07-06.md
+generated: 2026-07-06
+status: in-progress
+---
+- [ ] T001 do the thing
+EOF
+( cd "$FPROJ" && sh "$STATE" feature-field widget-panel tasks tasks-widget-panel-aaaa.md >/dev/null )
+set +e
+out="$( cd "$FPROJ" && sh "$STATE" feature-flip widget-panel implemented 2>&1 )"; rc=$?
+set -e
+assert_exit "feature-flip: tasked->implemented refused, tasks file not completed" 1 "$rc"
+assert_file_grep "feature-flip: still tasked after refusal (bound tasks incomplete)" "^status: tasked" "$WFEAT"
+case "$out" in
+  *tasks-widget-panel-aaaa.md*in-progress*) ok "feature-flip: refusal names the tasks file and its actual status" ;;
+  *) bad "feature-flip: refusal names the tasks file and its actual status — got: $out" ;;
+esac
+sed -i.arddbak 's/^status: in-progress/status: completed/' "$WTASKS" && rm -f "$WTASKS.arddbak"
+( cd "$FPROJ" && sh "$STATE" feature-flip widget-panel implemented >/dev/null )
+assert_file_grep "feature-flip: tasked->implemented succeeds once tasks file is completed" "^status: implemented" "$WFEAT"
+
+# A feature with no tasks: field flips freely (no regression).
+( cd "$FPROJ" && printf 'No tasks binding.\n' | sh "$STATE" feature-create no-binding >/dev/null )
+NBFEAT="$FPROJ/.project/features/no-binding.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip no-binding planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip no-binding tasked >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip no-binding implemented >/dev/null )
+assert_file_grep "feature-flip: no tasks: field flips freely to implemented" "^status: implemented" "$NBFEAT"
 
 ( cd "$FPROJ" && sh "$STATE" feature-field dark-mode plan plan-dark-mode-2026-07-06.md >/dev/null )
 assert_file_grep "feature-field: plan added" "^plan: plan-dark-mode-2026-07-06.md" "$FEAT"

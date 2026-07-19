@@ -128,6 +128,18 @@ write_status() {
   sed -i.arddbak "s/^status:\([[:space:]]*\)$2/status:\1$3/" "$1" && rm -f "$1.arddbak"
 }
 
+# frontmatter_field <file> <field> — print an arbitrary frontmatter value
+# (sans trailing comment), or nothing if the field is absent. Same
+# extraction pattern as completion-flip-check.sh's helper of the same name.
+frontmatter_field() {
+  file="$1"
+  field="$2"
+  awk '/^---$/{n++; next} n==1' "$file" \
+    | grep -E "^${field}:" \
+    | head -1 \
+    | sed -E "s/^${field}:[[:space:]]*//; s/[[:space:]]*(#.*)?\$//"
+}
+
 cmd_plan_flip() {
   file="${1:-}"; to="${2:-}"
   [ -n "$file" ] && [ -n "$to" ] || dieu "plan-flip: need <file> <status>"
@@ -181,7 +193,14 @@ cmd_task_check() {
     echo "task-check: $id already checked in $file (no-op)"
     return 0
   fi
-  grep -q "^- \[ \] $id " "$file" || die "task-check: no unchecked task '$id' in $file"
+  if ! grep -q "^- \[ \] $id " "$file"; then
+    loose="$(grep -m1 "$id" "$file" || true)"
+    if [ -n "$loose" ]; then
+      die "task-check: found '$id' but not in the expected '- [ ] $id ' format in $file — check for a trailing colon or other formatting issue: $loose"
+    else
+      die "task-check: no unchecked task '$id' in $file"
+    fi
+  fi
   sed -i.arddbak "s/^- \[ \] $id /- [x] $id /" "$file" && rm -f "$file.arddbak"
   echo "task-check: $id checked in $file"
 }
@@ -261,6 +280,15 @@ cmd_feature_flip() {
     backlogged-planned|planned-tasked|tasked-implemented|implemented-retired) ;;
     *) die "feature-flip: illegal transition $from -> $to for $slug (one stage at a time; retired is terminal)" ;;
   esac
+  if [ "$from-$to" = "tasked-implemented" ]; then
+    tasks_ref="$(frontmatter_field "$f" tasks)"
+    if [ -n "$tasks_ref" ]; then
+      tasks_file=".project/tasks/$tasks_ref"
+      [ -f "$tasks_file" ] || die "feature-flip: $slug's tasks: field names $tasks_file, which does not exist"
+      tasks_status="$(read_status "$tasks_file")"
+      [ "$tasks_status" = "completed" ] || die "feature-flip: refused — $slug's bound tasks file $tasks_file is '$tasks_status', not completed"
+    fi
+  fi
   write_status "$f" "$from" "$to"
   echo "feature-flip: $slug $from -> $to"
 }

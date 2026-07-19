@@ -48,25 +48,25 @@ status: in-progress
   default-inference path.
 
 ## Phase 2: `ardd-state.sh` fixes (F003, F004)
-- [ ] T006 [parallel] Fix F003 in `scripts/ardd-state.sh`'s
+- [x] T006 [parallel] Fix F003 in `scripts/ardd-state.sh`'s
   `cmd_feature_flip`: when the transition is specifically `tasked ->
   implemented` and the feature file has a `tasks:` frontmatter field,
   read that tasks file's `status:` and refuse the flip (clear error
   naming the tasks file and its actual status) unless it is `completed`.
   Skip the check entirely if the feature has no `tasks:` field.
-- [ ] T007 [parallel] Add a red-then-green regression case to
+- [x] T007 [parallel] Add a red-then-green regression case to
   `scripts/test-ardd-state.sh` for T006: confirm `feature-flip <slug>
   implemented` is refused (clear error naming the tasks file and its
   actual status) when the bound tasks file is not `completed`, and
   succeeds normally once it is. Also confirm a feature with no `tasks:`
   field flips freely (no regression to existing behavior).
-- [ ] T008 [parallel] Improve F004's error message in
+- [x] T008 [parallel] Improve F004's error message in
   `scripts/ardd-state.sh`'s `cmd_task_check`: no change to the strict
   matching behavior itself — only a more diagnostic message when the
   strict `- \[ \] $id ` pattern fails to match but a looser search finds
   the task ID elsewhere in a different format (e.g. colon-suffixed),
   naming what was found instead of a generic not-found message.
-- [ ] T009 [parallel] Add a regression case to `scripts/test-ardd-state.sh`
+- [x] T009 [parallel] Add a regression case to `scripts/test-ardd-state.sh`
   for T008: a `T001:` (colon-suffixed) checkbox format produces the new,
   more specific error message rather than the old generic one.
 
