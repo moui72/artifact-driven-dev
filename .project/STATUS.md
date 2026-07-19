@@ -1,6 +1,19 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-feedback` — logged
+_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+`work-queue-parallel-safety` worktree run completed all 6 tasks and
+merged fast-forward; worktree reaped; dogfooded install refreshed via
+`./install.sh .` (the new script is live in
+`.claude/skills/ardd-scripts/`). Shipped: `scripts/parallel-matrix.sh`
+(pairwise `independent|shared-feature|shared-artifact` verdicts among
+`ready` tasks files and in-flight worktree claims; test-first, 11/11
+regression cases green, CI job + install manifest wired), the Work
+Queue section in `/ardd-status` (report + STATUS.md, omit-if-none), the
+matrix-annotated pick list in `/ardd-implement` (`shared-feature` =
+strong warning, same-file claim stays the only hard exclusion), and
+both reference-doc bodies. Feature `work-queue-parallel-safety`:
+`tasked` → `implemented`. Prior update, same day, `/ardd-feedback` —
+logged
 `feedback-bare-plan-target-prompt-dc5f.md` (2 UX items, `open`): F001 a
 bare `/ardd-plan` should prompt with the plannable items it found
 (backlogged slugs, open feedback, unsurfaced defects) rather than
@@ -1322,17 +1335,9 @@ the next `/ardd-plan`.
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 28 implemented · 1 retired — see
+1 backlogged · 29 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
-Tasked:
-- `work-queue-parallel-safety` — single-pane work-queue view:
-  `parallel-matrix.sh` (feature + artifact overlap among `ready` tasks
-  files and in-flight worktrees; no path heuristics), a Work Queue
-  section in `/ardd-status`, matrix-annotated fan-out picker in
-  `/ardd-implement`. `tasks-work-queue-parallel-safety-eadb.md`
-  (`ready`, 6 tasks/4 phases). Vetted:
-  `research-work-queue-parallel-safety-vie-2026-07-19-25f7.md`.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1343,8 +1348,8 @@ Backlogged:
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `rejected-feature-status` — see the `_Updated` note
-above.
+Newest implemented: `work-queue-parallel-safety` and
+`rejected-feature-status` — see the `_Updated` notes above.
 
 ## Audit
 
@@ -1356,15 +1361,17 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — the `rejected-feature-status` worktree merged and was reaped
-this update. `main` is ahead of `origin/main` (unpushed local commits).
+Nothing — the `work-queue-parallel-safety` and `rejected-feature-status`
+worktrees both merged and were reaped today. `main` is ahead of
+`origin/main` (unpushed local commits).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-work-queue-parallel-safety-eadb.md`
-(`ready`, 6 tasks/4 phases) — or push `main` first: the merged
-`rejected-feature-status` work is local-only until pushed, which also
-publishes a beta. v1.0.0 is out; the remaining backlog
+Push `main` — today's merged work (`rejected-feature-status`,
+`work-queue-parallel-safety`, the open feedback file) is local-only
+until pushed, which also publishes a beta. The open feedback
+(`feedback-bare-plan-target-prompt-dc5f.md`) waits for the next
+`/ardd-plan`. v1.0.0 is out; the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
