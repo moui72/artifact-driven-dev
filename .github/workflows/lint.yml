@@ -66,6 +66,13 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-inflight-worktrees.sh
 
+  parallel-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - run: ./scripts/test-parallel-matrix.sh
+
   install-worktreeinclude:
     runs-on: ubuntu-latest
     steps:

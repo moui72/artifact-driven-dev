@@ -43,6 +43,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-worktree-reap.sh        # regression test for worktree-reap.sh (throwaway fixture repos, never this repo's worktrees)
 ./scripts/inflight-worktrees.sh        # enumerate other worktrees + their tasks-file state (solo mode's in-flight visibility channel)
 ./scripts/test-inflight-worktrees.sh   # regression test for inflight-worktrees.sh
+./scripts/parallel-matrix.sh           # pairwise overlap verdicts among ready tasks files + in-flight claims (independent = no declared overlap only); read by ardd-status/implement
+./scripts/test-parallel-matrix.sh      # regression test for parallel-matrix.sh (fixture repos in a temp dir)
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
 ./scripts/test-hooks-pre-commit.sh     # regression test for hooks/pre-commit's aggregation/short-circuit logic

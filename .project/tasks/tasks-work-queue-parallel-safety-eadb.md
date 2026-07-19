@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: parallel-matrix.sh (test-first)
 
-- [ ] T001 Create `scripts/test-parallel-matrix.sh` (POSIX sh, source-side
+- [x] T001 Create `scripts/test-parallel-matrix.sh` (POSIX sh, source-side
   regression test, red-first) against throwaway fixture repos built in a
   temp dir — never this repo's own worktrees. Cases: (a) two `ready`
   tasks files with disjoint plan `features:` lists and disjoint
@@ -25,7 +25,7 @@ status: in-progress
   `scripts/test-inflight-worktrees.sh` (closest sibling). Test must fail
   (red) before T002 lands.
 
-- [ ] T002 Create `scripts/parallel-matrix.sh` (POSIX sh, target-side —
+- [x] T002 Create `scripts/parallel-matrix.sh` (POSIX sh, target-side —
   installed to `ardd-scripts`): enumerate `.project/tasks/tasks-*.md`
   with frontmatter `status: ready` in the current checkout, plus each
   in-flight tasks file from `inflight-worktrees.sh` (invoked from the
@@ -40,7 +40,7 @@ status: in-progress
   governs". No path heuristics. Exit 0 with no output when fewer than
   two participants. Makes T001 green.
 
-- [ ] T003 Wire distribution and CI, same commit as T001–T002: add a
+- [x] T003 Wire distribution and CI, same commit as T001–T002: add a
   `test-parallel-matrix` job to `.github/workflows/lint.yml` (mirror an
   existing test job); add `parallel-matrix.sh` to `install.sh`'s
   `ardd-scripts` ship list with an installed-and-executable assertion in

@@ -188,6 +188,12 @@ if [ -x "$fl" ]; then
 else
   bad "case1b5: feature-list.sh installed and executable"
 fi
+pm="$target/.claude/skills/ardd-scripts/parallel-matrix.sh"
+if [ -x "$pm" ]; then
+  ok "case1b6: parallel-matrix.sh installed and executable"
+else
+  bad "case1b6: parallel-matrix.sh installed and executable"
+fi
 
 # --- Case 2: existing .worktreeinclude, unrelated content, NO trailing newline ---
 target="$WORK/case2"

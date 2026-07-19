@@ -162,6 +162,11 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   already landed on the default branch before delegation started — a
 #   delegated worktree branches from origin/<default> by default and so can
 #   start behind the local default branch.
+# parallel-matrix.sh: pairwise overlap verdicts (shared feature slugs via
+#   the tasks->plan chain, shared [artifacts: ...] tags) among ready tasks
+#   files and in-flight worktree claims — read by ardd-status's Work Queue
+#   section and ardd-implement's pick-list annotations. `independent` means
+#   no declared overlap only; merge_policy still governs at merge time.
 # inflight-worktrees.sh: enumerates other worktrees of the repo and reports
 #   any in-progress/completed ArDD tasks-file state found in them — the
 #   worktree-native replacement for reading coarse state off the default
@@ -190,6 +195,7 @@ cp "$SCRIPT_DIR/scripts/worktree-align.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh"
 cp "$SCRIPT_DIR/scripts/fold-to-main.sh" "$ARDD_SCRIPTS_DIR/fold-to-main.sh"
 cp "$SCRIPT_DIR/scripts/worktree-reap.sh" "$ARDD_SCRIPTS_DIR/worktree-reap.sh"
 cp "$SCRIPT_DIR/scripts/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh"
+cp "$SCRIPT_DIR/scripts/parallel-matrix.sh" "$ARDD_SCRIPTS_DIR/parallel-matrix.sh"
 cp "$SCRIPT_DIR/scripts/ardd-state.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh"
 cp "$SCRIPT_DIR/scripts/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh"
 cp "$SCRIPT_DIR/scripts/tasks-list.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh"
@@ -205,7 +211,8 @@ chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" 
   "$ARDD_SCRIPTS_DIR/sync-label-decision.sh" "$ARDD_SCRIPTS_DIR/sync-divergence.sh" \
   "$ARDD_SCRIPTS_DIR/project-lock.sh" "$ARDD_SCRIPTS_DIR/worktree-align.sh" \
   "$ARDD_SCRIPTS_DIR/fold-to-main.sh" "$ARDD_SCRIPTS_DIR/worktree-reap.sh" \
-  "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/ardd-state.sh" \
+  "$ARDD_SCRIPTS_DIR/inflight-worktrees.sh" "$ARDD_SCRIPTS_DIR/parallel-matrix.sh" \
+  "$ARDD_SCRIPTS_DIR/ardd-state.sh" \
   "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh" \
   "$ARDD_SCRIPTS_DIR/upsert-section.sh" "$ARDD_SCRIPTS_DIR/ardd-update-check.sh" \
   "$ARDD_SCRIPTS_DIR/source-resolve.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh"
@@ -221,6 +228,7 @@ echo "  ✓ ardd-scripts/worktree-align.sh"
 echo "  ✓ ardd-scripts/fold-to-main.sh"
 echo "  ✓ ardd-scripts/worktree-reap.sh"
 echo "  ✓ ardd-scripts/inflight-worktrees.sh"
+echo "  ✓ ardd-scripts/parallel-matrix.sh"
 echo "  ✓ ardd-scripts/ardd-state.sh"
 echo "  ✓ ardd-scripts/defects-unsurfaced.sh"
 echo "  ✓ ardd-scripts/tasks-list.sh"
