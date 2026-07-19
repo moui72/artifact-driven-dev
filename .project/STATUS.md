@@ -1,6 +1,20 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-plan feedback-prerelease-sweep-d06a-f8ce.md`
+_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+`sweep-d06a-fixes` worktree run completed all 5 tasks and merged
+fast-forward; worktree reaped; dogfooded install refreshed. Fixed:
+parallel-matrix `features: []` now reads `none` (unknown reserved for a
+broken chain) and the same-file ready-vs-worktree-claim pair gets the
+new `verdict=claimed` (precedence claimed > shared-feature >
+shared-artifact > independent) — red-first, 15/15 asserts green;
+`claimed` named in both consuming skills' prose + reference docs; Work
+Queue data-source clarification applied; and T005 found `c7cb703`
+shipped with no regression test — added case4 (dual-tagged HEAD →
+stable `Source-Ref:`) to `test-install-channel-default.sh`, green
+against the existing fix. Next per user instruction: regression sweep
+S3 S5 S6 S8 re-verifying F001–F004; if clean, push + dispatch v1.0.1
+stable. Prior update, same day,
+`/ardd-plan feedback-prerelease-sweep-d06a-f8ce.md`
 — consumed the sweep feedback (all 4 items incorporated, file now
 `planned`): drafted, approved, and tasked
 `plan-sweep-d06a-fixes-2026-07-19-502e.md` — 5 tasks/3 phases in
@@ -1381,13 +1395,6 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 (2026-07-12) — first GitHub release. Full history: GitHub Releases and
 `docs/decisions/0006`/`0007`.
 
-## Work Queue
-
-- `tasks-sweep-d06a-fixes-ccf0.md` (`ready`, 0/5) — plan
-  `plan-sweep-d06a-fixes-2026-07-19-502e.md`, no bound features. Sole
-  ready file, nothing in flight (entry from `tasks-list.sh`; the
-  matrix has no pairs to report).
-
 ## Feature Backlog
 
 1 backlogged · 29 implemented · 1 retired — see
@@ -1423,11 +1430,11 @@ since the last push).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-sweep-d06a-fixes-ccf0.md` (`ready`,
-5 tasks/3 phases), then regression-rerun `/prerelease-sweep S3 S5 S6`,
-push, and dispatch the v1.0.1 stable release — the sweep was green and
-its headline finding (stale beta `Source-Ref:` under `--stable`) is
-fixed by shipping stable itself. v1.0.0 is out; the remaining backlog
+Regression sweep `/prerelease-sweep S3 S5 S6 S8` (re-verifying
+F001–F004 of the d06a batch); on a clean result, push `main` and
+dispatch the v1.0.1 stable release (user pre-authorized) — its
+headline finding (stale beta `Source-Ref:` under `--stable`) is fixed
+by shipping stable itself. v1.0.0 is out; the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
