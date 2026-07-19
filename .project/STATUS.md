@@ -1,6 +1,26 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-backlog` — logged `rejected-feature-status`:
+_Updated: 2026-07-19 (`/ardd-plan rejected-feature-status` — a fable
+design review (dispatched at the approval checkpoint) recommended
+extending the original rejected-only plan to also add `subsumed` (an
+entry whose scope shipped under a *different* feature/plan entry): this
+repo's own register had zero real instances of the `rejected` problem
+but a concrete example of the `subsumed` one, in the feature's own
+`Why:` line. Plan and the already-applied `constitution.md` edit both
+revised in place to cover both statuses (still one MINOR bump, 1.11.1 →
+1.12.0). `subsumed` deliberately not named `superseded` — that word
+already means something different at the *plan* level (a same-document
+replacement for the same feature) than this cross-feature scope-absorption
+case. Approved and tasked: 8 tasks/3 phases in
+`tasks-rejected-feature-status-2fb8.md` (`ready`) — schema
+(`lint-project.sh` enum), state mutation (`ardd-state.sh`'s
+`cmd_feature_flip`, including an asymmetric `tasked -> subsumed` edge
+`rejected` doesn't get, since absorption can be noticed later than a
+pre-work rejection decision), skill prose
+(`ardd-status`/`ardd-plan`/`project-files.md`), and manual verification
+against two throwaway fixtures. Feature `rejected-feature-status`:
+`backlogged` → `tasked`. Prior update, same day, `/ardd-backlog` —
+logged `rejected-feature-status`:
 a new `rejected` status for the feature register's status enum
 (backlogged/planned/tasked/implemented/retired), for a backlogged or
 planned idea the team decides not to pursue and that never gets
@@ -1190,7 +1210,7 @@ Keep this current as artifacts are refined and open questions are resolved._
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.11.1; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.12.0; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -1247,9 +1267,9 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged · 27 implemented · 1 retired — see `.project/features/`. No
-feature currently carries an `epic` value, so no "by epic" breakdown to
-show yet.
+1 backlogged · 1 tasked · 27 implemented · 1 retired — see
+`.project/features/`. No feature currently carries an `epic` value, so
+no "by epic" breakdown to show yet.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1259,13 +1279,13 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-- `rejected-feature-status` — new `rejected` status for the feature
-  register's status enum; see the `_Updated` note above.
+Tasked:
+- `rejected-feature-status` — `rejected` + `subsumed` statuses for the
+  feature register's status enum; see the `_Updated` note above.
+  `tasks-rejected-feature-status-2fb8.md` (`ready`, 8 tasks/3 phases).
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `docs-sweep` and `dynamic-version-badge-sync` — see
-the `_Updated` note above.
-Newest implemented: `constitution-trim-review-relev` — see the
-`_Updated` note above.
+the earlier `_Updated` note.
 
 ## Audit
 
@@ -1284,8 +1304,9 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-v1.0.0 is out. No urgent follow-up required — the backlog
-(`codex-second-harness-support`, `rejected-feature-status`) and the off-target research file
+`/ardd-implement` to work `tasks-rejected-feature-status-2fb8.md`
+(`ready`, 8 tasks/3 phases). v1.0.0 is out; the remaining backlog
+(`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
