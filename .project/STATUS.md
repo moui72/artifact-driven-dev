@@ -1,6 +1,18 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (**v1.0.0 shipped** — pushed `main` (publishing
+_Updated: 2026-07-19 (`/ardd-backlog` — logged `rejected-feature-status`:
+a new `rejected` status for the feature register's status enum
+(backlogged/planned/tasked/implemented/retired), for a backlogged or
+planned idea the team decides not to pursue and that never gets
+built — a terminal state distinct from `retired` (shipped then
+deliberately removed). Motivated partly by a related, illustrative gap
+from a consumer project: a feature whose scope shipped under a
+*different* plan/feature entry didn't cleanly fit `retired` or
+`implemented` either, and was worked around by closing it as
+`implemented` bound to the other plan with an explanatory note — flagged
+in the entry's `Why:` as a separate, related gap (a "subsumed" status or
+similar) not solved by this same change. Prior update, same day, **v1.0.0
+shipped** — pushed `main` (publishing
 `v0.10.3-beta.4` on the beta channel automatically), confirmed `lint`
 and `beta-release` both green on that commit, then dispatched
 `stable-release.yml` with `bump: major`. The workflow fast-forwarded
@@ -1235,7 +1247,7 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 27 implemented · 1 retired — see `.project/features/`. No
+2 backlogged · 27 implemented · 1 retired — see `.project/features/`. No
 feature currently carries an `epic` value, so no "by epic" breakdown to
 show yet.
 Backlogged:
@@ -1247,6 +1259,8 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
+- `rejected-feature-status` — new `rejected` status for the feature
+  register's status enum; see the `_Updated` note above.
 Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `docs-sweep` and `dynamic-version-badge-sync` — see
 the `_Updated` note above.
@@ -1271,7 +1285,7 @@ today's work); `v0.10.2` is the current published stable release.
 ## Recommended Next Step
 
 v1.0.0 is out. No urgent follow-up required — the backlog
-(`codex-second-harness-support`) and the off-target research file
+(`codex-second-harness-support`, `rejected-feature-status`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
