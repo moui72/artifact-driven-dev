@@ -1,6 +1,23 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-19 (`/prerelease-sweep S3 S5 S6 S8` + triage +
+`/ardd-feedback` — targeted regression sweep over every post-v1.0.0
+surface (run `2026-07-19-d06a`, ~348K tokens, ~$1.50–3.50, ~8m40s
+parallel). **All four scenarios passed**; the changed surfaces (bare-plan
+picker, Work Queue, parallel-matrix, picker annotations,
+rejected/subsumed, install dual-tag fix) all verified working. 7
+findings triaged → 4 accepted, filed as
+`feedback-prerelease-sweep-d06a-f8ce.md` (`open`, 2 bugs + 2 UX):
+headline F001 — `/ardd-update --stable` on real consumers today
+records a stale beta `Source-Ref:` under `Channel: stable` (v1.0.0's
+install.sh predates fix c7cb703; self-heals when the next stable
+ships, so this argues FOR cutting v1.0.1 promptly); F002
+parallel-matrix `features: []` misread as `unknown`; F003 same-file
+claimed pair mislabeled `shared-feature`; F004 Work Queue prose
+data-source clarification. Deferred/dropped: STATUS.md-accretion
+guidance (taste), fold branch-ref cleanup (taste), advisory-note
+duplicate, harness worktree-binding artifact. Prior update, same day,
+`/ardd-implement` coordinator — the delegated
 `bare-plan-target-prompt` worktree run completed both tasks and merged
 fast-forward; worktree reaped; dogfooded install refreshed. A bare
 `/ardd-plan` now has step 1a: it enumerates plannable inputs
@@ -1350,6 +1367,12 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 (2026-07-12) — first GitHub release. Full history: GitHub Releases and
 `docs/decisions/0006`/`0007`.
 
+## Feedback
+
+1 open feedback file — `feedback-prerelease-sweep-d06a-f8ce.md` (2 bugs
++ 2 UX from sweep run 2026-07-19-d06a); will be picked up by the next
+`/ardd-plan`.
+
 ## Feature Backlog
 
 1 backlogged · 29 implemented · 1 retired — see
@@ -1385,9 +1408,11 @@ since the last push).
 
 ## Recommended Next Step
 
-Push `main` — the bare-plan target-pick work and today's earlier state
-are local-only until pushed (which also publishes a beta). v1.0.0 is
-out; the remaining backlog
+`/ardd-plan feedback-prerelease-sweep-d06a-f8ce.md` to fix the 4
+accepted sweep findings, then push and dispatch the v1.0.1 stable
+release — the sweep was green and its headline finding (stale beta
+`Source-Ref:` under `--stable`) is fixed by shipping stable itself.
+v1.0.0 is out; the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
