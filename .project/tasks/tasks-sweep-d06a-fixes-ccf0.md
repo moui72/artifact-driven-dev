@@ -1,7 +1,7 @@
 ---
 plan: plan-sweep-d06a-fixes-2026-07-19-502e.md
 generated: 2026-07-19
-status: ready
+status: in-progress
 ---
 
 # Tasks
