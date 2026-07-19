@@ -1,6 +1,14 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-plan work-queue-parallel-safety` — drafted,
+_Updated: 2026-07-19 (`/ardd-feedback` — logged
+`feedback-bare-plan-target-prompt-dc5f.md` (2 UX items, `open`): F001 a
+bare `/ardd-plan` should prompt with the plannable items it found
+(backlogged slugs, open feedback, unsurfaced defects) rather than
+complaining about no feedback input; F002 with truly nothing plannable
+it should end in prose + concrete next-step suggestions
+(`/ardd-backlog`/`/ardd-feedback`/`/ardd-implement`). The next
+`/ardd-plan` run picks it up. Prior update, same day,
+`/ardd-plan work-queue-parallel-safety` — drafted,
 approved, and tasked
 `plan-work-queue-parallel-safety-2026-07-19-4c10.md`: 6 tasks/4 phases
 in `tasks-work-queue-parallel-safety-eadb.md` (`ready`). Phase 1
@@ -1305,6 +1313,12 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 (2026-07-13) — first fully-automatic two-channel cycle. v0.9.0
 (2026-07-12) — first GitHub release. Full history: GitHub Releases and
 `docs/decisions/0006`/`0007`.
+
+## Feedback
+
+1 open feedback file — `feedback-bare-plan-target-prompt-dc5f.md` (2 UX
+items on bare `/ardd-plan`'s no-scope behavior); will be picked up by
+the next `/ardd-plan`.
 
 ## Feature Backlog
 
