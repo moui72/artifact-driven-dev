@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Skill prose
 
-- [ ] T001 Add a **step 1a (bare-invocation target pick)** to
+- [x] T001 Add a **step 1a (bare-invocation target pick)** to
   `skills/ardd-plan/SKILL.md`, between step 1 (branch check) and step 2
   (artifact discovery), firing ONLY when the run received no scope
   argument of any kind (no feature slug, no `feedback-*.md`, no

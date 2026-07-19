@@ -13,8 +13,10 @@ approval, generate the ordered task list the plan implies. One skill spans
 the whole plan→approve→task arc — there is no separate task-generation command.
 Run `/ardd-status` first — do not plan over unresolved conflicts.
 
-Usage: `/ardd-plan` plans from artifacts/feedback only. `/ardd-plan
-<slug> [<slug> ...]` additionally targets one or more backlogged feature
+Usage: a bare `/ardd-plan` first offers a pick of everything currently
+plannable — backlogged features, open feedback, unsurfaced defects (step
+1a); an empty selection falls back to planning from artifacts/feedback
+only. `/ardd-plan <slug> [<slug> ...]` additionally targets one or more backlogged feature
 entries from the feature register (`.project/features/`) — this is where a feature
 idea's artifact design work actually happens (`/ardd-backlog` only logs the
 idea; it doesn't touch artifacts). Substantial or decision-reversing ideas:
@@ -149,6 +151,50 @@ drafts or writes a plan.
    **Re-task mode:** if invoked with `--from <plan-file>`, do step 1, then
    skip directly to step 11 with `<plan-file>` as the chosen plan. Steps
    2–10 do not run.
+
+1a. **Bare-invocation target pick.** Runs ONLY when this run received no
+   scope argument of any kind — no feature slug, no `feedback-*.md`
+   feedback scope, no `defect:<id>`/`defects` defect scope, and not
+   `--list`, `--from`, or `--slate`. Any scoped or side-door invocation
+   skips this step entirely; scoped runs already know their target.
+
+   Enumerate the plannable inputs deterministically:
+   - **Backlogged features** — run
+     `.claude/skills/ardd-scripts/feature-list.sh` (installed copy; if
+     absent, fall back to the source repo path `scripts/feature-list.sh`)
+     with no arguments (its default filter — `backlogged`).
+   - **Open feedback** — glob `.project/feedback/feedback-*.md` and keep
+     files whose frontmatter says `status: open`.
+   - **Unsurfaced defects** — run
+     `.claude/skills/ardd-scripts/defects-unsurfaced.sh` (source fallback
+     `scripts/defects-unsurfaced.sh`); its output lines are the
+     never-yet-surfaced `DEFECTS.md` entries.
+
+   **Something found:** present ONE `AskUserQuestion` (multiSelect on)
+   listing each backlogged slug, each open feedback file, and — only when
+   any unsurfaced entries exist — a single "surfaced defects" option.
+   Then continue the run scoped to the selection exactly as if those
+   arguments had been passed: selected slugs feed step 3, selected
+   feedback files become step 4's feedback scope, and the defects option
+   puts step 5 in its explicit-selection mode (`--all` over the entries
+   just enumerated). Selecting nothing is a legitimate answer: proceed
+   with the artifacts/feedback-only drafting a bare run performs today —
+   the picker adds options, it doesn't remove the existing path. This is
+   a **mid-run gate**, same class as the approval checkpoint (step 10),
+   not a terminal next-step prompt — it fires regardless of
+   `next_step_prompt` and doesn't count against the one-prompt-per-turn-end
+   rule. When the backlog is large, mention `--slate` as the richer
+   read-only grouping over the same items before the user picks.
+
+   **Nothing found** (empty backlog, no open feedback, no unsurfaced
+   defects): report that in plain prose — there are no plannable inputs —
+   and suggest concrete next steps: `/ardd-backlog <idea>` or
+   `/ardd-feedback <observation>` to create something plannable, and,
+   if `.claude/skills/ardd-scripts/tasks-list.sh` shows a `ready` or
+   `in-progress` tasks file, `/ardd-implement` to execute it. Then stop —
+   never draft a plan against nothing, and never prompt in this branch
+   (there is nothing to pick): plain text, like `--list`'s degenerate
+   cases.
 
 2. **Discover artifacts** by listing `.project/artifacts/`. Read every `.md`
    file present. If any are `status: draft`, warn the user and ask whether
