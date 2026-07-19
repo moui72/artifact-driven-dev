@@ -59,7 +59,7 @@ status: in-progress
   absorbed it, never revived under its own slug.
 
 ## Phase 3: Manual verification
-- [ ] T008 Manually exercise the full arc against two throwaway
+- [x] T008 Manually exercise the full arc against two throwaway
   fixture features: (a) create one at `backlogged`, flip it to
   `rejected` via `ardd-state.sh feature-flip <slug> rejected`, confirm
   `lint-project.sh` accepts it, confirm `/ardd-plan <that-slug>` now
