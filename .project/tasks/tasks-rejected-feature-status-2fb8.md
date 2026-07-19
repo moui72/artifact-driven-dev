@@ -1,7 +1,7 @@
 ---
 plan: plan-rejected-feature-status-2026-07-19-9590.md
 generated: 2026-07-19
-status: ready
+status: in-progress
 ---
 
 # Tasks
