@@ -42,7 +42,7 @@ status: in-progress
 
 ## Phase 2: Docs
 
-- [ ] T002 Update the hand-written body (below the `generated:end`
+- [x] T002 Update the hand-written body (below the `generated:end`
   marker) of `docs/reference/skills/ardd-plan.md` to describe the bare
   invocation's target pick and empty-case guidance, mirroring T001's
   semantics (picker only on a truly bare run; empty selection keeps

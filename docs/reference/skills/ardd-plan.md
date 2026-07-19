@@ -9,7 +9,7 @@ _Tier: core_
 ## Usage
 
 ```
-/ardd-plan                              # plan from artifacts + all open feedback
+/ardd-plan                              # bare run: pick from plannable inputs, else plan from artifacts + feedback
 /ardd-plan <slug> [<slug> ...]          # additionally target backlogged features
 /ardd-plan feedback-<slug>-<hex>.md     # scope to named feedback file(s) only
 /ardd-plan defect:<id> [...] | defects  # scope the defect check; re-offers declined entries
@@ -40,6 +40,20 @@ slate. The full grading/relation/classification shape is in the plan's
 Technical Approach (`.project/plans/plan-plan-time-defrag-slate-analysi-2026-07-17-1a95.md`)
 and the skill's own "Slate mode" section. It writes nothing — no plan, no
 register mutation — and recomputes fresh on every invocation.
+
+A truly bare `/ardd-plan` — no slug, no feedback or defect scope, and no
+side-door flag — starts with a **target pick** (step 1a): it enumerates
+the plannable inputs deterministically (`feature-list.sh` for backlogged
+slugs, the `status: open` feedback files, `defects-unsurfaced.sh` for
+never-surfaced defect entries) and offers them in one multi-select
+question. Whatever is selected scopes the run exactly as if those
+arguments had been passed; selecting nothing keeps today's
+artifacts/feedback-only drafting. Any scoped invocation skips the picker.
+When nothing plannable exists at all, the run reports that in prose —
+suggesting `/ardd-backlog <idea>` or `/ardd-feedback <observation>` to
+create something plannable, and `/ardd-implement` when a `ready` or
+`in-progress` tasks file exists — and stops without drafting a plan and
+without prompting.
 
 Argument disambiguation: a plain kebab-case argument is always a feature
 slug; `feedback-*.md` is always a feedback scope; `defect:<id>` (the 8-char
