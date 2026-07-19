@@ -1,6 +1,18 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-implement` — the delegated
+_Updated: 2026-07-18 (`/prerelease-sweep S2 S3 S4 S6 S7` — regression
+rerun (run `2026-07-18-abb8`, ~$2.50–3.75, ~414K tokens, ~8min real
+elapsed) of the scenarios that produced the 6 `prerelease-sweep-fixes`
+findings. **All 6 confirmed fixed** — see
+`dev-notes/prerelease-runs/2026-07-18-abb8/RUN.md`'s regression triage
+table for the full per-finding verification. One incidental catch (not
+a product bug): S6 found this repo's own dogfooded
+`.claude/skills/ardd-scripts/` was several commits stale — fixed
+immediately by re-running `./install.sh .` against this repo itself.
+No new defects found. **Verdict: green light for the 1.0 stable cut**
+as far as this sweep's scope is concerned — the plan/implement/regression
+loop that started with the full sweep is now closed. Prior update, same
+day, `/ardd-implement` — the delegated
 `prerelease-sweep-fixes` worktree run completed all 12 tasks, fixing all
 6 accepted prerelease-sweep findings: `install.sh` now infers `Channel:`
 from `Source-Ref:`'s `-beta.` suffix shape (F001, manually verified
@@ -1249,9 +1261,10 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/prerelease-sweep S2 S3 S4 S6 S7` — regression-rerun the scenarios that
-produced the 6 findings just fixed, then dispatch the stable-release
-workflow for 1.0 once green. Note there's also an earlier, off-target research file
+Regression rerun is green — dispatch the stable-release workflow for
+1.0 (push `main` first if not already at `origin`, then run the
+`workflow_dispatch` stable-release workflow with the appropriate version
+bump — this is a major-version cut). Note there's also an earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
