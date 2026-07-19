@@ -38,7 +38,7 @@ status: in-progress
   (previously: silent no-op). Also re-confirm: a target with no README
   gets no badge output at all; `ARDD_VERSION_BADGE` unset behaves
   byte-for-byte as before.
-- [ ] T005 Extend `scripts/test-install-version-badge.sh` with a case
+- [x] T005 Extend `scripts/test-install-version-badge.sh` with a case
   covering T003's fix (marker-already-present + `ARDD_VERSION_BADGE=1`
   writes both files), and extend the relevant install test coverage for
   T001's fix (beta-tag source with no prior recorded channel and no

@@ -157,4 +157,23 @@ else
   ok "case4: .github still absent after a second unset install"
 fi
 
+# --- Case 5: marker already present (a prior static-badge adopter) +
+# ARDD_VERSION_BADGE=1 still writes both supporting files (F002 fix) —
+# previously this was a silent no-op ---
+target="$(new_target case5)"
+printf '# Test project\n\n<!-- ardd-badge-start -->\nold static badge\n<!-- ardd-badge-end -->\n' > "$target/README.md"
+run_install_badge_on "$target" >/dev/null
+
+if [ -f "$target/$WORKFLOW_REL" ]; then
+  ok "case5: marker-present + ARDD_VERSION_BADGE=1 writes workflow file"
+else
+  bad "case5: marker-present + ARDD_VERSION_BADGE=1 writes workflow file"
+fi
+
+if [ -f "$target/$JSON_REL" ]; then
+  ok "case5: marker-present + ARDD_VERSION_BADGE=1 writes seed JSON"
+else
+  bad "case5: marker-present + ARDD_VERSION_BADGE=1 writes seed JSON"
+fi
+
 exit "$fail"
