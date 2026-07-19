@@ -46,6 +46,22 @@ entering the normal flow.
    parallelism is the tasks file; tasks within one file always run
    sequentially.
 
+   **Also run `.claude/skills/ardd-scripts/parallel-matrix.sh`** (installed
+   copy; source-repo absolute-path fallback, same present-or-fallback rule
+   as the other ardd-scripts calls) alongside the `inflight-worktrees.sh`
+   call below, and annotate each pick-list / fan-out multi-select option
+   with its verdicts against the other options and the in-flight claims:
+   `independent` (no declared overlap — *not* conflict-free),
+   `shared-artifact (<tags>)`, or `shared-feature (<slugs>)`.
+   `shared-feature` is a **strong warning in the option text** — "shares
+   feature <slug> with <other file>; running these in parallel risks
+   conflicting edits" — but never a hard exclusion: the same-file claim
+   check below stays the only hard exclusion. One judgment step the script
+   deliberately doesn't do: when two candidate files look related, skim
+   both and flag likely code-path contact before fanning out — the matrix
+   only sees declared overlap, and `merge_policy` conflict handling still
+   governs at merge time either way.
+
    **Before presenting the list, run
    `.claude/skills/ardd-scripts/inflight-worktrees.sh`** — it enumerates
    every *other* worktree of this repo and prints each one's branch and any

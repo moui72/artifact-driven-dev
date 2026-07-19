@@ -63,7 +63,7 @@ status: in-progress
 
 ## Phase 3: /ardd-implement picker annotations
 
-- [ ] T005 Update `skills/ardd-implement/SKILL.md` step 1: run
+- [x] T005 Update `skills/ardd-implement/SKILL.md` step 1: run
   `parallel-matrix.sh` (installed copy, absolute-path fallback) alongside
   the existing `inflight-worktrees.sh` call and annotate each pick-list /
   fan-out multi-select option with its verdicts against the other
