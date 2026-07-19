@@ -1,6 +1,28 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/ardd-plan` — drafted, approved, and tasked
+_Updated: 2026-07-18 (`/ardd-implement` — the delegated
+`prerelease-sweep-fixes` worktree run completed all 12 tasks, fixing all
+6 accepted prerelease-sweep findings: `install.sh` now infers `Channel:`
+from `Source-Ref:`'s `-beta.` suffix shape (F001, manually verified
+across all 3 precedence tiers — explicit `ARDD_CHANNEL`, preserved prior
+channel, and the new inferred default); `ARDD_VERSION_BADGE=1` now
+writes its supporting files even when a README already has the static
+badge marker (F002, manually verified — no-README and unset-env-var
+paths confirmed unchanged); `ardd-state.sh feature-flip ...
+implemented` now cross-checks the bound tasks file's completion status
+(F003); `task-check` gives a diagnostic message on a malformed
+colon-suffixed checkbox (F004); `lint-project.sh`'s `plan:`
+path-vs-filename error is now distinct and clear, no more doubled path
+(F005, bad-project fixture's `EXPECTED_BAD_FINDINGS` 38→39); the
+epic-drained-to-zero case is now documented in `ardd-status`'s
+`SKILL.md` (F006). New test coverage:
+`scripts/test-install-channel-default.sh` (new) plus extended cases in
+`test-install-version-badge.sh`, `test-ardd-state.sh`,
+`test-lint-project.sh` — all passing. Merged clean (fast-forward) and
+the worktree reaped. No feature slugs targeted. **Next: regression-rerun
+`/prerelease-sweep S2 S3 S4 S6 S7` (the scenarios that produced these
+findings) before dispatching the stable-release workflow for 1.0.**
+Prior update, same day, `/ardd-plan` — drafted, approved, and tasked
 `plan-prerelease-sweep-fixes-2026-07-18-d341.md`: 12 tasks/3 phases in
 `tasks-prerelease-sweep-fixes-e4d8.md` (`ready`) fixing all 6 findings
 from the full prerelease sweep. Highest priority (F001/T001-T002):
@@ -1227,11 +1249,9 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-prerelease-sweep-fixes-e4d8.md` (`ready`,
-12 tasks/3 phases — the 6 accepted prerelease-sweep fixes). After it
-merges, regression-rerun `/prerelease-sweep S2 S3 S4 S6 S7` (the
-scenarios that produced these findings) before dispatching the
-stable-release workflow for 1.0. Note there's also an earlier, off-target research file
+`/prerelease-sweep S2 S3 S4 S6 S7` — regression-rerun the scenarios that
+produced the 6 findings just fixed, then dispatch the stable-release
+workflow for 1.0 once green. Note there's also an earlier, off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:
