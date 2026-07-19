@@ -373,12 +373,24 @@ SOURCE_REF_LINE=""
 "
 # Channel precedence: $ARDD_CHANNEL (validated above) > the channel the
 # target already records (a re-install must not silently flip a beta
-# consumer back to stable) > stable. Absent-in-old-files = stable is the
-# consumers' parse rule; going forward the line is always written.
+# consumer back to stable) > inferred from $SOURCE_REF's own shape (this
+# repo's existing -beta. suffix convention, per next-version.sh /
+# source-resolve.sh) — beta if SOURCE_REF contains -beta., stable
+# otherwise (covers both a plain stable tag and the no-tag/dev-mode
+# case). Absent-in-old-files = stable is the consumers' parse rule;
+# going forward the line is always written.
 PREV_CHANNEL=""
 [ -f "$VERSION_FILE" ] && PREV_CHANNEL="$(sed -n 's/^Channel: //p' "$VERSION_FILE" | head -1)"
 CHANNEL="${ARDD_CHANNEL:-$PREV_CHANNEL}"
-case "$CHANNEL" in stable|beta) ;; *) CHANNEL=stable ;; esac
+case "$CHANNEL" in
+  stable|beta) ;;
+  *)
+    case "$SOURCE_REF" in
+      *-beta.*) CHANNEL=beta ;;
+      *) CHANNEL=stable ;;
+    esac
+    ;;
+esac
 mkdir -p "$(dirname "$VERSION_FILE")"
 cat > "$VERSION_FILE" <<EOF
 # ArDD Version
@@ -398,15 +410,17 @@ echo "  ✓ .project/ardd-version.md ($COMMIT)"
 
 # --- "built with ArDD" badge: suggestion only, never a README edit --------
 # Mirrors the gitignore-suggestion posture: install.sh never modifies a
-# target's README. Offered only when a README exists and lacks the marker.
-# ARDD_VERSION_BADGE=1 additionally writes the supporting files (workflow +
-# seed JSON) — never overwriting a target's hand-customized version on a
-# re-run — and prints the two-badge snippet instead of the single static
-# one. Unset (the default): behavior is byte-for-byte unchanged from before
-# this opt-in existed.
-if [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
-  echo ""
-  if [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
+# target's README. The static-suggestion print (for a first-time adopter)
+# is offered only when a README exists and lacks the marker. The
+# ARDD_VERSION_BADGE=1 supporting-file writes (workflow + seed JSON) fire
+# whenever a README exists, independent of whether the marker is already
+# present — a project that already adopted the static badge is exactly
+# the kind of consumer who'd want the dynamic upgrade, and shouldn't need
+# to strip the marker first (never overwriting a target's hand-customized
+# version on a re-run). Unset (the default): behavior is byte-for-byte
+# unchanged from before this opt-in existed.
+if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
+    echo ""
     BADGE_WORKFLOW="$TARGET/.github/workflows/ardd-badge.yml"
     BADGE_JSON="$TARGET/.github/badges/ardd-version.json"
 
@@ -447,12 +461,12 @@ if [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md
     echo ""
     sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
     echo ""
-  else
+elif [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
+    echo ""
     echo "Optional: add a \"built with ArDD\" badge to your README — paste this snippet:"
     echo ""
     sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
     echo ""
-  fi
 fi
 
 # --- .project/.lock gitignore entry ---

@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: `install.sh` fixes (F001, F002)
-- [ ] T001 Fix F001 in `install.sh`: infer the default `CHANNEL` from
+- [x] T001 Fix F001 in `install.sh`: infer the default `CHANNEL` from
   `$SOURCE_REF`'s `-beta.` suffix shape when neither `$ARDD_CHANNEL` nor
   a previously-recorded channel (`$PREV_CHANNEL`) applies — `beta` if
   `SOURCE_REF` contains `-beta.`, `stable` otherwise (covers both a
@@ -16,7 +16,7 @@ status: in-progress
   previously-recorded channel is preserved (never silently flip an
   existing beta consumer back to stable), and only the third tier's
   hardcoded `stable` default changes to this inference.
-- [ ] T002 Manually verify T001: run `./install.sh <fresh-target>` from
+- [x] T002 Manually verify T001: run `./install.sh <fresh-target>` from
   this checkout (currently at a beta tag) with no `ARDD_CHANNEL` set and
   no prior `.project/ardd-version.md` — confirm `Channel: beta` is now
   recorded (matching `Source-Ref:`'s actual prerelease tag), and that
@@ -26,12 +26,12 @@ status: in-progress
   `SOURCE_REF`'s shape, and a re-install against a target with a
   previously-recorded `Channel: beta` still preserves `beta` even with
   `ARDD_CHANNEL` unset.
-- [ ] T003 [parallel] Fix F002 in `install.sh`: split the badge block's
+- [x] T003 [parallel] Fix F002 in `install.sh`: split the badge block's
   gate — the supporting-file writes (workflow + seed JSON) fire whenever
   `ARDD_VERSION_BADGE=1`, independent of whether `ardd-badge-start`
   already exists in the target's README; the static-suggestion print for
   a first-time adopter stays gated on the marker's absence, unchanged.
-- [ ] T004 [parallel] Manually verify T003: create a fixture target with
+- [x] T004 [parallel] Manually verify T003: create a fixture target with
   a README already containing the `ardd-badge-start` marker (simulating
   a prior static-badge adopter), run `ARDD_VERSION_BADGE=1 ./install.sh
   <that-target>`, and confirm both supporting files are now written
