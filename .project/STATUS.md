@@ -1,6 +1,15 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-18 (`/prerelease-sweep S2 S3 S4 S6 S7` — regression
+_Updated: 2026-07-19 (**v1.0.0 shipped** — pushed `main` (publishing
+`v0.10.3-beta.4` on the beta channel automatically), confirmed `lint`
+and `beta-release` both green on that commit, then dispatched
+`stable-release.yml` with `bump: major`. The workflow fast-forwarded
+`release` to `main`'s tip and published `v1.0.0` as the latest stable
+release (https://github.com/moui72/artifact-driven-dev/releases/tag/v1.0.0).
+This closes the full loop that began with the 2026-07-18 full prerelease
+sweep: sweep → triage → 6 accepted findings → fix plan → implement →
+regression rerun (all green) → push → CI green → stable dispatch. Prior
+update, same day, `/prerelease-sweep S2 S3 S4 S6 S7` — regression
 rerun (run `2026-07-18-abb8`, ~$2.50–3.75, ~414K tokens, ~8min real
 elapsed) of the scenarios that produced the 6 `prerelease-sweep-fixes`
 findings. **All 6 confirmed fixed** — see
@@ -1261,10 +1270,8 @@ today's work); `v0.10.2` is the current published stable release.
 
 ## Recommended Next Step
 
-Regression rerun is green — dispatch the stable-release workflow for
-1.0 (push `main` first if not already at `origin`, then run the
-`workflow_dispatch` stable-release workflow with the appropriate version
-bump — this is a major-version cut). Note there's also an earlier, off-target research file
+v1.0.0 is out. No urgent follow-up required — the backlog
+(`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
 any plan. `codex-second-harness-support` is drafted-but-untasked:

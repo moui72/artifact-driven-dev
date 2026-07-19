@@ -366,8 +366,16 @@ SOURCE_COMMIT_LINE=""
 # When the source checkout sits exactly at a semver release tag (the normal
 # release-channel state after source-resolve.sh), record which release this
 # install came from; omit the line for any other commit (dev-mode installs
-# have no release identity to claim).
-SOURCE_REF="$(git -C "$SCRIPT_DIR" describe --exact-match --tags --match 'v[0-9]*' 2>/dev/null || true)"
+# have no release identity to claim). A commit can carry more than one
+# matching tag at once (e.g. right at a stable cut, which also still
+# carries the beta tag it was promoted from) — `git describe --exact-match`
+# picks one non-deterministically in that case, so list every tag at HEAD
+# explicitly and prefer a strict stable tag over a `-beta.` one, matching
+# the "newer stable beats older beta" ordering convention used elsewhere
+# (next-version.sh, source-resolve.sh).
+ALL_REFS_AT_HEAD="$(git -C "$SCRIPT_DIR" tag --points-at HEAD --list 'v[0-9]*' 2>/dev/null || true)"
+SOURCE_REF="$(printf '%s\n' "$ALL_REFS_AT_HEAD" | grep -v -- '-beta\.' | sort -V | tail -1)"
+[ -z "$SOURCE_REF" ] && SOURCE_REF="$(printf '%s\n' "$ALL_REFS_AT_HEAD" | sort -V | tail -1)"
 SOURCE_REF_LINE=""
 [ -n "$SOURCE_REF" ] && SOURCE_REF_LINE="Source-Ref: $SOURCE_REF
 "
