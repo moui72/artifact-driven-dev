@@ -1,6 +1,47 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-plan rejected-feature-status` — a fable
+_Updated: 2026-07-19 (`/ardd-plan work-queue-parallel-safety` — drafted,
+approved, and tasked
+`plan-work-queue-parallel-safety-2026-07-19-4c10.md`: 6 tasks/4 phases
+in `tasks-work-queue-parallel-safety-eadb.md` (`ready`). Phase 1
+(test-first): `parallel-matrix.sh` + regression test + CI/install
+wiring — pairwise `independent|shared-feature|shared-artifact` verdicts
+among `ready` tasks files and in-flight worktree claims (feature overlap
+via the tasks→plan→`features:` chain, `unknown` when broken; artifact
+overlap via `[artifacts: ...]` tag intersection; deliberately no path
+heuristics). Phases 2–3: Work Queue section in `/ardd-status` +
+matrix-annotated fan-out picker in `/ardd-implement` (`shared-feature`
+is a strong warning, never a hard exclusion — the same-file claim check
+stays the only hard one; `independent` means "no declared overlap",
+`merge_policy` still governs). Phase 4: docs. Both research-doc open
+questions resolved in the plan; no artifact edits needed. Feature
+`work-queue-parallel-safety`: `backlogged` → `tasked`. Prior update,
+same day, `/ardd-implement` coordinator — the delegated
+`rejected-feature-status` worktree run completed all 8 tasks and merged
+fast-forward; worktree reaped. `rejected` and `subsumed` are now real
+register statuses: `lint-project.sh`'s `FEATURE_STATUS_ENUM` extended;
+`ardd-state.sh feature-flip` grew the five legal transitions
+(`backlogged/planned→rejected`, `backlogged/planned/tasked→subsumed` —
+the asymmetry is deliberate: absorption can be noticed after tasking,
+rejection can't) with regression tests; good-project fixtures, `docs/
+reference/project-files.md`, and `ardd-status`/`ardd-plan` prose all
+updated. Feature `rejected-feature-status`: `tasked` → `implemented`.
+Subagent process note: one commit briefly landed with `--no-verify`
+after the pre-commit suite outran a tool timeout, self-caught and
+redone properly with hooks passing. Prior update, same day,
+`/ardd-research` + `/ardd-backlog` — vetted and
+logged `work-queue-parallel-safety`: a single-pane work-queue view — an
+installed `parallel-matrix.sh` reporting feature- and artifact-overlap
+verdicts among `ready` tasks files and in-flight worktrees (deliberately
+no path heuristics — prose paths are unstructured, so path-contact
+assessment stays agent judgment at presentation time), surfaced as a
+Work Queue section in `/ardd-status` and as annotations on
+`/ardd-implement`'s fan-out multi-select picker. Research doc (lens
+results, rejected alternatives incl. a separate `/ardd-board`
+report-owner skill, open question on whether `shared-feature` should be
+a hard fan-out exclusion or a warning):
+`research-work-queue-parallel-safety-vie-2026-07-19-25f7.md`. Prior
+update, same day, `/ardd-plan rejected-feature-status` — a fable
 design review (dispatched at the approval checkpoint) recommended
 extending the original rejected-only plan to also add `subsumed` (an
 entry whose scope shipped under a *different* feature/plan entry): this
@@ -1267,9 +1308,17 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 1 tasked · 27 implemented · 1 retired — see
+1 backlogged · 1 tasked · 28 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
+Tasked:
+- `work-queue-parallel-safety` — single-pane work-queue view:
+  `parallel-matrix.sh` (feature + artifact overlap among `ready` tasks
+  files and in-flight worktrees; no path heuristics), a Work Queue
+  section in `/ardd-status`, matrix-annotated fan-out picker in
+  `/ardd-implement`. `tasks-work-queue-parallel-safety-eadb.md`
+  (`ready`, 6 tasks/4 phases). Vetted:
+  `research-work-queue-parallel-safety-vie-2026-07-19-25f7.md`.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1279,13 +1328,9 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-Tasked:
-- `rejected-feature-status` — `rejected` + `subsumed` statuses for the
-  feature register's status enum; see the `_Updated` note above.
-  `tasks-rejected-feature-status-2fb8.md` (`ready`, 8 tasks/3 phases).
 Target a backlogged slug with `/ardd-plan <slug>`.
-Newest implemented: `docs-sweep` and `dynamic-version-badge-sync` — see
-the earlier `_Updated` note.
+Newest implemented: `rejected-feature-status` — see the `_Updated` note
+above.
 
 ## Audit
 
@@ -1297,15 +1342,15 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-Nothing — no worktrees, nothing pending reap (both `docs-sweep` and
-`dynamic-version-badge-sync` worktrees merged and were reaped this
-update). `main` is ahead of `origin/main` (unpushed local commits from
-today's work); `v0.10.2` is the current published stable release.
+Nothing — the `rejected-feature-status` worktree merged and was reaped
+this update. `main` is ahead of `origin/main` (unpushed local commits).
 
 ## Recommended Next Step
 
-`/ardd-implement` to work `tasks-rejected-feature-status-2fb8.md`
-(`ready`, 8 tasks/3 phases). v1.0.0 is out; the remaining backlog
+`/ardd-implement` to work `tasks-work-queue-parallel-safety-eadb.md`
+(`ready`, 6 tasks/4 phases) — or push `main` first: the merged
+`rejected-feature-status` work is local-only until pushed, which also
+publishes a beta. v1.0.0 is out; the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
