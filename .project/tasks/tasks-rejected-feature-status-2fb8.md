@@ -42,7 +42,7 @@ status: in-progress
   `tasked` → `implemented` (or → `retired`)) to also show the
   `backlogged`/`planned` → `rejected` branch and the
   `backlogged`/`planned`/`tasked` → `subsumed` branch.
-- [ ] T006 [parallel] Update `skills/ardd-status/SKILL.md`'s Feature
+- [x] T006 [parallel] Update `skills/ardd-status/SKILL.md`'s Feature
   Backlog report template: add `rejected` and `subsumed` to the count
   line alongside `implemented`/`retired` (omitted when zero each, same
   convention already used for `retired` in practice), and confirm/state

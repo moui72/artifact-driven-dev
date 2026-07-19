@@ -96,9 +96,9 @@ without regenerating `STATUS.md` or being asked anything.
 
    Also glob `.project/features/*.md` (the per-feature register) if
    present. Count entries by frontmatter `status`
-   (`backlogged`/`planned`/`tasked`/`implemented`) — read-only visibility;
-   `/ardd-status` never writes to the register except the one narrow,
-   explicit exception in step 5a below.
+   (`backlogged`/`planned`/`tasked`/`implemented`/`retired`/`rejected`/
+   `subsumed`) — read-only visibility; `/ardd-status` never writes to the
+   register except the one narrow, explicit exception in step 5a below.
 
    Also check whether any feature carries a non-empty `epic`: run
    `.claude/skills/ardd-scripts/feature-list.sh --all` (installed copy; if
@@ -106,9 +106,11 @@ without regenerating `STATUS.md` or being asked anything.
    inspect the fifth tab-separated column. If at least one entry has a
    non-empty `epic`, group the backlogged/planned/tasked counts by that
    `epic` value for the "by epic" breakdown below (omit `implemented`/
-   `retired` entries from the grouping — same "actionable at a glance"
-   framing as the plain status counts). If no feature carries `epic`, skip
-   this grouping entirely — nothing to collect.
+   `retired`/`rejected`/`subsumed` entries from the grouping — same
+   "actionable at a glance" framing as the plain status counts, and the
+   same reason none of the four terminal/completed statuses belong in a
+   breakdown meant to surface what's still moving). If no feature carries
+   `epic`, skip this grouping entirely — nothing to collect.
 
    Also compare each `status: stable` artifact's described capabilities
    against the feature register and the codebase: the agent lists any
@@ -191,16 +193,20 @@ without regenerating `STATUS.md` or being asked anything.
      by the next `/ardd-plan`. (Omit this section if none are open.)
 
    ## Feature Backlog
-   - <N> backlogged · <N> planned · <N> tasked · <N> implemented — see
+   - <N> backlogged · <N> planned · <N> tasked · <N> implemented (·
+     <N> retired · <N> rejected · <N> subsumed) — see
      `.project/features/`. Target a backlogged slug with
-     `/ardd-plan <slug>`. (Omit this section if the register doesn't exist.)
+     `/ardd-plan <slug>`. (Omit this section if the register doesn't exist.
+     Each of `retired`/`rejected`/`subsumed` is itself omitted from the
+     line when its count is zero — same convention.)
    - By epic: `<epic-slug>` — <N> backlogged · <N> planned · <N> tasked
      (one line per epic value seen). (Omit this "by epic" breakdown entirely
      if no feature carries a non-empty `epic` — same "omit if none"
      convention as every other optional section here. An epic value that
      previously had entries but now has zero remaining in
-     backlogged/planned/tasked — all moved to implemented/retired — simply
-     drops out of this breakdown on its own, a natural consequence of the
+     backlogged/planned/tasked — all moved to
+     implemented/retired/rejected/subsumed — simply drops out of this
+     breakdown on its own, a natural consequence of the
      existing counting rule; it is not a special case requiring different
      handling, and no "0/0/0" line should ever appear for it.)
 
