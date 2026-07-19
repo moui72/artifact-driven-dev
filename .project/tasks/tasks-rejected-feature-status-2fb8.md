@@ -32,7 +32,7 @@ status: in-progress
   refused with the existing clear error message; an illegal `tasked ->
   rejected` (not one of the five new edges) is also refused, confirming
   the asymmetry holds.
-- [ ] T004 [parallel] Add fixture cases to `scripts/test-lint-project.sh`
+- [x] T004 [parallel] Add fixture cases to `scripts/test-lint-project.sh`
   confirming feature files with `status: rejected` and `status:
   subsumed` both pass the enum check cleanly.
 
