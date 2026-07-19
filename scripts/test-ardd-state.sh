@@ -321,6 +321,75 @@ set -e
 assert_exit "feature-flip: out of retired refused" 1 "$rc"
 assert_file_grep "feature-flip: retired is terminal" "^status: retired" "$RFEAT"
 
+# rejected / subsumed: two new terminal states (constitution v1.12.0).
+# rejected: reachable only from backlogged or planned, never from tasked
+# (rejection is a pre-work decision only). subsumed: reachable from
+# backlogged, planned, OR tasked (absorption can be noticed late).
+( cd "$FPROJ" && printf 'Rejected idea.\n' | sh "$STATE" feature-create rejected-a >/dev/null )
+RAFEAT="$FPROJ/.project/features/rejected-a.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip rejected-a rejected >/dev/null )
+assert_file_grep "feature-flip: backlogged->rejected" "^status: rejected" "$RAFEAT"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip rejected-a planned ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: rejected is terminal (refuses outbound)" 1 "$rc"
+assert_file_grep "feature-flip: still rejected after refusal" "^status: rejected" "$RAFEAT"
+
+( cd "$FPROJ" && printf 'Rejected idea 2.\n' | sh "$STATE" feature-create rejected-b >/dev/null )
+RBFEAT="$FPROJ/.project/features/rejected-b.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip rejected-b planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip rejected-b rejected >/dev/null )
+assert_file_grep "feature-flip: planned->rejected" "^status: rejected" "$RBFEAT"
+
+( cd "$FPROJ" && printf 'Subsumed idea a.\n' | sh "$STATE" feature-create subsumed-a >/dev/null )
+SAFEAT="$FPROJ/.project/features/subsumed-a.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-a subsumed >/dev/null )
+assert_file_grep "feature-flip: backlogged->subsumed" "^status: subsumed" "$SAFEAT"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-a implemented ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: subsumed is terminal (refuses outbound)" 1 "$rc"
+assert_file_grep "feature-flip: still subsumed after refusal" "^status: subsumed" "$SAFEAT"
+
+( cd "$FPROJ" && printf 'Subsumed idea b.\n' | sh "$STATE" feature-create subsumed-b >/dev/null )
+SBFEAT="$FPROJ/.project/features/subsumed-b.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-b planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-b subsumed >/dev/null )
+assert_file_grep "feature-flip: planned->subsumed" "^status: subsumed" "$SBFEAT"
+
+( cd "$FPROJ" && printf 'Subsumed idea c.\n' | sh "$STATE" feature-create subsumed-c >/dev/null )
+SCFEAT="$FPROJ/.project/features/subsumed-c.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-c planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-c tasked >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip subsumed-c subsumed >/dev/null )
+assert_file_grep "feature-flip: tasked->subsumed" "^status: subsumed" "$SCFEAT"
+
+# illegal transitions into rejected/subsumed from implemented
+( cd "$FPROJ" && printf 'Implemented thing.\n' | sh "$STATE" feature-create impl-thing >/dev/null )
+IFEAT="$FPROJ/.project/features/impl-thing.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip impl-thing planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip impl-thing tasked >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip impl-thing implemented >/dev/null )
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip impl-thing rejected ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: implemented->rejected refused" 1 "$rc"
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip impl-thing subsumed ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: implemented->subsumed refused" 1 "$rc"
+
+# asymmetry: tasked->rejected is NOT a legal edge (only tasked->subsumed is)
+( cd "$FPROJ" && printf 'Tasked thing.\n' | sh "$STATE" feature-create tasked-thing >/dev/null )
+TFEAT="$FPROJ/.project/features/tasked-thing.md"
+( cd "$FPROJ" && sh "$STATE" feature-flip tasked-thing planned >/dev/null )
+( cd "$FPROJ" && sh "$STATE" feature-flip tasked-thing tasked >/dev/null )
+set +e
+( cd "$FPROJ" && sh "$STATE" feature-flip tasked-thing rejected ) >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "feature-flip: tasked->rejected refused (asymmetry with subsumed)" 1 "$rc"
+assert_file_grep "feature-flip: still tasked after asymmetry refusal" "^status: tasked" "$TFEAT"
+
 # --- feature-flip tasked->implemented completion cross-check (F003) ---
 # A feature bound to a tasks file via `tasks:` frontmatter must not flip
 # tasked->implemented unless that tasks file is status: completed.

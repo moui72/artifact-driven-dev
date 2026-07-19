@@ -13,7 +13,7 @@ status: in-progress
   comments mirroring the existing `retired` comment's style — one for
   each new value, explicit about what distinguishes it from both
   `retired` and the other new value.
-- [ ] T002 Add the five new legal transitions to
+- [x] T002 Add the five new legal transitions to
   `scripts/ardd-state.sh`'s `cmd_feature_flip` (`backlogged ->
   rejected`, `planned -> rejected`, `backlogged -> subsumed`, `planned
   -> subsumed`, `tasked -> subsumed`), update the `case "$to"`
@@ -23,7 +23,7 @@ status: in-progress
   branches clearly, including a one-line note on why `subsumed` alone
   reaches from `tasked` (absorption noticed late) while `rejected` does
   not (pre-work decision only).
-- [ ] T003 Add regression cases to `scripts/test-ardd-state.sh`: legal
+- [x] T003 Add regression cases to `scripts/test-ardd-state.sh`: legal
   `backlogged -> rejected`, `planned -> rejected`, `backlogged ->
   subsumed`, `planned -> subsumed`, and `tasked -> subsumed` transitions
   all succeed; both `rejected` and `subsumed` refuse every outbound

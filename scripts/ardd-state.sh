@@ -43,8 +43,17 @@ Deterministic state mutations for .project/ files. Subcommands:
   feature-flip <slug> <status>
                            advance a feature one stage along
                            backlogged->planned->tasked->implemented->retired
+                           or backlogged/planned->rejected
+                           or backlogged/planned/tasked->subsumed
                            (retired = shipped then deliberately removed;
-                           terminal — no arc out of it)
+                           rejected = decided against, never built;
+                           subsumed = shipped, credited to a different
+                           feature/plan entry; all three terminal — no arc
+                           out of any of them. subsumed alone reaches from
+                           tasked because absorption can be noticed late,
+                           after tasking but before implementation; rejection
+                           is a pre-work decision only, so it doesn't get
+                           that edge)
   feature-field <slug> <plan|tasks|gh_issue|epic> <value>
                            set an optional frontmatter field (add or replace)
   stamp <file> last_updated <YYYY-MM-DD>
@@ -266,8 +275,8 @@ cmd_feature_flip() {
   slug="${1:-}"; to="${2:-}"
   [ -n "$slug" ] && [ -n "$to" ] || dieu "feature-flip: need <slug> <status>"
   case "$to" in
-    planned|tasked|implemented|retired) ;;
-    *) dieu "feature-flip: target must be planned|tasked|implemented|retired, got '$to'" ;;
+    planned|tasked|implemented|retired|rejected|subsumed) ;;
+    *) dieu "feature-flip: target must be planned|tasked|implemented|retired|rejected|subsumed, got '$to'" ;;
   esac
   f="$(feature_file "$slug")"
   [ -f "$f" ] || die "feature-flip: no such feature: $f"
@@ -278,7 +287,9 @@ cmd_feature_flip() {
   fi
   case "$from-$to" in
     backlogged-planned|planned-tasked|tasked-implemented|implemented-retired) ;;
-    *) die "feature-flip: illegal transition $from -> $to for $slug (one stage at a time; retired is terminal)" ;;
+    backlogged-rejected|planned-rejected) ;;
+    backlogged-subsumed|planned-subsumed|tasked-subsumed) ;;
+    *) die "feature-flip: illegal transition $from -> $to for $slug (one stage at a time; retired/rejected/subsumed are terminal)" ;;
   esac
   if [ "$from-$to" = "tasked-implemented" ]; then
     tasks_ref="$(frontmatter_field "$f" tasks)"
