@@ -65,9 +65,13 @@ that would trap the `STATUS.md` write on the worktree's branch.
 - **In-flight work** — sibling worktrees, reapable worktrees, draft PRs
 - **Work Queue** — one entry per `ready` tasks file (filename, bound
   plan/features, verdicts against the other ready files and in-flight
-  claims, from `parallel-matrix.sh`). `independent` means **no declared
+  claims). Entry data comes from `tasks-list.sh`; `parallel-matrix.sh`
+  supplies only the pair verdicts (and is silent, by design, with fewer
+  than two participants). `independent` means **no declared
   overlap only** — not "conflict-free"; `merge_policy` conflict handling
-  still governs at merge time. Read-only visibility, omitted entirely
+  still governs at merge time. `claimed` reads "claimed by in-flight
+  worktree" — the same tasks file, ready here and in flight there.
+  Read-only visibility, omitted entirely
   when no `ready` tasks file exists
 - **By-epic breakdown** — when any register feature carries a non-empty
   `epic` field, the Feature Backlog counts (backlogged/planned/tasked)

@@ -32,10 +32,12 @@ surfaces blockers rather than working around them.
   state lives there, not here)
 - `parallel-matrix.sh` — pairwise overlap verdicts used to annotate every
   pick-list and fan-out multi-select option: `independent` (**no declared
-  overlap only** — not conflict-free), `shared-artifact (<tags>)`, or
-  `shared-feature (<slugs>)`. A `shared-feature` verdict is a strong
-  warning in the option text, never a hard exclusion — the same-file
-  claim check stays the only hard exclusion, and `merge_policy` conflict
+  overlap only** — not conflict-free), `shared-artifact (<tags>)`,
+  `shared-feature (<slugs>)`, or `claimed` (the same tasks file, ready
+  here and claimed by an in-flight worktree). A `shared-feature` verdict
+  is a strong warning in the option text, never a hard exclusion — the
+  same-file claim check stays the only hard exclusion, which a `claimed`
+  verdict simply reports (the rule itself is unchanged), and `merge_policy` conflict
   handling still governs at merge time. When two candidates merely look
   related, the agent skims both and flags likely code-path contact
   before fanning out

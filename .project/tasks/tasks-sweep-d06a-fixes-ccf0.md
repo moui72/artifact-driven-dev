@@ -46,7 +46,7 @@ status: in-progress
   silent, by design, with fewer than two participants). Verify
   `./scripts/lint-docs.sh` green.
 
-- [ ] T004 Update the hand-written bodies (below `generated:end`) of
+- [x] T004 Update the hand-written bodies (below `generated:end`) of
   `docs/reference/skills/ardd-status.md` and
   `docs/reference/skills/ardd-implement.md` to mention the `claimed`
   verdict and the Work Queue data-source split, mirroring T003.
