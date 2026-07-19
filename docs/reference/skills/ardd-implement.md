@@ -30,6 +30,15 @@ surfaces blockers rather than working around them.
 - Sibling worktrees via `inflight-worktrees.sh` — a tasks file a live
   worktree claims at `in-progress` is excluded from the pick (its real
   state lives there, not here)
+- `parallel-matrix.sh` — pairwise overlap verdicts used to annotate every
+  pick-list and fan-out multi-select option: `independent` (**no declared
+  overlap only** — not conflict-free), `shared-artifact (<tags>)`, or
+  `shared-feature (<slugs>)`. A `shared-feature` verdict is a strong
+  warning in the option text, never a hard exclusion — the same-file
+  claim check stays the only hard exclusion, and `merge_policy` conflict
+  handling still governs at merge time. When two candidates merely look
+  related, the agent skims both and flags likely code-path contact
+  before fanning out
 - Constitution frontmatter knobs: `workflow_mode`, `delegation`,
   `merge_policy`
 - The declared artifacts, per task

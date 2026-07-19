@@ -40,6 +40,9 @@ that would trap the `STATUS.md` write on the worktree's branch.
   progress; `worktree-reap.sh --dry-run` — merged-reapable candidates
   (visibility only, never mutates); `gh pr list --draft` in collaborative
   mode
+- `parallel-matrix.sh` — pairwise overlap verdicts among `ready` tasks
+  files and in-flight worktree claims (shared feature slugs via the
+  tasks → plan chain, shared `[artifacts: ...]` tags)
 - `completion-flip-check.sh` per completed tasks file — orphaned
   completion flips
 - `ardd-update-check.sh` — whether the ArDD install is behind its source
@@ -60,6 +63,12 @@ that would trap the `STATUS.md` write on the worktree's branch.
   language, `draft` artifacts that would block planning
 - **Diagram staleness** — each renderable artifact's `diagram_status`
 - **In-flight work** — sibling worktrees, reapable worktrees, draft PRs
+- **Work Queue** — one entry per `ready` tasks file (filename, bound
+  plan/features, verdicts against the other ready files and in-flight
+  claims, from `parallel-matrix.sh`). `independent` means **no declared
+  overlap only** — not "conflict-free"; `merge_policy` conflict handling
+  still governs at merge time. Read-only visibility, omitted entirely
+  when no `ready` tasks file exists
 - **By-epic breakdown** — when any register feature carries a non-empty
   `epic` field, the Feature Backlog counts (backlogged/planned/tasked)
   are additionally grouped and reported per `epic` value; omitted
@@ -74,7 +83,8 @@ that would trap the `STATUS.md` write on the worktree's branch.
 
 - `.project/STATUS.md` — its single writer. Artifact status table, open
   questions by artifact, defect/feedback/backlog summary lines, orphaned
-  flips, the In Flight section, the update-available line, and a
+  flips, the Work Queue section, the In Flight section, the
+  update-available line, and a
   recommended next step. STATUS.md is the single re-entry point after any
   interruption.
 - **One narrow register exception**: for each orphaned completion flip

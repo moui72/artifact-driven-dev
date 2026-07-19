@@ -76,7 +76,7 @@ status: in-progress
 
 ## Phase 4: Docs
 
-- [ ] T006 Update the hand-written bodies (below the `generated:end`
+- [x] T006 Update the hand-written bodies (below the `generated:end`
   marker) of `docs/reference/skills/ardd-status.md` and
   `docs/reference/skills/ardd-implement.md` to describe the Work Queue
   section and picker annotations, including the "no declared overlap"
