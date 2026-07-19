@@ -1,6 +1,6 @@
 ---
 slug: work-queue-parallel-safety
-status: tasked
+status: implemented
 logged: 2026-07-19
 plan: plan-work-queue-parallel-safety-2026-07-19-4c10.md
 tasks: tasks-work-queue-parallel-safety-eadb.md
