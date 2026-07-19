@@ -1,6 +1,19 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-19 (`/ardd-plan` (bare) — consumed
+`feedback-bare-plan-target-prompt-dc5f.md` (both UX items accepted, file
+now `planned`): drafted, approved, and tasked
+`plan-bare-plan-target-prompt-2026-07-19-03ba.md` — 2 tasks/2 phases in
+`tasks-bare-plan-target-prompt-6bcd.md` (`ready`). A bare `/ardd-plan`
+gains a step-1a target pick: it enumerates plannable inputs
+(backlogged slugs via `feature-list.sh`, open feedback files,
+unsurfaced defects) and offers them as one multi-select picker,
+forwarding the selection into the existing scope machinery; with truly
+nothing plannable it ends in prose + next-step suggestions
+(`/ardd-backlog`, `/ardd-feedback`, `/ardd-implement`) instead of a
+complaint. No new scripts; `--list`/`--slate`/`--from` untouched. No
+feature slugs targeted. Prior update, same day, `/ardd-implement`
+coordinator — the delegated
 `work-queue-parallel-safety` worktree run completed all 6 tasks and
 merged fast-forward; worktree reaped; dogfooded install refreshed via
 `./install.sh .` (the new script is live in
@@ -1327,11 +1340,12 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 (2026-07-12) — first GitHub release. Full history: GitHub Releases and
 `docs/decisions/0006`/`0007`.
 
-## Feedback
+## Work Queue
 
-1 open feedback file — `feedback-bare-plan-target-prompt-dc5f.md` (2 UX
-items on bare `/ardd-plan`'s no-scope behavior); will be picked up by
-the next `/ardd-plan`.
+- `tasks-bare-plan-target-prompt-6bcd.md` (`ready`, 0/2) —
+  plan `plan-bare-plan-target-prompt-2026-07-19-03ba.md`, no bound
+  features. Sole ready file, nothing in flight — `parallel-matrix.sh`
+  has no pairs to report.
 
 ## Feature Backlog
 
@@ -1367,11 +1381,8 @@ worktrees both merged and were reaped today. `main` is ahead of
 
 ## Recommended Next Step
 
-Push `main` — today's merged work (`rejected-feature-status`,
-`work-queue-parallel-safety`, the open feedback file) is local-only
-until pushed, which also publishes a beta. The open feedback
-(`feedback-bare-plan-target-prompt-dc5f.md`) waits for the next
-`/ardd-plan`. v1.0.0 is out; the remaining backlog
+`/ardd-implement` to work `tasks-bare-plan-target-prompt-6bcd.md`
+(`ready`, 2 tasks/2 phases). v1.0.0 is out; the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
