@@ -1,7 +1,9 @@
 ---
 slug: rejected-feature-status
-status: backlogged
+status: tasked
 logged: 2026-07-19
+plan: plan-rejected-feature-status-2026-07-19-9590.md
+tasks: tasks-rejected-feature-status-2fb8.md
 ---
 
 Add a 'rejected' status to the feature register's status enum (backlogged/planned/tasked/implemented/retired) for a backlogged or planned idea the team decides not to pursue and that never gets built — a terminal state distinct from retired (shipped then deliberately removed).

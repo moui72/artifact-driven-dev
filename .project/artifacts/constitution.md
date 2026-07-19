@@ -1,6 +1,43 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.11.1 → 1.12.0 (MINOR — schema-widening: two new
+terminal status values on the feature register's status enum.)
+
+Rationale: `/ardd-plan rejected-feature-status` (2026-07-19), extended
+after a design review to cover the second case its own `Why:` line
+flagged. The feature register's per-file schema (Quality Standards,
+"Feature register format") gains two sibling terminal states:
+`rejected` — a `backlogged` or `planned` idea the team decides not to
+pursue and that never gets built — and `subsumed` — an entry whose
+scope ended up shipping under a *different* feature/plan entry (not
+independently built, not removed). Both answer "does this capability
+exist in the shipped system?" differently from every other status
+(rejected: no, never; subsumed: yes, credited elsewhere), which is why
+they're separate enum values rather than one combined status or a body
+note — this repo's own norm already treats ship-state distinctions as
+status-grade (`retired` stays its own status rather than a note on
+`implemented`). Named `subsumed`, not `superseded`, to avoid colliding
+with the existing plan-level `superseded` (a newer plan replacing an
+older *unapproved* one for the *same* feature — a same-document
+one-for-one replacement, a different shape from a scope absorbed into
+an already-ahead, different feature's work). Purely additive (two new
+enum values; no existing value's meaning changes), matching this repo's
+own semver policy's MINOR case for schema-widening changes — same
+precedent as the `epic` field addition (1.10.0 → 1.11.0).
+
+Modified sections: Quality Standards ("Feature register format" entry —
+`rejected` and `subsumed` added to the status enum with one-sentence
+definitions distinguishing both from `retired` and from each other; a
+`subsumed` entry is expected to record the absorbing plan/feature).
+Footer version updated.
+
+Previous SIR (1.11.0 → 1.11.1) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 1.11.0 → 1.11.1 (PATCH — wording/scope clarification only;
 no principle or standing-decision change.)
 
@@ -184,7 +221,7 @@ revision.
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-17
+last_updated: 2026-07-19
 
 next_step_prompt: true
 delegation: eager
@@ -508,15 +545,30 @@ prose; it is not a mandate to sweep every existing skill file in one pass.
   parse robustness win over single-file glanceability, especially for
   collaborative mode and tracker sync. Schema per file — frontmatter,
   required: `slug`, `status`
-  (`backlogged|planned|tasked|implemented|retired`), `logged`
-  (YYYY-MM-DD); optional: `plan` and `tasks` (filenames of the binding
-  plan/tasks files), `gh_issue` (issue number), `epic` (a free-text slug
-  grouping related features for release-cadence-sized bundling — declared
-  and durable, distinct from the computed/ephemeral plan-time "defrag"
-  footprint analysis, a separate, unrelated backlog idea). A feature's `status`
-  asserts what is true of the system NOW, not what was once reached:
-  `retired` is the terminal state for a feature that shipped and was then
-  deliberately removed — it never flips back out. Body: a
+  (`backlogged|planned|tasked|implemented|retired|rejected|subsumed`),
+  `logged` (YYYY-MM-DD); optional: `plan` and `tasks` (filenames of the
+  binding plan/tasks files), `gh_issue` (issue number), `epic` (a
+  free-text slug grouping related features for release-cadence-sized
+  bundling — declared and durable, distinct from the computed/ephemeral
+  plan-time "defrag" footprint analysis, a separate, unrelated backlog
+  idea). A feature's `status` asserts what is true of the system NOW,
+  not what was once reached: `retired` is the terminal state for a
+  feature that shipped and was then deliberately removed — it never
+  flips back out. `rejected` is a distinct terminal state for a
+  `backlogged` or `planned` idea the team decides not to pursue and
+  that never gets built. `subsumed` is a third terminal state for an
+  entry whose scope ended up shipping under a *different* feature/plan
+  entry — not independently built under this slug, not removed; a
+  `subsumed` entry should record the absorbing plan/feature (via its
+  `plan:` field or a body note) so a future reader can trace where the
+  scope actually landed. Keep all three distinct: `retired` means it
+  shipped once (under this slug) then was removed; `rejected` means it
+  never shipped at all; `subsumed` means it shipped, just credited to a
+  different entry. `subsumed` is deliberately not named `superseded` —
+  that word is already used for a *plan's* status (a newer plan
+  replacing an older unapproved one for the *same* feature, a
+  same-document one-for-one replacement) and would collide semantically
+  with this different-shaped, cross-feature absorption case. Body: a
   one-sentence description, optionally followed by a `Why:` line.
   Register-wide views are produced by enumeration (glob), never by a
   second hand-maintained index file. This decision was made explicitly
@@ -565,4 +617,4 @@ standing decisions — each is a per-project operational setting, written by
 does not require a Sync Impact Report or a version increment, and does not
 itself update `last_updated`.
 
-**Version**: 1.11.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-17
+**Version**: 1.12.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-19
