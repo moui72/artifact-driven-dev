@@ -54,7 +54,7 @@ status: in-progress
 
 ## Phase 3: F001 coverage verification
 
-- [ ] T005 [parallel] Verify the dual-tag stable-preference coverage
+- [x] T005 [parallel] Verify the dual-tag stable-preference coverage
   from fix `c7cb703`: inspect `scripts/test-install-channel-default.sh`
   and `scripts/test-install-gitattributes.sh`/siblings for a case
   pinning "source HEAD carries BOTH a stable and a beta tag → recorded

@@ -79,4 +79,19 @@ else
   bad "case3: previously-recorded Channel: beta preserved with ARDD_CHANNEL unset"
 fi
 
+# --- Case 4: source HEAD carries BOTH a stable and a beta tag (the state
+# right after a stable cut, where HEAD still carries the beta it was
+# promoted from) -> recorded Source-Ref: is the stable tag, never the beta
+# (c7cb703 fix: git describe --exact-match picks non-deterministically) ---
+git -C "$SRC" tag v1.0.0
+target="$(new_target case4)"
+run_install "$target"
+vf="$target/.project/ardd-version.md"
+if grep -q '^Source-Ref: v1.0.0$' "$vf" 2>/dev/null; then
+  ok "case4: dual-tagged HEAD records the stable tag as Source-Ref"
+else
+  bad "case4: dual-tagged HEAD records the stable tag as Source-Ref"
+  cat "$vf" 2>/dev/null || echo "(no version file)"
+fi
+
 exit "$fail"
