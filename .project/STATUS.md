@@ -1,6 +1,22 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (`/ardd-plan` — consumed
+`feedback-amend-path-for-skill-written-files-2187.md` (both items
+accepted, file now `planned`): drafted, approved, and tasked
+`plan-amend-path-policy-2026-07-20-3c72.md` — 5 tasks/2 phases in
+`tasks-amend-path-policy-c18f.md` (`ready`). Design decision: F001's
+amend-path gap resolved by a **narrow factual-corrections exemption**
+(body-prose fixes to citations/paths/symbols/typos are hand-editable;
+frontmatter/lifecycle state and decisions never are), stated canonically
+in `templates/dot-project-readme.md` and echoed in
+ardd-feedback/ardd-plan prose, `docs/reference/project-files.md`,
+README, CLAUDE.md — explicitly NOT new `--amend` machinery (judgment
+below the deterministic bar). Phase 2: F002 citation-rot sweep — skill
+prose switches to symbol-preferred code citations. No feature slugs
+(`features: []`). Committed to `main` (793d2ed).
+`feedback-badge-workflow-yaml-ff0c.md` deliberately left `open` for a
+separate run. Prior update, same day, `/ardd-implement` coordinator —
+the delegated
 `dot-project-reviewer-guide` worktree run completed all 15 tasks and
 merged (`ort`, no conflicts — merge commit `fbcbbce`, signed); worktree
 reaped; dogfooded install refreshed via `./install.sh .` (the
@@ -1624,14 +1640,14 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open — `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX: the
+1 open — `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX: the
 invalid-YAML badge workflow template with verified fix, a column-0
 heredoc template sweep, branch-filter/`workflow_dispatch` hardening,
-`[skip ci]`), drained 2026-07-20 by `/inbox-drain`'s first live run;
-and `feedback-amend-path-for-skill-written-files-2187.md` (2 UX:
+`[skip ci]`), drained 2026-07-20 by `/inbox-drain`'s first live run.
+Delivered today: `feedback-amend-path-for-skill-written-files-2187.md` (2 UX:
 the amend-path gap for skill-written files; line-citation rot), drained
-2026-07-20 from an out-of-band inbox note; picked up by the next
-`/ardd-plan`. Correction: `feedback-repo-critique-6ad1.md`, previously
+2026-07-20 from an out-of-band inbox note, now `planned` — consumed by
+`plan-amend-path-policy-2026-07-20-3c72.md`. Correction: `feedback-repo-critique-6ad1.md`, previously
 reported here as deliberately-left-open, is actually `planned` —
 consumed by `plan-ardd-state-determinism-2026-07-06.md` (2026-07-06).
 Delivered today: `feedback-next-step-prompt-dontask-20da.md`
@@ -1712,18 +1728,29 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-amend-path-policy-c18f.md` (`ready`) — plan
+  `plan-amend-path-policy-2026-07-20-3c72.md`, no bound features
+  (`features: []`). Sole ready file, nothing in flight —
+  `parallel-matrix.sh` is silent with fewer than two participants; no
+  pair verdicts to report. (`independent` would mean no declared
+  overlap only, not conflict-free.)
+
 ## In Flight
 
 Nothing on a worktree (the reviewer-guide worktree merged and was
 reaped). `main` is ahead of `origin/main` (unpushed commits since the
-last push, now including the merged reviewer-guide/auto-prompt batch).
+last push, now including the merged reviewer-guide/auto-prompt batch
+and the amend-path plan).
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume both open feedback files
-(`feedback-badge-workflow-yaml-ff0c.md` — the invalid-YAML badge
-workflow template is consumer-facing and worth fixing promptly — and
-`feedback-amend-path-for-skill-written-files-2187.md`). Also standing: push `main` to publish the accumulated batch as
+`/ardd-implement` to execute `tasks-amend-path-policy-c18f.md` (5
+tasks, 2 phases — the factual-corrections exemption + citation-rot
+sweep). Then `/ardd-plan feedback-badge-workflow-yaml-ff0c.md` — the
+invalid-YAML badge workflow template is consumer-facing and worth
+fixing promptly. Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
