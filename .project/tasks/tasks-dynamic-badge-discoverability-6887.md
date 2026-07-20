@@ -53,7 +53,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: skill prose
 
-- [ ] T003 Edit `skills/ardd-update/SKILL.md`: at the step where
+- [x] T003 Edit `skills/ardd-update/SKILL.md`: at the step where
   install.sh output/suggestions are relayed to the user (step 4's
   suggestion-relay point — confirm against the file's current
   structure), add an offer: when the target's README lacks
