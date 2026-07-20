@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Make the workflow template real (ff0c)
 
-- [ ] T001 Create `scripts/lint-templates-yaml.sh` (source-side, POSIX
+- [x] T001 Create `scripts/lint-templates-yaml.sh` (source-side, POSIX
   sh): YAML-parse every `templates/*.yml` and `.github/workflows/*.yml`
   via `python3 -c 'import sys,yaml; yaml.safe_load(open(sys.argv[1]))'`,
   reporting each failing file with the parser error; when `python3` or
