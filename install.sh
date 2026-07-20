@@ -407,13 +407,41 @@ case "$CHANNEL" in
     esac
     ;;
 esac
+# Record Source-Path portably: when the source checkout sits under $HOME,
+# write it home-relative (~/<rest>) so the committed file carries no
+# machine-specific absolute path (readers — source-resolve.sh,
+# ardd-update-check.sh — expand the leading ~). Outside $HOME the absolute
+# path is kept: there is nothing portable to relativize against.
+case "$SCRIPT_DIR" in
+  "$HOME"/*) SOURCE_PATH_RECORD="~${SCRIPT_DIR#"$HOME"}" ;;
+  *)         SOURCE_PATH_RECORD="$SCRIPT_DIR" ;;
+esac
+# Legacy repair: a pre-portability install recorded an absolute Source-Path.
+# When the existing file's path sits under the current $HOME, this write
+# rewrites it to the ~/ form — but the old absolute path is already in the
+# consumer's git history. Repairing history (rewrite/squash before sharing,
+# or accepting the leak) is the user's call; the rewrite itself is left
+# uncommitted here, like every other install.sh write.
+PREV_SOURCE_PATH=""
+[ -f "$VERSION_FILE" ] && PREV_SOURCE_PATH="$(sed -n 's/^Source-Path: //p' "$VERSION_FILE" | head -1)"
+case "$PREV_SOURCE_PATH" in
+  "$HOME"/*)
+    echo ""
+    echo "  ⚠ This target's .project/ardd-version.md recorded a machine-specific"
+    echo "    absolute Source-Path ($PREV_SOURCE_PATH)."
+    echo "    It is being rewritten to the portable ~/ form, but the old absolute"
+    echo "    path remains in this repo's git history. Repairing history is your"
+    echo "    call — rewrite/squash before sharing the repo, or accept the leak."
+    echo "    Recommendation: if the history is already public, just accept it."
+    ;;
+esac
 mkdir -p "$(dirname "$VERSION_FILE")"
 cat > "$VERSION_FILE" <<EOF
 # ArDD Version
 
 _Source: artifact-driven-dev @ $COMMIT · Installed/updated ${DATE}_
 
-Source-Path: $SCRIPT_DIR
+Source-Path: $SOURCE_PATH_RECORD
 $SOURCE_COMMIT_LINE${SOURCE_REF_LINE}Channel: $CHANNEL
 
 This file is committed so the project's history shows which ArDD skill

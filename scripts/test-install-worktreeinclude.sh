@@ -105,8 +105,10 @@ case "$out" in
   *) ok "badge: silent when README missing" ;;
 esac
 
-# --- Case 1a3: Source-Path recorded in ardd-version.md, absolute, once
-# (and still exactly once after the second install in case 1a2) ---
+# --- Case 1a3: Source-Path recorded in ardd-version.md, portable, once
+# (and still exactly once after the second install in case 1a2).
+# Home-relative (~/<rest>) when the source sits under $HOME, absolute
+# otherwise — shape details pinned by test-install-source-path.sh. ---
 vf="$target/.project/ardd-version.md"
 sp_count="$(grep -c '^Source-Path: ' "$vf" 2>/dev/null || true)"
 if [ "$sp_count" = "1" ]; then
@@ -116,8 +118,10 @@ else
 fi
 sp_val="$(sed -n 's/^Source-Path: //p' "$vf" | head -1)"
 case "$sp_val" in
+  "~/"*) sp_dir="$HOME${sp_val#\~}"
+         [ -d "$sp_dir" ] && ok "version file: Source-Path home-relative and exists" || bad "version file: Source-Path dir missing: $sp_val" ;;
   /*) [ -d "$sp_val" ] && ok "version file: Source-Path absolute and exists" || bad "version file: Source-Path dir missing: $sp_val" ;;
-  *) bad "version file: Source-Path not absolute: '$sp_val'" ;;
+  *) bad "version file: Source-Path not portable: '$sp_val'" ;;
 esac
 
 # --- Case 1a4: Source-Ref recorded when the source HEAD is exactly at a

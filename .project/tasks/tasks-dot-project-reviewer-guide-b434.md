@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Source-Path portability
 
-- [ ] T001 Edit `install.sh` (~line 416) so the `Source-Path:` it writes into
+- [x] T001 Edit `install.sh` (~line 416) so the `Source-Path:` it writes into
   the target's `.project/ardd-version.md` is home-relative — when
   `$SCRIPT_DIR` sits under `$HOME`, record it as `~/<rest>`; otherwise keep
   the absolute path. POSIX `sh` only (prefix match on `$HOME/`, no bashisms).
@@ -22,7 +22,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `$HOME/` after the `sed` extraction, never via eval. Extend
   `scripts/test-source-resolve.sh` with a `~`-recorded fixture case, same
   commit.
-- [ ] T003 Legacy repair in `install.sh`: when re-installing over a target
+- [x] T003 Legacy repair in `install.sh`: when re-installing over a target
   whose existing `.project/ardd-version.md` records an absolute
   `Source-Path` under the current `$HOME`, rewrite it to the portable `~/`
   form and print a notice that the old absolute path remains in the
