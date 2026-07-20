@@ -1,6 +1,23 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-plan feedback-sweep-coverage-expansion-3452.md`
+_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+`sweep-coverage-expansion` worktree run completed all 5 tasks and
+merged fast-forward (`d22d620`); worktree reaped; lint-docs green on
+`main`. Shipped: S1 gained badge steps 6-9 (fake remote, real
+coordinates, no-reprint, opt-in mention, wrong-badge advisory; kept in
+smoke — cheap, no network); S5 gained the bare `/ardd-plan` picker
+step (the unselected feature staying `backlogged` is itself a check);
+S7 gained `--view` with a before/after `shasum` byte-identity check on
+STATUS.md and a full-tier-only `constitution --review` step (S7 has no
+per-step tier convention, so it's a prose gate); S8 gained pre-flight
+Work Queue verdict checks (`independent`, `features: []` → `none`),
+picker matrix annotations, and the in-flight `claimed` check; and the
+prerelease-sweep SKILL.md now carries the graduation mechanism —
+step-3 `never-graduated:` RUN.md lines (grep-and-judge, no script) and
+the step-6 mandatory `graduate ∈ yes/no/n-a` TRIAGE.md column with
+anti-bloat criteria, mirrored in tests/prerelease/README.md. No
+feature flips (`features: []`). The next sweep run exercises the new
+briefs. Prior update, same day, `/ardd-plan feedback-sweep-coverage-expansion-3452.md`
 — consumed the sweep-coverage feedback (all 6 items accepted, file now
 `planned`): drafted, approved, and tasked
 `plan-sweep-coverage-expansion-2026-07-20-d493.md` — 5 tasks/2 phases
@@ -1541,27 +1558,20 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
-## Work Queue
-
-- `tasks-sweep-coverage-expansion-36eb.md` — plan
-  `plan-sweep-coverage-expansion-2026-07-20-d493.md`, features: none
-  (`features: []`). The only `ready` tasks file and nothing in flight,
-  so `parallel-matrix.sh` has no pairs to report.
-
 ## In Flight
 
-Nothing — the `dynamic-badge-discoverability` worktree merged
-(`09abad7`) and was reaped. `main` is ahead of `origin/main` (unpushed
-commits since the last push). `main` is ahead of `origin/main` (unpushed commits
+Nothing — the `sweep-coverage-expansion` worktree merged (`d22d620`)
+and was reaped, following `dynamic-badge-discoverability` (`09abad7`)
+earlier. `main` is ahead of `origin/main` (unpushed commits since the
+last push). `main` is ahead of `origin/main` (unpushed commits
 since the last push).
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute
-`tasks-sweep-coverage-expansion-36eb.md` (5 tasks/2 phases, `ready`) —
-the four scenario-brief extensions plus the sweep skill's graduation
-mechanism. Also worth considering: push `main` to publish the badge
-fixes on the beta channel. Other standing options: v1.0.1 is out and the sweep loop is closed;
+Push `main` to publish the accumulated work (badge fixes +
+sweep-coverage expansion) on the beta channel; a targeted
+`/prerelease-sweep S1` afterward would exercise the new badge brief
+against the real acquisition path. Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
