@@ -1,7 +1,7 @@
 ---
 plan: plan-badge-guards-2026-07-20-8b60.md
 generated: 2026-07-20
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -27,7 +27,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Fix
 
-- [ ] T002 In install.sh's badge section, add marker-family detection (a
+- [x] T002 In install.sh's badge section, add marker-family detection (a
   small helper or case block identifying which of `ardd-badge-start`,
   `ardd-badge-version-start`, `ardd-badge-pair-start` the README
   carries — beware substring overlap: `ardd-badge-start` naively greps
