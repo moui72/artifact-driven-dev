@@ -41,7 +41,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Citation-rot sweep (F002)
 
-- [ ] T004 Sweep `skills/*/SKILL.md` and `templates/artifacts/*.md` for
+- [x] T004 Sweep `skills/*/SKILL.md` and `templates/artifacts/*.md` for
   prose that instructs the agent to record a code location (start from
   `grep -rn 'file/l\|line number\|file/location\|location reference'
   skills/ templates/` and read around each hit — at minimum

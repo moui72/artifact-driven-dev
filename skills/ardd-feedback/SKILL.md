@@ -47,7 +47,9 @@ notes in the next message.
    their judgment as final for this run).
 
 3. **Tag each item** with the artifact(s) it touches, if identifiable (e.g.
-   `[artifacts: ui]`), and a file/location reference if the user gave one.
+   `[artifacts: ui]`), and a code reference if the user gave one — prefer
+   path + symbol name (function, script, section heading) over bare line
+   numbers, which rot; a line number may accompany the symbol as a hint.
    Leave untagged if genuinely unclear — don't force a guess.
 
    For **Reconsidered** items specifically, check whether the reversed

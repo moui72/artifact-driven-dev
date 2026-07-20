@@ -52,7 +52,10 @@ lose it. Do not silently ignore the argument and run anyway.
    request/response shapes, stated principles are actually upheld.
 
 3. **Record every mismatch** as a defect: which artifact, which specific
-   claim, what the code actually does, file/line references, and a
+   claim, what the code actually does, location references — prefer
+   path + symbol name (function, script, section heading), which stays
+   valid as code moves; add a line number only as a supplementary hint —
+   and a
    severity/confidence note if useful (e.g., cosmetic drift vs. a broken
    contract).
 
@@ -84,7 +87,7 @@ lose it. Do not silently ignore the argument and run anyway.
    ## <artifact>.md
    - **Claim:** <what the artifact says>
      **Actual:** <what the code does>
-     **Location:** <file:line>
+     **Location:** <path + symbol name; line number optional as a hint>
      **Severity:** <cosmetic / drift / broken-contract>
 
    (repeat per defect, grouped by artifact)
