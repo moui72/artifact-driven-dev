@@ -56,7 +56,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   accordingly. Verify with `lint-templates-yaml.sh` green + the
   extracted-run-script check emitting valid JSON containing both new
   fields.
-- [ ] T005 Extend `scripts/test-install-version-badge.sh` for the new
+- [x] T005 Extend `scripts/test-install-version-badge.sh` for the new
   behavior: opted-in installs receive `templates/ardd-icon.svg` (at the
   path T004's workflow reads), and the seeded/generated badge JSON
   carries `labelColor` and `logoSvg`. Red-first where practical; suite
