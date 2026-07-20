@@ -488,6 +488,23 @@ if [ -f "$TARGET/README.md" ] \
   echo "    templates/badge.md in the ArDD source for the endpoint snippet shape)."
 fi
 
+# Marker-family detection: which badge form (if any) the README already
+# carries. Word-exact matches on the full marker tokens — the three tokens
+# share the `ardd-badge-` prefix, so a naive substring grep for one can
+# be shadowed by another; check the two longer tokens first and bound
+# every match so e.g. `ardd-badge-start` never matches inside a longer
+# token or a hyphenated neighbor.
+BADGE_FAMILY=""
+if [ -f "$TARGET/README.md" ]; then
+  if grep -qE '(^|[^[:alnum:]_-])ardd-badge-version-start([^[:alnum:]_-]|$)' "$TARGET/README.md"; then
+    BADGE_FAMILY="version"
+  elif grep -qE '(^|[^[:alnum:]_-])ardd-badge-pair-start([^[:alnum:]_-]|$)' "$TARGET/README.md"; then
+    BADGE_FAMILY="pair"
+  elif grep -qE '(^|[^[:alnum:]_-])ardd-badge-start([^[:alnum:]_-]|$)' "$TARGET/README.md"; then
+    BADGE_FAMILY="static"
+  fi
+fi
+
 if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
     echo ""
     BADGE_WORKFLOW="$TARGET/.github/workflows/ardd-badge.yml"
@@ -545,10 +562,18 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       echo "  – .github/badges/ardd-version.json (already exists, left untouched)"
     fi
 
-    # Snippet print, guarded like the static branch (F003): a README that
-    # already carries the version-badge markers doesn't need the paste-this
-    # suggestion again. Supporting-file writes above still ran.
-    if ! grep -q 'ardd-badge-version-start' "$TARGET/README.md"; then
+    # Snippet print, guarded on the detected marker family (F003 + S9
+    # F002): version markers → already adopted this exact shape, stay
+    # silent about the snippet; pair/static markers → already badged in
+    # another shape, print a short switch-shapes note instead of the
+    # duplication-inviting full paste block. Supporting-file writes above
+    # still ran in every case.
+    if [ "$BADGE_FAMILY" = "pair" ] || [ "$BADGE_FAMILY" = "static" ]; then
+      echo ""
+      echo "  README is already badged via $BADGE_FAMILY markers — see templates/badge.md"
+      echo "  in the ArDD source if you want to switch to the dynamic version-badge shape."
+      echo ""
+    elif [ -z "$BADGE_FAMILY" ]; then
       # Coordinate fill (F002): derive OWNER/REPO from the target's own
       # origin remote (https and SSH GitHub shapes) and BRANCH from HEAD
       # (fallback main); on any parse failure keep the placeholders and
@@ -584,7 +609,14 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       echo "  raw.githubusercontent.com unauthenticated."
       echo ""
     fi
-elif [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
+elif [ -f "$TARGET/README.md" ] && [ -n "$BADGE_FAMILY" ]; then
+    # S9 F001: any marker family present → the project is already badged;
+    # suppress the static suggestion, acknowledge the found form instead
+    # (matters doubly because /ardd-update runs install.sh env-unset and
+    # relays this output verbatim).
+    echo ""
+    echo "  README is already badged via $BADGE_FAMILY markers — nothing to add."
+elif [ -f "$TARGET/README.md" ]; then
     echo ""
     echo "Optional: add a \"built with ArDD\" badge to your README — paste this snippet:"
     echo ""
@@ -592,12 +624,17 @@ elif [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.
     echo ""
     echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic split version badge."
     echo ""
-elif [ ! -f "$TARGET/README.md" ]; then
+else
     # F001: no README yet (a fresh new.sh project) — the opt-in would
     # otherwise never be mentioned. Pointer only, never the snippet:
-    # there's no README to paste it into yet.
+    # there's no README to paste it into yet. S9 F003: if the flag is
+    # already set, acknowledge it instead of re-suggesting it.
     echo ""
-    echo "  Once this project has a README.md, re-run install with ARDD_VERSION_BADGE=1 to add a dynamic version badge."
+    if [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
+      echo "  ARDD_VERSION_BADGE=1 is set, but this project has no README.md yet — create a README and re-run install to add the dynamic version badge."
+    else
+      echo "  Once this project has a README.md, re-run install with ARDD_VERSION_BADGE=1 to add a dynamic version badge."
+    fi
 fi
 
 # --- .project/.lock gitignore entry ---
