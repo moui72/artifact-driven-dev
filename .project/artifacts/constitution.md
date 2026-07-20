@@ -1,6 +1,28 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.12.0 → 1.12.1 (PATCH — wording clarification only; no
+principle or standing-decision change.)
+
+Rationale: `/ardd-plan dot-project-reviewer-guide next-step-prompt-auto`
+(2026-07-20). The `next_step_prompt` workflow field gains a third enum
+value, `auto` (schema-of-record: `scripts/lint-project.sh`, widened in
+the implementing commit — per the Governance Exception, the field's
+values are not constitution content and need no entry here). The only
+constitution prose describing the field's behavior is Multi-harness
+substitution item 4, which covered only the prompt (`true`) degradation;
+clarified that `auto` (auto-run, no prompt primitive needed) carries
+over to Codex unchanged.
+
+Modified sections: Multi-harness install, substitution item 4. Footer
+version updated.
+
+Previous SIR (1.11.1 → 1.12.0) follows below, preserved for history.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 1.11.1 → 1.12.0 (MINOR — schema-widening: two new
 terminal status values on the feature register's status enum.)
 
@@ -221,7 +243,7 @@ revision.
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-19
+last_updated: 2026-07-20
 
 next_step_prompt: true
 delegation: eager
@@ -379,8 +401,10 @@ through skill prose:
    tool.
 3. `.worktreeinclude` gitignored-file copy → not carried over pending
    verification of Codex's own worktree file-copy behavior.
-4. `next_step_prompt`'s one-keypress offer → a plain-text next-step
-   suggestion.
+4. `next_step_prompt`'s one-keypress offer (`true`) → a plain-text
+   next-step suggestion. The `auto` value carries over unchanged — it
+   auto-runs a concrete runnable recommendation and needs no prompt
+   primitive on either harness.
 5. The `/ardd-X` invocation sigil → rewritten to `$ardd-X` (Codex's
    exact-name invocation channel; its `/`-commands are a fixed built-in
    set that cannot be extended, confirmed against Codex issue #11817).
@@ -617,4 +641,4 @@ standing decisions — each is a per-project operational setting, written by
 does not require a Sync Impact Report or a version increment, and does not
 itself update `last_updated`.
 
-**Version**: 1.12.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-19
+**Version**: 1.12.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-20
