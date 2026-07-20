@@ -1,7 +1,7 @@
 ---
 plan: plan-sweep-coverage-expansion-2026-07-20-d493.md
 generated: 2026-07-20
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
