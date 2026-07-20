@@ -1,6 +1,22 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-feedback`, third pass — vetted the
+_Updated: 2026-07-20 (`/ardd-plan` — consumed both open feedback
+files (`20da`, `19ce` — all 5 items accepted; both now `planned`) and
+targeted `dot-project-reviewer-guide` + `next-step-prompt-auto`:
+drafted, approved, and tasked
+`plan-dot-project-reviewer-guide-2026-07-20-ee87.md` — 15 tasks/4
+phases in `tasks-dot-project-reviewer-guide-b434.md` (`ready`). Phase
+1: portable home-relative `Source-Path` (install.sh writer, `~`-expanding
+readers, legacy rewrite + history advice, leak-class sweep). Phase 2:
+`next_step_prompt` enum widened to `true|false|auto` (lint enum + the
+two prompting skills; denied AskUserQuestion = decline, never
+retry/abort). Phase 3: plans decided as static historical records — no
+checkboxes, no restated derivable counts. Phase 4 (after 3): the
+installed `.project/` reviewer guide + `ardd-version.md` pointer.
+Constitution bumped to v1.12.1 (PATCH — Codex substitution item 4
+covers `auto`). Both features flipped `backlogged→tasked`. Committed to
+`main` (1802b2c). `repo-critique-6ad1` deliberately left open. Prior
+update, same day, `/ardd-feedback`, third pass — vetted the
 "couple next_step_prompt to the harness permission mode" idea and
 logged the recommended shape instead: new backlog entry
 `next-step-prompt-auto` (`backlogged`) — a third enum value `auto`
@@ -1545,7 +1561,7 @@ Keep this current as artifacts are refined and open questions are resolved._
 
 | Artifact | Status | Open questions |
 |---|---|---|
-| constitution.md | stable ✅ (v1.12.0; `delegation: eager`, `merge_policy: auto`) | — |
+| constitution.md | stable ✅ (v1.12.1; `delegation: eager`, `merge_policy: auto`) | — |
 
 ## Open Questions
 
@@ -1563,15 +1579,12 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open — `feedback-next-step-prompt-dontask-20da.md` (1 UX): denied
-AskUserQuestion under dontAsk mode must read as decline in the two
-next_step_prompt skills. And `feedback-source-path-portability-19ce.md` (2 bugs, 1 UX,
-1 Reconsidered): install.sh's machine-specific `Source-Path` in
-committed consumer metadata (+ options and a leak-class sweep),
-`/ardd-update` legacy-form rewrite/history-repair advisory, /ardd-plan
-prose-count-vs-enumeration drift, and the plan-checkbox
-static-vs-live-mirror convention decision. Picked up by the next
-`/ardd-plan`. Delivered earlier:
+1 open — `feedback-repo-critique-6ad1.md`, deliberately left for a
+later run. Delivered today: `feedback-next-step-prompt-dontask-20da.md`
+(1 UX) and `feedback-source-path-portability-19ce.md` (2 bugs, 1 UX,
+1 Reconsidered) are now `planned`, consumed by
+`plan-dot-project-reviewer-guide-2026-07-20-ee87.md` — see the
+`_Updated` note above. Delivered earlier:
 `feedback-s1-badge-followups-5e84.md` (2 UX items) is now
 `planned`, consumed by `plan-s1-badge-followups-2026-07-20-9667.md`.
 Delivered earlier:
@@ -1622,19 +1635,14 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-3 backlogged · 29 implemented · 1 retired — see
+1 backlogged · 2 tasked · 29 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
+Tasked (bound to `tasks-dot-project-reviewer-guide-b434.md`):
+- `next-step-prompt-auto` — third `next_step_prompt` enum value `auto`.
+- `dot-project-reviewer-guide` — the installed "how to read
+  `.project/`" reviewer orientation note.
 Backlogged:
-- `next-step-prompt-auto` — third `next_step_prompt` enum value `auto`:
-  auto-run the recommended next step when it's a concrete `/ardd-*`
-  invocation (the vetted, harness-agnostic alternative to
-  permission-mode coupling).
-- `dot-project-reviewer-guide` — a "how to read `.project/`"
-  orientation note for downstream AI reviewer configs (generated vs
-  authored, static-record vs live files, single-writer conventions), so
-  consumer-PR reviewers stop flagging false inconsistencies (re-filed
-  from the 2026-07-20 CodeRabbit feedback pass).
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
   report plus the de-risking spike (both GO). Still `backlogged`: a plan
@@ -1643,7 +1651,6 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-Target a backlogged slug with `/ardd-plan <slug>`.
 Newest implemented: `work-queue-parallel-safety` and
 `rejected-feature-status` — see the `_Updated` notes above.
 
@@ -1655,36 +1662,32 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-dot-project-reviewer-guide-b434.md` (`ready`, 0/15) — plan
+  `plan-dot-project-reviewer-guide-2026-07-20-ee87.md`, features
+  `dot-project-reviewer-guide`, `next-step-prompt-auto`. Sole ready
+  file, nothing in flight — `parallel-matrix.sh` is silent with fewer
+  than two participants; no pair verdicts to report. (`independent`
+  would mean no declared overlap only, not conflict-free.)
+
 ## In Flight
 
-Nothing — the `sweep-coverage-expansion` worktree merged (`d22d620`)
-and was reaped, following `dynamic-badge-discoverability` (`09abad7`)
-earlier. `main` is ahead of `origin/main` (unpushed commits since the
-last push). `main` is ahead of `origin/main` (unpushed commits
-since the last push).
+Nothing on a worktree. `main` is ahead of `origin/main` (unpushed
+commits since the last push, now including today's plan/tasks batch).
 
 ## Recommended Next Step
 
-`/ardd-plan` to consume the open
-`feedback-source-path-portability-19ce.md` (portable `Source-Path` +
-`/ardd-update` legacy rewrite). Also standing: push `main` to publish
-the unpushed batch (scenario-sweep rename +
-S1 badge follow-up fixes) as the next beta; then dispatch
-`stable-release.yml` (`bump: patch`) when ready for stable v1.0.2 to
-carry the full badge arc. Other standing options: v1.0.1 is out and the sweep loop is closed;
-update the consumer repos (`/ardd-update` in atelier etc. now resolves
-the fixed stable); pick up the three taste-deferred UX notes from
-runs 51a7/e33f if any start to grate; or plan the remaining backlog
-(`codex-second-harness-support`) and the off-target research file
-(`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
-framing) that's superseded in spirit but left on disk — not consumed by
-any plan. `codex-second-harness-support` is drafted-but-untasked:
-`/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`
-(Phase 1 is a blocking live skill-to-skill-chaining smoke test on a real
-Codex CLI — the true final go/no-go — before Phases 2–5's install-time
-substitution work proceeds). Standing options otherwise unchanged: the
-new `/prerelease-sweep smoke|full|S<n>` exercise (once reviewed and
-committed); dispatch the stable release workflow when consumers should
-get the accumulated `main` work; resolve the remaining
-`.project/audit.md` suggestion; or `/ardd-defects` to re-verify against
-the docs-site and skill-prose surfaces.
+`/ardd-implement` to execute `tasks-dot-project-reviewer-guide-b434.md`
+(15 tasks, 4 phases — source-path portability, `next_step_prompt: auto`
++ denial degradation, plan-record conventions, the installed reviewer
+guide). Also standing: push `main` to publish the accumulated batch as
+the next beta, then dispatch `stable-release.yml` when ready;
+`/ardd-defects` to refresh the 2026-07-12 seventh pass against the
+enlarged surface; the remaining open feedback
+(`feedback-repo-critique-6ad1.md`) and `codex-second-harness-support`
+(`/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`,
+gated on its Phase 1 live smoke test) wait for later runs; the
+off-target research file
+(`research-docs-freshness-skill-2026-07-18.md`) is still unconsumed on
+disk; and the one `.project/audit.md` suggestion remains open.
