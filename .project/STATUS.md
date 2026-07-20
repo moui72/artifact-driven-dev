@@ -1,6 +1,23 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/inbox-drain` + `/ardd-feedback` — first live
+_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+`dot-project-reviewer-guide` worktree run completed all 15 tasks and
+merged (`ort`, no conflicts — merge commit `fbcbbce`, signed); worktree
+reaped; dogfooded install refreshed via `./install.sh .` (the
+home-relative `Source-Path: ~/dev/artifact-driven-dev` and the new
+`.project/README.md` reviewer guide are now live in this repo's own
+install). Shipped: install.sh records `Source-Path` home-relative with
+`~`-expanding readers + legacy-absolute rewrite and history-leak notice
+(leak sweep: nothing beyond Source-Path); `next_step_prompt` enum
+widened to `true|false|auto` (auto-runs a concrete `/ardd-*`
+recommendation; denied prompt = decline) across lint/stamp/skills/docs;
+plans codified as static records (no checkboxes, no derivable counts);
+`templates/dot-project-readme.md` reviewer guide installed to
+`.project/README.md` with an `ardd-version.md` pointer. New
+`test-install-source-path.sh` + CI job. Both features
+(`dot-project-reviewer-guide`, `next-step-prompt-auto`):
+`tasked` → `implemented`. Prior update, same day,
+`/inbox-drain` + `/ardd-feedback` — first live
 run of the new source-side `/inbox-drain` skill (committed `86ee84c`):
 drained one item from `~/dev/.ardd-data/inbox/artifact-driven-dev/`
 into `feedback-badge-workflow-yaml-ff0c.md` (`open`, 1 bug + 3 UX):
@@ -1672,13 +1689,9 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 2 tasked · 29 implemented · 1 retired — see
+1 backlogged · 31 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
-Tasked (bound to `tasks-dot-project-reviewer-guide-b434.md`):
-- `next-step-prompt-auto` — third `next_step_prompt` enum value `auto`.
-- `dot-project-reviewer-guide` — the installed "how to read
-  `.project/`" reviewer orientation note.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1688,8 +1701,8 @@ Backlogged:
   resume with `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`.
   Per the `--slate` run: solo-deferred, not a parallel-set candidate,
   gated on its own Phase 1 go/no-go.
-Newest implemented: `work-queue-parallel-safety` and
-`rejected-feature-status` — see the `_Updated` notes above.
+Newest implemented: `dot-project-reviewer-guide` and
+`next-step-prompt-auto` — see the `_Updated` note above.
 
 ## Audit
 
@@ -1699,33 +1712,15 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
-## Work Queue
-
-- `tasks-dot-project-reviewer-guide-b434.md` (`ready` in this checkout)
-  — plan `plan-dot-project-reviewer-guide-2026-07-20-ee87.md`, features
-  `dot-project-reviewer-guide`, `next-step-prompt-auto`:
-  - vs in-flight
-    `.claude/worktrees/agent-a72d4b59ff61c2df2`'s copy: **claimed by
-    in-flight worktree** — the same tasks file, ready here and
-    `in-progress` (12/15) there. Do not start it a second time.
-  (`independent` would mean no declared overlap only, not
-  conflict-free.)
-
 ## In Flight
 
-- Worktree `.claude/worktrees/agent-a72d4b59ff61c2df2` (branch
-  `worktree-agent-a72d4b59ff61c2df2`) —
-  `tasks-dot-project-reviewer-guide-b434.md` `in-progress`, 12/15. No
-  reap candidates (`worktree-reap.sh --dry-run` silent). `main` is
-  ahead of `origin/main` (unpushed commits since the last push,
-  including today's plan/tasks batch).
+Nothing on a worktree (the reviewer-guide worktree merged and was
+reaped). `main` is ahead of `origin/main` (unpushed commits since the
+last push, now including the merged reviewer-guide/auto-prompt batch).
 
 ## Recommended Next Step
 
-Let the in-flight delegated `dot-project-reviewer-guide` worktree run
-(12/15) finish; when it reports back, the coordinator merges eagerly and
-reaps. The tasks file is claimed — don't start it a second time. After
-merge, `/ardd-plan` to consume both open feedback files
+`/ardd-plan` to consume both open feedback files
 (`feedback-badge-workflow-yaml-ff0c.md` — the invalid-YAML badge
 workflow template is consumer-facing and worth fixing promptly — and
 `feedback-amend-path-for-skill-written-files-2187.md`). Also standing: push `main` to publish the accumulated batch as
