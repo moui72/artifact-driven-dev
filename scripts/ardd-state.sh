@@ -60,6 +60,7 @@ Deterministic state mutations for .project/ files. Subcommands:
   stamp <file> diagram_status <unrendered|stale|current>
   stamp <file> next_step_prompt <true|false>
   stamp <file> delegation <eager|ask|inline>
+  stamp <file> workflow_mode <solo|collaborative>
   stamp <file> merge_policy <auto|ask>
   stamp <file> plan_preview <always-browser|always-console|ask>
   stamp <file> update_check_max_age_days <positive integer>
@@ -346,6 +347,12 @@ cmd_stamp() {
         *) dieu "stamp: delegation must be eager|ask|inline, got '$val'" ;;
       esac
       ;;
+    workflow_mode)
+      case "$val" in
+        solo|collaborative) ;;
+        *) dieu "stamp: workflow_mode must be solo|collaborative, got '$val'" ;;
+      esac
+      ;;
     merge_policy)
       case "$val" in
         auto|ask) ;;
@@ -363,7 +370,7 @@ cmd_stamp() {
         0*|*[!0-9]*|'') dieu "stamp: update_check_max_age_days must be a positive integer (1, 2, ...), got '$val'" ;;
       esac
       ;;
-    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|merge_policy|plan_preview|update_check_max_age_days, got '$key'" ;;
+    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|update_check_max_age_days, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
   echo "stamp: $file $key = $val"

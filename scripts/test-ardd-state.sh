@@ -544,6 +544,24 @@ sh "$STATE" stamp "$CF" plan_preview sometimes >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: bad plan_preview refused" 2 "$rc"
 
+# stamp workflow_mode — enum-validated, add + replace [feedback: feedback-stamp-workflow-mode-ca7d F001]
+sh "$STATE" stamp "$CF" workflow_mode solo >/dev/null
+assert_file_grep "stamp: workflow_mode set solo" "^workflow_mode: solo" "$CF"
+fmend="$(grep -n '^---$' "$CF" | sed -n 2p | cut -d: -f1)"
+wline="$(grep -n '^workflow_mode:' "$CF" | cut -d: -f1)"
+[ "$wline" -lt "$fmend" ] && ok "stamp: workflow_mode inside frontmatter" || bad "stamp: workflow_mode inside frontmatter — line $wline vs closing --- at $fmend"
+sh "$STATE" stamp "$CF" workflow_mode collaborative >/dev/null
+assert_file_grep "stamp: workflow_mode replaced with collaborative" "^workflow_mode: collaborative" "$CF"
+[ "$(grep -c '^workflow_mode:' "$CF")" = "1" ] && ok "stamp: workflow_mode no duplicate keys" || bad "stamp: workflow_mode no duplicate keys"
+set +e
+werr="$(sh "$STATE" stamp "$CF" workflow_mode bogus 2>&1 >/dev/null)"; rc=$?
+set -e
+assert_exit "stamp: bad workflow_mode refused" 2 "$rc"
+case "$werr" in
+  *"workflow_mode must be solo|collaborative"*) ok "stamp: bad workflow_mode error names legal values" ;;
+  *) bad "stamp: bad workflow_mode error names legal values — got: $werr" ;;
+esac
+
 # stamp update_check_max_age_days — positive-integer-validated, add + replace
 sh "$STATE" stamp "$CF" update_check_max_age_days 7 >/dev/null
 assert_file_grep "stamp: update_check_max_age_days set 7" "^update_check_max_age_days: 7" "$CF"
