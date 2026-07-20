@@ -99,3 +99,6 @@ into a background `Agent` call, one per scenario.
   or misleads a subagent the same way a stale enum misleads the linter.
 - Anything learned operationally (new failure mode, new guardrail) goes
   into GUARDRAILS.md or this README, not a chat transcript.
+- Coverage graduation: dispatcher-stressed surfaces earn standing brief
+  lines via the sweep skill's triage step (prerelease-sweep SKILL.md,
+  step 6) — brief edits land through the fix plan, never mid-sweep.

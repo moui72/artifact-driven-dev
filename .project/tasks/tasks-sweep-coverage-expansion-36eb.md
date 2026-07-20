@@ -55,7 +55,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Graduation mechanism
 
-- [ ] T005 Edit `.claude/skills/prerelease-sweep/SKILL.md` per the
+- [x] T005 Edit `.claude/skills/prerelease-sweep/SKILL.md` per the
   plan's design-of-record (the 2026-07-19 audit proposal — its drafted
   prose, adjusted to the file's current wording): (a) step 3
   (dispatch): while deriving S3's recent-features list from `git log`

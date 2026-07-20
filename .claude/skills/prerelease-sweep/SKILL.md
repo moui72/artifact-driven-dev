@@ -56,6 +56,15 @@ prompt is, in order:
    local ArDD source checkout path; any dispatcher-supplied substitutions
    (S2/S7 clone source, S3's "recent features to stress" list — derive
    that list from `git log` since the last stable tag).
+
+   While deriving S3's list, also grep-and-judge each recent
+   consumer-facing surface against `tests/prerelease/scenarios/*.md` —
+   judge, don't slug-match: briefs deliberately don't name register
+   slugs verbatim, so decide whether some brief step genuinely
+   exercises the surface. Record every consumer-facing surface that has
+   no brief line despite having been through a prior sweep as a
+   `never-graduated: <surface>` line in RUN.md; these carry into
+   triage's Graduation step (step 6).
 3. The full text of `tests/prerelease/scenarios/S<n>.md`, verbatim.
 4. Closing reminder: "Report file first, append after every major step,
    scripted answers only — you have no AskUserQuestion tool."
@@ -92,13 +101,29 @@ not just on disk.
 When all are done, read every `S<n>-report.md` and write
 `dev-notes/prerelease-runs/<run_id>/TRIAGE.md`: one table row per
 finding — id, scenario, kind, one-liner, disposition ∈ accept /
-duplicate / harness-artifact / taste-defer. Harness artifacts (missing
+duplicate / harness-artifact / taste-defer, and a mandatory
+`graduate ∈ yes / no / n-a` column. Harness artifacts (missing
 AskUserQuestion, scratchpad/spend-limit incidents) never leave the
 triage table. Present the table to the user and get
 dispositions confirmed.
 
+**Graduation.** Every accepted finding on a dispatcher-stressed surface
+(one exercised only via dispatcher-supplied substitutions, not a standing
+brief line), and every `never-graduated:` carry-in from RUN.md, gets
+`graduate = yes` and produces a brief-coverage item in the consolidated
+`/ardd-feedback` capture below, naming the target scenario and the
+1–3-line step to add — extend an existing S<n> whose setup already
+provides the precondition; propose a new S-file only when no existing
+scenario's axes fit. Brief edits land via the fix plan and are validated
+by the regression rerun — never edit `tests/prerelease/` during the
+sweep itself. Criteria (anti-bloat): consumer-facing accepted findings
+only; taste-defers, harness artifacts, and source-side surfaces never
+graduate (`no` / `n-a`); smoke-tier additions must respect the ~1 hr
+smoke budget — costly steps go full-tier.
+
 Then, on the user's go-ahead only: run `/ardd-feedback` once with the
-accepted findings consolidated (this repo dogfoods its own `.project/`),
+accepted findings (including any graduation brief-coverage items)
+consolidated (this repo dogfoods its own `.project/`),
 and remind that the normal next loop is `/ardd-plan` → fixes →
 regression rerun (`/prerelease-sweep S<the affected ones>`).
 
