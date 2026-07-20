@@ -1,6 +1,23 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (`/ardd-plan` badge slate — consumed both open
+badge feedback files (`ff0c` 1 bug + 3 UX, `bf75` 1 UX — all 5 items
+accepted, both now `planned`) and targeted the three badge features:
+drafted, approved, and tasked `plan-badge-slate-2026-07-20-e059.md` —
+7 tasks/3 phases in `tasks-badge-slate-658d.md` (`ready`). Phase 1
+(test-first): new `lint-templates-yaml.sh` (YAML-parse over shipped
+templates + workflows, red on the currently-broken badge template) +
+the verified heredoc-indent fix, `branches: [main]` +
+`workflow_dispatch`, `[skip ci]`. Phase 2: brand hex (proposed
+`#7C3AED`) published + emitted as `labelColor`; `templates/
+ardd-icon.svg` created and inlined as `logoSvg` (file-read at
+generation, never escaped-SVG-in-heredoc); badge install test
+extended. Phase 3: `badge.md` split-badge variant (recommended
+default), pair kept, renderer endpoint-vs-dynamic-JSON caveat;
+install.sh snippet + docs. Open questions carried: final brand hex;
+split-as-printed-default. All three features `backlogged→tasked`.
+Committed to `main` (59cc519). Prior update, same day,
+`/ardd-implement` coordinator — the delegated
 `amend-path-policy` worktree run completed all 5 tasks and merged
 (`ort`, no conflicts — merge commit `05d3978`); worktree reaped;
 dogfooded install refreshed. Shipped: the **factual-corrections
@@ -1670,13 +1687,15 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open — `feedback-badge-renderer-caveat-bf75.md` (1 UX: `badge.md`'s
-endpoint-vs-dynamic-JSON renderer caveat, drained 2026-07-20) and
-`feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX: the
+None open. Delivered today: `feedback-badge-renderer-caveat-bf75.md`
+(1 UX) and `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX) are
+now `planned`, consumed by `plan-badge-slate-2026-07-20-e059.md` — see
+the `_Updated` note above. (`bf75`: `badge.md`'s
+endpoint-vs-dynamic-JSON renderer caveat, drained 2026-07-20; `ff0c`: the
 invalid-YAML badge workflow template with verified fix, a column-0
 heredoc template sweep, branch-filter/`workflow_dispatch` hardening,
-`[skip ci]`), drained 2026-07-20 by `/inbox-drain`'s first live run.
-Delivered today: `feedback-amend-path-for-skill-written-files-2187.md` (2 UX:
+`[skip ci]`), drained 2026-07-20 by `/inbox-drain`'s first live run.)
+Delivered earlier today: `feedback-amend-path-for-skill-written-files-2187.md` (2 UX:
 the amend-path gap for skill-written files; line-citation rot), drained
 2026-07-20 from an out-of-band inbox note, now `planned` — consumed by
 `plan-amend-path-policy-2026-07-20-3c72.md`. Correction: `feedback-repo-critique-6ad1.md`, previously
@@ -1737,15 +1756,14 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-4 backlogged · 31 implemented · 1 retired — see
+1 backlogged · 3 tasked · 31 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
-Backlogged:
+Tasked (bound to `tasks-badge-slate-658d.md`):
 - `badge-split-variant`, `badge-brand-color-in-json`,
   `badge-icon-logosvg` — the three cross-linked badge proposals from
-  assisted-review PRs #107/#108 (natural epic/bundle candidates: all
-  ride the same generated `ardd-version.json`, and they interact with
-  open badge feedback — plan together).
+  assisted-review PRs #107/#108, planned together as the badge slate.
+Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
   report plus the de-risking spike (both GO). Still `backlogged`: a plan
@@ -1765,6 +1783,15 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-badge-slate-658d.md` (`ready`) — plan
+  `plan-badge-slate-2026-07-20-e059.md`, features `badge-split-variant`,
+  `badge-brand-color-in-json`, `badge-icon-logosvg`. Sole ready file,
+  nothing in flight — `parallel-matrix.sh` is silent with fewer than two
+  participants; no pair verdicts to report. (`independent` would mean no
+  declared overlap only, not conflict-free.)
+
 ## In Flight
 
 Nothing on a worktree (the amend-path worktree merged and was reaped).
@@ -1774,13 +1801,9 @@ policy, and the badge drain).
 
 ## Recommended Next Step
 
-`/ardd-plan feedback-badge-workflow-yaml-ff0c.md
-feedback-badge-renderer-caveat-bf75.md badge-split-variant
-badge-brand-color-in-json badge-icon-logosvg` — the whole badge slate
-rides the same template/workflow surface (the invalid-YAML fix is
-consumer-facing and worth shipping promptly; the three backlogged badge
-features and both feedback files naturally plan together). Also
-standing: push `main` to publish the accumulated batch as
+`/ardd-implement` to execute `tasks-badge-slate-658d.md` (7 tasks, 3
+phases — the YAML template fix + lint, centralized badge appearance,
+split-badge default). Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
