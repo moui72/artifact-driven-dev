@@ -1,6 +1,21 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (badge scenario + first S9 run + `/ardd-feedback`
+_Updated: 2026-07-20 (`/ardd-plan feedback-s9-badge-guards-b8b6.md` —
+consumed the S9 findings (all 3 accepted, file now `planned`): drafted,
+approved, and tasked `plan-badge-guards-2026-07-20-8b60.md` — 2
+tasks/2 phases in `tasks-badge-guards-cddd.md` (`ready`, red-first).
+T001 adds three red cases to `test-install-version-badge.sh`
+(version-badged env-unset → no static re-suggestion; pair-badged
+env-set → acknowledgment instead of the paste block; flag-aware
+no-README pointer); T002 adds marker-family detection and branches both
+guards on it (word-exact marker matching — substring overlap warned).
+Post-merge regression gate: rerun `/scenario-sweep S9` before the next
+stable dispatch. No feature slugs (`features: []`). Committed to `main`
+(a6c0d73). Noted but left uncommitted: an out-of-session refresh of
+`plan-codex-second-harness-support-2026-07-15-f837.md` + its feature
+entry (a 2026-07-20 capability-baseline rewrite) sits in the working
+tree — not this session's work, folded in when its author is ready.
+Prior update, same day, badge scenario + first S9 run + `/ardd-feedback`
 — a delegated design run authored `tests/scenarios/S9.md` (badge
 matrix: 6 repo states — no-README, no-badge, current-format re-install,
 pair/static previous formats, homespun wrong badge, `/ardd-update`
@@ -1727,9 +1742,8 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-s9-badge-guards-b8b6.md` (3 UX: the marker-family
-guard gaps + no-README pointer wording, from S9 run `4f1a`); next
-`/ardd-plan` picks it up. Delivered today:
+None open. Delivered today: `feedback-s9-badge-guards-b8b6.md` (3 UX,
+now `planned`, consumed by `plan-badge-guards-2026-07-20-8b60.md`);
 `feedback-badge-renderer-caveat-bf75.md`
 (1 UX) and `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX) are
 now `planned`, consumed by `plan-badge-slate-2026-07-20-e059.md` — see
@@ -1824,6 +1838,15 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-badge-guards-cddd.md` (`ready`) — plan
+  `plan-badge-guards-2026-07-20-8b60.md`, no bound features
+  (`features: []`). Sole ready file, nothing in flight —
+  `parallel-matrix.sh` is silent with fewer than two participants.
+  (`independent` would mean no declared overlap only, not
+  conflict-free.)
+
 ## In Flight
 
 Nothing on a worktree (the badge-slate worktree merged and was reaped).
@@ -1833,11 +1856,12 @@ policy, and the badge drain).
 
 ## Recommended Next Step
 
-`/ardd-plan feedback-s9-badge-guards-b8b6.md` to fix the three badge
-guard/pointer findings (then rerun `/scenario-sweep S9` as regression).
-After that lands: push and dispatch `stable-release.yml` — stable
-v1.0.2 still ships the broken badge workflow; v1.0.3-beta.1 carries
-the fix on the beta channel. Also standing: push `main` to publish the accumulated batch as
+`/ardd-implement` to execute `tasks-badge-guards-cddd.md` (2 tasks,
+red-first — marker-family guard fixes). After it lands: rerun
+`/scenario-sweep S9` as regression, then push and dispatch
+`stable-release.yml` — stable v1.0.2 still ships the broken badge
+workflow; v1.0.3-beta.1 carries the fix on the beta channel. Also
+standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
