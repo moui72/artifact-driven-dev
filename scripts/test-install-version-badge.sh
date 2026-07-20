@@ -340,4 +340,71 @@ case "$out" in
     ok "case14: advisory does not offer a bare re-run as the sole remedy" ;;
 esac
 
+# --- Case 15: opted-in install ships the badge icon at the path the sync
+# workflow reads (.github/badges/ardd-icon.svg) ---
+ICON_REL=".github/badges/ardd-icon.svg"
+target="$(new_target case15)"
+run_install_badge_on "$target" >/dev/null
+
+if [ -f "$target/$ICON_REL" ]; then
+  ok "case15: badge icon shipped to $ICON_REL"
+else
+  bad "case15: badge icon shipped to $ICON_REL"
+fi
+
+if grep -q "ardd-icon.svg" "$REPO_ROOT/templates/ardd-badge-workflow.yml" \
+   && grep -q ".github/badges/ardd-icon.svg" "$REPO_ROOT/templates/ardd-badge-workflow.yml"; then
+  ok "case15: workflow template reads the same icon path"
+else
+  bad "case15: workflow template reads the same icon path"
+fi
+
+# --- Case 16: seed JSON carries the brand labelColor and an inline logoSvg ---
+target="$(new_target case16)"
+run_install_badge_on "$target" >/dev/null
+
+if grep -qF '"labelColor": "#7C3AED"' "$target/$JSON_REL"; then
+  ok "case16: seed JSON carries labelColor #7C3AED"
+else
+  bad "case16: seed JSON carries labelColor #7C3AED"
+  cat "$target/$JSON_REL"
+fi
+
+if grep -qF '"logoSvg": "<svg' "$target/$JSON_REL"; then
+  ok "case16: seed JSON carries an inline logoSvg"
+else
+  bad "case16: seed JSON carries an inline logoSvg"
+  cat "$target/$JSON_REL"
+fi
+
+if grep -qF '__ARDD_BADGE_LOGO__' "$target/$JSON_REL"; then
+  bad "case16: no logo placeholder left in seed JSON"
+else
+  ok "case16: no logo placeholder left in seed JSON"
+fi
+
+# Seed must stay parseable JSON after the logoSvg embed (quote/newline
+# escaping is exactly what the awk escaper exists for). Skipped without
+# python3 — the grep assertions above still ran.
+if command -v python3 >/dev/null 2>&1; then
+  if python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$target/$JSON_REL" 2>/dev/null; then
+    ok "case16: seed JSON parses as JSON with logoSvg embedded"
+  else
+    bad "case16: seed JSON parses as JSON with logoSvg embedded"
+  fi
+fi
+
+# --- Case 17: re-install never clobbers a hand-edited icon ---
+target="$(new_target case17)"
+run_install_badge_on "$target" >/dev/null
+printf 'hand-edited icon\n' > "$target/$ICON_REL"
+before_icon="$(cksum "$target/$ICON_REL")"
+run_install_badge_on "$target" >/dev/null
+after_icon="$(cksum "$target/$ICON_REL")"
+if [ "$before_icon" = "$after_icon" ]; then
+  ok "case17: hand-edited icon left untouched"
+else
+  bad "case17: hand-edited icon left untouched"
+fi
+
 exit "$fail"
