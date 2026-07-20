@@ -70,6 +70,12 @@ FROM_VF=""
 if [ -z "$SRC" ]; then
   VF=".project/ardd-version.md"
   [ -f "$VF" ] && SRC="$(sed -n 's/^Source-Path: //p' "$VF" | head -1)"
+  # install.sh records the path home-relative (~/<rest>) when the source
+  # sits under $HOME; expand the leading ~ here (plain prefix swap, never
+  # eval).
+  case "$SRC" in
+    "~/"*) SRC="$HOME${SRC#\~}" ;;
+  esac
   if [ -z "$SRC" ]; then
     echo "resolved=false reason=no-source-path"
     exit 1

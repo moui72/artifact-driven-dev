@@ -16,7 +16,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   `scripts/test-install-source-path.sh` (fixture install into a temp target;
   assert the recorded line starts with `~/` when the source is under a
   faked `$HOME`) — same commit (test-first per constitution Principle V).
-- [ ] T002 [parallel] Teach both readers to expand a leading `~` in a
+- [x] T002 [parallel] Teach both readers to expand a leading `~` in a
   recorded `Source-Path`: `scripts/source-resolve.sh` (~line 72) and
   `scripts/ardd-update-check.sh` (~line 65) — replace a leading `~/` with
   `$HOME/` after the `sed` extraction, never via eval. Extend

@@ -160,6 +160,19 @@ set -e
   && ok "case8: Source-Path read from ardd-version.md" \
   || bad "case8: got '$out' (rc=$status)"
 
+# --- Case 8b: home-relative Source-Path (~/<rest>, as install.sh records
+# for a source under $HOME) expands against $HOME before resolution ---
+TGT8B="$WORK/target-tilde"; mkdir -p "$TGT8B/.project"
+printf '# ArDD Version\n\n_Source: artifact-driven-dev @ abc1234 · Installed/updated 2026-07-12_\n\nSource-Path: ~/%s\n' "$(basename "$DEV")" \
+  > "$TGT8B/.project/ardd-version.md"
+set +e
+out="$( (cd "$TGT8B" && HOME="$(dirname "$DEV")" sh "$RESOLVE") 2>&1 )"
+status=$?
+set -e
+[ "$status" -eq 0 ] && [ "$out" = "resolved=$DEV channel=dev" ] \
+  && ok "case8b: home-relative Source-Path expanded from ardd-version.md" \
+  || bad "case8b: got '$out' (rc=$status)"
+
 # --- Case 9: no argument, no version file -> resolved=false ---
 EMPTY="$WORK/empty-target"; mkdir -p "$EMPTY"
 set +e

@@ -41,6 +41,11 @@ T1="$WORK/t1"; mkver "$T1" "$TIP1" "$SRC"
 out="$(sh "$CHECK" "$T1")"
 [ "$out" = "up-to-date commit=$TIP1 note=no-releases" ] && ok "up-to-date (no releases)" || bad "up-to-date (no releases) — got '$out'"
 
+# --- home-relative Source-Path (~/<rest>) expands against $HOME ---
+T1T="$WORK/t1tilde"; mkver "$T1T" "$TIP1" "~/$(basename "$SRC")"
+out="$(HOME="$(dirname "$SRC")" sh "$CHECK" "$T1T")"
+[ "$out" = "up-to-date commit=$TIP1 note=no-releases" ] && ok "home-relative Source-Path expanded" || bad "home-relative Source-Path — got '$out'"
+
 # --- behind (source advances, still no releases -> tip comparison, noted) ---
 ( cd "$SRC" && printf 'x\n' >> install.sh && git add -A && git commit -q -m two )
 TIP2="$(git -C "$SRC" rev-parse --short HEAD)"

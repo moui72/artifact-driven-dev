@@ -65,6 +65,12 @@ VF="$TARGET/.project/ardd-version.md"
 src="$(sed -n 's/^Source-Path: //p' "$VF" | head -1)"
 [ -n "$src" ] || { echo "no-source-path"; exit 0; }
 
+# install.sh records the path home-relative (~/<rest>) when the source sits
+# under $HOME; expand the leading ~ here (plain prefix swap, never eval).
+case "$src" in
+  "~/"*) src="$HOME${src#\~}" ;;
+esac
+
 # The recorded path must still be an ArDD source checkout. When it isn't
 # (moved machine, re-cloned source), fall back to the tooling-owned checkout
 # at ${ARDD_HOME:-$HOME/.ardd}/source if that one qualifies — flagged with
