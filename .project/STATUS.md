@@ -1,14 +1,24 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-feedback` — logged
-`feedback-source-path-portability-19ce.md` (`open`, 1 bug + 1 UX) from a
-CodeRabbit finding on a consumer PR (moui72/assisted-review#105):
-install.sh records `Source-Path: $SCRIPT_DIR` — a machine-specific
-absolute path leaking the username — into the committed
-`.project/ardd-version.md` (F001: record the portable `~/.ardd/source`
-form, readers expanding `~`; F002: `/ardd-update` should detect and
-rewrite the legacy absolute form in consumers and advise on git-history
-repair). The next `/ardd-plan` picks it up. Prior update, same day,
+_Updated: 2026-07-20 (`/ardd-feedback`, second pass — expanded
+`feedback-source-path-portability-19ce.md` (`open`, now 2 bugs + 1 UX +
+1 Reconsidered) with the full CodeRabbit triage from
+moui72/assisted-review#105: F001 gained design options (tilde form vs
+split file vs drop the field) plus a sweep for other absolute-path
+leaks in committed generated files; new F003 (bug) — /ardd-plan wrote a
+prose count ("four call sites") contradicting its own five-item
+enumeration, nothing reconciles derivable counts; new F004
+(Reconsidered) — plan checkbox staleness: plans look like live mirrors
+but behave as static records, decide which and make it self-evident.
+The fourth finding — a "how to read `.project/`" note for downstream AI
+reviewer configs — was re-filed to the register as
+`dot-project-reviewer-guide` (`backlogged`). Original logging, same
+day: F001 install.sh records `Source-Path: $SCRIPT_DIR` — a
+machine-specific absolute path leaking the username — into the
+committed `.project/ardd-version.md`; F002 `/ardd-update` should detect
+and rewrite the legacy absolute form in consumers and advise on
+git-history repair. The next `/ardd-plan` picks it all up. Prior
+update, same day,
 `/ardd-implement` coordinator — the delegated
 `s1-badge-followups` worktree run completed both tasks and merged
 fast-forward (`e745582`); worktree reaped; badge test re-verified
@@ -1541,10 +1551,13 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-source-path-portability-19ce.md` (1 bug, 1 UX):
-install.sh's machine-specific `Source-Path` in committed consumer
-metadata + `/ardd-update` legacy-form rewrite/history-repair advisory.
-Picked up by the next `/ardd-plan`. Delivered earlier:
+1 open — `feedback-source-path-portability-19ce.md` (2 bugs, 1 UX,
+1 Reconsidered): install.sh's machine-specific `Source-Path` in
+committed consumer metadata (+ options and a leak-class sweep),
+`/ardd-update` legacy-form rewrite/history-repair advisory, /ardd-plan
+prose-count-vs-enumeration drift, and the plan-checkbox
+static-vs-live-mirror convention decision. Picked up by the next
+`/ardd-plan`. Delivered earlier:
 `feedback-s1-badge-followups-5e84.md` (2 UX items) is now
 `planned`, consumed by `plan-s1-badge-followups-2026-07-20-9667.md`.
 Delivered earlier:
@@ -1595,10 +1608,15 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 29 implemented · 1 retired — see
+2 backlogged · 29 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
+- `dot-project-reviewer-guide` — a "how to read `.project/`"
+  orientation note for downstream AI reviewer configs (generated vs
+  authored, static-record vs live files, single-writer conventions), so
+  consumer-PR reviewers stop flagging false inconsistencies (re-filed
+  from the 2026-07-20 CodeRabbit feedback pass).
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
   report plus the de-risking spike (both GO). Still `backlogged`: a plan
