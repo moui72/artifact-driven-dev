@@ -1,6 +1,24 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-plan` badge slate — consumed both open
+_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+`badge-slate` worktree run completed all 7 tasks and merged
+fast-forward (`5adffc3`); worktree reaped; dogfooded install refreshed.
+Shipped: new `scripts/lint-templates-yaml.sh` + fixture test + two CI
+jobs (red-first: the lint failed on the broken template before the
+fix; self-skips locally without PyYAML — CI installs it);
+`templates/ardd-badge-workflow.yml` fixed (heredoc indented into the
+`run: |` scalar, `branches: [main]` + `workflow_dispatch`,
+`[skip ci]`) and verified by executing the extracted run script;
+`templates/ardd-icon.svg` (323-byte single-colour delta monogram);
+brand hex `#7C3AED` documented in `configuration.md` and emitted as
+`labelColor`, icon inlined as `logoSvg` via `jq --rawfile` (install.sh
+ships the icon never-clobber and seeds both fields jq-free via an awk
+JSON-escaper); `badge.md` restructured to three shapes with the split
+badge as recommended default + the bf75 renderer caveat and base64
+data-URI recipe; install.sh's printed snippet now the split badge with
+all four existing guard behaviors preserved. Full suite green on every
+commit. All three badge features `tasked → implemented`. Prior update,
+same day, `/ardd-plan` badge slate — consumed both open
 badge feedback files (`ff0c` 1 bug + 3 UX, `bf75` 1 UX — all 5 items
 accepted, both now `planned`) and targeted the three badge features:
 drafted, approved, and tasked `plan-badge-slate-2026-07-20-e059.md` —
@@ -1756,13 +1774,11 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 3 tasked · 31 implemented · 1 retired — see
+1 backlogged · 34 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
-Tasked (bound to `tasks-badge-slate-658d.md`):
-- `badge-split-variant`, `badge-brand-color-in-json`,
-  `badge-icon-logosvg` — the three cross-linked badge proposals from
-  assisted-review PRs #107/#108, planned together as the badge slate.
+Newest implemented: `badge-split-variant`, `badge-brand-color-in-json`,
+`badge-icon-logosvg` — the badge slate, see the `_Updated` note above.
 Backlogged:
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
@@ -1783,27 +1799,21 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
-## Work Queue
-
-- `tasks-badge-slate-658d.md` (`ready`) — plan
-  `plan-badge-slate-2026-07-20-e059.md`, features `badge-split-variant`,
-  `badge-brand-color-in-json`, `badge-icon-logosvg`. Sole ready file,
-  nothing in flight — `parallel-matrix.sh` is silent with fewer than two
-  participants; no pair verdicts to report. (`independent` would mean no
-  declared overlap only, not conflict-free.)
-
 ## In Flight
 
-Nothing on a worktree (the amend-path worktree merged and was reaped).
+Nothing on a worktree (the badge-slate worktree merged and was reaped).
 `main` is ahead of `origin/main` (unpushed commits since the last push
 — the reviewer-guide/auto-prompt batch, inbox-drain skill, amend-path
 policy, and the badge drain).
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-badge-slate-658d.md` (7 tasks, 3
-phases — the YAML template fix + lint, centralized badge appearance,
-split-badge default). Also standing: push `main` to publish the accumulated batch as
+Push `main` to publish today's large batch (reviewer guide +
+`next_step_prompt: auto`, inbox-drain skill, amend-path policy, badge
+slate) as the next beta, then dispatch `stable-release.yml` when ready
+— the badge-workflow YAML fix is consumer-facing and v1.0.2-beta.1
+consumers are shipping the broken template until a release carries it.
+Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
