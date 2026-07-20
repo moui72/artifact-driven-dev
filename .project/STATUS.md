@@ -1,6 +1,28 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (release ops + rename + `/scenario-sweep S1` +
+`/ardd-feedback` — pushed `main` (`4be4848..86f2fec`, 22 commits);
+lint green; beta-release published **v1.0.2-beta.1** (stable remains
+v1.0.1). Renamed the sweep skill: `/prerelease-sweep` →
+`/scenario-sweep` (`a8d3c57`; it outgrew the release-ritual name —
+regression reruns and targeted verification are its main use;
+"-sweep" family with docs-sweep kept; description carries "formerly
+prerelease-sweep" for one release cycle) and `tests/prerelease/` →
+`tests/scenarios/` (inner `scenarios/` flattened; briefs now at
+`tests/scenarios/S<n>.md`). Then ran a targeted S1 sweep (run
+`2026-07-20-a7d7`, ~65K tokens, ~$0.30-0.90, 3m06s) — the first
+exercise of the new badge brief steps against the real `curl | sh`
+`--beta` acquisition of v1.0.2-beta.1: **pass, no release blockers**;
+acquisition/init/lint all clean; all three badge checks (real
+coordinates, no reprint, misdirected-badge advisory) verified live.
+The new brief immediately caught 2 accepted ux findings, logged as
+`feedback-s1-badge-followups-5e84.md` (`open`): F001 the
+ARDD_VERSION_BADGE opt-in mention is gated on README existing, so a
+greenfield new.sh project never sees it; F002 the misdirected-badge
+advisory's suggested remedy is circular (re-run prints nothing under
+the reprint guard). Graduation: n-a for both — the standing brief
+step is what caught them. Prior update, same day, `/ardd-implement`
+coordinator — the delegated
 `sweep-coverage-expansion` worktree run completed all 5 tasks and
 merged fast-forward (`d22d620`); worktree reaped; lint-docs green on
 `main`. Shipped: S1 gained badge steps 6-9 (fake remote, real
@@ -1487,7 +1509,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — `feedback-sweep-coverage-expansion-3452.md` (6 UX items) is
+1 open — `feedback-s1-badge-followups-5e84.md` (2 UX items from the
+targeted S1 sweep: README-gated opt-in mention; circular
+misdirected-badge advisory remedy). Will be picked up by the next
+`/ardd-plan`. Delivered earlier:
+`feedback-sweep-coverage-expansion-3452.md` (6 UX items),
 now `planned`, consumed by
 `plan-sweep-coverage-expansion-2026-07-20-d493.md` — see the
 `_Updated` note above. Delivered 2026-07-19:
@@ -1568,10 +1594,11 @@ since the last push).
 
 ## Recommended Next Step
 
-Push `main` to publish the accumulated work (badge fixes +
-sweep-coverage expansion) on the beta channel; a targeted
-`/prerelease-sweep S1` afterward would exercise the new badge brief
-against the real acquisition path. Other standing options: v1.0.1 is out and the sweep loop is closed;
+Run `/ardd-plan feedback-s1-badge-followups-5e84.md` to consume the
+two S1 follow-up UX items (both small install.sh output fixes). The
+rename commit (`a8d3c57`) and this feedback are unpushed — the next
+push publishes them as the next beta. When ready for stable v1.0.2:
+dispatch `stable-release.yml` (`bump: patch`). Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
