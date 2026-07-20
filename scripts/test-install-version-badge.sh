@@ -176,4 +176,124 @@ else
   bad "case5: marker-present + ARDD_VERSION_BADGE=1 writes seed JSON"
 fi
 
+# --- Case 6: GitHub https origin remote → printed snippet carries the
+# target's own coordinates (owner/repo + current branch), no placeholders ---
+target="$(new_target case6)"
+git -C "$target" remote add origin https://github.com/acme/widget.git
+branch="$(git -C "$target" symbolic-ref --short HEAD)"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"acme/widget/$branch"*)
+    ok "case6: snippet filled with acme/widget/$branch" ;;
+  *)
+    bad "case6: snippet filled with acme/widget/$branch" ;;
+esac
+
+case "$out" in
+  *"OWNER/REPO/BRANCH"*)
+    bad "case6: no literal OWNER/REPO/BRANCH placeholder remains" ;;
+  *)
+    ok "case6: no literal OWNER/REPO/BRANCH placeholder remains" ;;
+esac
+
+# --- Case 7: SSH-form remote git@github.com:acme/widget.git parses to
+# acme/widget too ---
+target="$(new_target case7)"
+git -C "$target" remote add origin git@github.com:acme/widget.git
+branch="$(git -C "$target" symbolic-ref --short HEAD)"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"acme/widget/$branch"*)
+    ok "case7: SSH remote parsed to acme/widget/$branch" ;;
+  *)
+    bad "case7: SSH remote parsed to acme/widget/$branch" ;;
+esac
+
+# --- Case 8: no remote → placeholders stay AND the replace-these
+# instruction is printed (not buried in an unprinted template comment) ---
+target="$(new_target case8)"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"OWNER/REPO/BRANCH"*)
+    ok "case8: placeholders remain with no remote" ;;
+  *)
+    bad "case8: placeholders remain with no remote" ;;
+esac
+
+case "$out" in
+  *"replace OWNER/REPO/BRANCH with your repo's coordinates"*)
+    ok "case8: replace-these instruction printed" ;;
+  *)
+    bad "case8: replace-these instruction printed" ;;
+esac
+
+# --- Case 9: README already contains ardd-badge-version-start → snippet
+# not reprinted; supporting files still written ---
+target="$(new_target case9)"
+printf '# Test project\n\n<!-- ardd-badge-version-start -->\nadopted\n<!-- ardd-badge-version-end -->\n' > "$target/README.md"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"two-badge"*)
+    bad "case9: two-badge snippet not reprinted when marker present" ;;
+  *)
+    ok "case9: two-badge snippet not reprinted when marker present" ;;
+esac
+
+if [ -f "$target/$WORKFLOW_REL" ] && [ -f "$target/$JSON_REL" ]; then
+  ok "case9: supporting files still written when marker present"
+else
+  bad "case9: supporting files still written when marker present"
+fi
+
+# --- Case 10: README with a latest-release ArDD badge → advisory printed
+# in BOTH the default (unset) path and the ARDD_VERSION_BADGE=1 path ---
+release_badge_readme() { # $1=target
+  printf '# Test project\n\n[![v](https://img.shields.io/github/v/release/moui72/artifact-driven-dev)](x)\n' > "$1/README.md"
+}
+
+target="$(new_target case10a)"
+release_badge_readme "$target"
+out="$(run_install "$target")"
+case "$out" in
+  *"latest release"*)
+    ok "case10: advisory fires in default (unset) path" ;;
+  *)
+    bad "case10: advisory fires in default (unset) path" ;;
+esac
+
+target="$(new_target case10b)"
+release_badge_readme "$target"
+out="$(run_install_badge_on "$target")"
+case "$out" in
+  *"latest release"*)
+    ok "case10: advisory fires in ARDD_VERSION_BADGE=1 path" ;;
+  *)
+    bad "case10: advisory fires in ARDD_VERSION_BADGE=1 path" ;;
+esac
+
+# --- Case 11: snippet output includes the private-repo caveat line ---
+target="$(new_target case11)"
+out="$(run_install_badge_on "$target")"
+case "$out" in
+  *"public repos"*)
+    ok "case11: private-repo caveat printed with snippet" ;;
+  *)
+    bad "case11: private-repo caveat printed with snippet" ;;
+esac
+
+# --- Case 12: default (unset) path's static-badge suggestion mentions the
+# ARDD_VERSION_BADGE=1 dynamic upgrade ---
+target="$(new_target case12)"
+out="$(run_install "$target")"
+case "$out" in
+  *"ARDD_VERSION_BADGE=1"*)
+    ok "case12: default path mentions ARDD_VERSION_BADGE=1 upgrade" ;;
+  *)
+    bad "case12: default path mentions ARDD_VERSION_BADGE=1 upgrade" ;;
+esac
+
 exit "$fail"

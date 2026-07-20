@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: install.sh badge mechanics (test-first)
 
-- [ ] T001 Extend `scripts/test-install-version-badge.sh` with red-first
+- [x] T001 Extend `scripts/test-install-version-badge.sh` with red-first
   cases for the five install.sh badge fixes (run it, confirm the new
   cases fail before T002): (a) a target fixture with a GitHub `origin`
   remote (`https://github.com/acme/widget.git`) run with
