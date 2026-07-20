@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Red test
 
-- [ ] T001 Add a case to `scripts/test-install-version-badge.sh`: a
+- [x] T001 Add a case to `scripts/test-install-version-badge.sh`: a
   fixture repo whose default branch is `master` (git init with
   `-b master` or rename), fake `example-owner/example-repo` remote,
   README present, `ARDD_VERSION_BADGE=1` install — assert the *written*

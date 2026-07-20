@@ -493,4 +493,32 @@ case "$out" in
     ok "case20: no-README pointer does not re-suggest setting the flag" ;;
 esac
 
+# --- Case 21: fixture repo whose default branch is `master` (plan
+# badge-workflow-branch, S9 finding 7b1a / feedback 8110 F001) → the
+# WRITTEN workflow's on.push.branches: filter must carry the real branch
+# (`master`), not the template's hardcoded `main` — otherwise the badge
+# sync never fires on non-main-default repos. Alongside (already-passing
+# context assertion): the printed snippet's endpoint URL carries master. ---
+target="$WORK/case21"
+mkdir -p "$target"
+git init -q -b master "$target"
+git -C "$target" commit -q --allow-empty -m init
+printf '# Test project\n' > "$target/README.md"
+git -C "$target" remote add origin https://github.com/example-owner/example-repo.git
+out="$(run_install_badge_on "$target")"
+
+if grep -qE '^[[:space:]]*branches:[[:space:]]*\[master\]' "$target/$WORKFLOW_REL"; then
+  ok "case21: written workflow branches filter carries master"
+else
+  bad "case21: written workflow branches filter carries master"
+  grep -n "branches" "$target/$WORKFLOW_REL" || true
+fi
+
+case "$out" in
+  *"example-owner/example-repo/master"*)
+    ok "case21: snippet endpoint URL carries example-owner/example-repo/master" ;;
+  *)
+    bad "case21: snippet endpoint URL carries example-owner/example-repo/master" ;;
+esac
+
 exit "$fail"
