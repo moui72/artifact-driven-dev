@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   observation. Keep in smoke tier unless the added wall-clock plainly
   threatens S1's budget (plan's open question — leaning smoke).
 
-- [ ] T002 [parallel] Extend `tests/prerelease/scenarios/S5.md` (F003):
+- [x] T002 [parallel] Extend `tests/prerelease/scenarios/S5.md` (F003):
   with two `backlogged` features present in the scratch project, a bare
   `/ardd-plan` must present the multi-select plannable-inputs picker
   (backlogged slugs + any open feedback); scripted answer: select one
