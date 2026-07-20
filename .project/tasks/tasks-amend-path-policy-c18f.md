@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Codify the factual-corrections exemption (F001)
 
-- [ ] T001 Add a "Correcting a skill-written file" subsection to
+- [x] T001 Add a "Correcting a skill-written file" subsection to
   `templates/dot-project-readme.md` (best placed after the "Static
   historical records" section) carrying the canonical rule text from the
   plan's Technical Approach: factual corrections — content wrong on the
