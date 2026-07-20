@@ -31,7 +31,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   one-line recommendation (accept if already public). Leave the change
   uncommitted (plan Open Question 2's working assumption). Regression case
   in the same test file as T001, same commit.
-- [ ] T004 Edit `skills/ardd-update/SKILL.md` to relay T003's legacy-repair
+- [x] T004 Edit `skills/ardd-update/SKILL.md` to relay T003's legacy-repair
   notice when install.sh prints it (relay verbatim, add the history-repair
   framing once — the skill already relays install output, so this is a
   pointer, not new mechanism).

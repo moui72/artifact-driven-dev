@@ -109,6 +109,18 @@ proceeds.
    any they want (e.g. paste the badge into README) but never apply one
    unprompted.
 
+   **Legacy Source-Path repair notice.** When install.sh prints its
+   machine-specific-absolute-Source-Path notice (a pre-portability
+   install recorded an absolute path under `$HOME`; the reinstall
+   rewrites it to the portable `~/` form), relay it verbatim like the
+   rest, and add the history-repair framing once: the rewrite fixes the
+   file going forward but the old absolute path is already in this
+   repo's git history — scrubbing it (rewrite/squash before sharing) or
+   accepting the leak is the user's call, and if the history is already
+   public, accepting it is the sensible default. The rewrite is left
+   uncommitted, like every install.sh write; never commit or push it
+   yourself.
+
    **Dynamic version-badge offer.** After relaying the output, when the
    project has a README that does *not* contain the
    `ardd-badge-version-start` marker, ask the user whether they'd like
