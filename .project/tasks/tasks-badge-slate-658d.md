@@ -40,7 +40,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   legible at 14px — no gradients, no multiple fills, no fine detail.
   Keep the file small (aim well under 2KB). Add a one-line comment in
   the SVG naming it the source of truth the badge workflow inlines.
-- [ ] T004 Publish the brand colour and wire both new fields into the
+- [x] T004 Publish the brand colour and wire both new fields into the
   workflow: state the canonical brand hex `#7C3AED` in
   `docs/reference/configuration.md` (or the page the badge docs live
   on) as "the ArDD brand colour"; then edit
