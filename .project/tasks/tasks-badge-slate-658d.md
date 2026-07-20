@@ -64,7 +64,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: README-side shapes and caveats
 
-- [ ] T006 Restructure `templates/badge.md` around three shapes: keep
+- [x] T006 Restructure `templates/badge.md` around three shapes: keep
   static-only as today; add the **split badge** — one shields endpoint
   badge whose JSON supplies both halves ("built with ArDD │ vX.Y.Z") —
   as the recommended default for `ARDD_VERSION_BADGE=1` repos; keep the
