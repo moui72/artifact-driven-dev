@@ -8,8 +8,10 @@ name: ArDD version badge sync
 # repos — shields.io fetches raw.githubusercontent.com unauthenticated.
 on:
   push:
+    branches: [main]
     paths:
       - '.project/ardd-version.md'
+  workflow_dispatch:
 
 jobs:
   sync-badge:
@@ -49,14 +51,19 @@ jobs:
           esac
 
           mkdir -p "$(dirname "$OUT")"
+          # The heredoc body and its JSON terminator are indented to this
+          # run: | block scalar's indentation on purpose — YAML strips the
+          # block's common indent before the shell ever sees the script, so
+          # the emitted JSON is unchanged; a column-0 heredoc here is
+          # invalid YAML (ff0c F001).
           cat > "$OUT" <<JSON
-{
-  "schemaVersion": 1,
-  "label": "ArDD",
-  "message": "$message",
-  "color": "$color"
-}
-JSON
+          {
+            "schemaVersion": 1,
+            "label": "ArDD",
+            "message": "$message",
+            "color": "$color"
+          }
+          JSON
 
       - name: Commit if changed
         run: |
@@ -68,5 +75,5 @@ JSON
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .github/badges/ardd-version.json
-          git commit -m "chore: sync ArDD version badge"
+          git commit -m "chore: sync ArDD version badge [skip ci]"
           git push
