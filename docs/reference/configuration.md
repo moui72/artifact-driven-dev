@@ -114,6 +114,24 @@ appends `note=fetch-failed` to the check's output line and the comparison
 proceeds against local tags — offline machines lose nothing. An invalid
 value behaves like absent (and is flagged by `lint-project.sh`).
 
+## `ARDD_VERSION_BADGE` — dynamic version badge (install-time env, not frontmatter)
+
+`ARDD_VERSION_BADGE=1 ./install.sh <project>` opts a target into the
+dynamic ArDD version badge: install.sh writes
+`.github/workflows/ardd-badge.yml`, a seeded
+`.github/badges/ardd-version.json`, and the badge mark
+`.github/badges/ardd-icon.svg` (copied from the source's
+`templates/ardd-icon.svg`), then prints the README snippet. Public repos
+only — shields.io fetches raw.githubusercontent.com unauthenticated.
+
+**The ArDD brand colour is `#7C3AED`.** The badge JSON carries it as
+`labelColor` (the badge's left half), while `color` (the right half)
+stays the channel signal: blue = stable, yellow = beta. The JSON also
+inlines the icon as `logoSvg`, so brand colour and mark propagate to
+consumer badges through the sync workflow — no README re-editing when
+either changes upstream. See `templates/badge.md` for the snippet shapes
+and renderer caveats.
+
 ## Related per-clone git opt-ins (not frontmatter)
 
 Two settings git refuses to take from a repo commit, suggested by

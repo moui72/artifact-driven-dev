@@ -491,6 +491,7 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
     echo ""
     BADGE_WORKFLOW="$TARGET/.github/workflows/ardd-badge.yml"
     BADGE_JSON="$TARGET/.github/badges/ardd-version.json"
+    BADGE_ICON="$TARGET/.github/badges/ardd-icon.svg"
 
     if [ ! -f "$BADGE_WORKFLOW" ]; then
       mkdir -p "$(dirname "$BADGE_WORKFLOW")"
@@ -498,6 +499,16 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       echo "  ✓ .github/workflows/ardd-badge.yml"
     else
       echo "  – .github/workflows/ardd-badge.yml (already exists, left untouched)"
+    fi
+
+    # The badge mark the workflow inlines as logoSvg — shipped to the path
+    # the workflow reads, same never-clobber posture as the other two files.
+    if [ ! -f "$BADGE_ICON" ]; then
+      mkdir -p "$(dirname "$BADGE_ICON")"
+      cp "$SCRIPT_DIR/templates/ardd-icon.svg" "$BADGE_ICON"
+      echo "  ✓ .github/badges/ardd-icon.svg"
+    else
+      echo "  – .github/badges/ardd-icon.svg (already exists, left untouched)"
     fi
 
     if [ ! -f "$BADGE_JSON" ]; then
@@ -516,9 +527,18 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
         *) BADGE_COLOR="blue" ;;
       esac
       mkdir -p "$(dirname "$BADGE_JSON")"
-      sed -e "s/__ARDD_BADGE_MESSAGE__/$BADGE_MESSAGE/" \
-          -e "s/__ARDD_BADGE_COLOR__/$BADGE_COLOR/" \
-          "$SCRIPT_DIR/templates/ardd-badge.json" > "$BADGE_JSON"
+      # Inline the icon file as the seed's logoSvg — JSON-escaped with awk
+      # (backslash, quote, newline), passed via ENVIRON so no shell/awk
+      # escape reprocessing touches it. POSIX-safe: no jq dependency here
+      # (the sync workflow, which always runs on a runner with jq, uses
+      # jq --rawfile for the same embed).
+      ARDD_BADGE_LOGO="$(awk 'BEGIN{ORS=""} {gsub(/\\/,"\\\\"); gsub(/"/,"\\\""); print $0 "\\n"}' "$SCRIPT_DIR/templates/ardd-icon.svg")" \
+        awk '
+          /__ARDD_BADGE_LOGO__/ { printf "  \"logoSvg\": \"%s\"\n", ENVIRON["ARDD_BADGE_LOGO"]; next }
+          { print }
+        ' "$SCRIPT_DIR/templates/ardd-badge.json" \
+        | sed -e "s/__ARDD_BADGE_MESSAGE__/$BADGE_MESSAGE/" \
+              -e "s/__ARDD_BADGE_COLOR__/$BADGE_COLOR/" > "$BADGE_JSON"
       echo "  ✓ .github/badges/ardd-version.json ($BADGE_MESSAGE)"
     else
       echo "  – .github/badges/ardd-version.json (already exists, left untouched)"

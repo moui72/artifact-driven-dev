@@ -61,9 +61,21 @@ jobs:
             "schemaVersion": 1,
             "label": "ArDD",
             "message": "$message",
-            "color": "$color"
+            "color": "$color",
+            "labelColor": "#7C3AED"
           }
           JSON
+
+          # Inline the badge mark from the icon file install.sh shipped
+          # alongside this workflow — the file is the source of truth,
+          # embedded at generation time (never escaped SVG pasted here).
+          ICON=".github/badges/ardd-icon.svg"
+          if [ -f "$ICON" ]; then
+            jq --rawfile svg "$ICON" '. + {logoSvg: $svg}' "$OUT" > "$OUT.tmp"
+            mv "$OUT.tmp" "$OUT"
+          else
+            echo "Note: $ICON not found — badge JSON written without logoSvg."
+          fi
 
       - name: Commit if changed
         run: |

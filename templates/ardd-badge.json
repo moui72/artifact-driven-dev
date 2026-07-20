@@ -2,5 +2,7 @@
   "schemaVersion": 1,
   "label": "ArDD",
   "message": "__ARDD_BADGE_MESSAGE__",
-  "color": "__ARDD_BADGE_COLOR__"
+  "color": "__ARDD_BADGE_COLOR__",
+  "labelColor": "#7C3AED",
+  "logoSvg": "__ARDD_BADGE_LOGO__"
 }
