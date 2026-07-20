@@ -44,7 +44,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   individually tier-marked, gate (b) with an explicit "full tier only"
   note in prose.
 
-- [ ] T004 [parallel] Extend `tests/prerelease/scenarios/S8.md` (F002):
+- [x] T004 [parallel] Extend `tests/prerelease/scenarios/S8.md` (F002):
   before the delegation step (S8 already sets up two `ready` tasks
   files), run `/ardd-status` and verify the Work Queue section shows
   pairwise verdicts — `independent` for the disjoint pair, and a plan
