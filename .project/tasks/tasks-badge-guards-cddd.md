@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Red tests
 
-- [ ] T001 Extend `scripts/test-install-version-badge.sh` with three
+- [x] T001 Extend `scripts/test-install-version-badge.sh` with three
   red-first cases pinning the S9 findings (feedback `b8b6` F001–F003):
   (a) env-unset install over a README carrying
   `ardd-badge-version-start` markers must NOT print the static-badge
