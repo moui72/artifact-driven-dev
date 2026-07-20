@@ -20,7 +20,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   deterministic checks). Test-first checkpoint: with the script in
   place, running it against the tree must go RED on the current broken
   `templates/ardd-badge-workflow.yml` before T002 fixes it.
-- [ ] T002 Fix `templates/ardd-badge-workflow.yml` (addresses ff0c
+- [x] T002 Fix `templates/ardd-badge-workflow.yml` (addresses ff0c
   F001/F003/F004, all three verified in the field by
   moui72/assisted-review's corrected copy): indent the badge-JSON
   heredoc body AND its `JSON` terminator to the enclosing `run: |` block
