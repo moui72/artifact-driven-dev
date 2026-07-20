@@ -1,7 +1,7 @@
 ---
 plan: plan-s1-badge-followups-2026-07-20-9667.md
 generated: 2026-07-20
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
