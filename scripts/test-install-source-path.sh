@@ -101,6 +101,28 @@ else
   ok "case3: rewrite left uncommitted in the target"
 fi
 
+# --- Reviewer guide (T014): every install writes .project/README.md
+# (install.sh-owned, overwritten) and ardd-version.md carries a pointer ---
+if [ -f "$WORK/case1/.project/README.md" ] \
+   && grep -q "How to read" "$WORK/case1/.project/README.md"; then
+  ok "guide: .project/README.md written on install"
+else
+  bad "guide: .project/README.md written on install"
+fi
+if grep -q '\.project/README\.md' "$WORK/case1/.project/ardd-version.md"; then
+  ok "guide: ardd-version.md carries the pointer line"
+else
+  bad "guide: ardd-version.md carries the pointer line"
+fi
+# Overwrite-on-install: a hand-edited guide is reset by the next install.
+printf 'hand edit\n' >> "$WORK/case1/.project/README.md"
+( cd "$REPO_ROOT" && HOME="$FAKE_HOME" sh "$INSTALL_SH" "$WORK/case1" ) >/dev/null
+if grep -q "hand edit" "$WORK/case1/.project/README.md"; then
+  bad "guide: overwritten on re-install (install.sh-owned)"
+else
+  ok "guide: overwritten on re-install (install.sh-owned)"
+fi
+
 # --- Case 4: fresh install (no prior version file) must NOT print the
 # legacy notice ---
 target="$WORK/case4"

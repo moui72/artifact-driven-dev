@@ -98,7 +98,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   consumer repos for a hand-authored `.project/README.md` first; default
   to install.sh-owned overwrite-on-install, falling back to
   create-if-absent + drift notice if any consumer authors one.
-- [ ] T014 Wire it into `install.sh`: write the guide to the target's
+- [x] T014 Wire it into `install.sh`: write the guide to the target's
   `.project/README.md` per T013's decision, add a one-line pointer in the
   generated `ardd-version.md`, and add a regression case (temp-target
   install asserts the file and pointer exist). Update install.sh's
