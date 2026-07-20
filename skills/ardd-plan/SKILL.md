@@ -394,6 +394,16 @@ drafts or writes a plan.
      which feedback item each such task addresses. Tasks implementing a
      feature targeted in step 3 reference that feature's slug. Tasks fixing a
      defect accepted in step 5 reference that defect's identifier.
+
+     **Plans are static historical records, not live checklists.** Phase
+     lists are plain enumerations (`-` bullets or numbers), never `- [ ]`
+     checkboxes — progress is tracked exclusively in the linked tasks
+     file, and nothing ever ticks a plan. Include a one-line note in the
+     Phase Breakdown stating this ("Phase lists are plan work-items, not
+     live checklists — progress is tracked in the linked tasks file").
+     And never restate in prose a count that is derivable from an
+     enumeration in the same document ("three phases", "5 tasks") — the
+     enumeration is the record; a restated count only drifts.
    - **Complexity Tracking** — table of justified deviations, included *only if*
      the constitution declares a principle requiring complexity to be justified
      (e.g. a Simplicity/YAGNI principle). Omit the section entirely when no such
@@ -544,6 +554,12 @@ drafts or writes a plan.
 
     Mark parallelism with `[parallel]` on tasks that touch different files and
     have no shared dependencies.
+
+    The tasks file is the **only** live checklist in the workflow: its
+    `- [ ]` checkboxes are ticked by `/ardd-implement` as work lands. The
+    plan they came from stays a static record — never add checkboxes to a
+    plan, and never restate a count derivable from an enumeration in the
+    same document (the checkbox list *is* the count).
 
     Phrase a task as *creating* a file/function, not extending or modifying
     it, whenever the target doesn't exist yet — there's nothing to modify.

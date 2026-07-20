@@ -408,7 +408,7 @@ prompt; a denied/unavailable prompt reads as "no — stop here"); plan
 normally hands off to analyze, which then owns the single prompt of
 the turn (one prompt per user-visible turn end — the prose in both
 skills states this). Set the field via `ardd-state.sh stamp <file>
-next_step_prompt <true|false>`, never by hand-editing. Like
+next_step_prompt <true|false|auto>`, never by hand-editing. Like
 `workflow_mode`, it's a workflow field, not constitution content: no Sync
 Impact Report entry and no constitution version bump applies. Don't widen
 the two-skill scope casually — every other skill's terminal analyze

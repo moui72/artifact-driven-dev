@@ -74,7 +74,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Plan-record conventions
 
-- [ ] T011 Edit `skills/ardd-plan/SKILL.md` drafting prose (step 8) and the
+- [x] T011 Edit `skills/ardd-plan/SKILL.md` drafting prose (step 8) and the
   tasking template (steps 12–13): plans emit plain enumerations, never
   `- [ ]` checkboxes; the plan template carries a "phase lists are plan
   work-items, not live checklists — progress is tracked in the linked
@@ -82,7 +82,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   restate in prose a count derivable from an enumeration in the same
   document (feedback 19ce F003/F004; F004 decided: static historical
   record).
-- [ ] T012 [parallel] Verify `skills/ardd-implement/SKILL.md` nowhere
+- [x] T012 [parallel] Verify `skills/ardd-implement/SKILL.md` nowhere
   implies it updates plan checklists or plan progress; if any wording
   suggests it, fix it to point at the tasks file as the sole progress
   record.
