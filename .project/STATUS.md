@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (release ops + rename + `/scenario-sweep S1` +
+_Updated: 2026-07-20 (`/ardd-plan feedback-s1-badge-followups-5e84.md`
+— consumed both S1 follow-up items (file now `planned`): drafted,
+approved, and tasked `plan-s1-badge-followups-2026-07-20-9667.md` — 2
+tasks/2 phases in `tasks-s1-badge-followups-7a62.md` (`ready`).
+Test-first: no-README targets get a one-line ARDD_VERSION_BADGE=1
+opt-in pointer (F001), and the misdirected-badge advisory's remedy
+becomes self-sufficient (replace the badge inside the markers with the
+endpoint form) instead of suggesting a re-run the reprint guard
+silences (F002). Reprint guard/coordinate fill untouched. No feature
+slugs (`features: []`). Committed to `main` (3a14785). Prior update,
+same day, release ops + rename + `/scenario-sweep S1` +
 `/ardd-feedback` — pushed `main` (`4be4848..86f2fec`, 22 commits);
 lint green; beta-release published **v1.0.2-beta.1** (stable remains
 v1.0.1). Renamed the sweep skill: `/prerelease-sweep` →
@@ -1509,10 +1519,9 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-s1-badge-followups-5e84.md` (2 UX items from the
-targeted S1 sweep: README-gated opt-in mention; circular
-misdirected-badge advisory remedy). Will be picked up by the next
-`/ardd-plan`. Delivered earlier:
+0 open — `feedback-s1-badge-followups-5e84.md` (2 UX items) is now
+`planned`, consumed by `plan-s1-badge-followups-2026-07-20-9667.md`.
+Delivered earlier:
 `feedback-sweep-coverage-expansion-3452.md` (6 UX items),
 now `planned`, consumed by
 `plan-sweep-coverage-expansion-2026-07-20-d493.md` — see the
@@ -1594,10 +1603,10 @@ since the last push).
 
 ## Recommended Next Step
 
-Run `/ardd-plan feedback-s1-badge-followups-5e84.md` to consume the
-two S1 follow-up UX items (both small install.sh output fixes). The
-rename commit (`a8d3c57`) and this feedback are unpushed — the next
-push publishes them as the next beta. When ready for stable v1.0.2:
+Run `/ardd-implement` to execute `tasks-s1-badge-followups-7a62.md`
+(2 tasks, `ready` — the two install.sh output fixes). The rename
+(`a8d3c57`) and this plan/tasks batch are unpushed — the next push
+publishes them as the next beta. When ready for stable v1.0.2:
 dispatch `stable-release.yml` (`bump: patch`). Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
