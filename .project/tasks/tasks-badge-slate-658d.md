@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Centralize appearance in the JSON
 
-- [ ] T003 Create `templates/ardd-icon.svg`: a deliberately simple,
+- [x] T003 Create `templates/ardd-icon.svg`: a deliberately simple,
   single-colour (`currentColor` or plain black fill) geometric mark
   legible at 14px — no gradients, no multiple fills, no fine detail.
   Keep the file small (aim well under 2KB). Add a one-line comment in
