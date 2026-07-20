@@ -414,4 +414,83 @@ else
   bad "case17: hand-edited icon left untouched"
 fi
 
+# --- Case 18: env unset, README already carries ardd-badge-version markers
+# (S9 F001, feedback b8b6) → the static-badge suggestion must NOT print;
+# instead a one-line acknowledgment naming the found form ---
+target="$(new_target case18)"
+printf '# Test project\n\n<!-- ardd-badge-version-start -->\nadopted\n<!-- ardd-badge-version-end -->\n' > "$target/README.md"
+out="$(run_install "$target")"
+
+case "$out" in
+  *'add a "built with ArDD" badge to your README'*)
+    bad "case18: static suggestion suppressed when version markers present" ;;
+  *)
+    ok "case18: static suggestion suppressed when version markers present" ;;
+esac
+
+case "$out" in
+  *"already badged via version markers"*)
+    ok "case18: acknowledgment names the found form (version)" ;;
+  *)
+    bad "case18: acknowledgment names the found form (version)" ;;
+esac
+
+# --- Case 19: ARDD_VERSION_BADGE=1, README carries ardd-badge-pair markers
+# (S9 F002) → no full paste-snippet block; a short "already badged via pair
+# markers" note pointing at templates/badge.md; supporting files still
+# written as usual ---
+target="$(new_target case19)"
+printf '# Test project\n\n<!-- ardd-badge-pair-start -->\nadopted pair\n<!-- ardd-badge-pair-end -->\n' > "$target/README.md"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"img.shields.io/endpoint"*)
+    bad "case19: full paste-snippet block not printed when pair markers present" ;;
+  *)
+    ok "case19: full paste-snippet block not printed when pair markers present" ;;
+esac
+
+case "$out" in
+  *"already badged via pair markers"*)
+    ok "case19: note names the found form (pair)" ;;
+  *)
+    bad "case19: note names the found form (pair)" ;;
+esac
+
+case "$out" in
+  *"templates/badge.md"*)
+    ok "case19: note points at templates/badge.md" ;;
+  *)
+    bad "case19: note points at templates/badge.md" ;;
+esac
+
+if [ -f "$target/$WORKFLOW_REL" ] && [ -f "$target/$JSON_REL" ]; then
+  ok "case19: supporting files still written when pair markers present"
+else
+  bad "case19: supporting files still written when pair markers present"
+fi
+
+# --- Case 20: ARDD_VERSION_BADGE=1 into a README-less repo (S9 F003) →
+# pointer must acknowledge the flag is already set ("create a README and
+# re-run"), not tell the user to re-run with a flag they already set ---
+target="$WORK/case20"
+mkdir -p "$target"
+git init -q "$target"
+git -C "$target" commit -q --allow-empty -m init
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"ARDD_VERSION_BADGE=1 is set"*)
+    ok "case20: no-README pointer acknowledges the flag is set" ;;
+  *)
+    bad "case20: no-README pointer acknowledges the flag is set" ;;
+esac
+
+case "$out" in
+  *"re-run install with ARDD_VERSION_BADGE=1"*)
+    bad "case20: no-README pointer does not re-suggest setting the flag" ;;
+  *)
+    ok "case20: no-README pointer does not re-suggest setting the flag" ;;
+esac
+
 exit "$fail"
