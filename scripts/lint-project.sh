@@ -71,7 +71,7 @@ TASKS_STATUS_ENUM="generating ready in-progress completed abandoned"
 FEEDBACK_STATUS_ENUM="open planned"
 FEATURE_STATUS_ENUM="backlogged planned tasked implemented retired rejected subsumed"  # retired = shipped, then deliberately removed; only from implemented; terminal; manual via ardd-state.sh feature-flip (no skill automates removal); rejected = a backlogged/planned idea decided against, never built (unlike retired, never shipped; unlike subsumed, no other entry absorbed it); terminal; manual via feature-flip; subsumed = shipped, but credited to a different feature/plan entry (unlike retired, the capability still exists; unlike rejected, it was work, just not under this slug) — the only one of the three reachable from tasked, since absorption can be noticed late; terminal; manual via feature-flip
 WORKFLOW_MODE_ENUM="solo collaborative"
-NEXT_STEP_PROMPT_ENUM="true false"
+NEXT_STEP_PROMPT_ENUM="true false auto"
 DELEGATION_ENUM="eager ask inline"
 MERGE_POLICY_ENUM="auto ask"
 PLAN_PREVIEW_ENUM="always-browser always-console ask"

@@ -503,6 +503,8 @@ sh "$STATE" stamp "$CF" next_step_prompt false >/dev/null
 assert_file_grep "stamp: next_step_prompt replaced with false" "^next_step_prompt: false" "$CF"
 [ "$(grep -c '^next_step_prompt:' "$CF")" = "1" ] && ok "stamp: next_step_prompt no duplicate keys" || bad "stamp: next_step_prompt no duplicate keys"
 set +e
+sh "$STATE" stamp "$CF" next_step_prompt auto >/dev/null
+assert_file_grep "stamp: next_step_prompt accepts auto" "^next_step_prompt: auto" "$CF"
 sh "$STATE" stamp "$CF" next_step_prompt yes >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: bad next_step_prompt refused" 2 "$rc"

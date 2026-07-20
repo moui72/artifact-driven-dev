@@ -109,6 +109,18 @@ proceeds.
    any they want (e.g. paste the badge into README) but never apply one
    unprompted.
 
+   **Legacy Source-Path repair notice.** When install.sh prints its
+   machine-specific-absolute-Source-Path notice (a pre-portability
+   install recorded an absolute path under `$HOME`; the reinstall
+   rewrites it to the portable `~/` form), relay it verbatim like the
+   rest, and add the history-repair framing once: the rewrite fixes the
+   file going forward but the old absolute path is already in this
+   repo's git history — scrubbing it (rewrite/squash before sharing) or
+   accepting the leak is the user's call, and if the history is already
+   public, accepting it is the sensible default. The rewrite is left
+   uncommitted, like every install.sh write; never commit or push it
+   yourself.
+
    **Dynamic version-badge offer.** After relaying the output, when the
    project has a README that does *not* contain the
    `ardd-badge-version-start` marker, ask the user whether they'd like
@@ -136,9 +148,12 @@ proceeds.
    **Without `--reconfigure` (default): backfill absent fields only, once.**
    If the frontmatter lacks a `next_step_prompt` field *entirely*, ask the
    same question `/ardd-init` asks — "Should skills end by offering
-   their recommended next step as a one-keypress prompt?" — and write the
+   their recommended next step as a one-keypress prompt?" — with the same
+   three answers `/ardd-init` offers (`true` = offer via AskUserQuestion;
+   `auto` = run the recommendation directly, stated in the report text
+   first; `false` = stay plain text) — and write the
    answer via `.claude/skills/ardd-scripts/ardd-state.sh stamp
-   .project/artifacts/constitution.md next_step_prompt <true|false>`. Field
+   .project/artifacts/constitution.md next_step_prompt <true|false|auto>`. Field
    presence (either value) suppresses re-asking forever. On paths that skip
    this ask — a bare `./install.sh` run, headless/scripted contexts —
    absent simply stays `false`; never block on the question and never
@@ -173,7 +188,9 @@ proceeds.
    merges locally) or "collaborative" (nothing lands on the local default
    branch; work moves through pushed branches / draft PRs and merges via
    PR); `next_step_prompt`: "Should skills end by offering their
-   recommended next step as a one-keypress prompt?"; `delegation`: "When
+   recommended next step as a one-keypress prompt?" (`true` = offer via
+   AskUserQuestion | `auto` = run it directly, stated in the report first
+   | `false` = plain text); `delegation`: "When
    `/ardd-implement` could run in the background, what should it do?"
    (`eager` | `ask` | `inline`); `merge_policy`: "When a delegated
    background run completes, merge its branch into your default branch

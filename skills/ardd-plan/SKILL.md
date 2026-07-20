@@ -394,6 +394,16 @@ drafts or writes a plan.
      which feedback item each such task addresses. Tasks implementing a
      feature targeted in step 3 reference that feature's slug. Tasks fixing a
      defect accepted in step 5 reference that defect's identifier.
+
+     **Plans are static historical records, not live checklists.** Phase
+     lists are plain enumerations (`-` bullets or numbers), never `- [ ]`
+     checkboxes — progress is tracked exclusively in the linked tasks
+     file, and nothing ever ticks a plan. Include a one-line note in the
+     Phase Breakdown stating this ("Phase lists are plan work-items, not
+     live checklists — progress is tracked in the linked tasks file").
+     And never restate in prose a count that is derivable from an
+     enumeration in the same document ("three phases", "5 tasks") — the
+     enumeration is the record; a restated count only drifts.
    - **Complexity Tracking** — table of justified deviations, included *only if*
      the constitution declares a principle requiring complexity to be justified
      (e.g. a Simplicity/YAGNI principle). Omit the section entirely when no such
@@ -545,6 +555,12 @@ drafts or writes a plan.
     Mark parallelism with `[parallel]` on tasks that touch different files and
     have no shared dependencies.
 
+    The tasks file is the **only** live checklist in the workflow: its
+    `- [ ]` checkboxes are ticked by `/ardd-implement` as work lands. The
+    plan they came from stays a static record — never add checkboxes to a
+    plan, and never restate a count derivable from an enumeration in the
+    same document (the checkbox list *is* the count).
+
     Phrase a task as *creating* a file/function, not extending or modifying
     it, whenever the target doesn't exist yet — there's nothing to modify.
     This is the common case for a project's very first feature: don't write
@@ -611,8 +627,8 @@ drafts or writes a plan.
     run leave it stale otherwise. Don't wait for the user to ask.
 
     **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
-    frontmatter has `next_step_prompt: true` (grep the frontmatter block;
-    absent or `false` = the plain-text behavior above, unchanged), the
+    frontmatter has `next_step_prompt: true` or `auto` (grep the frontmatter
+    block; absent or `false` = the plain-text behavior above, unchanged), the
     recommended next step is offered as a one-keypress AskUserQuestion. The
     recommendation depends on how the run ended: if tasks were generated,
     it's `/ardd-implement` (to execute the tasks file just written); if the
@@ -630,6 +646,22 @@ drafts or writes a plan.
     first. Only if this run ends the turn itself without handing off to
     analyze does the offer fire here. Recommendations that are not a concrete
     runnable `/ardd-*` invocation always stay plain text.
+
+    Under `next_step_prompt: auto`, when the recommendation is a concrete
+    runnable `/ardd-*` invocation, skip the AskUserQuestion: state in the
+    report text which invocation is being auto-run, then invoke it by name
+    directly (same terminal-handoff mechanism, no prompt). The
+    one-prompt-per-turn-end ownership rule above applies unchanged — when
+    the run hands off to `/ardd-status`, the auto-run decision belongs to
+    `/ardd-status`, not here. Non-runnable recommendations stay plain text
+    under `auto` too.
+
+    **Denied or unavailable prompt = "no — stop here".** If the
+    AskUserQuestion call is denied or unavailable (e.g. Claude Code's
+    dontAsk permission mode), treat it exactly as option 2: stop. Never
+    retry the prompt, and never treat the denial as an error that discards
+    the plan/tasks already written — they stand; only the convenience
+    offer is lost.
 
 ## Slate mode (`--slate`)
 
@@ -766,12 +798,13 @@ the feature register. Its own steps:
    don't print an empty section.
 
    If `next_step_prompt: true` (see below), the single top-priority
-   recommendation is then offered via `AskUserQuestion`; otherwise this
-   report is the run's final output and the run stops here.
+   recommendation is then offered via `AskUserQuestion` (`auto` runs it
+   directly); otherwise this report is the run's final output and the run
+   stops here.
 
 **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
-frontmatter has `next_step_prompt: true` (grep the frontmatter block;
-absent or `false` = stay plain text, unchanged), offer the single
+frontmatter has `next_step_prompt: true` or `auto` (grep the frontmatter
+block; absent or `false` = stay plain text, unchanged), offer the single
 top-priority recommendation from step 5's report via a one-keypress
 `AskUserQuestion` — the same mechanism `/ardd-plan`'s and `/ardd-status`'s
 own next-step prompts already use (see step 15 above). "Top-priority"
@@ -787,3 +820,14 @@ reflect), so this is the only prompt in play, never deferred to another
 skill. This prompt is wired only for step 5's N≥2 report; the N=0/N=1
 degenerate branch (step 2) stops before reaching step 5 and stays
 plain-text there, same as `--list`.
+
+Under `next_step_prompt: auto`, skip the AskUserQuestion: state in the
+report text which `/ardd-plan` invocation is being auto-run, then invoke
+it by name directly (same terminal-handoff mechanism, no prompt).
+Non-runnable recommendations stay plain text under `auto` too.
+
+**Denied or unavailable prompt = "no — stop here".** If the
+AskUserQuestion call is denied or unavailable (e.g. Claude Code's dontAsk
+permission mode), treat it exactly as option 2: stop. Never retry the
+prompt, and never treat the denial as an error that discards the report
+already produced — it stands; only the convenience offer is lost.

@@ -64,7 +64,7 @@ stamps it into the frontmatter (via `ardd-state.sh stamp`, never by hand):
 | Field | Values | Asked |
 |---|---|---|
 | `workflow_mode` | `solo` \| `collaborative` | Always; default suggested by detection (branch protection → collaborative, no remote → solo) |
-| `next_step_prompt` | `true` \| `false` | Always; absent = `false` |
+| `next_step_prompt` | `true` \| `false` \| `auto` | Always; absent = `false` |
 | `delegation` | `eager` \| `ask` \| `inline` | Always; absent = `ask` |
 | `merge_policy` | `auto` \| `ask` | Solo mode only — never consulted in collaborative mode |
 

@@ -74,7 +74,7 @@ else
   fi
   # next_step_prompt is optional but, when present, must be exactly
   # true/false — bad-project's 'yes' must be flagged with the allowed values
-  if grep -q "next_step_prompt 'yes' not in {true false}" /tmp/lint-bad.out; then
+  if grep -q "next_step_prompt 'yes' not in {true false auto}" /tmp/lint-bad.out; then
     echo "ok: invalid next_step_prompt value reported with allowed values"
   else
     echo "FAIL: invalid next_step_prompt value reported with allowed values"

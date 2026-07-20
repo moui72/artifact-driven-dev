@@ -70,6 +70,7 @@ the full story.
 |---|---|
 | Every skill, one page each — usage, reads/writes, behavior | [reference/skills/](docs/reference/skills/) |
 | `.project/` file formats, frontmatter schemas, status enums | [project-files.md](docs/reference/project-files.md) |
+| How to read a target's `.project/` (live files vs static records) | the `.project/README.md` reviewer guide install.sh writes into every target |
 | The constitution workflow knobs (`workflow_mode`, `delegation`, …) | [configuration.md](docs/reference/configuration.md) |
 | The installed helper scripts skills shell out to | [scripts.md](docs/reference/scripts.md) |
 

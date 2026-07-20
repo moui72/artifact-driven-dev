@@ -100,6 +100,13 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-gitattributes.sh
 
+  install-source-path:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
+      - run: ./scripts/test-install-source-path.sh
+
   install-prune:
     runs-on: ubuntu-latest
     steps:

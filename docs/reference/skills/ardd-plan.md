@@ -155,7 +155,10 @@ All status mutations are script-performed via `ardd-state.sh`
   reading the plan.
 - Ends by running `/ardd-status`; with `next_step_prompt: true` the
   recommended next step (usually `/ardd-implement`) may be offered as a
-  one-keypress prompt — but only when this run ends the turn itself.
+  one-keypress prompt — but only when this run ends the turn itself. With
+  `auto`, a runnable recommendation is invoked directly (stated in the
+  report first, no prompt); a denied/unavailable prompt reads as "no —
+  stop here".
 
 ## Related
 
