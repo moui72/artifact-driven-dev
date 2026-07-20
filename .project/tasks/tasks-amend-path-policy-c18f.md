@@ -1,7 +1,7 @@
 ---
 plan: plan-amend-path-policy-2026-07-20-3c72.md
 generated: 2026-07-20
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -53,7 +53,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   factual-error class the Phase 1 exemption exists to correct. Leave
   script-emitted output formats untouched — this is prose-instruction
   guidance only.
-- [ ] T005 Verify: run `./scripts/lint-docs.sh` (green) and
+- [x] T005 Verify: run `./scripts/lint-docs.sh` (green) and
   `./scripts/lint-project.sh .` (green), then re-run `./install.sh .` so
   this repo's own installed reviewer guide (`.project/README.md`) picks
   up the T001 change; confirm the new subsection is present in the

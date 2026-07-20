@@ -40,6 +40,18 @@ only *look* live.
 - `research/`-style one-off outputs in `plans/` — investigation results
   with no lifecycle.
 
+## Correcting a skill-written file
+
+**Factual corrections are exempt from the no-hand-edit rule.** A factual
+correction fixes content that is *wrong on the page* without re-deciding
+anything: a mis-cited file or symbol, a stale path, a typo, a wrong
+quotation. Anyone (human or AI) may hand-edit these in place, in any
+skill-written file's body prose. The exemption never covers frontmatter
+`status` fields, checkboxes, or any lifecycle state — those stay
+script-mutated (`ardd-state.sh`) — and never covers decisions, scope, or
+classifications: changing *what was decided* goes through the workflow
+(`/ardd-feedback`, `/ardd-refine`, a new plan).
+
 ## Generated reports (single-writer, disposable)
 
 `STATUS.md` (written only by `/ardd-status`), `DEFECTS.md`
