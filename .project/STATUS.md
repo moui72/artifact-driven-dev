@@ -1,6 +1,20 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-plan` — consumed
+_Updated: 2026-07-20 (`/inbox-drain` + `/ardd-feedback` — drained one
+inbox item (three badge proposals from adopting the guidance in
+moui72/assisted-review PRs #107/#108): re-filed 3 new-capability items
+to the register — `badge-split-variant` (a single split badge as a
+third `badge.md` shape, maybe the default), `badge-brand-color-in-json`
+(canonical ArDD brand hex published and emitted as `labelColor` in the
+generated badge JSON — central brand propagation), `badge-icon-logosvg`
+(ship `templates/ardd-icon.svg`, workflow inlines it as `logoSvg` +
+base64 URL form) — all `backlogged`, cross-linked; wrote
+`feedback-badge-renderer-caveat-bf75.md` (`open`, 1 UX): `badge.md`
+implies the JSON drives appearance, untrue for dynamic-JSON renderers
+(shieldcn) — document the endpoint-vs-dynamic distinction. Inbox file
+deleted; committed. Meanwhile the delegated `amend-path-policy`
+worktree run is in flight at 1/5. Prior update, same day,
+`/ardd-plan` — consumed
 `feedback-amend-path-for-skill-written-files-2187.md` (both items
 accepted, file now `planned`): drafted, approved, and tasked
 `plan-amend-path-policy-2026-07-20-3c72.md` — 5 tasks/2 phases in
@@ -1640,7 +1654,9 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX: the
+2 open — `feedback-badge-renderer-caveat-bf75.md` (1 UX: `badge.md`'s
+endpoint-vs-dynamic-JSON renderer caveat, drained 2026-07-20) and
+`feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX: the
 invalid-YAML badge workflow template with verified fix, a column-0
 heredoc template sweep, branch-filter/`workflow_dispatch` hardening,
 `[skip ci]`), drained 2026-07-20 by `/inbox-drain`'s first live run.
@@ -1705,10 +1721,15 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 31 implemented · 1 retired — see
+4 backlogged · 31 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
+- `badge-split-variant`, `badge-brand-color-in-json`,
+  `badge-icon-logosvg` — the three cross-linked badge proposals from
+  assisted-review PRs #107/#108 (natural epic/bundle candidates: all
+  ride the same generated `ardd-version.json`, and they interact with
+  open badge feedback — plan together).
 - `codex-second-harness-support` — single-source Codex CLI support via
   `install.sh --harness codex`; spec = the accepted Codex-harness research
   report plus the de-risking spike (both GO). Still `backlogged`: a plan
@@ -1730,27 +1751,34 @@ workflow-field exemption, v1.8.2).
 
 ## Work Queue
 
-- `tasks-amend-path-policy-c18f.md` (`ready`) — plan
+- `tasks-amend-path-policy-c18f.md` (`ready` in this checkout) — plan
   `plan-amend-path-policy-2026-07-20-3c72.md`, no bound features
-  (`features: []`). Sole ready file, nothing in flight —
-  `parallel-matrix.sh` is silent with fewer than two participants; no
-  pair verdicts to report. (`independent` would mean no declared
-  overlap only, not conflict-free.)
+  (`features: []`):
+  - vs in-flight `.claude/worktrees/agent-abed7ef0d9e2e6e37`'s copy:
+    **claimed by in-flight worktree** — the same tasks file, ready here
+    and `in-progress` (1/5) there. Do not start it a second time.
+  (`independent` would mean no declared overlap only, not
+  conflict-free.)
 
 ## In Flight
 
-Nothing on a worktree (the reviewer-guide worktree merged and was
-reaped). `main` is ahead of `origin/main` (unpushed commits since the
-last push, now including the merged reviewer-guide/auto-prompt batch
-and the amend-path plan).
+- Worktree `.claude/worktrees/agent-abed7ef0d9e2e6e37` (branch
+  `worktree-agent-abed7ef0d9e2e6e37`) —
+  `tasks-amend-path-policy-c18f.md` `in-progress`, 1/5. No reap
+  candidates. `main` is ahead of `origin/main` (unpushed commits since
+  the last push).
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-amend-path-policy-c18f.md` (5
-tasks, 2 phases — the factual-corrections exemption + citation-rot
-sweep). Then `/ardd-plan feedback-badge-workflow-yaml-ff0c.md` — the
-invalid-YAML badge workflow template is consumer-facing and worth
-fixing promptly. Also standing: push `main` to publish the accumulated batch as
+Let the in-flight delegated `amend-path-policy` worktree run (1/5)
+finish; the coordinator merges eagerly and reaps on report-back. Then
+`/ardd-plan feedback-badge-workflow-yaml-ff0c.md
+feedback-badge-renderer-caveat-bf75.md badge-split-variant
+badge-brand-color-in-json badge-icon-logosvg` — the whole badge slate
+rides the same template/workflow surface (the invalid-YAML fix is
+consumer-facing and worth shipping promptly; the three backlogged badge
+features and both feedback files naturally plan together). Also
+standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
