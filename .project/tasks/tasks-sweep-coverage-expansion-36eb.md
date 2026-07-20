@@ -31,7 +31,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   and confirm the run proceeds scoped to it. One added step in the
   brief's existing style.
 
-- [ ] T003 [parallel] Extend `tests/prerelease/scenarios/S7.md` (F004 +
+- [x] T003 [parallel] Extend `tests/prerelease/scenarios/S7.md` (F004 +
   F005): add (a) a smoke-tier step running `/ardd-status --view` —
   verify the printed summary/in-flight/next-step output AND that
   `STATUS.md` content is byte-identical afterward (capture a checksum
