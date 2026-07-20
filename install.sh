@@ -444,8 +444,11 @@ if [ -f "$TARGET/README.md" ] \
    && grep -q 'img.shields.io/github/v/release/.*artifact-driven-dev' "$TARGET/README.md"; then
   echo ""
   echo "  ⚠ Your README has an ArDD badge that tracks ArDD's latest release, not the"
-  echo "    version installed here. Consider replacing it with the endpoint-badge"
-  echo "    snippet (run install.sh with ARDD_VERSION_BADGE=1 to print it)."
+  echo "    version installed here. To fix it, replace the badge inside the markers"
+  echo "    (ardd-badge-version-start/-end, or wherever it sits) with the shields.io"
+  echo "    endpoint form pointing at this repo's own .github/badges/ardd-version.json"
+  echo "    (re-running with ARDD_VERSION_BADGE=1 writes that file; see"
+  echo "    templates/badge.md in the ArDD source for the endpoint snippet shape)."
 fi
 
 if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
@@ -529,6 +532,12 @@ elif [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.
     echo ""
     echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic version-badge pair."
     echo ""
+elif [ ! -f "$TARGET/README.md" ]; then
+    # F001: no README yet (a fresh new.sh project) — the opt-in would
+    # otherwise never be mentioned. Pointer only, never the snippet:
+    # there's no README to paste it into yet.
+    echo ""
+    echo "  Once this project has a README.md, re-run install with ARDD_VERSION_BADGE=1 to add a dynamic version badge."
 fi
 
 # --- .project/.lock gitignore entry ---

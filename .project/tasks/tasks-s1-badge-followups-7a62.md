@@ -24,7 +24,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Implement
 
-- [ ] T002 Implement both output-text fixes in `install.sh`'s badge
+- [x] T002 Implement both output-text fixes in `install.sh`'s badge
   section, turning T001 green: (1) F001 — print the one-line opt-in
   pointer when the target has no README.md (currently the mention lives
   only inside the `[ -f "$TARGET/README.md" ]`-gated static-suggestion
