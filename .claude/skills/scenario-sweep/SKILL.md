@@ -1,12 +1,12 @@
 ---
-name: prerelease-sweep
-description: Source-side only (never installed to consumers). Dispatch the prerelease dry-run scenarios in tests/prerelease/ as background subagents with durable progressive reporting, then triage the results. Usage — /prerelease-sweep smoke | full | S<n> [S<n> ...]
+name: scenario-sweep
+description: Source-side only (never installed to consumers; formerly prerelease-sweep). Dispatch the dry-run scenarios in tests/scenarios/ as background subagents with durable progressive reporting, then triage the results. Usage — /scenario-sweep smoke | full | S<n> [S<n> ...]
 ---
 
-# Prerelease sweep dispatcher
+# Scenario sweep dispatcher
 
-You are running ArDD's manual prerelease dry-run exercise. The briefs and
-rules live in `tests/prerelease/` — read `tests/prerelease/README.md`
+You are running ArDD's manual scenario dry-run exercise (the pre-release gate and regression-rerun harness). The briefs and
+rules live in `tests/scenarios/` — read `tests/scenarios/README.md`
 first if you haven't this session. This skill is a thin dispatcher: the
 briefs are the product; never improvise scenario content from memory.
 
@@ -37,35 +37,35 @@ briefs themselves grew.
 ## 2. Prepare the run
 
 1. `run_id` = `YYYY-MM-DD-<short>` (date + 4 hex chars).
-2. `mkdir -p dev-notes/prerelease-runs/<run_id>` (repo-relative; this is
+2. `mkdir -p dev-notes/scenario-runs/<run_id>` (repo-relative; this is
    the durable report location — never the session scratchpad).
-3. Write `dev-notes/prerelease-runs/<run_id>/RUN.md`: date, tier,
+3. Write `dev-notes/scenario-runs/<run_id>/RUN.md`: date, tier,
    scenario list, source HEAD (`git rev-parse HEAD`), and for beta-path
    scenarios the latest published beta tag.
 4. Create a scratch root for the subagents, e.g.
-   `dev-notes/prerelease-runs/<run_id>/scratch/` (also gitignored).
+   `dev-notes/scenario-runs/<run_id>/scratch/` (also gitignored).
 
 ## 3. Dispatch
 
 For each scenario, launch ONE background `Agent` (general-purpose) whose
 prompt is, in order:
 
-1. The full text of `tests/prerelease/GUARDRAILS.md`, verbatim.
+1. The full text of `tests/scenarios/GUARDRAILS.md`, verbatim.
 2. Concrete bindings: `$SCRATCH` = the scratch root above; report file =
-   `dev-notes/prerelease-runs/<run_id>/S<n>-report.md` (absolute path);
+   `dev-notes/scenario-runs/<run_id>/S<n>-report.md` (absolute path);
    local ArDD source checkout path; any dispatcher-supplied substitutions
    (S2/S7 clone source, S3's "recent features to stress" list — derive
    that list from `git log` since the last stable tag).
 
    While deriving S3's list, also grep-and-judge each recent
-   consumer-facing surface against `tests/prerelease/scenarios/*.md` —
+   consumer-facing surface against `tests/scenarios/*.md` —
    judge, don't slug-match: briefs deliberately don't name register
    slugs verbatim, so decide whether some brief step genuinely
    exercises the surface. Record every consumer-facing surface that has
    no brief line despite having been through a prior sweep as a
    `never-graduated: <surface>` line in RUN.md; these carry into
    triage's Graduation step (step 6).
-3. The full text of `tests/prerelease/scenarios/S<n>.md`, verbatim.
+3. The full text of `tests/scenarios/S<n>.md`, verbatim.
 4. Closing reminder: "Report file first, append after every major step,
    scripted answers only — you have no AskUserQuestion tool."
 
@@ -92,14 +92,14 @@ subagent, not the input/output/cache-read/cache-write split that pricing
 actually depends on, so treat the dollar figure as order-of-magnitude
 only, never precise billing. This is a standing requirement for every
 sweep, not just the first one — the point is a durable, on-disk cost
-history across runs (`dev-notes/prerelease-runs/*/RUN.md`), not a
+history across runs (`dev-notes/scenario-runs/*/RUN.md`), not a
 one-off. Report the same table + estimate to the user in this turn too,
 not just on disk.
 
 ## 6. Triage (do NOT skip straight to /ardd-feedback)
 
 When all are done, read every `S<n>-report.md` and write
-`dev-notes/prerelease-runs/<run_id>/TRIAGE.md`: one table row per
+`dev-notes/scenario-runs/<run_id>/TRIAGE.md`: one table row per
 finding — id, scenario, kind, one-liner, disposition ∈ accept /
 duplicate / harness-artifact / taste-defer, and a mandatory
 `graduate ∈ yes / no / n-a` column. Harness artifacts (missing
@@ -115,7 +115,7 @@ brief line), and every `never-graduated:` carry-in from RUN.md, gets
 1–3-line step to add — extend an existing S<n> whose setup already
 provides the precondition; propose a new S-file only when no existing
 scenario's axes fit. Brief edits land via the fix plan and are validated
-by the regression rerun — never edit `tests/prerelease/` during the
+by the regression rerun — never edit `tests/scenarios/` during the
 sweep itself. Criteria (anti-bloat): consumer-facing accepted findings
 only; taste-defers, harness artifacts, and source-side surfaces never
 graduate (`no` / `n-a`); smoke-tier additions must respect the ~1 hr
@@ -125,7 +125,7 @@ Then, on the user's go-ahead only: run `/ardd-feedback` once with the
 accepted findings (including any graduation brief-coverage items)
 consolidated (this repo dogfoods its own `.project/`),
 and remind that the normal next loop is `/ardd-plan` → fixes →
-regression rerun (`/prerelease-sweep S<the affected ones>`).
+regression rerun (`/scenario-sweep S<the affected ones>`).
 
 Never commit anything during a sweep; `dev-notes/` is gitignored and the
 only writes outside it are the subagents' sandboxed scratch dirs.

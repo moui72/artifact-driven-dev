@@ -35,7 +35,7 @@ unconstrained, push to real remotes or open real PRs. You must not.
 ## Progressive, durable reporting (hard requirement)
 
 8. Your brief names a report file under the ArDD repo's
-   `dev-notes/prerelease-runs/<run-id>/`. Create it as your FIRST act,
+   `dev-notes/scenario-runs/<run-id>/`. Create it as your FIRST act,
    with a header (scenario id, date, your scratch path), and APPEND to it
    after every major step — never hold findings for one final write. If
    you die mid-run, the partial report is the deliverable.

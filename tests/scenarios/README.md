@@ -18,7 +18,7 @@ findings, one fix plan). Background context lives in
 - `scenarios/S1.md` … `S7.md` — one durable brief per scenario: setup,
   steps, **scripted answers** for every interactive pause (background
   subagents have no `AskUserQuestion` tool), and a pass/fail checklist.
-- Reports land in `dev-notes/prerelease-runs/<run-id>/Sx-report.md`
+- Reports land in `dev-notes/scenario-runs/<run-id>/Sx-report.md`
   (gitignored; on repo disk, not the session scratchpad, so they survive
   subagent death — the 2026-07-15 outage lesson).
 
@@ -27,11 +27,11 @@ findings, one fix plan). Background context lives in
 Invocation is Claude-Code-driven — `Agent`-tool dispatch can't be
 scripted from `sh`. Use the source-side skill:
 
-    /prerelease-sweep smoke        # S1 + S5 + S7 (routine betas)
-    /prerelease-sweep full         # all seven (before a stable cut)
-    /prerelease-sweep S3 S6        # named subset (e.g. regression rerun)
+    /scenario-sweep smoke        # S1 + S5 + S7 (routine betas)
+    /scenario-sweep full         # all seven (before a stable cut)
+    /scenario-sweep S3 S6        # named subset (e.g. regression rerun)
 
-(`.claude/skills/prerelease-sweep/` — repo-local, never installed to
+(`.claude/skills/scenario-sweep/` — repo-local, never installed to
 consumers; install.sh only copies from `skills/`.) It creates the run
 directory, launches one background subagent per scenario with
 GUARDRAILS.md + the brief, monitors, and summarizes reports when done.
@@ -100,5 +100,5 @@ into a background `Agent` call, one per scenario.
 - Anything learned operationally (new failure mode, new guardrail) goes
   into GUARDRAILS.md or this README, not a chat transcript.
 - Coverage graduation: dispatcher-stressed surfaces earn standing brief
-  lines via the sweep skill's triage step (prerelease-sweep SKILL.md,
+  lines via the sweep skill's triage step (scenario-sweep SKILL.md,
   step 6) — brief edits land through the fix plan, never mid-sweep.

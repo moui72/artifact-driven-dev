@@ -30,7 +30,7 @@ git log --oneline <last-stable-tag>..HEAD -- skills/
 - `--all` argument: always do a full sweep of every skill under `skills/`
   regardless of recent changes, ignoring the git-log scoping above.
 
-Local-only skills (this one, `prerelease-sweep`) are never in scope for
+Local-only skills (this one, `scenario-sweep`) are never in scope for
 their own sweep — they have no `docs/reference/skills/` page and no
 installed consumer surface to judge freshness against.
 
@@ -73,11 +73,11 @@ guide that walks through a flow the skill participates in).
 ## 3. Present findings and triage (do NOT skip straight to /ardd-feedback)
 
 Present one table: `skill/file | gap | suggested fix` — same shape as
-`prerelease-sweep`'s scenario-report triage. Get accept/decline per row
+`scenario-sweep`'s scenario-report triage. Get accept/decline per row
 from the user before filing anything.
 
 There is no durable per-run report file for this skill (unlike
-`prerelease-sweep`'s `dev-notes/prerelease-runs/`) — a docs-sweep run is
+`scenario-sweep`'s `dev-notes/scenario-runs/`) — a docs-sweep run is
 lighter-weight than a full prerelease dry-run. The only durable output is
 whatever `/ardd-feedback` entries result from the triage below.
 
