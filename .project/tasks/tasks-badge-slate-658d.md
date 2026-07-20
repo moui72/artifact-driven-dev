@@ -1,7 +1,7 @@
 ---
 plan: plan-badge-slate-2026-07-20-e059.md
 generated: 2026-07-20
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -76,7 +76,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   and logo must ride the URL there, using the pre-encoded
   `data:image/svg+xml;base64,...` form of the icon (document how to
   produce it: `base64 < templates/ardd-icon.svg`).
-- [ ] T007 Update install.sh's `ARDD_VERSION_BADGE=1` printed snippet to
+- [x] T007 Update install.sh's `ARDD_VERSION_BADGE=1` printed snippet to
   the split-badge shape (the pair remains documented in `badge.md` for
   those who want it), keeping the existing OWNER/REPO/BRANCH
   coordinate-fill, reprint-guard, misdirected-badge advisory, and

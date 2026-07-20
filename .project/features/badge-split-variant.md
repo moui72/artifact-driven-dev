@@ -1,6 +1,6 @@
 ---
 slug: badge-split-variant
-status: tasked
+status: implemented
 logged: 2026-07-20
 plan: plan-badge-slate-2026-07-20-e059.md
 tasks: tasks-badge-slate-658d.md
