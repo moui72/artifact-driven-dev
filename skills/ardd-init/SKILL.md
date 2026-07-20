@@ -282,12 +282,16 @@ with `/ardd-refine` before planning new work.
 
    **Set `next_step_prompt` in the constitution's frontmatter.** Alongside
    the `workflow_mode` question, ask once: "Should skills end by offering
-   their recommended next step as a one-keypress prompt?" (`true` = at the
-   end of `/ardd-status` and `/ardd-plan`, a concrete runnable `/ardd-*`
-   recommendation is offered via AskUserQuestion — yes runs it, no/Esc
-   stops; `false`/absent = recommendations stay plain text). Write the
-   answer via `.claude/skills/ardd-scripts/ardd-state.sh stamp
-   .project/artifacts/constitution.md next_step_prompt <true|false>` after
+   their recommended next step as a one-keypress prompt?" Three answers:
+   - `true` — at the end of `/ardd-status` and `/ardd-plan`, a concrete
+     runnable `/ardd-*` recommendation is offered via AskUserQuestion —
+     yes runs it, no/Esc stops.
+   - `auto` — the same recommendation is run directly, stated in the
+     report text first, with no prompt.
+   - `false` (also what absence means) — recommendations stay plain text.
+
+   Write the answer via `.claude/skills/ardd-scripts/ardd-state.sh stamp
+   .project/artifacts/constitution.md next_step_prompt <true|false|auto>` after
    the file is written in step 6. Like `workflow_mode`, this is a
    frontmatter workflow field, not constitution content — no Sync Impact
    Report entry and no constitution version bump applies to setting or

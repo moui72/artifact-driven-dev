@@ -62,7 +62,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   call (e.g. Claude Code's dontAsk permission mode) means "no — stop here"
   — never retry the prompt, never treat the denial as an error that
   discards the report/plan already written.
-- [ ] T009 Update the one-time configuration ask in
+- [x] T009 Update the one-time configuration ask in
   `skills/ardd-init/SKILL.md` and `skills/ardd-update/SKILL.md`
   (`--reconfigure` and the backfill ask) to offer three values
   (`true`/`false`/`auto`) with one-line descriptions; stamped via
