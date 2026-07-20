@@ -215,7 +215,10 @@ this is not enforceable by a hook, and that was verified, not assumed.**
   on user confirmation, for an orphaned completion flip its
   `completion-flip-check.sh` detects — see the note below)
 
-Every other skill treats these as read-only. At merge/rebase these files
+Every other skill treats these as read-only. (Factual corrections —
+mis-cited path/symbol, typo — are exempt from the no-hand-edit rule in
+body prose; canonical rule in `templates/dot-project-readme.md`, the
+installed reviewer guide.) At merge/rebase these files
 are **disposable**: take either side without deliberation — never
 hand-reconcile, never re-apply — and let the owning skill regenerate
 from disk (full treatment: README's "Concurrency and `.project/` merge

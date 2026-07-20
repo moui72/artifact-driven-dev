@@ -29,7 +29,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   paths, symbol names, typos) are exempt and may be fixed in place —
   decisions and item content still never change. One sentence each; do
   not restate the full rule.
-- [ ] T003 [parallel] Echo the exemption where reviewers and
+- [x] T003 [parallel] Echo the exemption where reviewers and
   contributors read: `docs/reference/project-files.md` (alongside its
   existing hand-edit/single-writer guidance), `README.md` (the section
   stating the no-hand-edit/single-writer discipline — the "Concurrency
