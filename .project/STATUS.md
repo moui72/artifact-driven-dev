@@ -1,6 +1,23 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (**v1.0.1 shipped** — ship-gate sweep e33f (S3 S5
+_Updated: 2026-07-19 (`/ardd-feedback` — logged
+`feedback-dynamic-badge-discoverability-a123.md` (`open`, 3 bugs + 2 UX
++ 1 Reconsidered) after the `ARDD_VERSION_BADGE` dynamic-badge feature
+failed in the field: a consuming agent asked to add a version badge
+hand-rolled the wrong shields.io `github/v/release` badge (the exact
+"runs ahead silently" shape the feature was built to prevent) because
+the env-var opt-in is documented nowhere — zero mentions in `skills/`,
+`docs/`, `README.md`, or `USAGE.md`, and `/ardd-update` never offers
+it — then wrapped the wrong badge in `ardd-badge-start/end` markers,
+which now suppress install.sh's suggestion permanently. Also filed:
+the printed two-badge snippet's literal `OWNER/REPO/BRANCH`
+placeholders (the explanatory comment isn't printed), the
+`ARDD_VERSION_BADGE=1` branch reprinting the snippet despite existing
+markers, the missing private-repo caveat (shields.io can't fetch
+`raw.githubusercontent.com` on private repos), and a Reconsidered item
+questioning whether an env-var gate is the right interface for an
+agent-mediated workflow at all. The next `/ardd-plan` run picks it up.
+Prior update, same day, **v1.0.1 shipped** — ship-gate sweep e33f (S3 S5
 S6 S8) came back fully clean: all checklists green, the
 stamp-workflow-mode fix verified live, F002/F003/F004 holding, F001
 reproduced exactly as known-open; only new items were three
@@ -1381,7 +1398,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (the 6
+1 open — `feedback-dynamic-badge-discoverability-a123.md` (3 bugs, 2 UX,
+1 Reconsidered: the `ARDD_VERSION_BADGE` dynamic-badge feature is
+undiscoverable and mis-fired in the field — see the `_Updated` note
+above). Will be picked up by the next `/ardd-plan`. All earlier batches
+delivered — `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (the 6
 accepted prerelease-sweep findings) is now `planned`, consumed by
 `plan-prerelease-sweep-fixes-2026-07-18-d341.md` — see the `_Updated`
 note above. All other batches delivered, including `feedback-ardd-status-reference-page-mis-7fa5.md` and
@@ -1453,7 +1474,13 @@ since the last push).
 
 ## Recommended Next Step
 
-Nothing urgent — v1.0.1 is out and the sweep loop is closed. Options:
+Run `/ardd-plan` to consume
+`feedback-dynamic-badge-discoverability-a123.md` — the dynamic-badge
+feature shipped in v1.0.1 but is effectively unreachable (undocumented
+env-var opt-in) and its printed snippet is broken as pasted
+(`OWNER/REPO/BRANCH` placeholders); a real consumer already worked
+around it wrongly. Other standing options: v1.0.1 is out and the sweep
+loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
