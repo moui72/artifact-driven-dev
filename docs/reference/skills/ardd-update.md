@@ -81,7 +81,18 @@ than one at once is a usage error, reported before anything else runs.
    tree, never a push. The owned checkout was already moved in step 1.
 4. **Reinstall**: runs `<source>/install.sh` against the project and
    relays its full output verbatim. Suggestions are yours to accept;
-   none is applied unprompted.
+   none is applied unprompted. After relaying, if the project has a
+   README without the `ardd-badge-version-start` marker, it offers the
+   **dynamic ArDD version badge**: a two-badge pair whose version half
+   tracks `.project/ardd-version.md` via a small workflow. Saying yes
+   re-runs the same install with `ARDD_VERSION_BADGE=1` set and relays
+   the printed snippet — filled with your repo's own coordinates when a
+   GitHub `origin` remote exists — plus its caveats (the badge renders
+   only for public repos, since shields.io fetches
+   raw.githubusercontent.com unauthenticated). Your README is never
+   edited; the snippet is yours to paste. The offer is skipped when the
+   marker is already present, no README exists, or the run is
+   headless/scripted.
 5. **Ask the workflow-field questions.** Without `--reconfigure`
    (default): backfills only, once — for constitutions that lack
    `next_step_prompt`, `delegation`, or (solo mode only) `merge_policy`

@@ -68,7 +68,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: docs and templates
 
-- [ ] T004 Documentation pass: (a) update
+- [x] T004 Documentation pass: (a) update
   `templates/badge.md`'s comment block and
   `templates/ardd-badge-workflow.yml`'s header comment to state the
   public-repo-only limitation; (b) add the dynamic badge to `USAGE.md`

@@ -4,6 +4,8 @@ name: ArDD version badge sync
 # .project/ardd-version.md — regenerates the shields.io endpoint-badge JSON
 # whenever that file changes (via /ardd-update, a manual edit, or anything
 # else that touches it), and commits only if the JSON actually differs.
+# Note: the endpoint badge that reads this JSON renders only for public
+# repos — shields.io fetches raw.githubusercontent.com unauthenticated.
 on:
   push:
     paths:
