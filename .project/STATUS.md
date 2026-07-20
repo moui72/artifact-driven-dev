@@ -1,6 +1,22 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (`/ardd-plan feedback-sweep-coverage-expansion-3452.md`
+— consumed the sweep-coverage feedback (all 6 items accepted, file now
+`planned`): drafted, approved, and tasked
+`plan-sweep-coverage-expansion-2026-07-20-d493.md` — 5 tasks/2 phases
+in `tasks-sweep-coverage-expansion-36eb.md` (`ready`). Phase 1
+(parallel-safe, one task per brief): S1 + dynamic-badge steps (against
+the merged 09abad7 behavior), S5 + bare-plan picker, S7 + `--view`
+byte-identical-STATUS check and full-tier `constitution --review`, S8
++ Work Queue/parallel-matrix verdicts incl. `claimed`. Phase 2: the
+graduation mechanism in prerelease-sweep SKILL.md per the audit
+proposal (design-of-record in the plan) — dispatch-time
+`never-graduated:` RUN.md lines, a mandatory `graduate ∈ yes/no/n-a`
+TRIAGE.md column, feedback-routed brief-coverage items, anti-bloat
+criteria, README mirror; explicitly no new script (fails the
+deterministic bar). No feature slugs targeted (`features: []`).
+Committed to `main` (a217497). Prior update, 2026-07-19,
+`/ardd-implement` coordinator — the delegated
 `dynamic-badge-discoverability` worktree run completed all 4 tasks and
 merged (merge commit `09abad7`, signed with the on-disk key after the
 first attempt hit the locked-1Password signer); worktree reaped;
@@ -1454,12 +1470,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-sweep-coverage-expansion-3452.md` (6 UX items:
-prerelease-sweep scenario-brief extensions from the coverage audit —
-badge→S1, Work Queue→S8, bare-plan picker→S5, `--view` +
-`constitution --review`→S7, plus the graduate-to-brief rule). Will be
-picked up by the next `/ardd-plan`; its F001 deliberately waits for the
-in-flight badge fix branch to merge first. Delivered earlier today:
+0 open — `feedback-sweep-coverage-expansion-3452.md` (6 UX items) is
+now `planned`, consumed by
+`plan-sweep-coverage-expansion-2026-07-20-d493.md` — see the
+`_Updated` note above. Delivered 2026-07-19:
 `feedback-dynamic-badge-discoverability-a123.md` (3 bugs, 2 UX,
 1 Reconsidered) is now `planned`, consumed by
 `plan-dynamic-badge-discoverability-2026-07-19-23cf.md` — see the
@@ -1527,6 +1541,13 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-sweep-coverage-expansion-36eb.md` — plan
+  `plan-sweep-coverage-expansion-2026-07-20-d493.md`, features: none
+  (`features: []`). The only `ready` tasks file and nothing in flight,
+  so `parallel-matrix.sh` has no pairs to report.
+
 ## In Flight
 
 Nothing — the `dynamic-badge-discoverability` worktree merged
@@ -1536,13 +1557,11 @@ since the last push).
 
 ## Recommended Next Step
 
-Run `/ardd-plan feedback-sweep-coverage-expansion-3452.md` to consume
-the sweep-coverage feedback — now unblocked (F001's badge brief
-depended on the just-merged fix), with the coverage-audit agent's
-graduation proposal (triage `graduate` column + dispatch-time
-`never-graduated:` lines, drafted SKILL.md prose) ready as F006's
-technical approach. Also worth considering: push `main` to publish the
-badge fixes on the beta channel. Other standing options: v1.0.1 is out and the sweep loop is closed;
+Run `/ardd-implement` to execute
+`tasks-sweep-coverage-expansion-36eb.md` (5 tasks/2 phases, `ready`) —
+the four scenario-brief extensions plus the sweep skill's graduation
+mechanism. Also worth considering: push `main` to publish the badge
+fixes on the beta channel. Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
