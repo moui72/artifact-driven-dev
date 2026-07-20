@@ -1,6 +1,21 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-plan feedback-dynamic-badge-discoverability-a123.md`
+_Updated: 2026-07-19 (`/ardd-feedback` — logged
+`feedback-sweep-coverage-expansion-3452.md` (`open`, 6 UX items) from a
+Fable audit of `tests/prerelease/scenarios/` coverage vs recently
+shipped surfaces. Verdict: suite structurally healthy; two expansions
+matter — dynamic-badge checks into S1 (field failure, zero coverage;
+write after the in-flight fix branch merges) and Work Queue/
+parallel-matrix consumer-visible checks into S8 (two real d06a bugs,
+shell-test pin only) — plus smaller S5 (bare-plan picker), S7
+(`--view` single-writer discipline; `constitution --review`)
+extensions and a systemic F006: dispatcher-supplied "recent feature"
+stress ages out after one sweep, so real-finding surfaces should
+graduate into durable briefs. Judged adequate as-is: channels, epics,
+fold/reap/align, rejected/subsumed (deterministic layer), `--slate`,
+source-side skills. Meanwhile the delegated
+`dynamic-badge-discoverability` worktree run is in flight at 3/4.
+Prior update, same day, `/ardd-plan feedback-dynamic-badge-discoverability-a123.md`
 — consumed the badge feedback (all 6 items accepted, file now
 `planned`): drafted, approved, and tasked
 `plan-dynamic-badge-discoverability-2026-07-19-23cf.md` — 4 tasks/3
@@ -1417,7 +1432,13 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — `feedback-dynamic-badge-discoverability-a123.md` (3 bugs, 2 UX,
+1 open — `feedback-sweep-coverage-expansion-3452.md` (6 UX items:
+prerelease-sweep scenario-brief extensions from the coverage audit —
+badge→S1, Work Queue→S8, bare-plan picker→S5, `--view` +
+`constitution --review`→S7, plus the graduate-to-brief rule). Will be
+picked up by the next `/ardd-plan`; its F001 deliberately waits for the
+in-flight badge fix branch to merge first. Delivered earlier today:
+`feedback-dynamic-badge-discoverability-a123.md` (3 bugs, 2 UX,
 1 Reconsidered) is now `planned`, consumed by
 `plan-dynamic-badge-discoverability-2026-07-19-23cf.md` — see the
 `_Updated` note above. All earlier batches
@@ -1488,24 +1509,26 @@ workflow-field exemption, v1.8.2).
 
 - `tasks-dynamic-badge-discoverability-6887.md` — plan
   `plan-dynamic-badge-discoverability-2026-07-19-23cf.md`, features:
-  none (`features: []`). The only `ready` tasks file and nothing in
-  flight, so `parallel-matrix.sh` has no pairs to report (silent by
-  design with fewer than two participants).
+  none (`features: []`):
+  - vs in-flight worktree copy: **claimed by in-flight worktree** — the
+    same tasks file is `ready` here and `in-progress` (3/4) in the
+    delegated worktree; never start a second run against it.
 
 ## In Flight
 
-Nothing — three delegated worktrees (`rejected-feature-status`,
-`work-queue-parallel-safety`, `bare-plan-target-prompt`) all merged and
-were reaped today. `main` is ahead of `origin/main` (unpushed commits
+- Worktree `.claude/worktrees/agent-a8f831407115021ef` (branch
+  `worktree-agent-a8f831407115021ef`) —
+  `tasks-dynamic-badge-discoverability-6887.md` in-progress, 3/4. The
+  delegated badge-fix run; merges eagerly on completion
+  (`merge_policy: auto`), then reap. `main` is ahead of `origin/main` (unpushed commits
 since the last push).
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute
-`tasks-dynamic-badge-discoverability-6887.md` (4 tasks/3 phases,
-`ready`) — the dynamic-badge fixes: snippet coordinate fill, reprint
-guard, wrong-badge advisory, private-repo caveat, and the
-`/ardd-update` offer that finally makes the feature discoverable.
+Wait for the in-flight `dynamic-badge-discoverability` worktree run
+(3/4) to report back; on merge, run `/ardd-plan
+feedback-sweep-coverage-expansion-3452.md` to consume the sweep
+coverage feedback (its F001 badge brief depends on the merged fix).
 Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
