@@ -35,7 +35,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   notice when install.sh prints it (relay verbatim, add the history-repair
   framing once — the skill already relays install output, so this is a
   pointer, not new mechanism).
-- [ ] T005 Sweep every other generated-and-committed file class for
+- [x] T005 Sweep every other generated-and-committed file class for
   machine-specific absolute paths: grep the writers (`install.sh`,
   `scripts/*.sh`, `skills/*/SKILL.md` templates) for `$HOME`/`$SCRIPT_DIR`/
   `$PWD`-derived values written into committed target files. Fix any found
