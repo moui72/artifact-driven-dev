@@ -1,7 +1,7 @@
 ---
 plan: plan-dynamic-badge-discoverability-2026-07-19-23cf.md
 generated: 2026-07-19
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
