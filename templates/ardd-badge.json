@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "ArDD",
+  "label": "built with ArDD",
   "message": "__ARDD_BADGE_MESSAGE__",
   "color": "__ARDD_BADGE_COLOR__",
   "labelColor": "#7C3AED",

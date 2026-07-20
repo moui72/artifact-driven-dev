@@ -59,7 +59,7 @@ jobs:
           cat > "$OUT" <<JSON
           {
             "schemaVersion": 1,
-            "label": "ArDD",
+            "label": "built with ArDD",
             "message": "$message",
             "color": "$color",
             "labelColor": "#7C3AED"
