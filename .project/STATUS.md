@@ -1,6 +1,20 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (regression sweep 51a7 + `stamp-workflow-mode`
+_Updated: 2026-07-19 (**v1.0.1 shipped** — ship-gate sweep e33f (S3 S5
+S6 S8) came back fully clean: all checklists green, the
+stamp-workflow-mode fix verified live, F002/F003/F004 holding, F001
+reproduced exactly as known-open; only new items were three
+taste-deferred subjective UX notes (advisory-lock same-session noise,
+constitution-tag shared-artifact prevalence, fold-branch leftover).
+Pushed `main` (9fd6fbb), confirmed lint green, dispatched
+`stable-release.yml` (`bump: patch`) through GitHub API 503 flakiness
+— `v1.0.1` published and marked Latest. This closes the loop begun
+with sweep d06a and self-heals its headline finding: `/ardd-update
+--stable` consumers now get the fixed install.sh riding the stable
+tag. Full arc today: d06a targeted sweep → 4 fixes → 51a7 regression
+rerun (1 new finding) → stamp-workflow-mode fix → e33f clean gate →
+ship. Prior update, same day, regression sweep 51a7 +
+`stamp-workflow-mode`
 fix — the S3/S5/S6/S8 regression rerun verified all four d06a fixes
 (F002/F003/F004 confirmed live; F001 reproduced as known-open until
 v1.0.1) but surfaced one new bug: `--reconfigure` prose stamps
@@ -1439,11 +1453,10 @@ since the last push).
 
 ## Recommended Next Step
 
-Regression sweep `/prerelease-sweep S3 S5 S6 S8` (re-verifying
-F001–F004 of the d06a batch); on a clean result, push `main` and
-dispatch the v1.0.1 stable release (user pre-authorized) — its
-headline finding (stale beta `Source-Ref:` under `--stable`) is fixed
-by shipping stable itself. v1.0.0 is out; the remaining backlog
+Nothing urgent — v1.0.1 is out and the sweep loop is closed. Options:
+update the consumer repos (`/ardd-update` in atelier etc. now resolves
+the fixed stable); pick up the three taste-deferred UX notes from
+runs 51a7/e33f if any start to grate; or plan the remaining backlog
 (`codex-second-harness-support`) and the off-target research file
 (`research-docs-freshness-skill-2026-07-18.md`, the CI/coverage-wiring
 framing) that's superseded in spirit but left on disk — not consumed by
