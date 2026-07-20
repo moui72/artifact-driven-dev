@@ -29,7 +29,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   POSIX sh, fixture repos in a temp dir, same harness style as the
   file's existing cases.
 
-- [ ] T002 Implement the five fixes in `install.sh`'s badge section
+- [x] T002 Implement the five fixes in `install.sh`'s badge section
   (currently lines ~427-486), turning T001 green: (1) derive
   `owner/repo` from `git -C "$TARGET" remote get-url origin` (handle
   `https://github.com/o/r(.git)` and `git@github.com:o/r(.git)` shapes)
