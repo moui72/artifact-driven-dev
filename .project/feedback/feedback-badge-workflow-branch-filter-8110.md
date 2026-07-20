@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-20
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-badge-workflow-branch-2026-07-20-abf3.md
 ---
 
 # Feedback
@@ -13,7 +13,7 @@ findings taste-deferred and one declined as by-design — triage table on
 disk in that run directory.
 
 ## Bugs
-- [ ] F001 `templates/ardd-badge-workflow.yml` hardcodes
+- [x] F001 `templates/ardd-badge-workflow.yml` hardcodes
   `on.push.branches: [main]`, so on a repo whose default branch is
   `master` (or anything else) the badge-sync workflow never fires —
   even though install.sh's badge section already detects the target's
