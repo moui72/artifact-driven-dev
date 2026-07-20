@@ -1,6 +1,21 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-plan feedback-s9-badge-guards-b8b6.md` —
+_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+`badge-guards` worktree run completed both tasks and merged
+fast-forward (`b95dd2e`); worktree reaped (the reap correctly refused
+the user's dirty `codex/port-foundation` worktree — in-flight work,
+untouched); dogfooded install refreshed. Shipped: red-first cases 18–20
+in `test-install-version-badge.sh`, then install.sh's badge section
+gained `BADGE_FAMILY` detection (word-exact bounded regexes,
+longest-first) — env-unset installs now acknowledge any marker family
+instead of re-suggesting the static badge (b8b6-F001), pair/static
+repos get a switch-shapes note instead of the paste block (b8b6-F002),
+and the no-README pointer is flag-aware (b8b6-F003). Suite 44/44 +
+lint-docs green. Tasks file `completed`; no feature flips. **Stable
+gate (user instruction): do NOT dispatch stable-release.yml until a
+clean S9 rerun** — regression run `2026-07-20-7b1a` dispatched against
+`b95dd2e`, re-verifying F001–F003. Prior update, same day,
+`/ardd-plan feedback-s9-badge-guards-b8b6.md` —
 consumed the S9 findings (all 3 accepted, file now `planned`): drafted,
 approved, and tasked `plan-badge-guards-2026-07-20-8b60.md` — 2
 tasks/2 phases in `tasks-badge-guards-cddd.md` (`ready`, red-first).
@@ -1838,29 +1853,27 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
-## Work Queue
-
-- `tasks-badge-guards-cddd.md` (`ready`) — plan
-  `plan-badge-guards-2026-07-20-8b60.md`, no bound features
-  (`features: []`). Sole ready file, nothing in flight —
-  `parallel-matrix.sh` is silent with fewer than two participants.
-  (`independent` would mean no declared overlap only, not
-  conflict-free.)
-
 ## In Flight
 
-Nothing on a worktree (the badge-slate worktree merged and was reaped).
+- Worktree `~/dev/artifact-driven-dev-codex-port` (branch
+  `codex/port-foundation`) — the user's Codex-port work, no tasks file;
+  dirty tree, so `worktree-reap.sh` correctly refuses it. Its
+  companion plan refresh
+  (`plan-codex-second-harness-support-2026-07-15-f837.md` + feature
+  entry) sits uncommitted in the primary working tree.
+- S9 regression run `2026-07-20-7b1a` in flight (background scenario
+  subagent). Otherwise nothing (the badge-guards worktree merged and
+  was reaped).
 `main` is ahead of `origin/main` (unpushed commits since the last push
 — the reviewer-guide/auto-prompt batch, inbox-drain skill, amend-path
 policy, and the badge drain).
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-badge-guards-cddd.md` (2 tasks,
-red-first — marker-family guard fixes). After it lands: rerun
-`/scenario-sweep S9` as regression, then push and dispatch
-`stable-release.yml` — stable v1.0.2 still ships the broken badge
-workflow; v1.0.3-beta.1 carries the fix on the beta channel. Also
+Await S9 regression run `2026-07-20-7b1a`. **Hard gate (user
+instruction): stable-release.yml is not dispatched until S9 comes back
+clean** (F001–F003 verified fixed, no new findings) — then push and
+dispatch; stable v1.0.2 still ships the broken badge workflow. Also
 standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
