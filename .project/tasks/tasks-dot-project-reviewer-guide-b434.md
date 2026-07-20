@@ -1,7 +1,7 @@
 ---
 plan: plan-dot-project-reviewer-guide-2026-07-20-ee87.md
 generated: 2026-07-20
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -104,5 +104,5 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   install asserts the file and pointer exist). Update install.sh's
   gitignore-check allowlist only if a new `.claude/skills/` directory is
   involved (it isn't expected to be).
-- [ ] T015 Mention the installed guide in `README.md`/`USAGE.md` where
+- [x] T015 Mention the installed guide in `README.md`/`USAGE.md` where
   `.project/` is introduced (keep `scripts/lint-docs.sh` green).

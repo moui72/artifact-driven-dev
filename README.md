@@ -112,7 +112,10 @@ from each skill's frontmatter by `scripts/gen-skill-docs.sh` — edit the
     and vocabulary translation
 - **Reference** — the details:
   - [Per-skill pages](docs/reference/skills/) — one page per command
-  - [`.project/` file formats](docs/reference/project-files.md)
+  - [`.project/` file formats](docs/reference/project-files.md) —
+    install.sh also writes a `.project/README.md` reviewer guide into
+    every target, orienting humans and AI reviewers on which files are
+    live vs static records
   - [Configuration knobs](docs/reference/configuration.md)
   - [Installed helper scripts](docs/reference/scripts.md)
 - **[Decision records](docs/decisions/)** — the development history

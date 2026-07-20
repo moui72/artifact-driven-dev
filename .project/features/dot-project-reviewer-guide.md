@@ -1,6 +1,6 @@
 ---
 slug: dot-project-reviewer-guide
-status: tasked
+status: implemented
 logged: 2026-07-20
 plan: plan-dot-project-reviewer-guide-2026-07-20-ee87.md
 tasks: tasks-dot-project-reviewer-guide-b434.md
