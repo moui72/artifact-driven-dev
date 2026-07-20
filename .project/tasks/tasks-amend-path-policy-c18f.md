@@ -21,7 +21,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   a new plan). Keep it to one tight paragraph matching the guide's
   existing tone. No test task (prose change; `lint-docs.sh` covers
   reference validity).
-- [ ] T002 [parallel] Soften the frozen-forever phrasing in both skills
+- [x] T002 [parallel] Soften the frozen-forever phrasing in both skills
   that state it: in `skills/ardd-feedback/SKILL.md` (the "Planned
   feedback files are not edited further" sentence in its Consumption
   section) and `skills/ardd-plan/SKILL.md` (the same sentence at the end

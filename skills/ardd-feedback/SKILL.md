@@ -120,4 +120,8 @@ the minted plan filename in one validated step
 (`ardd-state.sh feedback-planned`). A file with unresolved items stays
 `open` — `feedback-planned` refuses it — and a later `/ardd-plan` run
 picks up the remainder. Planned feedback files are not edited further —
-they're the historical record of what prompted the plan.
+they're the historical record of what prompted the plan — except for
+factual corrections (a mis-cited path, symbol, or typo), which may be
+fixed in place per the exemption in the reviewer guide
+(`templates/dot-project-readme.md`); decisions and item content still
+never change.

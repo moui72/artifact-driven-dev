@@ -330,7 +330,10 @@ drafts or writes a plan.
    The plan filename is already known at this point — mint it now (step 9
    reuses it): `.claude/skills/ardd-scripts/ardd-state.sh mint plan <slug>`.
    Planned feedback files are not edited further and become a historical
-   record of what prompted the plan. If any item is still unresolved (e.g.
+   record of what prompted the plan — factual corrections (citations,
+   paths, symbol names, typos) are exempt and may be fixed in place per
+   the reviewer guide (`templates/dot-project-readme.md`); decisions and
+   item content still never change. If any item is still unresolved (e.g.
    the user wants to think about a declined override more), skip
    `feedback-planned` — the file stays `open` and the next `/ardd-plan` run
    picks up the remainder.
