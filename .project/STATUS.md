@@ -1,6 +1,24 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (S9 rerun + branch-filter fix — regression run
+`2026-07-20-7b1a` verified all three b8b6 guard fixes live (8/8
+checklist) but surfaced one new consumer-facing bug, triaged with the
+user: `templates/ardd-badge-workflow.yml` hardcoded `on.push.branches:
+[main]`, so master-default repos never fire the badge sync (accepted as
+`feedback-badge-workflow-branch-filter-8110.md`; two ux notes
+taste-deferred; `Channel: stable`-under-live-checkout declined as
+by-design after verifying install.sh's channel-precedence comment).
+Full loop run: plan `plan-badge-workflow-branch-2026-07-20-abf3.md`
+(approved) → delegated worktree run (red-first case 21, then install.sh
+computes `BADGE_BRANCH` and sed-substitutes it into the workflow's
+`branches:` filter on the fresh-write path; suite 45/45) → merged
+fast-forward (`f4433ed`), reaped, dogfood refreshed. **Stable gate
+still holding (user instruction)**: S9 gate run `2026-07-20-270a`
+dispatched against `f4433ed` — only a clean pass unlocks the stable
+dispatch, which remains the user's act. Also: user's
+`codex/port-foundation` worktree remains in flight (reap refuses,
+dirty); `.agents/skills/scenario-sweep/SKILL.md` gitignored on request.
+Prior update, same day, `/ardd-implement` coordinator — the delegated
 `badge-guards` worktree run completed both tasks and merged
 fast-forward (`b95dd2e`); worktree reaped (the reap correctly refused
 the user's dirty `codex/port-foundation` worktree — in-flight work,
@@ -1861,20 +1879,20 @@ workflow-field exemption, v1.8.2).
   companion plan refresh
   (`plan-codex-second-harness-support-2026-07-15-f837.md` + feature
   entry) sits uncommitted in the primary working tree.
-- S9 regression run `2026-07-20-7b1a` in flight (background scenario
-  subagent). Otherwise nothing (the badge-guards worktree merged and
-  was reaped).
+- S9 gate run `2026-07-20-270a` in flight (background scenario
+  subagent). Otherwise nothing (the badge-guards and
+  badge-workflow-branch worktrees merged and were reaped).
 `main` is ahead of `origin/main` (unpushed commits since the last push
 — the reviewer-guide/auto-prompt batch, inbox-drain skill, amend-path
 policy, and the badge drain).
 
 ## Recommended Next Step
 
-Await S9 regression run `2026-07-20-7b1a`. **Hard gate (user
-instruction): stable-release.yml is not dispatched until S9 comes back
-clean** (F001–F003 verified fixed, no new findings) — then push and
-dispatch; stable v1.0.2 still ships the broken badge workflow. Also
-standing: push `main` to publish the accumulated batch as
+Await S9 gate run `2026-07-20-270a`. **Hard gate (user instruction):
+stable-release.yml is not dispatched until S9 comes back clean**
+(8110-F001 verified fixed, b8b6 fixes holding, no new findings) — then
+push and dispatch; stable v1.0.2 still ships the broken badge workflow.
+Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback

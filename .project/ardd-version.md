@@ -1,9 +1,9 @@
 # ArDD Version
 
-_Source: artifact-driven-dev @ b95dd2e · Installed/updated 2026-07-20_
+_Source: artifact-driven-dev @ f4433ed · Installed/updated 2026-07-20_
 
 Source-Path: ~/dev/artifact-driven-dev
-Source-Commit: b95dd2e0be4d9f8f4d5e4e7b89922fab00784011
+Source-Commit: f4433ed089fe871691d6e422aa8156dbe1c13490
 Channel: stable
 
 This file is committed so the project's history shows which ArDD skill
