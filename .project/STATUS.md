@@ -1,6 +1,18 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (S9 rerun + branch-filter fix — regression run
+_Updated: 2026-07-20 (**S9 gate run `2026-07-20-270a`: CLEAN PASS —
+the stable gate is cleared.** 8110-F001 verified fixed (the written
+badge workflow carried `branches: [master]` — the repo's real default
+branch — in every badged case, with the install output printing it);
+b8b6 F001–F003 spot-checks all hold; all 8 checklist items green;
+idempotent reruns byte-identical; wrong-badge advisory fired in all
+four combos; `/ardd-update` left badge state byte-identical. Sole
+finding: one subjective ux sequencing nit (bare wrong badge gets
+advisory + paste block), taste-deferred as a duplicate of run-7b1a's
+already-deferred note. The badge surface is release-ready: push `main`
+(publishes the next beta) and dispatch `stable-release.yml` (patch →
+v1.0.3) — both remain the user's acts. Prior update, same day, S9
+rerun + branch-filter fix — regression run
 `2026-07-20-7b1a` verified all three b8b6 guard fixes live (8/8
 checklist) but surfaced one new consumer-facing bug, triaged with the
 user: `templates/ardd-badge-workflow.yml` hardcoded `on.push.branches:
@@ -1879,20 +1891,20 @@ workflow-field exemption, v1.8.2).
   companion plan refresh
   (`plan-codex-second-harness-support-2026-07-15-f837.md` + feature
   entry) sits uncommitted in the primary working tree.
-- S9 gate run `2026-07-20-270a` in flight (background scenario
-  subagent). Otherwise nothing (the badge-guards and
-  badge-workflow-branch worktrees merged and were reaped).
+- Nothing besides the codex worktree (the badge-guards and
+  badge-workflow-branch worktrees merged and were reaped; S9 gate run
+  `270a` completed clean).
 `main` is ahead of `origin/main` (unpushed commits since the last push
 — the reviewer-guide/auto-prompt batch, inbox-drain skill, amend-path
 policy, and the badge drain).
 
 ## Recommended Next Step
 
-Await S9 gate run `2026-07-20-270a`. **Hard gate (user instruction):
-stable-release.yml is not dispatched until S9 comes back clean**
-(8110-F001 verified fixed, b8b6 fixes holding, no new findings) — then
-push and dispatch; stable v1.0.2 still ships the broken badge workflow.
-Also standing: push `main` to publish the accumulated batch as
+**Gate cleared** (S9 run `270a` clean). Push `main` to publish the
+accumulated badge-fix batch as the next beta, then dispatch
+`stable-release.yml` (patch → v1.0.3) — stable v1.0.2 still ships the
+broken badge workflow until then. Both are the user's acts. Also
+standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
