@@ -396,13 +396,15 @@ hand-built one was tried and removed (Principle VIII; decision record
 0001, bug #1).
 
 **A second constitution frontmatter workflow field, `next_step_prompt:
-true | false`** (absent = `false`; boolean enforced by `lint-project.sh`;
+true | false | auto`** (absent = `false`; enum enforced by `lint-project.sh`;
 asked once by `/ardd-init`, and once by `/ardd-update` for installs
 whose constitution lacks the field; `/ardd-update --reconfigure` can
 re-ask it afterward too). When `true`, exactly two skills —
 `/ardd-status` and `/ardd-plan` — end by offering their
 recommended next step via AskUserQuestion, and only when that
-recommendation is a concrete runnable `/ardd-*` invocation; plan
+recommendation is a concrete runnable `/ardd-*` invocation (`auto` runs
+that recommendation directly, stated in the report text first, no
+prompt; a denied/unavailable prompt reads as "no — stop here"); plan
 normally hands off to analyze, which then owns the single prompt of
 the turn (one prompt per user-visible turn end — the prose in both
 skills states this). Set the field via `ardd-state.sh stamp <file>

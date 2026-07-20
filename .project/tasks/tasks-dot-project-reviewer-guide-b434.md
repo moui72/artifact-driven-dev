@@ -67,7 +67,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   (`--reconfigure` and the backfill ask) to offer three values
   (`true`/`false`/`auto`) with one-line descriptions; stamped via
   `ardd-state.sh stamp` as today.
-- [ ] T010 Update docs mentioning the boolean field:
+- [x] T010 Update docs mentioning the boolean field:
   `docs/reference/skills/` pages for status/plan/init/update hand-written
   bodies and any guide text (`scripts/lint-docs.sh` must stay green; run
   `/docs-sweep`-style spot check on the touched pages).

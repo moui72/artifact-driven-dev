@@ -102,7 +102,9 @@ that would trap the `STATUS.md` write on the worktree's branch.
 - With `next_step_prompt: true` in the constitution frontmatter, the run
   ends by offering the recommended next step as a one-keypress prompt —
   only when it's a concrete runnable `/ardd-*` invocation; anything else
-  stays plain text.
+  stays plain text. With `auto`, that runnable recommendation is invoked
+  directly (stated in the report first, no prompt). A denied/unavailable
+  prompt reads as "no — stop here".
 
 ## Related
 

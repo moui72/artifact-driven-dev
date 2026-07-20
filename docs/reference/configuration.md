@@ -44,15 +44,18 @@ Suggested by detection at init: branch protection on the default branch →
 
 ## `next_step_prompt` — one-keypress next steps
 
-`true` | `false` — absent = `false`.
+`true` | `false` | `auto` — absent = `false`.
 
 When `true`, exactly two skills — `/ardd-status` and `/ardd-plan` — end by
 offering their recommended next step via a yes/no prompt, and only when
 that recommendation is a concrete runnable `/ardd-*` invocation (anything
 else stays plain text). One prompt per user-visible turn end: when plan
-hands off to status, status owns the prompt. `false`/absent keeps
-recommendations as plain text, so delegated and scripted runs are
-unaffected.
+hands off to status, status owns the prompt. With `auto`, the same
+runnable recommendation is invoked directly — stated in the report text
+first, no prompt; non-runnable recommendations still stay plain text. A
+denied or unavailable prompt (e.g. dontAsk mode) reads as "no — stop
+here", never a retry. `false`/absent keeps recommendations as plain text,
+so delegated and scripted runs are unaffected.
 
 ## `delegation` — the background gate
 
