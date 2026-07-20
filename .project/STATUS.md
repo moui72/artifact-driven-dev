@@ -1,6 +1,28 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (badge scenario + first S9 run + `/ardd-feedback`
+— a delegated design run authored `tests/scenarios/S9.md` (badge
+matrix: 6 repo states — no-README, no-badge, current-format re-install,
+pair/static previous formats, homespun wrong badge, `/ardd-update`
+over badged — with a reusable well-formedness pass) and a new
+"change-triggered (targeted-only)" tier category mapping the badge
+file-set → `/scenario-sweep S9` (merged `6877f80`, reaped). Then S9's
+first live run (`2026-07-20-4f1a`, ~64K tokens, ~$0.20–0.80, 3m45s):
+**PASS, no hard failures** — README never edited across 11 installs,
+advisory fired in all 4 misdirected-badge runs, all well-formedness
+checks green. 3 accepted ux findings logged as
+`feedback-s9-badge-guards-b8b6.md` (`open`): F001 the static-suggestion
+guard misses `ardd-badge-version-start` so env-unset installs (incl.
+every `/ardd-update`) re-suggest the static badge to a
+correctly-badged repo; F002 the version-snippet guard misses
+`ardd-badge-pair-start` so pair-badged repos get the full paste block;
+F003 the no-README pointer ignores that `ARDD_VERSION_BADGE=1` is
+already set. Common root: both guards should treat all three marker
+families as "already badged". Earlier: pushed `main`
+(`33ac9ae..1803626`), lint green incl. the two new template-YAML CI
+jobs, **v1.0.3-beta.1 published** (stable v1.0.2 still ships the
+broken badge workflow). Prior update, same day, `/ardd-implement`
+coordinator — the delegated
 `badge-slate` worktree run completed all 7 tasks and merged
 fast-forward (`5adffc3`); worktree reaped; dogfooded install refreshed.
 Shipped: new `scripts/lint-templates-yaml.sh` + fixture test + two CI
@@ -1705,7 +1727,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. Delivered today: `feedback-badge-renderer-caveat-bf75.md`
+1 open — `feedback-s9-badge-guards-b8b6.md` (3 UX: the marker-family
+guard gaps + no-README pointer wording, from S9 run `4f1a`); next
+`/ardd-plan` picks it up. Delivered today:
+`feedback-badge-renderer-caveat-bf75.md`
 (1 UX) and `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX) are
 now `planned`, consumed by `plan-badge-slate-2026-07-20-e059.md` — see
 the `_Updated` note above. (`bf75`: `badge.md`'s
@@ -1808,12 +1833,11 @@ policy, and the badge drain).
 
 ## Recommended Next Step
 
-Push `main` to publish today's large batch (reviewer guide +
-`next_step_prompt: auto`, inbox-drain skill, amend-path policy, badge
-slate) as the next beta, then dispatch `stable-release.yml` when ready
-— the badge-workflow YAML fix is consumer-facing and v1.0.2-beta.1
-consumers are shipping the broken template until a release carries it.
-Also standing: push `main` to publish the accumulated batch as
+`/ardd-plan feedback-s9-badge-guards-b8b6.md` to fix the three badge
+guard/pointer findings (then rerun `/scenario-sweep S9` as regression).
+After that lands: push and dispatch `stable-release.yml` — stable
+v1.0.2 still ships the broken badge workflow; v1.0.3-beta.1 carries
+the fix on the beta channel. Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
