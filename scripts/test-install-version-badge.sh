@@ -296,4 +296,48 @@ case "$out" in
     bad "case12: default path mentions ARDD_VERSION_BADGE=1 upgrade" ;;
 esac
 
+# --- Case 13: target with NO README, env unset → output carries a one-line
+# ARDD_VERSION_BADGE=1 opt-in pointer (a pointer, not a snippet) ---
+target="$WORK/case13"
+mkdir -p "$target"
+git init -q "$target"
+git -C "$target" commit -q --allow-empty -m init
+out="$(run_install "$target")"
+
+case "$out" in
+  *"ARDD_VERSION_BADGE=1"*)
+    ok "case13: no-README default path prints the opt-in pointer" ;;
+  *)
+    bad "case13: no-README default path prints the opt-in pointer" ;;
+esac
+
+case "$out" in
+  *"two-badge"*|*"ardd-badge-version-start"*)
+    bad "case13: no-README path does not print any badge snippet" ;;
+  *)
+    ok "case13: no-README path does not print any badge snippet" ;;
+esac
+
+# --- Case 14: misdirected latest-release badge sitting INSIDE the
+# ardd-badge-version markers + ARDD_VERSION_BADGE=1 → the advisory's remedy
+# must be self-sufficient (replace the badge inside the markers), not a
+# bare re-run the reprint guard would silence ---
+target="$(new_target case14)"
+printf '# Test project\n\n<!-- ardd-badge-version-start -->\n[![v](https://img.shields.io/github/v/release/moui72/artifact-driven-dev)](x)\n<!-- ardd-badge-version-end -->\n' > "$target/README.md"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"replace the badge inside the markers"*)
+    ok "case14: advisory names the replace-inside-markers remedy" ;;
+  *)
+    bad "case14: advisory names the replace-inside-markers remedy" ;;
+esac
+
+case "$out" in
+  *"run install.sh with ARDD_VERSION_BADGE=1 to print it"*)
+    bad "case14: advisory does not offer a bare re-run as the sole remedy" ;;
+  *)
+    ok "case14: advisory does not offer a bare re-run as the sole remedy" ;;
+esac
+
 exit "$fail"

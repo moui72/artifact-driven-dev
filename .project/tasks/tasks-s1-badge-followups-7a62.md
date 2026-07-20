@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Test-first
 
-- [ ] T001 Extend `scripts/test-install-version-badge.sh` with red-first
+- [x] T001 Extend `scripts/test-install-version-badge.sh` with red-first
   cases (run the script and confirm both new cases fail before T002):
   (a) a target fixture with NO README.md, env unset → install.sh output
   contains a one-line `ARDD_VERSION_BADGE=1` opt-in pointer (a pointer,
