@@ -511,10 +511,31 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
     BADGE_JSON="$TARGET/.github/badges/ardd-version.json"
     BADGE_ICON="$TARGET/.github/badges/ardd-icon.svg"
 
+    # The target's real default branch — used both for the workflow's
+    # on.push.branches: filter (filled at write time below) and, further
+    # down, the printed snippet's endpoint URL. Empty = undeterminable
+    # (detached HEAD): the template's [main] placeholder is left as-is and
+    # a replace-it instruction printed, mirroring the snippet's own
+    # placeholder fallback.
+    BADGE_BRANCH="$(git -C "$TARGET" symbolic-ref --short HEAD 2>/dev/null || true)"
+
     if [ ! -f "$BADGE_WORKFLOW" ]; then
       mkdir -p "$(dirname "$BADGE_WORKFLOW")"
-      cp "$SCRIPT_DIR/templates/ardd-badge-workflow.yml" "$BADGE_WORKFLOW"
-      echo "  ✓ .github/workflows/ardd-badge.yml"
+      if [ -n "$BADGE_BRANCH" ]; then
+        # Fresh write only — never-clobber above is unchanged. The template
+        # keeps `branches: [main]` as its placeholder form; substitute the
+        # real branch here so the badge sync fires on repos whose default
+        # branch isn't main.
+        sed "s|^\([[:space:]]*branches:[[:space:]]*\)\[main\]|\1[$BADGE_BRANCH]|" \
+          "$SCRIPT_DIR/templates/ardd-badge-workflow.yml" > "$BADGE_WORKFLOW"
+        echo "  ✓ .github/workflows/ardd-badge.yml (branches: [$BADGE_BRANCH])"
+      else
+        cp "$SCRIPT_DIR/templates/ardd-badge-workflow.yml" "$BADGE_WORKFLOW"
+        echo "  ✓ .github/workflows/ardd-badge.yml"
+        echo "    (Could not determine this repo's default branch — the workflow's"
+        echo "    'branches: [main]' filter is a placeholder; replace 'main' with your"
+        echo "    default branch if it differs.)"
+      fi
     else
       echo "  – .github/workflows/ardd-badge.yml (already exists, left untouched)"
     fi

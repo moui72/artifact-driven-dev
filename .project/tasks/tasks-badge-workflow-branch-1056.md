@@ -1,7 +1,7 @@
 ---
 plan: plan-badge-workflow-branch-2026-07-20-abf3.md
 generated: 2026-07-20
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -23,7 +23,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Fix
 
-- [ ] T002 In install.sh's badge section, substitute the target's real
+- [x] T002 In install.sh's badge section, substitute the target's real
   default branch — the same already-computed value the printed
   snippet's endpoint URL uses — into the workflow file's
   `on.push.branches:` filter at write time (template keeps
