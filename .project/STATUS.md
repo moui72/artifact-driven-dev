@@ -1,6 +1,19 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-plan feedback-s1-badge-followups-5e84.md`
+_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+`s1-badge-followups` worktree run completed both tasks and merged
+fast-forward (`e745582`); worktree reaped; badge test re-verified
+27/27 green on `main`. Shipped: install.sh now prints the one-line
+`ARDD_VERSION_BADGE=1` opt-in pointer for no-README targets (F001 —
+new `elif` branch, pointer only, never the snippet), and the
+misdirected-badge advisory's remedy is self-sufficient — replace the
+badge inside the markers with the endpoint form pointing at the
+repo's own `.github/badges/ardd-version.json` — instead of suggesting
+a re-run the reprint guard silences (F002). Reprint guard/coordinate
+fill untouched; red-first (3 new assertions failed before the fix).
+This closes the full S1-sweep loop: brief caught both gaps → feedback
+→ plan → delegated fix → merged. No feature flips (`features: []`).
+Prior update, same day, `/ardd-plan feedback-s1-badge-followups-5e84.md`
 — consumed both S1 follow-up items (file now `planned`): drafted,
 approved, and tasked `plan-s1-badge-followups-2026-07-20-9667.md` — 2
 tasks/2 phases in `tasks-s1-badge-followups-7a62.md` (`ready`).
@@ -1603,11 +1616,10 @@ since the last push).
 
 ## Recommended Next Step
 
-Run `/ardd-implement` to execute `tasks-s1-badge-followups-7a62.md`
-(2 tasks, `ready` — the two install.sh output fixes). The rename
-(`a8d3c57`) and this plan/tasks batch are unpushed — the next push
-publishes them as the next beta. When ready for stable v1.0.2:
-dispatch `stable-release.yml` (`bump: patch`). Other standing options: v1.0.1 is out and the sweep loop is closed;
+Push `main` to publish the unpushed batch (scenario-sweep rename +
+S1 badge follow-up fixes) as the next beta; then dispatch
+`stable-release.yml` (`bump: patch`) when ready for stable v1.0.2 to
+carry the full badge arc. Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
