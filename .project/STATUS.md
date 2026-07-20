@@ -1,6 +1,25 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-feedback` — logged
+_Updated: 2026-07-19 (`/ardd-plan feedback-dynamic-badge-discoverability-a123.md`
+— consumed the badge feedback (all 6 items accepted, file now
+`planned`): drafted, approved, and tasked
+`plan-dynamic-badge-discoverability-2026-07-19-23cf.md` — 4 tasks/3
+phases in `tasks-dynamic-badge-discoverability-6887.md` (`ready`).
+Phase 1 (test-first): install.sh badge-section fixes — fill
+`OWNER/REPO/BRANCH` in the printed snippet from the target's own git
+remote/branch (placeholder + printed replace-instruction fallback),
+marker-guard the `ARDD_VERSION_BADGE=1` snippet reprint, advisory when
+a README carries the wrong latest-release badge shape (both paths),
+private-repo caveat line, and a default-output mention of the
+`ARDD_VERSION_BADGE=1` opt-in. Phase 2: `/ardd-update` offers the
+dynamic badge and sets the env var on the re-run (F006 resolved: env
+var stays the mechanism, skill prose becomes the interface). Phase 3:
+docs/templates (public-repo-only limitation, USAGE routing,
+`ardd-update` reference page). Out of scope deliberately: in-place
+README rewriting (would break the never-edit posture) and the sync
+workflow's push-failure modes. No feature slugs targeted
+(`features: []`). Committed to `main` (721f786). Prior update, same
+day, `/ardd-feedback` — logged
 `feedback-dynamic-badge-discoverability-a123.md` (`open`, 3 bugs + 2 UX
 + 1 Reconsidered) after the `ARDD_VERSION_BADGE` dynamic-badge feature
 failed in the field: a consuming agent asked to add a version badge
@@ -1398,10 +1417,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-dynamic-badge-discoverability-a123.md` (3 bugs, 2 UX,
-1 Reconsidered: the `ARDD_VERSION_BADGE` dynamic-badge feature is
-undiscoverable and mis-fired in the field — see the `_Updated` note
-above). Will be picked up by the next `/ardd-plan`. All earlier batches
+0 open — `feedback-dynamic-badge-discoverability-a123.md` (3 bugs, 2 UX,
+1 Reconsidered) is now `planned`, consumed by
+`plan-dynamic-badge-discoverability-2026-07-19-23cf.md` — see the
+`_Updated` note above. All earlier batches
 delivered — `feedback-prerelease-sweep-2026-07-18-50ea-ad22.md` (the 6
 accepted prerelease-sweep findings) is now `planned`, consumed by
 `plan-prerelease-sweep-fixes-2026-07-18-d341.md` — see the `_Updated`
@@ -1465,6 +1484,14 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-dynamic-badge-discoverability-6887.md` — plan
+  `plan-dynamic-badge-discoverability-2026-07-19-23cf.md`, features:
+  none (`features: []`). The only `ready` tasks file and nothing in
+  flight, so `parallel-matrix.sh` has no pairs to report (silent by
+  design with fewer than two participants).
+
 ## In Flight
 
 Nothing — three delegated worktrees (`rejected-feature-status`,
@@ -1474,13 +1501,12 @@ since the last push).
 
 ## Recommended Next Step
 
-Run `/ardd-plan` to consume
-`feedback-dynamic-badge-discoverability-a123.md` — the dynamic-badge
-feature shipped in v1.0.1 but is effectively unreachable (undocumented
-env-var opt-in) and its printed snippet is broken as pasted
-(`OWNER/REPO/BRANCH` placeholders); a real consumer already worked
-around it wrongly. Other standing options: v1.0.1 is out and the sweep
-loop is closed;
+Run `/ardd-implement` to execute
+`tasks-dynamic-badge-discoverability-6887.md` (4 tasks/3 phases,
+`ready`) — the dynamic-badge fixes: snippet coordinate fill, reprint
+guard, wrong-badge advisory, private-repo caveat, and the
+`/ardd-update` offer that finally makes the feature discoverable.
+Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
