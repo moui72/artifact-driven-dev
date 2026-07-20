@@ -1,6 +1,15 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-19 (regression sweep 51a7 + `stamp-workflow-mode`
+fix — the S3/S5/S6/S8 regression rerun verified all four d06a fixes
+(F002/F003/F004 confirmed live; F001 reproduced as known-open until
+v1.0.1) but surfaced one new bug: `--reconfigure` prose stamps
+`workflow_mode`, which `cmd_stamp`'s enum rejected. Fixed via the full
+loop (feedback `feedback-stamp-workflow-mode-ca7d.md` → plan →
+delegated implement, red-first, 6 new assertions, merged + reaped).
+Per user instruction the ship gate is now: full re-sweep S3 S5 S6 S8;
+on a clean pass, push + dispatch v1.0.1 stable. Prior update, same
+day, `/ardd-implement` coordinator — the delegated
 `sweep-d06a-fixes` worktree run completed all 5 tasks and merged
 fast-forward; worktree reaped; dogfooded install refreshed. Fixed:
 parallel-matrix `features: []` now reads `none` (unknown reserved for a
