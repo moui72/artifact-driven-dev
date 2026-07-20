@@ -95,6 +95,11 @@ it regenerates from disk. `STATUS.md` doubles as the single re-entry point
 after any interruption: it always says where things stand and names the
 recommended next step.
 
+Factual corrections (a mis-cited path or symbol, a typo) are exempt from
+the no-hand-edit discipline in any skill-written file's body prose — the
+canonical rule lives in the installed reviewer guide
+(`.project/README.md`); lifecycle state and decisions are never covered.
+
 ## Checking happens at four layers
 
 Structural validity (`/ardd-lint`), cross-artifact consistency

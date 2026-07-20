@@ -1,14 +1,14 @@
 ---
 plan: plan-amend-path-policy-2026-07-20-3c72.md
 generated: 2026-07-20
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
 
 ## Phase 1: Codify the factual-corrections exemption (F001)
 
-- [ ] T001 Add a "Correcting a skill-written file" subsection to
+- [x] T001 Add a "Correcting a skill-written file" subsection to
   `templates/dot-project-readme.md` (best placed after the "Static
   historical records" section) carrying the canonical rule text from the
   plan's Technical Approach: factual corrections — content wrong on the
@@ -21,7 +21,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   a new plan). Keep it to one tight paragraph matching the guide's
   existing tone. No test task (prose change; `lint-docs.sh` covers
   reference validity).
-- [ ] T002 [parallel] Soften the frozen-forever phrasing in both skills
+- [x] T002 [parallel] Soften the frozen-forever phrasing in both skills
   that state it: in `skills/ardd-feedback/SKILL.md` (the "Planned
   feedback files are not edited further" sentence in its Consumption
   section) and `skills/ardd-plan/SKILL.md` (the same sentence at the end
@@ -29,7 +29,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   paths, symbol names, typos) are exempt and may be fixed in place —
   decisions and item content still never change. One sentence each; do
   not restate the full rule.
-- [ ] T003 [parallel] Echo the exemption where reviewers and
+- [x] T003 [parallel] Echo the exemption where reviewers and
   contributors read: `docs/reference/project-files.md` (alongside its
   existing hand-edit/single-writer guidance), `README.md` (the section
   stating the no-hand-edit/single-writer discipline — the "Concurrency
@@ -41,7 +41,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
 
 ## Phase 2: Citation-rot sweep (F002)
 
-- [ ] T004 Sweep `skills/*/SKILL.md` and `templates/artifacts/*.md` for
+- [x] T004 Sweep `skills/*/SKILL.md` and `templates/artifacts/*.md` for
   prose that instructs the agent to record a code location (start from
   `grep -rn 'file/l\|line number\|file/location\|location reference'
   skills/ templates/` and read around each hit — at minimum
@@ -53,7 +53,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   factual-error class the Phase 1 exemption exists to correct. Leave
   script-emitted output formats untouched — this is prose-instruction
   guidance only.
-- [ ] T005 Verify: run `./scripts/lint-docs.sh` (green) and
+- [x] T005 Verify: run `./scripts/lint-docs.sh` (green) and
   `./scripts/lint-project.sh .` (green), then re-run `./install.sh .` so
   this repo's own installed reviewer guide (`.project/README.md`) picks
   up the T001 change; confirm the new subsection is present in the

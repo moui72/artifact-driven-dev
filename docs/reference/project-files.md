@@ -151,6 +151,13 @@ opt-in `git config merge.ours.driver true` they merge clean automatically.
 These four are deliberately *not* schema-validated by `lint-project.sh` —
 they're prose for humans, not machine-checkable state.
 
+One narrow exception to the no-hand-edit discipline: factual corrections
+(a mis-cited path or symbol, a typo) may be fixed in place in any
+skill-written file's body prose — the canonical rule lives in the
+installed reviewer guide (`templates/dot-project-readme.md` →
+`.project/README.md`). Frontmatter status, checkboxes, and decisions are
+never covered.
+
 ## `WORKFLOW.md`
 
 A static, generated tour of the installed skill set — the same command

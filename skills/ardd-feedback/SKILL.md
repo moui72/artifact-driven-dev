@@ -47,7 +47,9 @@ notes in the next message.
    their judgment as final for this run).
 
 3. **Tag each item** with the artifact(s) it touches, if identifiable (e.g.
-   `[artifacts: ui]`), and a file/location reference if the user gave one.
+   `[artifacts: ui]`), and a code reference if the user gave one — prefer
+   path + symbol name (function, script, section heading) over bare line
+   numbers, which rot; a line number may accompany the symbol as a hint.
    Leave untagged if genuinely unclear — don't force a guess.
 
    For **Reconsidered** items specifically, check whether the reversed
@@ -120,4 +122,8 @@ the minted plan filename in one validated step
 (`ardd-state.sh feedback-planned`). A file with unresolved items stays
 `open` — `feedback-planned` refuses it — and a later `/ardd-plan` run
 picks up the remainder. Planned feedback files are not edited further —
-they're the historical record of what prompted the plan.
+they're the historical record of what prompted the plan — except for
+factual corrections (a mis-cited path, symbol, or typo), which may be
+fixed in place per the exemption in the reviewer guide
+(`templates/dot-project-readme.md`); decisions and item content still
+never change.
