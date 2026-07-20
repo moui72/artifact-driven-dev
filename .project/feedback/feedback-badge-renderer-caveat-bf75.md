@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-20
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-badge-slate-2026-07-20-e059.md
 ---
 
 # Feedback
 
 ## UX
-- [ ] F001 `templates/badge.md` implies the badge JSON drives the badge's
+- [x] F001 `templates/badge.md` implies the badge JSON drives the badge's
   appearance, which is only true for endpoint-style renderers. Document
   the distinction: shields.io's `/endpoint` consumes `label`, `message`,
   and `color` from `.github/badges/ardd-version.json`, but

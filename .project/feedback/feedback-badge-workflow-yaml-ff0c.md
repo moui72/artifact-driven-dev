@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-20
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-badge-slate-2026-07-20-e059.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `templates/ardd-badge-workflow.yml` is not valid YAML — GitHub
+- [x] F001 `templates/ardd-badge-workflow.yml` is not valid YAML — GitHub
   Actions rejects it, so anyone following the badge guidance gets a
   workflow that never runs. Cause (confirmed at line 52-53): the heredoc
   writing the badge JSON puts its body and terminator at column 0, which
@@ -22,16 +22,16 @@ plan: null        # set to the consuming plan's filename once planned
   upstreamed.
 
 ## UX
-- [ ] F002 Sweep every other shipped template (and any heredoc embedded
+- [x] F002 Sweep every other shipped template (and any heredoc embedded
   in YAML this repo generates) for the same column-0-heredoc mistake —
   it is invisible until something actually parses the file, so add a
   YAML-parse check for shipped `*.yml` templates to the deterministic
   lint layer if feasible.
-- [ ] F003 The badge workflow triggers on any push touching
+- [x] F003 The badge workflow triggers on any push touching
   `.project/ardd-version.md`, including feature branches, where it
   commits and pushes badge JSON onto whatever branch triggered it. Add
   `branches: [main]` and a manual `workflow_dispatch` trigger — safer and
   easier to test.
-- [ ] F004 The workflow's sync commit spends a full consumer-CI run
+- [x] F004 The workflow's sync commit spends a full consumer-CI run
   validating a one-line JSON change — consider `[skip ci]` in its commit
   message.
