@@ -15,6 +15,14 @@ briefs are the product; never improvise scenario content from memory.
 - `smoke` → S1, S5, S7
 - `full` → S1–S8
 - explicit `S<n>` list → exactly those
+- **change-triggered (targeted-only)** — some scenarios belong to no
+  tier and run only when their named surface changes, via an explicit
+  `/scenario-sweep S<n>`. Currently: **S9** (badge matrix) — run it
+  whenever the badge file-set moves: install.sh's `ARDD_VERSION_BADGE`
+  section, `templates/ardd-badge-workflow.yml`,
+  `templates/ardd-badge.json`, `templates/ardd-icon.svg`, or
+  `templates/badge.md`. This mapping is prose convention, not a hook;
+  each such brief carries its own trigger note in its header.
 - no argument → ask the user (smoke / full / subset). If the user
   mentions this is a regression rerun after a fix batch, also ask for
   the fixed finding IDs and include them in each relevant dispatch

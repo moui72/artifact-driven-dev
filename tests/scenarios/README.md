@@ -15,7 +15,7 @@ findings, one fix plan). Background context lives in
 - `GUARDRAILS.md` — non-negotiable isolation + reporting rules, injected
   verbatim at the top of every subagent brief. Edit here, never fork
   per-scenario copies.
-- `scenarios/S1.md` … `S7.md` — one durable brief per scenario: setup,
+- `scenarios/S1.md` … `S9.md` — one durable brief per scenario: setup,
   steps, **scripted answers** for every interactive pause (background
   subagents have no `AskUserQuestion` tool), and a pass/fail checklist.
 - Reports land in `dev-notes/scenario-runs/<run-id>/Sx-report.md`
@@ -28,8 +28,9 @@ Invocation is Claude-Code-driven — `Agent`-tool dispatch can't be
 scripted from `sh`. Use the source-side skill:
 
     /scenario-sweep smoke        # S1 + S5 + S7 (routine betas)
-    /scenario-sweep full         # all seven (before a stable cut)
+    /scenario-sweep full         # S1–S8 (before a stable cut)
     /scenario-sweep S3 S6        # named subset (e.g. regression rerun)
+    /scenario-sweep S9           # change-triggered (badge file-set moved)
 
 (`.claude/skills/scenario-sweep/` — repo-local, never installed to
 consumers; install.sh only copies from `skills/`.) It creates the run
@@ -44,13 +45,21 @@ into a background `Agent` call, one per scenario.
   (acquisition), S5 (core solo loop), S7 (peripheral sweep). One from
   each axis; cheap enough to run routinely.
 - **full** (before any stable dispatch, or after a large skill-prose
-  batch): all seven. S6 tests the delegation **script layer** against a
+  batch): S1–S8. S6 tests the delegation **script layer** against a
   manually-created second worktree; the `Agent`-tool
   `isolation: "worktree"` nesting question is explicitly out of sweep
   scope (see Coverage backlog).
 - **regression rerun**: after a fix batch lands, rerun exactly the
   scenarios that produced the fixed findings, with the fixed finding IDs
   listed in the dispatch prompt so the subagent explicitly re-checks each.
+- **change-triggered (targeted-only)**: scenarios in NO tier, run via an
+  explicit `/scenario-sweep S<n>` whenever their named surface changes.
+  Currently S9 (badge matrix) ↔ the badge file-set: install.sh's
+  `ARDD_VERSION_BADGE` section, `templates/ardd-badge-workflow.yml`,
+  `templates/ardd-badge.json`, `templates/ardd-icon.svg`,
+  `templates/badge.md`. Each such brief carries a trigger note in its
+  header; the file-set → scenario mapping stays prose (no hook — a
+  path-triggered mechanism is a bigger decision, not this convention).
 
 ## Judging and acting on results (the loop)
 
