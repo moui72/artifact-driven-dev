@@ -58,7 +58,7 @@ Deterministic state mutations for .project/ files. Subcommands:
                            set an optional frontmatter field (add or replace)
   stamp <file> last_updated <YYYY-MM-DD>
   stamp <file> diagram_status <unrendered|stale|current>
-  stamp <file> next_step_prompt <true|false>
+  stamp <file> next_step_prompt <true|false|auto>
   stamp <file> delegation <eager|ask|inline>
   stamp <file> workflow_mode <solo|collaborative>
   stamp <file> merge_policy <auto|ask>
@@ -337,8 +337,8 @@ cmd_stamp() {
       ;;
     next_step_prompt)
       case "$val" in
-        true|false) ;;
-        *) dieu "stamp: next_step_prompt must be true|false, got '$val'" ;;
+        true|false|auto) ;;
+        *) dieu "stamp: next_step_prompt must be true|false|auto, got '$val'" ;;
       esac
       ;;
     delegation)

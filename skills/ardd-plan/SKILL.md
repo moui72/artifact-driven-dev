@@ -611,8 +611,8 @@ drafts or writes a plan.
     run leave it stale otherwise. Don't wait for the user to ask.
 
     **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
-    frontmatter has `next_step_prompt: true` (grep the frontmatter block;
-    absent or `false` = the plain-text behavior above, unchanged), the
+    frontmatter has `next_step_prompt: true` or `auto` (grep the frontmatter
+    block; absent or `false` = the plain-text behavior above, unchanged), the
     recommended next step is offered as a one-keypress AskUserQuestion. The
     recommendation depends on how the run ended: if tasks were generated,
     it's `/ardd-implement` (to execute the tasks file just written); if the
@@ -630,6 +630,15 @@ drafts or writes a plan.
     first. Only if this run ends the turn itself without handing off to
     analyze does the offer fire here. Recommendations that are not a concrete
     runnable `/ardd-*` invocation always stay plain text.
+
+    Under `next_step_prompt: auto`, when the recommendation is a concrete
+    runnable `/ardd-*` invocation, skip the AskUserQuestion: state in the
+    report text which invocation is being auto-run, then invoke it by name
+    directly (same terminal-handoff mechanism, no prompt). The
+    one-prompt-per-turn-end ownership rule above applies unchanged — when
+    the run hands off to `/ardd-status`, the auto-run decision belongs to
+    `/ardd-status`, not here. Non-runnable recommendations stay plain text
+    under `auto` too.
 
 ## Slate mode (`--slate`)
 
@@ -766,12 +775,13 @@ the feature register. Its own steps:
    don't print an empty section.
 
    If `next_step_prompt: true` (see below), the single top-priority
-   recommendation is then offered via `AskUserQuestion`; otherwise this
-   report is the run's final output and the run stops here.
+   recommendation is then offered via `AskUserQuestion` (`auto` runs it
+   directly); otherwise this report is the run's final output and the run
+   stops here.
 
 **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
-frontmatter has `next_step_prompt: true` (grep the frontmatter block;
-absent or `false` = stay plain text, unchanged), offer the single
+frontmatter has `next_step_prompt: true` or `auto` (grep the frontmatter
+block; absent or `false` = stay plain text, unchanged), offer the single
 top-priority recommendation from step 5's report via a one-keypress
 `AskUserQuestion` — the same mechanism `/ardd-plan`'s and `/ardd-status`'s
 own next-step prompts already use (see step 15 above). "Top-priority"
@@ -787,3 +797,8 @@ reflect), so this is the only prompt in play, never deferred to another
 skill. This prompt is wired only for step 5's N≥2 report; the N=0/N=1
 degenerate branch (step 2) stops before reaching step 5 and stays
 plain-text there, same as `--list`.
+
+Under `next_step_prompt: auto`, skip the AskUserQuestion: state in the
+report text which `/ardd-plan` invocation is being auto-run, then invoke
+it by name directly (same terminal-handoff mechanism, no prompt).
+Non-runnable recommendations stay plain text under `auto` too.

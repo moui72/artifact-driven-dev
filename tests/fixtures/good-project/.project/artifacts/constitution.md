@@ -8,7 +8,7 @@ Version change: 1.0.0 → 1.1.0 (MINOR)
 status: stable
 last_updated: 2026-01-01
 workflow_mode: solo
-next_step_prompt: true
+next_step_prompt: auto
 delegation: eager
 merge_policy: auto
 plan_preview: always-browser

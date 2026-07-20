@@ -319,11 +319,11 @@ without regenerating `STATUS.md` or being asked anything.
 
 8. **Next-step prompt (opt-in).** After step 6's STATUS.md write (and step 7,
    if it ran), check `.project/artifacts/constitution.md` frontmatter for
-   `next_step_prompt: true` (grep the frontmatter block; absent or `false`
-   means the plain-text behavior above is unchanged — stop here). When it is
-   `true` AND the Summary's "Recommended next step" is a concrete runnable
-   `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-defects`), end by
-   presenting it via AskUserQuestion:
+   `next_step_prompt: true` or `auto` (grep the frontmatter block; absent or
+   `false` means the plain-text behavior above is unchanged — stop here).
+   When it is `true` AND the Summary's "Recommended next step" is a concrete
+   runnable `/ardd-*` invocation (e.g. `/ardd-plan <slug>`, `/ardd-defects`),
+   end by presenting it via AskUserQuestion:
    - Option 1: "Yes — run `/ardd-<next>` now"
    - Option 2: "No — stop here" (Esc counts as option 2)
 
@@ -333,3 +333,11 @@ without regenerating `STATUS.md` or being asked anything.
    stay plain text, never prompted. Delegated/scripted contexts are
    unaffected: a project that never opted in has no `next_step_prompt`
    field, and absent = false.
+
+   When it is `auto` AND the recommendation is a concrete runnable
+   `/ardd-*` invocation, skip the AskUserQuestion entirely: state in the
+   report text which invocation is being auto-run (so the user sees it
+   before it happens), then invoke that skill by name directly — the same
+   terminal-handoff mechanism, no prompt. Recommendations that are not a
+   runnable skill invocation stay plain text under `auto` too — never
+   auto-run anything but a `/ardd-*` command.

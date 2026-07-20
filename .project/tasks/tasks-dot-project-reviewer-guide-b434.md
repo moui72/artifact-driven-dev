@@ -44,13 +44,13 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: next_step_prompt auto + denial degradation
 
-- [ ] T006 [artifacts: constitution] Widen the `next_step_prompt` enum in
+- [x] T006 [artifacts: constitution] Widen the `next_step_prompt` enum in
   `scripts/lint-project.sh`'s workflow-field enum block to
   `true | false | auto`, and update `scripts/test-lint-project.sh` fixtures
   (`tests/fixtures/good-project` gains an `auto` case; bad fixture keeps an
   invalid value rejected) — one commit, together with T007's prose
   (schema-of-record rule: enum and writer land in the same commit).
-- [ ] T007 Edit `skills/ardd-status/SKILL.md` step 8 and
+- [x] T007 Edit `skills/ardd-status/SKILL.md` step 8 and
   `skills/ardd-plan/SKILL.md` step 15 + the slate-mode prompt section:
   document `auto` — when `next_step_prompt: auto` and the recommendation is
   a concrete runnable `/ardd-*` invocation, invoke it directly (the
