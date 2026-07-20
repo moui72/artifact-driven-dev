@@ -1,6 +1,22 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/inbox-drain` + `/ardd-feedback` — drained one
+_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+`amend-path-policy` worktree run completed all 5 tasks and merged
+(`ort`, no conflicts — merge commit `05d3978`); worktree reaped;
+dogfooded install refreshed. Shipped: the **factual-corrections
+exemption** is now canonical in `templates/dot-project-readme.md`
+("Correcting a skill-written file" — body-prose fixes to
+citations/paths/symbols/typos hand-editable; frontmatter/lifecycle
+state and decisions never), echoed in ardd-feedback/ardd-plan prose,
+`docs/reference/project-files.md`, `docs/concepts.md` (the README
+section the plan named had moved there — recorded in the T003 commit),
+and CLAUDE.md; plus the citation-rot sweep — ardd-defects and
+ardd-feedback prose now prefer path + symbol citations, line numbers as
+supplementary hints only (ardd-lint's file:line output untouched:
+script-emitted). Tasks file `completed`; no feature flips
+(`features: []`). Both lints green; this repo's own `.project/README.md`
+regenerated with the new subsection. Prior update, same day,
+`/inbox-drain` + `/ardd-feedback` — drained one
 inbox item (three badge proposals from adopting the guidance in
 moui72/assisted-review PRs #107/#108): re-filed 3 new-capability items
 to the register — `badge-split-variant` (a single split badge as a
@@ -1749,29 +1765,15 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
-## Work Queue
-
-- `tasks-amend-path-policy-c18f.md` (`ready` in this checkout) — plan
-  `plan-amend-path-policy-2026-07-20-3c72.md`, no bound features
-  (`features: []`):
-  - vs in-flight `.claude/worktrees/agent-abed7ef0d9e2e6e37`'s copy:
-    **claimed by in-flight worktree** — the same tasks file, ready here
-    and `in-progress` (1/5) there. Do not start it a second time.
-  (`independent` would mean no declared overlap only, not
-  conflict-free.)
-
 ## In Flight
 
-- Worktree `.claude/worktrees/agent-abed7ef0d9e2e6e37` (branch
-  `worktree-agent-abed7ef0d9e2e6e37`) —
-  `tasks-amend-path-policy-c18f.md` `in-progress`, 1/5. No reap
-  candidates. `main` is ahead of `origin/main` (unpushed commits since
-  the last push).
+Nothing on a worktree (the amend-path worktree merged and was reaped).
+`main` is ahead of `origin/main` (unpushed commits since the last push
+— the reviewer-guide/auto-prompt batch, inbox-drain skill, amend-path
+policy, and the badge drain).
 
 ## Recommended Next Step
 
-Let the in-flight delegated `amend-path-policy` worktree run (1/5)
-finish; the coordinator merges eagerly and reaps on report-back. Then
 `/ardd-plan feedback-badge-workflow-yaml-ff0c.md
 feedback-badge-renderer-caveat-bf75.md badge-split-variant
 badge-brand-color-in-json badge-icon-logosvg` — the whole badge slate
