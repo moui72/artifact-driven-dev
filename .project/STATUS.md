@@ -1,6 +1,34 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-plan` — consumed both open feedback
+_Updated: 2026-07-20 (`/inbox-drain` + `/ardd-feedback` — first live
+run of the new source-side `/inbox-drain` skill (committed `86ee84c`):
+drained one item from `~/dev/.ardd-data/inbox/artifact-driven-dev/`
+into `feedback-badge-workflow-yaml-ff0c.md` (`open`, 1 bug + 3 UX):
+F001 — `templates/ardd-badge-workflow.yml` is invalid YAML (column-0
+heredoc body/terminator ends the `run: |` block scalar at line 53;
+verified fix: indent both to the block scalar's indentation; corrected
+copy exists in moui72/assisted-review, upstreamable); F002 — sweep
+other shipped templates for column-0 heredocs / add a YAML-parse lint;
+F003 — badge workflow needs `branches: [main]` + `workflow_dispatch`
+(currently commits badge JSON onto any triggering branch); F004 —
+consider `[skip ci]` on the sync commit. Inbox file deleted after
+drain; inbox empty. Open feedback now 2 files. Meanwhile the delegated
+`dot-project-reviewer-guide` worktree run advanced to 12/15. Prior
+update, same day, `/ardd-feedback` — drained an out-of-band inbox
+note (`~/dev/.ardd-data/feedback/feedback-1.md`, deleted after drain)
+into `feedback-amend-path-for-skill-written-files-2187.md` (`open`,
+2 UX): F001 — no sanctioned path to amend a skill-written file whose
+content is factually wrong (concrete case: a feedback file's citation
+error with no skill to fix it; generalizes to plans/tasks; resolve by
+either exempting factual corrections from the no-hand-edit rule or
+adding an `--amend`/`ardd-state.sh` path, and state the rule where
+agents read); F002 — skills writing file/line citations write content
+guaranteed to rot; prefer symbol names. The next `/ardd-plan` picks it
+up. Also corrected a stale Feedback-section claim:
+`feedback-repo-critique-6ad1.md` is `planned` (consumed by
+`plan-ardd-state-determinism-2026-07-06.md` on 2026-07-06), not open.
+Meanwhile the delegated `dot-project-reviewer-guide` worktree run is
+in flight at 2/15. Prior update, same day, `/ardd-plan` — consumed both open feedback
 files (`20da`, `19ce` — all 5 items accepted; both now `planned`) and
 targeted `dot-project-reviewer-guide` + `next-step-prompt-auto`:
 drafted, approved, and tasked
@@ -1579,8 +1607,17 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-repo-critique-6ad1.md`, deliberately left for a
-later run. Delivered today: `feedback-next-step-prompt-dontask-20da.md`
+2 open — `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX: the
+invalid-YAML badge workflow template with verified fix, a column-0
+heredoc template sweep, branch-filter/`workflow_dispatch` hardening,
+`[skip ci]`), drained 2026-07-20 by `/inbox-drain`'s first live run;
+and `feedback-amend-path-for-skill-written-files-2187.md` (2 UX:
+the amend-path gap for skill-written files; line-citation rot), drained
+2026-07-20 from an out-of-band inbox note; picked up by the next
+`/ardd-plan`. Correction: `feedback-repo-critique-6ad1.md`, previously
+reported here as deliberately-left-open, is actually `planned` —
+consumed by `plan-ardd-state-determinism-2026-07-06.md` (2026-07-06).
+Delivered today: `feedback-next-step-prompt-dontask-20da.md`
 (1 UX) and `feedback-source-path-portability-19ce.md` (2 bugs, 1 UX,
 1 Reconsidered) are now `planned`, consumed by
 `plan-dot-project-reviewer-guide-2026-07-20-ee87.md` — see the
@@ -1664,24 +1701,34 @@ workflow-field exemption, v1.8.2).
 
 ## Work Queue
 
-- `tasks-dot-project-reviewer-guide-b434.md` (`ready`, 0/15) — plan
-  `plan-dot-project-reviewer-guide-2026-07-20-ee87.md`, features
-  `dot-project-reviewer-guide`, `next-step-prompt-auto`. Sole ready
-  file, nothing in flight — `parallel-matrix.sh` is silent with fewer
-  than two participants; no pair verdicts to report. (`independent`
-  would mean no declared overlap only, not conflict-free.)
+- `tasks-dot-project-reviewer-guide-b434.md` (`ready` in this checkout)
+  — plan `plan-dot-project-reviewer-guide-2026-07-20-ee87.md`, features
+  `dot-project-reviewer-guide`, `next-step-prompt-auto`:
+  - vs in-flight
+    `.claude/worktrees/agent-a72d4b59ff61c2df2`'s copy: **claimed by
+    in-flight worktree** — the same tasks file, ready here and
+    `in-progress` (12/15) there. Do not start it a second time.
+  (`independent` would mean no declared overlap only, not
+  conflict-free.)
 
 ## In Flight
 
-Nothing on a worktree. `main` is ahead of `origin/main` (unpushed
-commits since the last push, now including today's plan/tasks batch).
+- Worktree `.claude/worktrees/agent-a72d4b59ff61c2df2` (branch
+  `worktree-agent-a72d4b59ff61c2df2`) —
+  `tasks-dot-project-reviewer-guide-b434.md` `in-progress`, 12/15. No
+  reap candidates (`worktree-reap.sh --dry-run` silent). `main` is
+  ahead of `origin/main` (unpushed commits since the last push,
+  including today's plan/tasks batch).
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-dot-project-reviewer-guide-b434.md`
-(15 tasks, 4 phases — source-path portability, `next_step_prompt: auto`
-+ denial degradation, plan-record conventions, the installed reviewer
-guide). Also standing: push `main` to publish the accumulated batch as
+Let the in-flight delegated `dot-project-reviewer-guide` worktree run
+(12/15) finish; when it reports back, the coordinator merges eagerly and
+reaps. The tasks file is claimed — don't start it a second time. After
+merge, `/ardd-plan` to consume both open feedback files
+(`feedback-badge-workflow-yaml-ff0c.md` — the invalid-YAML badge
+workflow template is consumer-facing and worth fixing promptly — and
+`feedback-amend-path-for-skill-written-files-2187.md`). Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
