@@ -1,6 +1,28 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-19 (`/ardd-feedback` — logged
+_Updated: 2026-07-19 (`/ardd-implement` coordinator — the delegated
+`dynamic-badge-discoverability` worktree run completed all 4 tasks and
+merged (merge commit `09abad7`, signed with the on-disk key after the
+first attempt hit the locked-1Password signer); worktree reaped;
+dogfooded install refreshed (`8be8b1a`). Shipped: install.sh's badge
+section now fills `OWNER/REPO/BRANCH` in the printed snippet from the
+target's own remote/branch (https + SSH shapes, placeholder + printed
+replace-instruction fallback), guards the `ARDD_VERSION_BADGE=1`
+snippet reprint on existing `ardd-badge-version-start` markers, prints
+a latest-release-badge advisory in both the default and opted-in paths,
+adds the private-repo caveat, and mentions the opt-in in the default
+path's static-badge suggestion; `/ardd-update` now offers the dynamic
+badge at its suggestion-relay step (env var = mechanism, prose =
+interface); templates/USAGE/reference-page docs updated. 8 red-first
+cases added — badge test 23/23 green on `main`, lint-docs clean. No
+feature flips (`features: []`). Separately, the coverage-audit agent
+returned a concrete F006 proposal: graduate dispatcher-stressed
+surfaces into durable briefs via a mandatory `graduate` column in
+sweep triage plus dispatch-time `never-graduated:` advisory lines —
+drafted SKILL.md prose ready for the plan that consumes
+`feedback-sweep-coverage-expansion-3452.md` (now unblocked: its F001
+badge brief depended on this merge). Prior update, same day,
+`/ardd-feedback` — logged
 `feedback-sweep-coverage-expansion-3452.md` (`open`, 6 UX items) from a
 Fable audit of `tests/prerelease/scenarios/` coverage vs recently
 shipped surfaces. Verdict: suite structurally healthy; two expansions
@@ -1505,31 +1527,22 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
-## Work Queue
-
-- `tasks-dynamic-badge-discoverability-6887.md` — plan
-  `plan-dynamic-badge-discoverability-2026-07-19-23cf.md`, features:
-  none (`features: []`):
-  - vs in-flight worktree copy: **claimed by in-flight worktree** — the
-    same tasks file is `ready` here and `in-progress` (3/4) in the
-    delegated worktree; never start a second run against it.
-
 ## In Flight
 
-- Worktree `.claude/worktrees/agent-a8f831407115021ef` (branch
-  `worktree-agent-a8f831407115021ef`) —
-  `tasks-dynamic-badge-discoverability-6887.md` in-progress, 3/4. The
-  delegated badge-fix run; merges eagerly on completion
-  (`merge_policy: auto`), then reap. `main` is ahead of `origin/main` (unpushed commits
+Nothing — the `dynamic-badge-discoverability` worktree merged
+(`09abad7`) and was reaped. `main` is ahead of `origin/main` (unpushed
+commits since the last push). `main` is ahead of `origin/main` (unpushed commits
 since the last push).
 
 ## Recommended Next Step
 
-Wait for the in-flight `dynamic-badge-discoverability` worktree run
-(3/4) to report back; on merge, run `/ardd-plan
-feedback-sweep-coverage-expansion-3452.md` to consume the sweep
-coverage feedback (its F001 badge brief depends on the merged fix).
-Other standing options: v1.0.1 is out and the sweep loop is closed;
+Run `/ardd-plan feedback-sweep-coverage-expansion-3452.md` to consume
+the sweep-coverage feedback — now unblocked (F001's badge brief
+depended on the just-merged fix), with the coverage-audit agent's
+graduation proposal (triage `graduate` column + dispatch-time
+`never-graduated:` lines, drafted SKILL.md prose) ready as F006's
+technical approach. Also worth considering: push `main` to publish the
+badge fixes on the beta channel. Other standing options: v1.0.1 is out and the sweep loop is closed;
 update the consumer repos (`/ardd-update` in atelier etc. now resolves
 the fixed stable); pick up the three taste-deferred UX notes from
 runs 51a7/e33f if any start to grate; or plan the remaining backlog
