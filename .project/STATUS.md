@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (**S9 gate run `2026-07-20-270a`: CLEAN PASS —
+_Updated: 2026-07-20 (**v1.0.3 shipped** — with the S9 gate clean, the
+user committed the codex plan refresh (plan file only; the
+feature-entry edit was deliberately withheld), pushed `main`
+(`1803626..0fc43f6`; beta-release published `v1.0.3-beta.2`), and
+dispatched `stable-release.yml` (`bump: patch`) — **`v1.0.3` is now the
+Latest stable release**, carrying the whole badge arc to stable
+consumers: valid workflow YAML, real-default-branch trigger filter,
+marker-family guards, brand `labelColor` + `logoSvg` icon, split-badge
+default, reviewer guide, `next_step_prompt: auto`, portable
+Source-Path, and the amend-path policy. Prior update, same day, **S9
+gate run `2026-07-20-270a`: CLEAN PASS —
 the stable gate is cleared.** 8110-F001 verified fixed (the written
 badge workflow carried `branches: [master]` — the repo's real default
 branch — in every badged case, with the install output printing it);
@@ -1900,11 +1910,10 @@ policy, and the badge drain).
 
 ## Recommended Next Step
 
-**Gate cleared** (S9 run `270a` clean). Push `main` to publish the
-accumulated badge-fix batch as the next beta, then dispatch
-`stable-release.yml` (patch → v1.0.3) — stable v1.0.2 still ships the
-broken badge workflow until then. Both are the user's acts. Also
-standing: push `main` to publish the accumulated batch as
+Released — v1.0.3 is Latest; nothing release-blocking open. Natural
+next moves: `/ardd-update` the consumer repos to v1.0.3; continue the
+codex-port work in its worktree (its feature-entry edit is
+deliberately uncommitted). Also standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
