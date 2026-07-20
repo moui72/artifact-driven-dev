@@ -640,6 +640,13 @@ drafts or writes a plan.
     `/ardd-status`, not here. Non-runnable recommendations stay plain text
     under `auto` too.
 
+    **Denied or unavailable prompt = "no — stop here".** If the
+    AskUserQuestion call is denied or unavailable (e.g. Claude Code's
+    dontAsk permission mode), treat it exactly as option 2: stop. Never
+    retry the prompt, and never treat the denial as an error that discards
+    the plan/tasks already written — they stand; only the convenience
+    offer is lost.
+
 ## Slate mode (`--slate`)
 
 Entered instead of steps 1–15 when the run's sole argument is `--slate`
@@ -802,3 +809,9 @@ Under `next_step_prompt: auto`, skip the AskUserQuestion: state in the
 report text which `/ardd-plan` invocation is being auto-run, then invoke
 it by name directly (same terminal-handoff mechanism, no prompt).
 Non-runnable recommendations stay plain text under `auto` too.
+
+**Denied or unavailable prompt = "no — stop here".** If the
+AskUserQuestion call is denied or unavailable (e.g. Claude Code's dontAsk
+permission mode), treat it exactly as option 2: stop. Never retry the
+prompt, and never treat the denial as an error that discards the report
+already produced — it stands; only the convenience offer is lost.

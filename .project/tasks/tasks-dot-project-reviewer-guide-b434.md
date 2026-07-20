@@ -57,7 +57,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   existing terminal-handoff mechanism) without AskUserQuestion; state the
   invocation being auto-run in the report text first; non-runnable
   recommendations stay plain text. Same commit as T006.
-- [ ] T008 In the same two prompt sections (both skills), add the denial
+- [x] T008 In the same two prompt sections (both skills), add the denial
   rule from feedback 20da F001: a denied or unavailable AskUserQuestion
   call (e.g. Claude Code's dontAsk permission mode) means "no — stop here"
   — never retry the prompt, never treat the denial as an error that

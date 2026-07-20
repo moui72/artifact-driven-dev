@@ -341,3 +341,10 @@ without regenerating `STATUS.md` or being asked anything.
    terminal-handoff mechanism, no prompt. Recommendations that are not a
    runnable skill invocation stay plain text under `auto` too — never
    auto-run anything but a `/ardd-*` command.
+
+   **Denied or unavailable prompt = "no — stop here".** If the
+   AskUserQuestion call is denied or unavailable (e.g. Claude Code's
+   dontAsk permission mode), treat it exactly as option 2: stop. Never
+   retry the prompt, and never treat the denial as an error — the report
+   already written stands; the only thing lost is the optional
+   convenience offer.
