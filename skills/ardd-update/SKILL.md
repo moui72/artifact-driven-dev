@@ -109,6 +109,21 @@ proceeds.
    any they want (e.g. paste the badge into README) but never apply one
    unprompted.
 
+   **Dynamic version-badge offer.** After relaying the output, when the
+   project has a README that does *not* contain the
+   `ardd-badge-version-start` marker, ask the user whether they'd like
+   the dynamic ArDD version badge — a two-badge pair whose version half
+   tracks `.project/ardd-version.md` via a small workflow (note the
+   caveat: it renders only for public repos). On yes, re-run the exact
+   same `install.sh` invocation with `ARDD_VERSION_BADGE=1` set in its
+   environment — the env var is the mechanism, this offer is the
+   interface — and relay the newly printed snippet and caveats verbatim.
+   Never edit the target's README yourself; the snippet is the user's to
+   paste. Never make this offer when the marker is already present (the
+   badge is adopted — install.sh's own reprint guard mirrors this), when
+   no README exists, or in headless/scripted contexts (same
+   never-block-on-a-question rule as step 5's asks).
+
 5. **Ask the workflow-field questions.** After the reinstall, check
    `.project/artifacts/constitution.md` frontmatter (if the file exists).
    These four fields are workflow settings, not constitution content:

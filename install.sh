@@ -434,7 +434,20 @@ echo "  ✓ .project/ardd-version.md ($COMMIT)"
 # the kind of consumer who'd want the dynamic upgrade, and shouldn't need
 # to strip the marker first (never overwriting a target's hand-customized
 # version on a re-run). Unset (the default): behavior is byte-for-byte
-# unchanged from before this opt-in existed.
+# unchanged from before this opt-in existed (modulo the wrong-badge
+# advisory and the one-line dynamic-upgrade mention below).
+
+# Advisory (both paths, F004): a hand-rolled ArDD badge of the
+# latest-release shape tracks ArDD's newest release, not the version this
+# project actually has installed. Advisory only — never a README edit.
+if [ -f "$TARGET/README.md" ] \
+   && grep -q 'img.shields.io/github/v/release/.*artifact-driven-dev' "$TARGET/README.md"; then
+  echo ""
+  echo "  ⚠ Your README has an ArDD badge that tracks ArDD's latest release, not the"
+  echo "    version installed here. Consider replacing it with the endpoint-badge"
+  echo "    snippet (run install.sh with ARDD_VERSION_BADGE=1 to print it)."
+fi
+
 if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
     echo ""
     BADGE_WORKFLOW="$TARGET/.github/workflows/ardd-badge.yml"
@@ -472,16 +485,49 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       echo "  – .github/badges/ardd-version.json (already exists, left untouched)"
     fi
 
-    echo ""
-    echo "Optional: add a two-badge \"built with ArDD\" pair to your README — paste this snippet:"
-    echo ""
-    sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
-    echo ""
+    # Snippet print, guarded like the static branch (F003): a README that
+    # already carries the version-badge markers doesn't need the paste-this
+    # suggestion again. Supporting-file writes above still ran.
+    if ! grep -q 'ardd-badge-version-start' "$TARGET/README.md"; then
+      # Coordinate fill (F002): derive OWNER/REPO from the target's own
+      # origin remote (https and SSH GitHub shapes) and BRANCH from HEAD
+      # (fallback main); on any parse failure keep the placeholders and
+      # print the replace-these instruction instead.
+      BADGE_COORDS=""
+      BADGE_ORIGIN="$(git -C "$TARGET" remote get-url origin 2>/dev/null || true)"
+      case "$BADGE_ORIGIN" in
+        https://github.com/*/*) BADGE_COORDS="${BADGE_ORIGIN#https://github.com/}" ;;
+        git@github.com:*/*)     BADGE_COORDS="${BADGE_ORIGIN#git@github.com:}" ;;
+      esac
+      BADGE_COORDS="${BADGE_COORDS%.git}"
+      case "$BADGE_COORDS" in
+        */*/*) BADGE_COORDS="" ;;  # unexpected shape — keep placeholders
+      esac
+      BADGE_BRANCH="$(git -C "$TARGET" symbolic-ref --short HEAD 2>/dev/null || echo main)"
+
+      echo ""
+      echo "Optional: add a two-badge \"built with ArDD\" pair to your README — paste this snippet:"
+      echo ""
+      if [ -n "$BADGE_COORDS" ]; then
+        sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" \
+          | sed "s|OWNER/REPO/BRANCH|$BADGE_COORDS/$BADGE_BRANCH|" | sed 's/^/  /'
+      else
+        sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+        echo ""
+        echo "  (No GitHub origin remote found — replace OWNER/REPO/BRANCH with your repo's coordinates before pasting.)"
+      fi
+      echo ""
+      echo "  Note: the version badge renders only for public repos — shields.io fetches"
+      echo "  raw.githubusercontent.com unauthenticated."
+      echo ""
+    fi
 elif [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.md"; then
     echo ""
     echo "Optional: add a \"built with ArDD\" badge to your README — paste this snippet:"
     echo ""
     sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+    echo ""
+    echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic version-badge pair."
     echo ""
 fi
 

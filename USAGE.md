@@ -53,6 +53,7 @@ the full story.
 | Vet a big idea before committing to it | `/ardd-research proposal: <idea>` — for reversals you're *not yet sure about* (sure ones go straight to `/ardd-feedback`) | [ardd-research](docs/reference/skills/ardd-research.md) |
 | Check the docs still match the code | `/ardd-defects` | [checking.md](docs/guides/checking.md) |
 | Update ArDD itself | `/ardd-update` | [install.md](docs/install.md) |
+| Add a README badge showing the installed ArDD version | Say yes at `/ardd-update`'s badge offer — or run `ARDD_VERSION_BADGE=1 ./install.sh <project>` (public repos only) | [ardd-update](docs/reference/skills/ardd-update.md) |
 
 ## Going deeper
 

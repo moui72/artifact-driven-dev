@@ -1,14 +1,14 @@
 ---
 plan: plan-dynamic-badge-discoverability-2026-07-19-23cf.md
 generated: 2026-07-19
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
 
 ## Phase 1: install.sh badge mechanics (test-first)
 
-- [ ] T001 Extend `scripts/test-install-version-badge.sh` with red-first
+- [x] T001 Extend `scripts/test-install-version-badge.sh` with red-first
   cases for the five install.sh badge fixes (run it, confirm the new
   cases fail before T002): (a) a target fixture with a GitHub `origin`
   remote (`https://github.com/acme/widget.git`) run with
@@ -29,7 +29,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
   POSIX sh, fixture repos in a temp dir, same harness style as the
   file's existing cases.
 
-- [ ] T002 Implement the five fixes in `install.sh`'s badge section
+- [x] T002 Implement the five fixes in `install.sh`'s badge section
   (currently lines ~427-486), turning T001 green: (1) derive
   `owner/repo` from `git -C "$TARGET" remote get-url origin` (handle
   `https://github.com/o/r(.git)` and `git@github.com:o/r(.git)` shapes)
@@ -53,7 +53,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
 
 ## Phase 2: skill prose
 
-- [ ] T003 Edit `skills/ardd-update/SKILL.md`: at the step where
+- [x] T003 Edit `skills/ardd-update/SKILL.md`: at the step where
   install.sh output/suggestions are relayed to the user (step 4's
   suggestion-relay point — confirm against the file's current
   structure), add an offer: when the target's README lacks
@@ -68,7 +68,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
 
 ## Phase 3: docs and templates
 
-- [ ] T004 Documentation pass: (a) update
+- [x] T004 Documentation pass: (a) update
   `templates/badge.md`'s comment block and
   `templates/ardd-badge-workflow.yml`'s header comment to state the
   public-repo-only limitation; (b) add the dynamic badge to `USAGE.md`
