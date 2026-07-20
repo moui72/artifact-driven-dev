@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Scenario-brief extensions
 
-- [ ] T001 [parallel] Extend `tests/prerelease/scenarios/S1.md` with
+- [x] T001 [parallel] Extend `tests/prerelease/scenarios/S1.md` with
   dynamic-badge steps (F001), written against the merged fixed behavior
   (commit 09abad7): in the scratch target, `git remote add origin
   https://github.com/example-owner/example-repo.git` (never push), then
