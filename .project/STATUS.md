@@ -1,6 +1,15 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-implement` coordinator — the delegated
+_Updated: 2026-07-20 (`/ardd-feedback` — logged
+`feedback-source-path-portability-19ce.md` (`open`, 1 bug + 1 UX) from a
+CodeRabbit finding on a consumer PR (moui72/assisted-review#105):
+install.sh records `Source-Path: $SCRIPT_DIR` — a machine-specific
+absolute path leaking the username — into the committed
+`.project/ardd-version.md` (F001: record the portable `~/.ardd/source`
+form, readers expanding `~`; F002: `/ardd-update` should detect and
+rewrite the legacy absolute form in consumers and advise on git-history
+repair). The next `/ardd-plan` picks it up. Prior update, same day,
+`/ardd-implement` coordinator — the delegated
 `s1-badge-followups` worktree run completed both tasks and merged
 fast-forward (`e745582`); worktree reaped; badge test re-verified
 27/27 green on `main`. Shipped: install.sh now prints the one-line
@@ -1532,7 +1541,11 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-0 open — `feedback-s1-badge-followups-5e84.md` (2 UX items) is now
+1 open — `feedback-source-path-portability-19ce.md` (1 bug, 1 UX):
+install.sh's machine-specific `Source-Path` in committed consumer
+metadata + `/ardd-update` legacy-form rewrite/history-repair advisory.
+Picked up by the next `/ardd-plan`. Delivered earlier:
+`feedback-s1-badge-followups-5e84.md` (2 UX items) is now
 `planned`, consumed by `plan-s1-badge-followups-2026-07-20-9667.md`.
 Delivered earlier:
 `feedback-sweep-coverage-expansion-3452.md` (6 UX items),
@@ -1616,7 +1629,10 @@ since the last push).
 
 ## Recommended Next Step
 
-Push `main` to publish the unpushed batch (scenario-sweep rename +
+`/ardd-plan` to consume the open
+`feedback-source-path-portability-19ce.md` (portable `Source-Path` +
+`/ardd-update` legacy rewrite). Also standing: push `main` to publish
+the unpushed batch (scenario-sweep rename +
 S1 badge follow-up fixes) as the next beta; then dispatch
 `stable-release.yml` (`bump: patch`) when ready for stable v1.0.2 to
 carry the full badge arc. Other standing options: v1.0.1 is out and the sweep loop is closed;
