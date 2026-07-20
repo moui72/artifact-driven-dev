@@ -89,7 +89,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: .project/ reviewer guide
 
-- [ ] T013 Resolve plan Open Question 1, then author the guide as a
+- [x] T013 Resolve plan Open Question 1, then author the guide as a
   source-side template (e.g. `templates/dot-project-readme.md`): how to
   read `.project/` — which files are generated vs authored, which look
   live but are static historical records (plans, planned feedback files,
