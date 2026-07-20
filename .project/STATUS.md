@@ -1,6 +1,18 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (`/ardd-feedback`, second pass — expanded
+_Updated: 2026-07-20 (`/ardd-feedback`, third pass — vetted the
+"couple next_step_prompt to the harness permission mode" idea and
+logged the recommended shape instead: new backlog entry
+`next-step-prompt-auto` (`backlogged`) — a third enum value `auto`
+that auto-runs the recommended next step when it's a concrete
+`/ardd-*` invocation (explicit and harness-agnostic; the mode-coupled
+variant was rejected: permission mode is only visible via hook
+payloads, would force target-side hook shipping, and
+acceptEdits/auto still show AskUserQuestion) — plus
+`feedback-next-step-prompt-dontask-20da.md` (`open`, 1 UX): dontAsk
+mode denies AskUserQuestion outright, so the two prompting skills
+should state that a denied prompt means decline, never retry/abort.
+Prior update, same day, `/ardd-feedback`, second pass — expanded
 `feedback-source-path-portability-19ce.md` (`open`, now 2 bugs + 1 UX +
 1 Reconsidered) with the full CodeRabbit triage from
 moui72/assisted-review#105: F001 gained design options (tilde form vs
@@ -1551,7 +1563,9 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-source-path-portability-19ce.md` (2 bugs, 1 UX,
+2 open — `feedback-next-step-prompt-dontask-20da.md` (1 UX): denied
+AskUserQuestion under dontAsk mode must read as decline in the two
+next_step_prompt skills. And `feedback-source-path-portability-19ce.md` (2 bugs, 1 UX,
 1 Reconsidered): install.sh's machine-specific `Source-Path` in
 committed consumer metadata (+ options and a leak-class sweep),
 `/ardd-update` legacy-form rewrite/history-repair advisory, /ardd-plan
@@ -1608,10 +1622,14 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged · 29 implemented · 1 retired — see
+3 backlogged · 29 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Backlogged:
+- `next-step-prompt-auto` — third `next_step_prompt` enum value `auto`:
+  auto-run the recommended next step when it's a concrete `/ardd-*`
+  invocation (the vetted, harness-agnostic alternative to
+  permission-mode coupling).
 - `dot-project-reviewer-guide` — a "how to read `.project/`"
   orientation note for downstream AI reviewer configs (generated vs
   authored, static-record vs live files, single-writer conventions), so
