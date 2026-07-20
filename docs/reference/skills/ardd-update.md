@@ -83,8 +83,10 @@ than one at once is a usage error, reported before anything else runs.
    relays its full output verbatim. Suggestions are yours to accept;
    none is applied unprompted. After relaying, if the project has a
    README without the `ardd-badge-version-start` marker, it offers the
-   **dynamic ArDD version badge**: a two-badge pair whose version half
-   tracks `.project/ardd-version.md` via a small workflow. Saying yes
+   **dynamic ArDD version badge**: a single split endpoint badge
+   ("built with ArDD │ vX.Y.Z") whose JSON — kept in sync with
+   `.project/ardd-version.md` by a small workflow — supplies both
+   halves, the brand colour, and the icon. Saying yes
    re-runs the same install with `ARDD_VERSION_BADGE=1` set and relays
    the printed snippet — filled with your repo's own coordinates when a
    GitHub `origin` remote exists — plus its caveats (the badge renders

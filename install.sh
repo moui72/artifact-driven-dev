@@ -36,7 +36,8 @@ esac
 # Opt-in dynamic version badge (plan: dynamic-version-badge-sync). Mirrors
 # the ARDD_CHANNEL validation above: unset/0/1 only — an unrecognized value
 # is a refusal, not a silent guess. When "1", install.sh writes the badge
-# workflow + seed JSON into the target and prints the two-badge snippet
+# workflow + seed JSON + badge icon into the target and prints the
+# split-badge snippet
 # instead of the single static one; unset (the default) leaves behavior
 # byte-for-byte unchanged.
 case "${ARDD_VERSION_BADGE:-}" in
@@ -565,7 +566,10 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       BADGE_BRANCH="$(git -C "$TARGET" symbolic-ref --short HEAD 2>/dev/null || echo main)"
 
       echo ""
-      echo "Optional: add a two-badge \"built with ArDD\" pair to your README — paste this snippet:"
+      echo "Optional: add the split \"built with ArDD │ version\" badge to your README — paste this snippet:"
+      echo "(one endpoint badge; both halves, brand colour, and mark all come from"
+      echo ".github/badges/ardd-version.json — a two-badge pair variant lives in the ArDD"
+      echo "source's templates/badge.md if you prefer separated marks)"
       echo ""
       if [ -n "$BADGE_COORDS" ]; then
         sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" \
@@ -586,7 +590,7 @@ elif [ -f "$TARGET/README.md" ] && ! grep -q 'ardd-badge-start' "$TARGET/README.
     echo ""
     sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
     echo ""
-    echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic version-badge pair."
+    echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic split version badge."
     echo ""
 elif [ ! -f "$TARGET/README.md" ]; then
     # F001: no README yet (a fresh new.sh project) — the opt-in would

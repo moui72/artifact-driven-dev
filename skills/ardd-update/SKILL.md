@@ -124,8 +124,10 @@ proceeds.
    **Dynamic version-badge offer.** After relaying the output, when the
    project has a README that does *not* contain the
    `ardd-badge-version-start` marker, ask the user whether they'd like
-   the dynamic ArDD version badge — a two-badge pair whose version half
-   tracks `.project/ardd-version.md` via a small workflow (note the
+   the dynamic ArDD version badge — a single split endpoint badge
+   ("built with ArDD │ vX.Y.Z") whose JSON, kept in sync with
+   `.project/ardd-version.md` by a small workflow, supplies both halves,
+   the brand colour, and the icon (note the
    caveat: it renders only for public repos). On yes, re-run the exact
    same `install.sh` invocation with `ARDD_VERSION_BADGE=1` set in its
    environment — the env var is the mechanism, this offer is the

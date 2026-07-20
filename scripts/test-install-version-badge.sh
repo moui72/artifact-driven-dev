@@ -3,7 +3,7 @@
 # (plan: dynamic-version-badge-sync): when set to "1", install.sh writes
 # .github/workflows/ardd-badge.yml and .github/badges/ardd-version.json into
 # the target (seeded with this run's actual version), and prints the
-# two-badge snippet instead of the single static one — never overwriting a
+# split-badge snippet instead of the single static one — never overwriting a
 # hand-customized version of either file on re-install. When unset (the
 # default), behavior must be byte-for-byte unchanged from before this opt-in
 # existed: neither file is written and the single-badge snippet is printed.
@@ -88,10 +88,17 @@ else
 fi
 
 case "$out" in
-  *"two-badge"*)
-    ok "case1: two-badge snippet printed" ;;
+  *"split"*)
+    ok "case1: split-badge snippet printed" ;;
   *)
-    bad "case1: two-badge snippet printed" ;;
+    bad "case1: split-badge snippet printed" ;;
+esac
+
+case "$out" in
+  *"img.shields.io/endpoint"*)
+    ok "case1: snippet carries the endpoint badge URL" ;;
+  *)
+    bad "case1: snippet carries the endpoint badge URL" ;;
 esac
 
 # --- Case 2: re-install with ARDD_VERSION_BADGE=1 leaves a hand-edited
@@ -133,10 +140,10 @@ else
 fi
 
 case "$out" in
-  *"two-badge"*)
-    bad "case3: default path does not print the two-badge snippet" ;;
+  *"img.shields.io/endpoint"*)
+    bad "case3: default path does not print the split-badge snippet" ;;
   *)
-    ok "case3: default path does not print the two-badge snippet" ;;
+    ok "case3: default path does not print the split-badge snippet" ;;
 esac
 
 case "$out" in
@@ -237,10 +244,10 @@ printf '# Test project\n\n<!-- ardd-badge-version-start -->\nadopted\n<!-- ardd-
 out="$(run_install_badge_on "$target")"
 
 case "$out" in
-  *"two-badge"*)
-    bad "case9: two-badge snippet not reprinted when marker present" ;;
+  *"img.shields.io/endpoint"*)
+    bad "case9: split-badge snippet not reprinted when marker present" ;;
   *)
-    ok "case9: two-badge snippet not reprinted when marker present" ;;
+    ok "case9: split-badge snippet not reprinted when marker present" ;;
 esac
 
 if [ -f "$target/$WORKFLOW_REL" ] && [ -f "$target/$JSON_REL" ]; then
@@ -312,7 +319,7 @@ case "$out" in
 esac
 
 case "$out" in
-  *"two-badge"*|*"ardd-badge-version-start"*)
+  *"img.shields.io/endpoint"*|*"ardd-badge-version-start"*)
     bad "case13: no-README path does not print any badge snippet" ;;
   *)
     ok "case13: no-README path does not print any badge snippet" ;;

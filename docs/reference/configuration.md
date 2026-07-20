@@ -129,8 +129,10 @@ only — shields.io fetches raw.githubusercontent.com unauthenticated.
 stays the channel signal: blue = stable, yellow = beta. The JSON also
 inlines the icon as `logoSvg`, so brand colour and mark propagate to
 consumer badges through the sync workflow — no README re-editing when
-either changes upstream. See `templates/badge.md` for the snippet shapes
-and renderer caveats.
+either changes upstream. The printed snippet is the **split badge** — one
+endpoint badge reading "built with ArDD │ vX.Y.Z" whose JSON supplies
+both halves; `templates/badge.md` documents all three shapes
+(static-only, split, two-badge pair) and the renderer caveats.
 
 ## Related per-clone git opt-ins (not frontmatter)
 
