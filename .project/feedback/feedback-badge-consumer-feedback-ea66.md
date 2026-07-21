@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-badge-consumer-fixes-2026-07-21-1c50.md
 ---
 
 # Feedback
@@ -10,7 +10,7 @@ From a real consumer update session (yet-another-rank-games,
 v1.0.2 → v1.0.3, 2026-07-21).
 
 ## Bugs
-- [ ] F001 The badge coordinate autodetect (install.sh badge section's
+- [x] F001 The badge coordinate autodetect (install.sh badge section's
   OWNER/REPO/BRANCH fill from the target's git remote) doesn't handle
   SSH host aliases: yarg's remote is
   `github-ardd:moui72/yet-another-rank-games.git` — an ssh-config alias
@@ -24,7 +24,7 @@ v1.0.2 → v1.0.3, 2026-07-21).
   file-set changes.
 
 ## Reconsidered
-- [ ] F002 The badge flow's never-edit-README posture, as agents read
+- [x] F002 The badge flow's never-edit-README posture, as agents read
   it, is overly assertive: in the yarg session the consuming agent
   refused the README badge paste outright ("I won't touch the README
   per the skill's badge rule") until the user explicitly overrode it —
