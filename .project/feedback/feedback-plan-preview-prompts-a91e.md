@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-multi-harness-2026-07-21-76ba.md
 ---
 
 # Feedback
 
 ## UX
-- [ ] F001 `/ardd-plan`'s approval checkpoint (step 10): the
+- [x] F001 `/ardd-plan`'s approval checkpoint (step 10): the
   browser-preview question and the approve/revise/stop question must be
   INDEPENDENT, sequential asks — never combined into one
   AskUserQuestion call. Observed live (2026-07-21): an agent bundled
