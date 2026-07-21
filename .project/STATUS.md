@@ -1,6 +1,16 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-20 (**v1.0.3 shipped** — with the S9 gate clean, the
+_Updated: 2026-07-21 (`/ardd-feedback` — logged
+`feedback-badge-consumer-feedback-ea66.md` (`open`, 1 bug + 1
+Reconsidered) from the first real consumer update to v1.0.3
+(yet-another-rank-games): F001 the badge coordinate autodetect misses
+scp-style SSH host-alias remotes (`github-ardd:moui72/...`) and falls
+back to placeholders — parse the path part regardless of host token;
+F002 the never-edit-README posture reads as refusal-until-overridden
+to consuming agents — revise the badge-surface prose so the agent
+offers a confirm-with-diff gate instead (install.sh itself stays
+suggestion-only). The next `/ardd-plan` picks it up. Prior update,
+2026-07-20, **v1.0.3 shipped** — with the S9 gate clean, the
 user committed the codex plan refresh (plan file only; the
 feature-entry edit was deliberately withheld), pushed `main`
 (`1803626..0fc43f6`; beta-release published `v1.0.3-beta.2`), and
@@ -1797,7 +1807,10 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-None open. Delivered today: `feedback-s9-badge-guards-b8b6.md` (3 UX,
+1 open — `feedback-badge-consumer-feedback-ea66.md` (1 bug + 1
+Reconsidered: ssh-alias coordinate autodetect; badge README posture →
+confirm-with-diff), from the yarg v1.0.3 update; next `/ardd-plan`
+picks it up. Delivered 2026-07-20: `feedback-s9-badge-guards-b8b6.md` (3 UX,
 now `planned`, consumed by `plan-badge-guards-2026-07-20-8b60.md`);
 `feedback-badge-renderer-caveat-bf75.md`
 (1 UX) and `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX) are
@@ -1910,10 +1923,12 @@ policy, and the badge drain).
 
 ## Recommended Next Step
 
-Released — v1.0.3 is Latest; nothing release-blocking open. Natural
-next moves: `/ardd-update` the consumer repos to v1.0.3; continue the
-codex-port work in its worktree (its feature-entry edit is
-deliberately uncommitted). Also standing: push `main` to publish the accumulated batch as
+`/ardd-plan feedback-badge-consumer-feedback-ea66.md` to fix the
+ssh-alias autodetect and soften the badge README posture to a
+confirm-with-diff gate (then `/scenario-sweep S9` when the badge
+file-set changes again). v1.0.3 is Latest; also natural: `/ardd-update`
+the remaining consumer repos; continue the codex-port worktree. Also
+standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
