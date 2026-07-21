@@ -62,7 +62,7 @@ jobs:
             "label": "built with ArDD",
             "message": "$message",
             "color": "$color",
-            "labelColor": "#7C3AED"
+            "labelColor": "#2F4858"
           }
           JSON
 

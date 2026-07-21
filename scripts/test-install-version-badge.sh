@@ -370,10 +370,10 @@ fi
 target="$(new_target case16)"
 run_install_badge_on "$target" >/dev/null
 
-if grep -qF '"labelColor": "#7C3AED"' "$target/$JSON_REL"; then
-  ok "case16: seed JSON carries labelColor #7C3AED"
+if grep -qF '"labelColor": "#2F4858"' "$target/$JSON_REL"; then
+  ok "case16: seed JSON carries labelColor #2F4858"
 else
-  bad "case16: seed JSON carries labelColor #7C3AED"
+  bad "case16: seed JSON carries labelColor #2F4858"
   cat "$target/$JSON_REL"
 fi
 

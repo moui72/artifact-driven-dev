@@ -124,7 +124,7 @@ dynamic ArDD version badge: install.sh writes
 `templates/ardd-icon.svg`), then prints the README snippet. Public repos
 only — shields.io fetches raw.githubusercontent.com unauthenticated.
 
-**The ArDD brand colour is `#7C3AED`.** The badge JSON carries it as
+**The ArDD brand colour is `#2F4858`.** The badge JSON carries it as
 `labelColor` (the badge's left half), while `color` (the right half)
 stays the channel signal: blue = stable, yellow = beta. The JSON also
 inlines the icon as `logoSvg`, so brand colour and mark propagate to
