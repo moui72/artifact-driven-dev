@@ -42,7 +42,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Pre-commit hook staged-path scoping
 
-- [ ] T004 [parallel] Red-first: extend `scripts/test-hooks-pre-commit.sh`
+- [x] T004 [parallel] Red-first: extend `scripts/test-hooks-pre-commit.sh`
   with marker-file-stub routing cases in a real `git init` fixture —
   (a) stage only `.project/x.md` → only the lint-project stub ran;
   (b) stage `scripts/branch-info.sh` → its `test-branch-info.sh` stub
