@@ -50,7 +50,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   (e.g. `.github/x`) → all stubs ran; (d) empty staged list → all
   stubs ran; (e) `ARDD_HOOK_ALL=1` → all stubs ran regardless of
   staged paths. Existing aggregation/short-circuit cases unchanged.
-- [ ] T005 Implement staged-path scoping in `hooks/pre-commit`
+- [x] T005 Implement staged-path scoping in `hooks/pre-commit`
   (POSIX sh): pattern table for `lint-docs.sh` (README/USAGE/
   CONTRIBUTING/docs/skills), `lint-project.sh` (`.project/`),
   `test-new.sh` (`new.sh`), the `test-install-*`/`test-merge-driver`/

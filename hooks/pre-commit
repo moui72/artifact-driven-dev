@@ -16,8 +16,113 @@ set -e
 # rule.) test-hooks-pre-commit.sh running *inside* the hook means the hook
 # tests its own control flow against fixtures on every commit — expected,
 # not recursion.
+#
+# Staged-path scoping (1e7b F001): the hook reads the staged path list and
+# skips checks whose subject files are provably untouched — a .project/-only
+# commit runs only lint-project.sh instead of the full suite. Every decision
+# fails safe to run-everything: an empty/unreadable staged list, any staged
+# path the pattern table doesn't map, or a check whose subjects can't be
+# determined all mean run-all, and ARDD_HOOK_ALL=1 forces run-all
+# unconditionally. CI still runs the full suite on every push.
+
+STAGED="$(git diff --cached --name-only 2>/dev/null || true)"
+
+RUN_ALL=0
+if [ "${ARDD_HOOK_ALL:-}" = "1" ] || [ -z "$STAGED" ]; then
+  RUN_ALL=1
+else
+  # Any staged path outside the mapped subject areas -> fail-safe run-all.
+  # Mapped areas: the docs set (lint-docs.sh), .project/ (lint-project.sh),
+  # new.sh (test-new.sh), the install surface install.sh/templates/
+  # migrations/skills (the test-install-*/test-merge-driver/
+  # test-ardd-update-check family; skills/ also feeds lint-docs),
+  # hooks/ (test-hooks-pre-commit.sh), the check scripts themselves, and
+  # scripts/X.sh guarded by an existing scripts/test-X.sh (generic rule).
+  old_ifs="$IFS"
+  IFS='
+'
+  for staged_path in $STAGED; do
+    case "$staged_path" in
+      README.md|USAGE.md|CONTRIBUTING.md|docs/*|skills/*) ;;
+      .project/*) ;;
+      new.sh|install.sh|templates/*|migrations/*) ;;
+      hooks/*) ;;
+      scripts/lint-docs.sh|scripts/lint-project.sh) ;;
+      scripts/test-*.sh) ;;
+      scripts/*.sh)
+        staged_base="$(basename "$staged_path")"
+        [ -f "scripts/test-${staged_base}" ] || RUN_ALL=1
+        ;;
+      *) RUN_ALL=1 ;;
+    esac
+  done
+  IFS="$old_ifs"
+fi
+
+# Does any staged path match one of the given patterns? A pattern ending in
+# / is a directory prefix; anything else is an exact path.
+staged_matches() {
+  for pat in "$@"; do
+    sm_ifs="$IFS"
+    IFS='
+'
+    for staged_path in $STAGED; do
+      case "$pat" in
+        */)
+          case "$staged_path" in
+            "$pat"*) IFS="$sm_ifs"; return 0 ;;
+          esac
+          ;;
+        *)
+          if [ "$staged_path" = "$pat" ]; then IFS="$sm_ifs"; return 0; fi
+          ;;
+      esac
+    done
+    IFS="$sm_ifs"
+  done
+  return 1
+}
+
+# Should this check run for the current staged list? Pattern table first,
+# then the generic scripts/test-X.sh -> scripts/X.sh rule; a check whose
+# subjects can't be determined (unknown name, missing subject file) always
+# runs — fail-safe, never a silent skip.
+check_needed() {
+  check_base="$(basename "$1")"
+  case "$check_base" in
+    lint-docs.sh)
+      staged_matches README.md USAGE.md CONTRIBUTING.md docs/ skills/ "scripts/$check_base"
+      ;;
+    lint-project.sh)
+      staged_matches .project/ "scripts/$check_base"
+      ;;
+    test-new.sh)
+      staged_matches new.sh "scripts/$check_base"
+      ;;
+    test-install-*.sh|test-merge-driver.sh|test-ardd-update-check.sh)
+      staged_matches install.sh templates/ migrations/ skills/ "scripts/$check_base"
+      ;;
+    test-hooks-pre-commit.sh)
+      staged_matches hooks/ "scripts/$check_base"
+      ;;
+    test-*.sh)
+      subject="scripts/${check_base#test-}"
+      if [ -f "$subject" ]; then
+        staged_matches "$subject" "scripts/$check_base"
+      else
+        return 0   # unknown subject — fail-safe: run it
+      fi
+      ;;
+    *)
+      return 0     # unknown check — fail-safe: run it
+      ;;
+  esac
+}
 
 for check in scripts/lint-docs.sh scripts/lint-project.sh scripts/test-*.sh; do
+  if [ "$RUN_ALL" -ne 1 ] && ! check_needed "$check"; then
+    continue
+  fi
   if ! "./$check"; then
     echo "pre-commit: $check failed — commit blocked" >&2
     exit 1
