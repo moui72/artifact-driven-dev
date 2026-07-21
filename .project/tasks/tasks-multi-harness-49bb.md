@@ -28,7 +28,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   resolved dev-mode; keep `ardd-update-check.sh` and
   `source-resolve.sh` parsing unaffected by the new line. All T001
   cases green; full existing install suite stays green.
-- [ ] T003 [artifacts: constitution] Harness-neutral shared prose +
+- [x] T003 [artifacts: constitution] Harness-neutral shared prose +
   bounded ignore guidance: the generated reviewer guide
   (`templates/dot-project-readme.md` and install.sh's write of it)
   lists every installed harness root rather than hardcoding
