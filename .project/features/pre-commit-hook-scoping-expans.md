@@ -1,7 +1,9 @@
 ---
 slug: pre-commit-hook-scoping-expans
-status: backlogged
+status: tasked
 logged: 2026-07-21
+plan: plan-changelog-precommit-2026-07-21-b716.md
+tasks: tasks-changelog-precommit-0966.md
 ---
 
 Extend hooks/pre-commit's staged-path scoping so workflow-YAML, test-fixture, and no-check-subject commits (CLAUDE.md, dev-notes/, tests/scenarios/, dotfiles) hit a fast path instead of the full ~117s RUN_ALL fallback, and wire scripts/lint-templates-yaml.sh into the hook itself (currently CI-only, so a broken workflow YAML silently passes the hook).

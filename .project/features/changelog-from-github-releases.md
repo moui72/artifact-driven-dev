@@ -1,7 +1,9 @@
 ---
 slug: changelog-from-github-releases
-status: backlogged
+status: tasked
 logged: 2026-07-21
+plan: plan-changelog-precommit-2026-07-21-b716.md
+tasks: tasks-changelog-precommit-0966.md
 ---
 
 Auto-generate docs/release-notes.md (the GitHub Pages docs site's changelog page, mkdocs.yml nav "Release notes") from actual GitHub releases via a fetch-and-commit script (gh api / gh release list), rather than the current hand-written single-release page frozen at v0.9.0.

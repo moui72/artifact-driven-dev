@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-21 (**badge-style-variant-option planned and tasked** — amended the badge brand colour to `#2F4858` (was `#7C3AED`) across `docs/reference/configuration.md`, `templates/ardd-badge.json`, `templates/ardd-badge-workflow.yml`, and `scripts/test-install-version-badge.sh`'s case16 assertion; regression suite green. Then a bare `/ardd-plan` picked `badge-style-variant-option` from the 3-item backlog: drafted, approved, and tasked `plan-badge-style-variant-option-2026-07-21-982c.md` — 10 tasks/5 phases (incl. a standalone Phase 0) in `tasks-badge-style-variant-option-7230.md` (`ready`). Design: a new `EXISTING_SHIELDS_IO` README detection (marker-excluded grep for `img.shields.io`) alongside the existing `BADGE_FAMILY` marker detection — shieldcn.dev becomes the default install-time badge offer (mirroring this repo's own sponsor badge, `README.md:13`), shields.io the fallback when the target README already carries non-ArDD shields.io badges; new `templates/badge-shieldcn.md` (3 shapes) ships alongside `templates/badge.md`; open question flagged on shieldcn.dev's exact `dynamic/json` query syntax (inferred from the shields.io analog, not yet independently verified). Mid-run catch: step 4's open-feedback check had missed `feedback-badge-style-clash-7db2.md` (a strict-equality status match didn't tolerate its trailing frontmatter comment) — surfaced it after tasking, confirmed with the user, marked F001 incorporated, bound to this plan (now `planned`), and added a standalone Phase 0/T010 for its interim-caveat ask (shields.io-vs-shieldcn clash note in the *current* offer text, landing independent of and before the rest of the plan). Feature `badge-style-variant-option`: `backlogged` → `tasked`. Open feedback now 1 file (`feedback-hookspath-side-effect-c707.md`). Prior update, same day, **multi-harness plan implemented and merged** — the delegated worktree run completed all 12 tasks of `tasks-multi-harness-49bb.md` (full suite green), merged to `main` as d41b193, worktree reaped; feature `multi-harness-install-metadata` is **implemented**. Shipped: `Harnesses:` union line in ardd-version.md (order-normalized, absent = claude; dual installs both orders preserve the sibling), dev-mode reinstall records `Channel: dev` and drops Source-Ref, per-harness bounded `.worktreeinclude`/gitignore guidance, reviewer guide lists every installed root, **pre-commit hook staged-path scoping** (P90: `.project/`-only commits ~117s → ~8s; `ARDD_HOOK_ALL=1` override), ardd-update reference/docs/USAGE `--harness codex` documentation, GUARDRAILS cwd-safety rules 7–8, ardd-plan two-sequential-prompts clause, S2 cold-fixture cleanse, S7 reviewer-guide check, init/backlog collaborative scaffold notes. Subagent also fixed a real fixture-isolation bug (`test-hooks-pre-commit.sh` missing the GIT_DIR unset guard). Same session: **brand refresh** (70f9c2a) — favicon + badge mark redesigned (orbit ring + 4 triangles around a small filled rect; heavier legibility variant; badge icon in dark-context whites); note existing consumers keep their never-clobbered `.github/badges/ardd-icon.svg` until refreshed. Second inbox drain (8a666ed): feedback-badge-style-clash-7db2 (open) + backlogged `badge-style-variant-option`, then revised by user decision (fcd287f): **shieldcn becomes the default badge offer**, shields.io the detection-based fallback; both templates ship; agents may adapt to detected style; other-style users invited to contribute templates upstream. Prior update, same day: **/ardd-plan multi-harness — approved and tasked** — constitution bumped to v1.13.0 (new Multi-harness standing decision: dual Claude+Codex installs are first-class; shared `.project/` install metadata represents the full harness set, preserve-on-reinstall, never last-writer-wins); `plan-multi-harness-2026-07-21-76ba.md` approved, `tasks-multi-harness-49bb.md` **ready** (12 tasks / 4 phases: harness metadata in install.sh, pre-commit staged-path scoping for P90 [~117s → ~7–10s common case, per the 2026-07-21 timing investigation], docs drift, guardrails/scenario/prose hardening); feature `multi-harness-install-metadata` (inbox-drained this session) flipped `tasked`. Consumed ALL 5 open feedback files (12 items, all accepted): docs-sweep-28d0, sweep-cdf0-878c, guardrails-5f18, plan-preview-prompts-a91e, pre-commit-hook-p90-1e7b — open feedback is now 0. Committed 91a2a40 (plus 6527695 backlog entry, 3244f70 status, b1c06bc docs-sweep feedback). Prior update, same day: **codex foundation merged to main** — the user merged `codex/port-foundation` (8a302c8: `install.sh --harness codex` support); the worktree at `…/artifact-driven-dev-codex-port` is now merged + clean → **reapable** (`worktree-reap.sh` candidate; reap pending). Register state deliberate: `codex-second-harness-support` stays `backlogged` and its plan `draft` — the merge is the foundation slice, not the full feature. Same session, `/docs-sweep` (scope: v1.0.3..HEAD, sole changed skill `ardd-update`) logged `feedback-docs-sweep-ardd-update-harness-28d0.md` (open, 3 bugs): the ardd-update reference page's step-4 body lacks the new harness-preservation behavior, still claims "your README is never edited" against the confirm-with-diff posture, and `install.sh --harness codex` is undocumented in all human-facing docs. Open feedback now 6 files. Prior update, same day, **v1.0.4 shipped** — pushed main (02c9692..68970e8, 13 commits; beta-release published v1.0.4-beta.1, lint green incl. the template-YAML jobs), then dispatched stable-release.yml (bump: patch): **v1.0.4 is Latest**, carrying the post-1.0.3 badge hardening to stable consumers — marker-family guards, real-default-branch workflow trigger, ssh-alias coordinate fill, confirm-with-diff README posture, amend-path prose. Every S9 gate in the arc ran clean before shipping. Prior update, same day, /ardd-feedback — logged feedback-guardrails-cwd-safety-5f18.md (open, 1 bug): the primary checkout lost its git origin remote during the S9 runs (restored by hand); likely a scenario subagent running the guardrails rule-2 cleanup outside $SCRATCH. Fix direction: GUARDRAILS.md gains a cwd-inside-$SCRATCH verification before any prescribed git mutation, structural -C/absolute-path forms, and an incident-reporting rule. Prior update, same day, /ardd-implement coordinator — the delegated badge-consumer-fixes worktree run completed all 4 tasks and merged fast-forward (5f47952); worktree reaped; dogfood refreshed. Shipped: install.sh parses any scp-style <token>:<path> remote (ssh-config aliases like github-ardd: now fill real coordinates; red-first case 22, badge suite 48/48); confirm-with-diff posture at templates/badge.md + install output + ardd-update relay (agent OFFERS the README edit with a diff, never refuses-until-overridden; script stays suggestion-only); S9 case-2 alias-remote variant. Badge file-set moved, so S9 run 2026-07-21-b788 ran against 5f47952: CLEAN PASS — ea66 F001 (alias coordinates fill) and F002 (confirm-with-diff posture on all three surfaces) verified fixed, all prior badge fixes hold; sole new finding taste-deferred (third of the bare-wrong-badge output-pairing family). Prior update, same day, /ardd-plan + /ardd-feedback — consumed feedback ea66 (both items accepted, planned): approved and tasked plan-badge-consumer-fixes-2026-07-21-1c50.md — 4 tasks/2 phases in tasks-badge-consumer-fixes-56c0.md (ready): red-first ssh-alias remote parse (scp-style <token>:<path> regardless of host token), confirm-with-diff README posture at the three badge prose sites, S9 alias-remote brief variant. Also logged feedback-plan-preview-prompts-a91e.md (open, 1 UX: preview and approval must be two sequential prompts, preview shown first — observed batched live) and backlogged plan-preview-editor-option (open-in-editor checkpoint option + configurable editor command). Prior update, same day, `/ardd-feedback` — logged
+_Updated: 2026-07-21 (**`/ardd-plan` — changelog-from-github-releases + pre-commit-hook-scoping-expans planned and tasked** — a bare `/ardd-plan` offered the step-1a picker over the then-4-item backlog and the 2 open feedback files; user selected both `changelog-from-github-releases` and `pre-commit-hook-scoping-expans` plus both feedback files. No artifact changes needed (only `constitution.md` exists; neither feature touches a declared principle). Drafted, approved, and tasked `plan-changelog-precommit-2026-07-21-b716.md` — 13 tasks/3 phases in `tasks-changelog-precommit-0966.md` (`ready`): Phase 1 a new source-side `scripts/release-notes.sh` (+ fixture test + CI job) regenerating `docs/release-notes.md` from `gh release list`/`gh api`, wired into `stable-release.yml` right after a release is cut; Phase 2 extends `hooks/pre-commit`'s staged-path scoping — `lint-templates-yaml.sh` added to the check loop (`.github/workflows/`+`templates/` subjects), `tests/fixtures/` mapped to its two consumers, `CLAUDE.md`/`dev-notes/*`/`tests/scenarios/*`/`mkdocs.yml`/`.gitignore`/`.worktreeinclude` recognized as no-check paths, plus new `test-hooks-pre-commit.sh` fixture cases pinning each mapping; Phase 3 folds in the two open feedback files' 3 items as independent follow-up tasks — the shieldcn badge logo `PLACEHOLDER` (verify shieldcn.dev's `dynamic/json` logo param, then replace with the real base64-encoded `templates/ardd-icon.svg` value), this repo's own `.worktreeinclude` gap for `.agents/skills/scenario-sweep/` (source-side dev tooling, not an `install.sh` target-facing change), and `/ardd-implement`'s missing `core.hooksPath` restoration alongside its existing `core.bare` check (+ doc mentions in CLAUDE.md and decision record 0001). Both features `backlogged` → `tasked`; both feedback files now `planned` — open feedback is 0. Ran `/ardd-status` per the terminal handoff. Prior update, same day, **badge-style-variant-option planned and tasked** — amended the badge brand colour to `#2F4858` (was `#7C3AED`) across `docs/reference/configuration.md`, `templates/ardd-badge.json`, `templates/ardd-badge-workflow.yml`, and `scripts/test-install-version-badge.sh`'s case16 assertion; regression suite green. Then a bare `/ardd-plan` picked `badge-style-variant-option` from the 3-item backlog: drafted, approved, and tasked `plan-badge-style-variant-option-2026-07-21-982c.md` — 10 tasks/5 phases (incl. a standalone Phase 0) in `tasks-badge-style-variant-option-7230.md` (`ready`). Design: a new `EXISTING_SHIELDS_IO` README detection (marker-excluded grep for `img.shields.io`) alongside the existing `BADGE_FAMILY` marker detection — shieldcn.dev becomes the default install-time badge offer (mirroring this repo's own sponsor badge, `README.md:13`), shields.io the fallback when the target README already carries non-ArDD shields.io badges; new `templates/badge-shieldcn.md` (3 shapes) ships alongside `templates/badge.md`; open question flagged on shieldcn.dev's exact `dynamic/json` query syntax (inferred from the shields.io analog, not yet independently verified). Mid-run catch: step 4's open-feedback check had missed `feedback-badge-style-clash-7db2.md` (a strict-equality status match didn't tolerate its trailing frontmatter comment) — surfaced it after tasking, confirmed with the user, marked F001 incorporated, bound to this plan (now `planned`), and added a standalone Phase 0/T010 for its interim-caveat ask (shields.io-vs-shieldcn clash note in the *current* offer text, landing independent of and before the rest of the plan). Feature `badge-style-variant-option`: `backlogged` → `tasked`. Open feedback now 1 file (`feedback-hookspath-side-effect-c707.md`). Prior update, same day, **multi-harness plan implemented and merged** — the delegated worktree run completed all 12 tasks of `tasks-multi-harness-49bb.md` (full suite green), merged to `main` as d41b193, worktree reaped; feature `multi-harness-install-metadata` is **implemented**. Shipped: `Harnesses:` union line in ardd-version.md (order-normalized, absent = claude; dual installs both orders preserve the sibling), dev-mode reinstall records `Channel: dev` and drops Source-Ref, per-harness bounded `.worktreeinclude`/gitignore guidance, reviewer guide lists every installed root, **pre-commit hook staged-path scoping** (P90: `.project/`-only commits ~117s → ~8s; `ARDD_HOOK_ALL=1` override), ardd-update reference/docs/USAGE `--harness codex` documentation, GUARDRAILS cwd-safety rules 7–8, ardd-plan two-sequential-prompts clause, S2 cold-fixture cleanse, S7 reviewer-guide check, init/backlog collaborative scaffold notes. Subagent also fixed a real fixture-isolation bug (`test-hooks-pre-commit.sh` missing the GIT_DIR unset guard). Same session: **brand refresh** (70f9c2a) — favicon + badge mark redesigned (orbit ring + 4 triangles around a small filled rect; heavier legibility variant; badge icon in dark-context whites); note existing consumers keep their never-clobbered `.github/badges/ardd-icon.svg` until refreshed. Second inbox drain (8a666ed): feedback-badge-style-clash-7db2 (open) + backlogged `badge-style-variant-option`, then revised by user decision (fcd287f): **shieldcn becomes the default badge offer**, shields.io the detection-based fallback; both templates ship; agents may adapt to detected style; other-style users invited to contribute templates upstream. Prior update, same day: **/ardd-plan multi-harness — approved and tasked** — constitution bumped to v1.13.0 (new Multi-harness standing decision: dual Claude+Codex installs are first-class; shared `.project/` install metadata represents the full harness set, preserve-on-reinstall, never last-writer-wins); `plan-multi-harness-2026-07-21-76ba.md` approved, `tasks-multi-harness-49bb.md` **ready** (12 tasks / 4 phases: harness metadata in install.sh, pre-commit staged-path scoping for P90 [~117s → ~7–10s common case, per the 2026-07-21 timing investigation], docs drift, guardrails/scenario/prose hardening); feature `multi-harness-install-metadata` (inbox-drained this session) flipped `tasked`. Consumed ALL 5 open feedback files (12 items, all accepted): docs-sweep-28d0, sweep-cdf0-878c, guardrails-5f18, plan-preview-prompts-a91e, pre-commit-hook-p90-1e7b — open feedback is now 0. Committed 91a2a40 (plus 6527695 backlog entry, 3244f70 status, b1c06bc docs-sweep feedback). Prior update, same day: **codex foundation merged to main** — the user merged `codex/port-foundation` (8a302c8: `install.sh --harness codex` support); the worktree at `…/artifact-driven-dev-codex-port` is now merged + clean → **reapable** (`worktree-reap.sh` candidate; reap pending). Register state deliberate: `codex-second-harness-support` stays `backlogged` and its plan `draft` — the merge is the foundation slice, not the full feature. Same session, `/docs-sweep` (scope: v1.0.3..HEAD, sole changed skill `ardd-update`) logged `feedback-docs-sweep-ardd-update-harness-28d0.md` (open, 3 bugs): the ardd-update reference page's step-4 body lacks the new harness-preservation behavior, still claims "your README is never edited" against the confirm-with-diff posture, and `install.sh --harness codex` is undocumented in all human-facing docs. Open feedback now 6 files. Prior update, same day, **v1.0.4 shipped** — pushed main (02c9692..68970e8, 13 commits; beta-release published v1.0.4-beta.1, lint green incl. the template-YAML jobs), then dispatched stable-release.yml (bump: patch): **v1.0.4 is Latest**, carrying the post-1.0.3 badge hardening to stable consumers — marker-family guards, real-default-branch workflow trigger, ssh-alias coordinate fill, confirm-with-diff README posture, amend-path prose. Every S9 gate in the arc ran clean before shipping. Prior update, same day, /ardd-feedback — logged feedback-guardrails-cwd-safety-5f18.md (open, 1 bug): the primary checkout lost its git origin remote during the S9 runs (restored by hand); likely a scenario subagent running the guardrails rule-2 cleanup outside $SCRATCH. Fix direction: GUARDRAILS.md gains a cwd-inside-$SCRATCH verification before any prescribed git mutation, structural -C/absolute-path forms, and an incident-reporting rule. Prior update, same day, /ardd-implement coordinator — the delegated badge-consumer-fixes worktree run completed all 4 tasks and merged fast-forward (5f47952); worktree reaped; dogfood refreshed. Shipped: install.sh parses any scp-style <token>:<path> remote (ssh-config aliases like github-ardd: now fill real coordinates; red-first case 22, badge suite 48/48); confirm-with-diff posture at templates/badge.md + install output + ardd-update relay (agent OFFERS the README edit with a diff, never refuses-until-overridden; script stays suggestion-only); S9 case-2 alias-remote variant. Badge file-set moved, so S9 run 2026-07-21-b788 ran against 5f47952: CLEAN PASS — ea66 F001 (alias coordinates fill) and F002 (confirm-with-diff posture on all three surfaces) verified fixed, all prior badge fixes hold; sole new finding taste-deferred (third of the bare-wrong-badge output-pairing family). Prior update, same day, /ardd-plan + /ardd-feedback — consumed feedback ea66 (both items accepted, planned): approved and tasked plan-badge-consumer-fixes-2026-07-21-1c50.md — 4 tasks/2 phases in tasks-badge-consumer-fixes-56c0.md (ready): red-first ssh-alias remote parse (scp-style <token>:<path> regardless of host token), confirm-with-diff README posture at the three badge prose sites, S9 alias-remote brief variant. Also logged feedback-plan-preview-prompts-a91e.md (open, 1 UX: preview and approval must be two sequential prompts, preview shown first — observed batched live) and backlogged plan-preview-editor-option (open-in-editor checkpoint option + configurable editor command). Prior update, same day, `/ardd-feedback` — logged
 `feedback-badge-consumer-feedback-ea66.md` (`open`, 1 bug + 1
 Reconsidered) from the first real consumer update to v1.0.3
 (yet-another-rank-games): F001 the badge coordinate autodetect misses
@@ -1807,21 +1807,14 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open — `feedback-badge-style-variant-followups-dbff.md` (2 bugs, filed
-today from the `badge-style-variant-option` implementation run: F001
-`templates/badge-shieldcn.md`'s split/pair snippets ship a `PLACEHOLDER`
-logo token — shieldcn.dev's `dynamic/json` logo-param shape was never
-verified against its own docs, only the icon choice
-[`templates/ardd-icon.svg`] is settled; F002 a delegated worktree was
-missing gitignored `.agents/skills/scenario-sweep/`, unlike the covered
-`.claude/skills/ardd-*/` pattern — `.worktreeinclude` handling may need
-to cover it too); `feedback-hookspath-side-effect-c707.md` (1 bug: a
-second delegated-worktree side effect alongside `core.bare=true` —
-`Agent`
-worktree creation also left the primary checkout's `core.hooksPath` set
-to `/dev/null`, silently disabling the pre-commit hook for two commits;
-fix direction: `/ardd-implement`'s post-delegation `core.bare` check
-should also check and restore `core.hooksPath`). Delivered today:
+0 open. Delivered today: `feedback-badge-style-variant-followups-dbff.md`
+(2 bugs: F001 the shieldcn badge logo `PLACEHOLDER`; F002 the
+`.worktreeinclude` gap for `.agents/skills/scenario-sweep/`) and
+`feedback-hookspath-side-effect-c707.md` (1 bug: `core.hooksPath` left at
+`/dev/null` by `Agent` worktree creation, alongside the known
+`core.bare=true` side effect) are both now `planned`, consumed by
+`plan-changelog-precommit-2026-07-21-b716.md` — see the `_Updated` note
+above. Delivered earlier today:
 `feedback-badge-style-clash-7db2.md` (1 UX: shieldcn-default badge
 styling direction + interim clash caveat) is now `planned`, consumed by
 `plan-badge-style-variant-option-2026-07-21-982c.md` (caught mid-run
@@ -1900,20 +1893,17 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-4 backlogged (`codex-second-harness-support`,
-`plan-preview-editor-option`, `pre-commit-hook-scoping-expans`,
-`changelog-from-github-releases`) ·
+2 backlogged (`codex-second-harness-support`,
+`plan-preview-editor-option`) ·
+2 tasked (`changelog-from-github-releases`,
+`pre-commit-hook-scoping-expans` — both bound to
+`tasks-changelog-precommit-0966.md`, `ready`) ·
 36 implemented (newest: `badge-style-variant-option`, `a1de0f2`) ·
 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
-`changelog-from-github-releases` (newest backlogged) — the docs site's
-`docs/release-notes.md` reads as very incomplete (frozen at v0.9.0
-against 41 real releases through v1.0.4); design direction: a
-fetch-and-commit script (source-side, alongside `scripts/next-version.sh`)
-regenerates it from `gh release list`/`gh api`, run on-demand or wired
-into `stable-release.yml` — deliberately not a build-time fetch in
-`docs.yml`'s GitHub Pages build.
+`changelog-from-github-releases` and `pre-commit-hook-scoping-expans`:
+`backlogged` → `tasked` this session — see the `_Updated` note above.
 `badge-style-variant-option`: `backlogged` → `tasked` → `implemented`
 this session — the delegated worktree run
 (`worktree-agent-a49dbb827b627b722`) completed all 10 tasks (T001-T010)
@@ -1946,11 +1936,6 @@ trust as-is. Also flagged (not yet actioned): `.worktreeinclude` may
 need to also cover `.agents/skills/scenario-sweep/` — a delegated
 worktree was missing that gitignored source-side file, unlike the
 already-covered `.claude/skills/ardd-*/` pattern.
-`pre-commit-hook-scoping-expans` (newest backlogged) — a dispatched
-Fable research agent's follow-up to today's `.project/`-only fast path:
-extend `hooks/pre-commit`'s staged-path scoping to workflow-YAML,
-test-fixture, and no-check-subject commits, and wire
-`scripts/lint-templates-yaml.sh` into the hook itself (today CI-only).
 Newest implemented: `badge-split-variant`, `badge-brand-color-in-json`,
 `badge-icon-logosvg` — the badge slate, see the `_Updated` note above.
 Backlogged:
@@ -1973,6 +1958,15 @@ documented as a deliberate standing state). 2 suggestions resolved this
 pass (new.sh tty narrative → decision record, v1.8.1; Governance
 workflow-field exemption, v1.8.2).
 
+## Work Queue
+
+- `tasks-changelog-precommit-0966.md` — plan
+  `plan-changelog-precommit-2026-07-21-b716.md`, features
+  `changelog-from-github-releases`, `pre-commit-hook-scoping-expans`:
+  no other `ready` tasks file and nothing in flight to compare against
+  (sole `ready` entry — `parallel-matrix.sh` stays silent below two
+  participants).
+
 ## In Flight
 
 - Nothing in flight — `worktree-agent-a49dbb827b627b722`
@@ -1982,23 +1976,16 @@ workflow-field exemption, v1.8.2).
 
 ## Recommended Next Step
 
-Push `main` to publish `badge-style-variant-option` (shieldcn.dev-default
-badge offer, now `implemented`) as part of the next beta — this session's
-merge (`a1de0f2`) is unpushed. Verify shieldcn.dev's `dynamic/json` logo
-query-param shape before that badge form reaches a real consumer (open
-item flagged above; `templates/badge-shieldcn.md`'s header documents the
-gap and ships a `PLACEHOLDER` logo token in the meantime). Then:
-`/ardd-plan pre-commit-hook-scoping-expans` (newest backlogged — extends
-today's `.project/`-only hook fast path to
-workflow-YAML/fixture/no-check-subject commits). Also standing:
-`/ardd-defects` to refresh the 2026-07-12 seventh pass against the
-enlarged surface; the remaining open feedback
-(`feedback-hookspath-side-effect-c707.md`; note
-`feedback-repo-critique-6ad1.md` is actually already `planned`, not
-open — a stale reference here, corrected) and the two remaining backlogged
-features (`plan-preview-editor-option`; `codex-second-harness-support`
-via `/ardd-plan --from plan-codex-second-harness-support-2026-07-15-f837.md`,
-gated on its Phase 1 live smoke test) wait for later runs; the
-off-target research file
-(`research-docs-freshness-skill-2026-07-18.md`) is still unconsumed on
-disk; and the one `.project/audit.md` suggestion remains open.
+Run `/ardd-implement` on `tasks-changelog-precommit-0966.md` (13
+tasks/3 phases, `ready`) — release-notes generation, pre-commit scoping
+expansion, and the three feedback-sourced follow-up fixes. Also standing:
+push `main` to publish `badge-style-variant-option` (shieldcn.dev-default
+badge offer, `implemented`) as part of the next beta — this session's
+merge (`a1de0f2`) is still unpushed; `/ardd-defects` to refresh the
+2026-07-12 seventh pass against the enlarged surface; the two remaining
+backlogged features (`plan-preview-editor-option`;
+`codex-second-harness-support` via `/ardd-plan --from
+plan-codex-second-harness-support-2026-07-15-f837.md`, gated on its
+Phase 1 live smoke test) wait for later runs; the off-target research
+file (`research-docs-freshness-skill-2026-07-18.md`) is still unconsumed
+on disk; and the one `.project/audit.md` suggestion remains open.

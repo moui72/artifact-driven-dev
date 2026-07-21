@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-changelog-precommit-2026-07-21-b716.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `templates/badge-shieldcn.md`'s split/pair snippets ship a
+- [x] F001 `templates/badge-shieldcn.md`'s split/pair snippets ship a
   `PLACEHOLDER` token for the `logo` query param instead of a real
   base64-encoded icon, because shieldcn.dev's `dynamic/json` badge type's
   logo-parameter shape was never verified against shieldcn.dev's own docs
@@ -28,7 +28,7 @@ plan: null        # set to the consuming plan's filename once planned
   badge) is the only one safe to trust as-is — the split/pair shapes
   should not reach a real consumer with the placeholder still in place.
 
-- [ ] F002 A delegated worktree for the `badge-style-variant-option`
+- [x] F002 A delegated worktree for the `badge-style-variant-option`
   implementation run was missing `.agents/skills/scenario-sweep/`
   (gitignored source-side content present in the primary checkout),
   causing an initial `scripts/test-install-harness.sh` failure on

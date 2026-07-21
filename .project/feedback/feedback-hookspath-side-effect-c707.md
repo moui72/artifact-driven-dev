@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-changelog-precommit-2026-07-21-b716.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 Second harness worktree side effect (observed 2026-07-21,
+- [x] F001 Second harness worktree side effect (observed 2026-07-21,
   after the delegated multi-harness run): alongside the known
   `core.bare=true` flip, `Agent` worktree creation left the primary
   checkout's repo config with `core.hooksPath=/dev/null`, silently
