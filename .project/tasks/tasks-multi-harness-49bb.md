@@ -81,7 +81,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 4: Skill-prose and scenario hardening
 
-- [ ] T008 [parallel] Harden `tests/scenarios/GUARDRAILS.md`: before ANY
+- [x] T008 [parallel] Harden `tests/scenarios/GUARDRAILS.md`: before ANY
   guardrails-prescribed git mutation (`git remote remove origin`,
   `git init`, adding the fake origin) the subagent must verify cwd is
   inside `$SCRATCH` (`case "$PWD" in "$SCRATCH"/*) ;; *) stop and
