@@ -52,7 +52,12 @@ act and refuses to proceed (`aligned=false`) if it can't.
 The same live test surfaced that `Agent` worktree creation flipped the
 primary checkout's `.git/config` to `core.bare = true`, breaking ordinary
 git there until manually reverted — which is why the coordinator checks
-exactly that after every delegated run.
+exactly that after every delegated run. A later feedback pass
+(feedback-hookspath-side-effect-c707.md, 2026-07-21) found the same
+worktree-creation mechanism also flips `core.hooksPath` to `/dev/null`,
+silently disabling this repo's pre-commit hook in the primary checkout
+until restored — the coordinator now checks and restores that alongside
+`core.bare` for the same reason.
 
 A follow-up live validation (2026-07-05) confirmed the align path end to
 end: a real delegated worktree based well behind local state

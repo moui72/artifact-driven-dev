@@ -103,13 +103,13 @@ status: in-progress
   state that finding explicitly and leave `PLACEHOLDER` in place with an
   explanatory note (do not silently ship a broken param). [feedback:
   F001, feedback-badge-style-variant-followups-dbff.md]
-- [ ] T011 [parallel] In this repo's own
+- [x] T011 [parallel] In this repo's own
   `.worktreeinclude` (repo root, not a target project's — this is
   source-side dev tooling), add a line covering
   `.agents/skills/scenario-sweep/`, mirroring the existing
   `.claude/skills/ardd-*/` line and its header comment style. [feedback:
   F002, feedback-badge-style-variant-followups-dbff.md]
-- [ ] T012 [parallel] In `skills/ardd-implement/SKILL.md`
+- [x] T012 [parallel] In `skills/ardd-implement/SKILL.md`
   step 3 (the "When the subagent reports back" coordinator checklist,
   immediately after the existing `git config --get core.bare` check),
   add an equivalent check: run `git config --get core.hooksPath` in the
@@ -119,7 +119,7 @@ status: in-progress
   pre-run value was) and tell the user, the same way the `core.bare`
   restoration is reported. [feedback: F001,
   feedback-hookspath-side-effect-c707.md]
-- [ ] T013 [parallel] Mention the `core.hooksPath`
+- [x] T013 [parallel] Mention the `core.hooksPath`
   side effect and its restoration alongside the existing `core.bare`
   mentions in `CLAUDE.md`'s architecture note (the paragraph beginning
   "back, the coordinator checks the primary checkout for the `core.bare

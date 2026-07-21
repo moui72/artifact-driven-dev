@@ -351,7 +351,10 @@ not touch the register" rule anymore: the subagent *does* flip it
 at completion, in its worktree, precisely because the flip cannot escape to
 the default branch before the code does. After a delegated run reports
 back, the coordinator checks the primary checkout for the `core.bare = true`
-side effect (decision record 0001), offers an eager merge into the default
+side effect (decision record 0001) and, alongside it, whether
+`core.hooksPath` reads `/dev/null` — restoring it to `hooks` (this repo's
+standard value) when it does, the same known `Agent` worktree-creation side
+effect as the `core.bare` flip — offers an eager merge into the default
 branch — eager merge is what keeps solo mode's in-flight window short —
 and, after a successful merge, runs `worktree-reap.sh` to remove the
 landed worktree (surfacing any `reaped=false` reason verbatim, never
