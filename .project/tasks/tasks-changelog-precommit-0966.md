@@ -83,7 +83,7 @@ status: in-progress
   already used for cases 5–9 in this file.
 
 ## Phase 3: Follow-up fixes
-- [ ] T009 Verify shieldcn.dev's `dynamic/json` badge
+- [x] T009 Verify shieldcn.dev's `dynamic/json` badge
   type's `logo` query parameter against shieldcn.dev's own docs or a
   live test render: confirm whether it accepts a base64
   `data:image/svg+xml;base64,...` URI the way shields.io's `/endpoint`
@@ -91,7 +91,7 @@ status: in-progress
   message or in `templates/badge-shieldcn.md`'s own comments — T010
   depends on the outcome. [feedback: F001,
   feedback-badge-style-variant-followups-dbff.md]
-- [ ] T010 In `templates/badge-shieldcn.md`, once T009
+- [x] T010 In `templates/badge-shieldcn.md`, once T009
   confirms the param shape: replace the `PLACEHOLDER` token in both the
   split and pair snippets (currently at the two
   `logo=data:image/svg+xml;base64,PLACEHOLDER` occurrences) with the

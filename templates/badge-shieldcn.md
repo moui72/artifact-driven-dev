@@ -15,24 +15,34 @@
      under templates/ regardless of which one install.sh selects for a
      given run.
 
-     ASSUMPTION, NOT independently verified against shieldcn.dev's own
-     docs at template-authoring time: the `dynamic/json` query-string
-     shape below (url + a $.message-style query selector, with
-     label/color/logo riding the URL rather than the JSON) is inferred
-     from the shields.io /dynamic/json analog that templates/badge.md's
-     own renderer-caveat note documents, grounded in this repo's real
-     static shieldcn badge at README.md:13
+     VERIFIED (2026-07-21, live test render — see feedback-badge-style-
+     variant-followups-dbff.md F001, T009): the `dynamic/json` query-
+     string shape below (url + a $.message-style query selector, with
+     label/color/logo riding the URL rather than the JSON) is confirmed
+     against shieldcn.dev's own API reference and a real render, grounded
+     in this repo's static shieldcn badge at README.md:13
      (https://shieldcn.dev/badge/sponsor-%E2%9D%A4-ea4aaa.svg?variant=secondary&theme=pink)
      for the static-badge URL shape and the `variant=secondary&theme=pink`
-     query-param form. A later check against shieldcn.dev's own API
-     reference confirmed the `url` + `query` (JSONPath selector, e.g.
-     $.message) param names, plus `label`/`color`/`labelColor`/`logo`/
-     `variant`/`theme` as documented appearance params — but did NOT
-     confirm whether `logo` accepts a base64 data: URI the way shields.io's
-     `logo` param does. Verify directly against shieldcn.dev before
-     shipping any of these split/pair snippets to a real consumer; the
-     static form (grounded in this repo's own working badge) is the
-     safest of the three to trust as-is.
+     query-param form. The `url`/`query` (JSONPath selector, e.g.
+     $.message)/`label`/`color`/`labelColor`/`logo`/`variant`/`theme`
+     param names are all documented appearance params — but `logo` does
+     **NOT** accept a base64 `data:image/svg+xml;base64,...` URI the way
+     shields.io's `logo` param does: a live A/B render (same query,
+     `logo=` present vs. absent vs. set to a `data:` URI) came back
+     byte-for-byte identical, meaning the data: URI form is silently
+     ignored, not an error — you'd ship a badge that looks fine and
+     simply never shows the custom icon. `logo=<named-slug>` (e.g.
+     `logo=github`, a simple-icons-style slug) DOES render — confirmed by
+     the same test producing a visibly larger, icon-bearing SVG — so
+     shieldcn.dev's dynamic/json logo param supports named icon slugs
+     only, not arbitrary custom SVGs via data: URI. The `PLACEHOLDER`
+     token below is therefore left in place deliberately, not an
+     oversight: there is no confirmed way to render the custom ArDD icon
+     via this badge type today. If shieldcn.dev adds data: URI support
+     later, re-verify with the same A/B byte-comparison technique before
+     replacing PLACEHOLDER. The static form (shape 1, grounded in this
+     repo's own working badge) remains the safest of the three to trust
+     as-is; it carries no logo param at all.
 
      For shapes 2 and 3: replace OWNER/REPO/BRANCH with your repo's own
      coordinates before pasting. Public repos only — the endpoint fetches
@@ -77,14 +87,13 @@
      the query-selected field ($.message) from the JSON; label, color,
      and logo must ride the URL as query parameters here — the same gap
      templates/badge.md's own "Dynamic-JSON readers" note documents for
-     shieldcn specifically. For the logo, use the pre-encoded
-     data:image/svg+xml;base64,... form of the icon, produced from the
-     source of truth with:
-
-         base64 < templates/ardd-icon.svg
-
-     (in a consumer repo the same file is installed at
-     .github/badges/ardd-icon.svg) — replace the PLACEHOLDER token above
-     with that output. Whether shieldcn.dev's `logo` param actually
-     accepts this data: URI form was NOT confirmed against its docs; test
-     it renders before relying on it. -->
+     shieldcn specifically. Custom-icon-via-data:-URI does NOT work here
+     (verified 2026-07-21, live A/B render): shieldcn.dev's `logo` param
+     silently ignores a `data:image/svg+xml;base64,...` value — the
+     rendered badge comes back byte-for-byte identical with the param
+     present or absent, so it fails silent rather than loud. Only a
+     named logo slug (simple-icons-style, e.g. `logo=github`) actually
+     renders. Until shieldcn.dev adds data: URI support, the PLACEHOLDER
+     token above stays in place — there is no working substitute
+     (`base64 < templates/ardd-icon.svg` would produce a value shieldcn.dev
+     accepts syntactically but silently drops). -->
