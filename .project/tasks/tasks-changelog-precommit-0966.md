@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: Release notes generation
-- [ ] T001 [feature: changelog-from-github-releases] Create
+- [x] T001 [feature: changelog-from-github-releases] Create
   `scripts/release-notes.sh`: a POSIX `sh`, source-side-only script
   (follow the header-comment style of `scripts/next-version.sh` and
   `scripts/source-resolve.sh` — purpose, usage, source-side-only note)
@@ -21,7 +21,7 @@ status: in-progress
   release). Print nothing but the regenerated file's path on success;
   exit non-zero with a clear message on `gh` auth/rate-limit failure.
   Test requirement: none in this task — its regression test is T002.
-- [ ] T002 [feature: changelog-from-github-releases] [parallel] Create
+- [x] T002 [feature: changelog-from-github-releases] [parallel] Create
   `scripts/test-release-notes.sh`: a fixture-based regression test for
   `scripts/release-notes.sh`, following the pattern of
   `scripts/test-next-version.sh` / `scripts/test-source-resolve.sh`
