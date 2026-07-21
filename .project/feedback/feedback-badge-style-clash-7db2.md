@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-badge-style-variant-option-2026-07-21-982c.md
 ---
 
 # Feedback
 
 ## UX
-- [ ] F001 The dynamic version badge offered by `/ardd-update` (the
+- [x] F001 The dynamic version badge offered by `/ardd-update` (the
   `ardd-badge-version-start` snippet) currently renders only via the
   classic shields.io endpoint style — a default the user has since
   reconsidered. The ArDD repo itself uses shieldcn.dev badges, and in a
