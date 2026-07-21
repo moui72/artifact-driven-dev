@@ -1893,14 +1893,42 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 3 backlogged (`codex-second-harness-support`,
 `plan-preview-editor-option`, `pre-commit-hook-scoping-expans`) ·
-1 tasked (`badge-style-variant-option`) ·
-35 implemented (newest: `multi-harness-install-metadata`, d41b193) ·
+36 implemented (newest: `badge-style-variant-option`, `a1de0f2`) ·
 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
-`badge-style-variant-option`: `backlogged` → `tasked` this session —
-`tasks-badge-style-variant-option-7230.md` (`ready`, 0/10; a delegated
-implementation subagent is running against it).
+`badge-style-variant-option`: `backlogged` → `tasked` → `implemented`
+this session — the delegated worktree run
+(`worktree-agent-a49dbb827b627b722`) completed all 10 tasks (T001-T010)
+and merged (`a1de0f2`, a real 3-way merge, not fast-forward — the
+worktree branched before this session's post-tasking register commits
+landed on main, producing add/add conflicts in the feature/feedback/tasks
+files; resolved by hand: tasks file took the worktree's completed
+checkbox state, feedback file kept main's already-marked F001, feature
+file took the worktree's `implemented` status but had its dropped
+`plan:`/`tasks:` frontmatter fields restored from main — the worktree's
+own in-worktree "orphaned register repair" had stripped them). Worktree
+reaped. Shipped: `templates/badge-shieldcn.md` (shieldcn.dev default
+style, 3 shapes) + `templates/badge.md` cross-reference;
+`install.sh`'s new `EXISTING_SHIELDS_IO` detection selecting shieldcn
+(default) vs. shields.io (fallback when the target README already
+carries non-ArDD shields.io badges) at both badge print sites;
+`docs/reference/configuration.md` updated; 3 new regression cases (23-25,
+all green, 25/25 total) in `test-install-version-badge.sh`; the standalone
+Phase 0/T010 interim shields.io/shieldcn clash caveat added to
+`templates/badge.md` and `skills/ardd-update/SKILL.md`. **Open item the
+subagent flagged, per the plan's own caveat**: shieldcn.dev's
+`dynamic/json` logo-parameter shape (does it accept a base64
+`data:image/svg+xml;base64,...` URI like shields.io's does?) was not
+confirmed against shieldcn.dev's docs — the split/pair snippets in
+`templates/badge-shieldcn.md` ship a `PLACEHOLDER` logo token and
+document the gap in the file's header; verify directly before this
+badge shape reaches a real consumer. The static-only shieldcn shape
+(grounded in this repo's own working `README.md:13` badge) is safe to
+trust as-is. Also flagged (not yet actioned): `.worktreeinclude` may
+need to also cover `.agents/skills/scenario-sweep/` — a delegated
+worktree was missing that gitignored source-side file, unlike the
+already-covered `.claude/skills/ardd-*/` pattern.
 `pre-commit-hook-scoping-expans` (newest backlogged) — a dispatched
 Fable research agent's follow-up to today's `.project/`-only fast path:
 extend `hooks/pre-commit`'s staged-path scoping to workflow-YAML,
@@ -1930,22 +1958,22 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-- Nothing in flight — the codex-port worktree was reaped 2026-07-21
-  after its branch (`codex/port-foundation`, 8a302c8) merged to `main`
-  (worktree removed, branch deleted via `branch -d`).
+- Nothing in flight — `worktree-agent-a49dbb827b627b722`
+  (`badge-style-variant-option`) merged (`a1de0f2`) and was reaped
+  2026-07-21; the codex-port worktree was also reaped 2026-07-21 after
+  its branch (`codex/port-foundation`, 8a302c8) merged to `main`.
 
 ## Recommended Next Step
 
-`/ardd-implement` is already running (delegated worktree subagent) against
-`tasks-badge-style-variant-option-7230.md` (10 tasks/5 phases, `ready`) —
-Phase 0/T010's interim clash caveat can land standalone even before the
-rest. main was pushed (`c0386d3`) publishing the accumulated batch (codex
-foundation, multi-harness metadata, hook P90, brand refresh, brand-colour
-amend) as the next beta; dispatch `stable-release.yml` when ready. v1.0.4
-is Latest; consumer repos can /ardd-update. Next up: `/ardd-plan
-pre-commit-hook-scoping-expans` (newest backlogged — extends today's
-`.project/`-only hook fast path to workflow-YAML/fixture/no-check-subject
-commits). Also standing:
+Push `main` to publish `badge-style-variant-option` (shieldcn.dev-default
+badge offer, now `implemented`) as part of the next beta — this session's
+merge (`a1de0f2`) is unpushed. Verify shieldcn.dev's `dynamic/json` logo
+query-param shape before that badge form reaches a real consumer (open
+item flagged above; `templates/badge-shieldcn.md`'s header documents the
+gap and ships a `PLACEHOLDER` logo token in the meantime). Then:
+`/ardd-plan pre-commit-hook-scoping-expans` (newest backlogged — extends
+today's `.project/`-only hook fast path to
+workflow-YAML/fixture/no-check-subject commits). Also standing:
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
 (`feedback-hookspath-side-effect-c707.md`; note
