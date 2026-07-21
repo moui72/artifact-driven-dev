@@ -42,7 +42,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   suggestion-relay step. `lint-docs.sh` green; adjust any
   `test-install-version-badge.sh` output assertions the wording change
   breaks.
-- [ ] T004 [parallel] Add the alias-remote variant to
+- [x] T004 [parallel] Add the alias-remote variant to
   `tests/scenarios/S9.md`: case 2's setup gains a note to use an
   scp-style alias remote (`github-ardd:example-owner/example-repo.git`)
   in at least one badged case and assert coordinates still fill (brief
