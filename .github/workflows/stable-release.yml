@@ -13,7 +13,10 @@
 #   3. compute the tag via scripts/next-version.sh stable <bump> and
 #      publish a full release. The tag is created server-side by
 #      `gh release create` (GitHub API -> web-flow Verified; no CI
-#      signing keys).
+#      signing keys);
+#   4. regenerate docs/release-notes.md from the real release history
+#      (scripts/release-notes.sh) and commit+push it to `release` if it
+#      changed — keeps the changelog page current without a manual step.
 #
 # All version logic lives in scripts/next-version.sh (fixture-tested);
 # this YAML is thin glue, per the plan's Complexity Tracking.
@@ -104,3 +107,16 @@ jobs:
             --generate-notes \
             --target "$GITHUB_SHA" \
             --title "${{ steps.version.outputs.tag }}"
+
+      - name: Regenerate and publish docs/release-notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sh scripts/release-notes.sh
+          git config user.email "ci@example.com"
+          git config user.name "CI"
+          # Note: pushes HEAD (the new docs commit), not $GITHUB_SHA — unlike
+          # the fast-forward step above, this step creates a new commit on
+          # top of $GITHUB_SHA, so the ref pushed to refs/heads/release must
+          # be the commit that actually carries the regenerated file.
+          git diff --quiet -- docs/release-notes.md || (git add docs/release-notes.md && git commit -m "docs: regenerate release-notes.md" && git push origin "HEAD:refs/heads/release")

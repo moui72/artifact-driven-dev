@@ -31,12 +31,12 @@ status: in-progress
   Pin: multiple releases render newest-first; a release body containing
   Markdown table/list content passes through unescaped; zero releases
   produces a valid (near-empty) file rather than erroring.
-- [ ] T003 Add a `lint-release-notes` (or similarly
+- [x] T003 Add a `lint-release-notes` (or similarly
   named) CI job to `.github/workflows/lint.yml` running
   `./scripts/test-release-notes.sh`, following the existing
   `lint-templates-yaml`/`lint-templates-yaml-test` job pair's shape (a
   small `run:` step under `runs-on: ubuntu-latest`).
-- [ ] T004 [feature: changelog-from-github-releases] Wire
+- [x] T004 [feature: changelog-from-github-releases] Wire
   `scripts/release-notes.sh` into `.github/workflows/stable-release.yml`:
   add a step after "Publish the release (API-created tag)" that runs
   `sh scripts/release-notes.sh`, then commits and pushes
