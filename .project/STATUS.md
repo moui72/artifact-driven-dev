@@ -1807,8 +1807,17 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-hookspath-side-effect-c707.md` (1 bug: a second
-delegated-worktree side effect alongside `core.bare=true` — `Agent`
+2 open — `feedback-badge-style-variant-followups-dbff.md` (2 bugs, filed
+today from the `badge-style-variant-option` implementation run: F001
+`templates/badge-shieldcn.md`'s split/pair snippets ship a `PLACEHOLDER`
+logo token — shieldcn.dev's `dynamic/json` logo-param shape was never
+verified against its own docs, only the icon choice
+[`templates/ardd-icon.svg`] is settled; F002 a delegated worktree was
+missing gitignored `.agents/skills/scenario-sweep/`, unlike the covered
+`.claude/skills/ardd-*/` pattern — `.worktreeinclude` handling may need
+to cover it too); `feedback-hookspath-side-effect-c707.md` (1 bug: a
+second delegated-worktree side effect alongside `core.bare=true` —
+`Agent`
 worktree creation also left the primary checkout's `core.hooksPath` set
 to `/dev/null`, silently disabling the pre-commit hook for two commits;
 fix direction: `/ardd-implement`'s post-delegation `core.bare` check
