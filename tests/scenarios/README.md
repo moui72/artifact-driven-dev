@@ -24,20 +24,32 @@ findings, one fix plan). Background context lives in
 
 ## How to run
 
-Invocation is Claude-Code-driven — `Agent`-tool dispatch can't be
-scripted from `sh`. Use the source-side skill:
+Invocation is harness-driven — subagent dispatch can't be scripted from
+`sh`. Use the source-side skill for your current harness:
 
-    /scenario-sweep smoke        # S1 + S5 + S7 (routine betas)
-    /scenario-sweep full         # S1–S8 (before a stable cut)
-    /scenario-sweep S3 S6        # named subset (e.g. regression rerun)
-    /scenario-sweep S9           # change-triggered (badge file-set moved)
+    /scenario-sweep smoke        # Claude: S1 + S5 + S7 (routine betas)
+    /scenario-sweep full         # Claude: S1–S8 (before a stable cut)
+    /scenario-sweep S3 S6        # Claude: named subset
+    /scenario-sweep S9           # Claude: badge file-set moved
 
-(`.claude/skills/scenario-sweep/` — repo-local, never installed to
-consumers; install.sh only copies from `skills/`.) It creates the run
-directory, launches one background subagent per scenario with
-GUARDRAILS.md + the brief, monitors, and summarizes reports when done.
-Manual fallback: do the same by hand — paste GUARDRAILS.md + the brief
-into a background `Agent` call, one per scenario.
+    $scenario-sweep smoke        # Codex: S1 + S5 + S7 (routine betas)
+    $scenario-sweep full         # Codex: S1–S8 (before a stable cut)
+    $scenario-sweep S3 S6        # Codex: named subset
+    $scenario-sweep S9           # Codex: badge file-set moved
+
+The canonical dispatcher is `.claude/skills/scenario-sweep/` —
+repo-local, never installed to consumers; `install.sh` only copies from
+`skills/`. Codex uses a local-only `.agents/skills/scenario-sweep/`
+entrypoint that points back to the canonical dispatcher and uses
+`$scenario-sweep` / `$ardd-*` invocation spelling without rewriting the
+scenario briefs. Keep that `.agents/` entrypoint ignored, like generated
+ArDD consumer skill installs.
+
+The dispatcher creates the run directory, launches one background
+subagent per scenario with GUARDRAILS.md + the brief, monitors, and
+summarizes reports when done. Manual fallback: do the same by hand —
+paste GUARDRAILS.md + the brief into a background subagent call, one per
+scenario.
 
 ## Tiering
 
@@ -53,7 +65,8 @@ into a background `Agent` call, one per scenario.
   scenarios that produced the fixed findings, with the fixed finding IDs
   listed in the dispatch prompt so the subagent explicitly re-checks each.
 - **change-triggered (targeted-only)**: scenarios in NO tier, run via an
-  explicit `/scenario-sweep S<n>` whenever their named surface changes.
+  explicit `/scenario-sweep S<n>` or `$scenario-sweep S<n>` whenever
+  their named surface changes.
   Currently S9 (badge matrix) ↔ the badge file-set: install.sh's
   `ARDD_VERSION_BADGE` section, `templates/ardd-badge-workflow.yml`,
   `templates/ardd-badge.json`, `templates/ardd-icon.svg`,

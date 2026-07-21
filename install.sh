@@ -1,21 +1,66 @@
 #!/usr/bin/env sh
 # Install or upgrade artifact-driven-dev skills into a target project.
-# Usage: ./install.sh [target-dir]
+# Usage: ./install.sh [--harness claude|codex] [target-dir]
 # Defaults to the current directory if no target is given.
 # Safe to re-run — skills are overwritten, migrations are applied once.
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET="${1:-.}"
+HARNESS="claude"
+TARGET=""
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --harness)
+      [ "$#" -ge 2 ] || { echo "Error: --harness requires claude or codex." >&2; exit 1; }
+      HARNESS="$2"
+      shift 2
+      ;;
+    --harness=*)
+      HARNESS="${1#--harness=}"
+      shift
+      ;;
+    --*)
+      echo "Error: unknown option '$1'." >&2
+      exit 1
+      ;;
+    *)
+      if [ -n "$TARGET" ]; then
+        echo "Error: expected at most one target directory." >&2
+        exit 1
+      fi
+      TARGET="$1"
+      shift
+      ;;
+  esac
+done
+
+TARGET="${TARGET:-.}"
+
+case "$HARNESS" in
+  claude)
+    SKILLS_REL=".claude/skills"
+    COMMAND_SIGIL="/"
+    ;;
+  codex)
+    SKILLS_REL=".agents/skills"
+    COMMAND_SIGIL="$"
+    ;;
+  *)
+    echo "Error: --harness must be 'claude' or 'codex' (got '$HARNESS')." >&2
+    exit 1
+    ;;
+esac
+
 SKILLS_DIR="$SCRIPT_DIR/skills"
 MIGRATIONS_DIR="$SCRIPT_DIR/migrations"
-CLAUDE_SKILLS="$TARGET/.claude/skills"
+INSTALL_SKILLS="$TARGET/$SKILLS_REL"
 APPLIED_FILE="$TARGET/.ardd-applied"
 VERSION_FILE="$TARGET/.project/ardd-version.md"
-CONSTITUTION_DATA_DIR="$CLAUDE_SKILLS/ardd-constitution-data"
-ARTIFACT_TEMPLATES_DIR="$CLAUDE_SKILLS/ardd-artifact-templates"
-ARDD_SCRIPTS_DIR="$CLAUDE_SKILLS/ardd-scripts"
+CONSTITUTION_DATA_DIR="$INSTALL_SKILLS/ardd-constitution-data"
+ARTIFACT_TEMPLATES_DIR="$INSTALL_SKILLS/ardd-artifact-templates"
+ARDD_SCRIPTS_DIR="$INSTALL_SKILLS/ardd-scripts"
 
 if [ ! -d "$TARGET" ]; then
   echo "Error: target directory '$TARGET' does not exist." >&2
@@ -47,14 +92,25 @@ case "${ARDD_VERSION_BADGE:-}" in
 esac
 
 # --- Skills ---
-echo "Installing artifact-driven-dev skills into $TARGET ..."
+echo "Installing artifact-driven-dev skills into $TARGET ($HARNESS harness) ..."
+
+install_skill_file() {
+  src="$1"
+  dest="$2"
+  # One canonical source: harness installs may choose their target directory,
+  # so installed SKILL.md path prose must name the installed harness root.
+  # This is intentionally narrow: only filesystem paths under the harness
+  # skills directory are rewritten, never command invocations such as
+  # /ardd-plan.
+  sed "s|\\.claude/skills|$SKILLS_REL|g" "$src" > "$dest"
+}
 
 # --- Symlink guard ---
-# The skills CLI's symlink mode (`npx skills add`) leaves .claude/skills/
+# The skills CLI's symlink mode (`npx skills add`) leaves skill install
 # entries pointing into its cache; copying "into" those would write through
 # the link into the cache instead of the project. Replace any symlinked
 # ardd-* entry with a real directory — warn, never fail.
-for entry in "$CLAUDE_SKILLS"/ardd-*; do
+for entry in "$INSTALL_SKILLS"/ardd-*; do
   [ -L "$entry" ] || continue
   echo "  ! $(basename "$entry") is a symlink (skills-CLI symlink mode?) — replacing with a real copy."
   echo "    Regenerating through a symlink would write into the CLI cache, not this project;"
@@ -65,9 +121,9 @@ done
 installed_skill_names=""
 for skill_dir in "$SKILLS_DIR"/*/; do
   skill_name="$(basename "$skill_dir")"
-  dest="$CLAUDE_SKILLS/$skill_name"
+  dest="$INSTALL_SKILLS/$skill_name"
   mkdir -p "$dest"
-  cp "$skill_dir/SKILL.md" "$dest/SKILL.md"
+  install_skill_file "$skill_dir/SKILL.md" "$dest/SKILL.md"
   echo "  ✓ $skill_name"
   installed_skill_names="$installed_skill_names $skill_name"
 done
@@ -81,7 +137,7 @@ done
 # are ever touched: a hand-written non-ardd skill never matches `ardd-*`, and
 # the three non-skill reference dirs below (this script's own output, with no
 # source `skills/` entry) are explicitly preserved.
-for existing in "$CLAUDE_SKILLS"/ardd-*/; do
+for existing in "$INSTALL_SKILLS"/ardd-*/; do
   [ -d "$existing" ] || continue   # no matches -> literal glob, skip
   existing_name="$(basename "$existing")"
   case " $installed_skill_names ardd-constitution-data ardd-artifact-templates ardd-scripts " in
@@ -238,23 +294,84 @@ echo "  ✓ ardd-scripts/ardd-update-check.sh"
 echo "  ✓ ardd-scripts/source-resolve.sh"
 echo "  ✓ ardd-scripts/feature-list.sh"
 
+# Live capability matrix for the installed harness. Skills can read this
+# instead of inferring capabilities from stale prose or from the harness name.
+CAPABILITIES_FILE="$ARDD_SCRIPTS_DIR/harness-capabilities.env"
+CODEX_CLI_STATUS="not-applicable"
+CODEX_VERSION="not-applicable"
+CODEX_FEATURES_STATUS="not-applicable"
+HOOKS_STATUS="unknown"
+SUBAGENTS_STATUS="unknown"
+if [ "$HARNESS" = "codex" ]; then
+  if command -v codex >/dev/null 2>&1; then
+    CODEX_CLI_STATUS="available"
+    CODEX_VERSION="$(codex --version 2>/dev/null | head -1 | tr ' ' '_' || true)"
+    [ -n "$CODEX_VERSION" ] || CODEX_VERSION="unavailable"
+    CODEX_FEATURES="$(codex features list 2>/dev/null || true)"
+    if [ -n "$CODEX_FEATURES" ]; then
+      CODEX_FEATURES_STATUS="available"
+      case "$(printf '%s\n' "$CODEX_FEATURES" | awk '$1 == "hooks" { print $3; exit }')" in
+        true) HOOKS_STATUS="available" ;;
+        false) HOOKS_STATUS="disabled" ;;
+      esac
+      case "$(printf '%s\n' "$CODEX_FEATURES" | awk '$1 == "multi_agent" { print $3; exit }')" in
+        true) SUBAGENTS_STATUS="available" ;;
+        false) SUBAGENTS_STATUS="disabled" ;;
+      esac
+    else
+      CODEX_FEATURES_STATUS="unavailable"
+    fi
+  else
+    CODEX_CLI_STATUS="unavailable"
+    CODEX_VERSION="unavailable"
+    CODEX_FEATURES_STATUS="unavailable"
+  fi
+fi
+cat > "$CAPABILITIES_FILE" <<EOF
+# Generated by install.sh. Read as advisory capability evidence, not policy.
+HARNESS=$HARNESS
+SKILLS_DIR=$SKILLS_REL
+COMMAND_SIGIL=$COMMAND_SIGIL
+CANONICAL_SKILL_SOURCE=skills
+DETERMINISTIC_SCRIPTS=present
+WORKTREEINCLUDE=present
+WORKTREEINCLUDE_PATTERN=$SKILLS_REL/ardd-*/
+STRUCTURED_USER_QUESTIONS=unknown
+SUBAGENTS=$SUBAGENTS_STATUS
+HOOKS=$HOOKS_STATUS
+SKILL_CHAINING=optional
+NEXT_SKILL_FALLBACK=explicit
+CODEX_CLI=$CODEX_CLI_STATUS
+CODEX_CLI_VERSION=$CODEX_VERSION
+CODEX_FEATURES_STATUS=$CODEX_FEATURES_STATUS
+EOF
+echo "  ✓ ardd-scripts/harness-capabilities.env"
+
 # --- Worktree include ---
-# Claude Code copies gitignored files into a freshly created worktree
-# (including an Agent-tool subagent's own `isolation: "worktree"`) when they
-# match a pattern in a `.worktreeinclude` file at the project root (gitignore
-# syntax; only files that both match AND are gitignored are copied). Since
-# .claude/skills/ardd-*/ is the gitignore pattern this script itself
-# recommends below, a fresh delegated worktree would otherwise start with
-# none of the installed ardd scripts. Never write anything broader than
-# .claude/skills/ardd-*/ here — same ceiling as the gitignore suggestion.
+# Preserve ArDD's worktree-copy contract for the installed harness. The
+# harness-specific ardd skills pattern is also the gitignore pattern this
+# script recommends below, so a fresh delegated worktree needs the same
+# bounded include to receive the installed scripts. Never write anything
+# broader than the ardd skill pattern here — same ceiling as the gitignore
+# suggestion.
 WORKTREEINCLUDE="$TARGET/.worktreeinclude"
 WORKTREEINCLUDE_COMMENT="# ArDD: copy installed skills/scripts into new worktrees (added by install.sh)"
-WORKTREEINCLUDE_PATTERN=".claude/skills/ardd-*/"
+WORKTREEINCLUDE_PATTERN="$SKILLS_REL/ardd-*/"
 
 if [ ! -f "$WORKTREEINCLUDE" ]; then
   printf '%s\n%s\n' "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE_PATTERN" > "$WORKTREEINCLUDE"
   echo "  ✓ .worktreeinclude created ($WORKTREEINCLUDE_PATTERN)"
-elif grep -qxF "$WORKTREEINCLUDE_PATTERN" "$WORKTREEINCLUDE"; then
+else
+  tmp_worktreeinclude="$WORKTREEINCLUDE.tmp.$$"
+  awk -v keep="$WORKTREEINCLUDE_PATTERN" '
+    $0 == ".claude/skills/ardd-*/" && $0 != keep { next }
+    $0 == ".agents/skills/ardd-*/" && $0 != keep { next }
+    { print }
+  ' "$WORKTREEINCLUDE" > "$tmp_worktreeinclude"
+  mv "$tmp_worktreeinclude" "$WORKTREEINCLUDE"
+fi
+
+if grep -qxF "$WORKTREEINCLUDE_PATTERN" "$WORKTREEINCLUDE"; then
   echo "  – .worktreeinclude already contains $WORKTREEINCLUDE_PATTERN"
 else
   # Guard against a missing trailing newline in the existing file gluing our
@@ -262,7 +379,10 @@ else
   if [ -s "$WORKTREEINCLUDE" ] && [ -n "$(tail -c1 "$WORKTREEINCLUDE")" ]; then
     printf '\n' >> "$WORKTREEINCLUDE"
   fi
-  printf '%s\n%s\n' "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE_PATTERN" >> "$WORKTREEINCLUDE"
+  if ! grep -qxF "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE"; then
+    printf '%s\n' "$WORKTREEINCLUDE_COMMENT" >> "$WORKTREEINCLUDE"
+  fi
+  printf '%s\n' "$WORKTREEINCLUDE_PATTERN" >> "$WORKTREEINCLUDE"
   echo "  ✓ .worktreeinclude appended ($WORKTREEINCLUDE_PATTERN)"
 fi
 
@@ -361,7 +481,7 @@ if [ -d "$MIGRATIONS_DIR" ]; then
 fi
 
 # --- Version file ---
-# .claude/skills/ is regenerated output (gitignore it); this file is the
+# The harness skill directory is regenerated output (gitignore it); this file is the
 # committed, human-readable record of which ArDD version produced it.
 COMMIT="$(git -C "$SCRIPT_DIR" rev-parse --short HEAD 2>/dev/null || echo unknown)"
 DATE="$(date +%Y-%m-%d)"
@@ -444,9 +564,10 @@ _Source: artifact-driven-dev @ $COMMIT · Installed/updated ${DATE}_
 
 Source-Path: $SOURCE_PATH_RECORD
 $SOURCE_COMMIT_LINE${SOURCE_REF_LINE}Channel: $CHANNEL
+Harness: $HARNESS
 
 This file is committed so the project's history shows which ArDD skill
-version was active at any point. \`.claude/skills/\` is regenerated by
+version was active at any point. \`$SKILLS_REL/\` is regenerated by
 \`install.sh\` from that source commit and should be gitignored, not
 committed.
 
@@ -458,7 +579,8 @@ echo "  ✓ .project/ardd-version.md ($COMMIT)"
 # --- .project/README.md reviewer guide: install.sh-owned, overwritten on
 # every install (like ardd-version.md) — how to read .project/ for
 # downstream reviewers. Source of truth: templates/dot-project-readme.md.
-cp "$SCRIPT_DIR/templates/dot-project-readme.md" "$TARGET/.project/README.md"
+sed "s|\\.claude/skills|$SKILLS_REL|g" \
+  "$SCRIPT_DIR/templates/dot-project-readme.md" > "$TARGET/.project/README.md"
 echo "  ✓ .project/README.md (reviewer guide)"
 
 # --- "built with ArDD" badge: suggestion only, never a README edit --------
@@ -704,13 +826,12 @@ fi
 # or previously committed) rather than parsing .gitignore text — this is
 # what actually determines whether they'd get committed.
 #
-# The only thing ArDD ever installs under .claude/skills/ is its own ardd-*
+# The only thing ArDD ever installs under the harness skill directory is its own ardd-*
 # directories (skills, plus the non-skill ardd-constitution-data,
-# ardd-artifact-templates, ardd-scripts). Anything else under .claude/ or
-# .claude/skills/ — settings.json, agents/, commands/, hooks, a hand-written
+# ardd-artifact-templates, ardd-scripts). Anything else under the harness
+# root or skill directory — settings, commands, hooks, a hand-written
 # custom skill — is real project content ArDD doesn't own. Never suggest
-# ignoring more than ".claude/skills/ardd-*/": a broader pattern (blanket
-# ".claude/", or blanket ".claude/skills/") silently blocks tracking that
+# ignoring more than the ardd skill pattern: a broader pattern silently blocks tracking that
 # content forever, since git refuses to `add` an ignored path without -f —
 # easy to not notice until you actually need to commit something there.
 # `--is-inside-work-tree` is true for any directory nested under an
@@ -723,20 +844,20 @@ target_abs="$(cd "$TARGET" && pwd -P)"
 target_toplevel="$(git -C "$TARGET" rev-parse --show-toplevel 2>/dev/null || true)"
 if [ -n "$target_toplevel" ] && [ "$target_toplevel" = "$target_abs" ]; then
   skills_ignored=0
-  git -C "$TARGET" check-ignore -q ".claude/skills/ardd-plan/SKILL.md" 2>/dev/null && skills_ignored=1
+  git -C "$TARGET" check-ignore -q "$SKILLS_REL/ardd-plan/SKILL.md" 2>/dev/null && skills_ignored=1
 
   if [ "$skills_ignored" -eq 0 ]; then
     tracked_ardd=0   # our own ardd-* skills already committed
 
-    tracked_files="$(git -C "$TARGET" ls-files -- .claude/skills)"
+    tracked_files="$(git -C "$TARGET" ls-files -- "$SKILLS_REL")"
     if [ -n "$tracked_files" ]; then
       old_ifs="$IFS"
       IFS='
 '
       for f in $tracked_files; do
         case "$f" in
-          .claude/skills/*/*)
-            rest="${f#.claude/skills/}"
+          "$SKILLS_REL"/*/*)
+            rest="${f#"$SKILLS_REL"/}"
             skill_name="${rest%%/*}"
             case " $installed_skill_names ardd-constitution-data ardd-artifact-templates ardd-scripts " in
               *" $skill_name "*) tracked_ardd=1 ;;
@@ -749,19 +870,19 @@ if [ -n "$target_toplevel" ] && [ "$target_toplevel" = "$target_abs" ]; then
 
     echo ""
     echo "======================================================================"
-    echo "ACTION NEEDED: .claude/skills/ardd-*/ isn't gitignored in $TARGET"
+    echo "ACTION NEEDED: $SKILLS_REL/ardd-*/ isn't gitignored in $TARGET"
     echo "======================================================================"
     echo "These files are regenerated by install.sh, not project source. Add"
-    echo "this pattern to .gitignore (never blanket \".claude/\" or"
-    echo "\".claude/skills/\" — both can hold real project content):"
+    echo "this pattern to .gitignore (never blanket the whole harness directory"
+    echo "or its skills directory — both can hold real project content):"
     echo ""
-    echo "  .claude/skills/ardd-*/"
+    echo "  $SKILLS_REL/ardd-*/"
 
     if [ "$tracked_ardd" -eq 1 ]; then
       echo ""
       echo "  ardd-* skill files are already committed here. After updating"
       echo "  .gitignore, untrack them with:"
-      echo "    git rm -r --cached .claude/skills/ardd-*"
+      echo "    git rm -r --cached $SKILLS_REL/ardd-*"
     fi
 
     echo ""
@@ -772,36 +893,39 @@ if [ -n "$target_toplevel" ] && [ "$target_toplevel" = "$target_abs" ]; then
     echo "  left uncommitted, every teammate re-runs every migration."
     echo "======================================================================"
   else
-    if git -C "$TARGET" check-ignore -q ".claude/settings.json" 2>/dev/null; then
+    if git -C "$TARGET" check-ignore -q "${SKILLS_REL%/skills}/settings.json" 2>/dev/null; then
       echo ""
-      echo "Warning: $TARGET's .gitignore blocks .claude/skills/ardd-* but is"
-      echo "broad enough to also block .claude/settings.json (and similarly"
-      echo ".claude/agents/, .claude/commands/) — real, team-shared project"
+      echo "Warning: $TARGET's .gitignore blocks $SKILLS_REL/ardd-* but is"
+      echo "broad enough to also block files at ${SKILLS_REL%/skills}/ — real, team-shared project"
       echo "config, not ArDD-regenerated output. If you (or a hook, like"
       echo "ArDD's own PostToolUse lint hook) ever need to commit one of"
       echo "those, git will silently refuse without -f. Narrow the pattern to:"
       echo ""
-      echo "  .claude/skills/ardd-*/"
+      echo "  $SKILLS_REL/ardd-*/"
     fi
-    if git -C "$TARGET" check-ignore -q ".claude/skills/my-custom-skill/SKILL.md" 2>/dev/null; then
+    if git -C "$TARGET" check-ignore -q "$SKILLS_REL/my-custom-skill/SKILL.md" 2>/dev/null; then
       echo ""
       echo "Warning: $TARGET's .gitignore also blocks any future hand-written"
-      echo "skill under .claude/skills/ — only the ardd-* directories there"
+      echo "skill under $SKILLS_REL/ — only the ardd-* directories there"
       echo "are ArDD-regenerated output. If you ever add your own skill"
       echo "alongside ArDD's, git will silently refuse to track it without"
       echo "-f. Narrow the pattern to:"
       echo ""
-      echo "  .claude/skills/ardd-*/"
+      echo "  $SKILLS_REL/ardd-*/"
     fi
   fi
 fi
 
 echo ""
 echo "Done. Next steps for a new project:"
-echo "  1. Run /ardd-init in Claude Code — it detects greenfield vs existing"
+if [ "$HARNESS" = "codex" ]; then
+  echo "  1. Run \$ardd-init in Codex — it detects greenfield vs existing"
+else
+  echo "  1. Run /ardd-init in Claude Code — it detects greenfield vs existing"
+fi
 echo "     code, then seeds your artifacts from the conversation (interviewing"
 echo "     you first on a cold start) or reverse-engineers them from the code."
-echo "  2. Run /ardd-status to check for cross-artifact issues."
-echo "  3. Run /ardd-plan when artifacts are stable."
+echo "  2. Run ${COMMAND_SIGIL}ardd-status to check for cross-artifact issues."
+echo "  3. Run ${COMMAND_SIGIL}ardd-plan when artifacts are stable."
 echo ""
-echo "For an existing project, run /ardd-status to verify everything looks right."
+echo "For an existing project, run ${COMMAND_SIGIL}ardd-status to verify everything looks right."
