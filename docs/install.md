@@ -100,6 +100,43 @@ release for you.
 - Prints a gitignore suggestion when git sees the skill files as
   untracked or committed (see below).
 
+## Codex CLI: `install.sh --harness codex`
+
+ArDD's primary target is Claude Code, but the same pack also installs —
+in a deliberately degraded v1 form — to **OpenAI Codex CLI**:
+
+```sh
+/path/to/artifact-driven-dev/install.sh --harness codex /path/to/your/project
+```
+
+- **Same canonical skills, different root.** The identical
+  `skills/*/SKILL.md` sources are installed under `.agents/skills/`
+  instead of `.claude/skills/` — a single install-time transformation,
+  never a forked prose tree. Skills are invoked as `$ardd-init`,
+  `$ardd-status`, ... (Codex's exact-name channel; its `/`-commands are
+  a fixed built-in set).
+- **Degraded v1 caveats** (from the constitution's Multi-harness
+  section): structured `AskUserQuestion` prompts become plain-text
+  numbered questions; worktree delegation and fan-out are dropped —
+  Codex v1 runs everything inline; `.worktreeinclude` copying is not
+  carried over; `next_step_prompt: true`'s one-keypress offer degrades
+  to a plain-text suggestion (`auto` carries over unchanged).
+- **Install metadata records the harness set.** `.project/ardd-version.md`
+  carries `Harness: <invoking>` plus a comma-separated, order-normalized
+  `Harnesses:` line for the full installed set (absent line in an older
+  file = `claude`). Dual Claude+Codex installs are first-class: install
+  in either order and both skill trees coexist, both ending with
+  `Harnesses: claude,codex`; reinstalling one harness never removes or
+  misrepresents the other. The reviewer guide, `.worktreeinclude`
+  patterns, and the gitignore suggestion all speak for every installed
+  harness root — bounded to `.claude/skills/ardd-*/` and
+  `.agents/skills/ardd-*/`, never a broader parent (the same ceiling as
+  below, applied per harness root).
+- A capability record is written to
+  `<skills-root>/ardd-scripts/harness-capabilities.env`
+  (`HARNESS=`, `SKILLS_DIR=`, live `codex` CLI evidence); `/ardd-update`
+  reads it to preserve the installed harness on reinstall.
+
 ## Gitignore the skill files
 
 The installed skill files are regenerated output — re-running `install.sh`

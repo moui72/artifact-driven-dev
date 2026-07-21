@@ -73,7 +73,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   apply, exact diff shown, ask before writing). Doc-only — no test
   requirement (Principle V exception); `scripts/lint-docs.sh` and
   `gen-skill-docs.sh --check` stay green.
-- [ ] T007 Document `install.sh --harness codex` in `docs/install.md`
+- [x] T007 Document `install.sh --harness codex` in `docs/install.md`
   (flag semantics, `.agents/skills/` target, degraded-v1 caveats per
   the constitution's Multi-harness section, dual-install metadata
   shape from Phase 1) and add a USAGE.md routing line for the Codex
