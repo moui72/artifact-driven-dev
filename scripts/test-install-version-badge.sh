@@ -95,10 +95,10 @@ case "$out" in
 esac
 
 case "$out" in
-  *"img.shields.io/endpoint"*)
-    ok "case1: snippet carries the endpoint badge URL" ;;
+  *"shieldcn.dev/badge"*)
+    ok "case1: snippet carries the shieldcn.dev badge URL (new default)" ;;
   *)
-    bad "case1: snippet carries the endpoint badge URL" ;;
+    bad "case1: snippet carries the shieldcn.dev badge URL (new default)" ;;
 esac
 
 # --- Case 2: re-install with ARDD_VERSION_BADGE=1 leaves a hand-edited
@@ -552,5 +552,106 @@ else
   bad "case22: written workflow branches filter carries $branch"
   grep -n "branches" "$target/$WORKFLOW_REL" || true
 fi
+
+# --- Case 23 (T007): no existing shields.io badges → BOTH the
+# ARDD_VERSION_BADGE=1 split-badge path and the static-only path offer the
+# shieldcn.dev template (the new default) ---
+target="$(new_target case23)"
+out="$(run_install_badge_on "$target")"
+case "$out" in
+  *"shieldcn.dev/badge"*)
+    ok "case23: version-badge path offers shieldcn.dev by default" ;;
+  *)
+    bad "case23: version-badge path offers shieldcn.dev by default" ;;
+esac
+
+target="$(new_target case23b)"
+out="$(run_install "$target")"
+case "$out" in
+  *"shieldcn.dev/badge"*)
+    ok "case23: static-only path offers shieldcn.dev by default" ;;
+  *)
+    bad "case23: static-only path offers shieldcn.dev by default" ;;
+esac
+
+# --- Case 24 (T008): target README pre-seeded with a non-ArDD
+# img.shields.io badge (outside any ArDD marker block) → BOTH print sites
+# fall back to templates/badge.md's shields.io form, never shieldcn.dev ---
+shields_io_seeded_readme() { # $1=target
+  printf '# Test project\n\n[![ci](https://img.shields.io/badge/ci-passing-brightgreen)](x)\n' > "$1/README.md"
+}
+
+target="$(new_target case24)"
+shields_io_seeded_readme "$target"
+out="$(run_install_badge_on "$target")"
+case "$out" in
+  *"img.shields.io"*)
+    ok "case24: version-badge path falls back to shields.io" ;;
+  *)
+    bad "case24: version-badge path falls back to shields.io" ;;
+esac
+case "$out" in
+  *"shieldcn.dev"*)
+    bad "case24: version-badge path does not offer shieldcn.dev" ;;
+  *)
+    ok "case24: version-badge path does not offer shieldcn.dev" ;;
+esac
+
+target="$(new_target case24b)"
+shields_io_seeded_readme "$target"
+out="$(run_install "$target")"
+case "$out" in
+  *"img.shields.io"*)
+    ok "case24: static-only path falls back to shields.io" ;;
+  *)
+    bad "case24: static-only path falls back to shields.io" ;;
+esac
+case "$out" in
+  *"shieldcn.dev"*)
+    bad "case24: static-only path does not offer shieldcn.dev" ;;
+  *)
+    ok "case24: static-only path does not offer shieldcn.dev" ;;
+esac
+
+# --- Case 25 (T009): the split-version shieldcn snippet's composed URL is
+# well-formed — url, a $.message query selector, label, color, and a
+# base64-encoded logo value are all present ---
+target="$(new_target case25)"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"url=https://raw.githubusercontent.com"*)
+    ok "case25: shieldcn snippet carries the url= param" ;;
+  *)
+    bad "case25: shieldcn snippet carries the url= param" ;;
+esac
+
+case "$out" in
+  *'query=$.message'*)
+    ok "case25: shieldcn snippet carries the \$.message query selector" ;;
+  *)
+    bad "case25: shieldcn snippet carries the \$.message query selector" ;;
+esac
+
+case "$out" in
+  *"label="*)
+    ok "case25: shieldcn snippet carries a label= param" ;;
+  *)
+    bad "case25: shieldcn snippet carries a label= param" ;;
+esac
+
+case "$out" in
+  *"color="*)
+    ok "case25: shieldcn snippet carries a color= param" ;;
+  *)
+    bad "case25: shieldcn snippet carries a color= param" ;;
+esac
+
+case "$out" in
+  *"logo=data:image/svg+xml;base64,"*)
+    ok "case25: shieldcn snippet carries a base64 logo= value" ;;
+  *)
+    bad "case25: shieldcn snippet carries a base64 logo= value" ;;
+esac
 
 exit "$fail"

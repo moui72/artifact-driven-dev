@@ -33,7 +33,7 @@ status: in-progress
   target README already carries non-ArDD shields.io badges.
 
 ## Phase 2: install.sh detection + offer selection
-- [ ] T003 In `install.sh`, add an `EXISTING_SHIELDS_IO` detection
+- [x] T003 In `install.sh`, add an `EXISTING_SHIELDS_IO` detection
   (`true`/`false`) near the existing `BADGE_FAMILY` detection block
   (install.sh:681-696): grep the target README for `img.shields.io`
   outside ArDD's own `<!-- ardd-badge*-start -->`/`<!-- ardd-badge*-end -->`
@@ -41,7 +41,7 @@ status: in-progress
   ArDD's own shields.io-rendered badges never count as "existing"), and set
   `EXISTING_SHIELDS_IO=true` if any match remains.
 
-- [ ] T004 At the `ARDD_VERSION_BADGE=1` print site (install.sh:819-833),
+- [x] T004 At the `ARDD_VERSION_BADGE=1` print site (install.sh:819-833),
   select the snippet source by `EXISTING_SHIELDS_IO`:
   `EXISTING_SHIELDS_IO=true` → `templates/badge.md` (today's behavior,
   unchanged); otherwise → `templates/badge-shieldcn.md`. Adjust the printed
@@ -52,7 +52,7 @@ status: in-progress
   (e.g. `variant=secondary&theme=pink`) rather than pasting the shipped
   defaults unexamined. Depends on: T001, T003.
 
-- [ ] T005 [parallel] At the static-only print site (install.sh:849-853),
+- [x] T005 [parallel] At the static-only print site (install.sh:849-853),
   apply the same `EXISTING_SHIELDS_IO` selection rule and advisory-text
   adjustment as T004, for the static badge shape only. Depends on: T001, T003.
 
@@ -65,21 +65,21 @@ status: in-progress
   upstream" pointer alongside it. Depends on: T004, T005.
 
 ## Phase 4: regression coverage
-- [ ] T007 Extend `scripts/test-install-version-badge.sh`
+- [x] T007 Extend `scripts/test-install-version-badge.sh`
   with a case: on a target README with no existing shields.io badges,
   `install.sh`'s printed snippet (both the `ARDD_VERSION_BADGE=1` path and
   the static-only path) comes from `templates/badge-shieldcn.md` (assert on
   a shieldcn.dev-specific URL fragment, e.g. `shieldcn.dev/badge`, appearing
   in the captured install output). Depends on: T004, T005.
 
-- [ ] T008 [parallel] Extend `scripts/test-install-version-badge.sh` with a
+- [x] T008 [parallel] Extend `scripts/test-install-version-badge.sh` with a
   case: on a target README pre-seeded with a non-ArDD
   `img.shields.io`-based badge outside any ArDD marker block, `install.sh`'s
   printed snippet still comes from `templates/badge.md` (assert the
   shields.io endpoint URL shape appears, and that `shieldcn.dev` does not).
   Depends on: T004, T005.
 
-- [ ] T009 [parallel] Extend `scripts/test-install-version-badge.sh` with a
+- [x] T009 [parallel] Extend `scripts/test-install-version-badge.sh` with a
   case: the split-version shieldcn snippet's composed URL is well-formed
   (query params present: `url`, a query selector for `$.message`, `label`,
   `color`, and a base64-encoded `logo` value) when run against a target
