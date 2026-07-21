@@ -643,6 +643,9 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       echo "  Note: the version badge renders only for public repos — shields.io fetches"
       echo "  raw.githubusercontent.com unauthenticated."
       echo ""
+      echo "  Suggestion only — this script never edits your README. An agent relaying"
+      echo "  this should offer the edit: show the exact diff and ask before writing."
+      echo ""
     fi
 elif [ -f "$TARGET/README.md" ] && [ -n "$BADGE_FAMILY" ]; then
     # S9 F001: any marker family present → the project is already badged;
@@ -658,6 +661,9 @@ elif [ -f "$TARGET/README.md" ]; then
     sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
     echo ""
     echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic split version badge."
+    echo ""
+    echo "  Suggestion only — this script never edits your README. An agent relaying"
+    echo "  this should offer the edit: show the exact diff and ask before writing."
     echo ""
 else
     # F001: no README yet (a fresh new.sh project) — the opt-in would

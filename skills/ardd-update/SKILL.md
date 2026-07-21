@@ -106,8 +106,9 @@ proceeds.
    **relay its full output verbatim** — the migrations it applied and
    every suggestion it printed (badge snippet, gitignore guidance).
    These suggestions are the user's to accept or ignore; offer to apply
-   any they want (e.g. paste the badge into README) but never apply one
-   unprompted.
+   each (e.g. the badge snippet into README) behind a confirm-with-diff
+   gate — show the exact diff and ask before writing — but never apply
+   one unprompted.
 
    **Legacy Source-Path repair notice.** When install.sh prints its
    machine-specific-absolute-Source-Path notice (a pre-portability
@@ -132,8 +133,11 @@ proceeds.
    same `install.sh` invocation with `ARDD_VERSION_BADGE=1` set in its
    environment — the env var is the mechanism, this offer is the
    interface — and relay the newly printed snippet and caveats verbatim.
-   Never edit the target's README yourself; the snippet is the user's to
-   paste. Never make this offer when the marker is already present (the
+   The snippet is suggestion-only at the script level (install.sh never
+   edits a README); OFFER to apply it — present the exact diff, the
+   snippet with its markers replacing any stale badge block, and ask
+   before writing. Confirm-with-diff, never a refusal that waits for an
+   override. Never make this offer when the marker is already present (the
    badge is adopted — install.sh's own reprint guard mirrors this), when
    no README exists, or in headless/scripted contexts (same
    never-block-on-a-question rule as step 5's asks).

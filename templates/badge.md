@@ -20,7 +20,14 @@
      For shapes 2 and 3: replace OWNER/REPO/BRANCH with your repo's own
      coordinates before pasting. Public repos only — shields.io fetches
      raw.githubusercontent.com unauthenticated, so the endpoint badge
-     won't render for a private repo. -->
+     won't render for a private repo.
+
+     Posture: every snippet here is suggestion-only at the script level —
+     install.sh never edits a README. An agent relaying the suggestion
+     should OFFER to apply the edit: present the exact diff (the snippet
+     with its markers, replacing any stale badge block) and ask before
+     writing — a confirm-with-diff gate, never a refusal that waits for
+     an override. -->
 
 <!-- ardd-badge-start -->
 [![built with ArDD](https://img.shields.io/badge/built%20with-ArDD-blue)](https://github.com/moui72/artifact-driven-dev)

@@ -30,7 +30,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: confirm-with-diff posture (F002, prose)
 
-- [ ] T003 [parallel] Revise the never-edit-README posture at the
+- [x] T003 [parallel] Revise the never-edit-README posture at the
   three badge prose sites, one consistent shape: full statement in
   `templates/badge.md` — the printed snippet is suggestion-only at the
   script level (install.sh never edits a README), AND an agent
