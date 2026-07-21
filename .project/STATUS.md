@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-21 (**v1.0.4 shipped** — pushed main (02c9692..68970e8, 13 commits; beta-release published v1.0.4-beta.1, lint green incl. the template-YAML jobs), then dispatched stable-release.yml (bump: patch): **v1.0.4 is Latest**, carrying the post-1.0.3 badge hardening to stable consumers — marker-family guards, real-default-branch workflow trigger, ssh-alias coordinate fill, confirm-with-diff README posture, amend-path prose. Every S9 gate in the arc ran clean before shipping. Prior update, same day, /ardd-feedback — logged feedback-guardrails-cwd-safety-5f18.md (open, 1 bug): the primary checkout lost its git origin remote during the S9 runs (restored by hand); likely a scenario subagent running the guardrails rule-2 cleanup outside $SCRATCH. Fix direction: GUARDRAILS.md gains a cwd-inside-$SCRATCH verification before any prescribed git mutation, structural -C/absolute-path forms, and an incident-reporting rule. Prior update, same day, /ardd-implement coordinator — the delegated badge-consumer-fixes worktree run completed all 4 tasks and merged fast-forward (5f47952); worktree reaped; dogfood refreshed. Shipped: install.sh parses any scp-style <token>:<path> remote (ssh-config aliases like github-ardd: now fill real coordinates; red-first case 22, badge suite 48/48); confirm-with-diff posture at templates/badge.md + install output + ardd-update relay (agent OFFERS the README edit with a diff, never refuses-until-overridden; script stays suggestion-only); S9 case-2 alias-remote variant. Badge file-set moved, so S9 run 2026-07-21-b788 ran against 5f47952: CLEAN PASS — ea66 F001 (alias coordinates fill) and F002 (confirm-with-diff posture on all three surfaces) verified fixed, all prior badge fixes hold; sole new finding taste-deferred (third of the bare-wrong-badge output-pairing family). Prior update, same day, /ardd-plan + /ardd-feedback — consumed feedback ea66 (both items accepted, planned): approved and tasked plan-badge-consumer-fixes-2026-07-21-1c50.md — 4 tasks/2 phases in tasks-badge-consumer-fixes-56c0.md (ready): red-first ssh-alias remote parse (scp-style <token>:<path> regardless of host token), confirm-with-diff README posture at the three badge prose sites, S9 alias-remote brief variant. Also logged feedback-plan-preview-prompts-a91e.md (open, 1 UX: preview and approval must be two sequential prompts, preview shown first — observed batched live) and backlogged plan-preview-editor-option (open-in-editor checkpoint option + configurable editor command). Prior update, same day, `/ardd-feedback` — logged
+_Updated: 2026-07-21 (**codex foundation merged to main** — the user merged `codex/port-foundation` (8a302c8: `install.sh --harness codex` support); the worktree at `…/artifact-driven-dev-codex-port` is now merged + clean → **reapable** (`worktree-reap.sh` candidate; reap pending). Register state deliberate: `codex-second-harness-support` stays `backlogged` and its plan `draft` — the merge is the foundation slice, not the full feature. Same session, `/docs-sweep` (scope: v1.0.3..HEAD, sole changed skill `ardd-update`) logged `feedback-docs-sweep-ardd-update-harness-28d0.md` (open, 3 bugs): the ardd-update reference page's step-4 body lacks the new harness-preservation behavior, still claims "your README is never edited" against the confirm-with-diff posture, and `install.sh --harness codex` is undocumented in all human-facing docs. Open feedback now 6 files. Prior update, same day, **v1.0.4 shipped** — pushed main (02c9692..68970e8, 13 commits; beta-release published v1.0.4-beta.1, lint green incl. the template-YAML jobs), then dispatched stable-release.yml (bump: patch): **v1.0.4 is Latest**, carrying the post-1.0.3 badge hardening to stable consumers — marker-family guards, real-default-branch workflow trigger, ssh-alias coordinate fill, confirm-with-diff README posture, amend-path prose. Every S9 gate in the arc ran clean before shipping. Prior update, same day, /ardd-feedback — logged feedback-guardrails-cwd-safety-5f18.md (open, 1 bug): the primary checkout lost its git origin remote during the S9 runs (restored by hand); likely a scenario subagent running the guardrails rule-2 cleanup outside $SCRATCH. Fix direction: GUARDRAILS.md gains a cwd-inside-$SCRATCH verification before any prescribed git mutation, structural -C/absolute-path forms, and an incident-reporting rule. Prior update, same day, /ardd-implement coordinator — the delegated badge-consumer-fixes worktree run completed all 4 tasks and merged fast-forward (5f47952); worktree reaped; dogfood refreshed. Shipped: install.sh parses any scp-style <token>:<path> remote (ssh-config aliases like github-ardd: now fill real coordinates; red-first case 22, badge suite 48/48); confirm-with-diff posture at templates/badge.md + install output + ardd-update relay (agent OFFERS the README edit with a diff, never refuses-until-overridden; script stays suggestion-only); S9 case-2 alias-remote variant. Badge file-set moved, so S9 run 2026-07-21-b788 ran against 5f47952: CLEAN PASS — ea66 F001 (alias coordinates fill) and F002 (confirm-with-diff posture on all three surfaces) verified fixed, all prior badge fixes hold; sole new finding taste-deferred (third of the bare-wrong-badge output-pairing family). Prior update, same day, /ardd-plan + /ardd-feedback — consumed feedback ea66 (both items accepted, planned): approved and tasked plan-badge-consumer-fixes-2026-07-21-1c50.md — 4 tasks/2 phases in tasks-badge-consumer-fixes-56c0.md (ready): red-first ssh-alias remote parse (scp-style <token>:<path> regardless of host token), confirm-with-diff README posture at the three badge prose sites, S9 alias-remote brief variant. Also logged feedback-plan-preview-prompts-a91e.md (open, 1 UX: preview and approval must be two sequential prompts, preview shown first — observed batched live) and backlogged plan-preview-editor-option (open-in-editor checkpoint option + configurable editor command). Prior update, same day, `/ardd-feedback` — logged
 `feedback-badge-consumer-feedback-ea66.md` (`open`, 1 bug + 1
 Reconsidered) from the first real consumer update to v1.0.3
 (yet-another-rank-games): F001 the badge coordinate autodetect misses
@@ -1807,7 +1807,7 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-2 open — feedback-guardrails-cwd-safety-5f18.md (1 bug: scenario-guardrails cwd-safety hardening after the origin-remote-loss incident) and feedback-plan-preview-prompts-a91e.md (1 UX: plan-preview prompt sequencing). Delivered today: feedback-badge-consumer-feedback-ea66.md (planned, consumed by plan-badge-consumer-fixes-2026-07-21-1c50.md). Delivered 2026-07-20: `feedback-s9-badge-guards-b8b6.md` (3 UX,
+4 open — feedback-docs-sweep-ardd-update-harness-28d0.md (3 bugs: ardd-update reference-page drift on harness preservation and badge posture; `--harness codex` undocumented), feedback-sweep-cdf0-codex-port-regressi-878c.md, feedback-guardrails-cwd-safety-5f18.md (1 bug: scenario-guardrails cwd-safety hardening after the origin-remote-loss incident), and feedback-plan-preview-prompts-a91e.md (1 UX: plan-preview prompt sequencing). Delivered today: feedback-badge-consumer-feedback-ea66.md (planned, consumed by plan-badge-consumer-fixes-2026-07-21-1c50.md). Delivered 2026-07-20: `feedback-s9-badge-guards-b8b6.md` (3 UX,
 now `planned`, consumed by `plan-badge-guards-2026-07-20-8b60.md`);
 `feedback-badge-renderer-caveat-bf75.md`
 (1 UX) and `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX) are
@@ -1878,7 +1878,8 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-1 backlogged · 34 implemented · 1 retired — see
+2 backlogged (`codex-second-harness-support`,
+`plan-preview-editor-option`) · 34 implemented · 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 Newest implemented: `badge-split-variant`, `badge-brand-color-in-json`,
@@ -1905,25 +1906,21 @@ workflow-field exemption, v1.8.2).
 
 ## In Flight
 
-- Worktree `~/dev/artifact-driven-dev-codex-port` (branch
-  `codex/port-foundation`) — the user's Codex-port work, no tasks file;
-  dirty tree, so `worktree-reap.sh` correctly refuses it. Its
-  companion plan refresh
-  (`plan-codex-second-harness-support-2026-07-15-f837.md` + feature
-  entry) sits uncommitted in the primary working tree.
-- Nothing besides the codex worktree (the badge-guards and
-  badge-workflow-branch worktrees merged and were reaped; S9 gate run
-  `270a` completed clean).
-`main` is ahead of `origin/main` (unpushed commits since the last push
-— the reviewer-guide/auto-prompt batch, inbox-drain skill, amend-path
-policy, and the badge drain).
+- Nothing in flight — the codex-port worktree was reaped 2026-07-21
+  after its branch (`codex/port-foundation`, 8a302c8) merged to `main`
+  (worktree removed, branch deleted via `branch -d`).
 
 ## Recommended Next Step
 
-/ardd-plan over the two open feedback files (guardrails-cwd-safety-5f18, plan-preview-prompts-a91e — they can share a plan) and/or the two backlogged features (plan-preview-editor-option; codex-second-harness-support via --from its draft plan). v1.0.4 is Latest; consumer repos can /ardd-update. v1.0.3 is Latest; also natural: `/ardd-update`
-the remaining consumer repos; continue the codex-port worktree. Also
-standing: push `main` to publish the accumulated batch as
-the next beta, then dispatch `stable-release.yml` when ready;
+/ardd-plan over the four open feedback files
+(docs-sweep-28d0 and sweep-cdf0-878c are both codex-arc follow-ups and
+can share a plan with guardrails-cwd-safety-5f18 /
+plan-preview-prompts-a91e as fits) and/or the two backlogged features
+(plan-preview-editor-option; codex-second-harness-support via --from its
+draft plan — the merged foundation makes resuming it the natural next
+codex step). v1.0.4 is Latest; consumer repos can /ardd-update. Also
+standing: push `main` to publish the codex foundation + feedback batch
+as the next beta, then dispatch `stable-release.yml` when ready;
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
 (`feedback-repo-critique-6ad1.md`) and `codex-second-harness-support`
