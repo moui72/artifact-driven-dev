@@ -1900,12 +1900,20 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-3 backlogged (`codex-second-harness-support`,
-`plan-preview-editor-option`, `pre-commit-hook-scoping-expans`) ·
+4 backlogged (`codex-second-harness-support`,
+`plan-preview-editor-option`, `pre-commit-hook-scoping-expans`,
+`changelog-from-github-releases`) ·
 36 implemented (newest: `badge-style-variant-option`, `a1de0f2`) ·
 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
+`changelog-from-github-releases` (newest backlogged) — the docs site's
+`docs/release-notes.md` reads as very incomplete (frozen at v0.9.0
+against 41 real releases through v1.0.4); design direction: a
+fetch-and-commit script (source-side, alongside `scripts/next-version.sh`)
+regenerates it from `gh release list`/`gh api`, run on-demand or wired
+into `stable-release.yml` — deliberately not a build-time fetch in
+`docs.yml`'s GitHub Pages build.
 `badge-style-variant-option`: `backlogged` → `tasked` → `implemented`
 this session — the delegated worktree run
 (`worktree-agent-a49dbb827b627b722`) completed all 10 tasks (T001-T010)
