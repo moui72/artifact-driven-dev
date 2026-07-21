@@ -1,6 +1,6 @@
 ---
 slug: badge-style-variant-option
-status: backlogged
+status: tasked
 logged: 2026-07-21
 ---
 

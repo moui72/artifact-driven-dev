@@ -1,7 +1,7 @@
 ---
 plan: plan-badge-style-variant-option-2026-07-21-982c.md
 generated: 2026-07-21
-status: ready
+status: in-progress
 ---
 
 # Tasks
