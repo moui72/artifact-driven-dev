@@ -1,6 +1,6 @@
 ---
 slug: pre-commit-hook-scoping-expans
-status: backlogged
+status: tasked
 logged: 2026-07-21
 ---
 

@@ -1,7 +1,7 @@
 ---
 plan: plan-changelog-precommit-2026-07-21-b716.md
 generated: 2026-07-21
-status: ready
+status: in-progress
 ---
 
 # Tasks
