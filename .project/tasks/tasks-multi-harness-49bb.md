@@ -1,7 +1,7 @@
 ---
 plan: plan-multi-harness-2026-07-21-76ba.md
 generated: 2026-07-21
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
