@@ -144,6 +144,13 @@ run this sweep instead:
    (`slug`, `status: backlogged`, `logged: <today>`). After writing, run
    `.claude/skills/ardd-scripts/project-lock.sh touch ardd-backlog`.
 
+   Collaborative-mode note (`workflow_mode: collaborative` in the
+   constitution): leave this `.project/` scaffold write **uncommitted**
+   on the default branch (or write it on a branch directly) —
+   `/ardd-plan`'s branch gate carries it onto the work branch.
+   Committing it to the local default branch violates the mode's
+   nothing-lands-on-local-default rule.
+
 4. **Legacy note.** If the project still has a single-file
    `.project/artifacts/features.md`, the register predates migration
    0003-per-feature-files — tell the user to re-run `install.sh` (which
