@@ -1,6 +1,6 @@
 ---
 slug: changelog-from-github-releases
-status: tasked
+status: implemented
 logged: 2026-07-21
 ---
 
