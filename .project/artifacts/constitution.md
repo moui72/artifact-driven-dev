@@ -1,6 +1,24 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.12.1 → 1.13.0 (MINOR — new standing decision appended to
+the Multi-harness install section.)
+
+Rationale: `/ardd-plan multi-harness-install-metadata` (2026-07-21), from
+the inbox-captured dual-install observation: `.project/ardd-version.md`
+and the reviewer guide are single shared install-owned files, so
+whichever harness install runs last owns the recorded harness identity —
+dual Claude+Codex installs work mechanically but the metadata
+misrepresents the installed set. New standing decision: shared
+install-owned `.project/` files must represent the full installed
+harness set (preserve-on-reinstall semantics, never last-writer-wins);
+one harness's install/update never removes or misrepresents the other;
+per-harness gitignore/.worktreeinclude guidance stays bounded per
+harness root (Principle III already covers the pattern — no principle
+change). Modified sections: Multi-harness install (new closing
+paragraph). Footer version/date updated.
+
+Previous report (1.12.0 → 1.12.1):
 Version change: 1.12.0 → 1.12.1 (PATCH — wording clarification only; no
 principle or standing-decision change.)
 
@@ -243,7 +261,7 @@ revision.
 ---
 name: constitution
 status: stable
-last_updated: 2026-07-20
+last_updated: 2026-07-21
 
 next_step_prompt: true
 delegation: eager
@@ -426,6 +444,24 @@ one — is what would justify generalizing the five-substitution list into
 a real per-harness adapter system (Principle VI, YAGNI); building one now,
 at two harnesses, would be the premature abstraction that principle
 forbids.
+
+**Dual installs are first-class (2026-07-21, feature
+`multi-harness-install-metadata`).** Both harness trees
+(`.claude/skills/ardd-*/`, `.agents/skills/ardd-*/`) may coexist in one
+target project, installed in either order, and the shared install-owned
+`.project/` files (`ardd-version.md`, the reviewer guide) must represent
+the full installed harness *set* — preserve-on-reinstall semantics,
+never last-writer-wins. One harness's install or update never removes,
+overwrites the identity of, or misrepresents the other; a harness-aware
+update preserves the invoking harness (already standing) *and* leaves
+the sibling harness's recorded metadata intact. Gitignore and
+`.worktreeinclude` guidance names each installed harness's bounded
+`ardd-*` root only — never blanket `.claude/`, `.agents/`, or their
+`skills/` parents (Principle III applies per harness root). Claude-only
+installs remain backward-compatible (absent harness metadata = claude);
+Codex-only installs record enough for update/check/status flows.
+Deterministic tests must cover Claude-only, Codex-only, and dual-install
+in both orders.
 
 Two install targets exist and must not be conflated: files/scripts that
 govern this source repository only (e.g. `scripts/lint-docs.sh`,
@@ -641,4 +677,4 @@ standing decisions — each is a per-project operational setting, written by
 does not require a Sync Impact Report or a version increment, and does not
 itself update `last_updated`.
 
-**Version**: 1.12.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-20
+**Version**: 1.13.0 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-21

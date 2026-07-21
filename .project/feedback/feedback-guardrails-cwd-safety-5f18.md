@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-multi-harness-2026-07-21-76ba.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 Real isolation incident (2026-07-21): the primary ArDD
+- [x] F001 Real isolation incident (2026-07-21): the primary ArDD
   checkout's git `origin` remote disappeared during the day's S9
   scenario-sweep runs — discovered when `git rev-list
   origin/main..main` failed after run `2026-07-21-b788`; restored by
