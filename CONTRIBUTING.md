@@ -75,9 +75,9 @@ fast-forwards `main` into the `release` branch. Versions come from
 `scripts/next-version.sh`, the single version authority.
 
 Before dispatching a stable release, run the two local-only manual checks:
-`/scenario-sweep` (behavioral dry-run scenarios) and `/docs-sweep`
-(human-facing doc freshness against current skill behavior) — neither is
-installed to consumers or run by CI.
+`/scenario-sweep` or `$scenario-sweep` (behavioral dry-run scenarios) and
+`/docs-sweep` (human-facing doc freshness against current skill behavior)
+— neither is installed to consumers or run by CI.
 
 ## The behavioral smoke tier
 

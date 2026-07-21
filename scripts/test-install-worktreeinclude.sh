@@ -289,4 +289,60 @@ else
   bad "case4: CLI cache dir not written through"
 fi
 
+# --- Case 5: harness switch prunes the other harness's pattern ---
+# A Claude->codex (or codex->Claude) re-install must leave exactly ONE ardd
+# worktreeinclude pattern — the active harness's — and never a stale line
+# from the previous harness, while preserving the user's own lines. Guards
+# the R5 regression (2026-07-21 sweep rg02): a switch used to append the new
+# pattern without removing the old one.
+CODEX_PATTERN=".agents/skills/ardd-*/"
+run_install_codex() {
+  ( cd "$REPO_ROOT" && sh "$INSTALL_SH" --harness codex "$1" ) >/dev/null
+}
+codex_pattern_count() {
+  grep -cxF "$CODEX_PATTERN" "$1" 2>/dev/null || true
+}
+
+target="$WORK/case5"
+mkdir -p "$target"
+git init -q "$target"
+git -C "$target" commit -q --allow-empty -m init
+wti="$target/.worktreeinclude"
+# The user's own pre-existing include line — must survive every switch.
+printf '%s\n%s\n' "# my own include" "docs/local/" > "$wti"
+
+run_install "$target"          # 1) claude
+if [ "$(pattern_count "$wti")" = "1" ] && [ "$(codex_pattern_count "$wti")" = "0" ]; then
+  ok "case5: fresh claude install -> only the claude pattern"
+else
+  bad "case5: fresh claude install -> only the claude pattern"
+fi
+
+run_install_codex "$target"    # 2) switch to codex
+if [ "$(codex_pattern_count "$wti")" = "1" ] && [ "$(pattern_count "$wti")" = "0" ]; then
+  ok "case5: switch to codex prunes the stale claude pattern"
+else
+  bad "case5: switch to codex prunes the stale claude pattern (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
+fi
+
+run_install_codex "$target"    # 3) idempotent codex re-install
+if [ "$(codex_pattern_count "$wti")" = "1" ]; then
+  ok "case5: codex re-install stays exactly one codex pattern"
+else
+  bad "case5: codex re-install stays exactly one codex pattern (got $(codex_pattern_count "$wti"))"
+fi
+
+run_install "$target"          # 4) switch back to claude
+if [ "$(pattern_count "$wti")" = "1" ] && [ "$(codex_pattern_count "$wti")" = "0" ]; then
+  ok "case5: switch back to claude prunes the stale codex pattern"
+else
+  bad "case5: switch back to claude prunes the stale codex pattern (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
+fi
+
+if grep -qxF "docs/local/" "$wti" && grep -qxF "# my own include" "$wti"; then
+  ok "case5: user's own lines preserved across every switch"
+else
+  bad "case5: user's own lines preserved across every switch"
+fi
+
 exit "$fail"

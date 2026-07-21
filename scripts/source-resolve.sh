@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 # source-resolve.sh — resolve an ArDD source checkout to the release
 # channel (constitution, release-channel standing decision, 2026-07-12).
-# Target-side: installed to .claude/skills/ardd-scripts/ and shelled out to
-# by /ardd-update's source-standing step. The decision tree here is a pure
+# Target-side: installed under the active harness skills root's
+# ardd-scripts/ directory and shelled out to by /ardd-update's
+# source-standing step. The decision tree here is a pure
 # function of disk/remote state (Principle II); the judgment — whether to
 # accept a dev-mode source — stays in skill prose.
 #

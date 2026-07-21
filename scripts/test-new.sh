@@ -24,7 +24,8 @@
 # whether to reach that read at all, which is where regressions actually live:
 # --kickoff reaches the exec (case 10, poison claude exits 42), --no-kickoff
 # does not (case 4), a missing `claude` does not (case 12), and none of them
-# hang (every case runs under with_timeout).
+# hang (every case runs under with_timeout). The harness prompt follows the
+# same rule: no tty preserves the historical Claude default.
 
 set -e
 
@@ -105,6 +106,10 @@ fi
 [ -f "$target/.project/ardd-version.md" ] \
   && ok "case1: ardd-version.md recorded" \
   || bad "case1: ardd-version.md missing"
+
+grep -qxF 'Harness: claude' "$target/.project/ardd-version.md" \
+  && ok "case1: no-tty default records Claude harness" \
+  || bad "case1: no-tty default records Claude harness"
 
 # The whole point of converging on install.sh: its non-skill reference dirs
 # exist, which an npx-style copy of SKILL.md files alone would never produce.
@@ -306,7 +311,7 @@ set -e
 # read-write itself. `exec claude … < /dev/tty` passes that check with a
 # read-only fd, so the TUI paints but accepts no keystrokes; `<>` exits. CI has
 # no tty to reproduce either, so guard the source line instead.
-grep -n 'exec claude' "$NEW_SH" | grep -q '/dev/tty' \
+grep -n 'exec "$handoff_tool"' "$NEW_SH" | grep -q '/dev/tty' \
   && bad "case14: launch exec redirects stdin — Claude Code will ignore keystrokes" \
   || ok "case14: launch exec leaves stdin alone"
 
@@ -629,6 +634,37 @@ if [ -n "$target_toplevel" ] && [ "$target_toplevel" != "$outer_toplevel" ]; the
 else
   bad "case29: nested target's repo top-level is the outer repo ($target_toplevel vs $outer_toplevel)"
 fi
+
+# --- Case 30: --harness codex routes acquisition through install.sh's
+# Codex harness and prints a shell-safe Codex handoff command ---
+target="$WORK/case30/proj"
+run_new 0 "case30: --harness codex installs" --no-kickoff --harness codex "$target"
+[ -f "$target/.agents/skills/ardd-init/SKILL.md" ] \
+  && ok "case30: Codex skills installed under .agents" \
+  || bad "case30: Codex skills missing"
+[ ! -d "$target/.claude/skills" ] \
+  && ok "case30: Codex acquisition does not create .claude skills" \
+  || bad "case30: Codex acquisition created .claude skills"
+grep -qxF 'Harness: codex' "$target/.project/ardd-version.md" \
+  && ok "case30: ardd-version records Codex harness" \
+  || bad "case30: ardd-version records Codex harness"
+printf '%s' "$out" | grep -F -q "codex '\$ardd-init'" \
+  && ok 'case30: next step prints shell-safe codex $ardd-init command' \
+  || bad 'case30: next step prints shell-safe codex $ardd-init command'
+
+# --- Case 31: --harness=codex form is accepted ---
+target="$WORK/case31/proj"
+run_new 0 "case31: --harness=codex installs" --no-kickoff --harness=codex "$target"
+grep -qxF 'Harness: codex' "$target/.project/ardd-version.md" \
+  && ok "case31: --harness= form records Codex harness" \
+  || bad "case31: --harness= form records Codex harness"
+
+# --- Case 32: unknown harness is refused before install ---
+target="$WORK/case32/proj"
+run_new 2 "case32: unknown harness refused" --no-kickoff --harness nope "$target"
+[ -d "$target/.claude" ] || [ -d "$target/.agents" ] \
+  && bad "case32: usage error still installed skills" \
+  || ok "case32: nothing installed for unknown harness"
 
 if [ "$fail" -eq 0 ]; then
   echo "test-new: all cases pass"

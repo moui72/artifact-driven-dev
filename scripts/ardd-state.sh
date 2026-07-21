@@ -4,7 +4,8 @@
 # a transition happens; this script does the *writing*, validating file
 # state first and refusing illegal transitions with a nonzero exit).
 #
-# Installed target-side into .claude/skills/ardd-scripts/ by install.sh.
+# Installed target-side into the active harness skills root's ardd-scripts/
+# directory by install.sh.
 # POSIX sh only. Every subcommand is idempotent-safe to re-run: a
 # transition to the state a file is already in is reported, not applied.
 #

@@ -1,5 +1,7 @@
 .worktrees
 .claude/skills/ardd-*/
+.agents/skills/ardd-*/
+.agents/skills/scenario-sweep/
 .project/.lock
 site/
 dev-notes/
