@@ -20,10 +20,30 @@ unconstrained, push to real remotes or open real PRs. You must not.
    release tags) is the one permitted network read.
 6. Never touch any real `~/dev/*` checkout in place — only a fresh clone
    (rule 2) or fresh init (rule 3) inside `$SCRATCH`.
+7. Cwd safety for git mutations: before ANY git mutation these guardrails
+   prescribe (`git remote remove origin`, `git init`, adding the fake
+   bare origin), verify your current directory is inside `$SCRATCH`:
+
+   ```sh
+   case "$PWD" in "$SCRATCH"/*) ;; *) echo "cwd outside SCRATCH — stop"; exit 1 ;; esac
+   ```
+
+   If the check fails, STOP and report — never run the mutation and never
+   "fix up" the cwd silently. Prefer structural forms that name the target
+   repo explicitly over cwd-dependent invocations wherever possible:
+   `git -C "$SCRATCH/<clone>" remote remove origin`,
+   `git init "$SCRATCH/<project>"` — an absolute path can't hit the wrong
+   repo when a prior `cd` failed or a subshell dropped you somewhere
+   unexpected (this exact failure once removed the `origin` remote from a
+   real checkout).
+8. Any damage to a path outside `$SCRATCH` — however small, however
+   recoverable — is an INCIDENT: report it immediately and verbatim in
+   your report file (what command, what path, what changed), never
+   silently repair it and move on.
 
 ## Interaction model (harness constraint, not a product bug)
 
-7. You have NO `AskUserQuestion` tool. Every ArDD skill pause (init
+9. You have NO `AskUserQuestion` tool. Every ArDD skill pause (init
    interview, plan approval checkpoint, delegation gate, push
    confirmation, next-step prompt) has a PRE-SCRIPTED ANSWER in your
    brief's "Scripted answers" section. When a skill reaches such a pause,
@@ -34,12 +54,12 @@ unconstrained, push to real remotes or open real PRs. You must not.
 
 ## Progressive, durable reporting (hard requirement)
 
-8. Your brief names a report file under the ArDD repo's
+10. Your brief names a report file under the ArDD repo's
    `dev-notes/scenario-runs/<run-id>/`. Create it as your FIRST act,
    with a header (scenario id, date, your scratch path), and APPEND to it
    after every major step — never hold findings for one final write. If
    you die mid-run, the partial report is the deliverable.
-9. Report format per finding: an `## Fnnn` heading, a one-line summary,
+11. Report format per finding: an `## Fnnn` heading, a one-line summary,
    `kind: bug | ux | docs | question`, the exact command/skill and
    observed vs expected, and file paths. End the report (if you get
    there) with a `## Verdict` section: pass/fail per checklist item in
@@ -47,7 +67,7 @@ unconstrained, push to real remotes or open real PRs. You must not.
 
 ## Judgment calibration
 
-10. Report what a real user would notice: misleading errors, prose/doc
+12. Report what a real user would notice: misleading errors, prose/doc
     drift, silent behavior, stale output, awkward phrasing — not just
     hard failures. But distinguish clearly between defects and taste;
     mark pure-taste items `kind: ux` with a "subjective" note.
