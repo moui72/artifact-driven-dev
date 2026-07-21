@@ -106,7 +106,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 - [x] T011 [parallel] Add to `tests/scenarios/S7.md` setup a one-line
   post-install check that the `.project/README.md` reviewer guide is
   present and coherent (878c F005 / graduation G2). Brief edit only.
-- [ ] T012 [parallel] Add the collaborative-mode scaffold note to
+- [x] T012 [parallel] Add the collaborative-mode scaffold note to
   `skills/ardd-init/SKILL.md` and `skills/ardd-backlog/SKILL.md`: in
   `workflow_mode: collaborative`, pre-plan `.project/` scaffold writes
   stay uncommitted on the default branch (or go straight to a branch)
