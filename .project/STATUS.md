@@ -1891,14 +1891,21 @@ dispatches no longer need that workaround, the flag is off. v0.9.1
 
 ## Feature Backlog
 
-2 backlogged (`codex-second-harness-support`,
-`plan-preview-editor-option`) · 1 tasked (`badge-style-variant-option`) ·
+3 backlogged (`codex-second-harness-support`,
+`plan-preview-editor-option`, `pre-commit-hook-scoping-expans`) ·
+1 tasked (`badge-style-variant-option`) ·
 35 implemented (newest: `multi-harness-install-metadata`, d41b193) ·
 1 retired — see
 `.project/features/`. No feature currently carries an `epic` value, so
 no "by epic" breakdown to show yet.
 `badge-style-variant-option`: `backlogged` → `tasked` this session —
-`tasks-badge-style-variant-option-7230.md` (`ready`, 0/10).
+`tasks-badge-style-variant-option-7230.md` (`ready`, 0/10; a delegated
+implementation subagent is running against it).
+`pre-commit-hook-scoping-expans` (newest backlogged) — a dispatched
+Fable research agent's follow-up to today's `.project/`-only fast path:
+extend `hooks/pre-commit`'s staged-path scoping to workflow-YAML,
+test-fixture, and no-check-subject commits, and wire
+`scripts/lint-templates-yaml.sh` into the hook itself (today CI-only).
 Newest implemented: `badge-split-variant`, `badge-brand-color-in-json`,
 `badge-icon-logosvg` — the badge slate, see the `_Updated` note above.
 Backlogged:
@@ -1929,13 +1936,16 @@ workflow-field exemption, v1.8.2).
 
 ## Recommended Next Step
 
-`/ardd-implement` to execute `tasks-badge-style-variant-option-7230.md`
-(10 tasks/5 phases, `ready`) — Phase 0/T010's interim clash caveat can
-land standalone even before the rest. Separately: push `main` to publish
-the accumulated batch (codex foundation, multi-harness metadata, hook
-P90, brand refresh, brand-colour amend) as the next beta, then dispatch
-`stable-release.yml` when ready. v1.0.4 is Latest; consumer repos can
-/ardd-update. Also standing:
+`/ardd-implement` is already running (delegated worktree subagent) against
+`tasks-badge-style-variant-option-7230.md` (10 tasks/5 phases, `ready`) —
+Phase 0/T010's interim clash caveat can land standalone even before the
+rest. main was pushed (`c0386d3`) publishing the accumulated batch (codex
+foundation, multi-harness metadata, hook P90, brand refresh, brand-colour
+amend) as the next beta; dispatch `stable-release.yml` when ready. v1.0.4
+is Latest; consumer repos can /ardd-update. Next up: `/ardd-plan
+pre-commit-hook-scoping-expans` (newest backlogged — extends today's
+`.project/`-only hook fast path to workflow-YAML/fixture/no-check-subject
+commits). Also standing:
 `/ardd-defects` to refresh the 2026-07-12 seventh pass against the
 enlarged surface; the remaining open feedback
 (`feedback-hookspath-side-effect-c707.md`; note
