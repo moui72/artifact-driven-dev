@@ -21,7 +21,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   line; (e) dev-mode reinstall (source resolving `channel=dev`) records
   `Channel: dev` and drops any stale `Source-Ref` (878c F002). Confirm
   the new cases fail against current `install.sh` before T002.
-- [ ] T002 [artifacts: constitution] Implement in `install.sh`:
+- [x] T002 [artifacts: constitution] Implement in `install.sh`:
   union-write the `Harnesses:` line (read existing, add the invoking
   harness, sort/normalize; absent line parses as `claude` for old
   files); write `Channel: dev` and omit `Source-Ref` when the source
