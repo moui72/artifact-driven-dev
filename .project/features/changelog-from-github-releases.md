@@ -1,6 +1,6 @@
 ---
 slug: changelog-from-github-releases
-status: tasked
+status: implemented
 logged: 2026-07-21
 plan: plan-changelog-precommit-2026-07-21-b716.md
 tasks: tasks-changelog-precommit-0966.md

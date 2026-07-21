@@ -264,6 +264,12 @@ entering the normal flow.
      `true`, runs `git config core.bare false` and tells the user (a known
      side effect of `Agent` worktree creation flipping the primary
      checkout's config, which otherwise breaks ordinary git there).
+   - Runs `git config --get core.hooksPath` in the primary checkout; if it
+     prints `/dev/null`, runs `git config core.hooksPath hooks` (this
+     repo's standard value — for a target project installed elsewhere,
+     restore whatever the pre-run value was, or unset it if there wasn't
+     one) and tells the user, the same way the `core.bare` restoration is
+     reported (another known side effect of `Agent` worktree creation).
    - Consults the **`merge_policy` knob**: read `merge_policy` from
      `.project/artifacts/constitution.md` frontmatter (grep the frontmatter
      block; **absent = `ask`** — schema-of-record:

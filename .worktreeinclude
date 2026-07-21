@@ -1,2 +1,6 @@
 # ArDD: copy installed skills/scripts into new worktrees (added by install.sh)
 .claude/skills/ardd-*/
+# ArDD: this repo's own scenario-sweep Codex entrypoint (source-side dev
+# tooling, gitignored, generated) — without this a delegated worktree
+# never sees it, since it isn't tracked in git either.
+.agents/skills/scenario-sweep/
