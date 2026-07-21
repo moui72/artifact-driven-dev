@@ -240,6 +240,87 @@ else
   ok "switch codex->claude: .worktreeinclude prunes stale Codex pattern"
 fi
 
+# --- Case 5: Harnesses: union metadata (multi-harness-install-metadata) ---
+# The shared .project/ardd-version.md must represent the full installed
+# harness *set* via a comma-separated, order-normalized `Harnesses:` line —
+# preserve-on-reinstall union semantics, never last-writer-wins. Absent
+# line = claude (old files keep parsing); asserted here as the written
+# contract for every new install.
+
+target="$WORK/meta-claude"
+mkdir -p "$target"; git init -q "$target"; git -C "$target" commit -q --allow-empty -m init
+run_install "$target" >/dev/null
+grep -qxF 'Harnesses: claude' "$target/.project/ardd-version.md" \
+  && ok "meta: claude-only install records Harnesses: claude" \
+  || bad "meta: claude-only install records Harnesses: claude"
+
+target="$WORK/meta-codex"
+mkdir -p "$target"; git init -q "$target"; git -C "$target" commit -q --allow-empty -m init
+run_install "$target" --harness codex >/dev/null
+grep -qxF 'Harnesses: codex' "$target/.project/ardd-version.md" \
+  && ok "meta: codex-only install records Harnesses: codex" \
+  || bad "meta: codex-only install records Harnesses: codex"
+
+target="$WORK/meta-dual-cc"
+mkdir -p "$target"; git init -q "$target"; git -C "$target" commit -q --allow-empty -m init
+run_install "$target" >/dev/null
+run_install "$target" --harness codex >/dev/null
+grep -qxF 'Harnesses: claude,codex' "$target/.project/ardd-version.md" \
+  && ok "meta: claude-then-codex records Harnesses: claude,codex" \
+  || bad "meta: claude-then-codex records Harnesses: claude,codex"
+[ -f "$target/.claude/skills/ardd-init/SKILL.md" ] \
+  && [ -f "$target/.agents/skills/ardd-init/SKILL.md" ] \
+  && ok "meta: claude-then-codex keeps both skill trees intact" \
+  || bad "meta: claude-then-codex keeps both skill trees intact"
+
+target="$WORK/meta-dual-xc"
+mkdir -p "$target"; git init -q "$target"; git -C "$target" commit -q --allow-empty -m init
+run_install "$target" --harness codex >/dev/null
+run_install "$target" >/dev/null
+grep -qxF 'Harnesses: claude,codex' "$target/.project/ardd-version.md" \
+  && ok "meta: codex-then-claude records order-normalized Harnesses: claude,codex" \
+  || bad "meta: codex-then-claude records order-normalized Harnesses: claude,codex"
+[ -f "$target/.claude/skills/ardd-init/SKILL.md" ] \
+  && [ -f "$target/.agents/skills/ardd-init/SKILL.md" ] \
+  && ok "meta: codex-then-claude keeps both skill trees intact" \
+  || bad "meta: codex-then-claude keeps both skill trees intact"
+
+# Reinstall of one harness preserves the sibling's membership.
+run_install "$target" --harness codex >/dev/null
+grep -qxF 'Harnesses: claude,codex' "$target/.project/ardd-version.md" \
+  && ok "meta: codex reinstall preserves claude membership in Harnesses:" \
+  || bad "meta: codex reinstall preserves claude membership in Harnesses:"
+
+# --- Case 6: dev-mode reinstall records Channel: dev, drops Source-Ref ---
+# (878c F002.) A reinstall whose source resolved channel=dev (the caller —
+# /ardd-update — passes ARDD_CHANNEL=dev) must record `Channel: dev` and
+# drop any stale Source-Ref, never leave a stale beta/stable + tag pair.
+# Fixture source sits at a release tag so the first install records a
+# Source-Ref to go stale.
+SRC="$WORK/devsrc"
+mkdir -p "$SRC"
+cp -R "$REPO_ROOT/skills" "$REPO_ROOT/templates" "$REPO_ROOT/scripts" "$REPO_ROOT/migrations" "$SRC/"
+cp "$REPO_ROOT/install.sh" "$SRC/"
+( cd "$SRC" && git init -q -b main && git add -A && git commit -q -m one )
+git -C "$SRC" tag v9.9.9
+
+target="$WORK/meta-dev"
+mkdir -p "$target"; git init -q "$target"; git -C "$target" commit -q --allow-empty -m init
+( cd "$SRC" && sh "$SRC/install.sh" "$target" ) >/dev/null 2>&1
+grep -q '^Source-Ref: v9.9.9$' "$target/.project/ardd-version.md" \
+  && ok "devmode: tagged-source install records Source-Ref (precondition)" \
+  || bad "devmode: tagged-source install records Source-Ref (precondition)"
+
+( cd "$SRC" && ARDD_CHANNEL=dev sh "$SRC/install.sh" "$target" ) >/dev/null 2>&1 || true
+grep -qxF 'Channel: dev' "$target/.project/ardd-version.md" \
+  && ok "devmode: ARDD_CHANNEL=dev reinstall records Channel: dev" \
+  || bad "devmode: ARDD_CHANNEL=dev reinstall records Channel: dev"
+if grep -q '^Source-Ref:' "$target/.project/ardd-version.md"; then
+  bad "devmode: dev reinstall drops stale Source-Ref"
+else
+  ok "devmode: dev reinstall drops stale Source-Ref"
+fi
+
 # --- Case 4: option validation ---
 if ( cd "$REPO_ROOT" && sh "$INSTALL_SH" --harness nope "$WORK/invalid" ) >/dev/null 2>&1; then
   bad "invalid: unknown harness is rejected"

@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Harness metadata in install.sh
 
-- [ ] T001 [artifacts: constitution] Red-first: extend
+- [x] T001 [artifacts: constitution] Red-first: extend
   `scripts/test-install-harness.sh` with failing cases pinning the new
   metadata contract — (a) `--harness claude` install writes
   `Harnesses: claude` to `.project/ardd-version.md` (or the absent-line
