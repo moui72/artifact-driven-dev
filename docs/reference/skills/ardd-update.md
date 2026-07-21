@@ -79,10 +79,22 @@ than one at once is a usage error, reported before anything else runs.
    belongs to `source-resolve.sh` in step 1.
 3. **Dev-mode only: offer a pull** — never assumed, never on a dirty
    tree, never a push. The owned checkout was already moved in step 1.
-4. **Reinstall**: runs `<source>/install.sh` against the project and
-   relays its full output verbatim. Suggestions are yours to accept;
-   none is applied unprompted. After relaying, if the project has a
-   README without the `ardd-badge-version-start` marker, it offers the
+4. **Reinstall**: reads the installed harness from
+   `ardd-scripts/harness-capabilities.env` (`HARNESS=<claude|codex>`;
+   a missing file means a pre-harness install, treated as `claude`) and
+   runs `<source>/install.sh --harness <harness>` against the project,
+   relaying its full output verbatim — the update preserves the harness
+   that's installed, never silently reverting a Codex install to the
+   Claude layout. If a Codex install's selected source predates
+   `--harness` support (an older release tag whose `install.sh` rejects
+   the flag), the run refuses and presents the safe choices — pick a
+   newer release/channel that has harness support, or stop — rather
+   than running the old installer as a fallback. Suggestions in the
+   relayed output are offers: when you accept one (a gitignore line,
+   the badge snippet), the agent shows you the exact diff it would
+   apply and asks before writing — nothing is applied unprompted.
+   After relaying, if the project has a README without the
+   `ardd-badge-version-start` marker, it offers the
    **dynamic ArDD version badge**: a single split endpoint badge
    ("built with ArDD │ vX.Y.Z") whose JSON — kept in sync with
    `.project/ardd-version.md` by a small workflow — supplies both
@@ -91,10 +103,11 @@ than one at once is a usage error, reported before anything else runs.
    the printed snippet — filled with your repo's own coordinates when a
    GitHub `origin` remote exists — plus its caveats (the badge renders
    only for public repos, since shields.io fetches
-   raw.githubusercontent.com unauthenticated). Your README is never
-   edited; the snippet is yours to paste. The offer is skipped when the
-   marker is already present, no README exists, or the run is
-   headless/scripted.
+   raw.githubusercontent.com unauthenticated). Adding it to the README
+   follows the same confirm-with-diff posture: the agent offers the
+   edit, shows the exact diff, and writes only on your yes. The offer
+   is skipped when the marker is already present, no README exists, or
+   the run is headless/scripted.
 5. **Ask the workflow-field questions.** Without `--reconfigure`
    (default): backfills only, once — for constitutions that lack
    `next_step_prompt`, `delegation`, or (solo mode only) `merge_policy`

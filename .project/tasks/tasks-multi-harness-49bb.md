@@ -63,7 +63,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Docs drift
 
-- [ ] T006 Rewrite `docs/reference/skills/ardd-update.md` "What a run
+- [x] T006 Rewrite `docs/reference/skills/ardd-update.md` "What a run
   does" step 4 body (below the `generated:end` marker): reinstall
   reads `HARNESS=` from `harness-capabilities.env` and passes
   `--harness <harness>`, refusing (with the safe choices) when a Codex
