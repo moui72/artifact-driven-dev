@@ -57,7 +57,7 @@ status: in-progress
   adjustment as T004, for the static badge shape only. Depends on: T001, T003.
 
 ## Phase 3: docs
-- [ ] T006 Update `docs/reference/configuration.md`'s badge section
+- [x] T006 Update `docs/reference/configuration.md`'s badge section
   (currently states the shields.io endpoint form and brand colour) to
   state shieldcn.dev is now the default install-time badge offer, with
   shields.io offered as the fallback when the target README already
