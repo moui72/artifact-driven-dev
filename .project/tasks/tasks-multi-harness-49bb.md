@@ -89,7 +89,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   absolute-path forms over cwd-dependent invocations; any damage to a
   path outside `$SCRATCH` is reported immediately as an incident,
   never silently fixed. Prose-only — no test requirement.
-- [ ] T009 [parallel] Add to `skills/ardd-plan/SKILL.md` step 10 an
+- [x] T009 [parallel] Add to `skills/ardd-plan/SKILL.md` step 10 an
   explicit clause: the browser-preview question and the
   approve/revise/stop question are two separate, sequential prompts —
   never one AskUserQuestion — and a requested preview is published,
