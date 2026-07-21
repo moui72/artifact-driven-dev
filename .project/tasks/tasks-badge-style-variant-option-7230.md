@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: shieldcn template
-- [ ] T001 Create `templates/badge-shieldcn.md` mirroring `templates/badge.md`'s
+- [x] T001 Create `templates/badge-shieldcn.md` mirroring `templates/badge.md`'s
   three shapes (static, split-version, pair) using shieldcn.dev URLs
   instead of shields.io: static form
   `https://shieldcn.dev/badge/built%20with-ArDD-<labelColor>.svg` (mirror
@@ -27,7 +27,7 @@ status: in-progress
   selection rule, and invite consumers on other badge systems to submit new
   template designs upstream to the ArDD repo.
 
-- [ ] T002 [parallel] Update `templates/badge.md`'s header comment to note the
+- [x] T002 [parallel] Update `templates/badge.md`'s header comment to note the
   new shieldcn alternative at `templates/badge-shieldcn.md` and state that
   shieldcn is now the default offer, shields.io the fallback when the
   target README already carries non-ArDD shields.io badges.

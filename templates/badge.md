@@ -1,5 +1,14 @@
 <!-- Three badge shapes, all linking to the ArDD source repo.
 
+     A shieldcn.dev-rendered alternative to every shape below lives at
+     templates/badge-shieldcn.md. shieldcn is now install.sh's default
+     offer (this repo's own README uses shieldcn badges); this
+     shields.io form is the fallback, offered instead only when the
+     target README already carries a pre-existing, non-ArDD
+     img.shields.io badge — matching the repo's existing visual
+     language. Both ship in the ArDD source regardless of which one a
+     given install run selects.
+
      1. Static-only (below, ardd-badge-start markers): no workflow, no
         JSON — works everywhere, shows no version.
 
