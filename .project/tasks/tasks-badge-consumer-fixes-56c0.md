@@ -18,7 +18,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   placeholder residue. Confirm it FAILS against current install.sh
   (falls to placeholders). Land per the repo's documented red-first
   shell-test convention (document in the commit body).
-- [ ] T002 Generalize install.sh's badge-section remote parsing: any
+- [x] T002 Generalize install.sh's badge-section remote parsing: any
   remote matching `<token>:<path>` where `<token>` contains no `://`
   is scp-style — take `<path>`, strip a trailing `.git`, and read
   `<owner>/<repo>` from its last two segments, regardless of the host

@@ -596,14 +596,28 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       echo ""
     elif [ -z "$BADGE_FAMILY" ]; then
       # Coordinate fill (F002): derive OWNER/REPO from the target's own
-      # origin remote (https and SSH GitHub shapes) and BRANCH from HEAD
+      # origin remote (https and scp-style SSH shapes) and BRANCH from HEAD
       # (fallback main); on any parse failure keep the placeholders and
-      # print the replace-these instruction instead.
+      # print the replace-these instruction instead. Any `<token>:<path>`
+      # remote with no `://` is scp-style — the host token (git@github.com,
+      # an ssh-config alias like github-ardd, ...) is irrelevant to the
+      # coordinates; take <path>, strip a trailing .git, and read
+      # owner/repo from its last two segments.
       BADGE_COORDS=""
       BADGE_ORIGIN="$(git -C "$TARGET" remote get-url origin 2>/dev/null || true)"
       case "$BADGE_ORIGIN" in
         https://github.com/*/*) BADGE_COORDS="${BADGE_ORIGIN#https://github.com/}" ;;
-        git@github.com:*/*)     BADGE_COORDS="${BADGE_ORIGIN#git@github.com:}" ;;
+        *://*) ;;  # other URL schemes — keep placeholders
+        *:*/*)
+          badge_path="${BADGE_ORIGIN#*:}"
+          badge_path="${badge_path%.git}"
+          badge_repo="${badge_path##*/}"
+          badge_owner_path="${badge_path%/*}"
+          badge_owner="${badge_owner_path##*/}"
+          if [ -n "$badge_owner" ] && [ -n "$badge_repo" ]; then
+            BADGE_COORDS="$badge_owner/$badge_repo"
+          fi
+          ;;
       esac
       BADGE_COORDS="${BADGE_COORDS%.git}"
       case "$BADGE_COORDS" in
