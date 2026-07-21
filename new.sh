@@ -13,8 +13,8 @@
 # ~/.ardd/source either way, so both bases work even before the release
 # branch's first stable is cut.
 #
-# Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
-#        new.sh --existing [--kickoff|--no-kickoff] [--beta] [--source <path>] [<project-dir>]
+# Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--harness claude|codex] [--source <path>] <target-dir>
+#        new.sh --existing [--kickoff|--no-kickoff] [--beta] [--harness claude|codex] [--source <path>] [<project-dir>]
 #
 # This is an *acquisition* channel, nothing more. It resolves an ArDD source
 # checkout, prepares the target (creating a new one, or accepting an existing
@@ -66,11 +66,12 @@ source_arg=""
 target=""
 existing=0          # 1 = install into an existing, already-populated project
 channel="stable"    # stable | beta (--beta); recorded via $ARDD_CHANNEL
+harness=""          # claude | codex; absent prompts when a tty is available
 
 usage() {
   cat >&2 <<EOF
-Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
-       new.sh --existing [--kickoff|--no-kickoff] [--beta] [--source <path>] [<project-dir>]
+Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--harness claude|codex] [--source <path>] <target-dir>
+       new.sh --existing [--kickoff|--no-kickoff] [--beta] [--harness claude|codex] [--source <path>] [<project-dir>]
 
   --existing       Install ArDD into an existing, already-populated project
                    (<project-dir> defaults to the current directory). Without
@@ -86,6 +87,10 @@ Usage: new.sh [--kickoff|--no-kickoff] [--beta] [--source <path>] <target-dir>
                    *including* vX.Y.Z-beta.N prereleases (published on every
                    push to main), and record the channel for /ardd-update.
                    Default is stable — tagged full releases only.
+  --harness <name> Install for claude (.claude/skills, slash commands) or
+                   codex (.agents/skills, dollar-prefixed skills). If omitted
+                   and a terminal is available, new.sh asks; without a
+                   terminal it preserves the historical Claude default.
   --source <path>  Use an existing ArDD checkout (also settable as \$ARDD_SOURCE).
                    Read, never modified. Without it, ~/.ardd/source is cloned
                    and kept up to date.
@@ -108,6 +113,9 @@ while [ $# -gt 0 ]; do
     --source)     [ $# -ge 2 ] || usage; source_arg="$2"; shift 2 ;;
     --source=*)   source_arg="${1#--source=}"; shift ;;
     --beta)       channel="beta"; shift ;;
+    --harness)    [ $# -ge 2 ] || { echo "Error: --harness requires claude or codex" >&2; usage; }
+                  harness="$2"; shift 2 ;;
+    --harness=*)  harness="${1#--harness=}"; shift ;;
     --existing)   existing=1; shift ;;
     -h|--help)    usage ;;
     -*)           echo "Error: unknown option '$1'" >&2; usage ;;
@@ -122,6 +130,30 @@ done
 if [ -z "$target" ]; then
   [ "$existing" -eq 1 ] && target="." || usage
 fi
+
+# Actually open the tty rather than testing its permission bits: `[ -r /dev/tty ]`
+# passes on a CI runner with no controlling terminal, where the open then fails
+# with ENXIO. Only a real open answers "can I interact with a human here?"
+tty_ok() { (exec 3< /dev/tty) 2>/dev/null; }
+
+ask_harness() {
+  attempt=0
+  while [ "$attempt" -lt 3 ]; do
+    printf 'Install ArDD skills for which harness? [claude/codex] ' > /dev/tty
+    if ! IFS= read -r reply < /dev/tty; then
+      echo "" > /dev/tty
+      return 1   # EOF
+    fi
+    case "$reply" in
+      [Cc][Ll][Aa][Uu][Dd][Ee]) harness="claude"; return 0 ;;
+      [Cc][Oo][Dd][Ee][Xx])     harness="codex"; return 0 ;;
+      *) echo "Please answer claude or codex." > /dev/tty ;;
+    esac
+    attempt=$((attempt + 1))
+  done
+  echo "No clear answer after 3 tries — using Claude harness." > /dev/tty
+  return 1
+}
 
 # --- Validate the target, before touching the network -------------------
 # Cheap checks first: a typo'd target must not cost a clone of ~/.ardd/source.
@@ -157,6 +189,19 @@ elif [ -e "$target" ]; then
     exit 1
   fi
 fi
+
+if [ -z "$harness" ]; then
+  if tty_ok; then
+    ask_harness || harness="claude"
+  else
+    harness="claude"
+  fi
+fi
+
+case "$harness" in
+  claude|codex) ;;
+  *) echo "Error: --harness must be 'claude' or 'codex' (got '$harness')" >&2; usage ;;
+esac
 
 # --- Resolve the source checkout ---------------------------------------
 # An explicit --source/$ARDD_SOURCE is the user's checkout: verify, use as-is.
@@ -254,7 +299,7 @@ fi
 # view of install-time housekeeping. Relay it verbatim; never summarize.
 # $ARDD_CHANNEL tells it which channel to record in ardd-version.md.
 
-ARDD_CHANNEL="$channel" "$SRC/install.sh" "$TARGET"
+ARDD_CHANNEL="$channel" "$SRC/install.sh" --harness "$harness" "$TARGET"
 
 # --- Hand off to the first session -------------------------------------
 # Both new and existing projects initialize with /ardd-init — the skill
@@ -264,27 +309,42 @@ ARDD_CHANNEL="$channel" "$SRC/install.sh" "$TARGET"
 # never .project/artifacts/, so that dir's presence reliably distinguishes
 # an already-set-up project from a first install.
 if [ "$existing" -eq 1 ] && [ -d "$TARGET/.project/artifacts" ]; then
-  handoff_cmd="/ardd-status"
+  handoff_name="ardd-status"
 else
-  handoff_cmd="/ardd-init"
+  handoff_name="ardd-init"
 fi
+
+case "$harness" in
+  codex)
+    handoff_tool="codex"
+    handoff_tool_name="Codex"
+    handoff_cmd="\$$handoff_name"
+    ;;
+  *)
+    handoff_tool="claude"
+    handoff_tool_name="Claude Code"
+    handoff_cmd="/$handoff_name"
+    ;;
+esac
+
+print_handoff_command() {
+  case "$harness" in
+    codex) echo "  $handoff_tool '$handoff_cmd'" ;;
+    *)     echo "  $handoff_tool \"$handoff_cmd\"" ;;
+  esac
+}
 
 next_steps() { # $1 = optional reason line
   [ -n "$1" ] && echo "$1"
   echo "Start the first session with:"
   echo ""
   echo "  cd $target"
-  echo "  claude \"$handoff_cmd\""
+  print_handoff_command
   echo ""
 }
 
-# Actually open the tty rather than testing its permission bits: `[ -r /dev/tty ]`
-# passes on a CI runner with no controlling terminal, where the open then fails
-# with ENXIO. Only a real open answers "can I interact with a human here?"
-tty_ok() { (exec 3< /dev/tty) 2>/dev/null; }
-
 launch() {
-  echo "Opening Claude Code in $target — $handoff_cmd is your first step."
+  echo "Opening $handoff_tool_name in $target — $handoff_cmd is your first step."
   echo ""
   cd "$TARGET"
   # Do NOT redirect stdin here, even though under `curl | sh` it's the curl
@@ -294,7 +354,7 @@ launch() {
   # passes the check, so it uses that fd instead and silently accepts no
   # keystrokes; `<> /dev/tty` makes it exit outright. An EOF'd pipe on stdin is
   # the input it handles correctly.
-  exec claude "$handoff_cmd"
+  exec "$handoff_tool" "$handoff_cmd"
 }
 
 # Ask on /dev/tty — never stdin, which is the curl pipe. Bare Enter means yes.
@@ -304,7 +364,7 @@ launch() {
 ask_kickoff() {
   attempt=0
   while [ "$attempt" -lt 3 ]; do
-    printf 'Open Claude Code now and run %s? [Y/n] ' "$handoff_cmd" > /dev/tty
+    printf 'Open %s now and run %s? [Y/n] ' "$handoff_tool_name" "$handoff_cmd" > /dev/tty
     if ! IFS= read -r reply < /dev/tty; then
       echo "" > /dev/tty
       return 1   # EOF
@@ -329,8 +389,8 @@ if [ "$kickoff" = "0" ]; then
   exit 0
 fi
 
-if ! command -v claude >/dev/null 2>&1; then
-  next_steps "Claude Code isn't on your PATH, so I can't open the first session for you."
+if ! command -v "$handoff_tool" >/dev/null 2>&1; then
+  next_steps "$handoff_tool_name isn't on your PATH, so I can't open the first session for you."
   exit 0
 fi
 

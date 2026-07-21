@@ -102,7 +102,24 @@ proceeds.
    do with their own checkout. Never push, and never pull without
    explicit confirmation this run.
 
-4. **Reinstall.** Run `<source>/install.sh <this project's root>` and
+4. **Reinstall.** Preserve the installed harness. Read
+   `HARNESS=<claude|codex>` from
+   `.claude/skills/ardd-scripts/harness-capabilities.env` (installed
+   copy; if the file or line is missing, default to `claude` for
+   backwards compatibility with pre-harness installs).
+
+   Before running the installer, verify the selected source supports the
+   installed harness. If `HARNESS=codex` and `<source>/install.sh` does
+   not contain a `--harness` option, stop before reinstalling and tell
+   the user: the selected ArDD source predates Codex-harness support, so
+   this update cannot safely preserve the Codex install. Offer the safe
+   choices: switch to a newer/local ArDD source that contains
+   `install.sh --harness codex`, or wait for a release tag that carries
+   Codex support. Do not run the old installer as a fallback; it would
+   regenerate Claude-oriented `.claude/skills` output.
+
+   Otherwise, run
+   `<source>/install.sh --harness <harness> <this project's root>` and
    **relay its full output verbatim** — the migrations it applied and
    every suggestion it printed (badge snippet, gitignore guidance).
    These suggestions are the user's to accept or ignore; offer to apply
