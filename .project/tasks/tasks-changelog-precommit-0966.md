@@ -49,27 +49,27 @@ status: in-progress
   list) to mention the new step.
 
 ## Phase 2: Pre-commit scoping expansion
-- [ ] T005 [feature: pre-commit-hook-scoping-expans] In `hooks/pre-commit`,
+- [x] T005 [feature: pre-commit-hook-scoping-expans] In `hooks/pre-commit`,
   add `scripts/lint-templates-yaml.sh` to the `for check in scripts/lint-docs.sh
   scripts/lint-project.sh scripts/test-*.sh` loop (it currently only
   matches `test-*.sh` and the two named lints, so `lint-templates-yaml.sh`
   needs an explicit new entry in that `for` list), and add a
   `check_needed()` case for it: `staged_matches .github/workflows/
   templates/ "scripts/$check_base"`.
-- [ ] T006 [feature: pre-commit-hook-scoping-expans] [parallel] In
+- [x] T006 [feature: pre-commit-hook-scoping-expans] [parallel] In
   `hooks/pre-commit`'s `check_needed()`, add a case mapping
   `test-lint-project.sh` and `test-hook-lint-on-write.sh` to also run
   when `tests/fixtures/` is staged (in addition to their existing
   subjects) — extend their `staged_matches` calls to include
   `tests/fixtures/`.
-- [ ] T007 [feature: pre-commit-hook-scoping-expans] In `hooks/pre-commit`'s
+- [x] T007 [feature: pre-commit-hook-scoping-expans] In `hooks/pre-commit`'s
   top-level staged-path `case` statement (the `RUN_ALL` fail-safe loop),
   add `CLAUDE.md`, `dev-notes/*`, `tests/scenarios/*`, `mkdocs.yml`,
   `.gitignore`, and `.worktreeinclude` as recognized no-check paths
   (matched but producing no action, same as the existing `.project/*)
   ;;` branch) — so a commit touching only these paths no longer falls
   through to the `RUN_ALL=1` catch-all.
-- [ ] T008 [feature: pre-commit-hook-scoping-expans] In
+- [x] T008 [feature: pre-commit-hook-scoping-expans] In
   `scripts/test-hooks-pre-commit.sh`, add fixture cases pinning each new
   mapping from T005–T007: (a) staging a `.github/workflows/*.yml` or
   `templates/*` path runs `lint-templates-yaml.sh` but not the full

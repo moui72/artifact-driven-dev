@@ -39,6 +39,7 @@ fail=0
 # --- Case 1: all pass -> hook exits 0 ---
 stub lint-docs.sh 0
 stub lint-project.sh 0
+stub lint-templates-yaml.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 0
 stub test-completion-flip-check.sh 0
@@ -60,6 +61,7 @@ rm -f /tmp/hook-case1.out
 # --- Case 2: a mid-list script fails -> hook stops there and names it ---
 stub lint-docs.sh 0
 stub lint-project.sh 0
+stub lint-templates-yaml.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 1
 stub test-completion-flip-check.sh 0
@@ -84,6 +86,7 @@ fi
 rm -f "$WORK/ran-marker"
 stub lint-docs.sh 1
 stub lint-project.sh 0
+stub lint-templates-yaml.sh 0
 cat > "$WORK/scripts/test-lint-project.sh" <<EOF
 #!/usr/bin/env sh
 touch "$WORK/ran-marker"
@@ -113,6 +116,7 @@ fi
 # naming it.
 stub lint-docs.sh 0
 stub lint-project.sh 0
+stub lint-templates-yaml.sh 0
 stub test-lint-project.sh 0
 stub test-branch-info.sh 0
 stub test-completion-flip-check.sh 0
@@ -163,6 +167,20 @@ mstub test-new.sh
 printf '#!/usr/bin/env sh\n' > "$FIX/scripts/branch-info.sh"
 printf '#!/usr/bin/env sh\n' > "$FIX/new.sh"
 mkdir -p "$FIX/.project" "$FIX/.github"
+# T005-T007 subjects/stubs: needed here (not just before cases 10-13) so
+# the RUN_ALL fail-safe cases (7-9, below) also see them on disk. No
+# on-disk subject files needed for test-lint-project.sh/
+# test-hook-lint-on-write.sh — their check_needed cases use staged_matches
+# directly (dedicated case branches, not the generic test-X.sh rule), so
+# nothing checks for scripts/lint-project.sh or scripts/hook-lint-on-write.sh
+# on disk; writing plain stand-ins for them here would only risk clobbering
+# the mstub lint-project.sh marker above (scripts/lint-project.sh is both
+# a real check and, incidentally, that other subject's name).
+mstub lint-templates-yaml.sh
+mstub test-lint-project.sh
+mstub test-hook-lint-on-write.sh
+mkdir -p "$FIX/.github/workflows" "$FIX/templates" "$FIX/tests/fixtures" \
+  "$FIX/dev-notes" "$FIX/tests/scenarios"
 
 reset_markers() { rm -f "$FIX"/ran-*; ( cd "$FIX" && git reset -q ) ; }
 ran()  { [ -f "$FIX/ran-$1" ]; }
@@ -221,6 +239,88 @@ if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran tes
   echo "ok: ARDD_HOOK_ALL=1 overrides scoping and runs every check"
 else
   echo "FAIL: ARDD_HOOK_ALL=1 overrides scoping and runs every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# --- Cases 10-13: pre-commit scoping expansion (T005-T007, feature
+# pre-commit-hook-scoping-expans) — lint-templates-yaml.sh wired into the
+# check loop, tests/fixtures/ mapped to test-lint-project.sh +
+# test-hook-lint-on-write.sh, and a set of no-check subject paths that
+# nothing in the suite reads. (Subject files/stubs for these were added
+# to $FIX above, alongside the rest of the fixture bootstrap.)
+
+# Case 10 (a): staging a .github/workflows/*.yml or templates/* path runs
+# lint-templates-yaml.sh but not the full suite.
+reset_markers
+echo x > "$FIX/.github/workflows/x.yml"
+( cd "$FIX" && git add .github/workflows/x.yml )
+run_hook || true
+if ran lint-templates-yaml.sh && ! ran lint-docs.sh && ! ran test-branch-info.sh; then
+  echo "ok: staged .github/workflows/*.yml runs lint-templates-yaml.sh, not the full suite"
+else
+  echo "FAIL: staged .github/workflows/*.yml runs lint-templates-yaml.sh, not the full suite (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+reset_markers
+echo x > "$FIX/templates/x.yml"
+( cd "$FIX" && git add templates/x.yml )
+run_hook || true
+if ran lint-templates-yaml.sh && ! ran lint-docs.sh && ! ran test-branch-info.sh; then
+  echo "ok: staged templates/* runs lint-templates-yaml.sh, not the full suite"
+else
+  echo "FAIL: staged templates/* runs lint-templates-yaml.sh, not the full suite (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 11 (b): staging a tests/fixtures/* path runs test-lint-project.sh
+# and test-hook-lint-on-write.sh but not the full suite.
+reset_markers
+echo x > "$FIX/tests/fixtures/x"
+( cd "$FIX" && git add tests/fixtures/x )
+run_hook || true
+if ran test-lint-project.sh && ran test-hook-lint-on-write.sh && ! ran lint-docs.sh && ! ran test-branch-info.sh; then
+  echo "ok: staged tests/fixtures/* runs test-lint-project.sh + test-hook-lint-on-write.sh, not the full suite"
+else
+  echo "FAIL: staged tests/fixtures/* runs test-lint-project.sh + test-hook-lint-on-write.sh, not the full suite (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 12 (c): staging only a no-check-subject path runs no checks at all
+# (fast exit) — CLAUDE.md, dev-notes/*, tests/scenarios/*, mkdocs.yml,
+# .gitignore, .worktreeinclude.
+for no_check_path in CLAUDE.md dev-notes/x tests/scenarios/x mkdocs.yml .gitignore .worktreeinclude; do
+  reset_markers
+  # Content "no-check-content" rather than a bare "x" — a real .gitignore
+  # among these paths must not, as a side effect, gitignore every other
+  # fixture path literally named "x" used elsewhere in this file.
+  echo no-check-content > "$FIX/$no_check_path"
+  ( cd "$FIX" && git add "$no_check_path" )
+  run_hook || true
+  if ! ran lint-docs.sh && ! ran lint-project.sh && ! ran test-branch-info.sh \
+    && ! ran test-new.sh && ! ran lint-templates-yaml.sh \
+    && ! ran test-lint-project.sh && ! ran test-hook-lint-on-write.sh; then
+    echo "ok: staged $no_check_path runs no checks (fast exit)"
+  else
+    echo "FAIL: staged $no_check_path runs no checks (fast exit) (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+    fail=1
+  fi
+  # Undo any incidental effect of that path's own content before the next
+  # iteration/case (the .gitignore case is the one that matters).
+  rm -f "$FIX/$no_check_path"
+  ( cd "$FIX" && git reset -q ) 2>/dev/null || true
+done
+
+# Case 13 (d): an unmapped path still triggers RUN_ALL=1 (regression guard
+# for the fail-safe default) — reuses case 7's .github/x path, which is
+# NOT .github/workflows/ and stays unmapped.
+reset_markers
+echo x > "$FIX/.github/x"
+( cd "$FIX" && git add .github/x )
+run_hook || true
+if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
+  echo "ok: unmapped path still fail-safes to running every check"
+else
+  echo "FAIL: unmapped path still fail-safes to running every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
   fail=1
 fi
 

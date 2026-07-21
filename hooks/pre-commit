@@ -36,7 +36,11 @@ else
   # new.sh (test-new.sh), the install surface install.sh/templates/
   # migrations/skills (the test-install-*/test-merge-driver/
   # test-ardd-update-check family; skills/ also feeds lint-docs),
-  # hooks/ (test-hooks-pre-commit.sh), the check scripts themselves, and
+  # hooks/ (test-hooks-pre-commit.sh), .github/workflows/ (also templates/,
+  # lint-templates-yaml.sh), tests/fixtures/ (test-lint-project.sh +
+  # test-hook-lint-on-write.sh), the no-check subjects nothing in the suite
+  # reads (CLAUDE.md, dev-notes/*, tests/scenarios/*, mkdocs.yml,
+  # .gitignore, .worktreeinclude), the check scripts themselves, and
   # scripts/X.sh guarded by an existing scripts/test-X.sh (generic rule).
   old_ifs="$IFS"
   IFS='
@@ -47,7 +51,10 @@ else
       .project/*) ;;
       new.sh|install.sh|templates/*|migrations/*) ;;
       hooks/*) ;;
-      scripts/lint-docs.sh|scripts/lint-project.sh) ;;
+      .github/workflows/*) ;;
+      tests/fixtures/*) ;;
+      CLAUDE.md|dev-notes/*|tests/scenarios/*|mkdocs.yml|.gitignore|.worktreeinclude) ;;
+      scripts/lint-docs.sh|scripts/lint-project.sh|scripts/lint-templates-yaml.sh) ;;
       scripts/test-*.sh) ;;
       scripts/*.sh)
         staged_base="$(basename "$staged_path")"
@@ -96,6 +103,9 @@ check_needed() {
     lint-project.sh)
       staged_matches .project/ "scripts/$check_base"
       ;;
+    lint-templates-yaml.sh)
+      staged_matches .github/workflows/ templates/ "scripts/$check_base"
+      ;;
     test-new.sh)
       staged_matches new.sh "scripts/$check_base"
       ;;
@@ -104,6 +114,12 @@ check_needed() {
       ;;
     test-hooks-pre-commit.sh)
       staged_matches hooks/ "scripts/$check_base"
+      ;;
+    test-lint-project.sh)
+      staged_matches scripts/lint-project.sh tests/fixtures/ "scripts/$check_base"
+      ;;
+    test-hook-lint-on-write.sh)
+      staged_matches scripts/hook-lint-on-write.sh tests/fixtures/ "scripts/$check_base"
       ;;
     test-*.sh)
       subject="scripts/${check_base#test-}"
@@ -119,7 +135,7 @@ check_needed() {
   esac
 }
 
-for check in scripts/lint-docs.sh scripts/lint-project.sh scripts/test-*.sh; do
+for check in scripts/lint-docs.sh scripts/lint-project.sh scripts/lint-templates-yaml.sh scripts/test-*.sh; do
   if [ "$RUN_ALL" -ne 1 ] && ! check_needed "$check"; then
     continue
   fi
