@@ -8,7 +8,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: ssh-alias autodetect (F001, red-first)
 
-- [ ] T001 Add a red-first case to
+- [x] T001 Add a red-first case to
   `scripts/test-install-version-badge.sh`: fixture repo with remote
   `github-ardd:example-owner/example-repo.git` (scp-style ssh-config
   alias — no `://`, host token not `git@github.com`), README present,

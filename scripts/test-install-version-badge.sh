@@ -521,4 +521,36 @@ case "$out" in
     bad "case21: snippet endpoint URL carries example-owner/example-repo/master" ;;
 esac
 
+# --- Case 22: scp-style ssh-config ALIAS remote (feedback ea66 F001) —
+# `github-ardd:example-owner/example-repo.git` has no `://` and a host
+# token that isn't `git@github.com`, but the path part alone yields the
+# coordinates. The printed snippet's endpoint URL and the written workflow
+# must carry example-owner/example-repo and the real branch, with zero
+# placeholder residue. ---
+target="$(new_target case22)"
+git -C "$target" remote add origin github-ardd:example-owner/example-repo.git
+branch="$(git -C "$target" symbolic-ref --short HEAD)"
+out="$(run_install_badge_on "$target")"
+
+case "$out" in
+  *"example-owner/example-repo/$branch"*)
+    ok "case22: alias remote parsed to example-owner/example-repo/$branch" ;;
+  *)
+    bad "case22: alias remote parsed to example-owner/example-repo/$branch" ;;
+esac
+
+case "$out" in
+  *"OWNER/REPO/BRANCH"*)
+    bad "case22: no literal OWNER/REPO/BRANCH placeholder remains" ;;
+  *)
+    ok "case22: no literal OWNER/REPO/BRANCH placeholder remains" ;;
+esac
+
+if grep -qE "^[[:space:]]*branches:[[:space:]]*\[$branch\]" "$target/$WORKFLOW_REL"; then
+  ok "case22: written workflow branches filter carries $branch"
+else
+  bad "case22: written workflow branches filter carries $branch"
+  grep -n "branches" "$target/$WORKFLOW_REL" || true
+fi
+
 exit "$fail"
