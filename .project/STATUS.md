@@ -1,6 +1,6 @@
 # artifact-driven-dev — Project Status
 
-_Updated: 2026-07-21 (`/ardd-feedback` — logged
+_Updated: 2026-07-21 (/ardd-plan + /ardd-feedback — consumed feedback ea66 (both items accepted, planned): approved and tasked plan-badge-consumer-fixes-2026-07-21-1c50.md — 4 tasks/2 phases in tasks-badge-consumer-fixes-56c0.md (ready): red-first ssh-alias remote parse (scp-style <token>:<path> regardless of host token), confirm-with-diff README posture at the three badge prose sites, S9 alias-remote brief variant. Also logged feedback-plan-preview-prompts-a91e.md (open, 1 UX: preview and approval must be two sequential prompts, preview shown first — observed batched live) and backlogged plan-preview-editor-option (open-in-editor checkpoint option + configurable editor command). Prior update, same day, `/ardd-feedback` — logged
 `feedback-badge-consumer-feedback-ea66.md` (`open`, 1 bug + 1
 Reconsidered) from the first real consumer update to v1.0.3
 (yet-another-rank-games): F001 the badge coordinate autodetect misses
@@ -1807,10 +1807,7 @@ verify DEFECTS.md against the enlarged doc/workflow surface.
 
 ## Feedback
 
-1 open — `feedback-badge-consumer-feedback-ea66.md` (1 bug + 1
-Reconsidered: ssh-alias coordinate autodetect; badge README posture →
-confirm-with-diff), from the yarg v1.0.3 update; next `/ardd-plan`
-picks it up. Delivered 2026-07-20: `feedback-s9-badge-guards-b8b6.md` (3 UX,
+1 open — feedback-plan-preview-prompts-a91e.md (1 UX: plan-preview prompt sequencing). Delivered today: feedback-badge-consumer-feedback-ea66.md (planned, consumed by plan-badge-consumer-fixes-2026-07-21-1c50.md). Delivered 2026-07-20: `feedback-s9-badge-guards-b8b6.md` (3 UX,
 now `planned`, consumed by `plan-badge-guards-2026-07-20-8b60.md`);
 `feedback-badge-renderer-caveat-bf75.md`
 (1 UX) and `feedback-badge-workflow-yaml-ff0c.md` (1 bug + 3 UX) are
@@ -1923,10 +1920,7 @@ policy, and the badge drain).
 
 ## Recommended Next Step
 
-`/ardd-plan feedback-badge-consumer-feedback-ea66.md` to fix the
-ssh-alias autodetect and soften the badge README posture to a
-confirm-with-diff gate (then `/scenario-sweep S9` when the badge
-file-set changes again). v1.0.3 is Latest; also natural: `/ardd-update`
+/ardd-implement to execute tasks-badge-consumer-fixes-56c0.md (4 tasks — ssh-alias parse, confirm-with-diff posture, S9 alias variant), then /scenario-sweep S9 as the post-merge check. v1.0.3 is Latest; also natural: `/ardd-update`
 the remaining consumer repos; continue the codex-port worktree. Also
 standing: push `main` to publish the accumulated batch as
 the next beta, then dispatch `stable-release.yml` when ready;
