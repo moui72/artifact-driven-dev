@@ -1,5 +1,14 @@
 <!-- Three badge shapes, all linking to the ArDD source repo.
 
+     A shieldcn.dev-rendered alternative to every shape below lives at
+     templates/badge-shieldcn.md. shieldcn is now install.sh's default
+     offer (this repo's own README uses shieldcn badges); this
+     shields.io form is the fallback, offered instead only when the
+     target README already carries a pre-existing, non-ArDD
+     img.shields.io badge — matching the repo's existing visual
+     language. Both ship in the ArDD source regardless of which one a
+     given install run selects.
+
      1. Static-only (below, ardd-badge-start markers): no workflow, no
         JSON — works everywhere, shows no version.
 
@@ -27,7 +36,15 @@
      should OFFER to apply the edit: present the exact diff (the snippet
      with its markers, replacing any stale badge block) and ask before
      writing — a confirm-with-diff gate, never a refusal that waits for
-     an override. -->
+     an override.
+
+     Interim caveat (feedback-badge-style-clash-7db2.md#F001): this
+     shields.io-styled badge (flat, square) may visually clash with a
+     README that already uses shieldcn-based badges (rounded/themed
+     look) — e.g. a shieldcn sponsor badge sitting right above one of
+     these. If your README already has a shieldcn or otherwise
+     differently-styled badge, consider templates/badge-shieldcn.md
+     instead, or adapt this snippet's colours to match. -->
 
 <!-- ardd-badge-start -->
 [![built with ArDD](https://img.shields.io/badge/built%20with-ArDD-blue)](https://github.com/moui72/artifact-driven-dev)

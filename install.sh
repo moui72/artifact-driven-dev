@@ -695,6 +695,19 @@ if [ -f "$TARGET/README.md" ]; then
   fi
 fi
 
+# EXISTING_SHIELDS_IO detection (T003): does the target README already carry
+# a pre-existing, non-ArDD img.shields.io badge? Strip every ArDD marker
+# block first (start/end pairs across all three families) so ArDD's own
+# shields.io-rendered badge never counts as "existing" — only a badge the
+# target authored independently of ArDD should flip this to true.
+EXISTING_SHIELDS_IO=false
+if [ -f "$TARGET/README.md" ]; then
+  if sed -E '/<!-- ardd-badge(-version|-pair)?-start -->/,/<!-- ardd-badge(-version|-pair)?-end -->/d' "$TARGET/README.md" \
+     | grep -q 'img\.shields\.io'; then
+    EXISTING_SHIELDS_IO=true
+  fi
+fi
+
 if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
     echo ""
     BADGE_WORKFLOW="$TARGET/.github/workflows/ardd-badge.yml"
@@ -815,23 +828,39 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       esac
       BADGE_BRANCH="$(git -C "$TARGET" symbolic-ref --short HEAD 2>/dev/null || echo main)"
 
+      # T004: shieldcn.dev is the default offer; fall back to the shields.io
+      # form only when the target README already carries a pre-existing,
+      # non-ArDD shields.io badge (EXISTING_SHIELDS_IO, detected above) —
+      # matching the target's own existing visual language.
+      if [ "$EXISTING_SHIELDS_IO" = "true" ]; then
+        BADGE_TEMPLATE_SRC="$SCRIPT_DIR/templates/badge.md"
+        BADGE_STYLE_NOTE="offering the shields.io style: your README already has a shields.io badge, so this matches it"
+      else
+        BADGE_TEMPLATE_SRC="$SCRIPT_DIR/templates/badge-shieldcn.md"
+        BADGE_STYLE_NOTE="offering the shieldcn.dev style (ArDD's own default — see templates/badge-shieldcn.md in the ArDD source)"
+      fi
+
       echo ""
       echo "Optional: add the split \"built with ArDD │ version\" badge to your README — paste this snippet:"
-      echo "(one endpoint badge; both halves, brand colour, and mark all come from"
-      echo ".github/badges/ardd-version.json — a two-badge pair variant lives in the ArDD"
-      echo "source's templates/badge.md if you prefer separated marks)"
+      echo "($BADGE_STYLE_NOTE. One endpoint badge; both halves, brand colour, and mark all come"
+      echo "from .github/badges/ardd-version.json — a two-badge pair variant lives alongside this"
+      echo "template if you prefer separated marks)"
       echo ""
       if [ -n "$BADGE_COORDS" ]; then
-        sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" \
+        sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$BADGE_TEMPLATE_SRC" \
           | sed "s|OWNER/REPO/BRANCH|$BADGE_COORDS/$BADGE_BRANCH|" | sed 's/^/  /'
       else
-        sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+        sed -n '/<!-- ardd-badge-version-start -->/,/<!-- ardd-badge-version-end -->/p' "$BADGE_TEMPLATE_SRC" | sed 's/^/  /'
         echo ""
         echo "  (No GitHub origin remote found — replace OWNER/REPO/BRANCH with your repo's coordinates before pasting.)"
       fi
       echo ""
-      echo "  Note: the version badge renders only for public repos — shields.io fetches"
+      echo "  Note: the version badge renders only for public repos — the endpoint fetches"
       echo "  raw.githubusercontent.com unauthenticated."
+      echo ""
+      echo "  Before pasting: adapt the snippet's variant/theme (or shields.io colour) query"
+      echo "  params to match whatever badge styling is already visible in your README (e.g."
+      echo "  variant=secondary&theme=pink) rather than pasting the shipped defaults unexamined."
       echo ""
       echo "  Suggestion only — this script never edits your README. An agent relaying"
       echo "  this should offer the edit: show the exact diff and ask before writing."
@@ -845,15 +874,34 @@ elif [ -f "$TARGET/README.md" ] && [ -n "$BADGE_FAMILY" ]; then
     echo ""
     echo "  README is already badged via $BADGE_FAMILY markers — nothing to add."
 elif [ -f "$TARGET/README.md" ]; then
+    # T005: same EXISTING_SHIELDS_IO selection rule as the version-badge
+    # print site above — shieldcn.dev by default, shields.io fallback when
+    # the target README already carries a pre-existing, non-ArDD
+    # shields.io badge.
+    if [ "$EXISTING_SHIELDS_IO" = "true" ]; then
+      BADGE_TEMPLATE_SRC="$SCRIPT_DIR/templates/badge.md"
+      BADGE_STYLE_NOTE="offering the shields.io style: your README already has a shields.io badge, so this matches it"
+    else
+      BADGE_TEMPLATE_SRC="$SCRIPT_DIR/templates/badge-shieldcn.md"
+      BADGE_STYLE_NOTE="offering the shieldcn.dev style (ArDD's own default — see templates/badge-shieldcn.md in the ArDD source)"
+    fi
     echo ""
     echo "Optional: add a \"built with ArDD\" badge to your README — paste this snippet:"
+    echo "($BADGE_STYLE_NOTE)"
     echo ""
-    sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$SCRIPT_DIR/templates/badge.md" | sed 's/^/  /'
+    sed -n '/<!-- ardd-badge-start -->/,/<!-- ardd-badge-end -->/p' "$BADGE_TEMPLATE_SRC" | sed 's/^/  /'
     echo ""
     echo "  Prefer a badge showing the installed ArDD version? Re-run with ARDD_VERSION_BADGE=1 ./install.sh to get the dynamic split version badge."
     echo ""
+    echo "  Before pasting: adapt the snippet's variant/theme (or shields.io colour) query"
+    echo "  params to match whatever badge styling is already visible in your README rather"
+    echo "  than pasting the shipped defaults unexamined."
+    echo ""
     echo "  Suggestion only — this script never edits your README. An agent relaying"
     echo "  this should offer the edit: show the exact diff and ask before writing."
+    echo ""
+    echo "  Using a different badge system than shields.io/shieldcn? Submit a new template"
+    echo "  design upstream to the ArDD repo (templates/) rather than hand-rolling one here."
     echo ""
 else
     # F001: no README yet (a fresh new.sh project) — the opt-in would

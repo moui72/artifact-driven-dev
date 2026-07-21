@@ -134,6 +134,23 @@ endpoint badge reading "built with ArDD │ vX.Y.Z" whose JSON supplies
 both halves; `templates/badge.md` documents all three shapes
 (static-only, split, two-badge pair) and the renderer caveats.
 
+**shieldcn.dev is the default badge offer; shields.io is the fallback.**
+install.sh detects whether the target README already carries a
+pre-existing, non-ArDD `img.shields.io` badge outside ArDD's own marker
+blocks (`EXISTING_SHIELDS_IO`). If it doesn't, every print site (both the
+static-only snippet and the `ARDD_VERSION_BADGE=1` split snippet) offers
+the shieldcn.dev-rendered form from `templates/badge-shieldcn.md` — ArDD's
+own README uses shieldcn badges, so that's the house style. If the target
+already has a non-ArDD shields.io badge, install.sh falls back to
+`templates/badge.md`'s shields.io form instead, matching the target's
+existing visual language rather than introducing a second one. Both
+templates ship in the ArDD source regardless of which one a given run
+selects; the printed advisory also invites hand-adapting the offered
+snippet's `variant`/`theme` (shieldcn) or colour (shields.io) query
+params to whatever styling is already visible in the target README.
+Using a different badge system entirely? Submit a new template design
+upstream to the ArDD repo (`templates/`) rather than hand-rolling one.
+
 ## Related per-clone git opt-ins (not frontmatter)
 
 Two settings git refuses to take from a repo commit, suggested by

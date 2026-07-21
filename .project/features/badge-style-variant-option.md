@@ -1,6 +1,6 @@
 ---
 slug: badge-style-variant-option
-status: tasked
+status: implemented
 logged: 2026-07-21
 plan: plan-badge-style-variant-option-2026-07-21-982c.md
 tasks: tasks-badge-style-variant-option-7230.md
