@@ -146,7 +146,12 @@ proceeds.
    ("built with ArDD │ vX.Y.Z") whose JSON, kept in sync with
    `.project/ardd-version.md` by a small workflow, supplies both halves,
    the brand colour, and the icon (note the
-   caveat: it renders only for public repos). On yes, re-run the exact
+   caveat: it renders only for public repos, and — interim caveat,
+   feedback-badge-style-clash-7db2.md#F001 — this offer is currently
+   shields.io-styled, which may visually clash with a README that
+   already uses shieldcn-based badges; a shieldcn-rendered alternative
+   lives at `templates/badge-shieldcn.md` in the ArDD source if the
+   target's existing badges are shieldcn-styled). On yes, re-run the exact
    same `install.sh` invocation with `ARDD_VERSION_BADGE=1` set in its
    environment — the env var is the mechanism, this offer is the
    interface — and relay the newly printed snippet and caveats verbatim.

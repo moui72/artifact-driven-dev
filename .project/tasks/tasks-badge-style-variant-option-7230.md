@@ -1,7 +1,7 @@
 ---
 plan: plan-badge-style-variant-option-2026-07-21-982c.md
 generated: 2026-07-21
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -87,7 +87,7 @@ status: in-progress
   Depends on: T004.
 
 ## Phase 0: interim caveat (independent of the phases above; ships on its own)
-- [ ] T010 [feedback: feedback-badge-style-clash-7db2.md#F001] [parallel]
+- [x] T010 [feedback: feedback-badge-style-clash-7db2.md#F001] [parallel]
   Add an interim caveat, in the *current* (pre-shieldcn-default) offer
   text — `skills/ardd-update/SKILL.md`'s badge-offer relay step and/or
   `templates/badge.md`'s printed snippet advisory — noting the offered

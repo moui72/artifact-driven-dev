@@ -36,7 +36,15 @@
      should OFFER to apply the edit: present the exact diff (the snippet
      with its markers, replacing any stale badge block) and ask before
      writing — a confirm-with-diff gate, never a refusal that waits for
-     an override. -->
+     an override.
+
+     Interim caveat (feedback-badge-style-clash-7db2.md#F001): this
+     shields.io-styled badge (flat, square) may visually clash with a
+     README that already uses shieldcn-based badges (rounded/themed
+     look) — e.g. a shieldcn sponsor badge sitting right above one of
+     these. If your README already has a shieldcn or otherwise
+     differently-styled badge, consider templates/badge-shieldcn.md
+     instead, or adapt this snippet's colours to match. -->
 
 <!-- ardd-badge-start -->
 [![built with ArDD](https://img.shields.io/badge/built%20with-ArDD-blue)](https://github.com/moui72/artifact-driven-dev)
