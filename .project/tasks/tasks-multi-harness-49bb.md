@@ -103,7 +103,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   fixture repo — so the reverse-engineer path is exercised without
   ad-hoc `rm -rf`. Brief edit only — validated by the next sweep run,
   never mid-sweep.
-- [ ] T011 [parallel] Add to `tests/scenarios/S7.md` setup a one-line
+- [x] T011 [parallel] Add to `tests/scenarios/S7.md` setup a one-line
   post-install check that the `.project/README.md` reviewer guide is
   present and coherent (878c F005 / graduation G2). Brief edit only.
 - [ ] T012 [parallel] Add the collaborative-mode scaffold note to
