@@ -7,6 +7,13 @@
 
 set -e
 
+# This test runs *inside* the real pre-commit hook, where git exports
+# GIT_INDEX_FILE/GIT_DIR/... pointing at the real repository — without this
+# unset, the routing fixture's git init/add/reset below would mutate the
+# real index mid-commit (learned the hard way: a fixture .project/x.md got
+# committed in place of the intended changes).
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_OBJECT_DIRECTORY
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 HOOK_SRC="$REPO_DIR/hooks/pre-commit"
