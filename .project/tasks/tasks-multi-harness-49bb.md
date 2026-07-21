@@ -95,7 +95,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   never one AskUserQuestion — and a requested preview is published,
   opened, and its URL shown before the approval question fires.
   Prose-only — no test requirement.
-- [ ] T010 [parallel] Fix scenario S2's cold-fixture premise
+- [x] T010 [parallel] Fix scenario S2's cold-fixture premise
   (`tests/scenarios/S2.md`): name/prepare a genuinely never-ArDD clone
   source — either a cleanup step cleansing the daily-huddle clone of
   committed ArDD state (`.project/`, `.ardd-applied`, old
