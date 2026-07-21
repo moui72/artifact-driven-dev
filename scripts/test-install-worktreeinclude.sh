@@ -289,12 +289,13 @@ else
   bad "case4: CLI cache dir not written through"
 fi
 
-# --- Case 5: harness switch prunes the other harness's pattern ---
-# A Claude->codex (or codex->Claude) re-install must leave exactly ONE ardd
-# worktreeinclude pattern — the active harness's — and never a stale line
-# from the previous harness, while preserving the user's own lines. Guards
-# the R5 regression (2026-07-21 sweep rg02): a switch used to append the new
-# pattern without removing the old one.
+# --- Case 5: installed-set patterns — dual keeps both, never duplicates ---
+# Dual installs are first-class (constitution, 2026-07-21): a second
+# harness's install adds its own bounded pattern and KEEPS the sibling's
+# (the recorded Harnesses: set is a union, and both skill trees coexist),
+# while preserving the user's own lines and never duplicating a pattern.
+# Supersedes the old switch-prunes expectation (R5): pruning applies only
+# to a harness absent from the installed set, which a union never drops.
 CODEX_PATTERN=".agents/skills/ardd-*/"
 run_install_codex() {
   ( cd "$REPO_ROOT" && sh "$INSTALL_SH" --harness codex "$1" ) >/dev/null
@@ -318,31 +319,31 @@ else
   bad "case5: fresh claude install -> only the claude pattern"
 fi
 
-run_install_codex "$target"    # 2) switch to codex
-if [ "$(codex_pattern_count "$wti")" = "1" ] && [ "$(pattern_count "$wti")" = "0" ]; then
-  ok "case5: switch to codex prunes the stale claude pattern"
+run_install_codex "$target"    # 2) add codex — dual set now
+if [ "$(codex_pattern_count "$wti")" = "1" ] && [ "$(pattern_count "$wti")" = "1" ]; then
+  ok "case5: adding codex keeps the claude pattern (dual set)"
 else
-  bad "case5: switch to codex prunes the stale claude pattern (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
+  bad "case5: adding codex keeps the claude pattern (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
 fi
 
 run_install_codex "$target"    # 3) idempotent codex re-install
-if [ "$(codex_pattern_count "$wti")" = "1" ]; then
-  ok "case5: codex re-install stays exactly one codex pattern"
+if [ "$(codex_pattern_count "$wti")" = "1" ] && [ "$(pattern_count "$wti")" = "1" ]; then
+  ok "case5: codex re-install stays exactly one pattern per installed harness"
 else
-  bad "case5: codex re-install stays exactly one codex pattern (got $(codex_pattern_count "$wti"))"
+  bad "case5: codex re-install stays exactly one pattern per installed harness (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
 fi
 
-run_install "$target"          # 4) switch back to claude
-if [ "$(pattern_count "$wti")" = "1" ] && [ "$(codex_pattern_count "$wti")" = "0" ]; then
-  ok "case5: switch back to claude prunes the stale codex pattern"
+run_install "$target"          # 4) claude re-install on the dual set
+if [ "$(pattern_count "$wti")" = "1" ] && [ "$(codex_pattern_count "$wti")" = "1" ]; then
+  ok "case5: claude re-install keeps the codex pattern (dual set)"
 else
-  bad "case5: switch back to claude prunes the stale codex pattern (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
+  bad "case5: claude re-install keeps the codex pattern (claude=$(pattern_count "$wti") codex=$(codex_pattern_count "$wti"))"
 fi
 
 if grep -qxF "docs/local/" "$wti" && grep -qxF "# my own include" "$wti"; then
-  ok "case5: user's own lines preserved across every switch"
+  ok "case5: user's own lines preserved across every install"
 else
-  bad "case5: user's own lines preserved across every switch"
+  bad "case5: user's own lines preserved across every install"
 fi
 
 exit "$fail"

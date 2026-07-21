@@ -200,21 +200,45 @@ git init -q "$target"
 git -C "$target" commit -q --allow-empty -m init
 
 run_install "$target" >/dev/null
-run_install "$target" --harness codex >/dev/null
+out="$(run_install "$target" --harness codex)"
 
 [ -f "$target/.claude/skills/ardd-init/SKILL.md" ] \
   && [ -f "$target/.agents/skills/ardd-init/SKILL.md" ] \
   && ok "switch claude->codex: both generated skill trees can coexist" \
   || bad "switch claude->codex: both generated skill trees can coexist"
 
+# Bounded gitignore guidance covers each installed harness root — both
+# ardd-* patterns, never a broader parent (Principle III ceiling).
+case "$out" in
+  *".agents/skills/ardd-*/"*)
+    case "$out" in
+      *".claude/skills/ardd-*/"*)
+        ok "dual claude->codex: gitignore suggestion names both bounded patterns" ;;
+      *)
+        bad "dual claude->codex: gitignore suggestion names both bounded patterns" ;;
+    esac ;;
+  *) bad "dual claude->codex: gitignore suggestion names both bounded patterns" ;;
+esac
+
 grep -qxF '.agents/skills/ardd-*/' "$target/.worktreeinclude" \
   && ok "switch claude->codex: .worktreeinclude keeps Codex pattern" \
   || bad "switch claude->codex: .worktreeinclude keeps Codex pattern"
 
+# Dual installs are first-class (constitution, 2026-07-21): both trees
+# coexist, so the sibling harness's bounded pattern stays — never pruned.
 if grep -qxF '.claude/skills/ardd-*/' "$target/.worktreeinclude"; then
-  bad "switch claude->codex: .worktreeinclude prunes stale Claude pattern"
+  ok "dual claude->codex: .worktreeinclude keeps installed Claude pattern"
 else
-  ok "switch claude->codex: .worktreeinclude prunes stale Claude pattern"
+  bad "dual claude->codex: .worktreeinclude keeps installed Claude pattern"
+fi
+
+# Reviewer guide lists every installed harness root, never just the
+# invoking harness's.
+if grep -q '\.agents/skills' "$target/.project/README.md" \
+   && grep -q '\.claude/skills' "$target/.project/README.md"; then
+  ok "dual claude->codex: reviewer guide lists both harness roots"
+else
+  bad "dual claude->codex: reviewer guide lists both harness roots"
 fi
 
 target="$WORK/switch-codex-claude"
@@ -235,9 +259,16 @@ grep -qxF '.claude/skills/ardd-*/' "$target/.worktreeinclude" \
   || bad "switch codex->claude: .worktreeinclude keeps Claude pattern"
 
 if grep -qxF '.agents/skills/ardd-*/' "$target/.worktreeinclude"; then
-  bad "switch codex->claude: .worktreeinclude prunes stale Codex pattern"
+  ok "dual codex->claude: .worktreeinclude keeps installed Codex pattern"
 else
-  ok "switch codex->claude: .worktreeinclude prunes stale Codex pattern"
+  bad "dual codex->claude: .worktreeinclude keeps installed Codex pattern"
+fi
+
+if grep -q '\.agents/skills' "$target/.project/README.md" \
+   && grep -q '\.claude/skills' "$target/.project/README.md"; then
+  ok "dual codex->claude: reviewer guide lists both harness roots"
+else
+  bad "dual codex->claude: reviewer guide lists both harness roots"
 fi
 
 # --- Case 5: Harnesses: union metadata (multi-harness-install-metadata) ---
