@@ -1,6 +1,6 @@
 ---
 slug: multi-harness-install-metadata
-status: tasked
+status: implemented
 logged: 2026-07-21
 plan: plan-multi-harness-2026-07-21-76ba.md
 tasks: tasks-multi-harness-49bb.md

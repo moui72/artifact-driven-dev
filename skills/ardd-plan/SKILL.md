@@ -485,6 +485,13 @@ drafts or writes a plan.
     targets the same artifact URL, so the preview always reflects the
     latest draft.
 
+    The browser-preview question and the approve/revise/stop question
+    below are **two separate, sequential prompts** — never combined
+    into one `AskUserQuestion`. Sequencing is strict: when the user
+    asks for a preview, the plan is published, opened, and its URL
+    shown **before** the approval question fires — the user must be
+    able to read the preview before being asked to decide on it.
+
     Then **pause and ask which of three the user wants** (use `AskUserQuestion`):
 
     - **Approve** — proceed to step 11: approve the plan and generate its

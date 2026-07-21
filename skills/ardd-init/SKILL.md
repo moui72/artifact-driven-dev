@@ -398,6 +398,13 @@ with `/ardd-refine` before planning new work.
    using the structure below. STATUS.md changes frequently; WORKFLOW.md
    does not.
 
+   Collaborative-mode note (`workflow_mode: collaborative` was chosen in
+   step 5): leave the `.project/` scaffold this run wrote **uncommitted**
+   on the default branch (or move it straight to a branch) —
+   `/ardd-plan`'s branch gate carries it onto the work branch.
+   Committing it to the local default branch violates the mode's
+   nothing-lands-on-local-default rule.
+
 9. **Capture newly documented capabilities — both paths.** The
    just-written artifacts may describe capabilities that don't exist yet
    and aren't tracked anywhere — documented scope that would otherwise

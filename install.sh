@@ -67,14 +67,43 @@ if [ ! -d "$TARGET" ]; then
   exit 1
 fi
 
+# Installed harness *set* (multi-harness-install-metadata): union the
+# invoking harness into any previously recorded Harnesses: line —
+# preserve-on-reinstall, never last-writer-wins. Absent line in an
+# existing file parses as claude (old files predate the field); the set
+# is order-normalized (sorted, comma-separated) so both install orders
+# converge on the same record. Computed up front because the
+# .worktreeinclude, reviewer-guide, and gitignore-suggestion steps below
+# all speak for every installed harness, not just the invoking one.
+PREV_HARNESSES=""
+if [ -f "$VERSION_FILE" ]; then
+  PREV_HARNESSES="$(sed -n 's/^Harnesses: //p' "$VERSION_FILE" | head -1)"
+  [ -n "$PREV_HARNESSES" ] || PREV_HARNESSES="claude"
+fi
+HARNESSES="$(printf '%s,%s' "$PREV_HARNESSES" "$HARNESS" \
+  | tr ',' '\n' | grep -v '^$' | sort -u | paste -sd, -)"
+
+# Per-harness bounded skill roots for the installed set (Principle III:
+# these ardd-*/ patterns are the permanent ceiling — never a broader
+# parent).
+harness_root() { # $1=harness -> its skills dir, empty for unknown
+  case "$1" in
+    claude) echo ".claude/skills" ;;
+    codex)  echo ".agents/skills" ;;
+  esac
+}
+
 # Release channel this install records (two-channel decision, v1.8.0).
-# $ARDD_CHANNEL (set by new.sh --beta, or a deliberate channel switch)
+# $ARDD_CHANNEL (set by new.sh --beta, a deliberate channel switch, or
+# /ardd-update passing through source-resolve.sh's channel=dev verdict)
 # wins; otherwise the target's previously recorded channel is preserved;
 # otherwise stable. Validated before anything is written — an unknown
-# channel is a refusal, not a guess.
+# channel is a refusal, not a guess. `dev` marks a live-checkout install:
+# it records Channel: dev and drops any stale Source-Ref (878c F002) —
+# a dev install has no release identity to claim.
 case "${ARDD_CHANNEL:-}" in
-  ""|stable|beta) ;;
-  *) echo "Error: ARDD_CHANNEL must be 'stable' or 'beta' (got '$ARDD_CHANNEL')." >&2
+  ""|stable|beta|dev) ;;
+  *) echo "Error: ARDD_CHANNEL must be 'stable', 'beta', or 'dev' (got '$ARDD_CHANNEL')." >&2
      exit 1 ;;
 esac
 
@@ -356,35 +385,47 @@ echo "  ✓ ardd-scripts/harness-capabilities.env"
 # suggestion.
 WORKTREEINCLUDE="$TARGET/.worktreeinclude"
 WORKTREEINCLUDE_COMMENT="# ArDD: copy installed skills/scripts into new worktrees (added by install.sh)"
-WORKTREEINCLUDE_PATTERN="$SKILLS_REL/ardd-*/"
 
-if [ ! -f "$WORKTREEINCLUDE" ]; then
-  printf '%s\n%s\n' "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE_PATTERN" > "$WORKTREEINCLUDE"
-  echo "  ✓ .worktreeinclude created ($WORKTREEINCLUDE_PATTERN)"
-else
+# One bounded pattern per *installed* harness (the Harnesses: union set) —
+# dual installs keep both; a pattern is pruned only when its harness is
+# absent from the set (a stale line from before the set existed).
+wti_keep_claude=0
+wti_keep_codex=0
+case ",$HARNESSES," in *,claude,*) wti_keep_claude=1 ;; esac
+case ",$HARNESSES," in *,codex,*)  wti_keep_codex=1 ;; esac
+
+if [ -f "$WORKTREEINCLUDE" ]; then
   tmp_worktreeinclude="$WORKTREEINCLUDE.tmp.$$"
-  awk -v keep="$WORKTREEINCLUDE_PATTERN" '
-    $0 == ".claude/skills/ardd-*/" && $0 != keep { next }
-    $0 == ".agents/skills/ardd-*/" && $0 != keep { next }
+  awk -v keepc="$wti_keep_claude" -v keepx="$wti_keep_codex" '
+    $0 == ".claude/skills/ardd-*/" && keepc != 1 { next }
+    $0 == ".agents/skills/ardd-*/" && keepx != 1 { next }
     { print }
   ' "$WORKTREEINCLUDE" > "$tmp_worktreeinclude"
   mv "$tmp_worktreeinclude" "$WORKTREEINCLUDE"
 fi
 
-if grep -qxF "$WORKTREEINCLUDE_PATTERN" "$WORKTREEINCLUDE"; then
-  echo "  – .worktreeinclude already contains $WORKTREEINCLUDE_PATTERN"
-else
-  # Guard against a missing trailing newline in the existing file gluing our
-  # appended line onto its last line.
-  if [ -s "$WORKTREEINCLUDE" ] && [ -n "$(tail -c1 "$WORKTREEINCLUDE")" ]; then
-    printf '\n' >> "$WORKTREEINCLUDE"
+for wti_harness in $(printf '%s' "$HARNESSES" | tr ',' ' '); do
+  wti_root="$(harness_root "$wti_harness")"
+  [ -n "$wti_root" ] || continue
+  WORKTREEINCLUDE_PATTERN="$wti_root/ardd-*/"
+  if [ ! -f "$WORKTREEINCLUDE" ]; then
+    printf '%s\n%s\n' "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE_PATTERN" > "$WORKTREEINCLUDE"
+    echo "  ✓ .worktreeinclude created ($WORKTREEINCLUDE_PATTERN)"
+  elif grep -qxF "$WORKTREEINCLUDE_PATTERN" "$WORKTREEINCLUDE"; then
+    echo "  – .worktreeinclude already contains $WORKTREEINCLUDE_PATTERN"
+  else
+    # Guard against a missing trailing newline in the existing file gluing
+    # our appended line onto its last line.
+    if [ -s "$WORKTREEINCLUDE" ] && [ -n "$(tail -c1 "$WORKTREEINCLUDE")" ]; then
+      printf '\n' >> "$WORKTREEINCLUDE"
+    fi
+    if ! grep -qxF "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE"; then
+      printf '%s\n' "$WORKTREEINCLUDE_COMMENT" >> "$WORKTREEINCLUDE"
+    fi
+    printf '%s\n' "$WORKTREEINCLUDE_PATTERN" >> "$WORKTREEINCLUDE"
+    echo "  ✓ .worktreeinclude appended ($WORKTREEINCLUDE_PATTERN)"
   fi
-  if ! grep -qxF "$WORKTREEINCLUDE_COMMENT" "$WORKTREEINCLUDE"; then
-    printf '%s\n' "$WORKTREEINCLUDE_COMMENT" >> "$WORKTREEINCLUDE"
-  fi
-  printf '%s\n' "$WORKTREEINCLUDE_PATTERN" >> "$WORKTREEINCLUDE"
-  echo "  ✓ .worktreeinclude appended ($WORKTREEINCLUDE_PATTERN)"
-fi
+done
 
 # --- Merge attributes for single-writer report files ---
 # The four generated report files (STATUS.md, DEFECTS.md, TRACKER.md,
@@ -520,7 +561,7 @@ PREV_CHANNEL=""
 [ -f "$VERSION_FILE" ] && PREV_CHANNEL="$(sed -n 's/^Channel: //p' "$VERSION_FILE" | head -1)"
 CHANNEL="${ARDD_CHANNEL:-$PREV_CHANNEL}"
 case "$CHANNEL" in
-  stable|beta) ;;
+  stable|beta|dev) ;;
   *)
     case "$SOURCE_REF" in
       *-beta.*) CHANNEL=beta ;;
@@ -528,6 +569,15 @@ case "$CHANNEL" in
     esac
     ;;
 esac
+# Dev-mode installs have no release identity: never record a Source-Ref
+# (even when the checkout incidentally sits at a tag), and never leave a
+# stale one from a previous stable/beta install (878c F002).
+if [ "$CHANNEL" = "dev" ]; then
+  SOURCE_REF=""
+  SOURCE_REF_LINE=""
+fi
+# (Harnesses: union set computed up front, right after the harness case —
+# the .worktreeinclude/guide/gitignore steps above already used it.)
 # Record Source-Path portably: when the source checkout sits under $HOME,
 # write it home-relative (~/<rest>) so the committed file carries no
 # machine-specific absolute path (readers — source-resolve.sh,
@@ -565,6 +615,7 @@ _Source: artifact-driven-dev @ $COMMIT · Installed/updated ${DATE}_
 Source-Path: $SOURCE_PATH_RECORD
 $SOURCE_COMMIT_LINE${SOURCE_REF_LINE}Channel: $CHANNEL
 Harness: $HARNESS
+Harnesses: $HARNESSES
 
 This file is committed so the project's history shows which ArDD skill
 version was active at any point. \`$SKILLS_REL/\` is regenerated by
@@ -579,7 +630,24 @@ echo "  ✓ .project/ardd-version.md ($COMMIT)"
 # --- .project/README.md reviewer guide: install.sh-owned, overwritten on
 # every install (like ardd-version.md) — how to read .project/ for
 # downstream reviewers. Source of truth: templates/dot-project-readme.md.
-sed "s|\\.claude/skills|$SKILLS_REL|g" \
+# The guide speaks for every installed harness root (the Harnesses: set),
+# not just the invoking one: the template's __ARDD_SKILL_ROOTS__ /
+# __ARDD_SKILL_PATTERNS__ tokens are filled with the full set. The path
+# rewrite for any remaining literal .claude/skills prose runs first, so
+# the substituted set text is never itself rewritten.
+GUIDE_ROOTS=""
+GUIDE_PATTERNS=""
+for guide_harness in $(printf '%s' "$HARNESSES" | tr ',' ' '); do
+  guide_root="$(harness_root "$guide_harness")"
+  [ -n "$guide_root" ] || continue
+  [ -n "$GUIDE_ROOTS" ] && GUIDE_ROOTS="$GUIDE_ROOTS and "
+  GUIDE_ROOTS="$GUIDE_ROOTS\`$guide_root/\`"
+  [ -n "$GUIDE_PATTERNS" ] && GUIDE_PATTERNS="$GUIDE_PATTERNS, "
+  GUIDE_PATTERNS="$GUIDE_PATTERNS\`$guide_root/ardd-*/\`"
+done
+sed -e "s|\\.claude/skills|$SKILLS_REL|g" \
+    -e "s|__ARDD_SKILL_ROOTS__|$GUIDE_ROOTS|g" \
+    -e "s|__ARDD_SKILL_PATTERNS__|$GUIDE_PATTERNS|g" \
   "$SCRIPT_DIR/templates/dot-project-readme.md" > "$TARGET/.project/README.md"
 echo "  ✓ .project/README.md (reviewer guide)"
 
@@ -876,7 +944,14 @@ if [ -n "$target_toplevel" ] && [ "$target_toplevel" = "$target_abs" ]; then
     echo "this pattern to .gitignore (never blanket the whole harness directory"
     echo "or its skills directory — both can hold real project content):"
     echo ""
-    echo "  $SKILLS_REL/ardd-*/"
+    # One bounded pattern per installed harness (the Harnesses: set) —
+    # a dual install suggests both ardd-*/ patterns, never a broader
+    # parent (Principle III ceiling).
+    for gi_harness in $(printf '%s' "$HARNESSES" | tr ',' ' '); do
+      gi_root="$(harness_root "$gi_harness")"
+      [ -n "$gi_root" ] || continue
+      echo "  $gi_root/ardd-*/"
+    done
 
     if [ "$tracked_ardd" -eq 1 ]; then
       echo ""

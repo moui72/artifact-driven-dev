@@ -7,6 +7,13 @@
 
 set -e
 
+# This test runs *inside* the real pre-commit hook, where git exports
+# GIT_INDEX_FILE/GIT_DIR/... pointing at the real repository — without this
+# unset, the routing fixture's git init/add/reset below would mutate the
+# real index mid-commit (learned the hard way: a fixture .project/x.md got
+# committed in place of the intended changes).
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX GIT_OBJECT_DIRECTORY
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 HOOK_SRC="$REPO_DIR/hooks/pre-commit"
@@ -125,6 +132,96 @@ elif ! printf '%s' "$out" | grep -q "test-zzz-brand-new.sh"; then
   fail=1
 else
   echo "ok: glob enforces a test script the hook never enumerated"
+fi
+
+# --- Cases 5-9: staged-path scoping (1e7b F001) ---
+# In a real git repo, the hook scopes which checks run by the staged path
+# list: a .project/-only commit runs only lint-project.sh; a staged
+# scripts/X.sh runs its scripts/test-X.sh; an unmapped staged path, an
+# empty staged list, or ARDD_HOOK_ALL=1 fail-safe to running everything.
+# Marker-file stubs record which checks actually ran.
+
+FIX="$WORK/routing"
+mkdir -p "$FIX/scripts"
+( cd "$FIX" && git -c commit.gpgsign=false init -q && git config core.hooksPath /dev/null )
+cp "$HOOK_SRC" "$FIX/pre-commit-under-test"
+chmod +x "$FIX/pre-commit-under-test"
+
+mstub() { # $1 = script name -> stub that records it ran
+  cat > "$FIX/scripts/$1" <<EOF
+#!/usr/bin/env sh
+touch "$FIX/ran-$1"
+exit 0
+EOF
+  chmod +x "$FIX/scripts/$1"
+}
+mstub lint-docs.sh
+mstub lint-project.sh
+mstub test-branch-info.sh
+mstub test-new.sh
+# Subject files the generic test-X.sh -> scripts/X.sh rule needs on disk.
+printf '#!/usr/bin/env sh\n' > "$FIX/scripts/branch-info.sh"
+printf '#!/usr/bin/env sh\n' > "$FIX/new.sh"
+mkdir -p "$FIX/.project" "$FIX/.github"
+
+reset_markers() { rm -f "$FIX"/ran-*; ( cd "$FIX" && git reset -q ) ; }
+ran()  { [ -f "$FIX/ran-$1" ]; }
+run_hook() { ( cd "$FIX" && sh ./pre-commit-under-test > /dev/null 2>&1 ) }
+
+# Case 5 (a): .project/-only commit -> only lint-project.sh runs.
+reset_markers
+echo x > "$FIX/.project/x.md"
+( cd "$FIX" && git add .project/x.md )
+run_hook || true
+if ran lint-project.sh && ! ran lint-docs.sh && ! ran test-branch-info.sh && ! ran test-new.sh; then
+  echo "ok: staged .project/ runs only lint-project.sh"
+else
+  echo "FAIL: staged .project/ runs only lint-project.sh (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 6 (b): staged scripts/branch-info.sh -> its test runs, test-new does not.
+reset_markers
+( cd "$FIX" && git add scripts/branch-info.sh )
+run_hook || true
+if ran test-branch-info.sh && ! ran test-new.sh; then
+  echo "ok: staged scripts/branch-info.sh runs test-branch-info.sh, not test-new.sh"
+else
+  echo "FAIL: staged scripts/branch-info.sh runs test-branch-info.sh, not test-new.sh (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 7 (c): unmapped staged path -> fail-safe run-all.
+reset_markers
+echo x > "$FIX/.github/x"
+( cd "$FIX" && git add .github/x )
+run_hook || true
+if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
+  echo "ok: unmapped staged path fail-safes to running every check"
+else
+  echo "FAIL: unmapped staged path fail-safes to running every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 8 (d): empty staged list -> fail-safe run-all.
+reset_markers
+run_hook || true
+if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
+  echo "ok: empty staged list fail-safes to running every check"
+else
+  echo "FAIL: empty staged list fail-safes to running every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 9 (e): ARDD_HOOK_ALL=1 -> run-all regardless of staged paths.
+reset_markers
+( cd "$FIX" && git add .project/x.md )
+( cd "$FIX" && ARDD_HOOK_ALL=1 sh ./pre-commit-under-test > /dev/null 2>&1 ) || true
+if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
+  echo "ok: ARDD_HOOK_ALL=1 overrides scoping and runs every check"
+else
+  echo "FAIL: ARDD_HOOK_ALL=1 overrides scoping and runs every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
 fi
 
 exit "$fail"
