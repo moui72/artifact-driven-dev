@@ -128,10 +128,38 @@ install_skill_file() {
   dest="$2"
   # One canonical source: harness installs may choose their target directory,
   # so installed SKILL.md path prose must name the installed harness root.
-  # This is intentionally narrow: only filesystem paths under the harness
-  # skills directory are rewritten, never command invocations such as
-  # /ardd-plan.
-  sed "s|\\.claude/skills|$SKILLS_REL|g" "$src" > "$dest"
+  # The `.claude/skills` -> $SKILLS_REL path substitution below runs for
+  # every harness and never touches command invocations such as /ardd-plan.
+  #
+  # Codex installs additionally rewrite genuine `/ardd-<name>` invocation
+  # references to `$ardd-<name>` (Codex's own command syntax), so a
+  # Codex session doesn't see Claude Code's slash-command form quoted back
+  # at it. This second pass is codex-only — the claude branch's output
+  # stays byte-identical to the plain path substitution above. It matches
+  # only when: (a) `/ardd-<name>` is immediately preceded by a
+  # command-context boundary (backtick, space, `(`, `"`, or start of
+  # line) — this alone excludes every path-embedded occurrence, since a
+  # path always has a directory-name character immediately before that
+  # slash (e.g. the `s` in `.../skills/ardd-plan`); (b) `<name>` is
+  # exactly one of the 14 real skill names, via explicit alternation, not
+  # a wildcard — so non-invocation `ardd-*` entities (script filenames
+  # like `ardd-state.sh`, reference dirs like `ardd-scripts`) are never
+  # touched; (c) immediately followed by a non-identifier character (not
+  # a lowercase letter or hyphen) — so `/ardd-update` cannot match inside
+  # `/ardd-update-check`.
+  case "$HARNESS" in
+    codex)
+      names="audit|backlog|defects|diagram|feedback|implement|init|lint|plan|refine|research|status|tracker|update"
+      sed -E \
+        -e "s|\\.claude/skills|$SKILLS_REL|g" \
+        -e "s#([\`\" (])/ardd-($names)([^a-z-]|\$)#\\1\$ardd-\\2\\3#g" \
+        -e "s#^/ardd-($names)([^a-z-]|\$)#\$ardd-\\1\\2#g" \
+        "$src" > "$dest"
+      ;;
+    *)
+      sed "s|\\.claude/skills|$SKILLS_REL|g" "$src" > "$dest"
+      ;;
+  esac
 }
 
 # --- Symlink guard ---
