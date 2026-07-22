@@ -8,40 +8,46 @@
 
 set -e
 
-# The two lints run first (fast), then every regression test — discovered by
-# glob, never an enumerated list: a new scripts/test-*.sh is enforced here the
-# moment it exists, in the same commit that adds its CI job, with no list to
-# remember to extend. (An enumerated list here silently fell four scripts
-# behind CI once — constitution v1.1.0's amendment replaced it with this
-# rule.) test-hooks-pre-commit.sh running *inside* the hook means the hook
-# tests its own control flow against fixtures on every commit — expected,
-# not recursion.
+# Staged-path scoping (1e7b F001, tightened further per feedback after the
+# 2026-07-21 scoping-expansion work): a check whose subject is a specific
+# script (scripts/test-X.sh <-> scripts/X.sh) runs ONLY when that script (or
+# its own test file) is staged — no more "unknown subject, run it anyway"
+# fallback for paired tests; the pairing is the ground truth. Checks with no
+# single-script subject (test-new.sh, the install/migration family,
+# test-hooks-pre-commit.sh, the two tests/fixtures/-consuming tests) are
+# driven by an explicit path mapping instead.
 #
-# Staged-path scoping (1e7b F001): the hook reads the staged path list and
-# skips checks whose subject files are provably untouched — a .project/-only
-# commit runs only lint-project.sh instead of the full suite. Every decision
-# fails safe to run-everything: an empty/unreadable staged list, any staged
-# path the pattern table doesn't map, or a check whose subjects can't be
-# determined all mean run-all, and ARDD_HOOK_ALL=1 forces run-all
-# unconditionally. CI still runs the full suite on every push.
+# For staged content that matches none of the above — genuinely novel or
+# broad-surface changes — running literally every test is overkill for what
+# it buys: FAILSAFE instead runs a small curated REGRESSION_SUITE (below)
+# chosen because each member is cheap and catches broad-surface breakage
+# regardless of what changed: the three deterministic lints (docs
+# cross-references, .project/ frontmatter schemas, template YAML validity)
+# plus this hook's own self-test. `ARDD_HOOK_ALL=1` remains a separate,
+# explicit escape hatch that forces the literal full suite — for a release
+# gate, not for everyday commits. CI still runs the full suite on every push.
+
+REGRESSION_SUITE="scripts/lint-docs.sh scripts/lint-project.sh scripts/lint-templates-yaml.sh scripts/test-hooks-pre-commit.sh"
 
 STAGED="$(git diff --cached --name-only 2>/dev/null || true)"
 
 RUN_ALL=0
+FAILSAFE=0
 if [ "${ARDD_HOOK_ALL:-}" = "1" ] || [ -z "$STAGED" ]; then
   RUN_ALL=1
 else
-  # Any staged path outside the mapped subject areas -> fail-safe run-all.
-  # Mapped areas: the docs set (lint-docs.sh), .project/ (lint-project.sh),
-  # new.sh (test-new.sh), the install surface install.sh/templates/
-  # migrations/skills (the test-install-*/test-merge-driver/
-  # test-ardd-update-check family; skills/ also feeds lint-docs),
-  # hooks/ (test-hooks-pre-commit.sh), .github/workflows/ (also templates/,
-  # lint-templates-yaml.sh), tests/fixtures/ (test-lint-project.sh +
-  # test-hook-lint-on-write.sh), the no-check subjects nothing in the suite
-  # reads (CLAUDE.md, dev-notes/*, tests/scenarios/*, mkdocs.yml,
-  # .gitignore, .worktreeinclude), the check scripts themselves, and
-  # scripts/X.sh guarded by an existing scripts/test-X.sh (generic rule).
+  # Any staged path outside the mapped subject areas -> FAILSAFE (regression
+  # suite only, not the full run). Mapped areas: the docs set (lint-docs.sh),
+  # .project/ (lint-project.sh), new.sh (test-new.sh), the install/migration
+  # surface install.sh/templates/migrations/skills (the test-install-*/
+  # test-merge-driver/test-migration-*/test-migrations-legacy family; skills/
+  # also feeds lint-docs), hooks/ (test-hooks-pre-commit.sh),
+  # .github/workflows/ (also templates/, lint-templates-yaml.sh),
+  # tests/fixtures/ (test-lint-project.sh + test-hook-lint-on-write.sh), the
+  # no-check subjects nothing in the suite reads (CLAUDE.md, dev-notes/*,
+  # tests/scenarios/*, mkdocs.yml, .gitignore, .worktreeinclude), the check
+  # scripts themselves, and scripts/X.sh guarded by an existing
+  # scripts/test-X.sh (generic pairing rule).
   old_ifs="$IFS"
   IFS='
 '
@@ -58,9 +64,9 @@ else
       scripts/test-*.sh) ;;
       scripts/*.sh)
         staged_base="$(basename "$staged_path")"
-        [ -f "scripts/test-${staged_base}" ] || RUN_ALL=1
+        [ -f "scripts/test-${staged_base}" ] || FAILSAFE=1
         ;;
-      *) RUN_ALL=1 ;;
+      *) FAILSAFE=1 ;;
     esac
   done
   IFS="$old_ifs"
@@ -91,9 +97,12 @@ staged_matches() {
 }
 
 # Should this check run for the current staged list? Pattern table first,
-# then the generic scripts/test-X.sh -> scripts/X.sh rule; a check whose
-# subjects can't be determined (unknown name, missing subject file) always
-# runs — fail-safe, never a silent skip.
+# then the generic scripts/test-X.sh <-> scripts/X.sh pairing rule — a
+# paired test runs ONLY when its own script or its own test file changed,
+# no fallback. A check name this function doesn't recognize at all
+# (shouldn't happen — every scripts/test-*.sh is either paired or explicitly
+# mapped below) is treated as not-needed here; FAILSAFE's regression suite
+# is the safety net for anything this table doesn't understand.
 check_needed() {
   check_base="$(basename "$1")"
   case "$check_base" in
@@ -109,7 +118,7 @@ check_needed() {
     test-new.sh)
       staged_matches new.sh "scripts/$check_base"
       ;;
-    test-install-*.sh|test-merge-driver.sh|test-ardd-update-check.sh)
+    test-install-*.sh|test-merge-driver.sh|test-migration-*.sh|test-migrations-legacy.sh)
       staged_matches install.sh templates/ migrations/ skills/ "scripts/$check_base"
       ;;
     test-hooks-pre-commit.sh)
@@ -123,26 +132,46 @@ check_needed() {
       ;;
     test-*.sh)
       subject="scripts/${check_base#test-}"
-      if [ -f "$subject" ]; then
-        staged_matches "$subject" "scripts/$check_base"
-      else
-        return 0   # unknown subject — fail-safe: run it
-      fi
+      staged_matches "$subject" "scripts/$check_base"
       ;;
     *)
-      return 0     # unknown check — fail-safe: run it
+      return 1
       ;;
   esac
 }
 
-for check in scripts/lint-docs.sh scripts/lint-project.sh scripts/lint-templates-yaml.sh scripts/test-*.sh; do
-  if [ "$RUN_ALL" -ne 1 ] && ! check_needed "$check"; then
-    continue
+# Which checks actually run: RUN_ALL forces every one (ARDD_HOOK_ALL=1 or
+# nothing staged); otherwise each check runs if check_needed says so, plus
+# the whole REGRESSION_SUITE if FAILSAFE fired (deduplicated below via
+# already_ran, since a regression-suite member may also be independently
+# needed).
+already_ran=""
+ran_contains() {
+  case " $already_ran " in *" $1 "*) return 0 ;; *) return 1 ;; esac
+}
+
+run_check() {
+  check="$1"
+  if ran_contains "$check"; then
+    return 0
   fi
+  already_ran="$already_ran $check"
   if ! "./$check"; then
     echo "pre-commit: $check failed — commit blocked" >&2
     exit 1
   fi
+}
+
+for check in scripts/lint-docs.sh scripts/lint-project.sh scripts/lint-templates-yaml.sh scripts/test-*.sh; do
+  if [ "$RUN_ALL" -eq 1 ] || check_needed "$check"; then
+    run_check "$check"
+  fi
 done
+
+if [ "$FAILSAFE" -eq 1 ] && [ "$RUN_ALL" -ne 1 ]; then
+  for check in $REGRESSION_SUITE; do
+    run_check "$check"
+  done
+fi
 
 exit 0

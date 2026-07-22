@@ -179,8 +179,16 @@ mkdir -p "$FIX/.project" "$FIX/.github"
 mstub lint-templates-yaml.sh
 mstub test-lint-project.sh
 mstub test-hook-lint-on-write.sh
+# REGRESSION_SUITE member with no scripts/X.sh subject — needed on disk so
+# the FAILSAFE cases (7, 13 below) can actually run it.
+mstub test-hooks-pre-commit.sh
+# Representative unpaired test (no scripts/migration-*.sh subject exists —
+# migrations live under migrations/, not scripts/) — proves the
+# install/migration family is scoped to its mapped paths, not fail-safe-run
+# on every unrelated commit.
+mstub test-migration-critique-to-audit.sh
 mkdir -p "$FIX/.github/workflows" "$FIX/templates" "$FIX/tests/fixtures" \
-  "$FIX/dev-notes" "$FIX/tests/scenarios"
+  "$FIX/dev-notes" "$FIX/tests/scenarios" "$FIX/migrations"
 
 reset_markers() { rm -f "$FIX"/ran-*; ( cd "$FIX" && git reset -q ) ; }
 ran()  { [ -f "$FIX/ran-$1" ]; }
@@ -209,29 +217,36 @@ else
   fail=1
 fi
 
-# Case 7 (c): unmapped staged path -> fail-safe run-all.
+# Case 7 (c): unmapped staged path -> FAILSAFE runs only the curated
+# regression suite (lint-docs.sh, lint-project.sh, lint-templates-yaml.sh,
+# test-hooks-pre-commit.sh) — paired tests with no bearing on the staged
+# path (test-branch-info.sh, test-new.sh) do NOT run.
 reset_markers
 echo x > "$FIX/.github/x"
 ( cd "$FIX" && git add .github/x )
 run_hook || true
-if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
-  echo "ok: unmapped staged path fail-safes to running every check"
+if ran lint-docs.sh && ran lint-project.sh && ran lint-templates-yaml.sh \
+  && ran test-hooks-pre-commit.sh && ! ran test-branch-info.sh && ! ran test-new.sh; then
+  echo "ok: unmapped staged path fail-safes to the regression suite only"
 else
-  echo "FAIL: unmapped staged path fail-safes to running every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  echo "FAIL: unmapped staged path fail-safes to the regression suite only (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
   fail=1
 fi
 
-# Case 8 (d): empty staged list -> fail-safe run-all.
+# Case 8 (d): empty staged list -> RUN_ALL (the full suite, not just the
+# regression suite) — distinct from FAILSAFE, kept maximally safe since
+# nothing about the diff is known at all.
 reset_markers
 run_hook || true
 if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
-  echo "ok: empty staged list fail-safes to running every check"
+  echo "ok: empty staged list runs the full suite"
 else
-  echo "FAIL: empty staged list fail-safes to running every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  echo "FAIL: empty staged list runs the full suite (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
   fail=1
 fi
 
-# Case 9 (e): ARDD_HOOK_ALL=1 -> run-all regardless of staged paths.
+# Case 9 (e): ARDD_HOOK_ALL=1 -> RUN_ALL (the full suite) regardless of
+# staged paths — the explicit override, distinct from FAILSAFE.
 reset_markers
 ( cd "$FIX" && git add .project/x.md )
 ( cd "$FIX" && ARDD_HOOK_ALL=1 sh ./pre-commit-under-test > /dev/null 2>&1 ) || true
@@ -298,7 +313,8 @@ for no_check_path in CLAUDE.md dev-notes/x tests/scenarios/x mkdocs.yml .gitigno
   run_hook || true
   if ! ran lint-docs.sh && ! ran lint-project.sh && ! ran test-branch-info.sh \
     && ! ran test-new.sh && ! ran lint-templates-yaml.sh \
-    && ! ran test-lint-project.sh && ! ran test-hook-lint-on-write.sh; then
+    && ! ran test-lint-project.sh && ! ran test-hook-lint-on-write.sh \
+    && ! ran test-hooks-pre-commit.sh; then
     echo "ok: staged $no_check_path runs no checks (fast exit)"
   else
     echo "FAIL: staged $no_check_path runs no checks (fast exit) (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
@@ -310,17 +326,56 @@ for no_check_path in CLAUDE.md dev-notes/x tests/scenarios/x mkdocs.yml .gitigno
   ( cd "$FIX" && git reset -q ) 2>/dev/null || true
 done
 
-# Case 13 (d): an unmapped path still triggers RUN_ALL=1 (regression guard
-# for the fail-safe default) — reuses case 7's .github/x path, which is
-# NOT .github/workflows/ and stays unmapped.
+# Case 13 (d): a scripts/*.sh change with no matching scripts/test-*.sh on
+# disk still triggers FAILSAFE (regression suite only, not the full suite,
+# and not any unrelated paired test).
 reset_markers
-echo x > "$FIX/.github/x"
-( cd "$FIX" && git add .github/x )
+echo '#!/usr/bin/env sh' > "$FIX/scripts/orphan-script.sh"
+( cd "$FIX" && git add scripts/orphan-script.sh )
 run_hook || true
-if ran lint-docs.sh && ran lint-project.sh && ran test-branch-info.sh && ran test-new.sh; then
-  echo "ok: unmapped path still fail-safes to running every check"
+if ran lint-docs.sh && ran lint-project.sh && ran lint-templates-yaml.sh \
+  && ran test-hooks-pre-commit.sh && ! ran test-branch-info.sh && ! ran test-new.sh; then
+  echo "ok: an untested scripts/*.sh change fail-safes to the regression suite only"
 else
-  echo "FAIL: unmapped path still fail-safes to running every check (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  echo "FAIL: an untested scripts/*.sh change fail-safes to the regression suite only (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+rm -f "$FIX/scripts/orphan-script.sh"
+
+# --- Cases 14-15: tightened paired-test scoping (feedback after
+# pre-commit-hook-scoping-expans) — a test-X.sh with no scripts/X.sh
+# subject on disk (migrations, install family, ...) is scoped to an
+# explicit path mapping, never fail-safe-run just because its subject file
+# doesn't exist; and a paired test-X.sh no longer runs on an unrelated
+# staged path just because it was once the generic-rule default.
+
+# Case 14 (a): staging migrations/* runs the install/migration family
+# (represented here by test-migration-critique-to-audit.sh) but not
+# unrelated paired tests (test-branch-info.sh, test-new.sh) or the
+# regression suite's lint-docs.sh/test-hooks-pre-commit.sh — this is a
+# mapped path, not a FAILSAFE.
+reset_markers
+echo x > "$FIX/migrations/0099-example.sh"
+( cd "$FIX" && git add migrations/0099-example.sh )
+run_hook || true
+if ran test-migration-critique-to-audit.sh && ! ran test-branch-info.sh \
+  && ! ran test-new.sh && ! ran lint-docs.sh && ! ran test-hooks-pre-commit.sh; then
+  echo "ok: staged migrations/* runs the install/migration family, nothing else"
+else
+  echo "FAIL: staged migrations/* runs the install/migration family, nothing else (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
+  fail=1
+fi
+
+# Case 15 (b): a paired test (test-branch-info.sh <-> scripts/branch-info.sh)
+# does NOT run just because some other, unrelated paired test's subject
+# changed — no more "unknown subject, run it anyway" cross-contamination.
+reset_markers
+( cd "$FIX" && git add new.sh )
+run_hook || true
+if ran test-new.sh && ! ran test-branch-info.sh && ! ran test-migration-critique-to-audit.sh; then
+  echo "ok: a paired test runs only for its own subject, never another paired test's"
+else
+  echo "FAIL: a paired test runs only for its own subject, never another paired test's (ran: $(cd "$FIX" && ls ran-* 2>/dev/null))"
   fail=1
 fi
 
