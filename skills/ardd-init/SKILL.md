@@ -189,6 +189,16 @@ with `/ardd-refine` before planning new work.
      "REST over RPC" if only REST routes exist; "SQLite for storage" if
      that's what's imported). Mark inferred principles explicitly so the
      user can correct them.
+   - Before writing a universal-coverage claim in any generated artifact
+     (e.g. "every route validates input", "every model has a `created_at`
+     field"), enumerate each relevant instance of the entity (every route,
+     every model, ...) individually and verify the claimed property
+     against each one — don't generalize a claim like this from a
+     representative sample. When full verification wasn't performed, or
+     isn't practical (e.g. dozens of instances), phrase the claim
+     conservatively instead of an unverified "every" — e.g. "N of M
+     observed routes validate input" — so the reader knows the coverage
+     is partial, not exhaustive.
    - Set `status: draft` on every artifact this path writes.
 
    Both paths: look for a template at

@@ -40,7 +40,7 @@ status: in-progress
       explicit-harness recording, rather than stopping. Verify by
       reading the edited section back and confirming both harness
       branches are now covered by the pre-check.
-- [ ] T004 [parallel] In `skills/ardd-init/SKILL.md`'s existing-codebase
+- [x] T004 [parallel] In `skills/ardd-init/SKILL.md`'s existing-codebase
       reverse-engineer step, add guidance: before writing a
       universal-coverage claim in a generated artifact ("every X has
       Y"), enumerate each relevant instance of X individually and verify
