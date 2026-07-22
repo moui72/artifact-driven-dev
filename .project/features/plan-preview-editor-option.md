@@ -1,6 +1,6 @@
 ---
 slug: plan-preview-editor-option
-status: tasked
+status: implemented
 logged: 2026-07-21
 plan: plan-plan-preview-editor-option-2026-07-22-3276.md
 tasks: tasks-plan-preview-editor-option-8805.md
