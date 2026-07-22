@@ -1,13 +1,13 @@
 ---
 plan: plan-new-sh-codex-docs-2026-07-21-302a.md
 generated: 2026-07-21
-status: in-progress
+status: completed
 ---
 
 # Tasks
 
 ## Phase 1: Document `new.sh --harness`
-- [ ] T001 In `docs/install.md`, add `--harness claude|codex` to the
+- [x] T001 In `docs/install.md`, add `--harness claude|codex` to the
   existing `new.sh` flag documentation. Place it alongside the existing
   `--kickoff`/`--no-kickoff` bullet under "Quickstart: a brand-new
   project" (docs/install.md, the bullet list right after the `curl | sh`

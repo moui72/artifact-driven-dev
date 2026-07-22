@@ -20,6 +20,15 @@ runs `install.sh` from it, and offers to open Claude Code on `/ardd-init`
 - `--kickoff` / `--no-kickoff` answer the handoff question in advance.
   With no flag and no terminal to ask on (a scripted or CI run), it
   declines rather than hangs, printing the command instead.
+- `--harness claude|codex` (or `--harness=<name>`) picks which harness to
+  install for. Omit it and `new.sh` asks interactively when a tty is
+  available (`ask_harness`: 3 tries, falling back to `claude` on no clear
+  answer or no tty — the same `/dev/tty` discipline as the kickoff
+  handoff prompt, documented in
+  `docs/decisions/0008-new-sh-tty-interactivity.md`); either way the
+  choice passes straight through to `install.sh --harness "$harness"`.
+  See "Codex CLI: `install.sh --harness codex`" below for the full
+  behavior and caveats of choosing `codex`.
 - `new.sh` refuses rather than asks anywhere it would write into a
   directory it doesn't own: a non-empty target, or a `--source` that
   isn't an ArDD checkout, is an error. Nothing is overwritten.
