@@ -1,0 +1,91 @@
+name: ArDD version badge sync
+
+# Keeps .github/badges/ardd-version.json in sync with
+# .project/ardd-version.md — regenerates the shields.io endpoint-badge JSON
+# whenever that file changes (via /ardd-update, a manual edit, or anything
+# else that touches it), and commits only if the JSON actually differs.
+# Note: the endpoint badge that reads this JSON renders only for public
+# repos — shields.io fetches raw.githubusercontent.com unauthenticated.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.project/ardd-version.md'
+  workflow_dispatch:
+
+jobs:
+  sync-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate badge JSON
+        run: |
+          set -e
+          VF=".project/ardd-version.md"
+          OUT=".github/badges/ardd-version.json"
+
+          # Same sed-based read style install.sh/ardd-update-check.sh/
+          # source-resolve.sh already use for this file. Prefer the
+          # human-readable Source-Ref (a release tag); fall back to a short
+          # Source-Commit prefix when no tag is recorded (dev-mode/
+          # no-releases-yet installs).
+          ref="$(sed -n 's/^Source-Ref: //p' "$VF" | head -1)"
+          commit="$(sed -n 's/^Source-Commit: //p' "$VF" | head -1)"
+          channel="$(sed -n 's/^Channel: //p' "$VF" | head -1)"
+          [ -n "$channel" ] || channel="stable"
+
+          if [ -n "$ref" ]; then
+            message="$ref"
+          elif [ -n "$commit" ]; then
+            message="$(printf '%s' "$commit" | cut -c1-7)"
+          else
+            message="dev"
+          fi
+
+          case "$channel" in
+            beta) color="yellow" ;;
+            *) color="blue" ;;
+          esac
+
+          mkdir -p "$(dirname "$OUT")"
+          # The heredoc body and its JSON terminator are indented to this
+          # run: | block scalar's indentation on purpose — YAML strips the
+          # block's common indent before the shell ever sees the script, so
+          # the emitted JSON is unchanged; a column-0 heredoc here is
+          # invalid YAML (ff0c F001).
+          cat > "$OUT" <<JSON
+          {
+            "schemaVersion": 1,
+            "label": "built with ArDD",
+            "message": "$message",
+            "color": "$color",
+            "labelColor": "#2F4858"
+          }
+          JSON
+
+          # Inline the badge mark from the icon file install.sh shipped
+          # alongside this workflow — the file is the source of truth,
+          # embedded at generation time (never escaped SVG pasted here).
+          ICON=".github/badges/ardd-icon.svg"
+          if [ -f "$ICON" ]; then
+            jq --rawfile svg "$ICON" '. + {logoSvg: $svg}' "$OUT" > "$OUT.tmp"
+            mv "$OUT.tmp" "$OUT"
+          else
+            echo "Note: $ICON not found — badge JSON written without logoSvg."
+          fi
+
+      - name: Commit if changed
+        run: |
+          set -e
+          if git diff --quiet -- .github/badges/ardd-version.json; then
+            echo "No change to .github/badges/ardd-version.json — skipping commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/badges/ardd-version.json
+          git commit -m "chore: sync ArDD version badge [skip ci]"
+          git push

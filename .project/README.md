@@ -68,8 +68,8 @@ overwritten by `install.sh`.
 
 ## Elsewhere in the repo
 
-`.claude/skills/` is regenerated output of ArDD's `install.sh` and is
-normally gitignored (`.claude/skills/ardd-*/`) — never review it as
-project source. The prose conventions above (single-writer ownership,
+The installed skill root(s) — `.claude/skills/` — are regenerated
+output of ArDD's `install.sh` and normally gitignored
+(`.claude/skills/ardd-*/`) — never review them as project source. The prose conventions above (single-writer ownership,
 static-record semantics) are enforced by convention and lint
 (`/ardd-lint`), not by hooks.

@@ -11,6 +11,9 @@
 > **<https://moui72.github.io/artifact-driven-dev/>**
 
 [![sponsor](https://shieldcn.dev/badge/sponsor-%E2%9D%A4-ea4aaa.svg?variant=secondary&theme=pink)](https://github.com/sponsors/moui72)
+<!-- ardd-badge-version-start -->
+[![built with ArDD](https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/.github/badges/ardd-version.json&query=$.message&label=built%20with%20ArDD&color=7C3AED&logo=data:image/svg+xml;base64,PLACEHOLDER&variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
+<!-- ardd-badge-version-end -->
 
 A workflow system for Claude Code built around a small set of living
 documents — **artifacts** — that record what you've decided about your
