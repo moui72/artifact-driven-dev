@@ -347,14 +347,25 @@ launch() {
   echo "Opening $handoff_tool_name in $target — $handoff_cmd is your first step."
   echo ""
   cd "$TARGET"
-  # Do NOT redirect stdin here, even though under `curl | sh` it's the curl
-  # pipe. Claude Code checks `process.stdin.isTTY && process.stdout.isTTY` and
-  # only falls back to opening /dev/tty itself — read-write, which is what its
-  # TUI needs — when that check fails. Feeding it `< /dev/tty` (read-only)
-  # passes the check, so it uses that fd instead and silently accepts no
-  # keystrokes; `<> /dev/tty` makes it exit outright. An EOF'd pipe on stdin is
-  # the input it handles correctly.
-  exec "$handoff_tool" "$handoff_cmd"
+  # Claude Code vs Codex need opposite stdin handling here, even though both
+  # are launched under `curl | sh` with the curl pipe on stdin:
+  #
+  # - Claude Code: do NOT redirect stdin. It checks
+  #   `process.stdin.isTTY && process.stdout.isTTY` and only falls back to
+  #   opening /dev/tty itself — read-write, which is what its TUI needs —
+  #   when that check fails. Feeding it `< /dev/tty` (read-only) passes the
+  #   check, so it uses that fd instead and silently accepts no keystrokes;
+  #   `<> /dev/tty` makes it exit outright. An EOF'd pipe on stdin is the
+  #   input it handles correctly, so leave it alone.
+  # - Codex: it has no such isTTY-checked fallback at all — it errors
+  #   immediately when stdin isn't a terminal, confirmed empirically
+  #   (`echo "" | codex '...' </dev/null` reproduces
+  #   `Error: stdin is not a terminal`). So it needs stdin explicitly
+  #   connected to a real terminal via `<> /dev/tty` (read-write).
+  case "$harness" in
+    codex) exec "$handoff_tool" "$handoff_cmd" <> /dev/tty ;;
+    *)     exec "$handoff_tool" "$handoff_cmd" ;;
+  esac
 }
 
 # Ask on /dev/tty — never stdin, which is the curl pipe. Bare Enter means yes.

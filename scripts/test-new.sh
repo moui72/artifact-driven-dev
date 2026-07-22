@@ -305,15 +305,25 @@ set -e
   && ok "case13: retired --no-launch exits 2 (unknown option)" \
   || bad "case13: expected exit 2, got $status"
 
-# --- Case 14: the launch exec never redirects Claude Code's stdin ---
-# Static, because the failure is invisible without a real tty: Claude Code uses
-# process.stdin only when `stdin.isTTY && stdout.isTTY`, else it opens /dev/tty
-# read-write itself. `exec claude … < /dev/tty` passes that check with a
-# read-only fd, so the TUI paints but accepts no keystrokes; `<>` exits. CI has
-# no tty to reproduce either, so guard the source line instead.
-grep -n 'exec "$handoff_tool"' "$NEW_SH" | grep -q '/dev/tty' \
-  && bad "case14: launch exec redirects stdin — Claude Code will ignore keystrokes" \
-  || ok "case14: launch exec leaves stdin alone"
+# --- Case 14: launch()'s exec is redirected correctly per harness ---
+# Static, because the failure is invisible without a real tty. Claude Code
+# uses process.stdin only when `stdin.isTTY && stdout.isTTY`, else it opens
+# /dev/tty read-write itself. `exec claude … < /dev/tty` passes that check
+# with a read-only fd, so the TUI paints but accepts no keystrokes; `<>`
+# exits — so its branch must stay unredirected. Codex has no such fallback
+# at all: it errors immediately without a real terminal on stdin (confirmed
+# empirically: `echo "" | codex '...' </dev/null` reproduces
+# `Error: stdin is not a terminal`), so its branch must use `<> /dev/tty`.
+# CI has no tty to reproduce either behavior live, so guard both source
+# lines instead.
+claude_exec_line=$(grep -n 'exec "\$handoff_tool" "\$handoff_cmd" ;;' "$NEW_SH" || true)
+codex_exec_line=$(grep -n 'exec "\$handoff_tool" "\$handoff_cmd" <> /dev/tty' "$NEW_SH" || true)
+echo "$claude_exec_line" | grep -q '/dev/tty' \
+  && bad "case14: Claude Code launch exec redirects stdin — will ignore keystrokes" \
+  || ok "case14: Claude Code launch exec leaves stdin alone"
+[ -n "$codex_exec_line" ] \
+  && ok "case14: Codex launch exec redirects stdin via <> /dev/tty" \
+  || bad "case14: Codex launch exec missing <> /dev/tty redirect"
 
 # --- Case 15: --existing installs into a populated project (guard inverted) ---
 # The existing-project mode accepts a non-empty target — that is the whole

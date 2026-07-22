@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: Fix and pin the launch redirect
-- [ ] T001 In `new.sh`'s `launch()` function, branch the `exec` call on
+- [x] T001 In `new.sh`'s `launch()` function, branch the `exec` call on
       `$harness`: Claude Code keeps the current unredirected `exec
       "$handoff_tool" "$handoff_cmd"` exactly as-is; add a `codex` branch
       that runs `exec "$handoff_tool" "$handoff_cmd" <> /dev/tty`
