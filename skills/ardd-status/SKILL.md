@@ -215,8 +215,11 @@ without regenerating `STATUS.md` or being asked anything.
      <N> retired · <N> rejected · <N> subsumed) — see
      `.project/features/`. Target a backlogged slug with
      `/ardd-plan <slug>`. (Omit this section if the register doesn't exist.
-     Each of `retired`/`rejected`/`subsumed` is itself omitted from the
-     line when its count is zero — same convention.)
+     The four core buckets — backlogged/planned/tasked/implemented —
+     always print, even when a count is zero. Only `retired`/`rejected`/
+     `subsumed` are each omitted from the line when its own count is zero —
+     that omit-rule applies to those three terminal buckets alone, never
+     to the four core buckets.)
    - By epic: `<epic-slug>` — <N> backlogged · <N> planned · <N> tasked
      (one line per epic value seen). (Omit this "by epic" breakdown entirely
      if no feature carries a non-empty `epic` — same "omit if none"

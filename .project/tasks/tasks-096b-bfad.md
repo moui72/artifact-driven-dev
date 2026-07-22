@@ -57,7 +57,7 @@ status: in-progress
       phase) — if so, phrase the task as directly
       implementing/extending the already-existing code instead, since
       there is no red state left to confirm.
-- [ ] T006 [parallel] In `skills/ardd-status/SKILL.md`'s Feature
+- [x] T006 [parallel] In `skills/ardd-status/SKILL.md`'s Feature
       Backlog report format (currently around lines 213-219), add one
       explicit sentence: the four core buckets
       (backlogged/planned/tasked/implemented) always print, even at
