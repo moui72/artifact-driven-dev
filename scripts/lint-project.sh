@@ -181,6 +181,18 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       fi
     fi
 
+    # plan_preview_editor is an optional workflow field (absent = not
+    # offered); when present it must be non-empty and contain the literal
+    # {path} placeholder.
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" plan_preview_editor; then
+      val="$(frontmatter_field "$f" plan_preview_editor)"
+      case "$val" in
+        *'{path}'*) : ;;
+        *)
+          report "$f: plan_preview_editor '$val' must be a non-empty command template containing {path}$SKEW_HINT" ;;
+      esac
+    fi
+
     # update_check_max_age_days is optional (absent = the update check never
     # fetches); when present it must be a positive integer.
     if [ "$name" = "constitution" ] && frontmatter_has "$f" update_check_max_age_days; then

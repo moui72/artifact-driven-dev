@@ -12,6 +12,7 @@ next_step_prompt: yes
 delegation: sometimes
 merge_policy: yolo
 plan_preview: sometimes
+plan_preview_editor: code
 update_check_max_age_days: 0
 ---
 

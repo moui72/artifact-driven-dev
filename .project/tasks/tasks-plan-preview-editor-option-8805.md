@@ -13,14 +13,14 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Schema and state-script support
 
-- [ ] T001 In `tests/fixtures/bad-project/.project/artifacts/constitution.md`,
+- [x] T001 In `tests/fixtures/bad-project/.project/artifacts/constitution.md`,
   add a `plan_preview_editor` frontmatter value missing the `{path}`
   placeholder (e.g. `plan_preview_editor: code`). Bump
   `scripts/test-lint-project.sh`'s `EXPECTED_BAD_FINDINGS` by 1. Run
   `scripts/test-lint-project.sh` and confirm it now FAILS (the new bad
   fixture doesn't yet produce a finding — no such check exists in
   `lint-project.sh` yet). This is the red step.
-- [ ] T002 In `scripts/lint-project.sh`, add a validation branch (near the
+- [x] T002 In `scripts/lint-project.sh`, add a validation branch (near the
   existing `plan_preview` check, around line 175) for `plan_preview_editor`:
   when present on the `constitution` artifact, it must be non-empty and
   contain the literal substring `{path}`; report a finding otherwise
