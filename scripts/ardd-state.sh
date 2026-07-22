@@ -81,6 +81,13 @@ set_frontmatter() {
   fi
 }
 
+# abspath <file> — print the resolved absolute path of an existing file
+# (F002: every write-performing subcommand's confirmation line includes
+# this, so a wrong-CWD write is immediately visible rather than silent).
+abspath() {
+  printf '%s/%s' "$(cd "$(dirname "$1")" && pwd)" "$(basename "$1")"
+}
+
 die()  { echo "ardd-state: $1" >&2; exit 1; }
 dieu() { echo "ardd-state: $1" >&2; usage >&2; exit 2; }
 
@@ -193,7 +200,7 @@ cmd_tasks_flip() {
     [ -z "$open_ids" ] || die "tasks-flip: completed refused — unchecked task(s) remain in $file: $open_ids"
   fi
   write_status "$file" "$from" "$to"
-  echo "tasks-flip: $file $from -> $to"
+  echo "tasks-flip: $(abspath "$file") $from -> $to"
 }
 
 cmd_task_check() {
@@ -213,7 +220,7 @@ cmd_task_check() {
     fi
   fi
   sed -i.arddbak "s/^- \[ \] $id /- [x] $id /" "$file" && rm -f "$file.arddbak"
-  echo "task-check: $id checked in $file"
+  echo "task-check: $id checked in $(abspath "$file")"
 }
 
 cmd_next_task() {
@@ -235,7 +242,7 @@ cmd_feedback_mark() {
   fi
   grep -q "^- \[ \] $id " "$file" || die "feedback-mark: no unresolved item '$id' in $file"
   sed -i.arddbak "s/^- \[ \] $id /- [$mark] $id /" "$file" && rm -f "$file.arddbak"
-  echo "feedback-mark: $id -> [$mark] in $file"
+  echo "feedback-mark: $id -> [$mark] in $(abspath "$file")"
 }
 
 cmd_feedback_planned() {
@@ -248,7 +255,7 @@ cmd_feedback_planned() {
   fi
   write_status "$file" open planned
   sed -i.arddbak "s|^plan:[[:space:]]*null.*|plan: $plan|" "$file" && rm -f "$file.arddbak"
-  echo "feedback-planned: $file -> planned, plan: $plan"
+  echo "feedback-planned: $(abspath "$file") -> planned, plan: $plan"
 }
 
 FEATURES_DIR=".project/features"
@@ -270,7 +277,7 @@ cmd_feature_create() {
     printf -- '---\nslug: %s\nstatus: backlogged\nlogged: %s\n---\n\n' "$slug" "$(date +%Y-%m-%d)"
     [ -n "$body" ] && printf '%s\n' "$body"
   } > "$f"
-  echo "feature-create: $f (backlogged)"
+  echo "feature-create: $(abspath "$f") (backlogged)"
 }
 
 cmd_feature_flip() {
@@ -303,7 +310,7 @@ cmd_feature_flip() {
     fi
   fi
   write_status "$f" "$from" "$to"
-  echo "feature-flip: $slug $from -> $to"
+  echo "feature-flip: $slug $from -> $to ($(abspath "$f"))"
 }
 
 cmd_feature_field() {
@@ -374,7 +381,7 @@ cmd_stamp() {
     *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|update_check_max_age_days, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
-  echo "stamp: $file $key = $val"
+  echo "stamp: $(abspath "$file") $key = $val"
 }
 
 cmd="${1:-}"

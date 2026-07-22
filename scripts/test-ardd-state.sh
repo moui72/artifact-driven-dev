@@ -291,6 +291,13 @@ set +e
 set -e
 assert_exit "feature-create: duplicate slug refused" 1 "$rc"
 
+# feature-create: confirmation prints the resolved absolute path written [feedback: F002]
+fcout="$( cd "$FPROJ" && printf 'Adds night mode.\n' | sh "$STATE" feature-create night-mode )"
+case "$fcout" in
+  *" /"*/.project/features/night-mode.md*) ok "feature-create: confirmation prints resolved absolute path" ;;
+  *) bad "feature-create: confirmation prints resolved absolute path — got: $fcout" ;;
+esac
+
 ( cd "$FPROJ" && sh "$STATE" feature-flip dark-mode planned >/dev/null )
 assert_file_grep "feature-flip: backlogged->planned" "^status: planned" "$FEAT"
 set +e
@@ -466,6 +473,15 @@ last_updated: 2026-07-01
 EOF
 sh "$STATE" stamp "$AF" last_updated 2026-07-06 >/dev/null
 assert_file_grep "stamp: last_updated replaced" "^last_updated: 2026-07-06" "$AF"
+
+# stamp: confirmation prints the resolved absolute path of <file>, even
+# when <file> is given as a relative path [feedback: F002]
+stout="$( cd "$ART" && sh "$STATE" stamp datamodel.md last_updated 2026-07-07 )"
+case "$stout" in
+  *" /"*/.project/artifacts/datamodel.md*) ok "stamp: confirmation prints resolved absolute path" ;;
+  *) bad "stamp: confirmation prints resolved absolute path — got: $stout" ;;
+esac
+
 set +e
 sh "$STATE" stamp "$AF" last_updated 'not-a-date' >/dev/null 2>&1; rc=$?
 set -e

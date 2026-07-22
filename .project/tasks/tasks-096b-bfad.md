@@ -7,7 +7,7 @@ status: in-progress
 # Tasks
 
 ## Phase 1: F002 — red-first script fix
-- [ ] T001 Add a case to `scripts/test-ardd-state.sh` asserting that
+- [x] T001 Add a case to `scripts/test-ardd-state.sh` asserting that
       `ardd-state.sh feature-create <slug>` prints the resolved absolute
       path of the file it wrote (e.g. matching
       `/.*\.project/features/<slug>\.md$/` against its stdout, not just
@@ -15,7 +15,7 @@ status: in-progress
       same assertion for `ardd-state.sh stamp <file> last_updated
       <date>`. Run `scripts/test-ardd-state.sh` and confirm both new
       cases fail red — the absolute-path behavior doesn't exist yet.
-- [ ] T002 Update every write-performing `ardd-state.sh` subcommand
+- [x] T002 Update every write-performing `ardd-state.sh` subcommand
       (`feature-create`, `stamp`, `tasks-flip`, `task-check`,
       `feature-flip`, `feedback-mark`, `feedback-planned`, `mint`) to
       include the resolved absolute path of the file it wrote/mutated in
