@@ -1,7 +1,7 @@
 ---
 plan: plan-b860-2026-07-22-e518.md
 generated: 2026-07-22
-status: ready
+status: in-progress
 ---
 
 # Tasks
