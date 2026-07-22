@@ -27,14 +27,14 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   (mirror the existing `report "$f: ..."` call shape used by
   `update_check_max_age_days`). Run `scripts/test-lint-project.sh` and
   confirm it now PASSES. [defect: none]
-- [ ] T003 In `scripts/test-ardd-state.sh`, add cases exercising `stamp
+- [x] T003 In `scripts/test-ardd-state.sh`, add cases exercising `stamp
   <file> plan_preview_editor <template>`: one accepting a template
   containing `{path}` (e.g. `code {path}`), one rejecting an empty value,
   one rejecting a template missing `{path}` (e.g. `code`). Run
   `scripts/test-ardd-state.sh` and confirm the new cases FAIL against the
   current `ardd-state.sh` (no such stamp key exists yet). This is the red
   step.
-- [ ] T004 In `scripts/ardd-state.sh`, add `plan_preview_editor` as a
+- [x] T004 In `scripts/ardd-state.sh`, add `plan_preview_editor` as a
   `stamp` key: in the `case "$key" in ... esac` block (around line
   370), add a case that validates the value is non-empty and contains
   `{path}` (`dieu "stamp: plan_preview_editor must be a non-empty command

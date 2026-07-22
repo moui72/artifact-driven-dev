@@ -562,6 +562,18 @@ sh "$STATE" stamp "$CF" plan_preview sometimes >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: bad plan_preview refused" 2 "$rc"
 
+# stamp plan_preview_editor — non-empty template containing {path}
+sh "$STATE" stamp "$CF" plan_preview_editor "code {path}" >/dev/null
+assert_file_grep "stamp: plan_preview_editor set code {path}" "^plan_preview_editor: code {path}" "$CF"
+set +e
+sh "$STATE" stamp "$CF" plan_preview_editor "" >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: empty plan_preview_editor refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$CF" plan_preview_editor "code" >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: plan_preview_editor missing {path} refused" 2 "$rc"
+
 # stamp workflow_mode — enum-validated, add + replace [feedback: feedback-stamp-workflow-mode-ca7d F001]
 sh "$STATE" stamp "$CF" workflow_mode solo >/dev/null
 assert_file_grep "stamp: workflow_mode set solo" "^workflow_mode: solo" "$CF"
