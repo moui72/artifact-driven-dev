@@ -1,6 +1,6 @@
 ---
 slug: codex-second-harness-support
-status: tasked
+status: implemented
 logged: 2026-07-15
 plan: plan-codex-second-harness-support-2026-07-22-4941.md
 tasks: tasks-codex-second-harness-support-d2fa.md

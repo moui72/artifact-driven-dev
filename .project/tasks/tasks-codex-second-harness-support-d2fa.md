@@ -1,7 +1,7 @@
 ---
 plan: plan-codex-second-harness-support-2026-07-22-4941.md
 generated: 2026-07-22
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
                      # completed is terminal — post-completion failures
@@ -13,7 +13,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: Template and install.sh wiring, test-first
 
-- [ ] T001 Create `templates/AGENTS.md`: a short pointer file for OpenAI
+- [x] T001 Create `templates/AGENTS.md`: a short pointer file for OpenAI
   Codex's `AGENTS.md` convention. Content: state that `.project/` holds
   this project's durable ArDD workflow state (artifacts, plans, tasks,
   the feature register), point at `.project/README.md` (the reviewer
@@ -22,7 +22,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
   channel — every ArDD skill is invoked as `$ardd-<name>`, e.g.
   `$ardd-status`). Keep it short — a landing pointer, not a duplicate of
   the reviewer guide.
-- [ ] T002 Create `scripts/test-install-agents-md.sh` (new file, modeled on
+- [x] T002 Create `scripts/test-install-agents-md.sh` (new file, modeled on
   `scripts/test-install-harness.sh`'s structure: `set -e`, the
   `unset GIT_*` line, a `mktemp -d` work dir with `trap ... EXIT`, a local
   `git()` wrapper disabling gpgsign/hooksPath, an `ok`/`bad`/`fail`
@@ -43,7 +43,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
      `AGENTS.md`-related line appears in stdout (Claude installs never
      touch this file).
   Make the script executable (`chmod +x`).
-- [ ] T003 In `install.sh`, add a never-clobber write/advisory block for
+- [x] T003 In `install.sh`, add a never-clobber write/advisory block for
   `AGENTS.md`, gated on `[ "$HARNESS" = codex ]`, placed near the other
   never-clobber writes (the `.github/badges/ardd-icon.svg` block, around
   line 776, is the exact idiom to mirror): if `$TARGET/AGENTS.md` doesn't
@@ -56,7 +56,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Documentation
 
-- [ ] T004 [artifacts: constitution] In `docs/install.md`'s existing Codex
+- [x] T004 [artifacts: constitution] In `docs/install.md`'s existing Codex
   section (alongside the current `--harness codex` documentation), add one
   line noting that a Codex install also writes `AGENTS.md` (never-clobber)
   pointing new sessions at `.project/README.md`'s reviewer guide and the
