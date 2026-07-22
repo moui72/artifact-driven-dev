@@ -655,6 +655,19 @@ EOF
 echo ""
 echo "  ✓ .project/ardd-version.md ($COMMIT)"
 
+# --- AGENTS.md: OpenAI Codex CLI's session-start pointer convention.
+# Codex-only, never-clobber (same idiom as .github/badges/ardd-icon.svg
+# above) — a Claude-only install never writes or mentions this file.
+if [ "$HARNESS" = "codex" ]; then
+  AGENTS_MD="$TARGET/AGENTS.md"
+  if [ ! -f "$AGENTS_MD" ]; then
+    cp "$SCRIPT_DIR/templates/AGENTS.md" "$AGENTS_MD"
+    echo "  ✓ AGENTS.md"
+  else
+    echo "  – AGENTS.md (already exists, left untouched)"
+  fi
+fi
+
 # --- .project/README.md reviewer guide: install.sh-owned, overwritten on
 # every install (like ardd-version.md) — how to read .project/ for
 # downstream reviewers. Source of truth: templates/dot-project-readme.md.
