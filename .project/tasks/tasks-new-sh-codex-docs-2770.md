@@ -1,7 +1,7 @@
 ---
 plan: plan-new-sh-codex-docs-2026-07-21-302a.md
 generated: 2026-07-21
-status: ready
+status: in-progress
 ---
 
 # Tasks
