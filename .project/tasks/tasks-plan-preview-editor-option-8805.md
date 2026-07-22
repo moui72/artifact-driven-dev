@@ -45,7 +45,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: Wire the checkpoint offer into `/ardd-plan`
 
-- [ ] T005 [artifacts: constitution] In `skills/ardd-plan/SKILL.md` step 10,
+- [x] T005 [artifacts: constitution] In `skills/ardd-plan/SKILL.md` step 10,
   extend the preliminary-question logic: grep
   `.project/artifacts/constitution.md` frontmatter for `plan_preview_editor`
   alongside the existing `plan_preview` grep. Describe the combined

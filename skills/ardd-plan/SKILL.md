@@ -462,28 +462,55 @@ drafts or writes a plan.
        a summary-plus-pointer, never a full inline dump of the plan.
 
     Before that three-way question, check the constitution's
-    `plan_preview` frontmatter field (grep
-    `.project/artifacts/constitution.md`; absent = `ask`, the behavior
-    below unchanged):
-    - **`always-browser`** — skip the preliminary question; always
-      publish the plan file
-      (`.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md`, Markdown —
-      no HTML skeleton needed) via the `Artifact` tool, open it, and
-      display the resulting URL to the user, then proceed straight to
-      the three-way question below.
-    - **`always-console`** — skip the preliminary question and never
-      publish; proceed straight to the three-way question below.
-    - **`ask`** (or absent) — ask a one-time preliminary question:
-      **view the plan in the browser first?** (use `AskUserQuestion`,
-      yes/no). On yes: publish and open as above, then proceed to the
-      three-way question. On no: proceed straight to the three-way
-      question.
+    `plan_preview` and `plan_preview_editor` frontmatter fields (grep
+    `.project/artifacts/constitution.md` for both; each absent = not set):
+    - **`plan_preview_editor` set, `plan_preview` absent or `ask`** — ask
+      a one-time preliminary question offering **open in editor?**
+      (use `AskUserQuestion`, yes/no — mirrors today's browser yes/no
+      shape). On yes: substitute the plan file's absolute path into the
+      `{path}` placeholder of the configured `plan_preview_editor`
+      template and run the resulting command, then proceed to the
+      three-way question below. On no: proceed straight to the
+      three-way question.
+    - **Both `plan_preview` (as `ask`, or absent) and
+      `plan_preview_editor` set** — ask a one-time preliminary question
+      offering three options: browser / editor / no (use
+      `AskUserQuestion`). On browser: publish and open as described
+      below, then proceed to the three-way question. On editor:
+      substitute the plan file's absolute path into the `{path}`
+      placeholder of the configured `plan_preview_editor` template and
+      run the resulting command, then proceed to the three-way
+      question. On no: proceed straight to the three-way question.
+    - **Only `plan_preview` set** (`plan_preview_editor` absent) —
+      unchanged from today:
+      - **`always-browser`** — skip the preliminary question; always
+        publish the plan file
+        (`.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md`, Markdown —
+        no HTML skeleton needed) via the `Artifact` tool, open it, and
+        display the resulting URL to the user, then proceed straight to
+        the three-way question below.
+      - **`always-console`** — skip the preliminary question and never
+        publish; proceed straight to the three-way question below.
+      - **`ask`** (or absent) — ask a one-time preliminary question:
+        **view the plan in the browser first?** (use `AskUserQuestion`,
+        yes/no). On yes: publish and open as above, then proceed to the
+        three-way question. On no: proceed straight to the three-way
+        question.
+      - Neither field set — no preliminary question; proceed straight
+        to the three-way question below.
+
+    When the "open in editor" command fails, surface the failure inline
+    (e.g. non-zero exit or an error on stderr) and fall through to the
+    three-way Approve/Revise/Stop question rather than blocking the run
+    on it — the plan file still exists on disk regardless of whether the
+    editor launched.
 
     Either way, this offer (or its `plan_preview`-driven auto-behavior)
     re-fires each time a Revise loop brings the run back to this
     checkpoint — a later redeploy of the same plan file (same path)
     targets the same artifact URL, so the preview always reflects the
-    latest draft.
+    latest draft. The editor offer re-fires identically on every Revise
+    loop back to this checkpoint.
 
     The browser-preview question and the approve/revise/stop question
     below are **two separate, sequential prompts** — never combined
