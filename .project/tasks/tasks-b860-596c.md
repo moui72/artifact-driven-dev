@@ -25,7 +25,7 @@ status: in-progress
       automated check alone does not confirm the fix; the empirical
       terminal check is the actual verification, per the plan's Open
       Questions.
-- [ ] T002 Update `test-new.sh` case 14 (currently asserts the single
+- [x] T002 Update `test-new.sh` case 14 (currently asserts the single
       shared exec line never contains `/dev/tty`) to instead assert two
       things statically, mirroring the existing "no live tty in CI, grep
       the source line" discipline: the Claude Code branch's exec line
