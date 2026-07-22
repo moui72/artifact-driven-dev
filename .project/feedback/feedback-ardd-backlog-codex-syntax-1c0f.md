@@ -1,13 +1,13 @@
 ---
-status: open
+status: planned
 created: 2026-07-22
-plan: null
+plan: plan-35f6-2026-07-22-93b3.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 Skill prose universally hardcodes Claude's `/<skill>` invocation
+- [x] F001 Skill prose universally hardcodes Claude's `/<skill>` invocation
   syntax when suggesting a next step or cross-referencing another skill,
   even though the same prose file is installed verbatim into Codex's
   `.agents/skills/` (dollar-prefixed convention, per `new.sh`'s own
