@@ -26,7 +26,9 @@ task checkbox is still unchecked), `task-check`, `next-task` (tasks
 files), `feedback-mark` / `feedback-planned` (feedback bookkeeping), and
 `stamp <file> <field> <value>` (exactly these frontmatter fields:
 `last_updated`, `diagram_status`, `next_step_prompt`, `delegation`,
-`merge_policy`, `plan_preview`, `update_check_max_age_days`).
+`merge_policy`, `plan_preview`, `plan_preview_editor` (a command
+template that must contain the literal `{path}` placeholder),
+`update_check_max_age_days`).
 
 ### `upsert-section.sh <file> "<Header>"`
 

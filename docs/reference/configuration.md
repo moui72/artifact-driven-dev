@@ -95,6 +95,26 @@ approve/revise/stop question:
 Not asked by `/ardd-init` or backfilled by default `/ardd-update` —
 opt in deliberately via `ardd-state.sh stamp <file> plan_preview <value>`.
 
+## `plan_preview_editor` — the open-in-editor offer at `/ardd-plan`'s checkpoint
+
+A command template containing the literal `{path}` placeholder — absent
+(the default) = not offered. Consulted alongside `plan_preview` by
+`/ardd-plan`'s approval checkpoint (step 10), before the three-way
+approve/revise/stop question:
+
+- set, with `plan_preview` absent or `ask` — offer a yes/no "open in
+  editor?" question; on yes, substitute the plan file's absolute path
+  into `{path}` and run the resulting command
+- set, with `plan_preview` also set (as `ask` or absent) — offer a
+  three-way question: browser / editor / no
+- absent — no editor offer; `plan_preview` behavior is unchanged
+
+Example: `plan_preview_editor: code {path}`.
+
+Not asked by `/ardd-init` or backfilled by default `/ardd-update` —
+opt in deliberately via `ardd-state.sh stamp <file> plan_preview_editor
+<template>`.
+
 ## `update_check_max_age_days` — opt-in freshness fetch for the update check
 
 A positive integer — absent = never fetch (the default: the update check

@@ -68,14 +68,14 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 3: Reference docs
 
-- [ ] T006 [parallel] In `docs/reference/configuration.md`, add a
+- [x] T006 [parallel] In `docs/reference/configuration.md`, add a
   `plan_preview_editor` section directly after the existing `plan_preview`
   section (around line 82), mirroring its structure: what the field is, its
   absent-means-not-offered default, its value shape (a command template
   containing `{path}`), an example (`plan_preview_editor: code {path}`),
   and how to set it (`ardd-state.sh stamp <file> plan_preview_editor
   <template>`). No test requirement — documentation-only change.
-- [ ] T007 [parallel] In `docs/reference/scripts.md`, add a `stamp <file>
+- [x] T007 [parallel] In `docs/reference/scripts.md`, add a `stamp <file>
   plan_preview_editor <command-template>` usage line to the `ardd-state.sh`
   section, alongside the existing `plan_preview` line, briefly noting the
   `{path}`-placeholder requirement. No test requirement —
