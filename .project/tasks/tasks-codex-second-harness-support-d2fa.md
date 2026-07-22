@@ -56,7 +56,7 @@ status: ready   # generating -> ready -> in-progress -> completed (schema-of-rec
 
 ## Phase 2: Documentation
 
-- [ ] T004 [artifacts: constitution] In `docs/install.md`'s existing Codex
+- [x] T004 [artifacts: constitution] In `docs/install.md`'s existing Codex
   section (alongside the current `--harness codex` documentation), add one
   line noting that a Codex install also writes `AGENTS.md` (never-clobber)
   pointing new sessions at `.project/README.md`'s reviewer guide and the

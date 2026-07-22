@@ -130,6 +130,10 @@ in a deliberately degraded v1 form — to **OpenAI Codex CLI**:
   Codex v1 runs everything inline; `.worktreeinclude` copying is not
   carried over; `next_step_prompt: true`'s one-keypress offer degrades
   to a plain-text suggestion (`auto` carries over unchanged).
+- **Writes `AGENTS.md`.** A Codex install also writes a short, never-clobber
+  `AGENTS.md` at the target root, pointing new sessions at
+  `.project/README.md`'s reviewer guide and the `$ardd-*` invocation
+  convention; a Claude-only install never touches this file.
 - **Install metadata records the harness set.** `.project/ardd-version.md`
   carries `Harness: <invoking>` plus a comma-separated, order-normalized
   `Harnesses:` line for the full installed set (absent line in an older
