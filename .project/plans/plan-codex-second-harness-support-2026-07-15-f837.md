@@ -1,5 +1,5 @@
 ---
-status: draft
+status: superseded
 branch: codex-second-harness-support
 created: 2026-07-15
 last_updated: 2026-07-20

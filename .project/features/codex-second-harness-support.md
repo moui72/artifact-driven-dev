@@ -1,7 +1,9 @@
 ---
 slug: codex-second-harness-support
-status: backlogged
+status: tasked
 logged: 2026-07-15
+plan: plan-codex-second-harness-support-2026-07-22-4941.md
+tasks: tasks-codex-second-harness-support-d2fa.md
 ---
 
 Single-source Codex CLI support: `install.sh --harness codex` installs the canonical skill set to `.agents/skills/`, preserving ArDD's `.project/` workflow and deterministic scripts. Harness-specific behavior uses explicit, tested clauses and mechanical path/sigil rewrites where safe — never a parallel Codex prose tree or a premature general adapter system. Inline implementation is the safe fallback until a live capability matrix proves Codex can meet ArDD's delegation/worktree/state-landing contract.
