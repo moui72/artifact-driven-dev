@@ -1,13 +1,13 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-21
-plan: null        # set to the consuming plan's filename once planned
+plan: plan-new-sh-codex-docs-2026-07-21-302a.md
 ---
 
 # Feedback
 
 ## Bugs
-- [ ] F001 `docs/install.md` documents `install.sh --harness codex` (its
+- [x] F001 `docs/install.md` documents `install.sh --harness codex` (its
   own "Codex CLI: `install.sh --harness codex`" section) but never
   mentions that `new.sh` — the acquisition bootstrap `docs/install.md`
   itself introduces and covers elsewhere in the same page — also has
