@@ -27,7 +27,7 @@ status: in-progress
       confirm nothing else regressed.
 
 ## Phase 2: F001, F003, F004, F006 — skill-prose fixes [parallel]
-- [ ] T003 [parallel] In `skills/ardd-update/SKILL.md` step 4
+- [x] T003 [parallel] In `skills/ardd-update/SKILL.md` step 4
       (currently lines ~105-128), broaden the pre-reinstall
       `--harness`-support check to run for both harnesses, not just
       `HARNESS=codex`. Keep Codex's existing stop-and-explain behavior

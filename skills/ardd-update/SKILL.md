@@ -109,16 +109,26 @@ proceeds.
    backwards compatibility with pre-harness installs).
 
    Before running the installer, verify the selected source supports the
-   installed harness. If `HARNESS=codex` and `<source>/install.sh` does
-   not contain a `--harness` option, stop before reinstalling and tell
-   the user: the selected ArDD source predates Codex-harness support, so
-   this update cannot safely preserve the Codex install. Offer the safe
-   choices: switch to a newer/local ArDD source that contains
-   `install.sh --harness codex`, or wait for a release tag that carries
-   Codex support. Do not run the old installer as a fallback; it would
+   installed harness — check this for both harnesses, not just Codex.
+   If `HARNESS=codex` and `<source>/install.sh` does not contain a
+   `--harness` option, stop before reinstalling and tell the user: the
+   selected ArDD source predates Codex-harness support, so this update
+   cannot safely preserve the Codex install. Offer the safe choices:
+   switch to a newer/local ArDD source that contains `install.sh
+   --harness codex`, or wait for a release tag that carries Codex
+   support. Do not run the old installer as a fallback; it would
    regenerate Claude-oriented `.claude/skills` output.
 
-   Otherwise, run
+   If `HARNESS=claude` and `<source>/install.sh` does not contain a
+   `--harness` option, do not stop — this case is safe, since a
+   pre-`--harness` installer always installed for Claude implicitly
+   (harness wasn't yet a concept). Simply omit `--harness claude` from
+   the reinstall invocation (run `<source>/install.sh <this project's
+   root>` instead of `<source>/install.sh --harness claude <this
+   project's root>`), and add a note in the relayed output that the
+   selected source predates explicit-harness recording.
+
+   Otherwise (the source supports `--harness`), run
    `<source>/install.sh --harness <harness> <this project's root>` and
    **relay its full output verbatim** — the migrations it applied and
    every suggestion it printed (badge snippet, gitignore guidance).
