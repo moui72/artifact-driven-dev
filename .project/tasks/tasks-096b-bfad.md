@@ -48,7 +48,7 @@ status: in-progress
       sample. When full verification isn't performed or isn't
       practical, phrase the claim conservatively ("N of M observed
       entities have Y") instead of an unverified "every."
-- [ ] T005 [parallel] In `skills/ardd-plan/SKILL.md` step 12 (Generate
+- [x] T005 [parallel] In `skills/ardd-plan/SKILL.md` step 12 (Generate
       tasks), add a bullet alongside the existing test-requirement
       guidance (near the "Include a test requirement..." bullet): before
       phrasing a TDD red-first task ("confirm it fails first"), check

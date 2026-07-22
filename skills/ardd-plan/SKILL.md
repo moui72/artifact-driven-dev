@@ -561,6 +561,14 @@ drafts or writes a plan.
       Principles) — TDD, test-after, coverage threshold, or none. Tasks are
       paradigm-agnostic by default; don't assume TDD or any specific
       principle number if the constitution doesn't state one
+    - Under a TDD paradigm, before phrasing a task as red-first ("confirm
+      it fails first"), check whether its precondition work already landed
+      via an earlier task in the same plan (an earlier phase, or an
+      earlier task in the same phase). If so, there is no red state left
+      to confirm — phrase the task as directly implementing/extending the
+      already-existing code instead, not as a fresh red-first check
+
+
 
     Mark parallelism with `[parallel]` on tasks that touch different files and
     have no shared dependencies.
