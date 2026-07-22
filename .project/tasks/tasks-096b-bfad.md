@@ -1,7 +1,7 @@
 ---
 plan: plan-096b-2026-07-22-479f.md
 generated: 2026-07-22
-status: ready
+status: in-progress
 ---
 
 # Tasks
