@@ -64,6 +64,22 @@ unconstrained, push to real remotes or open real PRs. You must not.
    observed vs expected, and file paths. End the report (if you get
    there) with a `## Verdict` section: pass/fail per checklist item in
    your brief, plus overall subjective quality notes.
+12. **The report file is your position marker.** On any resume or
+   continuation, your FIRST act is to re-read your report file and find
+   the last completed `## Step N` section; resume at step N+1. Never
+   re-verify or re-inspect a step already written up — its section is
+   final. Write a step's report section IMMEDIATELY after completing it,
+   before starting the next step. If the sandbox shows work has outrun
+   the report (e.g. commits exist for a step with no report section),
+   writing that missing section IS the next step, not more inspection.
+13. **Bounded verification.** At most two inspection commands per
+   checklist item when verifying. If you still can't reach a verdict,
+   write the section anyway with `verdict: inconclusive` plus what you
+   saw, and move on — never loop re-running commands whose output you've
+   already seen this run. If you're about to stop without having reached
+   the end, write everything you know to the report first, finish the
+   `## Verdict` section (marking unreached items `not-reached`), then
+   stop.
 
 ## Judgment calibration
 

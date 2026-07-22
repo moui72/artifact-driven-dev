@@ -75,7 +75,9 @@ prompt is, in order:
    triage's Graduation step (step 6).
 3. The full text of `tests/scenarios/S<n>.md`, verbatim.
 4. Closing reminder: "Report file first, append after every major step,
-   scripted answers only — you have no AskUserQuestion tool."
+   scripted answers only — you have no AskUserQuestion tool. If resumed,
+   re-read your report's last `## Step N` and continue from N+1 — never
+   re-verify steps you've already reported."
 
 Launch all selected scenarios in parallel. They are mutually isolated by
 scratch subdirectory; no ordering dependency exists.
