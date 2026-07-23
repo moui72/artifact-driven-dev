@@ -1,7 +1,7 @@
 ---
 plan: plan-chore-feedback-status-readines-2026-07-23-a4a4.md
 generated: 2026-07-23
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -89,7 +89,7 @@ status: in-progress
       implementation landed on PR #15's
       `chore/stamp-arg-safety-and-preflight-gap` branch, in
       `skills/ardd-implement/SKILL.md`.)
-- [ ] T006 Manually verify the widened pre-flight prose from T004/T005
+- [x] T006 Manually verify the widened pre-flight prose from T004/T005
       against a worked example: trace through a hypothetical plan run that
       targeted one feature slug and had one feedback file bound to it via
       `plan:` frontmatter, and confirm the described resolution steps
