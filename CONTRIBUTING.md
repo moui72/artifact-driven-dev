@@ -6,8 +6,8 @@ project is [docs/install.md](docs/install.md).
 ## License and contributions
 
 ArDD is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE) —
-free for noncommercial use; commercial/business use requires a separate
-license from the maintainer.
+noncommercial purposes are permitted subject to all of the LICENSE's terms;
+commercial use requires separate permission from the maintainer.
 
 By submitting a contribution (a pull request, patch, or any other
 proposed change) to this repository, you grant the maintainer
