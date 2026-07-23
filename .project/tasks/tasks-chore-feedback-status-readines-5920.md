@@ -17,7 +17,7 @@ status: in-progress
       the test genuinely demonstrates the pre-fix silent-drop behavior
       before Phase 1's fix goes in. Do not yet assert the fixed behavior in
       this task — that assertion belongs to T003.
-- [ ] T002 In `.claude/skills/ardd-scripts/ardd-state.sh`'s `cmd_stamp`
+- [x] T002 In `.claude/skills/ardd-scripts/ardd-state.sh`'s `cmd_stamp`
       function (currently lines 330-332), add a trailing-argument guard
       immediately after the existing
       `[ -n "$file" ] && [ -n "$key" ] && [ -n "$val" ] || dieu ...` check:
