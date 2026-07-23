@@ -13,7 +13,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 1: /ardd-defects reconciliation step
 
-- [ ] T001 In `skills/ardd-defects/SKILL.md` step 5 ("Write
+- [x] T001 In `skills/ardd-defects/SKILL.md` step 5 ("Write
   `.project/DEFECTS.md`"), add a reconciliation sub-step before the
   full-overwrite write: read the current on-disk `.project/DEFECTS.md`
   (if present) and extract its claims; compute the set of claims present

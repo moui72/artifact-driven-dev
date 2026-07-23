@@ -77,6 +77,21 @@ lose it. Do not silently ignore the argument and run anyway.
    defect that's since been fixed in code silently drops out on the next run
    rather than requiring anyone to remember to remove it.
 
+   **Reconciliation sub-step, before the full-overwrite write.** Read the
+   current on-disk `.project/DEFECTS.md` (if present) and extract its
+   claims. Compute the set of claims present there but not produced by this
+   run's fresh survey (step 2/3). For each such claim, spot-check it
+   directly — re-read the specific artifact claim and the specific code
+   location the old entry cited — before deciding whether to drop it. A
+   claim confirmed still genuinely true on spot-check is carried forward
+   into the new `DEFECTS.md` even though the general survey pass missed it
+   this run; a claim confirmed fixed (the code now matches the artifact)
+   drops, same as today. This closes the gap where an incomplete general
+   survey silently loses a still-valid finding, while keeping the "full
+   regenerate, no manual removal needed" design intact — the fix mechanism
+   stays the actual code check, never a human remembering to preserve an
+   entry.
+
    ```markdown
    # Defects
 
