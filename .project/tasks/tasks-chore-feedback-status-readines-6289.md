@@ -1,7 +1,7 @@
 ---
 plan: plan-chore-feedback-status-readines-2026-07-23-659e.md
 generated: 2026-07-23
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -71,7 +71,7 @@ status: in-progress
       before — those assertions pass explicit `ARDD_CHANNEL` values or
       test rejection behavior, not the tag-inference fallback, so they
       aren't affected by live tag state.
-- [ ] T006 Run `sh scripts/test-ardd-update-check.sh` locally and confirm
+- [x] T006 Run `sh scripts/test-ardd-update-check.sh` locally and confirm
       every assertion passes, in particular "install.sh records Channel:
       stable by default" — first with the repo's real `HEAD` untagged (the
       common case), and, if a beta tag currently points at `HEAD` in this
