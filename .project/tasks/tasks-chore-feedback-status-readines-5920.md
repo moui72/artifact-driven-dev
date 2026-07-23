@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: `ardd-state.sh stamp` rejects unexpected trailing args
 
-- [ ] T001 In `scripts/test-ardd-state.sh`'s existing `stamp` section
+- [x] T001 In `scripts/test-ardd-state.sh`'s existing `stamp` section
       (~line 463 onward, alongside the existing bad-date/bad-diagram-status
       cases), add a red-first case: run
       `sh "$STATE" stamp "$AF" last_updated 2026-07-06 extra-arg` and
