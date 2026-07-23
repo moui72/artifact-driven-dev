@@ -33,7 +33,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 
 ## Phase 2: /ardd-status prepend-and-preserve rule
 
-- [ ] T002 In `skills/ardd-status/SKILL.md` step 6 ("Write
+- [x] T002 In `skills/ardd-status/SKILL.md` step 6 ("Write
   `.project/STATUS.md`"), add an explicit rule, right after the existing
   bullet list and before the closing "STATUS.md is the single re-entry
   point..." paragraph: a new run's `_Updated:` entry is *prepended* as a

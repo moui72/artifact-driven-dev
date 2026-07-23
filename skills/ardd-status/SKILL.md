@@ -303,6 +303,14 @@ without regenerating `STATUS.md` or being asked anything.
    - Recommended next step drawn from the Summary
    - Update the `_Updated:` date to today
 
+   **Prepend-and-preserve.** A new run's `_Updated:` entry is *prepended*
+   as a new top block, and every prior `_Updated:` block already in the
+   file is preserved verbatim below it — never summarized away, condensed,
+   or replaced with just a fresh top-level summary. This is why
+   `STATUS.md` grows over time by design: its history is durable re-entry
+   chronology, not a point-in-time snapshot — matching the file's own
+   description below ("the single re-entry point after any interruption").
+
    STATUS.md is the single re-entry point after any interruption. `/ardd-status`
    is its only writer — other skills prompt the user to run it rather than
    writing STATUS.md themselves.
