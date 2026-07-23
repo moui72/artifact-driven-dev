@@ -9,295 +9,295 @@ jobs:
   lint-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/lint-docs.sh
 
   lint-docs-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-lint-docs.sh
 
   lint-templates-yaml:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: python3 -c 'import yaml' || pip3 install pyyaml
       - run: ./scripts/lint-templates-yaml.sh
 
   lint-templates-yaml-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: python3 -c 'import yaml' || pip3 install pyyaml
       - run: ./scripts/test-lint-templates-yaml.sh
 
   lint-project:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-lint-project.sh
 
   branch-info:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-branch-info.sh
 
   completion-flip-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-completion-flip-check.sh
 
   worktree-align:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-worktree-align.sh
 
   fold-to-main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-fold-to-main.sh
 
   worktree-reap:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-worktree-reap.sh
 
   inflight-worktrees:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-inflight-worktrees.sh
 
   parallel-matrix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-parallel-matrix.sh
 
   install-worktreeinclude:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-worktreeinclude.sh
 
   install-manifest-complete:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-install-manifest-complete.sh
 
   install-agents-md:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-agents-md.sh
 
   merge-driver:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-merge-driver.sh
 
   install-gitattributes:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-gitattributes.sh
 
   install-source-path:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-source-path.sh
 
   install-prune:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-prune.sh
 
   install-version-badge:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-install-version-badge.sh
 
   new-project:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-new.sh
 
   sibling-tasks-complete:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-sibling-tasks-complete.sh
 
   sync-slug-match:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-sync-slug-match.sh
 
   sync-label-decision:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-sync-label-decision.sh
 
   sync-divergence:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-sync-divergence.sh
 
   project-lock:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-project-lock.sh
 
   hook-lint-on-write:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-hook-lint-on-write.sh
 
   ardd-state:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-ardd-state.sh
 
   migration-per-feature:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migration-per-feature.sh
 
   defects-unsurfaced:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-defects-unsurfaced.sh
 
   tasks-list:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-tasks-list.sh
 
   feature-list:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-feature-list.sh
 
   upsert-section:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-upsert-section.sh
 
   smoke-assert:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-smoke-assert.sh
 
   gen-skill-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-gen-skill-docs.sh
 
   migrations-legacy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migrations-legacy.sh
 
   migration-retag:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migration-retag.sh
 
   migration-diagram-type:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migration-diagram-type.sh
 
   migration-critique-to-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migration-critique-to-audit.sh
 
   migration-sync-to-tracker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migration-sync-to-tracker.sh
 
   migration-workflow-table:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-migration-workflow-table.sh
 
   ardd-update-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-ardd-update-check.sh
 
   hooks-pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-hooks-pre-commit.sh
 
   source-resolve:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-source-resolve.sh
 
   next-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-next-version.sh
 
   release-notes:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: ./scripts/test-release-notes.sh
