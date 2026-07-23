@@ -44,7 +44,7 @@ status: in-progress
 
 ## Phase 2: Widen the delegation pre-flight's committed-path coverage
 
-- [ ] T004 In `.claude/skills/ardd-implement/SKILL.md`'s pre-flight step
+- [x] T004 In `.claude/skills/ardd-implement/SKILL.md`'s pre-flight step
       (currently lines 161-195), after the existing step that resolves the
       tasks file's bound plan filename via its `plan:` frontmatter, add
       prose describing three additional path-resolution steps run against
@@ -57,7 +57,7 @@ status: in-progress
       `git status --short` step below, rather than resolved to specific
       files, since artifact edits carry no back-reference to the plan that
       produced them.
-- [ ] T005 In the same pre-flight step, change the existing
+- [x] T005 In the same pre-flight step, change the existing
       `git status --short <plan-file> <tasks-file>` invocation to include
       every path resolved in T004 — the plan file, the tasks file, each
       resolved feature-register file, each resolved feedback file, and
