@@ -1,7 +1,7 @@
 ---
 plan: plan-chore-feedback-status-readines-2026-07-23-a4a4.md
 generated: 2026-07-23
-status: ready
+status: in-progress
 ---
 
 # Tasks
