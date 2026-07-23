@@ -43,7 +43,7 @@ status: in-progress
 
 ## Phase 2: Isolate the update-check test's live-tag dependency
 
-- [ ] T004 In `scripts/test-ardd-update-check.sh`,
+- [x] T004 In `scripts/test-ardd-update-check.sh`,
       before the "producer contract" section (~line 228 onward, which
       currently sets `REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"` and runs
       `install.sh` directly against it), add a step that creates an
@@ -56,7 +56,7 @@ status: in-progress
       FETCH_HEAD` — this fetches only the commit object graph reachable
       from `HEAD`, pulling in no tags from `$REPO_ROOT`). Store this
       clone's path in a new variable (e.g. `REPO_CLONE`).
-- [ ] T005 In `scripts/test-ardd-update-check.sh`, change the two producer-
+- [x] T005 In `scripts/test-ardd-update-check.sh`, change the two producer-
       contract `install.sh` invocations (the `Source-Commit` assertion and
       the "records Channel: stable by default" assertion, currently both
       running `( cd "$REPO_ROOT" && sh ./install.sh "$TP" )`) to instead

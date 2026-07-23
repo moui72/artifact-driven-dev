@@ -227,8 +227,18 @@ out="$(sh "$CHECK" "$T11")"
 
 # --- producer contract: install.sh writes Source-Commit as the full sha ---
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# An untagged clone of REPO_ROOT at its current HEAD, used for the two
+# assertions below so install.sh's `git tag --points-at HEAD` inference
+# (install.sh:573-576) always sees zero tags — decoupling those assertions
+# from whether a release tag happens to point at this checkout's HEAD.
+REPO_CLONE="$WORK/repo-clone"; mkdir -p "$REPO_CLONE"
+( git init -q "$REPO_CLONE" \
+  && git -C "$REPO_CLONE" fetch -q --depth 1 "$REPO_ROOT" HEAD \
+  && git -C "$REPO_CLONE" checkout -q FETCH_HEAD ) >/dev/null 2>&1
+
 TP="$WORK/producer"; mkdir -p "$TP"
-( cd "$REPO_ROOT" && sh ./install.sh "$TP" ) >/dev/null 2>&1
+( cd "$REPO_CLONE" && sh ./install.sh "$TP" ) >/dev/null 2>&1
 want="$(command git -C "$REPO_ROOT" rev-parse HEAD)"
 got="$(sed -n 's/^Source-Commit: //p' "$TP/.project/ardd-version.md" | head -1)"
 [ "$got" = "$want" ] && ok "install.sh writes Source-Commit (full sha)" || bad "install.sh Source-Commit — got '$got', want '$want'"
