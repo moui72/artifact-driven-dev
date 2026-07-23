@@ -8,7 +8,7 @@ status: in-progress
 
 ## Phase 1: Rework badge-sync workflow to survive branch protection
 
-- [ ] T001 In `.github/workflows/ardd-badge.yml`, replace the "Commit if
+- [x] T001 In `.github/workflows/ardd-badge.yml`, replace the "Commit if
       changed" step's direct `git push` to `main` (currently lines 80-91)
       with a PR-based path: after detecting a diff in
       `.github/badges/ardd-version.json`, create a short-lived branch
@@ -20,7 +20,7 @@ status: in-progress
       permission at the top of the job). Do not attempt `git push` to
       `main` directly anywhere in this step. [feedback:
       feedback-branch-protection-badge-exception-a8a9.md F001]
-- [ ] T002 Immediately after the `gh pr create` call
+- [x] T002 Immediately after the `gh pr create` call
       added in T001, attempt `gh pr merge --auto --squash` on the opened
       PR so it merges itself once/if the ruleset's approval requirement is
       satisfied by an existing bypass; if the `gh pr merge --auto` call
@@ -30,7 +30,7 @@ status: in-progress
       and awaiting manual approval/merge — never fail the workflow run
       over an unmergeable badge-sync PR. [feedback:
       feedback-branch-protection-badge-exception-a8a9.md F001]
-- [ ] T003 Manually verify the reworked `ardd-badge.yml` step: run
+- [x] T003 Manually verify the reworked `ardd-badge.yml` step: run
       `actionlint .github/workflows/ardd-badge.yml` (or equivalent YAML/
       shell lint available in this repo) to confirm the script block is
       still well-formed, then trigger the workflow via

@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
 
@@ -78,6 +79,8 @@ jobs:
           fi
 
       - name: Commit if changed
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -e
           if git diff --quiet -- .github/badges/ardd-version.json; then
@@ -86,6 +89,26 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # main has branch protection now, so this step can no longer push
+          # directly to it. Instead: commit on a short-lived branch, push
+          # that, and open a PR against main.
+          branch="badge-sync-${{ github.run_id }}"
+          git checkout -b "$branch"
           git add .github/badges/ardd-version.json
           git commit -m "chore: sync ArDD version badge [skip ci]"
-          git push
+          git push origin "$branch"
+
+          pr_url="$(gh pr create --base main --head "$branch" \
+            --title "chore: sync ArDD version badge" \
+            --body "Automated update of .github/badges/ardd-version.json from .project/ardd-version.md, triggered by the ardd-badge.yml workflow.")"
+          echo "Opened $pr_url"
+
+          # Best-effort auto-merge: never fail the workflow if this can't
+          # merge on its own (auto-merge disabled on the repo, or the
+          # approval requirement isn't satisfied by an existing bypass).
+          if gh pr merge --auto --squash "$pr_url"; then
+            echo "Auto-merge enabled for $pr_url"
+          else
+            echo "Could not enable auto-merge for $pr_url — PR is open and awaiting manual approval/merge."
+          fi
