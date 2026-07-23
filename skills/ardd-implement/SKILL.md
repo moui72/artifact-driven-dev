@@ -171,16 +171,30 @@ entering the normal flow.
    exits 0, indistinguishable from "clean," so skipping this existence
    check would silently miss a stale or typo'd `plan:` reference. If the
    plan file is missing, stop and surface this to the user (in both
-   modes) rather than proceeding into the `git status` check below. Once
-   existence is confirmed, run `git status --short <plan-file>
-   <tasks-file>` for both paths. If either is untracked or shows
-   modifications relative to HEAD:
+   modes) rather than proceeding into the `git status` check below.
+
+   Resolve the same coverage gap for the other paths a plan run can leave
+   uncommitted, using that same resolved plan file: (a) read the plan's
+   `features:` frontmatter list and resolve each slug to
+   `.project/features/<slug>.md`; (b) glob `.project/feedback/feedback-*.md`
+   and keep any file whose `plan:` frontmatter names this plan's filename;
+   (c) note that `.project/artifacts/` will be checked as a whole directory
+   in the `git status --short` step below, rather than resolved to specific
+   files, since artifact edits carry no back-reference to the plan that
+   produced them.
+
+   Once existence is confirmed, run `git status --short <plan-file>
+   <tasks-file> <feature-file>... <feedback-file>... .project/artifacts/`
+   (every resolved feature file, every resolved feedback file, and the
+   `.project/artifacts/` directory, alongside the plan and tasks files). If
+   any of these paths is untracked or shows modifications relative to HEAD:
    - **solo mode** (`workflow_mode` absent or `solo`, read from
      `.project/artifacts/constitution.md` frontmatter) — auto-commit them
-     directly, no prompt: `git add <plan-file> <tasks-file>` (the exact
-     paths only, never a sweep), then a signed commit per this repo's
-     `CLAUDE.md` signing convention (the on-disk `~/.ssh/id_claude_signing`
-     key):
+     directly, no prompt: `git add <plan-file> <tasks-file> <feature-file>...
+     <feedback-file>... .project/artifacts/` (this same widened set — every
+     path resolved above, plus the `.project/artifacts/` directory — never a
+     broader sweep), then a signed commit per this repo's `CLAUDE.md`
+     signing convention (the on-disk `~/.ssh/id_claude_signing` key):
      ```
      git -c gpg.format=ssh -c gpg.ssh.program=ssh-keygen \
          -c user.signingkey="$HOME/.ssh/id_claude_signing.pub" \
@@ -191,7 +205,10 @@ entering the normal flow.
      the action is visible, not silent.
    - **collaborative mode** — unchanged: surface this to the user before
      delegating, offer to commit them now, or block delegation with an
-     explicit message naming the uncommitted file(s) — never launch a
+     explicit message naming every affected path found dirty/untracked —
+     the plan and tasks files, plus any resolved feature file, feedback
+     file, or path under `.project/artifacts/` — never just the plan/tasks
+     pair — never launch a
      worktree subagent while the gap exists.
 
    - If `on_default` is `false` — a recovery path now that solo
