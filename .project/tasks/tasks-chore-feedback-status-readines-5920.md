@@ -30,7 +30,7 @@ status: in-progress
       non-empty one. (Revised from an earlier `[ -z "${1:-}" ]` draft of
       this guard per CodeRabbit review on PR #15 — see that PR's
       `scripts/ardd-state.sh` commit for the actual implementation.)
-- [ ] T003 In `scripts/test-ardd-state.sh`, update the case added in T001
+- [x] T003 In `scripts/test-ardd-state.sh`, update the case added in T001
       (or add a new case immediately after it) to assert the fixed
       behavior: `sh "$STATE" stamp "$AF" last_updated 2026-07-06 extra-arg`
       now exits with the usage-error code `dieu` produces (matching the

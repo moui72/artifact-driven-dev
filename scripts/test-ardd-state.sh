@@ -500,13 +500,16 @@ sh "$STATE" stamp "$AF" name other >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: unknown key usage error" 2 "$rc"
 
-# stamp: trailing extra argument — currently silently dropped (bug); this
-# case demonstrates the pre-fix behavior before Phase 1's fix goes in
-# [feedback: feedback-ardd-state-stamp-silent-extra-args-1625.md F001]
+# stamp: trailing extra argument must be rejected as a usage error, not
+# silently dropped [feedback: feedback-ardd-state-stamp-silent-extra-args-1625.md F001]
 set +e
-sh "$STATE" stamp "$AF" last_updated 2026-07-06 extra-arg >/dev/null 2>&1; rc=$?
+stout="$(sh "$STATE" stamp "$AF" last_updated 2026-07-06 extra-arg 2>&1)"; rc=$?
 set -e
-assert_exit "stamp: extra trailing argument currently silently dropped (pre-fix)" 0 "$rc"
+assert_exit "stamp: extra trailing argument rejected" 2 "$rc"
+case "$stout" in
+  *"extra-arg"*) ok "stamp: extra-argument error names the unexpected argument" ;;
+  *) bad "stamp: extra-argument error names the unexpected argument — got: $stout" ;;
+esac
 
 # stamp next_step_prompt — boolean-validated, add + replace
 CF="$ART/constitution.md"
