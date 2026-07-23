@@ -1,7 +1,7 @@
 ---
 plan: plan-codex-scenario-sweep-fixes-2026-07-22-220d.md
 generated: 2026-07-22
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
                      # (or -> abandoned, if superseded by a new tasks
                      # file generated for the same plan)
                      # completed is terminal — post-completion failures
