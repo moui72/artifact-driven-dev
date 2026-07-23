@@ -3,6 +3,23 @@
 This is about working on ArDD's own source — installing ArDD *into* a
 project is [docs/install.md](docs/install.md).
 
+## License and contributions
+
+ArDD is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE) —
+free for noncommercial use; commercial/business use requires a separate
+license from the maintainer.
+
+By submitting a contribution (a pull request, patch, or any other
+proposed change) to this repository, you grant the maintainer
+(moui72) a perpetual, worldwide, non-exclusive, royalty-free,
+irrevocable license to use, reproduce, modify, and relicense your
+contribution — including under different license terms than
+[LICENSE](LICENSE), such as a commercial license offered to business
+users. You retain your own copyright in your contribution; this
+grant doesn't transfer ownership, only lets the maintainer relicense
+it alongside the rest of the project. Don't submit a contribution
+you don't hold the rights to license on these terms.
+
 ## What you're editing
 
 The deliverable is the content of `skills/*/SKILL.md` — markdown files

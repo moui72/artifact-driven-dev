@@ -10,10 +10,13 @@
 > 📖 Browse these docs as a website:
 > **<https://moui72.github.io/artifact-driven-dev/>**
 
-[![sponsor](https://shieldcn.dev/badge/sponsor-%E2%9D%A4-ea4aaa.svg?variant=secondary&theme=pink)](https://github.com/sponsors/moui72)
-<!-- ardd-badge-version-start -->
-[![built with ArDD](https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/.github/badges/ardd-version.json&query=$.message&label=built%20with%20ArDD&color=7C3AED&logo=data:image/svg+xml;base64,PLACEHOLDER&variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
-<!-- ardd-badge-version-end -->
+<p align="center">
+  <a href="LICENSE"><img alt="license" src="https://shieldcn.dev/badge/license-PolyForm%20Noncommercial-2F4858.svg?variant=secondary"></a>
+  <a href="https://github.com/sponsors/moui72"><img alt="sponsor" src="https://shieldcn.dev/badge/sponsor-%E2%9D%A4-ea4aaa.svg?variant=secondary&theme=pink"></a>
+  <!-- ardd-badge-version-start -->
+  <a href="https://github.com/moui72/artifact-driven-dev"><img alt="built with ArDD" src="https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/moui72/artifact-driven-dev/main/.github/badges/ardd-version.json&query=$.message&label=built%20with%20ArDD&labelColor=2F4858&variant=secondary"></a>
+  <!-- ardd-badge-version-end -->
+</p>
 
 A workflow system for Claude Code built around a small set of living
 documents — **artifacts** — that record what you've decided about your
