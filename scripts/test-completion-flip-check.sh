@@ -85,10 +85,14 @@ write_features "$repo" "tasked"
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
 assert_eq "case1: not completed -> silent" "" "$out"
 
-# --- Case 2: completed, but plan's branch never created/merged -> silent ---
+# --- Case 2: completed, but plan's branch ref doesn't exist and the
+# feature is still tasked -> loud branch-missing line (F004: a completed
+# file + tasked feature is reportable even when merged-ness can't be
+# proven; /ardd-status only asks, never auto-flips) ---
 write_tasks "$repo" "completed"
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
-assert_eq "case2: unmerged branch -> silent" "" "$out"
+assert_eq "case2: missing branch ref + tasked -> branch-missing line" \
+  "branch-missing branch=some-branch features=demo-feature" "$out"
 
 # --- Case 3: completed, branch exists but unmerged (diverged) -> silent ---
 git checkout -q -b unmerged-branch
@@ -166,20 +170,42 @@ sed -i.bak 's/^status: tasked/status: implemented/' "$repo/.project/features/dem
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
 assert_eq "case10: per-feature register, already implemented -> silent" "" "$out"
 
-# --- Case 11 (solo no-branch flow, decision 0005): the plan's branch:
-# names a branch that was never created — /ardd-plan's solo path commits
-# plan+tasks to the default branch without ever creating the branch the
-# field names — and there's no worktree_branch. The feature is still
-# tasked, so the only thing keeping the check silent is the missing ref:
-# it must degrade cleanly (empty stdout, empty stderr, exit 0), never
-# error. ---
+# --- Case 11 (missing ref, feature still tasked — revises the decision-
+# 0005 silence this case previously pinned, per badge-audit F004): the
+# plan's branch: names a ref that doesn't exist (solo never-created and
+# deleted-after-merge are indistinguishable here) and the feature is
+# still tasked -> loud branch-missing line on stdout, clean stderr,
+# exit 0 — never an error, never silent. ---
 sed -i.bak 's/^status: implemented/status: tasked/' "$repo/.project/features/demo-feature.md" && rm -f "$repo/.project/features/demo-feature.md.bak"
 write_plan "$repo" "never-created-solo-branch" "[demo-feature]"
 write_tasks "$repo" "completed"
 rc=0
 out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md" 2>"$WORK/case11.err")" || rc=$?
-assert_eq "case11: no-branch flow, nonexistent ref -> silent stdout" "" "$out"
-assert_eq "case11: no-branch flow, nonexistent ref -> silent stderr" "" "$(cat "$WORK/case11.err")"
-assert_eq "case11: no-branch flow, nonexistent ref -> exit 0" "0" "$rc"
+assert_eq "case11: missing ref + tasked -> branch-missing line" \
+  "branch-missing branch=never-created-solo-branch features=demo-feature" "$out"
+assert_eq "case11: missing ref -> clean stderr" "" "$(cat "$WORK/case11.err")"
+assert_eq "case11: missing ref -> exit 0" "0" "$rc"
+
+# --- Case 12 (the observed F004 scenario): the branch existed, merged
+# into the default branch, and was then deleted (GitHub's default
+# post-merge action). The register flip never landed. The missing ref
+# must NOT read as all-clear -> same loud branch-missing line. ---
+git checkout -q -b deleted-after-merge
+git commit -q --allow-empty -m "delegated work, later squash-merged"
+git checkout -q main
+git merge -q deleted-after-merge -m "merge deleted-after-merge"
+git branch -q -D deleted-after-merge
+write_plan "$repo" "deleted-after-merge" "[demo-feature]"
+write_tasks "$repo" "completed"
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+assert_eq "case12: deleted-after-merge branch -> branch-missing line" \
+  "branch-missing branch=deleted-after-merge features=demo-feature" "$out"
+
+# --- Case 13: missing ref but feature already implemented -> nothing to
+# report, stays silent (the loud line exists to surface a pending flip,
+# not missing refs per se) ---
+sed -i.bak 's/^status: tasked/status: implemented/' "$repo/.project/features/demo-feature.md" && rm -f "$repo/.project/features/demo-feature.md.bak"
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+assert_eq "case13: missing ref + already implemented -> silent" "" "$out"
 
 exit "$fail"

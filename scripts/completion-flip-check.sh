@@ -63,7 +63,20 @@ repo_root="$(cd "$project_root/.." && pwd)"
 default="$(cd "$repo_root" && sh "$SCRIPT_DIR/branch-info.sh" | sed -n 's/^default=//p')"
 [ -n "$default" ] || exit 0
 
-if ! (cd "$repo_root" && git merge-base --is-ancestor "$branch" "$default" 2>/dev/null); then
+# Distinguish "branch ref missing" from "branch not merged" (badge-audit
+# F004): a branch deleted after its PR merged (GitHub's default) used to
+# fall through the merge-base check's swallowed error and read as
+# all-clear — the exact scenario this check exists for. A missing ref is
+# indistinguishable from a solo never-created plan branch (decision
+# 0005), but a completed tasks file whose features are still tasked is
+# worth surfacing either way — /ardd-status only asks, never auto-flips —
+# so both report loudly via the branch_missing path below (revising the
+# silence 0005 originally pinned). An existing-but-unmerged branch stays
+# silent as before.
+branch_missing=0
+if ! (cd "$repo_root" && git rev-parse --verify --quiet "$branch^{commit}" >/dev/null 2>&1); then
+  branch_missing=1
+elif ! (cd "$repo_root" && git merge-base --is-ancestor "$branch" "$default" 2>/dev/null); then
   exit 0
 fi
 
@@ -82,6 +95,7 @@ status_of() {
   fi
 }
 
+tasked_slugs=""
 old_ifs="$IFS"
 IFS=','
 for raw in $inner; do
@@ -89,8 +103,18 @@ for raw in $inner; do
   slug="$(printf '%s' "$raw" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
   if [ -n "$slug" ]; then
     feature_status="$(status_of "$slug")"
-    [ "$feature_status" = "tasked" ] && echo "$slug"
+    [ "$feature_status" = "tasked" ] && tasked_slugs="${tasked_slugs:+$tasked_slugs,}$slug"
   fi
   IFS=','
 done
 IFS="$old_ifs"
+
+[ -n "$tasked_slugs" ] || exit 0
+if [ "$branch_missing" -eq 1 ]; then
+  # Loud missing-ref report: one line, machine-readable, never exit-0-silent
+  # when a flip is pending. No merge-commit archaeology (Principle VI) —
+  # the report is the fix; the user confirms the flip via /ardd-status.
+  echo "branch-missing branch=$branch features=$tasked_slugs"
+else
+  printf '%s\n' "$tasked_slugs" | tr ',' '\n'
+fi
