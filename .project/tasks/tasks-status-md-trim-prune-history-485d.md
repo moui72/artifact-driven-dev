@@ -1,7 +1,7 @@
 ---
 plan: plan-status-md-trim-prune-history-2026-07-24-1038.md
 generated: 2026-07-24
-status: ready
+status: in-progress
 ---
 
 # Tasks
