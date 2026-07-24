@@ -511,6 +511,15 @@ case "$stout" in
   *) bad "stamp: extra-argument error names the unexpected argument — got: $stout" ;;
 esac
 
+# stamp: an explicitly empty trailing argument must also be rejected — a
+# value-based guard (`[ -z "$1" ]`) would wrongly accept it, since an empty
+# string is indistinguishable from "no argument" by value alone; only a
+# positional-count guard (`$#`) catches it [CodeRabbit review, PR #15]
+set +e
+sh "$STATE" stamp "$AF" last_updated 2026-07-06 "" >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: explicitly empty trailing argument rejected" 2 "$rc"
+
 # stamp next_step_prompt — boolean-validated, add + replace
 CF="$ART/constitution.md"
 cat > "$CF" <<'EOF'

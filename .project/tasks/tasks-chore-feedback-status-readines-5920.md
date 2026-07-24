@@ -100,3 +100,42 @@ status: completed
       harness to run against it — record the trace as confirmation in this
       task's completion, not as a new test file. [feedback:
       feedback-delegation-preflight-artifact-gap-44dc.md F001]
+
+      **T006 verification record.** Worked example: a hypothetical plan
+      `plan-chore-example-2026-07-23-abcd.md` with `features:
+      [chore-example]`, and a feedback file
+      `feedback-example-item-1234.md` whose frontmatter carries `plan:
+      plan-chore-example-2026-07-23-abcd.md`.
+      - Feature resolution (T004 step (a)): the plan's `features:` list
+        names `chore-example`, which resolves directly to
+        `.project/features/chore-example.md` — the widened prose's
+        resolution rule is unambiguous here, no judgment call needed.
+      - Feedback resolution (T004 step (b)): globbing
+        `.project/feedback/feedback-*.md` and keeping any file whose
+        `plan:` frontmatter equals `plan-chore-example-2026-07-23-abcd.md`
+        correctly picks up `feedback-example-item-1234.md` and excludes
+        every other feedback file in the directory, since none of them
+        carry that `plan:` value.
+      - `git status --short` coverage (T005): the widened invocation —
+        `<plan-file> <tasks-file> .project/features/chore-example.md
+        feedback-example-item-1234.md .project/artifacts/` — covers both
+        resolved files plus the artifacts directory alongside the existing
+        plan/tasks pair, matching the prose exactly.
+      - Collaborative-mode message (T005): per the updated prose ("naming
+        every affected path found dirty/untracked... never just the
+        plan/tasks pair"), a real uncommitted-file message in this
+        scenario would name all four: the plan file, the tasks file,
+        `.project/features/chore-example.md`, and
+        `feedback-example-item-1234.md` (plus any dirty path under
+        `.project/artifacts/`, if present) — not just the plan/tasks pair.
+
+      **Conclusion on broad artifact auto-commit (raised by CodeRabbit
+      review on PR #15):** the `.project/artifacts/` directory is
+      deliberately checked as a whole rather than resolved to specific
+      files, because artifact edits carry no `plan:`-style back-reference
+      to the plan that produced them — there is no mechanical way to
+      narrow it further. This is accepted as-is: any artifact left
+      dirty/untracked at delegation time is, by definition, state a
+      delegated worktree cannot see either way, so including it in the
+      pre-flight's coverage is never wrong — at worst it's broader than
+      strictly necessary for this one plan, never insufficient.
