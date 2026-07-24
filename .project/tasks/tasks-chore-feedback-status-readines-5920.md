@@ -22,9 +22,14 @@ status: ready
       immediately after the existing
       `[ -n "$file" ] && [ -n "$key" ] && [ -n "$val" ] || dieu ...` check:
       `shift 3 2>/dev/null || shift $#` then
-      `[ -z "${1:-}" ] || dieu "stamp: unexpected extra argument(s): $*"`.
+      `[ "$#" -eq 0 ] || dieu "stamp: unexpected extra argument(s): $*"`.
       This makes a 4th-or-later positional argument a usage error instead
-      of being silently ignored.
+      of being silently ignored — a positional-count check, not a
+      value/`-z` check, so an explicitly empty trailing argument (still a
+      real extra positional parameter) is rejected too, not just a
+      non-empty one. (Revised from an earlier `[ -z "${1:-}" ]` draft of
+      this guard per CodeRabbit review on PR #15 — see that PR's
+      `scripts/ardd-state.sh` commit for the actual implementation.)
 - [ ] T003 In `scripts/test-ardd-state.sh`, update the case added in T001
       (or add a new case immediately after it) to assert the fixed
       behavior: `sh "$STATE" stamp "$AF" last_updated 2026-07-06 extra-arg`

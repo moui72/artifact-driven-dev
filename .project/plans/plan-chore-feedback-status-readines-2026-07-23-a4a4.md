@@ -40,8 +40,12 @@ Out of scope:
 `stamp <file> key1 val1 key2 val2` silently applies only `key1`/`val1` and
 drops the rest with no error. The fix adds one guard at the top of
 `cmd_stamp`: after the existing `need <file> <key> <value>` check, `shift 3`
-and check `[ -n "${1:-}" ]` — if anything remains, `dieu` with a message
-naming the unexpected extra argument(s). Every existing caller across the
+and check `[ "$#" -eq 0 ]` — if anything remains, `dieu` with a message
+naming the unexpected extra argument(s). A positional-count check, not a
+value/`-z` check, so an explicitly empty trailing argument is rejected too
+(a value check would wrongly treat an empty string as "no argument" —
+caught by CodeRabbit review on PR #15, after this plan's initial draft
+proposed the value-based form). Every existing caller across the
 skill prose passes exactly one `key val` pair, so this is a pure
 tightening — no existing call site regresses.
 
