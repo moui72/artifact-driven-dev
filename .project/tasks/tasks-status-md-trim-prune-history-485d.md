@@ -1,7 +1,7 @@
 ---
 plan: plan-status-md-trim-prune-history-2026-07-24-1038.md
 generated: 2026-07-24
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -26,5 +26,5 @@ status: in-progress
 ## Phase 4: Install wiring + doc sync
 - [x] T012 Update `install.sh` to copy `scripts/status-prune.sh` into the target's `.claude/skills/ardd-scripts/` directory, exactly as the other installed scripts (e.g. `branch-info.sh`) are handled. Depends on T001.
 - [x] T013 Add `scripts/status-prune.sh` and `scripts/test-status-prune.sh` to `CLAUDE.md`'s Commands list with one-line descriptions matching the existing entries' style. Depends on T012.
-- [ ] T014 Sync user-facing docs that describe STATUS.md's unbounded growth to the bounded framing: README's "Concurrency and `.project/` merge conflicts" neighborhood and any `docs/` mention, plus `templates/dot-project-readme.md` if it states the preserve-verbatim rule. Depends on T011.
-- [ ] T015 Run `scripts/lint-docs.sh`, `scripts/lint-project.sh`, `scripts/test-status-prune.sh`, and `scripts/test-lint-project.sh` and confirm all pass with no new findings. Depends on T005, T013, T014.
+- [x] T014 Sync user-facing docs that describe STATUS.md's unbounded growth to the bounded framing: README's "Concurrency and `.project/` merge conflicts" neighborhood and any `docs/` mention, plus `templates/dot-project-readme.md` if it states the preserve-verbatim rule. Depends on T011.
+- [x] T015 Run `scripts/lint-docs.sh`, `scripts/lint-project.sh`, `scripts/test-status-prune.sh`, and `scripts/test-lint-project.sh` and confirm all pass with no new findings. Depends on T005, T013, T014.

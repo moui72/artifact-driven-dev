@@ -1,6 +1,6 @@
 ---
 slug: status-md-trim-prune-history
-status: tasked
+status: implemented
 logged: 2026-07-24
 plan: plan-status-md-trim-prune-history-2026-07-24-1038.md
 tasks: tasks-status-md-trim-prune-history-485d.md
