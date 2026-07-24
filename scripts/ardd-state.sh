@@ -331,7 +331,7 @@ cmd_stamp() {
   file="${1:-}"; key="${2:-}"; val="${3:-}"
   [ -n "$file" ] && [ -n "$key" ] && [ -n "$val" ] || dieu "stamp: need <file> <key> <value>"
   shift 3 2>/dev/null || shift $#
-  [ -z "${1:-}" ] || dieu "stamp: unexpected extra argument(s): $*"
+  [ "$#" -eq 0 ] || dieu "stamp: unexpected extra argument(s): $*"
   [ -f "$file" ] || die "stamp: no such file: $file"
   case "$key" in
     last_updated)
