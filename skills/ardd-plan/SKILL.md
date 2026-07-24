@@ -753,11 +753,13 @@ the feature register. Its own steps:
 
    Only continue to step 3 when N≥2.
 
-3. **Per-item footprint confidence grading (N≥2).** For each backlogged
-   item, read its register entry (the description and any `Why:` line)
-   and ground a footprint estimate in real greps/reads of the codebase —
-   never free-associated from the register's prose alone. Grade a
-   confidence:
+3. **Per-item footprint confidence grading (N≥2).** For each item — a
+   backlogged feature from its register entry (the description and any
+   `Why:` line), or an open feedback file from its item lines — ground a
+   footprint estimate in real greps/reads of the codebase, never
+   free-associated from the prose alone. A feedback file's footprint is
+   the union of its items' `[artifacts: ...]` bracket-tags plus any
+   grep-grounded code refs they cite. Grade a confidence:
    - **`high`** — a concrete existing seam was found (a file, interface,
      or abstraction the feature would extend or plug into). Example:
      `wasm-hunspell-backend` grades `high` because a grep turns up a
@@ -775,16 +777,29 @@ the feature register. Its own steps:
 
    Grading is agent judgment, not a rigid rubric — these two worked
    examples anchor what "grounded in real greps" means in practice; don't
-   grade purely from how confident the register's own prose sounds.
+   grade purely from how confident the register's own prose sounds. Open
+   feedback files usually grade `high`: they were captured from inspecting
+   the running implementation and typically cite a concrete path + symbol
+   (ardd-feedback step 3), so the seam is already named rather than
+   hypothesized.
 
 4. **Pairwise relations (N≥2), two axes, computed separately.** For every
-   pair of backlogged items, determine two independent judgments — never
-   collapse them into one:
+   pair of items — feature/feature, feature/feedback, or feedback/feedback,
+   the axes apply identically to a feedback file's footprint (its unioned
+   artifact tags + code refs) as to a feature's — determine two independent
+   judgments, never collapsing them into one:
    - **File-set overlap** — do the two items' footprints share any file?
    - **Ordering dependency** — does one item need to land before the
      other regardless of file overlap (e.g. an interface one item would
      consume that the other edits, or a shared code path one transforms
-     and the other reads)?
+     and the other reads)? One heuristic specific to the mixed slate: a
+     feedback file carrying a `## Reconsidered` item tagged with an
+     artifact that a slated feature would *also* modify is an ordering
+     edge — the decision reversal should be negotiated before (or together
+     with) that feature's artifact design, so the pair bundles rather than
+     fanning out. This is the mixed slate's chief payoff: without it, a
+     fan-out can design a feature against an artifact a pending reversal is
+     about to overturn.
 
    Overlap without dependency is a **safe parallel pair**, even when the
    items are topically related. Example: a `project-scoped-personal-
