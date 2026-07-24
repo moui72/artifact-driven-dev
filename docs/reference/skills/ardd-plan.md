@@ -15,7 +15,7 @@ _Tier: core_
 /ardd-plan defect:<id> [...] | defects  # scope the defect check; re-offers declined entries
 /ardd-plan --from <plan-file>           # re-task mode: skip planning, regenerate tasks for an existing plan
 /ardd-plan --list                       # print backlogged features and stop (read-only, no pick flow)
-/ardd-plan --slate                      # advisory defrag grouping over the backlog, then stop (read-only)
+/ardd-plan --slate                      # advisory defrag grouping over backlogged features + open feedback, then stop (read-only)
 ```
 
 `--list` is a pure side door: it runs `feature-list.sh` (default filter —
@@ -26,17 +26,25 @@ no writes of any kind.
 `--slate` is also read-only and ephemeral — like `--list`, it skips
 straight past the normal flow (steps 1–15) and runs a separate procedure
 instead. Where `--list` prints a bare backlog, `--slate` computes an
-advisory "defrag" grouping over it: for each `backlogged` item it grades
-a footprint confidence (`high`/`medium`/`low`) grounded in real codebase
-greps, then for every pair it determines file-set overlap and ordering
-dependency as two separate axes, and classifies every item into exactly
-one of Bundle (sequential — recommended as one multi-slug `/ardd-plan
-<slug1> <slug2> ...` call), Parallel set (safe to fan out — separate
-`/ardd-plan <slug>` calls), or Solo-deferred (low/speculative confidence
-or gated on a non-code decision — its own single-slug call). N=0 or N=1
-backlogged items is a degenerate case (report "nothing to defrag" and
-stop; N=1 recommends that single slug directly) rather than a fabricated
-slate. The full grading/relation/classification shape is in the plan's
+advisory "defrag" grouping over the full plannable surface — both
+`backlogged` features and open feedback files (each feedback *file* is one
+slate item). For each item it grades a footprint confidence
+(`high`/`medium`/`low`) grounded in real codebase greps — a feedback
+file's footprint is the union of its items' `[artifacts: ...]` tags and
+code refs, and it usually grades `high` — then for every pair it
+determines file-set overlap and ordering dependency as two separate axes
+(one mixed-slate heuristic: a `## Reconsidered` feedback item tagged with
+an artifact a slated feature also modifies is a dependency edge, so they
+bundle). It classifies every item into exactly one of Bundle (sequential —
+one multi-item `/ardd-plan <item1> <item2> ...` call), Parallel set (safe
+to fan out — separate `/ardd-plan <item>` calls), or Solo-deferred
+(low/speculative or gated on a non-code decision — its own single-item
+call), where each `<item>` is a feature slug or a `feedback-*.md`
+filename. N=0 or N=1 items is a degenerate case (report "nothing to
+defrag" and stop; N=1 recommends that single item directly, in its
+matching slug-or-filename form) rather than a fabricated slate. It only
+reads open feedback to grade and group it — it never marks or flips a
+feedback file, so the read-only guarantee is intact. The full grading/relation/classification shape is in the plan's
 Technical Approach (`.project/plans/plan-plan-time-defrag-slate-analysi-2026-07-17-1a95.md`)
 and the skill's own "Slate mode" section. It writes nothing — no plan, no
 register mutation — and recomputes fresh on every invocation.

@@ -107,6 +107,13 @@ artifact produce artifact-revision tasks (tagged
 mechanism in `/ardd-plan`'s tasking half or `/ardd-implement`); untagged items produce
 ordinary code-change tasks.
 
+`/ardd-plan --slate` also surfaces open feedback files: its read-only
+"defrag" grouping treats each open feedback *file* as one slate item
+alongside backlogged features, so it can recommend planning a feedback
+file on its own or bundled with a feature it shares a footprint with. That
+mode only reads feedback to group it — the marking and `status: planned`
+flip still happen only in a normal (non-slate) `/ardd-plan` run's step 4.
+
 Each item's checkbox uses the same 3-state resolution convention as
 `audit.md`: `[ ]` open (not yet resolved), `[x]` incorporated into the
 plan, `[-]` declined (an override the user chose not to take). `/ardd-plan`

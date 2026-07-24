@@ -59,14 +59,17 @@ slug, `feedback-*.md` is always a feedback scope.
 
 `/ardd-plan --slate` is a **read-only advisory mode**: like `--list`, it
 runs before step 1's branch check and before every other step — no
-artifact discovery, no feedback load, no interactive pick, and no writes
-of any kind — but instead of a bare backlog printout it computes a
-"defrag" grouping over the open backlog (bundles that should plan
-together, parallel sets safe to fan out, solo-deferred items) and reports
-a recommended `/ardd-plan <slug> [<slug> ...]` invocation. Entering
-`--slate` skips steps 1–15 entirely and runs the separate "Slate mode"
-procedure defined at the end of this file. Never combine `--slate` with
-any other argument form — it takes no scope.
+artifact discovery, no interactive pick, and no writes of any kind — but
+instead of a bare backlog printout it computes a "defrag" grouping over
+the open plannable surface — **both backlogged features and open feedback
+files** — (bundles that should plan together, parallel sets safe to fan
+out, solo-deferred items) and reports a recommended
+`/ardd-plan <slug|feedback-*.md> [...]` invocation. It only *reads* open
+feedback to grade and group it — it never marks, resolves, or flips a
+feedback file (that stays the normal run's step-4 job), so the read-only
+guarantee holds. Entering `--slate` skips steps 1–15 entirely and runs the
+separate "Slate mode" procedure defined at the end of this file. Never
+combine `--slate` with any other argument form — it takes no scope.
 
 ## Shape of a run
 
@@ -718,29 +721,45 @@ and ends in a report plus a recommended next `/ardd-plan` invocation. It
 never drafts a plan, never writes a plan or tasks file, and never touches
 the feature register. Its own steps:
 
-1. **Enumerate the backlog.** Run
-   `.claude/skills/ardd-scripts/feature-list.sh --status backlogged`
-   (installed copy; if absent, fall back to the source repo path
-   `scripts/feature-list.sh --status backlogged`) and read its tab-separated
-   output verbatim — this is the same register-direct-read discipline
-   `--list` already uses: never trust `STATUS.md`'s assembled counts, even
-   when they happen to already be correct. Let N be the number of lines
-   printed.
+1. **Enumerate the plannable surface.** Two sources, both read directly
+   from disk (never from `STATUS.md`'s assembled counts, even when they
+   happen to be correct — the same register-direct-read discipline `--list`
+   uses):
+   - **Backlogged features** — run
+     `.claude/skills/ardd-scripts/feature-list.sh --status backlogged`
+     (installed copy; if absent, fall back to the source repo path
+     `scripts/feature-list.sh --status backlogged`) and read its
+     tab-separated output verbatim.
+   - **Open feedback** — glob `.project/feedback/feedback-*.md` and keep
+     files whose frontmatter says `status: open` (the same discipline step
+     1a uses in the normal flow). Each open feedback *file* is one slate
+     item (not each `F###` item inside it) — the file is the unit a normal
+     run scopes on and `feedback-planned` flips, and the recommendation
+     grammar has no `feedback-file#F002` form.
+
+   Let N be the total count of both — backlogged features plus open
+   feedback files.
 
 2. **N=0/N=1 branch.** These are degenerate cases — a slate is a relation
    *between* items, and with N≤1 the relation set is empty by
    construction, so don't manufacture one:
-   - **N=0**: report "nothing to defrag — the backlog is empty" and stop.
-   - **N=1**: report "nothing to defrag — single open item: `<slug>`" and
-     recommend `/ardd-plan <that slug>` directly, then stop.
+   - **N=0**: report "nothing to defrag — no backlogged features and no
+     open feedback" and stop.
+   - **N=1**: report "nothing to defrag — single open item: `<item>`" and
+     recommend planning it directly, then stop. The single item may be
+     either kind, so render the recommendation in the matching form: a
+     feature is `/ardd-plan <slug>`, an open feedback file is
+     `/ardd-plan <feedback-*.md>`.
 
    Only continue to step 3 when N≥2.
 
-3. **Per-item footprint confidence grading (N≥2).** For each backlogged
-   item, read its register entry (the description and any `Why:` line)
-   and ground a footprint estimate in real greps/reads of the codebase —
-   never free-associated from the register's prose alone. Grade a
-   confidence:
+3. **Per-item footprint confidence grading (N≥2).** For each item — a
+   backlogged feature from its register entry (the description and any
+   `Why:` line), or an open feedback file from its item lines — ground a
+   footprint estimate in real greps/reads of the codebase, never
+   free-associated from the prose alone. A feedback file's footprint is
+   the union of its items' `[artifacts: ...]` bracket-tags plus any
+   grep-grounded code refs they cite. Grade a confidence:
    - **`high`** — a concrete existing seam was found (a file, interface,
      or abstraction the feature would extend or plug into). Example:
      `wasm-hunspell-backend` grades `high` because a grep turns up a
@@ -758,16 +777,29 @@ the feature register. Its own steps:
 
    Grading is agent judgment, not a rigid rubric — these two worked
    examples anchor what "grounded in real greps" means in practice; don't
-   grade purely from how confident the register's own prose sounds.
+   grade purely from how confident the register's own prose sounds. Open
+   feedback files usually grade `high`: they were captured from inspecting
+   the running implementation and typically cite a concrete path + symbol
+   (ardd-feedback step 3), so the seam is already named rather than
+   hypothesized.
 
 4. **Pairwise relations (N≥2), two axes, computed separately.** For every
-   pair of backlogged items, determine two independent judgments — never
-   collapse them into one:
+   pair of items — feature/feature, feature/feedback, or feedback/feedback,
+   the axes apply identically to a feedback file's footprint (its unioned
+   artifact tags + code refs) as to a feature's — determine two independent
+   judgments, never collapsing them into one:
    - **File-set overlap** — do the two items' footprints share any file?
    - **Ordering dependency** — does one item need to land before the
      other regardless of file overlap (e.g. an interface one item would
      consume that the other edits, or a shared code path one transforms
-     and the other reads)?
+     and the other reads)? One heuristic specific to the mixed slate: a
+     feedback file carrying a `## Reconsidered` item tagged with an
+     artifact that a slated feature would *also* modify is an ordering
+     edge — the decision reversal should be negotiated before (or together
+     with) that feature's artifact design, so the pair bundles rather than
+     fanning out. This is the mixed slate's chief payoff: without it, a
+     fan-out can design a feature against an artifact a pending reversal is
+     about to overturn.
 
    Overlap without dependency is a **safe parallel pair**, even when the
    items are topically related. Example: a `project-scoped-personal-
@@ -789,16 +821,20 @@ the feature register. Its own steps:
    step 5.
 
 5. **Classify and present.** Using the confidence grade (step 3) and the
-   two relations (step 4), bucket every backlogged item into exactly one
-   of:
+   two relations (step 4), bucket every item — feature or open feedback
+   file — into exactly one of. Each item appears in a recommendation in
+   its matching argument form: a feature as its `<slug>`, a feedback file
+   as its `<feedback-*.md>` filename (the normal-run argument grammar
+   already disambiguates the two, so a mixed call is valid input as-is):
    - **Bundle** (reported under "Plan together") — items connected by a
      dependency edge, or sharing files with no safe reordering.
-     Sequenced; recommended as one multi-slug
-     `/ardd-plan <slug1> <slug2> ...` call, in dependency order.
+     Sequenced; recommended as one multi-item
+     `/ardd-plan <item1> <item2> ...` call, in dependency order — items
+     may be any mix of slugs and feedback filenames.
    - **Parallel set** (reported under "Plan separately, safe to fan
      out") — items that are pairwise file-disjoint, have no dependency
      edge between them, and are *not* `low` confidence. Recommended as
-     separate `/ardd-plan <slug>` calls, one per item, safe to fan out
+     separate `/ardd-plan <item>` calls, one per item, safe to fan out
      to worktrees. A `low`-confidence item is never placed in a
      parallel set even when no overlap was found — a wrong "disjoint"
      call is the expensive failure (it green-lights a fan-out that then
@@ -806,7 +842,7 @@ the feature register. Its own steps:
      instead.
    - **Solo-deferred** (reported under "Defer") — `low`/speculative
      confidence, or explicitly gated on a non-code decision per the
-     artifact. Recommended as its own single-slug `/ardd-plan <slug>`
+     artifact. Recommended as its own single-item `/ardd-plan <item>`
      call on its own timeline; never bundled or fanned out.
 
    **Report format**: lead with the actionable grouping, not the
@@ -819,10 +855,10 @@ the feature register. Its own steps:
 
    ```
    Plan together (1 call):
-     -> /ardd-plan typography-substitution docx-export epub-pdf-export
-        (typography-substitution, docx-export, epub-pdf-export —
-        typography-substitution must land first; both export items read
-        through the same render/export path it transforms)
+     -> /ardd-plan typography-substitution feedback-export-glyph-bug-4a2c.md
+        (typography-substitution + a Reconsidered feedback item, both
+        tagged the ui artifact the feature redesigns — negotiate the
+        reversal with the feature's artifact design, so bundle)
 
    Plan separately, safe to fan out (2 calls):
      -> /ardd-plan spellcheck-backend
@@ -833,10 +869,10 @@ the feature register. Its own steps:
         no file or dependency overlap)
 
    Defer (own timeline):
-     -> /ardd-plan llm-assistance
-        (low confidence — infrastructure.md flags this as a later phase
-        with an open question; no seam exists yet to ground a footprint
-        against)
+     -> /ardd-plan feedback-flaky-sync-note-9f10.md
+        (feedback-only item — footprint touches sync.ts, disjoint from
+        every feature above, but graded low because the note itself flags
+        the cause as unconfirmed; keep it on its own timeline)
    ```
 
    Omit any of the three headings entirely when its bucket is empty —
@@ -856,10 +892,12 @@ own next-step prompts already use (see step 15 above). "Top-priority"
 means: a bundle beats a parallel set beats a solo-deferred item (bundles
 resolve an ordering constraint, so they're the most time-sensitive to
 act on), and among same-tier buckets, prefer the first one enumerated.
-Offer as option 1 "Yes — run `<recommendation>` now", option 2 "No — stop
-here" (Esc = option 2); on yes, invoke `/ardd-plan` with the recommended
-slug(s) by name (the existing terminal-handoff mechanism, no value passed
-back). **Exactly one prompt per user-visible turn end** — slate mode never
+This ordering resolves unchanged whether the buckets hold features,
+feedback files, or a mix — the tier and enumeration order are what decide,
+not the item kind. Offer as option 1 "Yes — run `<recommendation>` now",
+option 2 "No — stop here" (Esc = option 2); on yes, invoke `/ardd-plan`
+with the recommended item(s) — slugs and/or `feedback-*.md` filenames — by
+name (the existing terminal-handoff mechanism, no value passed back). **Exactly one prompt per user-visible turn end** — slate mode never
 hands off to `/ardd-status` (it makes no writes for `/ardd-status` to
 reflect), so this is the only prompt in play, never deferred to another
 skill. This prompt is wired only for step 5's N≥2 report; the N=0/N=1
