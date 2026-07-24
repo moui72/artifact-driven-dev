@@ -80,6 +80,12 @@ bumps the constitution version. See
 - Warns and asks before overwriting any existing artifacts.
 - Never invents decisions: anything unresolved (greenfield) or ambiguous
   (existing code) becomes `[OPEN: <question>]`, never a plausible guess.
+  On the existing-codebase path this extends beyond never-guessing to
+  never-overclaiming: before writing a universal-coverage claim (e.g.
+  "all routes validate input"), it verifies the property against every
+  relevant instance individually rather than generalizing from a sample,
+  and phrases the claim conservatively (e.g. "N of M observed routes...")
+  when full verification isn't practical.
 - On the existing-codebase path, accepted constitution suggestions the
   survey already shows violated are marked `[VIOLATED: <evidence>]` — init
   never writes to `DEFECTS.md` or the register for these; it recommends

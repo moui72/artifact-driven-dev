@@ -31,7 +31,11 @@ periodically, not as a routine post-refine step.
 
 - `.project/DEFECTS.md` — its single writer, **full overwrite every run**
   (a fixed defect silently drops out on the next pass; nobody has to
-  remember to remove it). Each defect records the artifact, the specific
+  remember to remove it) — but before dropping any prior claim, a
+  reconciliation spot-check re-reads the specific artifact claim and code
+  location a claim missing from the fresh survey originally cited, and
+  carries it forward instead of dropping it if it's still genuinely true;
+  only a claim confirmed fixed actually drops. Each defect records the artifact, the specific
   claim, what the code actually does, file/line locations, and a severity
   (`cosmetic` / `drift` / `broken-contract`). A clean run still writes the
   file, in an explicit all-clear state — that's what distinguishes

@@ -89,7 +89,12 @@ than one at once is a usage error, reported before anything else runs.
    `--harness` support (an older release tag whose `install.sh` rejects
    the flag), the run refuses and presents the safe choices — pick a
    newer release/channel that has harness support, or stop — rather
-   than running the old installer as a fallback. Suggestions in the
+   than running the old installer as a fallback. A `HARNESS=claude`
+   install against the same pre-`--harness` source is treated
+   differently, not refused: since every pre-harness installer installed
+   for Claude implicitly, the run simply omits `--harness claude` from
+   the reinstall invocation and notes in its output that the source
+   predates explicit-harness recording. Suggestions in the
    relayed output are offers: when you accept one (a gitignore line,
    the badge snippet), the agent shows you the exact diff it would
    apply and asks before writing — nothing is applied unprompted.

@@ -69,14 +69,22 @@ isolates state; backgrounding frees your session). The constitution's
 
 - **Pre-flight, before the fold below**: the chosen tasks file and its
   bound plan must be committed, or a delegated worktree simply can't see
-  them. In solo mode, an uncommitted plan/tasks file is auto-committed
-  (scoped `git add` of exactly those two paths, then a signed commit) —
-  no prompt, the committed paths and hash are printed. In collaborative
-  mode this is unchanged: the user is asked to commit or delegation is
-  blocked. Also verifies the plan file resolved from the tasks file's
-  `plan:` frontmatter actually exists on disk first (a nonexistent path
-  makes `git status --short` print nothing, which would otherwise look
-  identical to "already clean").
+  them. This extends to two more resolved-path kinds: the plan's bound
+  feature-register files (from its `features:` frontmatter) and any
+  feedback files whose `plan:` frontmatter names this plan — all four
+  kinds are checked and, where the mode allows, committed together. In
+  solo mode, anything dirty/untracked among these four is auto-committed
+  (scoped `git add` of exactly those resolved paths, then a signed
+  commit) — no prompt, the committed paths and hash are printed. In
+  collaborative mode this is unchanged: the user is asked to commit or
+  delegation is blocked. Also verifies the plan file resolved from the
+  tasks file's `plan:` frontmatter actually exists on disk first (a
+  nonexistent path makes `git status --short` print nothing, which would
+  otherwise look identical to "already clean"). Separately,
+  `.project/artifacts/` is checked as a whole directory — since artifact
+  edits carry no back-reference to the plan that produced them — and this
+  one always asks before committing, in both solo and collaborative mode;
+  it's never folded into the auto-commit path above.
 - Already on a feature branch when backgrounding? The branch is
   fast-forward-folded into local `<default>` first (`fold-to-main.sh`) so
   the delegated worktree can see its state; any non-trivial condition
