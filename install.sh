@@ -790,17 +790,39 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
         echo "    default branch if it differs.)"
       fi
     else
-      echo "  – .github/workflows/ardd-badge.yml (already exists, left untouched)"
+      # Never-clobber (a consumer may legitimately customize the
+      # workflow), but drift is REPORTED, not silent (badge-audit F001):
+      # compare against what a fresh install would write — the template
+      # with the same branch substitution applied — so a non-main default
+      # branch alone never reads as drift.
+      EXPECTED_WORKFLOW="$(if [ -n "$BADGE_BRANCH" ]; then
+          sed "s|^\([[:space:]]*branches:[[:space:]]*\)\[main\]|\1[$BADGE_BRANCH]|" \
+            "$SCRIPT_DIR/templates/ardd-badge-workflow.yml"
+        else
+          cat "$SCRIPT_DIR/templates/ardd-badge-workflow.yml"
+        fi)"
+      if [ "$(cat "$BADGE_WORKFLOW")" = "$EXPECTED_WORKFLOW" ]; then
+        echo "  – .github/workflows/ardd-badge.yml (already exists, left untouched)"
+      else
+        echo "  – .github/workflows/ardd-badge.yml (differs from current template — review manually;"
+        echo "    left untouched in case it carries local customization)"
+      fi
     fi
 
-    # The badge mark the workflow inlines as logoSvg — shipped to the path
-    # the workflow reads, same never-clobber posture as the other two files.
+    # The badge mark the workflow inlines as logoSvg. Unlike the workflow
+    # this is a MANAGED asset — declared "source of truth … inlined
+    # verbatim", never meant for consumer customization — so a drifted
+    # copy is refreshed in place (badge-audit F001: an upstream rebrand
+    # must reach consumers, not strand them on a stale mark silently).
     if [ ! -f "$BADGE_ICON" ]; then
       mkdir -p "$(dirname "$BADGE_ICON")"
       cp "$SCRIPT_DIR/templates/ardd-icon.svg" "$BADGE_ICON"
       echo "  ✓ .github/badges/ardd-icon.svg"
+    elif cmp -s "$BADGE_ICON" "$SCRIPT_DIR/templates/ardd-icon.svg"; then
+      echo "  – .github/badges/ardd-icon.svg (already exists, matches current template)"
     else
-      echo "  – .github/badges/ardd-icon.svg (already exists, left untouched)"
+      cp "$SCRIPT_DIR/templates/ardd-icon.svg" "$BADGE_ICON"
+      echo "  ✓ .github/badges/ardd-icon.svg (refreshed — differed from current template)"
     fi
 
     if [ ! -f "$BADGE_JSON" ]; then
