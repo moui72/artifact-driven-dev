@@ -15,8 +15,14 @@
 #      `gh release create` (GitHub API -> web-flow Verified; no CI
 #      signing keys);
 #   4. regenerate docs/release-notes.md from the real release history
-#      (scripts/release-notes.sh) and commit+push it to `release` if it
-#      changed — keeps the changelog page current without a manual step.
+#      (scripts/release-notes.sh) and, if it changed, land the commit on
+#      `main` via a short-lived branch + PR with best-effort auto-merge
+#      (the badge-sync idiom — main's branch protection blocks direct
+#      pushes). Never committed to `release`: a release-only commit made
+#      the branch diverge from main and permanently tripped step 2's
+#      fast-forward guard on every later cut. `release`'s copy of the
+#      notes now trails by one cut, which is cosmetic — the docs site
+#      builds from main.
 #
 # All version logic lives in scripts/next-version.sh (fixture-tested);
 # this YAML is thin glue, per the plan's Complexity Tracking.
@@ -108,15 +114,39 @@ jobs:
             --target "$GITHUB_SHA" \
             --title "${{ steps.version.outputs.tag }}"
 
-      - name: Regenerate and publish docs/release-notes.md
+      - name: Regenerate docs/release-notes.md and PR it to main
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -e
           sh scripts/release-notes.sh
-          git config user.email "ci@example.com"
-          git config user.name "CI"
-          # Note: pushes HEAD (the new docs commit), not $GITHUB_SHA — unlike
-          # the fast-forward step above, this step creates a new commit on
-          # top of $GITHUB_SHA, so the ref pushed to refs/heads/release must
-          # be the commit that actually carries the regenerated file.
-          git diff --quiet -- docs/release-notes.md || (git add docs/release-notes.md && git commit -m "docs: regenerate release-notes.md" && git push origin "HEAD:refs/heads/release")
+          if git diff --quiet -- docs/release-notes.md; then
+            echo "No change to docs/release-notes.md — skipping commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Never commit to `release`: a release-only commit diverges the
+          # branch from main and permanently trips the fast-forward guard
+          # above on every later cut. main has branch protection, so land
+          # the commit there the same way ardd-badge.yml does: short-lived
+          # branch, PR, best-effort auto-merge.
+          branch="release-notes-${{ github.run_id }}"
+          git checkout -b "$branch"
+          git add docs/release-notes.md
+          git commit -m "docs: regenerate release-notes.md for ${{ steps.version.outputs.tag }} [skip ci]"
+          git push origin "$branch"
+
+          pr_url="$(gh pr create --base main --head "$branch" \
+            --title "docs: regenerate release-notes.md for ${{ steps.version.outputs.tag }}" \
+            --body "Automated regeneration of docs/release-notes.md from the GitHub release history, triggered by the stable-release.yml workflow after publishing ${{ steps.version.outputs.tag }}.")"
+          echo "Opened $pr_url"
+
+          # Best-effort auto-merge: never fail the release over the
+          # changelog page — the release itself is already published.
+          if gh pr merge --auto --squash "$pr_url"; then
+            echo "Auto-merge enabled for $pr_url"
+          else
+            echo "Could not enable auto-merge for $pr_url — PR is open and awaiting manual approval/merge."
+          fi
