@@ -535,7 +535,24 @@ reconcile mode's gap identification).
     rename should follow the same pattern: carry the suffix for one
     release cycle, then drop it.
 - **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `refactor:`,
-  `chore:`, `docs:`, etc.) — matches existing repo history.
+  `chore:`, `docs:`, `ci:`, etc.) — matches existing repo history. A
+  `SKILL.md` edit is a behavior change to this repo's actual product (see
+  below), never `docs:`/`chore:` — use `fix:` for a bug/behavior correction
+  or `feat:` for new skill behavior, even when the diff is "just prose."
+  This applies to PR titles too, not only commit messages. The same
+  labeling rule extends to every other file class this repo ships into a
+  target project or its CI, even when it reads like "just content" or
+  "just config": `templates/artifacts/*.md` and
+  `templates/constitution-suggestions.md` (installed as
+  `ardd-artifact-templates`/`ardd-constitution-data` — editing them changes
+  what users see and build against), `migrations/*.sh` (run against real
+  target projects on `install.sh`/`ardd-update`), `scripts/lint-project.sh`
+  (the schema-of-record for frontmatter enums — adding/changing an enum
+  value is `feat:`/`fix:`), and `.github/workflows/*.yml` (`ardd-badge.yml`,
+  `beta-release.yml`, `stable-release.yml` — use `ci:` for genuine behavior
+  changes here, not `chore:`/`fix:`). The one exception is
+  `templates/dot-project-readme.md`: it's read by human reviewers, never
+  executed, so `docs:` is still fine there.
 - **Skill files are the product.** A `SKILL.md` edit is a behavior change to
   every project that runs `install.sh` against this commit — treat it with
   the same care as changing a public API.
