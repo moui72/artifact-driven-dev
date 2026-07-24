@@ -14,7 +14,7 @@ fail=0
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=40
+EXPECTED_BAD_FINDINGS=41
 
 if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -113,6 +113,16 @@ else
     echo "ok: invalid update_check_max_age_days value reported with allowed shape"
   else
     echo "FAIL: invalid update_check_max_age_days value reported with allowed shape"
+    fail=1
+  fi
+  # status_history_keep is optional (absent = unbounded STATUS.md history); when
+  # present it must be a positive integer — bad-project's '-3' must be flagged
+  # with the field name and the allowed shape. good-project sets 5 and must
+  # still pass (asserted via the overall good-project pass above).
+  if grep -q "status_history_keep '-3' is not a positive integer" /tmp/lint-bad.out; then
+    echo "ok: invalid status_history_keep value reported with allowed shape"
+  else
+    echo "FAIL: invalid status_history_keep value reported with allowed shape"
     fail=1
   fi
   # render_target / render_section are optional per-artifact overrides; when
