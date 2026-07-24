@@ -203,6 +203,18 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       esac
     fi
 
+    # status_history_keep is optional (absent = /ardd-status keeps the full
+    # prepend-and-preserve chronology, unbounded); when present it must be a
+    # positive integer — the number of most-recent _Updated: blocks status-prune.sh
+    # retains in STATUS.md.
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" status_history_keep; then
+      val="$(frontmatter_field "$f" status_history_keep)"
+      case "$val" in
+        0*|*[!0-9]*|'')
+          report "$f: status_history_keep '$val' is not a positive integer (1, 2, ...)$SKEW_HINT" ;;
+      esac
+    fi
+
     # --- constitution governance bookkeeping consistency ---
     # The exact drift /ardd-defects caught once (v1.1.0 defects): footer
     # Version/Last Amended vs frontmatter last_updated vs the Sync Impact

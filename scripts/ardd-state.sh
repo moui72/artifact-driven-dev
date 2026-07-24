@@ -66,6 +66,7 @@ Deterministic state mutations for .project/ files. Subcommands:
   stamp <file> plan_preview <always-browser|always-console|ask>
   stamp <file> plan_preview_editor <command-template with {path}>
   stamp <file> update_check_max_age_days <positive integer>
+  stamp <file> status_history_keep <positive integer>
                            set an artifact frontmatter field (add or replace)
 EOF
 }
@@ -387,7 +388,12 @@ cmd_stamp() {
         0*|*[!0-9]*|'') dieu "stamp: update_check_max_age_days must be a positive integer (1, 2, ...), got '$val'" ;;
       esac
       ;;
-    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|plan_preview_editor|update_check_max_age_days, got '$key'" ;;
+    status_history_keep)
+      case "$val" in
+        0*|*[!0-9]*|'') dieu "stamp: status_history_keep must be a positive integer (1, 2, ...), got '$val'" ;;
+      esac
+      ;;
+    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|plan_preview_editor|update_check_max_age_days|status_history_keep, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
   echo "stamp: $(abspath "$file") $key = $val"
