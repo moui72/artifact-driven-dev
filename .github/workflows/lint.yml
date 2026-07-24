@@ -66,6 +66,12 @@ jobs:
       - run: git config --global user.email "ci@example.com" && git config --global user.name "CI"
       - run: ./scripts/test-fold-to-main.sh
 
+  status-prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: ./scripts/test-status-prune.sh
+
   worktree-reap:
     runs-on: ubuntu-latest
     steps:
