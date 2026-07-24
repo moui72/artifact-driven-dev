@@ -1,7 +1,7 @@
 ---
 plan: plan-fix-badge-icon-monochrome-2026-07-24-2123.md
 generated: 2026-07-24
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
