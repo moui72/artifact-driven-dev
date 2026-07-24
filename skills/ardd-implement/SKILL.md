@@ -356,10 +356,36 @@ entering the normal flow.
    **Collaborative mode.** Nothing may be committed to the local default
    branch, ever — branch protection makes it unlandable anyway. If
    `on_default` is `true`, the work *must* move to a branch before step 4:
-   either a delegated worktree (same align-first subagent preamble,
-   in-flight check, and `core.bare` check as solo mode) or a plain
-   `git checkout -b`. All state rides that branch exactly as in
-   solo-delegated. After the first commit, offer to push the branch and open
+   either a delegated worktree or a plain `git checkout -b`. All state
+   rides that branch exactly as in solo-delegated. The delegated-worktree
+   case uses the same align-first subagent preamble and `core.bare` check
+   as solo mode, but with one required difference: since collaborative mode
+   never gates on `on_default` before delegating the way solo mode's
+   recovery path does, the subagent preamble must pass **the `current` ref
+   read from `branch-info.sh` in step 2** as `worktree-align.sh <ref>`'s
+   argument — or `default` when `on_default` was already `true` — instead
+   of relying on `worktree-align.sh`'s no-argument (local-default-branch)
+   behavior, which would align the worktree to the wrong branch here. This
+   replaces any need for a `fold-to-main.sh` step in the collaborative
+   path; `fold-to-main.sh` stays solo-mode-only (used only in solo mode's
+   own `on_default: false` recovery path and its eager-background case,
+   per decision record 0004).
+
+   As in solo mode, if `worktree-align.sh` does not print `aligned=true`,
+   **stop and surface the `reason=` verbatim; never resolve** — the same
+   refuse-don't-resolve discipline as solo mode's failure handling above,
+   not a new failure mode. Because ref-alignment (unlike the old
+   `fold-to-main.sh`/local-default flow) doesn't depend on anything having
+   reached `origin`, the push + draft-PR offer below is now
+   visibility-only, not a delegation prerequisite — the worktree can align
+   and the subagent can start work before any push happens. One caveat
+   worth stating rather than silently assuming: a worktree aligned to
+   feature-branch A cannot see uncommitted work still sitting only on
+   unrelated feature-branch B — acceptable given the existing same-file
+   claim check and same-branch fan-out, but real, so state it plainly
+   rather than assume it away.
+
+   After the first commit, offer to push the branch and open
    a draft PR titled with the feature slug(s) — that pushed draft PR is
    collaborative mode's in-flight visibility channel (`gh pr list --draft`),
    checked alongside `inflight-worktrees.sh` in the in-flight step. **Never
@@ -370,7 +396,11 @@ entering the normal flow.
    merges, atomically. If `gh pr create` fails (no GitHub remote, no `gh`
    auth, etc.), report the `gh` error verbatim — the push already
    succeeded, so the branch and its state are safe — and let the user open
-   the PR by hand or retry once `gh` is usable.
+   the PR by hand or retry once `gh` is usable. Once a delegated branch's
+   PR (now carrying the plan/tasks commits too) merges, an earlier
+   plan-only draft PR opened before delegation becomes redundant —
+   closable or absorbable into the merged one, since its state has already
+   landed via the delegated branch's PR.
 
 4. **Flip to `in-progress` (if needed), then find the next uncompleted
    task.** If the file's status is still `ready` (a first-task run on the
