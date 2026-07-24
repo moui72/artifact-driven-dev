@@ -821,16 +821,20 @@ the feature register. Its own steps:
    step 5.
 
 5. **Classify and present.** Using the confidence grade (step 3) and the
-   two relations (step 4), bucket every backlogged item into exactly one
-   of:
+   two relations (step 4), bucket every item — feature or open feedback
+   file — into exactly one of. Each item appears in a recommendation in
+   its matching argument form: a feature as its `<slug>`, a feedback file
+   as its `<feedback-*.md>` filename (the normal-run argument grammar
+   already disambiguates the two, so a mixed call is valid input as-is):
    - **Bundle** (reported under "Plan together") — items connected by a
      dependency edge, or sharing files with no safe reordering.
-     Sequenced; recommended as one multi-slug
-     `/ardd-plan <slug1> <slug2> ...` call, in dependency order.
+     Sequenced; recommended as one multi-item
+     `/ardd-plan <item1> <item2> ...` call, in dependency order — items
+     may be any mix of slugs and feedback filenames.
    - **Parallel set** (reported under "Plan separately, safe to fan
      out") — items that are pairwise file-disjoint, have no dependency
      edge between them, and are *not* `low` confidence. Recommended as
-     separate `/ardd-plan <slug>` calls, one per item, safe to fan out
+     separate `/ardd-plan <item>` calls, one per item, safe to fan out
      to worktrees. A `low`-confidence item is never placed in a
      parallel set even when no overlap was found — a wrong "disjoint"
      call is the expensive failure (it green-lights a fan-out that then
@@ -838,7 +842,7 @@ the feature register. Its own steps:
      instead.
    - **Solo-deferred** (reported under "Defer") — `low`/speculative
      confidence, or explicitly gated on a non-code decision per the
-     artifact. Recommended as its own single-slug `/ardd-plan <slug>`
+     artifact. Recommended as its own single-item `/ardd-plan <item>`
      call on its own timeline; never bundled or fanned out.
 
    **Report format**: lead with the actionable grouping, not the
@@ -851,10 +855,10 @@ the feature register. Its own steps:
 
    ```
    Plan together (1 call):
-     -> /ardd-plan typography-substitution docx-export epub-pdf-export
-        (typography-substitution, docx-export, epub-pdf-export —
-        typography-substitution must land first; both export items read
-        through the same render/export path it transforms)
+     -> /ardd-plan typography-substitution feedback-export-glyph-bug-4a2c.md
+        (typography-substitution + a Reconsidered feedback item, both
+        tagged the ui artifact the feature redesigns — negotiate the
+        reversal with the feature's artifact design, so bundle)
 
    Plan separately, safe to fan out (2 calls):
      -> /ardd-plan spellcheck-backend
@@ -865,10 +869,10 @@ the feature register. Its own steps:
         no file or dependency overlap)
 
    Defer (own timeline):
-     -> /ardd-plan llm-assistance
-        (low confidence — infrastructure.md flags this as a later phase
-        with an open question; no seam exists yet to ground a footprint
-        against)
+     -> /ardd-plan feedback-flaky-sync-note-9f10.md
+        (feedback-only item — footprint touches sync.ts, disjoint from
+        every feature above, but graded low because the note itself flags
+        the cause as unconfirmed; keep it on its own timeline)
    ```
 
    Omit any of the three headings entirely when its bucket is empty —
@@ -888,10 +892,12 @@ own next-step prompts already use (see step 15 above). "Top-priority"
 means: a bundle beats a parallel set beats a solo-deferred item (bundles
 resolve an ordering constraint, so they're the most time-sensitive to
 act on), and among same-tier buckets, prefer the first one enumerated.
-Offer as option 1 "Yes — run `<recommendation>` now", option 2 "No — stop
-here" (Esc = option 2); on yes, invoke `/ardd-plan` with the recommended
-slug(s) by name (the existing terminal-handoff mechanism, no value passed
-back). **Exactly one prompt per user-visible turn end** — slate mode never
+This ordering resolves unchanged whether the buckets hold features,
+feedback files, or a mix — the tier and enumeration order are what decide,
+not the item kind. Offer as option 1 "Yes — run `<recommendation>` now",
+option 2 "No — stop here" (Esc = option 2); on yes, invoke `/ardd-plan`
+with the recommended item(s) — slugs and/or `feedback-*.md` filenames — by
+name (the existing terminal-handoff mechanism, no value passed back). **Exactly one prompt per user-visible turn end** — slate mode never
 hands off to `/ardd-status` (it makes no writes for `/ardd-status` to
 reflect), so this is the only prompt in play, never deferred to another
 skill. This prompt is wired only for step 5's N≥2 report; the N=0/N=1
