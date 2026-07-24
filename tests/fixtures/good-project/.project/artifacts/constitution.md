@@ -13,6 +13,7 @@ delegation: eager
 merge_policy: auto
 plan_preview: always-browser
 update_check_max_age_days: 7
+status_history_keep: 5
 ---
 
 # Constitution

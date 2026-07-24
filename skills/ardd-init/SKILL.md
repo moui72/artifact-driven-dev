@@ -331,6 +331,21 @@ with `/ardd-refine` before planning new work.
    migration (and `/ardd-update` backfills the question(s) once for
    installs whose constitution lacks them).
 
+   **Set `status_history_keep` in the constitution's frontmatter
+   (optional).** Alongside the questions above, ask once: "Keep only the
+   most recent N `_Updated:` blocks in `STATUS.md` (older history stays in
+   git), or keep the full chronology in the file?" — a positive integer
+   (e.g. `5`) bounds it; declining leaves the field absent, which keeps
+   today's unbounded prepend-and-preserve behavior. Suggest a small
+   number (3–5) since blocks can be long. Only when the user gives a
+   number, write it via `.claude/skills/ardd-scripts/ardd-state.sh stamp
+   .project/artifacts/constitution.md status_history_keep <N>` after the
+   file is written in step 6 — never hand-edit. Same workflow-field status
+   as the fields above (no Sync Impact Report entry, no version bump);
+   absence means unbounded, so existing projects need no migration
+   (`/ardd-update` backfills the question once for installs whose
+   constitution lacks the field).
+
 6. **Write all artifact files** to `.project/artifacts/`.
 
 7. **Existing codebase only: offer to extract the feature register.** This
