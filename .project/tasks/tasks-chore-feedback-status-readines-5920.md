@@ -69,6 +69,26 @@ status: ready
       message to name every affected path found dirty/untracked, not just
       the plan/tasks pair. [feedback:
       feedback-delegation-preflight-artifact-gap-44dc.md F001]
+
+      **Revised post-review (CodeRabbit, PR #14/#16):** the initial
+      implementation folded `.project/artifacts/` into the same
+      unconditional, no-prompt solo-mode `git add` as the plan/tasks/
+      feature/feedback files. That's unsafe specifically for solo mode's
+      auto-commit path — an artifact carries no back-reference proving it
+      belongs to *this* plan (unlike the other four kinds, which are exact
+      matches), so a blind `git add .project/artifacts/` risked silently
+      committing an unrelated, still-in-progress artifact edit without
+      asking. Split the behavior: `.project/artifacts/` is still checked
+      (directory-wide, for detection only) alongside the other paths, but
+      it is no longer part of the automatic `git add` in solo mode — if it
+      shows anything dirty/untracked, the user is asked (a narrow,
+      deliberate exception to solo's no-prompt default) whether to include
+      it in a second commit, rather than it being swept in silently.
+      Collaborative mode's behavior (surface everything, ask/block) was
+      already safe as originally written and is unchanged. (Actual
+      implementation landed on PR #15's
+      `chore/stamp-arg-safety-and-preflight-gap` branch, in
+      `skills/ardd-implement/SKILL.md`.)
 - [ ] T006 Manually verify the widened pre-flight prose from T004/T005
       against a worked example: trace through a hypothetical plan run that
       targeted one feature slug and had one feedback file bound to it via

@@ -73,18 +73,28 @@ frontmatter already ties these files together:
   frontmatter names this plan's filename.
 - `.project/artifacts/*.md` files a plan may have edited have no
   frontmatter back-reference to the plan, so the pre-flight instead checks
-  `git status --short .project/artifacts/` as a whole and includes any
+  `git status --short .project/artifacts/` as a whole and detects any
   dirty/untracked artifact file it finds — coarser than the other two
   (which are exact matches), but the only mechanically available signal
-  here, and safe: an artifact dirty for an unrelated reason is still state
-  this checkout hasn't committed and a delegated worktree still can't see,
-  so including it is never wrong, just occasionally broader than strictly
-  necessary.
+  here.
 
-  The `git status --short <paths...>` check and (solo mode) `git add`
-  step both take this widened path list instead of the fixed two paths;
-  collaborative mode's existing "surface to the user / block" behavior is
-  unchanged in shape, just now covering the same widened list.
+  The `git status --short <paths...>` check takes this widened path list
+  (plan, tasks, resolved feature files, resolved feedback files, and the
+  artifacts directory) instead of the fixed two paths. **Auto-commit is
+  narrower than detection, though**: solo mode's no-prompt `git add` covers
+  only the plan/tasks/feature/feedback set — every one an exact match
+  provably tied to this plan. `.project/artifacts/` is deliberately
+  excluded from that automatic step even in solo mode: since an artifact
+  carries no back-reference, blindly `git add`-ing the whole directory
+  risks silently committing an unrelated, still-in-progress edit the user
+  never intended to commit yet (raised by CodeRabbit review on PR #14/#16
+  after this plan's initial draft proposed including it unconditionally).
+  If the artifacts check finds anything dirty, ask the user whether to
+  include it in a second commit before delegating — a narrow, deliberate
+  exception to solo mode's normal no-prompt default. Collaborative mode's
+  existing "surface to the user / block" behavior already covered this
+  safely and is unchanged in shape, just now covering the same widened
+  list.
 
 ## Phase Breakdown
 
