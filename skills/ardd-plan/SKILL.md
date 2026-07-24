@@ -59,14 +59,17 @@ slug, `feedback-*.md` is always a feedback scope.
 
 `/ardd-plan --slate` is a **read-only advisory mode**: like `--list`, it
 runs before step 1's branch check and before every other step — no
-artifact discovery, no feedback load, no interactive pick, and no writes
-of any kind — but instead of a bare backlog printout it computes a
-"defrag" grouping over the open backlog (bundles that should plan
-together, parallel sets safe to fan out, solo-deferred items) and reports
-a recommended `/ardd-plan <slug> [<slug> ...]` invocation. Entering
-`--slate` skips steps 1–15 entirely and runs the separate "Slate mode"
-procedure defined at the end of this file. Never combine `--slate` with
-any other argument form — it takes no scope.
+artifact discovery, no interactive pick, and no writes of any kind — but
+instead of a bare backlog printout it computes a "defrag" grouping over
+the open plannable surface — **both backlogged features and open feedback
+files** — (bundles that should plan together, parallel sets safe to fan
+out, solo-deferred items) and reports a recommended
+`/ardd-plan <slug|feedback-*.md> [...]` invocation. It only *reads* open
+feedback to grade and group it — it never marks, resolves, or flips a
+feedback file (that stays the normal run's step-4 job), so the read-only
+guarantee holds. Entering `--slate` skips steps 1–15 entirely and runs the
+separate "Slate mode" procedure defined at the end of this file. Never
+combine `--slate` with any other argument form — it takes no scope.
 
 ## Shape of a run
 
@@ -718,21 +721,35 @@ and ends in a report plus a recommended next `/ardd-plan` invocation. It
 never drafts a plan, never writes a plan or tasks file, and never touches
 the feature register. Its own steps:
 
-1. **Enumerate the backlog.** Run
-   `.claude/skills/ardd-scripts/feature-list.sh --status backlogged`
-   (installed copy; if absent, fall back to the source repo path
-   `scripts/feature-list.sh --status backlogged`) and read its tab-separated
-   output verbatim — this is the same register-direct-read discipline
-   `--list` already uses: never trust `STATUS.md`'s assembled counts, even
-   when they happen to already be correct. Let N be the number of lines
-   printed.
+1. **Enumerate the plannable surface.** Two sources, both read directly
+   from disk (never from `STATUS.md`'s assembled counts, even when they
+   happen to be correct — the same register-direct-read discipline `--list`
+   uses):
+   - **Backlogged features** — run
+     `.claude/skills/ardd-scripts/feature-list.sh --status backlogged`
+     (installed copy; if absent, fall back to the source repo path
+     `scripts/feature-list.sh --status backlogged`) and read its
+     tab-separated output verbatim.
+   - **Open feedback** — glob `.project/feedback/feedback-*.md` and keep
+     files whose frontmatter says `status: open` (the same discipline step
+     1a uses in the normal flow). Each open feedback *file* is one slate
+     item (not each `F###` item inside it) — the file is the unit a normal
+     run scopes on and `feedback-planned` flips, and the recommendation
+     grammar has no `feedback-file#F002` form.
+
+   Let N be the total count of both — backlogged features plus open
+   feedback files.
 
 2. **N=0/N=1 branch.** These are degenerate cases — a slate is a relation
    *between* items, and with N≤1 the relation set is empty by
    construction, so don't manufacture one:
-   - **N=0**: report "nothing to defrag — the backlog is empty" and stop.
-   - **N=1**: report "nothing to defrag — single open item: `<slug>`" and
-     recommend `/ardd-plan <that slug>` directly, then stop.
+   - **N=0**: report "nothing to defrag — no backlogged features and no
+     open feedback" and stop.
+   - **N=1**: report "nothing to defrag — single open item: `<item>`" and
+     recommend planning it directly, then stop. The single item may be
+     either kind, so render the recommendation in the matching form: a
+     feature is `/ardd-plan <slug>`, an open feedback file is
+     `/ardd-plan <feedback-*.md>`.
 
    Only continue to step 3 when N≥2.
 

@@ -7,9 +7,9 @@ status: in-progress
 # Tasks
 
 ## Phase 1: Slate enumeration + Usage prose
-- [ ] T001 In `skills/ardd-plan/SKILL.md` slate-mode step 1 ("Enumerate the backlog"), add a second enumeration source: glob `.project/feedback/feedback-*.md` and keep files whose frontmatter is `status: open` (same discipline as step 1a in the normal flow). Redefine `N` as the count of backlogged features + open feedback files. Keep the register-direct-read discipline (never trust STATUS.md counts).
-- [ ] T002 In `skills/ardd-plan/SKILL.md` slate-mode step 2 (N=0/N=1 branch), update the degenerate-case wording so a single open feedback file (N=1) renders a valid single-item recommendation in feedback-filename form (`/ardd-plan feedback-<x>.md`), not only a slug. Keep the "nothing to defrag" N=0 message.
-- [ ] T003 In `skills/ardd-plan/SKILL.md` Usage `--slate` paragraph, remove the "no feedback load" absolute *as it applies to slate* while preserving the read-only guarantee ("no writes of any kind") and the "takes no scope" rule. Word it so slate now reads both backlogged features and open feedback.
+- [x] T001 In `skills/ardd-plan/SKILL.md` slate-mode step 1 ("Enumerate the backlog"), add a second enumeration source: glob `.project/feedback/feedback-*.md` and keep files whose frontmatter is `status: open` (same discipline as step 1a in the normal flow). Redefine `N` as the count of backlogged features + open feedback files. Keep the register-direct-read discipline (never trust STATUS.md counts).
+- [x] T002 In `skills/ardd-plan/SKILL.md` slate-mode step 2 (N=0/N=1 branch), update the degenerate-case wording so a single open feedback file (N=1) renders a valid single-item recommendation in feedback-filename form (`/ardd-plan feedback-<x>.md`), not only a slug. Keep the "nothing to defrag" N=0 message.
+- [x] T003 In `skills/ardd-plan/SKILL.md` Usage `--slate` paragraph, remove the "no feedback load" absolute *as it applies to slate* while preserving the read-only guarantee ("no writes of any kind") and the "takes no scope" rule. Word it so slate now reads both backlogged features and open feedback.
 
 ## Phase 2: Grading + pairwise relations for feedback
 - [ ] T004 In `skills/ardd-plan/SKILL.md` slate-mode step 3 (footprint confidence grading), extend the guidance to feedback items: their footprint is the union of the file's items' artifact bracket-tags plus grep-grounded code refs, and they typically grade `high` because they cite concrete observed behavior (often path+symbol refs). Keep the existing high/medium/low rubric and worked examples intact.
