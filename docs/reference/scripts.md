@@ -98,6 +98,16 @@ register flip.
 One line per tasks file: `<filename>\t<status>\t<x>/<y>\t<plan>`.
 `abandoned` files excluded unless `--all`.
 
+### `status-prune.sh <file> --keep <N>`
+
+Keep-last-N tail-cut of a STATUS.md's `_Updated:` chronology: preserves the
+head matter and the newest N blocks verbatim, drops the older tail (which
+stays recoverable from git). Run by `/ardd-status` step 6 after its prepend,
+only when the constitution sets `status_history_keep: <N>`. Prints
+`pruned=true blocks=<t> kept=<k> removed=<r>`; refuses (`pruned=false
+reason=...`) on a missing/unreadable file or a non-positive `--keep`, never
+corrupting the file.
+
 ### `defects-unsurfaced.sh [--id <id> | --all]`
 
 Prints `DEFECTS.md` entries no plan has surfaced yet, as

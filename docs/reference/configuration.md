@@ -134,6 +134,25 @@ appends `note=fetch-failed` to the check's output line and the comparison
 proceeds against local tags — offline machines lose nothing. An invalid
 value behaves like absent (and is flagged by `lint-project.sh`).
 
+## `status_history_keep` — bound STATUS.md's `_Updated:` history
+
+A positive integer — absent = unbounded (the default: `/ardd-status`'s
+prepend-and-preserve keeps the full chronology in the live file, so it
+grows over time). `/ardd-init` asks once, and `/ardd-update` backfills the
+question for installs whose constitution lacks the field; or set it
+directly:
+
+```sh
+ardd-state.sh stamp .project/artifacts/constitution.md status_history_keep 5
+```
+
+When set to N, `/ardd-status` runs `status-prune.sh <STATUS.md> --keep N`
+after prepending each new block, keeping only the newest N `_Updated:`
+blocks in the file. Blocks are never summarized or rewritten — the prune
+only removes whole older blocks, and the full history stays recoverable
+from git (`git log -p .project/STATUS.md`). An invalid value behaves like
+absent (and is flagged by `lint-project.sh`).
+
 ## `ARDD_VERSION_BADGE` — dynamic version badge (install-time env, not frontmatter)
 
 `ARDD_VERSION_BADGE=1 ./install.sh <project>` opts a target into the
