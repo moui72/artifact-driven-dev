@@ -1,7 +1,7 @@
 ---
 plan: plan-chore-docs-sweep-feedback-2026-07-24-8c58.md
 generated: 2026-07-24
-status: in-progress
+status: completed
 ---
 
 # Tasks
