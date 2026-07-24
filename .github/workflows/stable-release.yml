@@ -132,7 +132,10 @@ jobs:
           # above on every later cut. main has branch protection, so land
           # the commit there the same way ardd-badge.yml does: short-lived
           # branch, PR, best-effort auto-merge.
-          branch="release-notes-${{ github.run_id }}"
+          # run_attempt makes reruns idempotent: run_id is stable across
+          # reruns, so a retry after a partial failure would otherwise
+          # collide with the branch the failed attempt already pushed.
+          branch="release-notes-${{ github.run_id }}-${{ github.run_attempt }}"
           git checkout -b "$branch"
           git add docs/release-notes.md
           git commit -m "docs: regenerate release-notes.md for ${{ steps.version.outputs.tag }} [skip ci]"
