@@ -1,7 +1,7 @@
 ---
 plan: plan-ardd-plan-slate-mixed-feature-2026-07-24-a7fb.md
 generated: 2026-07-24
-status: in-progress
+status: completed
 ---
 
 # Tasks
@@ -20,6 +20,6 @@ status: in-progress
 - [x] T007 In `skills/ardd-plan/SKILL.md` slate-mode "Next-step prompt" subsection, confirm the "top-priority" ordering (bundle > parallel > solo, then first-enumerated) still resolves unambiguously when feedback items are present; adjust the wording only if feedback items introduce a tie the current rule doesn't cover. Depends on T006.
 
 ## Phase 4: Doc sync
-- [ ] T008 Read `docs/reference/skills/ardd-plan.md`'s hand-written body (below the `generated:end` marker). If it describes `--slate` as backlog/feature-only, update it to reflect the mixed feature+feedback scope; if it doesn't mention slate scope, leave it unchanged. Depends on T006.
-- [ ] T009 Add one clarifying sentence to `skills/ardd-feedback/SKILL.md`'s "Consumption by /ardd-plan" section noting that `/ardd-plan --slate` now surfaces open feedback files in its defrag grouping (not only the normal-flow consumption already documented). Depends on T003.
-- [ ] T010 Run `scripts/lint-docs.sh` and `scripts/lint-project.sh` and confirm both pass with no new findings introduced by this change. Depends on T008, T009.
+- [x] T008 Read `docs/reference/skills/ardd-plan.md`'s hand-written body (below the `generated:end` marker). If it describes `--slate` as backlog/feature-only, update it to reflect the mixed feature+feedback scope; if it doesn't mention slate scope, leave it unchanged. Depends on T006.
+- [x] T009 Add one clarifying sentence to `skills/ardd-feedback/SKILL.md`'s "Consumption by /ardd-plan" section noting that `/ardd-plan --slate` now surfaces open feedback files in its defrag grouping (not only the normal-flow consumption already documented). Depends on T003.
+- [x] T010 Run `scripts/lint-docs.sh` and `scripts/lint-project.sh` and confirm both pass with no new findings introduced by this change. Depends on T008, T009.

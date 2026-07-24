@@ -1,6 +1,6 @@
 ---
 slug: ardd-plan-slate-mixed-feature
-status: tasked
+status: implemented
 logged: 2026-07-24
 plan: plan-ardd-plan-slate-mixed-feature-2026-07-24-a7fb.md
 tasks: tasks-ardd-plan-slate-mixed-feature-4469.md
