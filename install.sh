@@ -565,38 +565,47 @@ SOURCE_COMMIT_LINE=""
 # release-channel state after source-resolve.sh), record which release this
 # install came from; omit the line for any other commit (dev-mode installs
 # have no release identity to claim). A commit can carry more than one
-# matching tag at once (e.g. right at a stable cut, which also still
-# carries the beta tag it was promoted from) — `git describe --exact-match`
-# picks one non-deterministically in that case, so list every tag at HEAD
-# explicitly and prefer a strict stable tag over a `-beta.` one, matching
-# the "newer stable beats older beta" ordering convention used elsewhere
-# (next-version.sh, source-resolve.sh).
-ALL_REFS_AT_HEAD="$(git -C "$SCRIPT_DIR" tag --points-at HEAD --list 'v[0-9]*' 2>/dev/null || true)"
-SOURCE_REF="$(printf '%s\n' "$ALL_REFS_AT_HEAD" | grep -v -- '-beta\.' | sort -V | tail -1)"
-[ -z "$SOURCE_REF" ] && SOURCE_REF="$(printf '%s\n' "$ALL_REFS_AT_HEAD" | sort -V | tail -1)"
-SOURCE_REF_LINE=""
-[ -n "$SOURCE_REF" ] && SOURCE_REF_LINE="Source-Ref: $SOURCE_REF
-"
+# matching tag at once (a stable cut still carrying the beta it was
+# promoted from, or a beta cut whose commit still carries the prior
+# stable tag) — `git describe --exact-match` picks one
+# non-deterministically in that case, so list every tag at HEAD
+# explicitly, ordered by `versionsort.suffix=-beta.` (the same ordering
+# next-version.sh and source-resolve.sh pin: a prerelease sorts BEFORE
+# its own stable, a newer prerelease AFTER an older stable). The pick is
+# channel-filtered (badge-audit F003): the channel must be resolved
+# FIRST, because a Channel: beta install must be able to record a beta
+# ref — the old channel-blind non-beta preference made a beta install
+# advertise a stable version string in the version badge.
+ALL_REFS_AT_HEAD="$(git -C "$SCRIPT_DIR" -c versionsort.suffix=-beta. tag --points-at HEAD --list 'v[0-9]*' --sort=version:refname 2>/dev/null || true)"
 # Channel precedence: $ARDD_CHANNEL (validated above) > the channel the
 # target already records (a re-install must not silently flip a beta
-# consumer back to stable) > inferred from $SOURCE_REF's own shape (this
-# repo's existing -beta. suffix convention, per next-version.sh /
-# source-resolve.sh) — beta if SOURCE_REF contains -beta., stable
-# otherwise (covers both a plain stable tag and the no-tag/dev-mode
-# case). Absent-in-old-files = stable is the consumers' parse rule;
-# going forward the line is always written.
+# consumer back to stable) > inferred from the highest tag at HEAD under
+# the suffix ordering — beta if that tag is a prerelease (HEAD is past
+# the last stable cut), stable otherwise (covers both a plain stable tag
+# and the no-tag/dev-mode case). Absent-in-old-files = stable is the
+# consumers' parse rule; going forward the line is always written.
 PREV_CHANNEL=""
 [ -f "$VERSION_FILE" ] && PREV_CHANNEL="$(sed -n 's/^Channel: //p' "$VERSION_FILE" | head -1)"
 CHANNEL="${ARDD_CHANNEL:-$PREV_CHANNEL}"
 case "$CHANNEL" in
   stable|beta|dev) ;;
   *)
-    case "$SOURCE_REF" in
+    case "$(printf '%s\n' "$ALL_REFS_AT_HEAD" | tail -1)" in
       *-beta.*) CHANNEL=beta ;;
       *) CHANNEL=stable ;;
     esac
     ;;
 esac
+# Channel-filtered pick, highest under the suffix ordering: stable admits
+# only strict vX.Y.Z tags; beta admits prereleases too (so a newer stable
+# at the same commit still beats an older beta, per the ordering).
+case "$CHANNEL" in
+  beta) SOURCE_REF="$(printf '%s\n' "$ALL_REFS_AT_HEAD" | tail -1)" ;;
+  *)    SOURCE_REF="$(printf '%s\n' "$ALL_REFS_AT_HEAD" | grep -v -- '-beta\.' | tail -1)" ;;
+esac
+SOURCE_REF_LINE=""
+[ -n "$SOURCE_REF" ] && SOURCE_REF_LINE="Source-Ref: $SOURCE_REF
+"
 # Dev-mode installs have no release identity: never record a Source-Ref
 # (even when the checkout incidentally sits at a tag), and never leave a
 # stale one from a previous stable/beta install (878c F002).
