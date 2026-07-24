@@ -84,6 +84,14 @@ constitution's `plan_preview` frontmatter field
 preview; `always-console` skips it and never publishes; `ask` (or absent)
 keeps asking each time, as before.
 
+A separate, independently-configurable `plan_preview_editor` field names
+an open-in-editor checkpoint: when set, its `{path}` template has the
+plan file's absolute path substituted in and is run, opening the plan in
+an editor rather than a browser. It composes with `plan_preview` — the
+two are offered alongside each other, never one replacing the other —
+so a run can open the plan in an editor, in the browser, both, or
+neither, depending on which fields are configured.
+
 ## Reads
 
 - Every `.project/artifacts/*.md` (warns before planning over `draft` ones)
