@@ -45,6 +45,8 @@ internal notes — keep them in sync with the skills themselves.
 ./scripts/test-inflight-worktrees.sh   # regression test for inflight-worktrees.sh
 ./scripts/parallel-matrix.sh           # pairwise overlap verdicts among ready tasks files + in-flight claims (independent = no declared overlap only); read by ardd-status/implement
 ./scripts/test-parallel-matrix.sh      # regression test for parallel-matrix.sh (fixture repos in a temp dir)
+./scripts/status-prune.sh <file> --keep <N> # keep-last-N tail-cut of STATUS.md's _Updated: chronology; ardd-status step 6 runs it when constitution sets status_history_keep (older history stays in git)
+./scripts/test-status-prune.sh         # regression test for status-prune.sh (throwaway STATUS.md fixtures, never this repo's STATUS.md)
 ./scripts/hook-lint-on-write.sh        # PostToolUse hook body: lints .project/ writes, wired via .claude/settings.json
 ./scripts/test-hook-lint-on-write.sh   # regression test for the hook (silent/silent/valid-JSON-findings cases)
 ./scripts/test-hooks-pre-commit.sh     # regression test for hooks/pre-commit's aggregation/short-circuit logic
@@ -202,7 +204,13 @@ against.
 
 **Single-writer ownership of generated files is, deliberately, prose-only —
 this is not enforceable by a hook, and that was verified, not assumed.**
-- `.project/STATUS.md` — written only by `/ardd-status`
+- `.project/STATUS.md` — written only by `/ardd-status`. Its `_Updated:`
+  chronology is prepend-and-preserve (never summarized), and grows unbounded
+  by default; when the constitution sets `status_history_keep: <N>`,
+  `/ardd-status` calls `scripts/status-prune.sh` after each prepend to keep
+  only the newest N blocks in the live file — older history stays recoverable
+  from git, so "durable re-entry chronology" is backed by git rather than
+  by file length
 - `.project/DEFECTS.md` — written only by `/ardd-defects`
 - `.project/TRACKER.md` — written only by `/ardd-tracker`
 - `.project/audit.md` — written only by `/ardd-audit`

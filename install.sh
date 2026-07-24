@@ -296,6 +296,11 @@ echo "  ✓ ardd-artifact-templates/ ($(ls "$SCRIPT_DIR"/templates/artifacts/*.m
 #   runs it with --dry-run for visibility only. Refuse-never-resolve:
 #   unmerged/dirty/detached worktrees are reported and skipped; the primary
 #   and current worktrees are never candidates.
+# status-prune.sh: keep-last-N tail-cut of STATUS.md's _Updated: chronology —
+#   run by ardd-status step 6 after its prepend, only when the constitution
+#   sets status_history_keep: <N>. Preserves the newest N blocks verbatim,
+#   drops the older tail (recoverable from git); refuses on a missing file or
+#   non-positive N.
 mkdir -p "$ARDD_SCRIPTS_DIR"
 cp "$SCRIPT_DIR/scripts/lint-project.sh" "$ARDD_SCRIPTS_DIR/lint-project.sh"
 cp "$SCRIPT_DIR/scripts/branch-info.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh"
@@ -317,6 +322,7 @@ cp "$SCRIPT_DIR/scripts/upsert-section.sh" "$ARDD_SCRIPTS_DIR/upsert-section.sh"
 cp "$SCRIPT_DIR/scripts/ardd-update-check.sh" "$ARDD_SCRIPTS_DIR/ardd-update-check.sh"
 cp "$SCRIPT_DIR/scripts/source-resolve.sh" "$ARDD_SCRIPTS_DIR/source-resolve.sh"
 cp "$SCRIPT_DIR/scripts/feature-list.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh"
+cp "$SCRIPT_DIR/scripts/status-prune.sh" "$ARDD_SCRIPTS_DIR/status-prune.sh"
 cp "$SCRIPT_DIR/templates/WORKFLOW.md" "$ARTIFACT_TEMPLATES_DIR/WORKFLOW.md"
 echo "  ✓ ardd-artifact-templates/WORKFLOW.md"
 chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" \
@@ -329,7 +335,8 @@ chmod +x "$ARDD_SCRIPTS_DIR/lint-project.sh" "$ARDD_SCRIPTS_DIR/branch-info.sh" 
   "$ARDD_SCRIPTS_DIR/ardd-state.sh" \
   "$ARDD_SCRIPTS_DIR/defects-unsurfaced.sh" "$ARDD_SCRIPTS_DIR/tasks-list.sh" \
   "$ARDD_SCRIPTS_DIR/upsert-section.sh" "$ARDD_SCRIPTS_DIR/ardd-update-check.sh" \
-  "$ARDD_SCRIPTS_DIR/source-resolve.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh"
+  "$ARDD_SCRIPTS_DIR/source-resolve.sh" "$ARDD_SCRIPTS_DIR/feature-list.sh" \
+  "$ARDD_SCRIPTS_DIR/status-prune.sh"
 echo "  ✓ ardd-scripts/lint-project.sh"
 echo "  ✓ ardd-scripts/branch-info.sh"
 echo "  ✓ ardd-scripts/completion-flip-check.sh"
@@ -350,6 +357,7 @@ echo "  ✓ ardd-scripts/upsert-section.sh"
 echo "  ✓ ardd-scripts/ardd-update-check.sh"
 echo "  ✓ ardd-scripts/source-resolve.sh"
 echo "  ✓ ardd-scripts/feature-list.sh"
+echo "  ✓ ardd-scripts/status-prune.sh"
 
 # Live capability matrix for the installed harness. Skills can read this
 # instead of inferring capabilities from stale prose or from the harness name.
