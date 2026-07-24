@@ -197,7 +197,7 @@ entering the normal flow.
      <feedback-file>...` (this exact resolved set, never a broader sweep),
      then a signed commit per this repo's `CLAUDE.md` signing convention
      (the on-disk `~/.ssh/id_claude_signing` key):
-     ```
+     ```sh
      git -c gpg.format=ssh -c gpg.ssh.program=ssh-keygen \
          -c user.signingkey="$HOME/.ssh/id_claude_signing.pub" \
          commit -S -m "chore(delegation): auto-commit <slug> plan/tasks before delegating"
