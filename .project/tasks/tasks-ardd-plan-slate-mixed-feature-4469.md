@@ -1,7 +1,7 @@
 ---
 plan: plan-ardd-plan-slate-mixed-feature-2026-07-24-a7fb.md
 generated: 2026-07-24
-status: ready
+status: in-progress
 ---
 
 # Tasks
