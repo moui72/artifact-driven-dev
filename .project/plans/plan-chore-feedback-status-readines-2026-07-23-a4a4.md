@@ -123,11 +123,19 @@ in the linked tasks file.
   in the plan's `features:` frontmatter list; (b) every
   `.project/feedback/feedback-*.md` whose `plan:` frontmatter names this
   plan's filename; (c) any dirty/untracked file under
-  `.project/artifacts/`. Fold all three into the same `git status --short`
-  check and (solo mode) `git add` list already covering `<plan-file>
-  <tasks-file>`, and extend collaborative mode's uncommitted-file message
-  to name every affected path, not just the plan/tasks pair. [feedback:
-  feedback-delegation-preflight-artifact-gap-44dc.md F001]
+  `.project/artifacts/` (detection only — see below). Fold the plan file,
+  tasks file, and paths (a)/(b) into the same `git status --short` check
+  and (solo mode) `git add` list, and extend collaborative mode's
+  uncommitted-file message to name every affected path, not just the
+  plan/tasks pair. `.project/artifacts/` is checked in the same
+  `git status --short` pass but is deliberately **excluded** from the
+  automatic `git add` even in solo mode — an artifact carries no
+  back-reference proving it belongs to this plan, so a blind
+  `git add .project/artifacts/` risks silently committing an unrelated,
+  still-in-progress edit; if it's dirty, ask the user before including it
+  in a second commit, a narrow exception to solo mode's normal no-prompt
+  default. [feedback: feedback-delegation-preflight-artifact-gap-44dc.md
+  F001]
 - Manually verify the widened pre-flight prose against a worked example:
   trace through a hypothetical plan run that targeted one feature slug and
   one feedback file, confirm the described resolution steps correctly

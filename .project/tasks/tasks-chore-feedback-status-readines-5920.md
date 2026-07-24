@@ -62,13 +62,20 @@ status: completed
       every path resolved in T004 — the plan file, the tasks file, each
       resolved feature-register file, each resolved feedback file, and
       `.project/artifacts/` (the directory, so any dirty/untracked file
-      under it is caught). Update the solo-mode auto-commit's `git add`
-      list to match this same widened set of paths (still never a broad
-      sweep — every path in the list is either resolved above or the
-      specific directory). Update the collaborative-mode uncommitted-file
-      message to name every affected path found dirty/untracked, not just
-      the plan/tasks pair. [feedback:
-      feedback-delegation-preflight-artifact-gap-44dc.md F001]
+      under it is caught, for detection only — see below). Update the
+      solo-mode auto-commit's `git add` list to match only the plan file,
+      tasks file, resolved feature files, and resolved feedback files
+      (still never a broad sweep — every path in the list is an exact
+      match provably tied to this plan). `.project/artifacts/` is
+      deliberately **excluded** from that automatic `git add` even in
+      solo mode — an artifact carries no back-reference proving it
+      belongs to this plan, so a blind `git add .project/artifacts/`
+      risks silently committing an unrelated, still-in-progress edit; if
+      it's dirty, ask the user before including it in a second commit, a
+      narrow exception to solo mode's normal no-prompt default. Update
+      the collaborative-mode uncommitted-file message to name every
+      affected path found dirty/untracked, not just the plan/tasks pair.
+      [feedback: feedback-delegation-preflight-artifact-gap-44dc.md F001]
 
       **Revised post-review (CodeRabbit, PR #14/#16):** the initial
       implementation folded `.project/artifacts/` into the same
