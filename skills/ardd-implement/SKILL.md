@@ -184,17 +184,19 @@ entering the normal flow.
    produced them.
 
    Once existence is confirmed, run `git status --short <plan-file>
-   <tasks-file> <feature-file>... <feedback-file>... .project/artifacts/`
-   (every resolved feature file, every resolved feedback file, and the
-   `.project/artifacts/` directory, alongside the plan and tasks files). If
-   any of these paths is untracked or shows modifications relative to HEAD:
+   <tasks-file> <feature-file>... <feedback-file>...` (every resolved
+   feature file and every resolved feedback file, alongside the plan and
+   tasks files) as one check, and `git status --short .project/artifacts/`
+   as a **separate** check — the artifacts directory is never folded into
+   the same automatic-commit path as the other four, exact-match kinds
+   (see why below).
    - **solo mode** (`workflow_mode` absent or `solo`, read from
-     `.project/artifacts/constitution.md` frontmatter) — auto-commit them
-     directly, no prompt: `git add <plan-file> <tasks-file> <feature-file>...
-     <feedback-file>... .project/artifacts/` (this same widened set — every
-     path resolved above, plus the `.project/artifacts/` directory — never a
-     broader sweep), then a signed commit per this repo's `CLAUDE.md`
-     signing convention (the on-disk `~/.ssh/id_claude_signing` key):
+     `.project/artifacts/constitution.md` frontmatter): if the first check
+     found anything untracked or modified, auto-commit it directly, no
+     prompt: `git add <plan-file> <tasks-file> <feature-file>...
+     <feedback-file>...` (this exact resolved set, never a broader sweep),
+     then a signed commit per this repo's `CLAUDE.md` signing convention
+     (the on-disk `~/.ssh/id_claude_signing` key):
      ```
      git -c gpg.format=ssh -c gpg.ssh.program=ssh-keygen \
          -c user.signingkey="$HOME/.ssh/id_claude_signing.pub" \
@@ -202,14 +204,25 @@ entering the normal flow.
      ```
      using the tasks file's slug in the message. After committing, print
      the committed paths and the resulting `git rev-parse --short HEAD` so
-     the action is visible, not silent.
-   - **collaborative mode** — unchanged: surface this to the user before
-     delegating, offer to commit them now, or block delegation with an
-     explicit message naming every affected path found dirty/untracked —
-     the plan and tasks files, plus any resolved feature file, feedback
-     file, or path under `.project/artifacts/` — never just the plan/tasks
-     pair — never launch a
-     worktree subagent while the gap exists.
+     the action is visible, not silent. **Then, separately, if the
+     `.project/artifacts/` check found anything dirty/untracked**: this is
+     a narrow, deliberate exception to solo mode's no-prompt default —
+     unlike the plan/tasks/feature/feedback files above, an artifact
+     carries no back-reference proving it belongs to *this* plan, so a
+     blind `git add .project/artifacts/` risks silently sweeping in an
+     unrelated, still-in-progress artifact edit the user never intended to
+     commit yet. Surface the affected paths and ask whether to include
+     them in a second commit before delegating, or proceed without them
+     (the worktree simply won't see that artifact state — no worse than
+     today). Never auto-commit this directory without asking, in either
+     mode.
+   - **collaborative mode** — unchanged: surface any dirty/untracked path
+     from *either* check to the user before delegating, offer to commit
+     it now, or block delegation with an explicit message naming every
+     affected path — the plan and tasks files, plus any resolved feature
+     file, feedback file, or dirty path under `.project/artifacts/` —
+     never just the plan/tasks pair — never launch a worktree subagent
+     while the gap exists.
 
    - If `on_default` is `false` — a recovery path now that solo
      `/ardd-plan` no longer creates a branch (a resumed older run, or a
