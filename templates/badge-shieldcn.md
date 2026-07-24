@@ -25,24 +25,22 @@
      for the static-badge URL shape and the `variant=secondary&theme=pink`
      query-param form. The `url`/`query` (JSONPath selector, e.g.
      $.message)/`label`/`color`/`labelColor`/`logo`/`variant`/`theme`
-     param names are all documented appearance params — but `logo` does
-     **NOT** accept a base64 `data:image/svg+xml;base64,...` URI the way
-     shields.io's `logo` param does: a live A/B render (same query,
-     `logo=` present vs. absent vs. set to a `data:` URI) came back
-     byte-for-byte identical, meaning the data: URI form is silently
-     ignored, not an error — you'd ship a badge that looks fine and
-     simply never shows the custom icon. `logo=<named-slug>` (e.g.
-     `logo=github`, a simple-icons-style slug) DOES render — confirmed by
-     the same test producing a visibly larger, icon-bearing SVG — so
-     shieldcn.dev's dynamic/json logo param supports named icon slugs
-     only, not arbitrary custom SVGs via data: URI. The `PLACEHOLDER`
-     token below is therefore left in place deliberately, not an
-     oversight: there is no confirmed way to render the custom ArDD icon
-     via this badge type today. If shieldcn.dev adds data: URI support
-     later, re-verify with the same A/B byte-comparison technique before
-     replacing PLACEHOLDER. The static form (shape 1, grounded in this
-     repo's own working badge) remains the safest of the three to trust
-     as-is; it carries no logo param at all.
+     param names are all documented appearance params.
+
+     RE-VERIFIED (2026-07-24, live render): `logo` DOES now accept a
+     base64 `data:image/svg+xml;base64,...` URI — the 2026-07-21 finding
+     that it was silently ignored no longer holds. But shieldcn.dev's
+     satori-based renderer flattens the SVG hard: strokes are dropped
+     (a stroked circle renders as a solid filled disc), per-element
+     `transform` attributes are discarded (elements stamp at their
+     untransformed coordinates), and per-element fills are replaced by
+     one uniform monochrome fill. An icon passed here must therefore be
+     plain filled <path> elements with baked-in absolute coordinates,
+     designed to read as a single-color silhouette —
+     templates/ardd-icon.svg satisfies this by construction; produce the
+     value for PLACEHOLDER with `base64 < templates/ardd-icon.svg` (in a
+     consumer repo the same file sits at .github/badges/ardd-icon.svg).
+     Named slugs (e.g. `logo=github`) also still work.
 
      For shapes 2 and 3: replace OWNER/REPO/BRANCH with your repo's own
      coordinates before pasting. Public repos only — the endpoint fetches
@@ -87,13 +85,8 @@
      the query-selected field ($.message) from the JSON; label, color,
      and logo must ride the URL as query parameters here — the same gap
      templates/badge.md's own "Dynamic-JSON readers" note documents for
-     shieldcn specifically. Custom-icon-via-data:-URI does NOT work here
-     (verified 2026-07-21, live A/B render): shieldcn.dev's `logo` param
-     silently ignores a `data:image/svg+xml;base64,...` value — the
-     rendered badge comes back byte-for-byte identical with the param
-     present or absent, so it fails silent rather than loud. Only a
-     named logo slug (simple-icons-style, e.g. `logo=github`) actually
-     renders. Until shieldcn.dev adds data: URI support, the PLACEHOLDER
-     token above stays in place — there is no working substitute
-     (`base64 < templates/ardd-icon.svg` would produce a value shieldcn.dev
-     accepts syntactically but silently drops). -->
+     shieldcn specifically. Custom-icon-via-data:-URI works (re-verified
+     2026-07-24, superseding the 2026-07-21 ignored-param finding), with
+     the monochrome/filled-paths-only renderer constraint described in
+     the VERIFIED note above — fill PLACEHOLDER with
+     `base64 < templates/ardd-icon.svg`. -->

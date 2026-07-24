@@ -1,0 +1,23 @@
+---
+plan: plan-fix-badge-icon-monochrome-2026-07-24-2123.md
+generated: 2026-07-24
+status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+---
+
+# Tasks
+
+## Phase 1: Source-Ref channel correctness (F003)
+- [ ] T001 Fix install.sh's `ALL_REFS_AT_HEAD` tag selection (~L574-576): filter the tags at HEAD to the channel being recorded (beta admits `-beta.` prereleases; stable admits only strict `vX.Y.Z`), then pick the highest under `git -c versionsort.suffix=-beta. tag --sort=v:refname` ordering — matching next-version.sh/source-resolve.sh, as install.sh's own comment already claims. Extend `scripts/test-install-channel-default.sh` with the dual-tag case (HEAD carrying both v1.2.0 and v1.2.1-beta.1: a `Channel: beta` install records `Source-Ref: v1.2.1-beta.1`; a stable install still records `v1.2.0`), red-first within the task, test and fix landing in the same commit (Principle V).
+
+## Phase 2: completion-flip-check missing-ref reporting (F004)
+- [ ] T002 [parallel] Fix `scripts/completion-flip-check.sh` to distinguish "branch ref missing" from "branch not merged": when the resolved branch (worktree_branch: or the plan's branch:) does not exist, print an explicit `branch-missing branch=<name> features=<still-tasked slugs>` line instead of exiting 0 silently — a deleted-on-merge branch (GitHub default) must not read as all-clear. Do not add merge-commit archaeology (declined per Principle VI). Add a deleted-branch fixture case to `scripts/test-completion-flip-check.sh` (create branch, merge, delete, expect the loud line), red-first, same commit.
+
+## Phase 3: install badge-asset refresh + offer alignment (F001, F005)
+- [ ] T003 Update install.sh's badge-asset section (~L787-794): treat `.github/badges/ardd-icon.svg` as a managed asset — when it exists but differs byte-wise from `templates/ardd-icon.svg`, overwrite it in place and print a "refreshed (differed from current template)" line; leave `.github/workflows/ardd-badge.yml` never-clobber but, when it differs from `templates/ardd-badge-workflow.yml`, print a drift-report line ("differs from current template — review manually"). Add fixture cases to `scripts/test-install-version-badge.sh` (stale icon refreshed + reported; stale workflow untouched + reported; identical assets silent), red-first, same commit. Depends on T001 (same file, sequencing only).
+- [ ] T004 [parallel] Align `skills/ardd-update/SKILL.md`'s dynamic version-badge offer (step 4) with install.sh's `BADGE_FAMILY` guard: the offer must test the same condition the guard enforces — any existing ArDD badge marker family that would make install.sh refuse the version-badge emit (including a README badged only via `ardd-badge-start` static markers) suppresses the offer, mirroring the guard's documented priority order. Prose-only edit; never offer what install.sh then refuses to produce.
+
+## Phase 4: template truth (F002, F006, F007, F008)
+- [ ] T005 [parallel] Bring `templates/badge-shieldcn.md` in line with verified renderer behavior: (a) swap `color=7C3AED` to the brand `2F4858` in the shape-2/shape-3 snippets, matching `templates/ardd-badge-workflow.yml` and `templates/ardd-badge.json` (F002); (b) rewrite the header VERIFIED note and the trailing "Renderer caveat" to the 2026-07-24 re-verification — the `logo=` param DOES render a `data:image/svg+xml;base64,...` URI (superseding the 2026-07-21 ignored-param finding), with satori constraints: strokes, per-element transforms, and per-element fills are dropped, so icons must be single-color plain filled paths (F006); (c) replace `PLACEHOLDER` in both snippets with the real base64 of `templates/ardd-icon.svg` and document the regeneration command (`base64 < templates/ardd-icon.svg`, URL-encoded) (F006); (d) add a one-line note that shieldcn.dev ignores `mode=` — `mode=dark`/`mode=light`/absent return byte-identical SVGs, so `<picture>`/prefers-color-scheme wrappers around the badge are dead markup (F007); (e) document the per-channel color mirroring honestly: the workflow's computed JSON color is consumed only by shields.io `/endpoint` renders; shieldcn snippets carry color as a static URL param, so channel-color changes require editing the URL or using the shields.io form (F008). Update `templates/badge.md`'s "Dynamic-JSON readers" caveat to match (b)'s renderer constraints. Run `scripts/lint-docs.sh` and keep it green.
+
+## Phase 5: verification
+- [ ] T006 Run `scripts/test-install-channel-default.sh`, `scripts/test-install-version-badge.sh`, `scripts/test-completion-flip-check.sh`, and `scripts/lint-docs.sh`; confirm all pass with no new findings. Depends on T001, T002, T003, T004, T005.

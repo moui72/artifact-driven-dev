@@ -74,4 +74,7 @@
          base64 < templates/ardd-icon.svg
 
      (in a consumer repo the same file is installed at
-     .github/badges/ardd-icon.svg). -->
+     .github/badges/ardd-icon.svg). Those satori-based renderers drop
+     strokes, per-element transforms, and per-element fills, so the icon
+     file must stay plain filled paths with baked-in coordinates, one
+     color — see the constraint comment inside ardd-icon.svg itself. -->
