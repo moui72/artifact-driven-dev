@@ -37,10 +37,30 @@
      one uniform monochrome fill. An icon passed here must therefore be
      plain filled <path> elements with baked-in absolute coordinates,
      designed to read as a single-color silhouette —
-     templates/ardd-icon.svg satisfies this by construction; produce the
-     value for PLACEHOLDER with `base64 < templates/ardd-icon.svg` (in a
-     consumer repo the same file sits at .github/badges/ardd-icon.svg).
+     templates/ardd-icon.svg satisfies this by construction. The shape-2/
+     shape-3 snippets below carry that icon's URL-safe base64 inline;
+     after an icon change, regenerate the `logo=` value with
+
+         base64 < templates/ardd-icon.svg | tr -d '\n' | jq -sRr @uri
+
+     (in a consumer repo the same file sits at
+     .github/badges/ardd-icon.svg). Raw `base64` output alone is NOT
+     URL-safe — it wraps lines and emits `+`/`/`/`=`, which break the
+     query string; the `tr`+`jq @uri` steps are required, not cosmetic.
      Named slugs (e.g. `logo=github`) also still work.
+
+     Two more verified renderer facts (2026-07-24, same A/B byte-compare
+     technique): shieldcn.dev ignores `mode=` — `mode=dark`, `mode=light`,
+     and no mode at all return byte-identical SVGs, so wrapping the badge
+     in `<picture>`/prefers-color-scheme markup for it is dead weight.
+     And its dynamic/json endpoint reads ONLY the query-selected field
+     from the JSON — the sync workflow's computed per-channel `color`
+     (yellow beta / blue stable) and `labelColor` in
+     .github/badges/ardd-version.json are consumed by shields.io
+     /endpoint renders only. In these snippets color rides the URL as a
+     static param, so a channel-color change must be mirrored by editing
+     `color=` here by hand (or use templates/badge.md's shields.io
+     endpoint form, which does consume the JSON's colors and logoSvg).
 
      For shapes 2 and 3: replace OWNER/REPO/BRANCH with your repo's own
      coordinates before pasting. Public repos only — the endpoint fetches
@@ -70,12 +90,12 @@
 <!-- ardd-badge-end -->
 
 <!-- ardd-badge-version-start -->
-[![built with ArDD](https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/OWNER/REPO/BRANCH/.github/badges/ardd-version.json&query=$.message&label=built%20with%20ArDD&color=7C3AED&logo=data:image/svg+xml;base64,PLACEHOLDER&variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
+[![built with ArDD](https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/OWNER/REPO/BRANCH/.github/badges/ardd-version.json&query=$.message&label=built%20with%20ArDD&color=2F4858&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFyREQiPgo8IS0tIFNvdXJjZSBvZiB0cnV0aCBmb3IgdGhlIEFyREQgYmFkZ2UgbWFyazogdGhlIGJhZGdlIHdvcmtmbG93IGlubGluZXMgdGhpcyBmaWxlIHZlcmJhdGltIGFzIHRoZSBlbmRwb2ludCBKU09OJ3MgbG9nb1N2ZywgYW5kIGl0cyBiYXNlNjQgZm9ybSByaWRlcyBzaGllbGRjbi5kZXYgYmFkZ2UgVVJMcyBhcyB0aGUgbG9nbyBwYXJhbS4gUmVuZGVyZXIgY29uc3RyYWludCAodmVyaWZpZWQgMjAyNi0wNy0yNCBhZ2FpbnN0IGEgbGl2ZSBzaGllbGRjbiByZW5kZXIpOiBzYXRvcmktYmFzZWQgYmFkZ2UgcmVuZGVyZXJzIGRyb3Agc3Ryb2tlcywgcGVyLWVsZW1lbnQgdHJhbnNmb3JtcywgYW5kIHBlci1lbGVtZW50IGZpbGxzIOKAlCBldmVyeXRoaW5nIGhlcmUgbXVzdCBzdGF5IHBsYWluIGZpbGxlZCA8cGF0aD4gZWxlbWVudHMgd2l0aCBiYWtlZC1pbiBhYnNvbHV0ZSBjb29yZGluYXRlcywgb25lIGNvbG9yLiBUaGUgbWFyazogYSBicm9rZW4gcmluZyB3aXRoIGEgdGFuZ2VudGlhbCBhcnJvd2hlYWQgKHRoZSBpdGVyYXRlIGxvb3ApIGFyb3VuZCBhIGRvZy1lYXJlZCBkb2N1bWVudCAodGhlIGFydGlmYWN0KS4gV2hpdGUgPSBkYXJrLWJhY2tncm91bmQgKGJhZGdlIGxhYmVsIHNpZGUpIHZhcmlhbnQuIC0tPgo8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNNjAuODggOS40M0E0MiA0MiAwIDEgMCA5MC41NyAzOS4xMkw3OC45OCA0Mi4yM0EzMCAzMCAwIDEgMSA1Ny43NyAyMS4wMloiLz4KPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTc5LjYgMjEuNEw3Mi4yIDQ0LjBMOTcuMyAzNy4zWiIvPgo8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNMzggMzFINTdMNjUgMzlWNjlIMzhaIi8%2BCjwvc3ZnPgo%3D&variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
 <!-- ardd-badge-version-end -->
 
 <!-- ardd-badge-pair-start -->
 [![built with ArDD](https://shieldcn.dev/badge/built%20with-ArDD-7C3AED.svg?variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
-[![ArDD version](https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/OWNER/REPO/BRANCH/.github/badges/ardd-version.json&query=$.message&label=version&color=7C3AED&logo=data:image/svg+xml;base64,PLACEHOLDER&variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
+[![ArDD version](https://shieldcn.dev/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/OWNER/REPO/BRANCH/.github/badges/ardd-version.json&query=$.message&label=version&color=2F4858&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFyREQiPgo8IS0tIFNvdXJjZSBvZiB0cnV0aCBmb3IgdGhlIEFyREQgYmFkZ2UgbWFyazogdGhlIGJhZGdlIHdvcmtmbG93IGlubGluZXMgdGhpcyBmaWxlIHZlcmJhdGltIGFzIHRoZSBlbmRwb2ludCBKU09OJ3MgbG9nb1N2ZywgYW5kIGl0cyBiYXNlNjQgZm9ybSByaWRlcyBzaGllbGRjbi5kZXYgYmFkZ2UgVVJMcyBhcyB0aGUgbG9nbyBwYXJhbS4gUmVuZGVyZXIgY29uc3RyYWludCAodmVyaWZpZWQgMjAyNi0wNy0yNCBhZ2FpbnN0IGEgbGl2ZSBzaGllbGRjbiByZW5kZXIpOiBzYXRvcmktYmFzZWQgYmFkZ2UgcmVuZGVyZXJzIGRyb3Agc3Ryb2tlcywgcGVyLWVsZW1lbnQgdHJhbnNmb3JtcywgYW5kIHBlci1lbGVtZW50IGZpbGxzIOKAlCBldmVyeXRoaW5nIGhlcmUgbXVzdCBzdGF5IHBsYWluIGZpbGxlZCA8cGF0aD4gZWxlbWVudHMgd2l0aCBiYWtlZC1pbiBhYnNvbHV0ZSBjb29yZGluYXRlcywgb25lIGNvbG9yLiBUaGUgbWFyazogYSBicm9rZW4gcmluZyB3aXRoIGEgdGFuZ2VudGlhbCBhcnJvd2hlYWQgKHRoZSBpdGVyYXRlIGxvb3ApIGFyb3VuZCBhIGRvZy1lYXJlZCBkb2N1bWVudCAodGhlIGFydGlmYWN0KS4gV2hpdGUgPSBkYXJrLWJhY2tncm91bmQgKGJhZGdlIGxhYmVsIHNpZGUpIHZhcmlhbnQuIC0tPgo8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNNjAuODggOS40M0E0MiA0MiAwIDEgMCA5MC41NyAzOS4xMkw3OC45OCA0Mi4yM0EzMCAzMCAwIDEgMSA1Ny43NyAyMS4wMloiLz4KPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTc5LjYgMjEuNEw3Mi4yIDQ0LjBMOTcuMyAzNy4zWiIvPgo8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNMzggMzFINTdMNjUgMzlWNjlIMzhaIi8%2BCjwvc3ZnPgo%3D&variant=secondary&theme=pink)](https://github.com/moui72/artifact-driven-dev)
 <!-- ardd-badge-pair-end -->
 
 <!-- Renderer caveat (which badge service reads what):
@@ -88,5 +108,9 @@
      shieldcn specifically. Custom-icon-via-data:-URI works (re-verified
      2026-07-24, superseding the 2026-07-21 ignored-param finding), with
      the monochrome/filled-paths-only renderer constraint described in
-     the VERIFIED note above — fill PLACEHOLDER with
-     `base64 < templates/ardd-icon.svg`. -->
+     the RE-VERIFIED note above — the snippets carry the icon's URL-safe
+     base64 inline; regenerate after an icon change with
+     `base64 < templates/ardd-icon.svg | tr -d '\n' | jq -sRr @uri`.
+     `mode=` is ignored (byte-identical output either way), and the
+     JSON's computed channel color is not read here — see the same note
+     above for both. -->
