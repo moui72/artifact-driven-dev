@@ -859,10 +859,17 @@ the feature register. Its own steps:
       after `<other>` when eventually planned") so the ordering
       constraint isn't lost, but the recommendation stays a solo call.
    2. Otherwise, any dependency edge *or* any file-set overlap with
-      another non-solo-deferred item → **Bundle** with those items.
-      Shared files without an edge still bundle: fanning out two runs
-      that will edit the same file is the expensive failure this mode
-      exists to prevent, and sequencing them costs only latency.
+      another non-solo-deferred item → **Bundle**. Bundle membership is
+      transitive: build the relation graph over the non-solo-deferred
+      items (an edge = dependency or file overlap) and each *connected
+      component* is one bundle, one `/ardd-plan` call — so A–B plus B–C
+      yields one three-item bundle, never two overlapping ones, and no
+      item appears in more than one recommendation. Order each bundle's
+      items by its dependency edges (ties: overlap-only members follow
+      the members they overlap). Shared files without an edge still
+      bundle: fanning out two runs that will edit the same file is the
+      expensive failure this mode exists to prevent, and sequencing
+      them costs only latency.
    3. Otherwise → **Parallel set**.
 
    **Report format**: lead with the actionable grouping, not the
