@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "label": "built with ArDD",
-  "message": "6895df7",
+  "message": "541b283",
   "color": "blue",
   "labelColor": "#2F4858",
   "logoSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"ArDD\">\n<!-- Source of truth for the ArDD badge mark: the badge workflow inlines this file verbatim as the endpoint JSON's logoSvg, and its base64 form rides shieldcn.dev badge URLs as the logo param. Renderer constraint (verified 2026-07-24 against a live shieldcn render): satori-based badge renderers drop strokes, per-element transforms, and per-element fills — everything here must stay plain filled <path> elements with baked-in absolute coordinates, one color. The mark: a broken ring with a tangential arrowhead (the iterate loop) around a dog-eared document (the artifact). White = dark-background (badge label side) variant. -->\n<path fill=\"#ffffff\" d=\"M60.88 9.43A42 42 0 1 0 90.57 39.12L78.98 42.23A30 30 0 1 1 57.77 21.02Z\"/>\n<path fill=\"#ffffff\" d=\"M79.6 21.4L72.2 44.0L97.3 37.3Z\"/>\n<path fill=\"#ffffff\" d=\"M38 31H57L65 39V69H38Z\"/>\n</svg>\n"
