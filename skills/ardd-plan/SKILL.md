@@ -864,9 +864,16 @@ the feature register. Its own steps:
       items (an edge = dependency or file overlap) and each *connected
       component* is one bundle, one `/ardd-plan` call — so A–B plus B–C
       yields one three-item bundle, never two overlapping ones, and no
-      item appears in more than one recommendation. Order each bundle's
-      items by its dependency edges (ties: overlap-only members follow
-      the members they overlap). Shared files without an edge still
+      item appears in more than one recommendation. Order each bundle
+      deterministically: topological order over its dependency edges —
+      a dependency lands before everything that depends on it — with
+      ties (items no edge orders, including overlap-only members)
+      broken alphabetically by item name. If the dependency edges form
+      a cycle, don't invent an order: keep the cycle's members adjacent,
+      alphabetical, and flag the cycle in the bundle's rationale line —
+      a circular ordering claim is a grading error for the user to see,
+      not something to silently linearize. Same inputs, same
+      recommendation, every run. Shared files without an edge still
       bundle: fanning out two runs that will edit the same file is the
       expensive failure this mode exists to prevent, and sequencing
       them costs only latency.
