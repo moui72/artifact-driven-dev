@@ -39,7 +39,7 @@ bundle). It classifies every item into exactly one of Bundle (sequential —
 one multi-item `/ardd-plan <item1> <item2> ...` call), Parallel set (safe
 to fan out — separate `/ardd-plan <item>` calls), or Solo-deferred
 (low/speculative or gated on a non-code decision — its own single-item
-call), where each `<item>` is a feature slug or a `feedback-*.md`
+call; low confidence wins over any edge or overlap, then edge/overlap forces Bundle, else Parallel — first match wins), where each `<item>` is a feature slug or a `feedback-*.md`
 filename. N=0 or N=1 items is a degenerate case (report "nothing to
 defrag" and stop; N=1 recommends that single item directly, in its
 matching slug-or-filename form) rather than a fabricated slate. It only

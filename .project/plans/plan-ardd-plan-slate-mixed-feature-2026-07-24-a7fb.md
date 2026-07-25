@@ -17,7 +17,7 @@ recommendations reflect the full plannable surface instead of features only.
 ## Scope
 
 **In scope**
-- Widen slate-mode enumeration to include open `.project/feedback/*.md` files
+- Widen slate-mode enumeration to include open `.project/feedback/feedback-*.md` files
   as first-class slate items (one item per *file*).
 - Extend footprint grading and the two-axis pairwise relation model to feedback
   items, including the key new dependency heuristic: a `## Reconsidered`

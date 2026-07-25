@@ -747,7 +747,7 @@ the feature register. Its own steps:
    construction, so don't manufacture one:
    - **N=0**: report "nothing to defrag — no backlogged features and no
      open feedback" and stop.
-   - **N=1**: report "nothing to defrag — single open item: `<item>`" and
+   - **N=1**: report "nothing to defrag — single plannable item: `<item>`" and
      recommend planning it directly, then stop. The single item may be
      either kind, so render the recommendation in the matching form: a
      feature is `/ardd-plan <slug>`, an open feedback file is
@@ -803,7 +803,8 @@ the feature register. Its own steps:
      fan-out can design a feature against an artifact a pending reversal is
      about to overturn.
 
-   Overlap without dependency is a **safe parallel pair**, even when the
+   A shared topic or label without file or dependency overlap is a
+   **safe parallel pair**, even when the
    items are topically related. Example: a `project-scoped-personal-
    dictionary` item and a `spellcheck-backend` item might both carry the
    "spellcheck" label, but if their footprints are actually disjoint
@@ -829,7 +830,7 @@ the feature register. Its own steps:
    as its `<feedback-*.md>` filename (the normal-run argument grammar
    already disambiguates the two, so a mixed call is valid input as-is):
    - **Bundle** (reported under "Plan together") — items connected by a
-     dependency edge, or sharing files with no safe reordering.
+     dependency edge or a file-set overlap (precedence rules below).
      Sequenced; recommended as one multi-item
      `/ardd-plan <item1> <item2> ...` call, in dependency order — items
      may be any mix of slugs and feedback filenames.
@@ -846,6 +847,23 @@ the feature register. Its own steps:
      confidence, or explicitly gated on a non-code decision per the
      artifact. Recommended as its own single-item `/ardd-plan <item>`
      call on its own timeline; never bundled or fanned out.
+
+   **Precedence — every item lands in exactly one bucket, first match
+   wins.** The three definitions above overlap at the edges (a `low`
+   item can carry a dependency edge; a pair can share files without an
+   edge), so classify each item by this order, deterministically:
+   1. `low` confidence, or gated on a non-code decision → **Solo-
+      deferred**, even when it has a dependency edge or file overlap —
+      "never bundled or fanned out" is absolute. When such an item does
+      carry an edge, state the edge in its rationale line ("sequence
+      after `<other>` when eventually planned") so the ordering
+      constraint isn't lost, but the recommendation stays a solo call.
+   2. Otherwise, any dependency edge *or* any file-set overlap with
+      another non-solo-deferred item → **Bundle** with those items.
+      Shared files without an edge still bundle: fanning out two runs
+      that will edit the same file is the expensive failure this mode
+      exists to prevent, and sequencing them costs only latency.
+   3. Otherwise → **Parallel set**.
 
    **Report format**: lead with the actionable grouping, not the
    rationale — a reader must be able to tell "run together vs.
