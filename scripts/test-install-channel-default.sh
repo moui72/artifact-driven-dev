@@ -94,4 +94,32 @@ else
   cat "$vf" 2>/dev/null || echo "(no version file)"
 fi
 
+# --- Case 5: HEAD additionally carries a NEWER prerelease tag (the exact
+# state of a beta cut whose commit still carries the prior stable tag,
+# e.g. 20d8960: v1.2.0 + v1.2.1-beta.1). A Channel: beta install must
+# record the beta tag — the old channel-blind non-beta preference made a
+# beta install advertise a stable version string (badge-audit F003) ---
+git -C "$SRC" tag v1.0.1-beta.1
+target="$(new_target case5)"
+( cd "$SRC" && ARDD_CHANNEL=beta sh "$SRC/install.sh" "$target" ) >/dev/null 2>&1
+vf="$target/.project/ardd-version.md"
+if grep -q '^Source-Ref: v1.0.1-beta.1$' "$vf" 2>/dev/null; then
+  ok "case5: beta-channel install on stable+newer-beta HEAD records the beta tag"
+else
+  bad "case5: beta-channel install on stable+newer-beta HEAD records the beta tag"
+  cat "$vf" 2>/dev/null || echo "(no version file)"
+fi
+
+# --- Case 6: same dual-tag state, stable channel: still records the
+# strict stable tag, never the newer prerelease ---
+target="$(new_target case6)"
+( cd "$SRC" && ARDD_CHANNEL=stable sh "$SRC/install.sh" "$target" ) >/dev/null 2>&1
+vf="$target/.project/ardd-version.md"
+if grep -q '^Source-Ref: v1.0.0$' "$vf" 2>/dev/null; then
+  ok "case6: stable-channel install on stable+newer-beta HEAD records the stable tag"
+else
+  bad "case6: stable-channel install on stable+newer-beta HEAD records the stable tag"
+  cat "$vf" 2>/dev/null || echo "(no version file)"
+fi
+
 exit "$fail"

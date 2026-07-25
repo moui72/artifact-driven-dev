@@ -69,9 +69,14 @@
      query-selected field (typically $.message) from the JSON; label,
      colour, and logo must ride the URL as query parameters there. For
      the logo, use the pre-encoded data:image/svg+xml;base64,... form of
-     the icon, produced from the source of truth with:
+     the icon, produced URL-safe from the source of truth with:
 
-         base64 < templates/ardd-icon.svg
+         base64 < templates/ardd-icon.svg | tr -d '\n' | jq -sRr @uri
 
-     (in a consumer repo the same file is installed at
-     .github/badges/ardd-icon.svg). -->
+     (raw `base64` output alone wraps lines and emits `+`/`/`/`=`, which
+     break a query string — the `tr`+`jq @uri` steps are required; in a
+     consumer repo the same file is installed at
+     .github/badges/ardd-icon.svg). Those satori-based renderers drop
+     strokes, per-element transforms, and per-element fills, so the icon
+     file must stay plain filled paths with baked-in coordinates, one
+     color — see the constraint comment inside ardd-icon.svg itself. -->

@@ -150,9 +150,21 @@ proceeds.
    yourself.
 
    **Dynamic version-badge offer.** After relaying the output, when the
-   project has a README that does *not* contain the
-   `ardd-badge-version-start` marker, ask the user whether they'd like
-   the dynamic ArDD version badge — a single split endpoint badge
+   project has a README that contains *no ArDD badge marker family at
+   all* — none of `ardd-badge-version-start`, `ardd-badge-pair-start`,
+   or `ardd-badge-start` — ask the user whether they'd like
+   the dynamic ArDD version badge. This offer condition deliberately
+   matches install.sh's own `BADGE_FAMILY` guard (which classifies a
+   README carrying only static `ardd-badge-start` markers as "already
+   badged" and refuses the version-badge emit even under
+   `ARDD_VERSION_BADGE=1`) — offering on the weaker
+   no-version-marker test made the skill offer something the re-run
+   then refused to produce (badge-audit F005). For a README already
+   badged via static/pair markers, don't offer; mention instead that
+   templates/badge.md documents the upgrade path if the user wants to
+   move to the version form by hand.
+
+   The badge in question is a single split endpoint badge
    ("built with ArDD │ vX.Y.Z") whose JSON, kept in sync with
    `.project/ardd-version.md` by a small workflow, supplies both halves,
    the brand colour, and the icon (note the
@@ -169,8 +181,9 @@ proceeds.
    edits a README); OFFER to apply it — present the exact diff, the
    snippet with its markers replacing any stale badge block, and ask
    before writing. Confirm-with-diff, never a refusal that waits for an
-   override. Never make this offer when the marker is already present (the
-   badge is adopted — install.sh's own reprint guard mirrors this), when
+   override. Never make this offer when any ArDD badge marker family is
+   already present (the project is already badged — install.sh's own
+   `BADGE_FAMILY` guard mirrors this exactly), when
    no README exists, or in headless/scripted contexts (same
    never-block-on-a-question rule as step 5's asks).
 

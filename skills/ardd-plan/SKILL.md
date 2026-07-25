@@ -130,8 +130,10 @@ drafts or writes a plan.
    branch name `/ardd-implement`'s inline path *would* create for this
    plan's work — when no branch was created here (the solo no-gate path,
    or a collaborative "No"), that ref may never come to exist, and that's
-   fine: `completion-flip-check.sh` treats a nonexistent ref as not-merged
-   and stays silent.
+   fine: `completion-flip-check.sh` reports a nonexistent ref as a
+   `branch-missing` line only once the tasks file completes with its
+   bound features still `tasked` (a pending flip worth surfacing either
+   way); until then it stays silent.
 
    If this run discovers it started on a stale branch and merges or
    rebases the default branch in before proceeding: single-writer report

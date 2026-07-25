@@ -47,6 +47,9 @@ concurrency:
 
 permissions:
   contents: write
+  # pull-requests is needed by the release-notes step's `gh pr create`
+  # (same grant ardd-badge.yml carries for the identical idiom).
+  pull-requests: write
 
 jobs:
   publish-stable:

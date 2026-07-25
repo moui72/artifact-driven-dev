@@ -439,8 +439,11 @@ plan-approval and register flips are quick state updates the workflow wants
 on the default branch promptly, with no separate long-running work to
 isolate. The plan's `branch:` frontmatter names the branch inline
 implementation *would* use; in the solo no-gate flow that ref may never be
-created, and `completion-flip-check.sh` treats a nonexistent ref as
-not-merged (silent). Tried the delegating-plan variant once and reverted —
+created, and `completion-flip-check.sh` stays silent about the missing
+ref until the tasks file completes with bound features still `tasked` —
+then it emits a loud `branch-missing` line (F004: a deleted-after-merge
+branch is indistinguishable from a never-created one, and a pending flip
+is reportable either way). Tried the delegating-plan variant once and reverted —
 decision record 0001 has the story if the "make plan consistent with
 implement" temptation recurs.
 

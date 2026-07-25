@@ -1,5 +1,39 @@
 # ArDD release notes
 
+## v1.1.1-beta.8
+
+_Published 2026-07-24T04:27:47Z_
+
+## What's Changed
+* chore: refresh STATUS.md, log worktree-align collaborative-branch DevX feedback by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/16
+* docs: broaden fix/feat commit-labeling convention beyond SKILL.md by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/18
+* fix: collaborative delegation worktree-align fix + STATUS.md legacy tail cleanup by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/17
+
+
+**Full Changelog**: https://github.com/moui72/artifact-driven-dev/compare/v1.1.1-beta.7...v1.1.1-beta.8
+
+## v1.1.1-beta.7
+
+_Published 2026-07-24T01:48:55Z_
+
+## What's Changed
+* fix: ardd-state.sh stamp arg-safety + widen delegation pre-flight coverage by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/15
+
+
+**Full Changelog**: https://github.com/moui72/artifact-driven-dev/compare/v1.1.1-beta.6...v1.1.1-beta.7
+
+## v1.1.1-beta.6
+
+_Published 2026-07-24T00:53:00Z_
+
+## What's Changed
+* fix: regenerate release-notes.md, sync main with release by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/11
+* chore(status): log stable-release readiness findings, refresh STATUS.md by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/12
+* fix: badge-sync workflow PR-based push + isolate update-check test from live tags by @moui72 in https://github.com/moui72/artifact-driven-dev/pull/14
+
+
+**Full Changelog**: https://github.com/moui72/artifact-driven-dev/compare/v1.1.1-beta.5...v1.1.1-beta.6
+
 ## v1.1.1-beta.5
 
 _Published 2026-07-23T20:11:21Z_

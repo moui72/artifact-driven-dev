@@ -151,7 +151,13 @@ without regenerating `STATUS.md` or being asked anything.
    `implemented`. This happens because `/ardd-implement`'s post-merge flip step assumes a live coordinating
    conversation checks back after the worktree branch merges — but merge is
    manual/async, so in the common case that conversation is gone before it
-   happens and the flip never lands. Collect any printed slugs.
+   happens and the flip never lands. Collect any printed slugs. The
+   script prints either bare slugs (branch merged) or a single
+   `branch-missing branch=<b> features=<slugs>` line (the branch ref no
+   longer exists — e.g. deleted after its PR merged — but the flip is
+   still pending); treat the latter's slugs as orphan candidates too,
+   noting in the report that merged-ness could not be verified because
+   the ref is gone.
 
 2. **Check cross-artifact consistency** for every pair of artifacts:
    - Any entity, field, endpoint, or concept mentioned in one artifact must be
