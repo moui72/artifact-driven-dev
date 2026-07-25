@@ -634,4 +634,27 @@ sh "$STATE" stamp "$CF" update_check_max_age_days weekly >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: update_check_max_age_days non-numeric refused" 2 "$rc"
 
+# --- stamp status_history_keep range cap + unstamp removal path ---
+sh "$STATE" stamp "$CF" status_history_keep 5 >/dev/null
+assert_file_grep "stamp: status_history_keep set 5" "^status_history_keep: 5" "$CF"
+set +e
+sh "$STATE" stamp "$CF" status_history_keep 10000 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: status_history_keep >4 digits refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$CF" status_history_keep 99999999999999999999 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: status_history_keep huge value refused" 2 "$rc"
+
+printf 'body status_history_keep: prose line stays\n' >> "$CF"
+sh "$STATE" unstamp "$CF" status_history_keep >/dev/null
+grep -q "^status_history_keep:" "$CF" && bad "unstamp: frontmatter field removed" || ok "unstamp: frontmatter field removed"
+grep -q "body status_history_keep: prose line stays" "$CF" && ok "unstamp: body line preserved" || bad "unstamp: body line preserved"
+out="$(sh "$STATE" unstamp "$CF" status_history_keep)"
+case "$out" in *"already absent"*) ok "unstamp: absent field is a no-op" ;; *) bad "unstamp: absent field is a no-op — got: $out" ;; esac
+set +e
+sh "$STATE" unstamp "$CF" workflow_mode >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "unstamp: non-removable field refused" 2 "$rc"
+
 exit "$fail"

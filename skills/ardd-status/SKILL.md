@@ -318,7 +318,10 @@ without regenerating `STATUS.md` or being asked anything.
 
    How many blocks stay in the live file depends on the constitution's
    optional `status_history_keep` frontmatter field (grep it; absent =
-   unbounded):
+   unbounded; an invalid value — non-integer, zero/negative, or more than
+   4 digits — is treated as absent: skip the prune, and note the invalid
+   value in the report pointing at `/ardd-lint`, matching
+   `lint-project.sh`'s flag):
    - **Absent** — keep the full chronology in the file, unchanged from the
      original behavior: STATUS.md grows over time by design.
    - **A positive integer N** — after writing the prepended block, run

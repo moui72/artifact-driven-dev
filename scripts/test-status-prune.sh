@@ -58,7 +58,7 @@ cmp -s "$F" "$TMP/nohdr-orig.md" && check "no-blocks: file untouched" ok || chec
 
 # --- Case 5: bad keep (zero / negative / non-integer) -> refuse, file untouched ---
 F="$TMP/bad.md"; make_fixture "$F" 4; cp "$F" "$TMP/bad-orig.md"
-for badval in 0 -1 abc 2.5; do
+for badval in 0 -1 abc 2.5 10000 99999999999999999999; do
   if "$PRUNE" "$F" --keep "$badval" >/dev/null 2>&1; then
     check "bad-keep '$badval': refused (nonzero exit)" no
   else

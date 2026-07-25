@@ -11,41 +11,46 @@ FIXTURES="$REPO_DIR/tests/fixtures"
 
 fail=0
 
+# Captured lint output goes in a per-run mktemp dir, never a predictable
+# /tmp path (symlink/TOCTOU-safe, parallel-run-safe).
+OUT="$(mktemp -d)"
+trap 'rm -rf "$OUT"' 0 HUP INT TERM
+
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
 EXPECTED_BAD_FINDINGS=41
 
-if "$LINT" "$FIXTURES/good-project" > /tmp/lint-good.out 2>&1; then
+if "$LINT" "$FIXTURES/good-project" > "$OUT"/lint-good.out 2>&1; then
   echo "ok: good-project passes"
 else
   echo "FAIL: good-project should pass but didn't:"
-  cat /tmp/lint-good.out
+  cat "$OUT"/lint-good.out
   fail=1
 fi
 
-if "$LINT" "$FIXTURES/bad-project" > /tmp/lint-bad.out 2>&1; then
+if "$LINT" "$FIXTURES/bad-project" > "$OUT"/lint-bad.out 2>&1; then
   echo "FAIL: bad-project should fail but passed"
   fail=1
 else
-  bad_count="$(wc -l < /tmp/lint-bad.out | tr -d ' ')"
+  bad_count="$(wc -l < "$OUT"/lint-bad.out | tr -d ' ')"
   if [ "$bad_count" -eq "$EXPECTED_BAD_FINDINGS" ]; then
     echo "ok: bad-project fails as expected ($bad_count findings)"
   else
     echo "FAIL: bad-project produced $bad_count findings, expected $EXPECTED_BAD_FINDINGS:"
-    cat /tmp/lint-bad.out
+    cat "$OUT"/lint-bad.out
     fail=1
   fi
   # plan: with a path (not a bare filename) gets the distinct clear message,
   # not the old doubled-path existence-check message (F005)
-  if grep -q "expected a bare filename, got a path" /tmp/lint-bad.out; then
+  if grep -q "expected a bare filename, got a path" "$OUT"/lint-bad.out; then
     echo "ok: plan: path value gets the distinct clear message"
   else
     echo "FAIL: plan: path value gets the distinct clear message"
     fail=1
   fi
   # placeholder artifact names get the pointed message, not the generic one
-  if grep -q "placeholder artifact name" /tmp/lint-bad.out; then
+  if grep -q "placeholder artifact name" "$OUT"/lint-bad.out; then
     echo "ok: placeholder tag gets pointed message"
   else
     echo "FAIL: placeholder tag gets pointed message"
@@ -54,19 +59,19 @@ else
   # invented statuses get pointed messages, replacing the generic
   # "not in {enum}" report (the exact findings count above proves each is
   # one finding, not two)
-  if grep -q "completed is terminal" /tmp/lint-bad.out; then
+  if grep -q "completed is terminal" "$OUT"/lint-bad.out; then
     echo "ok: 'reopened' tasks status gets pointed terminal-completion message"
   else
     echo "FAIL: 'reopened' tasks status gets pointed terminal-completion message"
     fail=1
   fi
-  if grep -q "did you mean 'abandoned'" /tmp/lint-bad.out; then
+  if grep -q "did you mean 'abandoned'" "$OUT"/lint-bad.out; then
     echo "ok: 'superseded' tasks status gets pointed plan-status message"
   else
     echo "FAIL: 'superseded' tasks status gets pointed plan-status message"
     fail=1
   fi
-  if grep -q "mark items individually" /tmp/lint-bad.out; then
+  if grep -q "mark items individually" "$OUT"/lint-bad.out; then
     echo "ok: 'split' feedback status gets pointed per-item message"
   else
     echo "FAIL: 'split' feedback status gets pointed per-item message"
@@ -74,7 +79,7 @@ else
   fi
   # next_step_prompt is optional but, when present, must be exactly
   # true/false — bad-project's 'yes' must be flagged with the allowed values
-  if grep -q "next_step_prompt 'yes' not in {true false auto}" /tmp/lint-bad.out; then
+  if grep -q "next_step_prompt 'yes' not in {true false auto}" "$OUT"/lint-bad.out; then
     echo "ok: invalid next_step_prompt value reported with allowed values"
   else
     echo "FAIL: invalid next_step_prompt value reported with allowed values"
@@ -83,13 +88,13 @@ else
   # delegation / merge_policy are optional constitution workflow fields
   # (absent = ask); when present they must be in their enums — bad-project's
   # 'sometimes' / 'yolo' must be flagged with the allowed values
-  if grep -q "delegation 'sometimes' not in {eager ask inline}" /tmp/lint-bad.out; then
+  if grep -q "delegation 'sometimes' not in {eager ask inline}" "$OUT"/lint-bad.out; then
     echo "ok: invalid delegation value reported with allowed values"
   else
     echo "FAIL: invalid delegation value reported with allowed values"
     fail=1
   fi
-  if grep -q "merge_policy 'yolo' not in {auto ask}" /tmp/lint-bad.out; then
+  if grep -q "merge_policy 'yolo' not in {auto ask}" "$OUT"/lint-bad.out; then
     echo "ok: invalid merge_policy value reported with allowed values"
   else
     echo "FAIL: invalid merge_policy value reported with allowed values"
@@ -100,7 +105,7 @@ else
   # flagged with the allowed values. good-project sets always-browser and
   # must still pass (asserted above via the overall good-project pass).
   # [feedback: F001]
-  if grep -q "plan_preview 'sometimes' not in {always-browser always-console ask}" /tmp/lint-bad.out; then
+  if grep -q "plan_preview 'sometimes' not in {always-browser always-console ask}" "$OUT"/lint-bad.out; then
     echo "ok: invalid plan_preview value reported with allowed values"
   else
     echo "FAIL: invalid plan_preview value reported with allowed values"
@@ -109,7 +114,7 @@ else
   # update_check_max_age_days is optional (absent = never fetch); when
   # present it must be a positive integer — bad-project's '0' must be
   # flagged with the field name and the allowed shape
-  if grep -q "update_check_max_age_days '0' is not a positive integer" /tmp/lint-bad.out; then
+  if grep -q "update_check_max_age_days '0' is not a positive integer" "$OUT"/lint-bad.out; then
     echo "ok: invalid update_check_max_age_days value reported with allowed shape"
   else
     echo "FAIL: invalid update_check_max_age_days value reported with allowed shape"
@@ -119,7 +124,7 @@ else
   # present it must be a positive integer — bad-project's '-3' must be flagged
   # with the field name and the allowed shape. good-project sets 5 and must
   # still pass (asserted via the overall good-project pass above).
-  if grep -q "status_history_keep '-3' is not a positive integer" /tmp/lint-bad.out; then
+  if grep -q "status_history_keep '-3' is not a positive integer" "$OUT"/lint-bad.out; then
     echo "ok: invalid status_history_keep value reported with allowed shape"
   else
     echo "FAIL: invalid status_history_keep value reported with allowed shape"
@@ -127,13 +132,13 @@ else
   fi
   # render_target / render_section are optional per-artifact overrides; when
   # present they must be non-empty. bad-project's datamodel.md has both empty.
-  if grep -q "render_target is present but empty" /tmp/lint-bad.out; then
+  if grep -q "render_target is present but empty" "$OUT"/lint-bad.out; then
     echo "ok: empty render_target reported"
   else
     echo "FAIL: empty render_target reported"
     fail=1
   fi
-  if grep -q "render_section is present but empty" /tmp/lint-bad.out; then
+  if grep -q "render_section is present but empty" "$OUT"/lint-bad.out; then
     echo "ok: empty render_section reported"
   else
     echo "FAIL: empty render_section reported"
@@ -142,7 +147,7 @@ else
   # renderability is a property (declares diagram_type), not a fixed name-list.
   # An empty diagram_type is a non-empty-when-present violation, like the other
   # optional render fields; bad-project's datamodel.md has it empty.
-  if grep -q "diagram_type is present but empty" /tmp/lint-bad.out; then
+  if grep -q "diagram_type is present but empty" "$OUT"/lint-bad.out; then
     echo "ok: empty diagram_type reported"
   else
     echo "FAIL: empty diagram_type reported"
@@ -150,7 +155,7 @@ else
   fi
   # epic is an optional free-text feature-register field; when present it
   # must be non-empty. bad-project's widget-export.md feature has it empty.
-  if grep -q "epic is present but empty" /tmp/lint-bad.out; then
+  if grep -q "epic is present but empty" "$OUT"/lint-bad.out; then
     echo "ok: empty epic reported"
   else
     echo "FAIL: empty epic reported"
@@ -158,7 +163,7 @@ else
   fi
   # diagram_status is required once diagram_type is present. bad-project's
   # infrastructure.md declares diagram_type but no diagram_status.
-  if grep -q "required when diagram_type is present" /tmp/lint-bad.out; then
+  if grep -q "required when diagram_type is present" "$OUT"/lint-bad.out; then
     echo "ok: missing diagram_status (with diagram_type) reported"
   else
     echo "FAIL: missing diagram_status (with diagram_type) reported"
@@ -167,13 +172,13 @@ else
   # bracket-tag checks are scoped to checklist item lines: a tag mentioned
   # in body prose (tasks-foo-aaaa.md's trailing paragraph) must NOT be
   # reported, while the item-line violations above still are.
-  if grep -q "prose-only-mention" /tmp/lint-bad.out; then
+  if grep -q "prose-only-mention" "$OUT"/lint-bad.out; then
     echo "FAIL: body-prose bracket-tag must not be reported"
     fail=1
   else
     echo "ok: body-prose bracket-tag is not reported"
   fi
-  if grep -q "references 'nonexistent'" /tmp/lint-bad.out; then
+  if grep -q "references 'nonexistent'" "$OUT"/lint-bad.out; then
     echo "ok: item-line bracket-tag violation still reported"
   else
     echo "FAIL: item-line bracket-tag violation still reported"
@@ -183,7 +188,7 @@ else
   # stable channel is self-contradictory (the atelier-shaped mismatch).
   # bad-project's ardd-version.md pairs Channel: stable with
   # Source-Ref: v1.2.3-beta.2.
-  if grep -q "ardd-version.md.*Channel: stable.*Source-Ref: v1.2.3-beta.2.*prerelease" /tmp/lint-bad.out; then
+  if grep -q "ardd-version.md.*Channel: stable.*Source-Ref: v1.2.3-beta.2.*prerelease" "$OUT"/lint-bad.out; then
     echo "ok: Channel/Source-Ref prerelease mismatch reported"
   else
     echo "FAIL: Channel/Source-Ref prerelease mismatch reported"
@@ -222,14 +227,14 @@ rm -rf "$CHVERWORK" /tmp/lint-chver.out
 # --- unknown-enum messages carry the version-skew hint ---
 # An unrecognized status may be a typo, or a file written by a newer ArDD
 # than this install — the message must say so and point at /ardd-update.
-if grep -q "status 'shipped' not in {.*} (or written by a newer ArDD than this install — run /ardd-update)" /tmp/lint-bad.out; then
+if grep -q "status 'shipped' not in {.*} (or written by a newer ArDD than this install — run /ardd-update)" "$OUT"/lint-bad.out; then
   echo "ok: unknown-enum message carries version-skew hint"
 else
   echo "FAIL: unknown-enum message carries version-skew hint"
   fail=1
 fi
 # the pointed invented-status messages stay pointed, no hint bolted on
-if grep -q "completed is terminal.*run /ardd-update" /tmp/lint-bad.out; then
+if grep -q "completed is terminal.*run /ardd-update" "$OUT"/lint-bad.out; then
   echo "FAIL: pointed messages must not gain the version-skew hint"
   fail=1
 else
@@ -278,5 +283,5 @@ else
 fi
 rm -rf "$ARROWWORK" /tmp/lint-arrow.out
 
-rm -f /tmp/lint-good.out /tmp/lint-bad.out
+rm -f "$OUT"/lint-good.out "$OUT"/lint-bad.out
 exit "$fail"

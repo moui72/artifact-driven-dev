@@ -23,7 +23,8 @@
 #   pruned=false reason=usage                         (exit 2; bad arguments)
 #   pruned=false reason=not-a-file                    (exit 1)
 #   pruned=false reason=unreadable                    (exit 1)
-#   pruned=false reason=bad-keep                      (exit 1; not a positive int)
+#   pruned=false reason=bad-keep                      (exit 1; not a positive int, or > 9999)
+#   pruned=false reason=write-failed                  (exit 1; temp write/rename failed — file left untouched)
 
 file=""
 keep=""
@@ -43,9 +44,11 @@ if [ -z "$file" ] || [ -z "$keep" ]; then
   echo "pruned=false"; echo "reason=usage"; exit 2
 fi
 
-# keep must be a positive integer
+# keep must be a positive integer, at most 4 digits (9999) — the same
+# range-safe contract ardd-state.sh stamp and lint-project.sh enforce, so a
+# value every validator accepts is always safe for shell arithmetic here.
 case "$keep" in
-  ''|*[!0-9]*) echo "pruned=false"; echo "reason=bad-keep"; exit 1 ;;
+  ''|*[!0-9]*|?????*) echo "pruned=false"; echo "reason=bad-keep"; exit 1 ;;
 esac
 if [ "$keep" -lt 1 ]; then
   echo "pruned=false"; echo "reason=bad-keep"; exit 1
@@ -74,8 +77,18 @@ fi
 # plus the newest `keep` blocks, verbatim, and drops everything after.
 cutline=$(grep -n '^_Updated:' "$file" | sed -n "$((keep + 1))p" | cut -d: -f1)
 
-tmp="$file.prune.$$"
-head -n "$((cutline - 1))" "$file" > "$tmp" && mv "$tmp" "$file"
+# Fail closed: collision-resistant temp file in the target's own directory
+# (same filesystem, so mv is an atomic rename), cleaned up on any exit, and
+# every write/rename step checked — never report pruned=true unless the
+# rename actually landed.
+tmp=$(mktemp "$file.prune.XXXXXX") || { echo "pruned=false"; echo "reason=write-failed"; exit 1; }
+trap 'rm -f "$tmp"' 0 HUP INT TERM
+if ! head -n "$((cutline - 1))" "$file" > "$tmp"; then
+  echo "pruned=false"; echo "reason=write-failed"; exit 1
+fi
+if ! mv "$tmp" "$file"; then
+  echo "pruned=false"; echo "reason=write-failed"; exit 1
+fi
 
 echo "pruned=true"
 echo "blocks=$total"

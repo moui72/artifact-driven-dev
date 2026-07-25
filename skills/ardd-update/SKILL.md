@@ -236,7 +236,11 @@ proceeds.
    chronology?" — and, only when the user gives a positive integer, stamp
    it via `ardd-state.sh stamp .project/artifacts/constitution.md
    status_history_keep <N>`. Declining leaves the field absent, which keeps
-   today's unbounded behavior; field presence suppresses re-asking. On
+   today's unbounded behavior; a present *valid* value suppresses
+   re-asking. A present but invalid value (non-integer, zero/negative, or
+   more than 4 digits — `lint-project.sh` flags it) does NOT suppress the
+   backfill: surface the invalid value and re-ask, stamping the corrected
+   answer — presence of garbage is not a configuration. On
    paths that skip the ask (bare `./install.sh`, headless/scripted
    contexts) absent simply stays unbounded — never block, never default a
    number on. Same workflow-field rules: no Sync Impact Report entry, no
@@ -261,12 +265,17 @@ proceeds.
    background run completes, merge its branch into your default branch
    automatically?" (`auto` | `ask`); `status_history_keep`: "Keep only the
    most recent N `_Updated:` blocks in `STATUS.md` (older history stays in
-   git), or keep the full chronology?" (a positive integer, or decline to
-   leave it unbounded)). Ask `workflow_mode` first, since its
+   git), or keep the full chronology?" (a positive integer of at most 4
+   digits, or "keep the full chronology" — which, when the field is
+   currently set, REMOVES it via `ardd-state.sh unstamp
+   .project/artifacts/constitution.md status_history_keep`, restoring
+   unbounded history; stamp can only add/replace, so unstamp is the
+   scripted way back to unset). Ask `workflow_mode` first, since its
    answer determines whether `merge_policy` is asked at all; never ask
    `merge_policy` in collaborative mode, same as the default path. Stamp
    only the fields the user actually chooses to change, via
-   `ardd-state.sh stamp <file> <field> <value>` — leave untouched fields
+   `ardd-state.sh stamp <file> <field> <value>` (or `unstamp` for a
+   status_history_keep return-to-unbounded) — leave untouched fields
    as they are. Same workflow-field rules apply: no Sync Impact Report
    entry, no constitution version bump for any of them.
 

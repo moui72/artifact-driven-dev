@@ -210,8 +210,8 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
     if [ "$name" = "constitution" ] && frontmatter_has "$f" status_history_keep; then
       val="$(frontmatter_field "$f" status_history_keep)"
       case "$val" in
-        0*|*[!0-9]*|'')
-          report "$f: status_history_keep '$val' is not a positive integer (1, 2, ...)$SKEW_HINT" ;;
+        0*|*[!0-9]*|''|?????*)
+          report "$f: status_history_keep '$val' is not a positive integer of at most 4 digits (1..9999)$SKEW_HINT" ;;
       esac
     fi
 

@@ -151,7 +151,7 @@ after prepending each new block, keeping only the newest N `_Updated:`
 blocks in the file. Blocks are never summarized or rewritten — the prune
 only removes whole older blocks, and the full history stays recoverable
 from git (`git log -p .project/STATUS.md`). An invalid value behaves like
-absent (and is flagged by `lint-project.sh`).
+absent — the prune is skipped and `/ardd-status` notes the invalid value in its report — and is flagged by `lint-project.sh` (valid = a positive integer of at most 4 digits).
 
 ## `ARDD_VERSION_BADGE` — dynamic version badge (install-time env, not frontmatter)
 
