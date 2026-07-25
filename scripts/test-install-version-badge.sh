@@ -401,18 +401,52 @@ if command -v python3 >/dev/null 2>&1; then
   fi
 fi
 
-# --- Case 17: re-install never clobbers a hand-edited icon ---
+# --- Case 17 (badge-audit F001, revises the old never-clobber pin): the
+# icon is a MANAGED asset — declared verbatim-inlined source of truth —
+# so a re-install refreshes a drifted copy in place and says so; a
+# consumer rebrand upstream must reach consumers. The workflow file
+# stays never-clobber but drift is REPORTED, not silent. ---
 target="$(new_target case17)"
-run_install_badge_on "$target" >/dev/null
-printf 'hand-edited icon\n' > "$target/$ICON_REL"
-before_icon="$(cksum "$target/$ICON_REL")"
-run_install_badge_on "$target" >/dev/null
-after_icon="$(cksum "$target/$ICON_REL")"
-if [ "$before_icon" = "$after_icon" ]; then
-  ok "case17: hand-edited icon left untouched"
+out="$(run_install_badge_on "$target")"
+printf 'stale icon from an older install\n' > "$target/$ICON_REL"
+printf 'hand-edited workflow\n' > "$target/$WORKFLOW_REL"
+out="$(run_install_badge_on "$target")"
+if cmp -s "$target/$ICON_REL" "$REPO_ROOT/templates/ardd-icon.svg"; then
+  ok "case17: drifted icon refreshed in place to the current template"
 else
-  bad "case17: hand-edited icon left untouched"
+  bad "case17: drifted icon refreshed in place to the current template"
 fi
+case "$out" in
+  *"ardd-icon.svg (refreshed"*)
+    ok "case17: icon refresh reported" ;;
+  *)
+    bad "case17: icon refresh reported" ;;
+esac
+if [ "$(cat "$target/$WORKFLOW_REL")" = "hand-edited workflow" ]; then
+  ok "case17: hand-edited workflow still left untouched"
+else
+  bad "case17: hand-edited workflow still left untouched"
+fi
+case "$out" in
+  *"ardd-badge.yml (differs from current template"*)
+    ok "case17: workflow drift reported" ;;
+  *)
+    bad "case17: workflow drift reported" ;;
+esac
+
+# --- Case 17b: identical assets on re-install -> no refresh line, no
+# drift line (the reports fire on real drift only). The workflow file is
+# branch-substituted at install time, so compare against a re-install
+# into the same target: second run over untouched files stays quiet. ---
+target="$(new_target case17b)"
+run_install_badge_on "$target" >/dev/null
+out="$(run_install_badge_on "$target")"
+case "$out" in
+  *"ardd-icon.svg (refreshed"*|*"ardd-badge.yml (differs from current template"*)
+    bad "case17b: identical assets stay silent on re-install" ;;
+  *)
+    ok "case17b: identical assets stay silent on re-install" ;;
+esac
 
 # --- Case 18: env unset, README already carries ardd-badge-version markers
 # (S9 F001, feedback b8b6) → the static-badge suggestion must NOT print;
