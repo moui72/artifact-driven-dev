@@ -795,15 +795,20 @@ if [ -f "$TARGET/README.md" ] && [ "${ARDD_VERSION_BADGE:-}" = "1" ]; then
       # compare against what a fresh install would write — the template
       # with the same branch substitution applied — so a non-main default
       # branch alone never reads as drift.
-      EXPECTED_WORKFLOW="$(if [ -n "$BADGE_BRANCH" ]; then
-          sed "s|^\([[:space:]]*branches:[[:space:]]*\)\[main\]|\1[$BADGE_BRANCH]|" \
-            "$SCRIPT_DIR/templates/ardd-badge-workflow.yml"
-        else
-          cat "$SCRIPT_DIR/templates/ardd-badge-workflow.yml"
-        fi)"
-      if [ "$(cat "$BADGE_WORKFLOW")" = "$EXPECTED_WORKFLOW" ]; then
+      EXPECTED_WORKFLOW_TMP="$(mktemp)"
+      if [ -n "$BADGE_BRANCH" ]; then
+        sed "s|^\([[:space:]]*branches:[[:space:]]*\)\[main\]|\1[$BADGE_BRANCH]|" \
+          "$SCRIPT_DIR/templates/ardd-badge-workflow.yml" > "$EXPECTED_WORKFLOW_TMP"
+      else
+        cat "$SCRIPT_DIR/templates/ardd-badge-workflow.yml" > "$EXPECTED_WORKFLOW_TMP"
+      fi
+      # cmp on files, not command substitution — substitution strips
+      # trailing newlines, which would hide a trailing-blank-line drift.
+      if cmp -s "$BADGE_WORKFLOW" "$EXPECTED_WORKFLOW_TMP"; then
+        rm -f "$EXPECTED_WORKFLOW_TMP"
         echo "  – .github/workflows/ardd-badge.yml (already exists, left untouched)"
       else
+        rm -f "$EXPECTED_WORKFLOW_TMP"
         echo "  – .github/workflows/ardd-badge.yml (differs from current template — review manually;"
         echo "    left untouched in case it carries local customization)"
       fi

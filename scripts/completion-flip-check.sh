@@ -74,9 +74,19 @@ default="$(cd "$repo_root" && sh "$SCRIPT_DIR/branch-info.sh" | sed -n 's/^defau
 # silence 0005 originally pinned). An existing-but-unmerged branch stays
 # silent as before.
 branch_missing=0
-if ! (cd "$repo_root" && git rev-parse --verify --quiet "$branch^{commit}" >/dev/null 2>&1); then
+# Resolve the BRANCH namespace explicitly (local, then origin) — bare
+# rev-parse DWIM would also accept a same-named tag, masking a genuinely
+# deleted branch behind an unrelated ref.
+branch_ref=""
+for cand in "refs/heads/$branch" "refs/remotes/origin/$branch"; do
+  if (cd "$repo_root" && git rev-parse --verify --quiet "$cand" >/dev/null 2>&1); then
+    branch_ref="$cand"
+    break
+  fi
+done
+if [ -z "$branch_ref" ]; then
   branch_missing=1
-elif ! (cd "$repo_root" && git merge-base --is-ancestor "$branch" "$default" 2>/dev/null); then
+elif ! (cd "$repo_root" && git merge-base --is-ancestor "$branch_ref" "$default" 2>/dev/null); then
   exit 0
 fi
 

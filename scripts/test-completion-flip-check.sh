@@ -201,6 +201,16 @@ out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
 assert_eq "case12: deleted-after-merge branch -> branch-missing line" \
   "branch-missing branch=deleted-after-merge features=demo-feature" "$out"
 
+# --- Case 12b: a TAG with the same name as the missing branch must not
+# satisfy the existence check (rev-parse DWIM would resolve it) — the
+# branch namespace is what the flip rode; a same-named tag still means
+# branch-missing ---
+git tag deleted-after-merge
+out="$(sh "$CHECK" "$repo/.project/tasks/tasks-demo-0000.md")"
+git tag -d deleted-after-merge >/dev/null
+assert_eq "case12b: same-named tag does not mask a missing branch" \
+  "branch-missing branch=deleted-after-merge features=demo-feature" "$out"
+
 # --- Case 13: missing ref but feature already implemented -> nothing to
 # report, stays silent (the loud line exists to surface a pending flip,
 # not missing refs per se) ---
