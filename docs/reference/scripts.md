@@ -28,7 +28,7 @@ files), `feedback-mark` / `feedback-planned` (feedback bookkeeping), and
 `last_updated`, `diagram_status`, `next_step_prompt`, `delegation`,
 `merge_policy`, `plan_preview`, `plan_preview_editor` (a command
 template that must contain the literal `{path}` placeholder),
-`update_check_max_age_days`).
+`update_check_max_age_days`, `status_history_keep` (a positive integer of at most 4 digits)); `unstamp <file> <field>` removes an optional field (`status_history_keep`, `update_check_max_age_days`, `plan_preview`, `plan_preview_editor`) so its documented absent-default takes over again.
 
 ### `upsert-section.sh <file> "<Header>"`
 
@@ -97,6 +97,16 @@ register flip.
 
 One line per tasks file: `<filename>\t<status>\t<x>/<y>\t<plan>`.
 `abandoned` files excluded unless `--all`.
+
+### `status-prune.sh <file> --keep <N>`
+
+Keep-last-N tail-cut of a STATUS.md's `_Updated:` chronology: preserves the
+head matter and the newest N blocks verbatim, drops the older tail (which
+stays recoverable from git). Run by `/ardd-status` step 6 after its prepend,
+only when the constitution sets `status_history_keep: <N>`. Prints
+`pruned=true blocks=<t> kept=<k> removed=<r>`; refuses (`pruned=false
+reason=...`) on a missing/unreadable file or a non-positive `--keep`, never
+corrupting the file.
 
 ### `defects-unsurfaced.sh [--id <id> | --all]`
 

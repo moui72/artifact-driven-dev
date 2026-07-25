@@ -66,6 +66,9 @@ Deterministic state mutations for .project/ files. Subcommands:
   stamp <file> plan_preview <always-browser|always-console|ask>
   stamp <file> plan_preview_editor <command-template with {path}>
   stamp <file> update_check_max_age_days <positive integer>
+  stamp <file> status_history_keep <positive integer>
+  unstamp <file> <status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor>
+                           remove an optional field (back to its documented default)
                            set an artifact frontmatter field (add or replace)
 EOF
 }
@@ -387,10 +390,43 @@ cmd_stamp() {
         0*|*[!0-9]*|'') dieu "stamp: update_check_max_age_days must be a positive integer (1, 2, ...), got '$val'" ;;
       esac
       ;;
-    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|plan_preview_editor|update_check_max_age_days, got '$key'" ;;
+    status_history_keep)
+      case "$val" in
+        0*|*[!0-9]*|''|?????*) dieu "stamp: status_history_keep must be a positive integer (1, 2, ...) of at most 4 digits, got '$val'" ;;
+      esac
+      ;;
+    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|plan_preview_editor|update_check_max_age_days|status_history_keep, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
   echo "stamp: $(abspath "$file") $key = $val"
+}
+
+# unstamp <file> <key> — remove an OPTIONAL frontmatter field entirely
+# (absent = the documented default takes over). Allowlisted to the fields
+# whose absence is a meaningful state; stamp can only add/replace, so
+# without this there is no scripted way back to "unset" (badge-audit
+# follow-up, PR #26 review).
+cmd_unstamp() {
+  file="${1:-}"; key="${2:-}"
+  [ $# -le 2 ] || dieu "unstamp: unexpected extra arguments"
+  [ -n "$file" ] && [ -n "$key" ] || dieu "usage: unstamp <file> <key>"
+  [ -f "$file" ] || die "no such file: $file"
+  case "$key" in
+    status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor) ;;
+    *) dieu "unstamp: key must be status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor, got '$key'" ;;
+  esac
+  if awk -v k="$key" '/^---$/{c++; next} c==1 && $0 ~ "^"k":" {found=1} END{exit !found}' "$file"; then
+    # Delete only inside the frontmatter block — a body line that happens
+    # to start with "<key>:" is content, not configuration.
+    awk -v k="$key" '
+      /^---$/ { c++; print; next }
+      c == 1 && $0 ~ "^"k":" { next }
+      { print }
+    ' "$file" > "$file.arddtmp" && mv "$file.arddtmp" "$file"
+    echo "unstamp: $(abspath "$file") $key removed"
+  else
+    echo "unstamp: $key already absent in $(abspath "$file") (no-op)"
+  fi
 }
 
 cmd="${1:-}"
@@ -403,6 +439,7 @@ case "$cmd" in
   feature-flip) cmd_feature_flip "$@" ;;
   feature-field) cmd_feature_field "$@" ;;
   stamp) cmd_stamp "$@" ;;
+  unstamp) cmd_unstamp "$@" ;;
   feedback-mark) cmd_feedback_mark "$@" ;;
   feedback-planned) cmd_feedback_planned "$@" ;;
   mint) cmd_mint "$@" ;;

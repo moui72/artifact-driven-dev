@@ -13,7 +13,7 @@ suggestions) in the user's own session — suggestions only print to whoever
 runs install.sh, which is exactly why this skill exists.
 
 Usage: `/ardd-update` (backfill absent workflow fields only, resolve on
-the recorded channel), `/ardd-update --reconfigure` (re-ask all four
+the recorded channel), `/ardd-update --reconfigure` (re-ask all
 workflow fields, regardless of whether they're already set),
 `/ardd-update --stable` (switch to, or stay on, the latest full release),
 `/ardd-update --beta` (switch to, or stay on, the latest release
@@ -189,7 +189,7 @@ proceeds.
 
 5. **Ask the workflow-field questions.** After the reinstall, check
    `.project/artifacts/constitution.md` frontmatter (if the file exists).
-   These four fields are workflow settings, not constitution content:
+   These fields are workflow settings, not constitution content:
    `workflow_mode` is written inline into the frontmatter by `/ardd-init`
    directly, at initial creation; `next_step_prompt`, `delegation`, and
    `merge_policy` are always written via `ardd-state.sh stamp`, here and
@@ -229,10 +229,28 @@ proceeds.
    as above: no Sync Impact Report entry, no version bump. `workflow_mode`
    itself is never asked here — its absence just defaults to `solo`.
 
-   **With `--reconfigure`: re-ask all four fields, regardless of
+   Backfill `status_history_keep` the same way. If the constitution
+   frontmatter lacks a `status_history_keep` field *entirely*, ask the same
+   question `/ardd-init` asks — "Keep only the most recent N `_Updated:`
+   blocks in `STATUS.md` (older history stays in git), or keep the full
+   chronology?" — and, only when the user gives a positive integer, stamp
+   it via `ardd-state.sh stamp .project/artifacts/constitution.md
+   status_history_keep <N>`. Declining leaves the field absent, which keeps
+   today's unbounded behavior; a present *valid* value suppresses
+   re-asking. A present but invalid value (non-integer, zero/negative, or
+   more than 4 digits — `lint-project.sh` flags it) does NOT suppress the
+   backfill: surface the invalid value and re-ask, stamping the corrected
+   answer — presence of garbage is not a configuration. On
+   paths that skip the ask (bare `./install.sh`, headless/scripted
+   contexts) absent simply stays unbounded — never block, never default a
+   number on. Same workflow-field rules: no Sync Impact Report entry, no
+   version bump.
+
+   **With `--reconfigure`: re-ask all fields, regardless of
    presence.** For each of `workflow_mode`, `next_step_prompt`,
-   `delegation`, and — only when the (possibly just-reconfigured)
-   `workflow_mode` is `solo` — `merge_policy`, show the field's current
+   `delegation`, — only when the (possibly just-reconfigured)
+   `workflow_mode` is `solo` — `merge_policy`, and `status_history_keep`,
+   show the field's current
    value (or "not yet set" if absent) and ask whether to keep it or choose
    a new one, using the exact question wording `/ardd-init` uses for each
    field (`workflow_mode`: "solo" (state rides local worktree branches and
@@ -245,13 +263,21 @@ proceeds.
    `/ardd-implement` could run in the background, what should it do?"
    (`eager` | `ask` | `inline`); `merge_policy`: "When a delegated
    background run completes, merge its branch into your default branch
-   automatically?" (`auto` | `ask`)). Ask `workflow_mode` first, since its
+   automatically?" (`auto` | `ask`); `status_history_keep`: "Keep only the
+   most recent N `_Updated:` blocks in `STATUS.md` (older history stays in
+   git), or keep the full chronology?" (a positive integer of at most 4
+   digits, or "keep the full chronology" — which, when the field is
+   currently set, REMOVES it via `ardd-state.sh unstamp
+   .project/artifacts/constitution.md status_history_keep`, restoring
+   unbounded history; stamp can only add/replace, so unstamp is the
+   scripted way back to unset). Ask `workflow_mode` first, since its
    answer determines whether `merge_policy` is asked at all; never ask
    `merge_policy` in collaborative mode, same as the default path. Stamp
    only the fields the user actually chooses to change, via
-   `ardd-state.sh stamp <file> <field> <value>` — leave untouched fields
+   `ardd-state.sh stamp <file> <field> <value>` (or `unstamp` for a
+   status_history_keep return-to-unbounded) — leave untouched fields
    as they are. Same workflow-field rules apply: no Sync Impact Report
-   entry, no constitution version bump for any of the four.
+   entry, no constitution version bump for any of them.
 
 6. **Report** old commit → new commit (from the check in step 2 vs. the
    rewritten `.project/ardd-version.md`), migrations applied, and
