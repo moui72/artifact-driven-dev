@@ -267,6 +267,7 @@ next_step_prompt: auto
 delegation: eager
 merge_policy: auto
 workflow_mode: collaborative
+status_history_keep: 5
 ---
 
 # artifact-driven-dev Constitution
