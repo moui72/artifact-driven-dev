@@ -663,6 +663,27 @@ case "$cerr" in
   *) bad "stamp: bad complexity error names legal values — got: $cerr" ;;
 esac
 
+# stamp delegate_model — single tier alias or comma map, plus unstamp removal
+sh "$STATE" stamp "$CF" delegate_model sonnet >/dev/null
+assert_file_grep "stamp: delegate_model set single alias sonnet" "^delegate_model: sonnet" "$CF"
+sh "$STATE" stamp "$CF" delegate_model simple=haiku,complex=opus >/dev/null
+assert_file_grep "stamp: delegate_model replaced with map" "^delegate_model: simple=haiku,complex=opus" "$CF"
+[ "$(grep -c '^delegate_model:' "$CF")" = "1" ] && ok "stamp: delegate_model no duplicate keys" || bad "stamp: delegate_model no duplicate keys"
+set +e
+sh "$STATE" stamp "$CF" delegate_model gpt5 >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bogus delegate_model alias refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$CF" delegate_model trivial=haiku >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: bogus delegate_model map key refused" 2 "$rc"
+set +e
+sh "$STATE" stamp "$CF" delegate_model simple=haiku,simple=opus >/dev/null 2>&1; rc=$?
+set -e
+assert_exit "stamp: duplicate delegate_model map key refused" 2 "$rc"
+sh "$STATE" unstamp "$CF" delegate_model >/dev/null
+grep -q "^delegate_model:" "$CF" && bad "unstamp: delegate_model removed" || ok "unstamp: delegate_model removed"
+
 # --- stamp status_history_keep range cap + unstamp removal path ---
 sh "$STATE" stamp "$CF" status_history_keep 5 >/dev/null
 assert_file_grep "stamp: status_history_keep set 5" "^status_history_keep: 5" "$CF"
