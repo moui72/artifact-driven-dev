@@ -28,7 +28,7 @@ files), `feedback-mark` / `feedback-planned` (feedback bookkeeping), and
 `last_updated`, `diagram_status`, `next_step_prompt`, `delegation`,
 `merge_policy`, `plan_preview`, `plan_preview_editor` (a command
 template that must contain the literal `{path}` placeholder),
-`update_check_max_age_days`, `status_history_keep` (a positive integer of at most 4 digits)); `unstamp <file> <field>` removes an optional field (`status_history_keep`, `update_check_max_age_days`, `plan_preview`, `plan_preview_editor`) so its documented absent-default takes over again.
+`update_check_max_age_days`, `status_history_keep` (a positive integer of at most 4 digits), `complexity` (`simple|moderate|complex`, on tasks files)); `unstamp <file> <field>` removes an optional field (`status_history_keep`, `update_check_max_age_days`, `plan_preview`, `plan_preview_editor`) so its documented absent-default takes over again.
 
 ### `upsert-section.sh <file> "<Header>"`
 
