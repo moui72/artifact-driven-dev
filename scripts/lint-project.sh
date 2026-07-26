@@ -76,6 +76,7 @@ DELEGATION_ENUM="eager ask inline"
 MERGE_POLICY_ENUM="auto ask"
 PLAN_PREVIEW_ENUM="always-browser always-console ask"
 COMPLEXITY_ENUM="simple moderate complex"  # optional tasks-file field; absent = no routing signal (every pre-feature file lacks it)
+DELEGATE_MODEL_ALIAS_ENUM="haiku sonnet opus"  # optional constitution field delegate_model: a single tier alias, or a comma map of <complexity>=<alias> pairs (keys from COMPLEXITY_ENUM, each optional, at least one pair, no duplicate keys); absent = no routing (delegated runs inherit)
 # -----------------------------------------------------------------------
 
 in_enum() {
@@ -179,6 +180,42 @@ if [ -d "$PROJECT_DIR/artifacts" ]; then
       val="$(frontmatter_field "$f" plan_preview)"
       if ! in_enum "$val" $PLAN_PREVIEW_ENUM; then
         report "$f: plan_preview '$val' not in {$PLAN_PREVIEW_ENUM}$SKEW_HINT"
+      fi
+    fi
+
+    # delegate_model is an optional workflow field (absent = no routing —
+    # delegated runs inherit the session model); when present it must be a
+    # single tier alias, or a comma map of <complexity>=<alias> pairs
+    # (each key optional, at least one pair, no duplicate keys).
+    if [ "$name" = "constitution" ] && frontmatter_has "$f" delegate_model; then
+      val="$(frontmatter_field "$f" delegate_model)"
+      dm_ok=1
+      if in_enum "$val" $DELEGATE_MODEL_ALIAS_ENUM; then
+        : # single tier alias
+      else
+        dm_pairs=0
+        dm_seen=""
+        # Reject shapes word-splitting below would silently forgive:
+        # embedded whitespace, leading/trailing/doubled commas.
+        case "$val" in
+          *" "*|*"	"*|,*|*,|*,,*) dm_ok=0 ;;
+        esac
+        if [ "$dm_ok" -eq 1 ]; then
+          for dm_pair in $(printf '%s' "$val" | tr ',' ' '); do
+            dm_key="${dm_pair%%=*}"
+            dm_alias="${dm_pair#*=}"
+            if [ "$dm_pair" = "$dm_key" ]; then dm_ok=0; break; fi
+            if ! in_enum "$dm_key" $COMPLEXITY_ENUM; then dm_ok=0; break; fi
+            if ! in_enum "$dm_alias" $DELEGATE_MODEL_ALIAS_ENUM; then dm_ok=0; break; fi
+            case " $dm_seen " in *" $dm_key "*) dm_ok=0; break ;; esac
+            dm_seen="$dm_seen $dm_key"
+            dm_pairs=$((dm_pairs + 1))
+          done
+        fi
+        [ "$dm_pairs" -ge 1 ] || dm_ok=0
+      fi
+      if [ "$dm_ok" -ne 1 ]; then
+        report "$f: delegate_model '$val' is not a tier alias (haiku|sonnet|opus) or a comma map of simple=/moderate=/complex= pairs over those aliases (e.g. complex=opus or simple=haiku,complex=opus; no duplicate keys)$SKEW_HINT"
       fi
     fi
 
