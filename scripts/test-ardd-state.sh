@@ -634,6 +634,35 @@ sh "$STATE" stamp "$CF" update_check_max_age_days weekly >/dev/null 2>&1; rc=$?
 set -e
 assert_exit "stamp: update_check_max_age_days non-numeric refused" 2 "$rc"
 
+# stamp complexity — enum-validated, on a tasks-file fixture, add + replace
+TSD="$WORK/p2/.project/tasks"; mkdir -p "$TSD"
+TSF="$TSD/tasks-x-2026-07-26-abcd.md"
+cat > "$TSF" <<'EOF'
+---
+plan: plan-x-2026-07-26-abcd.md
+generated: 2026-07-26
+status: ready
+---
+# Tasks
+- [ ] T001 do the thing
+EOF
+sh "$STATE" stamp "$TSF" complexity moderate >/dev/null
+assert_file_grep "stamp: complexity set moderate" "^complexity: moderate" "$TSF"
+fmend="$(grep -n '^---$' "$TSF" | sed -n 2p | cut -d: -f1)"
+cline="$(grep -n '^complexity:' "$TSF" | cut -d: -f1)"
+[ "$cline" -lt "$fmend" ] && ok "stamp: complexity inside frontmatter" || bad "stamp: complexity inside frontmatter — line $cline vs closing --- at $fmend"
+sh "$STATE" stamp "$TSF" complexity complex >/dev/null
+assert_file_grep "stamp: complexity replaced with complex" "^complexity: complex" "$TSF"
+[ "$(grep -c '^complexity:' "$TSF")" = "1" ] && ok "stamp: complexity no duplicate keys" || bad "stamp: complexity no duplicate keys"
+set +e
+cerr="$(sh "$STATE" stamp "$TSF" complexity trivial 2>&1 >/dev/null)"; rc=$?
+set -e
+assert_exit "stamp: bad complexity refused" 2 "$rc"
+case "$cerr" in
+  *"complexity must be simple|moderate|complex"*) ok "stamp: bad complexity error names legal values" ;;
+  *) bad "stamp: bad complexity error names legal values — got: $cerr" ;;
+esac
+
 # --- stamp status_history_keep range cap + unstamp removal path ---
 sh "$STATE" stamp "$CF" status_history_keep 5 >/dev/null
 assert_file_grep "stamp: status_history_keep set 5" "^status_history_keep: 5" "$CF"

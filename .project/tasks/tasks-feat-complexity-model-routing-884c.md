@@ -7,7 +7,7 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 # Tasks
 
 ## Phase 1: complexity stamp machinery
-- [ ] T001 Extend `scripts/ardd-state.sh stamp` to accept `complexity` with enum validation `simple|moderate|complex` (any other value refused via `dieu`, naming the legal values), add it to the usage text's stamp inventory, and add red-first regression cases to `scripts/test-ardd-state.sh`: set on a tasks-file fixture, replace, and a bogus-value refusal (exit 2) — test and change in the same commit (Principle V).
+- [x] T001 Extend `scripts/ardd-state.sh stamp` to accept `complexity` with enum validation `simple|moderate|complex` (any other value refused via `dieu`, naming the legal values), add it to the usage text's stamp inventory, and add red-first regression cases to `scripts/test-ardd-state.sh`: set on a tasks-file fixture, replace, and a bogus-value refusal (exit 2) — test and change in the same commit (Principle V).
 - [ ] T002 Extend `scripts/lint-project.sh` to validate an optional `complexity` frontmatter field on tasks files: absent is always valid (every pre-feature file lacks it); present must be `simple|moderate|complex`, else a finding naming the legal values. Keep the enum in the top-of-script schema block. Add a bad-value case to `tests/fixtures/bad-project` and an assertion (plus the EXPECTED_BAD_FINDINGS bump) to `scripts/test-lint-project.sh`, red-first, same commit. Depends on T001 (same schema-block conventions).
 
 ## Phase 2: plan-side wiring
