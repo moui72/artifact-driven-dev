@@ -1,6 +1,6 @@
 ---
 slug: plan-time-complexity-stamps
-status: tasked
+status: implemented
 logged: 2026-07-24
 plan: plan-feat-complexity-model-routing-2026-07-25-fd96.md
 tasks: tasks-feat-complexity-model-routing-884c.md

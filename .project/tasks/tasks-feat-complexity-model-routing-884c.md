@@ -1,7 +1,7 @@
 ---
 plan: plan-feat-complexity-model-routing-2026-07-25-fd96.md
 generated: 2026-07-26
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 ---
 
 # Tasks
@@ -23,4 +23,4 @@ status: in-progress   # generating -> ready -> in-progress -> completed (schema-
 - [x] T008 Document the pair: `docs/reference/configuration.md` gains a `delegate_model` section (grammar, resolution rules incl. the asymmetric absent-inherits default, delegation-boundary-only rationale — fresh subagent context, no prompt-cache cost) and cross-references the tasks-file `complexity:` stamp; `docs/reference/scripts.md`'s stamp/unstamp inventories gain `delegate_model`. `scripts/lint-docs.sh` stays green. Depends on T007.
 
 ## Phase 5: verification
-- [ ] T009 Run `scripts/test-ardd-state.sh`, `scripts/test-lint-project.sh`, `scripts/lint-project.sh .`, and `scripts/lint-docs.sh`; confirm all pass with no new findings. Depends on T001, T002, T003, T004, T005, T006, T007, T008.
+- [x] T009 Run `scripts/test-ardd-state.sh`, `scripts/test-lint-project.sh`, `scripts/lint-project.sh .`, and `scripts/lint-docs.sh`; confirm all pass with no new findings. Depends on T001, T002, T003, T004, T005, T006, T007, T008.
