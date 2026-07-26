@@ -75,6 +75,7 @@ NEXT_STEP_PROMPT_ENUM="true false auto"
 DELEGATION_ENUM="eager ask inline"
 MERGE_POLICY_ENUM="auto ask"
 PLAN_PREVIEW_ENUM="always-browser always-console ask"
+COMPLEXITY_ENUM="simple moderate complex"  # optional tasks-file field; absent = no routing signal (every pre-feature file lacks it)
 # -----------------------------------------------------------------------
 
 in_enum() {
@@ -446,6 +447,15 @@ if [ -d "$PROJECT_DIR/tasks" ]; then
         esac
       elif [ "$val" = "generating" ]; then
         report "$f: status is 'generating' — a previous /ardd-plan tasking run likely crashed mid-generation; regenerate or fix manually"
+      fi
+    fi
+
+    # --- complexity: optional; absent is always valid (pre-feature files
+    # lack it), present must be in its enum ---
+    if frontmatter_has "$f" complexity; then
+      val="$(frontmatter_field "$f" complexity)"
+      if ! in_enum "$val" $COMPLEXITY_ENUM; then
+        report "$f: complexity '$val' not in {$COMPLEXITY_ENUM}$SKEW_HINT"
       fi
     fi
 
