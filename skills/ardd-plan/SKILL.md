@@ -637,6 +637,7 @@ drafts or writes a plan.
                          # completed is terminal — post-completion failures
                          # become new feedback (/ardd-feedback), never a
                          # status edit.
+    complexity: simple|moderate|complex   # plan-time judgment, stamped in this same write
     # worktree_branch: <branch>  — legacy field from the old design; nothing
     # writes it anymore (completion-flip-check.sh still reads it from files
     # that predate worktree-native state); not written here at generation time.
@@ -651,6 +652,16 @@ drafts or writes a plan.
     ## Phase 2: <Name>
     - [ ] T003 [artifacts: datamodel] <description>
     ```
+
+    The `complexity:` value is graded at generation time, in the same
+    write as `status: generating`, by how much implementation judgment the
+    file's tasks need: mechanical or single-seam work = `simple`,
+    multi-file but well-specified work = `moderate`, design-heavy or
+    cross-cutting work = `complex`. Absent stays legal — every tasks file
+    generated before this field existed lacks it, and absent means "no
+    routing signal". Corrections are script-performed, never hand-edited:
+    `.claude/skills/ardd-scripts/ardd-state.sh stamp <tasks-file>
+    complexity <simple|moderate|complex>`.
 
     Once all tasks are written, flip the file to ready —
     `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file> ready` —
