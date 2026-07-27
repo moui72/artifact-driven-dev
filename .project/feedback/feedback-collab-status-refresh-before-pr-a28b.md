@@ -1,7 +1,7 @@
 ---
-status: open      # open -> planned
+status: planned      # open -> planned
 created: 2026-07-27
-plan: null
+plan: plan-feat-collab-status-refresh-2026-07-27-7811.md
 ---
 
 # Feedback
@@ -14,7 +14,7 @@ motivation mostly evaporated after `merge=ours` + `status_history_keep`).
 This item is the surviving kernel, reshaped per the user's direction.
 
 ## Reconsidered
-- [ ] F001 In collaborative mode, the feature branch must always get a
+- [x] F001 In collaborative mode, the feature branch must always get a
   STATUS.md refresh as the LAST step before a PR is pushed/opened — true
   for a plan-only PR (`/ardd-plan`'s collaborative path) and for an
   implementation PR (`/ardd-implement`, inline AND delegated), regardless
