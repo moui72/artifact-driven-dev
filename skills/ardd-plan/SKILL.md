@@ -441,7 +441,7 @@ drafts or writes a plan.
 
 10. **Approval checkpoint.** Present a bounded, faithful skeleton of the
     plan drawn **verbatim from the plan the agent just wrote** — not a freehand
-    re-summary. Show exactly these four elements, in order:
+    re-summary. Show exactly these five elements, in order:
 
     1. **Goal** — reproduce the plan's **Goal** sentence verbatim and
        **bolded**. Never paraphrase it; this is the one line the user is
@@ -455,10 +455,14 @@ drafts or writes a plan.
        optional count of a phase's enumerated Phase Breakdown work-items
        *only* where the draft listed them, and label it as plan items,
        never tasks.)
-    3. **Open Questions** — reproduce the plan's **Open Questions** list
+    3. **Complexity** — one line stating the `complexity:` grade
+       (`simple`, `moderate`, or `complex`) the tasking half will stamp
+       into the generated tasks file's frontmatter (step 13), with the
+       one-sentence grading rationale.
+    4. **Open Questions** — reproduce the plan's **Open Questions** list
        verbatim (not summarized); these are exactly what the user weighs
        before approving.
-    4. **File pointer** — note the plan is saved at
+    5. **File pointer** — note the plan is saved at
        `.project/plans/plan-<slug>-<YYYY-MM-DD>-<hex4>.md` as `status: draft`,
        and **invite the user to open that `.md` in their editor or markdown
        preview** for the full plan (Scope, Technical Approach, Complexity
@@ -531,7 +535,12 @@ drafts or writes a plan.
     - **Revise** — the user wants changes to the plan first. Make them
       (loop back through steps 8–9 as needed, rewriting the same plan file),
       then return to this checkpoint. The plan stays `draft`; nothing is
-      approved or tasked until the user approves.
+      approved or tasked until the user approves. Revise also covers
+      correcting the complexity grade shown above: adjust the grade the
+      tasking half will stamp, and if the tasks file already exists (a
+      Revise after tasking began), re-stamp it via
+      `.claude/skills/ardd-scripts/ardd-state.sh stamp <tasks-file>
+      complexity <simple|moderate|complex>`.
     - **Stop** — leave the plan at `status: draft` and end the run without
       tasking. This is a legitimate outcome: the plan is a durable artifact
       a later `/ardd-plan --from <this plan>` (or a fresh run) can pick up.
@@ -637,6 +646,7 @@ drafts or writes a plan.
                          # completed is terminal — post-completion failures
                          # become new feedback (/ardd-feedback), never a
                          # status edit.
+    complexity: simple|moderate|complex   # plan-time judgment, stamped in this same write
     # worktree_branch: <branch>  — legacy field from the old design; nothing
     # writes it anymore (completion-flip-check.sh still reads it from files
     # that predate worktree-native state); not written here at generation time.
@@ -651,6 +661,16 @@ drafts or writes a plan.
     ## Phase 2: <Name>
     - [ ] T003 [artifacts: datamodel] <description>
     ```
+
+    The `complexity:` value is graded at generation time, in the same
+    write as `status: generating`, by how much implementation judgment the
+    file's tasks need: mechanical or single-seam work = `simple`,
+    multi-file but well-specified work = `moderate`, design-heavy or
+    cross-cutting work = `complex`. Absent stays legal — every tasks file
+    generated before this field existed lacks it, and absent means "no
+    routing signal". Corrections are script-performed, never hand-edited:
+    `.claude/skills/ardd-scripts/ardd-state.sh stamp <tasks-file>
+    complexity <simple|moderate|complex>`.
 
     Once all tasks are written, flip the file to ready —
     `.claude/skills/ardd-scripts/ardd-state.sh tasks-flip <file> ready` —

@@ -1,7 +1,9 @@
 ---
 slug: delegate-model-routing
-status: backlogged
+status: implemented
 logged: 2026-07-24
+plan: plan-feat-complexity-model-routing-2026-07-25-fd96.md
+tasks: tasks-feat-complexity-model-routing-884c.md
 ---
 
 Configurable model routing for /ardd-implement's delegated worktree runs: a delegate_model constitution frontmatter field, either a single tier alias or a complexity map keyed by the tasks file's complexity: stamp, resolved to a model: override on the Agent dispatch.

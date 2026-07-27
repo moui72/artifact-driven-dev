@@ -66,6 +66,37 @@ so delegated and scripted runs are unaffected.
 - `ask` — offer each time, suggesting yes
 - `inline` — never offer; run in the foreground
 
+## `delegate_model` — model routing for delegated runs
+
+A single tier alias — `haiku` | `sonnet` | `opus` — or a comma map of
+`simple=<alias>` / `moderate=<alias>` / `complex=<alias>` pairs (each key
+optional, at least one pair, no duplicate keys; keys are the tasks-file
+`complexity:` grades, aliases the harness model families). Examples:
+`complex=opus`, `simple=haiku,complex=opus`. Absent = no routing.
+Set/remove it via `ardd-state.sh stamp <constitution> delegate_model
+<value>` / `unstamp <constitution> delegate_model`; grammar enforced by
+`lint-project.sh`.
+
+Consulted only at `/ardd-implement`'s delegation boundary, when a worktree
+subagent is dispatched — a fresh subagent context means routing there
+costs no prompt cache, which is why inline runs and per-skill session
+routing are deliberately not covered. Resolution rules:
+
+- absent — no `model` parameter on the `Agent` call; the subagent
+  inherits the session model (unchanged behavior)
+- single alias — passed as the `Agent` call's `model`
+- map — the chosen tasks file's `complexity:` frontmatter is read; a
+  mapped grade passes that alias, while an unmapped grade or an absent
+  `complexity:` field inherits. The default is asymmetric on purpose:
+  nothing is ever routed *down* implicitly, and a missing grade is never
+  guessed.
+
+Fan-out resolves per selected tasks file, so one fan-out may dispatch to
+different models. The `complexity:` grade itself is stamped by
+`/ardd-plan` at tasks-file generation time (see the tasks-file
+`complexity:` field on `/ardd-plan`'s reference page) and corrected via
+`ardd-state.sh stamp <tasks-file> complexity <simple|moderate|complex>`.
+
 ## `merge_policy` — landing a delegated run
 
 `auto` | `ask` — absent = `ask`. **Solo mode only** — collaborative mode

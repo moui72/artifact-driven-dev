@@ -67,7 +67,9 @@ Deterministic state mutations for .project/ files. Subcommands:
   stamp <file> plan_preview_editor <command-template with {path}>
   stamp <file> update_check_max_age_days <positive integer>
   stamp <file> status_history_keep <positive integer>
-  unstamp <file> <status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor>
+  stamp <file> complexity <simple|moderate|complex>
+  stamp <file> delegate_model <haiku|sonnet|opus, or a comma map like simple=haiku,complex=opus>
+  unstamp <file> <status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor|delegate_model>
                            remove an optional field (back to its documented default)
                            set an artifact frontmatter field (add or replace)
 EOF
@@ -395,7 +397,39 @@ cmd_stamp() {
         0*|*[!0-9]*|''|?????*) dieu "stamp: status_history_keep must be a positive integer (1, 2, ...) of at most 4 digits, got '$val'" ;;
       esac
       ;;
-    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|plan_preview_editor|update_check_max_age_days|status_history_keep, got '$key'" ;;
+    complexity)
+      case "$val" in
+        simple|moderate|complex) ;;
+        *) dieu "stamp: complexity must be simple|moderate|complex, got '$val'" ;;
+      esac
+      ;;
+    delegate_model)
+      # Single tier alias, or a comma map of <complexity>=<alias> pairs
+      # (keys from simple|moderate|complex, each optional, at least one
+      # pair, no duplicate keys) — same grammar as lint-project.sh.
+      dm_ok=1
+      case "$val" in
+        haiku|sonnet|opus) ;;
+        *" "*|*"	"*|,*|*,|*,,*) dm_ok=0 ;;
+        *)
+          dm_pairs=0
+          dm_seen=""
+          for dm_pair in $(printf '%s' "$val" | tr ',' ' '); do
+            dm_key="${dm_pair%%=*}"
+            dm_alias="${dm_pair#*=}"
+            if [ "$dm_pair" = "$dm_key" ]; then dm_ok=0; break; fi
+            case "$dm_key" in simple|moderate|complex) ;; *) dm_ok=0; break ;; esac
+            case "$dm_alias" in haiku|sonnet|opus) ;; *) dm_ok=0; break ;; esac
+            case " $dm_seen " in *" $dm_key "*) dm_ok=0; break ;; esac
+            dm_seen="$dm_seen $dm_key"
+            dm_pairs=$((dm_pairs + 1))
+          done
+          [ "$dm_pairs" -ge 1 ] || dm_ok=0
+          ;;
+      esac
+      [ "$dm_ok" -eq 1 ] || dieu "stamp: delegate_model must be a tier alias (haiku|sonnet|opus) or a comma map of simple=/moderate=/complex= pairs over those aliases (e.g. complex=opus or simple=haiku,complex=opus; no duplicate keys), got '$val'"
+      ;;
+    *) dieu "stamp: key must be last_updated|diagram_status|next_step_prompt|delegation|workflow_mode|merge_policy|plan_preview|plan_preview_editor|update_check_max_age_days|status_history_keep|complexity|delegate_model, got '$key'" ;;
   esac
   set_frontmatter "$file" "$key" "$val"
   echo "stamp: $(abspath "$file") $key = $val"
@@ -412,8 +446,8 @@ cmd_unstamp() {
   [ -n "$file" ] && [ -n "$key" ] || dieu "usage: unstamp <file> <key>"
   [ -f "$file" ] || die "no such file: $file"
   case "$key" in
-    status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor) ;;
-    *) dieu "unstamp: key must be status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor, got '$key'" ;;
+    status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor|delegate_model) ;;
+    *) dieu "unstamp: key must be status_history_keep|update_check_max_age_days|plan_preview|plan_preview_editor|delegate_model, got '$key'" ;;
   esac
   if awk -v k="$key" '/^---$/{c++; next} c==1 && $0 ~ "^"k":" {found=1} END{exit !found}' "$file"; then
     # Delete only inside the frontmatter block — a body line that happens

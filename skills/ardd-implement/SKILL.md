@@ -248,10 +248,27 @@ entering the normal flow.
    the Reconcile-mode steps below instead — to a subagent via the `Agent`
    tool with `isolation: "worktree"`, handing it this skill's remaining
    steps verbatim, the chosen tasks file, and the current task pointer.
+
+   **Resolve the model override first.** Grep `delegate_model` from
+   `.project/artifacts/constitution.md` frontmatter and apply these
+   deterministic rules to decide the `Agent` call's `model` parameter:
+   - `delegate_model` absent — pass no `model` parameter: the subagent
+     inherits the session model (unchanged behavior).
+   - A single tier alias (`haiku`, `sonnet`, or `opus`) — pass that alias
+     as the `Agent` call's `model`.
+   - A comma map (`simple=<alias>`/`moderate=<alias>`/`complex=<alias>`
+     pairs) — read the chosen tasks file's `complexity:` frontmatter. If
+     that complexity has a mapped alias, pass it as `model`; if the
+     complexity is unmapped, or the tasks file has no `complexity:` field,
+     pass no `model` parameter and inherit — never guess a grade, and
+     never route down implicitly.
+
    **Fan-out:** when step 1 multi-selected several `ready` files, launch
    one such subagent per selected file, in parallel — each an independent
    `isolation: "worktree"` Agent with the same align-first preamble below
-   and its own tasks file. The coordinator handles each report-back
+   and its own tasks file. Resolve the model override per selected tasks
+   file (each file's own `complexity:` against the same `delegate_model`
+   value) — files in one fan-out may route to different models. The coordinator handles each report-back
    independently as it arrives (core.bare check, `merge_policy` merge,
    reap) — merges serialize naturally in the order runs complete.
    `isolation: "worktree"` creates and names its own worktree/branch

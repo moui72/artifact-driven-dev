@@ -13,6 +13,7 @@ delegation: eager
 merge_policy: auto
 plan_preview: always-browser
 update_check_max_age_days: 7
+delegate_model: simple=haiku,complex=opus
 status_history_keep: 5
 ---
 

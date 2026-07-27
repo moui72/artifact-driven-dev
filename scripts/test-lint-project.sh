@@ -19,7 +19,7 @@ trap 'rm -rf "$OUT"' 0 HUP INT TERM
 # Expected number of findings bad-project produces. Bump this in the same
 # commit whenever a fixture case or lint rule changes the count — an exact
 # assertion is what makes a test-first (red-then-green) rule addition provable.
-EXPECTED_BAD_FINDINGS=41
+EXPECTED_BAD_FINDINGS=43
 
 if "$LINT" "$FIXTURES/good-project" > "$OUT"/lint-good.out 2>&1; then
   echo "ok: good-project passes"
@@ -109,6 +109,28 @@ else
     echo "ok: invalid plan_preview value reported with allowed values"
   else
     echo "FAIL: invalid plan_preview value reported with allowed values"
+    fail=1
+  fi
+  # delegate_model is an optional constitution workflow field (absent = no
+  # routing — delegated runs inherit the session model); when present it must
+  # be a single tier alias (haiku|sonnet|opus) or a comma map of
+  # simple=/moderate=/complex= pairs over those aliases. bad-project's
+  # 'simple=fast' has a bogus alias; good-project's 'simple=haiku,complex=opus'
+  # must still pass (asserted via the overall good-project pass above).
+  if grep -q "delegate_model 'simple=fast' is not a tier alias (haiku|sonnet|opus) or a comma map of simple=/moderate=/complex= pairs over those aliases" "$OUT"/lint-bad.out; then
+    echo "ok: invalid delegate_model value reported with the grammar"
+  else
+    echo "FAIL: invalid delegate_model value reported with the grammar"
+    fail=1
+  fi
+  # complexity is an optional tasks-file field (absent = no routing signal —
+  # every pre-feature file lacks it); when present it must be in its enum.
+  # bad-project's tasks-foo-aaaa.md sets 'trivial'; good-project sets
+  # 'moderate' and must still pass (asserted via the overall pass above).
+  if grep -q "complexity 'trivial' not in {simple moderate complex}" "$OUT"/lint-bad.out; then
+    echo "ok: invalid complexity value reported with allowed values"
+  else
+    echo "FAIL: invalid complexity value reported with allowed values"
     fail=1
   fi
   # update_check_max_age_days is optional (absent = never fetch); when

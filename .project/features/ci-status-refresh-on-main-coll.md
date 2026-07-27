@@ -1,6 +1,6 @@
 ---
 slug: ci-status-refresh-on-main-coll
-status: backlogged
+status: rejected
 logged: 2026-07-24
 ---
 

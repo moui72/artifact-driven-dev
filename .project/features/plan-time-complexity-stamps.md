@@ -1,7 +1,9 @@
 ---
 slug: plan-time-complexity-stamps
-status: backlogged
+status: implemented
 logged: 2026-07-24
+plan: plan-feat-complexity-model-routing-2026-07-25-fd96.md
+tasks: tasks-feat-complexity-model-routing-884c.md
 ---
 
 At tasks-file generation time, /ardd-plan stamps a complexity: simple|moderate|complex field into each tasks file's frontmatter, reviewed and correctable at the plan approval checkpoint.

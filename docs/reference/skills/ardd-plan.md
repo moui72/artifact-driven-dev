@@ -117,7 +117,13 @@ neither, depending on which fields are configured.
   `surfaced-defects`
 - `.project/tasks/tasks-<slug>-<hex>.md` — written `status: generating`
   first (so an interrupted generation is visibly incomplete), flipped to
-  `ready` when all tasks are in
+  `ready` when all tasks are in; the same first write stamps
+  `complexity: simple|moderate|complex` (plan-time judgment of how much
+  implementation judgment the file's tasks need — the routing signal
+  `/ardd-implement`'s `delegate_model` map resolves against; absent stays
+  legal on pre-field files, and the approval checkpoint shows the grade
+  so Revise can correct it via
+  `ardd-state.sh stamp <tasks-file> complexity <value>`)
 - Targeted artifacts — the confirmed design changes for targeted feature
   slugs (this is where a backlogged idea's artifact design work actually
   happens; `/ardd-backlog` only logs)
