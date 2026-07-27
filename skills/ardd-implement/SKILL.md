@@ -366,9 +366,16 @@ entering the normal flow.
      until it merges or the user deals with it by hand.
 
    Note: a delegated subagent must **never** run `/ardd-status` or write
-   `STATUS.md` — either would trap `STATUS.md` inside the worktree branch.
-   The terminal analyze handoff belongs to the coordinator (or the inline
-   path), never the delegated subagent.
+   `STATUS.md` — the coordinator owns the refresh in every mode. The
+   trapped-write rationale behind this rule is **solo-mode-specific**: in
+   solo mode an abandoned worktree would trap `STATUS.md` inside the
+   worktree branch, so the refresh waits for the coordinator's post-merge
+   step. In collaborative mode the risk profile is different but the
+   ownership is the same — the coordinator's `/ardd-status` refresh on the
+   feature branch in the primary checkout (see the collaborative
+   report-back sequence below) is the required norm, and the subagent
+   still never runs it. The terminal analyze handoff belongs to the
+   coordinator (or the inline path), never the delegated subagent.
 
    **Collaborative mode.** Nothing may be committed to the local default
    branch, ever — branch protection makes it unlandable anyway. If
@@ -418,6 +425,23 @@ entering the normal flow.
    plan-only draft PR opened before delegation becomes redundant —
    closable or absorbable into the merged one, since its state has already
    landed via the delegated branch's PR.
+
+   **Collaborative report-back sequence.** When a delegated subagent
+   reports back in collaborative mode, the coordinator runs, in order:
+   the same side-effect checks as solo mode (`core.bare`,
+   `core.hooksPath`); then a fast-forward of the feature branch onto the
+   **subagent-reported** branch (never an in-memory name), so the feature
+   branch carries the completed work and its state; then — **mandatory,
+   before any push/PR offer** — `/ardd-status` on the feature branch in
+   the primary checkout (the full refresh, including `status-prune.sh`
+   when the constitution sets `status_history_keep`), committing the
+   refreshed `STATUS.md` to the feature branch. Only then does the run
+   reach the push/PR offer — the push never happens without the refresh:
+   in collaborative mode, no ArDD skill pushes a feature branch whose
+   STATUS.md predates the state the push carries. Mid-run visibility
+   pushes (the first-commit draft-PR offer above) are exempt — the
+   invariant binds pushes carrying terminal state (a completed tasks
+   file, flipped features), not incremental visibility pushes.
 
 4. **Flip to `in-progress` (if needed), then find the next uncompleted
    task.** If the file's status is still `ready` (a first-task run on the
