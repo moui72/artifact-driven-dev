@@ -512,9 +512,15 @@ entering the normal flow.
    **On the inline (non-delegated) path, this is the run's terminal step:**
    once step 9 commits this final work, **run `/ardd-status` now** to refresh
    `STATUS.md` — don't rely on the next loop iteration's early-exit (step 2)
-   to discover completion after the fact. A delegated subagent must **not**
+   to discover completion after the fact. In collaborative mode this
+   terminal `/ardd-status` on the feature branch is what satisfies the
+   invariant — in collaborative mode, no ArDD skill pushes a feature
+   branch whose STATUS.md predates the state the push carries — so any
+   push/PR offer must come **after** this refresh (and its commit), never
+   before. A delegated subagent must **not**
    run it here (see the note in step 3); its `/ardd-status` runs on the
-   coordinator after the worktree branch merges.
+   coordinator after the worktree branch merges (solo) or as the
+   coordinator's collaborative report-back sequence (step 3).
 
 9. **Commit** the work with a concise message referencing the task ID.
 
