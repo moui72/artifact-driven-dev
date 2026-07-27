@@ -1,7 +1,7 @@
 ---
 plan: plan-feat-collab-status-refresh-2026-07-27-7811.md
 generated: 2026-07-27
-status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: completed   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 complexity: moderate
 ---
 
@@ -19,4 +19,4 @@ complexity: moderate
 
 ## Phase 4: docs + verification
 - [x] T005 Sync the mode-scoped rule into CLAUDE.md (the single-writer ownership note's `/ardd-status` line and the "Two operating modes" collaborative bullet) and into the hand-written bodies of `docs/reference/skills/ardd-implement.md`, `docs/reference/skills/ardd-plan.md`, and `docs/reference/skills/ardd-status.md` — same invariant, same solo/collaborative split, no contradicting leftover prose. Depends on T002, T003, T004.
-- [ ] T006 Run `scripts/lint-docs.sh` and `scripts/lint-project.sh .`; confirm both pass with no new findings. Depends on T005.
+- [x] T006 Run `scripts/lint-docs.sh` and `scripts/lint-project.sh .`; confirm both pass with no new findings. Depends on T005.
