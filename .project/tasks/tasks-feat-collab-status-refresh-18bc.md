@@ -1,7 +1,7 @@
 ---
 plan: plan-feat-collab-status-refresh-2026-07-27-7811.md
 generated: 2026-07-27
-status: ready   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
+status: in-progress   # generating -> ready -> in-progress -> completed (schema-of-record: scripts/lint-project.sh)
 complexity: moderate
 ---
 
