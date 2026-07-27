@@ -167,7 +167,10 @@ All status mutations are script-performed via `ardd-state.sh`
   worktree branches from `origin/<default>`, so the plan and tasks files
   must reach the remote before delegated implementation can see them.
   Solo mode needs nothing — `worktree-align.sh` carries unpushed local
-  commits in.
+  commits in. Any collaborative push carrying the run's terminal state
+  happens only after the terminal `/ardd-status` refresh is committed on
+  the feature branch — in collaborative mode, no ArDD skill pushes a
+  feature branch whose STATUS.md predates the state the push carries.
 - Re-tasking a plan that already has tasks files asks before generating a
   new one (a deliberate fork, never an overwrite) and offers to mark
   superseded non-completed siblings `abandoned`.

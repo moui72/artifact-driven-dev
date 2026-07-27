@@ -28,7 +28,13 @@ next-step prompt. Same "no writes of any kind" shape as `/ardd-plan
 check without touching `STATUS.md` or being asked anything.
 
 **Run only from the primary checkout, never inside a delegated worktree** —
-that would trap the `STATUS.md` write on the worktree's branch.
+in solo mode that would trap the `STATUS.md` write on the worktree's
+branch. In collaborative mode, running on a feature branch in the primary
+checkout is the required norm (the refresh rides the branch and lands
+with the PR): in collaborative mode, no ArDD skill pushes a feature
+branch whose STATUS.md predates the state the push carries. The
+prohibition targets delegated worktrees (all modes) plus solo mode's
+trapped-write case.
 
 ## Reads
 

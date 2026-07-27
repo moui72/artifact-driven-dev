@@ -101,9 +101,12 @@ isolates state; backgrounding frees your session). The constitution's
   merge keeps the in-flight window short), then runs `worktree-reap.sh`
   to remove the landed worktree (refusals surfaced verbatim, never
   forced).
-- A delegated subagent never runs `/ardd-status` — that write would be
-  trapped on the worktree branch. The terminal analyze handoff belongs to
-  the coordinator or the inline path.
+- A delegated subagent never runs `/ardd-status` in any mode — the
+  coordinator owns the refresh. The trapped-write rationale is
+  solo-specific (an abandoned worktree would trap the write on the
+  worktree branch); in collaborative mode the coordinator refreshes on
+  the feature branch in the primary checkout instead. The terminal
+  analyze handoff belongs to the coordinator or the inline path.
 - If delegation ever misbehaves, the blessed fallback is a plain branch,
   inline: decline the offer, `git checkout -b <name>`, same state model,
   same merge.
@@ -113,7 +116,13 @@ branch. Work moves to a branch (worktree or plain), and after the first
 commit the skill offers to push and open a draft PR titled with the
 feature slug(s) — the mode's in-flight visibility channel. Merging goes
 through the PR; `merge_policy` is never consulted; pushes always require
-explicit confirmation.
+explicit confirmation. On a delegated report-back the coordinator
+fast-forwards the feature branch onto the subagent-reported branch, runs
+`/ardd-status` on it (refresh + prune) and commits, and only then offers
+the push/PR — in collaborative mode, no ArDD skill pushes a feature
+branch whose STATUS.md predates the state the push carries (the inline
+path's terminal `/ardd-status` satisfies the same invariant; the
+first-commit draft-PR visibility push is exempt).
 
 ## Reconcile mode (formerly the `ardd-converge` skill)
 
