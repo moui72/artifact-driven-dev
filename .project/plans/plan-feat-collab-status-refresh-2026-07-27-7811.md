@@ -100,10 +100,18 @@ Principle VI.
 
 ## Open Questions
 
-- Mid-run visibility pushes: `/ardd-implement`'s collaborative path may
-  push after the *first* commit (the draft-PR visibility offer) long
-  before completion. The plan treats that push as exempt — the invariant
-  binds pushes that carry *terminal* state (plan approved/tasked,
-  implementation completed), not incremental visibility pushes, since
-  refreshing STATUS.md on every mid-run push would spam the chronology.
-  Confirm this scoping at approval, or tighten to literally-every-push.
+None outstanding — the one question this plan opened was resolved at the
+approval checkpoint.
+
+**Resolved (approved 2026-07-27): mid-run visibility pushes are exempt.**
+`/ardd-implement`'s collaborative path may push after the *first* commit
+(the draft-PR visibility offer) long before completion. The invariant
+binds only pushes that carry *terminal* state — plan approved/tasked,
+implementation completed — not incremental visibility pushes, since
+refreshing STATUS.md on every mid-run push would spam the chronology. The
+alternative considered and rejected was tightening it to
+literally-every-push. Implemented as approved: see
+`skills/ardd-implement/SKILL.md` (the exemption is stated at the
+collaborative report-back step) and `skills/ardd-plan/SKILL.md` ("any
+such push carrying this run's terminal state happens only after" the
+refresh).
