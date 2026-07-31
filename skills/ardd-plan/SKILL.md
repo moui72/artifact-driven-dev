@@ -152,6 +152,9 @@ drafts or writes a plan.
    implementation can pick them up. Solo mode needs nothing extra here:
    `worktree-align.sh` fast-forwards the local default branch's unpushed
    commits into the delegated worktree, so both are visible without pushing.
+   Any such push carrying this run's terminal state happens only after
+   step 15's terminal `/ardd-status` refresh on the feature branch (see
+   the collaborative-ordering note there).
 
    **Re-task mode:** if invoked with `--from <plan-file>`, do step 1, then
    skip directly to step 11 with `<plan-file>` as the chosen plan. Steps
@@ -695,6 +698,17 @@ drafts or writes a plan.
     Then run `/ardd-status` now to refresh `STATUS.md` — artifacts, the
     feature register, plan approval, and/or the feature-backlog flips in this
     run leave it stale otherwise. Don't wait for the user to ask.
+
+    **Collaborative ordering.** In collaborative mode this terminal
+    `/ardd-status` (the full refresh, including `status-prune.sh` when the
+    constitution sets `status_history_keep`) must run on the feature
+    branch and be committed **before** the run's terminal push/draft-PR
+    offer — and before any later terminal-state push in the same run
+    (e.g. the post-approval/tasking re-push) — so a plan-only PR's
+    STATUS.md matches the plan/tasks state it carries: in collaborative
+    mode, no ArDD skill pushes a feature branch whose STATUS.md predates
+    the state the push carries. The existing analyze handoff here is the
+    mechanism; this note pins its ordering relative to the push.
 
     **Next-step prompt (opt-in).** If `.project/artifacts/constitution.md`
     frontmatter has `next_step_prompt: true` or `auto` (grep the frontmatter

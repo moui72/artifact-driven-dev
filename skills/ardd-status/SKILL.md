@@ -26,11 +26,17 @@ immediately would just report a wall of expected draft-state noise) or
 anytime the user wants a fresh check outside those flows.
 
 **Run only from the primary checkout, never inside a delegated worktree.**
-`/ardd-status` is the sole writer of `STATUS.md`; running it inside a
-worktree would trap that write on the worktree's branch instead of the
-default branch. Delegated `/ardd-implement` subagents are
-told explicitly not to invoke it — the terminal analyze handoff belongs to
-the coordinator or the inline path.
+`/ardd-status` is the sole writer of `STATUS.md`; in solo mode, running it
+inside a worktree would trap that write on the worktree's branch instead
+of the default branch. Delegated `/ardd-implement` subagents are
+told explicitly not to invoke it in any mode — the terminal analyze
+handoff belongs to the coordinator or the inline path. In collaborative
+mode, running on a **feature branch in the primary checkout** is not an
+exception but the required norm: the refresh rides the branch and lands
+with the PR, and it is what upholds the invariant that in collaborative
+mode, no ArDD skill pushes a feature branch whose STATUS.md predates the
+state the push carries. The prohibition's target remains delegated
+worktrees (all modes) plus solo mode's trapped-write case.
 
 `/ardd-status --view` is a **read-only side door**: it runs steps 1–5
 (discovery and the assembled report) unchanged, then prints that report

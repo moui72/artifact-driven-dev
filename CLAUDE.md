@@ -210,7 +210,12 @@ this is not enforceable by a hook, and that was verified, not assumed.**
   `/ardd-status` calls `scripts/status-prune.sh` after each prepend to keep
   only the newest N blocks in the live file — older history stays recoverable
   from git, so "durable re-entry chronology" is backed by git rather than
-  by file length
+  by file length. Never run by a delegated subagent in any mode — the
+  trapped-write rationale is solo-specific (an abandoned worktree traps
+  the write); in collaborative mode the coordinator's refresh on the
+  feature branch in the primary checkout is the required norm, upholding
+  the invariant that in collaborative mode, no ArDD skill pushes a
+  feature branch whose STATUS.md predates the state the push carries
 - `.project/DEFECTS.md` — written only by `/ardd-defects`
 - `.project/TRACKER.md` — written only by `/ardd-tracker`
 - `.project/audit.md` — written only by `/ardd-audit`
@@ -403,7 +408,14 @@ re-asked afterward via `/ardd-update --reconfigure`):
   `origin/<default>`, so plan/tasks files must have reached the remote
   before delegated implementation can see them — `/ardd-plan` carries a
   note about this; solo mode doesn't need one because `worktree-align.sh`
-  carries unpushed local commits in.
+  carries unpushed local commits in. Terminal-state pushes wait for the
+  status refresh: before `/ardd-plan` or `/ardd-implement` (inline
+  terminal step, or the coordinator's collaborative report-back sequence)
+  reaches a push/PR offer carrying terminal state, `/ardd-status` runs on
+  the feature branch and its commit rides the push — in collaborative
+  mode, no ArDD skill pushes a feature branch whose STATUS.md predates
+  the state the push carries (the first-commit draft-PR visibility push
+  is exempt).
 
 There is no custom script for the worktree-creation part itself — a
 hand-built one was tried and removed (Principle VIII; decision record
